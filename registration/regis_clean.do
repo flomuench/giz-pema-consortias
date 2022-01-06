@@ -24,38 +24,41 @@
 ***********************************************************************
 use "${regis_raw}/regis_raw", clear
 
-{
 	* string
 ds, has(type string) 
 local strvars "`r(varlist)'"
 format %-20s `strvars'
 
-	* make all string obs lower case
-foreach x of local strvars {
-replace `x'= lower(`x')
-}
 	* numeric 
 ds, has(type numeric) 
 local numvars "`r(varlist)'"
 format %-25.0fc `numvars'
 
 	* dates
-		* creation
-gen datedecréation = date(Datedecréation, "MDY")
-order datedecréation, a(Datedecréation)
-format datedecréation %td
-rename Datedecréation date_created_str
-		* registration
-format Dateinscription %td
+		* creation, inscription
+format Date* %td
 
+
+	* tel numbers
+format %15.0g *Tél*
+
+***********************************************************************
+* 	PART : Removing trail, leading spaces + lower all letters  			
+***********************************************************************
+{
+ds, has(type string) 
+local strvars "`r(varlist)'"
+foreach x of local strvars {
+replace `x' = lower(stritrim(strtrim(`x')))
+}
 }
 	
 ***********************************************************************
 * 	PART 2: 	Drop all text windows from the survey		  			
 ***********************************************************************
-{
+
 *drop VARNAMES
-}
+
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
@@ -181,17 +184,6 @@ label variable rg_enregistrement_coordonnees "Enregistrer mes coordonnées sur s
 lab def labelname 1 "" 2 "" 3 ""
 lab val variablename labelname
 */
-}
-
-***********************************************************************
-* 	PART 8: Removing trail and leading spaces in from string variables  			
-***********************************************************************
-{
-ds, has(type string) 
-local strvars "`r(varlist)'"
-foreach x of local strvars {
-replace `x' = stritrim(strtrim(`x'))
-}
 }
 
 ***********************************************************************

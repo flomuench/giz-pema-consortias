@@ -27,14 +27,14 @@ cd "$regis_checks"
 	* create word document
 putdocx begin 
 putdocx paragraph
-putdocx text ("Quality checks open question variables: registration E-commerce training"), bold
+putdocx text ("Quality checks open question variables: registration export consortia des PME femmes"), bold
 
 ***********************************************************************
 * 	PART 2:  Check for & visualise duplicates		  			
 ***********************************************************************
 		* keep only potentially eligible firms
 preserve
-keep if eligible_sans_matricule == 1
+*keep if eligible_sans_matricule == 1
 		* put all variables to for which we want to check for duplicates into a local
 local dupcontrol id_admin firmname rg_nom_rep rg_telrep rg_emailrep rg_telpdg rg_emailpdg
 
@@ -86,7 +86,7 @@ putdocx pagebreak
 sort firmname, stable
 
 		* define all the variables where respondent had to enter text
-local regis_open rg_fte rg_fte_femmes date_created_str rg_capital rg_position rg_legalstatus /// /* firm characteristics */
+local regis_open rg_fte rg_fte_femmes date_created rg_capital rg_position rg_legalstatus /// /* firm characteristics */
 	   firmname rg_nom_rep rg_telrep rg_telpdg rg_emailrep rg_emailpdg rg_adresse /// /* personal */
 	   rg_matricule rg_codedouane 
 				
