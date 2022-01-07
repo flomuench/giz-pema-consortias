@@ -27,6 +27,8 @@
 ***********************************************************************
 use "${regis_intermediate}/regis_inter", clear
 
+this is an example
+
 {
 	* replace "-" with missing value
 ds, has(type string) 
