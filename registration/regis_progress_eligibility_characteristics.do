@@ -35,7 +35,6 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 * 	PART 2:  Registration progress		  			
 ***********************************************************************
 putpdf paragraph, halign(center) 
-putpdf text ("E-commerce training: registration progress")
 
 {
 	* total number of firms registered
@@ -60,17 +59,16 @@ graph bar (count), over(dateinscription, label(angle(60) labsize(vsmall))) ///
 */
 	
 format %-td dateinscription 
-graph twoway histogram dateinscription, frequency width(1) ///
-		tlabel(02nov2021(1)07dec2021, angle(60) labsize(vsmall)) ///
-		ytitle("nombre d'enregistrement") ///
-		title("{bf:Campagne de communication: Enregistrement par jour}") ///
-		subtitle("{it: Envoie des emails en rouge}") ///
-		tline(22586 22592 22600 22609 22613, lcolor(red) lpattern(dash)) 
-gr export enregistrement_par_jour.png, replace
-putpdf paragraph, halign(center) 
-putpdf image enregistrement_par_jour.png
-putpdf pagebreak
-		
+	graph twoway histogram dateinscription if dateinscription != ., frequency width(1) ///
+			tlabel(20dec2021(1)03feb2022, angle(60) labsize(vsmall)) ///
+			ytitle("nombre d'enregistrement") ///
+			title("{bf:Campagne de communication: Enregistrement par jour}")
+			*subtitle("{it: Envoie des emails en rouge}")
+			*tline(22586 22592 22600 22609 22613, lcolor(red) lpattern(dash)) 
+	gr export enregistrement_par_jour.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image enregistrement_par_jour.png
+	putpdf pagebreak
 		
 	
 	* communication channels
@@ -126,14 +124,14 @@ histogram rg_fte, frequency addl ///
 	
 histogram rg_fte if rg_fte <= 200, frequency addl ///
 	title("Nombre des employés") ///
-	subtitle("Entreprises ayantes <= 200 employés") ///
-	xlabel(0(5)200,  labsize(tiny) format(%20.0fc)) ///
+	subtitle("Entreprises ayantes <= 100 employés") ///
+	xlabel(0(5)100,  labsize(tiny) format(%20.0fc)) ///
 	bin(30) ///
-	xline(6) xline(200) ///
-	note("Les deux lignes réprésentent le min. et max. selon les critères d'éligibilité.", size(vsmall)) ///
-	name(fte_200, replace)
+	xline(6) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	name(fte_100, replace)
 	
-gr combine fte_full fte_200
+gr combine fte_full fte_100
 graph export fte.png, replace
 putpdf paragraph, halign(center) 
 putpdf image fte.png
@@ -221,9 +219,9 @@ putpdf pagebreak
 ***********************************************************************
 	* create a heading for the section in the pdf
 putpdf paragraph, halign(center) 
-putpdf text ("E-commerce training: firm characteristics"), bold linebreak
+putpdf text ("Consortia d'export PME femmes: firm characteristics"), bold linebreak
 
-	* secteurs
+/*	* secteurs
 graph hbar (count), over(sector, sort(1)) blabel(total) ///
 	title("Sector - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
@@ -232,18 +230,19 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 	title("Sector - Entreprises eligibles") ///
 	ytitle("nombre d'entreprises") ///
 	name(sector_eligible, replace)
+*/
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les entreprises") ///
+	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
 graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les entreprises") ///
+	title("Pôle d'activité - entreprises éligibles") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_eligible, replace)
-gr combine sector_tous sector_eligible subsector_tous subsector_eligible , title("{bf: Distribution sectorielle}")
-graph export sector.png, replace 
+gr combine subsector_tous subsector_eligible , title("{bf: Distribution selon pôle d'activité}")
+graph export poles.png, replace 
 putpdf paragraph, halign(center) 
-putpdf image sector.png
+putpdf image poles.png
 putpdf pagebreak
 	
 	* gender
@@ -252,7 +251,7 @@ graph bar (count), over(rg_gender_rep) blabel(total) ///
 	ytitle("nombre d'enregistrement") ///
 	name(gender_rep_tot, replace)
 graph bar (count), over(rg_gender_rep) over(eligible) blabel(total, format(%-9.0fc)) ///
-	title("Gender of firm representative") subtitle("Selon statut d'éligibilité") ///
+	title("Genre répresentant(e)") subtitle("Selon statut d'éligibilité") ///
 	ytitle("pourcentage des entreprises") ///
 	name(gender_rep_eligible, replace)
 graph bar (count), over(rg_gender_pdg) blabel(total) ///
@@ -271,17 +270,17 @@ putpdf pagebreak
 
 	* distribution of firms by gender and subsector
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les PME enregistrées") ///
+	title("Pôle d'activité - Toutes les PME enregistrées") ///
 	ytitle("nombre d'entreprises") ///
 	name(gender_ssector_tot, replace)
 graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Subsector - PME éligibles") ///
+	title("Pôle d'activité - PME éligibles") ///
 	ytitle("nombre d'entreprises") ///
 	name(gender_ssector_eligible, replace)
-gr combine gender_ssector_tot gender_ssector_eligible, title("{bf:Genre des réprésentantes selon secteur}")
-graph export gender_sector.png, width(1500) height(1500) replace
+gr combine gender_ssector_tot gender_ssector_eligible, title("{bf:Genre des réprésentantes selon pôle d'activité}")
+graph export gender_pole.png, width(1500) height(1500) replace
 putpdf paragraph, halign(center) 
-putpdf image gender_sector.png
+putpdf image gender_pole.png
 putpdf pagebreak
 	* position du répresentant --> hbar
 	

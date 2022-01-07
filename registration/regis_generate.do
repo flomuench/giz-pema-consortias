@@ -32,40 +32,30 @@ use "${regis_intermediate}/regis_inter", clear
 * 	PART 2: factor variable sector & subsector 			  										  
 ***********************************************************************
 
-label define sector_name 1 "Agriculture & Peche" ///
+/*label define sector_name 1 "Agriculture & Peche" ///
 	2 "Artisanat" ///
 	3 "Commerce international" ///
 	4 "Industrie" ///
 	5 "Services" ///
-	6 "TIC" 
+	6 "TIC" */
 
-label define subsector_name 1 "agriculture" ///
-	2 "architecture" ///
-	3 "artisanat" ///
-	4 "assistance" ///
-	5 "audit" ///
-	6 "autres" ///
-	7 "centre d'appel" ///
-	8 "commerce international" ///
-	9 "développement informatique" ///
-	10 "enseignement" ///
-	11 "environnement et formation" ///
-	12 "industries diverses" ///
-	13 "industries mécaniques et électriques" ///
-	14 "industries agro-alimentaires" ///
-	15 "industries chimiques" ///
-	16 "industries des matériaux de construction, de la céramique et du verre" ///
-	17 "industries du cuir et de la chaussure" ///
-	18 "industries du textile et de l'habillement" ///
-	19 "pêche" ///
-	20 "réseaux et télécommunication" ///
-	21 "services et études dans le domaine de batîment"
+label define subsector_name 1 "autres" ///
+	2 "pôle d'activités agri-agroalimentaire" ///
+	3 "pôle d'activités artisanat" ///
+	4 "pôle d'activités cosmétiques" ///
+	5 "pôle d'activités de service conseil, education et formation" ///
+	6 "pôle d'activités technologies de l'information et de la communication" ///
+	7 "pôle d'activités textiles et habillement" ///
+	8 "pôle de l'énergie durable et développement durable" ///
+	9 "pôle d’activités artisanat" ///
+	10 "pôle d’activités de service conseil, education et formation" ///
+	11 "pôle d’activités technologies de l’information et de la communication"
 
-tempvar Sector
+/*tempvar Sector
 encode sector, gen(`Sector')
 drop sector
 rename `Sector' sector
-lab values sector sector_name
+lab values sector sector_name */
 
 tempvar Subsector
 encode subsector, gen(`Subsector')

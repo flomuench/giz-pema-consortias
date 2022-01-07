@@ -39,9 +39,6 @@ format %-25.0fc `numvars'
 format Date* %td
 
 
-	* tel numbers
-format %15.0g *Tél*
-
 ***********************************************************************
 * 	PART : Removing trail, leading spaces + lower all letters  			
 ***********************************************************************
@@ -57,7 +54,7 @@ replace `x' = lower(stritrim(strtrim(`x')))
 * 	PART 2: 	Drop all text windows from the survey		  			
 ***********************************************************************
 
-*drop VARNAMES
+drop Domaine /* Domaine = Sector, empty for consortia */
 
 
 ***********************************************************************
@@ -107,7 +104,7 @@ rename datedecréation date_created
 rename effectiftotal rg_fte
 rename nbrdefemmessalariée rg_fte_femmes 
 rename capitalsocial rg_capital 
-rename domaine sector
+*rename domaine sector
 rename secteurdactivité subsector
 			* Export
 rename régime rg_exportstatus
@@ -156,7 +153,7 @@ label variable date_created "Date création de l'entreprise"
 label variable rg_fte "nombre d'employés de l'entreprise"
 label variable rg_fte_femmes "nombre d'employées féminin de l'entreprise"
 label variable rg_capital "capital social"
-label variable sector "domaine"
+*label variable sector "domaine"
 label variable subsector " secteur d'acvitivté"
 
 			* Export
