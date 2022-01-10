@@ -68,94 +68,69 @@ order id_admin_correct, a(id_admin)
 lab def correct 1 "correct" 0 "incorrect"
 lab val id_admin_correct correct
 
-    * Correct Nom et prénom du/de la participant.e à l’activité
-/*
-gen rg_nom_rep_cor = rg_nom_rep
-replace rg_nom_rep_cor = ustrregexra( rg_nom_rep_cor ,"mr ","")
-replace rg_nom_rep_cor = "$check_again" if rg_nom_rep_cor == "Études géomatiques." */
 
+    *correct code de la douane
 
-    * correct code de la douane
-/*
 gen rg_codedouane_cor = rg_codedouane
-replace rg_codedouane_cor = ustrregexra( rg_codedouane_cor ," ","")
-replace rg_codedouane_cor = "0555082b" if rg_codedouane_cor == "0555082b/a/m/000" */
-
-   * correction de la variable autres
-/*
-gen autres_cor = autres
-replace autres_cor = "conseil" if ustrregexm( autres_cor ,"conseil")== 1
-replace autres_cor = "consulting" if ustrregexm( autres_cor ,"consulting")== 1
-replace autres_cor = "services informatiques" if ustrregexm( autres_cor ,"informatique")== 1
-replace autres_cor = "communication" if ustrregexm( autres_cor ,"communication")== 1
-replace autres_cor = "marketing digital" if ustrregexm( autres_cor ,"marketing digital")== 1
-replace autres_cor = "bureau d'études" if ustrregexm( autres_cor ,"bureau d'études")== 1
-replace autres_cor = "design" if ustrregexm( autres_cor ,"design")== 1 */
+replace rg_codedouane_cor = ustrregexra(rg_codedouane," ","")
+replace rg_codedouane_cor = "1435318s" if rg_codedouane_cor == "1435318/s"
+order rg_codedouane_cor, a(rg_codedouane)
+drop rg_codedouane 
+rename rg_codedouane_cor rg_codedouane 
 
 
 	* correct telephone numbers with regular expressions
 		* representative
-/* gen rg_telrep_cor = ustrregexra(rg_telrep, "^216", "")
+ gen rg_telrep_cor = ustrregexra(rg_telrep, "^216", "")
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"[a-z]","")
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor," ","")
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"00216","")
-replace rg_telrep_cor = "29939431" if rg_telrep_cor == "+21629939431"
-replace rg_telrep_cor = "22161622" if rg_telrep_cor == "(+216)22161622" */
+
 
 	* Check all phone numbers having more or less than 8 digits
-*replace rg_telrep_cor = "$check_again" if strlen( rg_telrep_cor ) != 8
+replace rg_telrep_cor = "$check_again" if strlen( rg_telrep_cor ) != 8
 
 	* Check phone number
-/* gen diff = length(rg_telrep) - length(rg_telrep_cor)
+gen diff = length(rg_telrep) - length(rg_telrep_cor)
 order rg_telrep_cor diff, a(rg_telrep)
 *browse rg_telrep* diff
 drop rg_telrep diff
-rename rg_telrep_cor rg_telrep */
-
-	* Correct the website
-/*
-gen rg_siteweb_cor = rg_siteweb
-replace rg_siteweb_cor = ustrregexra(rg_siteweb_cor ,"https://","")
-replace rg_siteweb_cor = ustrregexra(rg_siteweb_cor ,"http://","")
-replace rg_siteweb_cor = ustrregexra(rg_siteweb_cor ,"/","")
-replace rg_siteweb_cor = "$check_again" if rg_siteweb_cor == "je n ai pas encore" */
+rename rg_telrep_cor rg_telrep 
 
 
 	* Téléphone du de lagérante
-/*
+
 gen rg_telpdg_cor = ustrregexra( rg_telpdg, "^216", "")
 replace rg_telpdg_cor = subinstr(rg_telpdg_cor, " ", "", .)
 replace rg_telpdg_cor = ustrregexra( rg_telpdg_cor,"[a-z]","")
 replace rg_telpdg_cor = ustrregexra( rg_telpdg_cor,"00216","")
 order rg_telpdg_cor, a(rg_telpdg)
-replace rg_telpdg_cor = "98412425" if rg_telpdg_cor == "+21698412425"
-replace rg_telpdg_cor = "$check_again" if rg_telpdg_cor == "nasralichakroun"
+replace rg_telpdg_cor = "52710565" if rg_telpdg_cor == "(+216)52710565"
+replace rg_telpdg_cor = "97405671" if rg_telpdg_cor == "+21697405671"
+replace rg_telpdg_cor = "$check_again" if rg_telpdg_cor == "82828"
 drop rg_telpdg 
-rename rg_telpdg_cor rg_telpdg */
+rename rg_telpdg_cor rg_telpdg
 
 
+    * adresse mail du PDG
+replace rg_emailpdg = "$check_again" if rg_emailpdg == "yosra.slama@genoviaing"
 
 	* variable: Qualité/fonction
 
-/*gen rg_position_repcor = ustrlower(rg_position_rep)
-replace rg_position_repcor = "account manager" if rg_position_rep == "acount manager"
-replace rg_position_repcor = "business development manager" if rg_position_rep == "business développement manager"
+gen rg_position_repcor = ustrlower(rg_position_rep)
+replace rg_position_repcor = "directrice" if rg_position_rep == "dirctrice"
+replace rg_position_repcor = "$check_again" if rg_position_rep == "group task 6 - peer to peer group wee"
 replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
 replace rg_position_repcor = "gérante" if rg_position_rep == "gerante"
 replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
-replace rg_position_repcor = "responsable commercial" if rg_position_rep == "res commercial"
-replace rg_position_repcor = "responsable financier" if rg_position_rep == "resp.financier"
-replace rg_position_repcor = "responsable commercial" if rg_position_rep == "responsables commercials"
-replace rg_position_repcor = "financière" if rg_position_rep == "financiere"
-replace rg_position_repcor = "gestionnaire des opérations" if rg_position_rep == "gestionnaire des operations"
-replace rg_position_repcor = "directeur technique" if rg_position_rep == "directeur techique"
+replace rg_position_repcor = "gérante" if rg_position_rep == "gérant e"
 replace rg_position_repcor = "coo" if rg_position_rep == "c.o.o"
 order rg_position_repcor, a(rg_position_rep)
 drop rg_position_rep 
-rename rg_position_repcor rg_position_rep */
+rename rg_position_repcor rg_position_rep 
 
 	* variable: Matricule CNSS
-/*
+
 gen rg_matricule_cor = ustrregexra(rg_matricule, "[ ]", "")
 replace rg_matricule_cor = ustrregexra(rg_matricule_cor, "[/]", "-")
 replace rg_matricule_cor = ustrregexra(rg_matricule_cor, "[_]", "-")
@@ -179,35 +154,25 @@ gen t4 = t2 + "-" + t3
 replace t4 = ustrregexra(t4, "[-]", "") if length(t4)==1
 replace rg_matricule_cor = t4 if length(rg_matricule_cor)==10
 order rg_matricule_cor , a(rg_matricule)
-drop t1 t2 t3 t4 
-
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "02877-62"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "1342aam000"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "17"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "1548345"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "276297"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "2828-50"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "3212417"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "405216"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "5524552"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "5643390"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "01755t"
-replace rg_matricule_cor  = "$check_again" if rg_matricule_cor == "7260852" 
+drop t1 t2 t3 t4  
 
 replace rg_matricule_cor = "$check_again" if length(rg_matricule_cor) >= 12 | length(rg_matricule_cor) <= 7
 drop rg_matricule
 rename rg_matricule_cor rg_matricule
 
-*/
+		* Nom de l'entreprise:
 
+replace firmname = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
+replace firmname = "$check_again" if firmname == "suarl"
+replace firmname = "$check_again" if firmname == "sarl"
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
-/*
+
 	* cleaning capital social
-gen capitalsocial_corr = rg_capital
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,",","")
+/* gen capitalsocial_corr = rg_capital
+replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"","")
 replace capitalsocial_corr = ustrregexra( capitalsocial_corr," ","")
 replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"dinars","")
 replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"dt","")
