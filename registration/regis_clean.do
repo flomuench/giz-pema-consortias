@@ -23,7 +23,7 @@
 * 	PART 1: 	Format string & numerical & date variables		  			
 ***********************************************************************
 use "${regis_raw}/regis_raw", clear
-
+	
 	* string
 ds, has(type string) 
 local strvars "`r(varlist)'"
@@ -38,6 +38,14 @@ format %-25.0fc `numvars'
 		* creation, inscription
 format Date* %td
 
+	* keep dates as string variables for RA quality checks
+gen date_creation_string = Datedecréation
+format date_creation_string %td
+tostring date_creation_string, replace u force
+
+gen date_inscription_string = Dateinscription
+format date_inscription_string %td
+tostring date_inscription_string, replace u force
 
 ***********************************************************************
 * 	PART : Removing trail, leading spaces + lower all letters  			
@@ -62,9 +70,7 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Order the variables in the data set		  			
 ***********************************************************************
-{
 
-}
 
 ***********************************************************************
 * 	PART 5: 	Rename the variables in line with GIZ contact list final	  			
@@ -72,6 +78,7 @@ rename *, lower
 {
 	* Section identification
 rename id id_plateforme
+rename groupe treatment
 
 	* Section informations personnelles répresentantes
 rename nometprénomdudelaparticipa rg_nom_rep

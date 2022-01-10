@@ -24,7 +24,7 @@ clear all
 graph drop _all
 scalar drop _all
 set more off
-set graphics on /* switch off to on to display graphs */
+set graphics off /* switch off to on to display graphs */
 capture program drop zscore /* drops the program programname */
 qui cap log c
 

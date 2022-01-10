@@ -49,8 +49,10 @@ label define subsector_name 1 "autres" ///
 	8 "pôle de l'énergie durable et développement durable" ///
 	9 "pôle d’activités artisanat" ///
 	10 "pôle d’activités de service conseil, education et formation" ///
-	11 "pôle d’activités technologies de l’information et de la communication"
+	11 "pôle d’activités technologies de l’information et de la communication" ///
+	12 "pôle d’activités technologies de l’information et de la communication"
 
+	
 /*tempvar Sector
 encode sector, gen(`Sector')
 drop sector
@@ -168,7 +170,7 @@ format ca_* %12.2fc
 egen ca_mean = rowmean(ca_2018 ca_2019 ca_2020)
 lab var ca_mean "chiffre d'affaires moyenne 2018-2020"
 egen ca_exp_mean = rowmean(ca_exp2018 ca_exp2019 ca_exp2020)
-lab var ca_mean "chiffre d'affaires export moyenne 2018-2020"
+lab var ca_exp_mean "chiffre d'affaires export moyenne 2018-2020"
 
 	* gen share of export ca in ca
 forvalues x = 2018(1)2020 {
@@ -198,8 +200,8 @@ lab val eligible_sans_matricule eligible2
 
 		* alternative definition of eligibility
 			* intention to export rather than one export operation
-gen eligible_alternative = (rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
-lab val eligible_alternative eligible
+gen eligible_intention = (id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
+lab val eligible_intention eligible
 
 
 		* eligibility including also no webpage or social network
