@@ -97,14 +97,15 @@ putpdf text ("Consortia: eligibility"), bold linebreak
 
 
 	* distribution of ca and ca export 2018, 2019, 2020
+set graphics on
 histogram ca_mean, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	subtitle("Toutes les entreprises enregistrées") ///
 	ytitle("Nombre d'entreprises") ///
 	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
-	bin(100) ///
+	bin(80) ///
 	xline(1.5) ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
 	name(ca_mean, replace)
 gr export ca_mean.png, replace
 putpdf paragraph, halign(center) 
@@ -115,10 +116,10 @@ histogram ca_exp_mean, frequency addl ///
 	title("Chiffre d'affaires export moyennes 2018-2020") ///
 	subtitle("Toutes les entreprises enregistrées") ///
 	ytitle("Nombre d'entreprises") ///
-	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
-	bin(100) ///
+	xlabel(0 1 2 3 4 5 10 20 30 40 50, labsize(tiny) format(%9.0fc)) ///
+	bin(50) ///
 	xline(0.15) ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité (15.000 Dinar).", size(vsmall)) ///
 	name(ca_exp_mean, replace)
 gr export ca_exp_mean.png, replace
 putpdf paragraph, halign(center) 
@@ -139,6 +140,8 @@ gr export share_export.png, replace
 putpdf paragraph, halign(center) 
 putpdf image share_export.png
 putpdf pagebreak
+
+set graphics off
 
 	* identifiant unique correct (oui ou non)
 graph bar (count), over(id_admin_correct) blabel(total) ///
@@ -228,22 +231,29 @@ putpdf image presence_enligne.png
 putpdf pagebreak
 	
 	* eligibility
+		* including "operation d'export"
 graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
+	subtitle("Opération d'export") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligibles, replace) ///
-	note(`"Chaque entreprise est éligible qui a fourni un matricul fiscal correct, a >= 6 & < 200 employés, une produit exportable, "' `"l'intention d'exporter, >= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne."', size(vsmall) color(red))
-graph bar (count), over(eligible_sans_matricule) blabel(total) ///
-	title("Entreprises potentiellement éligibles") ///
+	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, a >= 6 & < 200 employés, une produit exportable, " "l'intention d'exporter, >= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
+
+		* just "intention d'export"
+graph bar (count), over(eligible_intention) blabel(total) ///
+	title("Entreprises actuellement éligibles") ///
+	subtitle("Seulement intention d'export") ///
 	ytitle("nombre d'enregistrement") ///
-	name(potentiellement_eligible, replace)
-gr combine eligibles potentiellement_eligible, title("{bf:Eligibilité des entreprises}")
+	name(eligible_intention, replace)
+gr combine eligibles eligible_intention, title("{bf:Eligibilité des entreprises}")
 graph export eligibles.png, replace
 putpdf paragraph, halign(center) 
 putpdf image eligibles.png
 putpdf pagebreak
+		
+		
 
-	* eligibility online presence
+/*	* eligibility online presence
 graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
 	ytitle("nombre d'enregistrement") ///
@@ -258,6 +268,7 @@ graph export eligibles_enligne.png, replace
 putpdf paragraph, halign(center) 
 putpdf image eligibles_enligne.png
 putpdf pagebreak
+*/
 
 ***********************************************************************
 * 	PART 4:  Characteristics
@@ -276,19 +287,34 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 	ytitle("nombre d'entreprises") ///
 	name(sector_eligible, replace)
 */
+
+		* poles d'activité
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
-graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
+graph hbar (count) if eligible_intention == 1, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
 	title("Pôle d'activité - entreprises éligibles") ///
+	subtitle("intention d'export") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_eligible, replace)
-gr combine subsector_tous subsector_eligible , title("{bf: Distribution selon pôle d'activité}")
+graph combine subsector_tous subsector_eligible , title("{bf: Distribution selon pôle d'activité}")
 graph export poles.png, replace 
 putpdf paragraph, halign(center) 
 putpdf image poles.png
 putpdf pagebreak
+
+		* categories d'autres
+set graphics on
+graph hbar (count), over(autres, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
+	title("Pole d'activité - catégorie autres") ///
+	ytitle("nombre d'entreprises") ///
+	name(autres, replace)
+graph export sector_autres.png, replace 
+putpdf paragraph, halign(center) 
+putpdf image sector_autres.png
+putpdf pagebreak	
+set graphics off
 	
 	* gender
 graph bar (count), over(rg_gender_rep) blabel(total) ///
@@ -343,6 +369,7 @@ putpdf pagebreak
 ***********************************************************************
 * 	PART 5:  Alternative eligibility
 ***********************************************************************
+/*
 putpdf paragraph, halign(center) 
 putpdf text ("Eligibilité sous contraintes lachés"), bold linebreak
 
@@ -376,6 +403,8 @@ gr combine gender_ssector_eligible gender_ssector_eligible_alt, title("{bf:Eligi
 graph export gender_sector_eligible_alt.png, replace
 putpdf paragraph, halign(center) 
 putpdf image gender_sector_eligible_alt.png
+
+*/
 	
 ***********************************************************************
 * 	PART 6:  save pdf
@@ -383,7 +412,7 @@ putpdf image gender_sector_eligible_alt.png
 	* change directory to progress folder
 cd "$regis_progress"
 	* pdf
-putpdf save "progress-eligibility-characteristics", replace
+putpdf save "consortium-progress-eligibility-characteristics", replace
 
 	* export excel with list of firms that we need to contact for them to correct
 		* their matricule fiscal

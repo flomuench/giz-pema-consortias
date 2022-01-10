@@ -237,8 +237,6 @@ foreach x of local destrvar {
 destring `x', replace
 }
 
-format 
-
 ***********************************************************************
 * 	PART 5:  Convert problematic values for open-ended questions  			
 ***********************************************************************
