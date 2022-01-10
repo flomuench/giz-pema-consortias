@@ -80,7 +80,7 @@ putdocx text ("Go to do-file 'regis_correct' part 9 'remove duplicates' to exami
 putdocx pagebreak
 
 ***********************************************************************
-* 	PART 3:  Open question variaregises		  			
+* 	PART 3:  Open question variables	  			
 ***********************************************************************
 		* sort stable by firmname to identify duplicates by eyeballing based on firmname
 sort firmname, stable
@@ -88,7 +88,8 @@ sort firmname, stable
 		* define all the variables where respondent had to enter text
 local regis_open rg_fte rg_fte_femmes date_created rg_capital rg_position rg_legalstatus /// /* firm characteristics */
 	   firmname rg_nom_rep rg_telrep rg_telpdg rg_emailrep rg_emailpdg rg_adresse /// /* personal */
-	   rg_matricule rg_codedouane 
+	   rg_matricule rg_codedouane /// /* administrative numbers */
+	   ca_2018 ca_2019 ca_2020 ca_exp2018 ca_exp2019 ca_exp2020 /* accounting */ 
 				
 		* export all the variables into a word document
 foreach x of local regis_open {

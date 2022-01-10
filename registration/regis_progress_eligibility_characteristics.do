@@ -26,7 +26,7 @@ cd "$regis_progress"
 putpdf begin 
 putpdf paragraph
 
-putpdf text ("E-commerce training: registration progress, elibility, firm characteristics"), bold linebreak
+putpdf text ("Consortia: registration progress, elibility, firm characteristics"), bold linebreak
 
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 
@@ -34,6 +34,8 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 ***********************************************************************
 * 	PART 2:  Registration progress		  			
 ***********************************************************************
+putpdf paragraph, halign(center) 
+putpdf text ("Consortia: registration progress"), bold linebreak
 putpdf paragraph, halign(center) 
 
 {
@@ -91,9 +93,53 @@ graph box rg_fte, over(moyen_com, sort(1) lab(labsize(tiny))) blabel(total) ///
 * 	PART 3:  Eligibility		  			
 ***********************************************************************
 putpdf paragraph, halign(center) 
-putpdf text ("E-commerce training: eligibility"), bold linebreak
+putpdf text ("Consortia: eligibility"), bold linebreak
 
-{
+
+	* distribution of ca and ca export 2018, 2019, 2020
+histogram ca_mean, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	subtitle("Toutes les entreprises enregistrées") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
+	bin(100) ///
+	xline(1.5) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	name(ca_mean, replace)
+gr export ca_mean.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean.png
+putpdf pagebreak
+	
+histogram ca_exp_mean, frequency addl ///
+	title("Chiffre d'affaires export moyennes 2018-2020") ///
+	subtitle("Toutes les entreprises enregistrées") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
+	bin(100) ///
+	xline(0.15) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	name(ca_exp_mean, replace)
+gr export ca_exp_mean.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_exp_mean.png
+putpdf pagebreak
+	
+	* share of export in total sales 
+histogram mean_exp_share, frequency addl ///
+	title("Part des exportation dans le chiffre d'affaires") ///
+	subtitle("Moyennes 2018-2020: toutes les entreprises enregistrées") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0(0.1)5, labsize(tiny) format(%9.1fc)) ///
+	bin(50) ///
+	xline(0.15) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	name(share_export, replace)
+gr export share_export.png, replace
+putpdf paragraph, halign(center) 
+putpdf image share_export.png
+putpdf pagebreak
+
 	* identifiant unique correct (oui ou non)
 graph bar (count), over(id_admin_correct) blabel(total) ///
 	title("Identifiant unique/matricule fiscal format correct") ///
@@ -213,7 +259,6 @@ putpdf paragraph, halign(center)
 putpdf image eligibles_enligne.png
 putpdf pagebreak
 
-}
 ***********************************************************************
 * 	PART 4:  Characteristics
 ***********************************************************************

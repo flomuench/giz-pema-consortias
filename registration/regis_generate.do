@@ -150,10 +150,43 @@ gen presence_enligne = (rg_siteweb != "" | rg_media != ""), b(rg_siteweb)
 lab def enligne 1 "présente enligne" 0 "ne pas présente enligne"
 lab values presence_enligne enligne
 
+***********************************************************************
+* 	PART : chiffres d'affaires et chiffres d'affaires à l'export
+***********************************************************************
+	* change the units
+forvalues x = 2018(1)2020 {
+	replace ca_`x' = ca_`x'/100000
+	lab var ca_`x' "chiffres d'affaires `x' en 100.000"
+	replace ca_exp`x' = ca_exp`x'/100000
+	lab var ca_exp`x' "chiffres d'affaires export `x' en 100.000"
+}
+
+format ca_* %12.2fc
+
+
+	* generate average for 2018-2020
+egen ca_mean = rowmean(ca_2018 ca_2019 ca_2020)
+lab var ca_mean "chiffre d'affaires moyenne 2018-2020"
+egen ca_exp_mean = rowmean(ca_exp2018 ca_exp2019 ca_exp2020)
+lab var ca_mean "chiffre d'affaires export moyenne 2018-2020"
+
+	* gen share of export ca in ca
+forvalues x = 2018(1)2020 {
+	gen exp_share`x' = ca_exp`x'/ ca_`x'
+}
+egen mean_exp_share = rowmean(exp_share2018 exp_share2019 exp_share2020)
+lab var mean_exp_share "part des exports en CA"
+
+	* gen dummy for firms where ca_exp > ca
+gen difca = (ca_exp_mean > ca_mean)
+
 
 ***********************************************************************
 * 	PART 10: eligibiliy dummy
 ***********************************************************************
+
+gen ca_eligible = (ca_mean > 1.5 & ca_mean < . & ca_exp_mean > 0.15 & ca_exp_mean < .)
+
 gen eligible = (id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
 lab def eligible 1 "éligible" 0 "inéligible"
 lab val eligible eligible

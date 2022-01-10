@@ -54,9 +54,6 @@ replace `x' = lower(stritrim(strtrim(`x')))
 * 	PART 2: 	Drop all text windows from the survey		  			
 ***********************************************************************
 
-drop Domaine /* Domaine = Sector, empty for consortia */
-
-
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
 ***********************************************************************
@@ -91,6 +88,14 @@ rename raisonsociale firmname
 	* Section présence en ligne
 rename sitedelentreprise rg_siteweb 
 rename réseausocialdelentreprise rg_media 
+
+	* Section accounting
+rename chiffredaffaires2018 ca_2018
+rename chiffredaffairesexport2018 ca_exp2018 
+rename chiffredaffaires2019 ca_2019
+rename chiffredaffairesexport2019 ca_exp2019
+rename chiffredaffaires2020 ca_2020
+rename chiffredaffairesexport2020 ca_exp2020
 
 	* Section firm characteristics
 			* Legal
@@ -139,6 +144,15 @@ label variable firmname "nom de l'entreprise"
 	* Section présence en ligne
 label variable rg_siteweb "site web de l'entreprise"
 label variable rg_media "réseau  social de l'entreprise"
+
+	* Section accounting
+lab var ca_2018 "chiffre d'affaires 2018"
+lab var ca_2019 "chiffre d'affaires 2019"
+lab var ca_2020 "chiffre d'affaires 2020"
+
+lab var ca_exp2018 "chiffre d'affaires 2018"
+lab var ca_exp2019 "chiffre d'affaires 2019"
+lab var ca_exp2020 "chiffre d'affaires 2020"
 
 	* Section firm characteristics
 			* Legal

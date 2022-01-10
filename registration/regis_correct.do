@@ -27,8 +27,6 @@
 ***********************************************************************
 use "${regis_intermediate}/regis_inter", clear
 
-this is an example
-
 {
 	* replace "-" with missing value
 ds, has(type string) 
@@ -234,11 +232,12 @@ replace capitalsocial_corr = "$check_again" if capitalsocial_corr == "tunis"
 ***********************************************************************
 * 	PART 4:  Convert string to numerical variaregises	  			
 ***********************************************************************
-local destrvar "rg_fte rg_fte_femmes id_plateforme"
+local destrvar "rg_fte rg_fte_femmes id_plateforme ca_2018 ca_2019 ca_2020 ca_exp2018 ca_exp2019 ca_exp2020"
 foreach x of local destrvar { 
 destring `x', replace
 }
 
+format 
 
 ***********************************************************************
 * 	PART 5:  Convert problematic values for open-ended questions  			
