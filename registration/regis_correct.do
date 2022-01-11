@@ -62,8 +62,13 @@ example variables:
 - id_admin, nom_rep etc.
 
 */ 
+        * Matricule fiscale de l'entreprise:
+gen id_admin_cor = id_admin
+replace id_admin_cor = ustrregexra( id_admin_cor ,"/","")
+replace id_admin_cor = ustrregexra( id_admin_cor ," ","")
+
 		* gen dummy if matricule fiscal is correct: 7 digit, 1 character condition
-gen id_admin_correct = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
+gen id_admin_correct = ustrregexm(id_admin_cor, "([0-9]){6,7}[a-z]")
 order id_admin_correct, a(id_admin)
 lab def correct 1 "correct" 0 "incorrect"
 lab val id_admin_correct correct
@@ -165,6 +170,42 @@ rename rg_matricule_cor rg_matricule
 replace firmname = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
 replace firmname = "$check_again" if firmname == "suarl"
 replace firmname = "$check_again" if firmname == "sarl"
+replace firmname = "$check_again" if firmname == "tataouine"
+
+        * Site web de l'entreprise:
+
+gen rg_siteweb_corr = rg_siteweb
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "zi mornag"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "en cours"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "fb:rahmatabletop"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "gouvernorat de nabeul"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "les doigts d'or keffois"
+replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"https://","")
+replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
+replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
+replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
+
+       * Capital social de l'entreprise
+	   
+replace rg_capital_cor = 88888888888888888 if rg_capital_cor < 1000
+replace rg_capital_cor = 88888888888888888 if rg_capital_cor > 1000000
+
+       * chiffre d'affaire 2018
+	   
+gen ca_2018_cor = ca_2018
+replace ca_2018_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2019
+       * chiffre d'affaire 2019
+	   
+gen ca_2019_cor = ca_2019
+replace ca_2019_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2020
+
+	   * chiffre d'affaire 2020
+	   
+gen ca_2020_cor = ca_2020
+replace ca_2020_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2021
+
+count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_exp2020_cor==0
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
