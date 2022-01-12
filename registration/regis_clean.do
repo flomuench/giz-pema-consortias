@@ -157,9 +157,9 @@ lab var ca_2018 "chiffre d'affaires 2018"
 lab var ca_2019 "chiffre d'affaires 2019"
 lab var ca_2020 "chiffre d'affaires 2020"
 
-lab var ca_exp2018 "chiffre d'affaires 2018"
-lab var ca_exp2019 "chiffre d'affaires 2019"
-lab var ca_exp2020 "chiffre d'affaires 2020"
+lab var ca_exp2018 "chiffre d'affaires export 2018"
+lab var ca_exp2019 "chiffre d'affaires export 2019"
+lab var ca_exp2020 "chiffre d'affaires export 2020"
 
 	* Section firm characteristics
 			* Legal
@@ -188,6 +188,17 @@ label variable moyen_com "moyen de communication ayant permis de découvrir l'ex
 label variable rg_confidentialite "Partager utiliser les données confidentielles"
 label variable rg_partage_donnees "Partager/utiliser les données collectées et anonymisées"
 label variable rg_enregistrement_coordonnees "Enregistrer mes coordonnées sur sa base de données"
+
+		* Variables corrigées
+label variable ca_2018_cor "chiffre d'affaires 2018"
+label variable ca_2019_cor "chiffre d'affaires 2019"
+label variable ca_2020_cor "chiffre d'affaires 2020"
+label variable id_admin_cor "matricule fiscale"
+label variable rg_adresse_cor "adresse du siège social"
+label variable rg_capital_cor "capital social"
+label variable rg_nom_rep_cor "nom et prénom du representant"
+label variable rg_siteweb_corr "site web de l'entreprise"
+label variable rg_media_cor "réseau social de l'entreprise"
 
 		* Section eligibility
 }

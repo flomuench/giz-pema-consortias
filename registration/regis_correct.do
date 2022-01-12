@@ -62,6 +62,12 @@ example variables:
 - id_admin, nom_rep etc.
 
 */ 
+
+* Nombre d'employés dans l'entreprise 
+*le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
+gen rg_fte_femmes_cor = rg_fte_femmes
+replace rg_fte_femmes_cor = 88888888888888888 if rg_fte < rg_fte_femmes
+
         * Matricule fiscale de l'entreprise:
 gen id_admin_cor = id_admin
 replace id_admin_cor = ustrregexra( id_admin_cor ,"/","")
@@ -79,6 +85,8 @@ lab val id_admin_correct correct
 gen rg_codedouane_cor = rg_codedouane
 replace rg_codedouane_cor = ustrregexra(rg_codedouane," ","")
 replace rg_codedouane_cor = "1435318s" if rg_codedouane_cor == "1435318/s"
+replace rg_codedouane_cor = "77777777777777777" if rg_codedouane == "encours"
+
 order rg_codedouane_cor, a(rg_codedouane)
 drop rg_codedouane 
 rename rg_codedouane_cor rg_codedouane 
@@ -102,6 +110,9 @@ order rg_telrep_cor diff, a(rg_telrep)
 drop rg_telrep diff
 rename rg_telrep_cor rg_telrep 
 
+	* Vérifier nom et prénom du representant*
+gen rg_nom_rep_cor = ustrlower(rg_nom_rep)
+replace rg_nom_rep_cor = "$check_again" if rg_nom_rep_cor == "sawssen" /*le nom de famille manque*/
 
 	* Téléphone du de lagérante
 
@@ -172,45 +183,75 @@ replace firmname = "$check_again" if firmname == "suarl"
 replace firmname = "$check_again" if firmname == "sarl"
 replace firmname = "$check_again" if firmname == "tataouine"
 
+		* Adresse de l'entreprise:
+gen rg_adresse_cor = ustrlower(rg_adresse) 
+replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "17"
+replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rte saltnia, km 5"
+replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue new ton"
+replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue mohamed jamoussi"
+
+
         * Site web de l'entreprise:
 
 gen rg_siteweb_corr = rg_siteweb
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "zi mornag"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "en cours"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "facebook.comtinhinansac"
+replace rg_siteweb_corr = "$not_know" if rg_siteweb_corr == "ksibet el mediouni"
+replace rg_siteweb_corr = " " if rg_siteweb_corr == "pas de site"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "fb:rahmatabletop"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "gouvernorat de nabeul"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "les doigts d'or keffois"
+replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "facebook.comol%c3%a9a-amiri-113583540352584"
+
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"https://","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
 
+ *Réseau  social de l'entreprise:
+
+gen rg_media_cor = rg_media
+
+replace rg_media_cor = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media_cor == "rissala kids farm"
+replace rg_media_cor = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media_cor == "laboratoire trésors naturels"
+replace rg_media_cor = "https://www.facebook.com/aabacti/" if rg_media_cor == "bacteriolab"
+
+replace rg_media_cor = " " if rg_media_cor == "aucun pour le moment"
+
+replace rg_media_cor = "$check_again" if rg_media_cor == "presert"
+replace rg_media_cor = "$check_again" if rg_media_cor == "siliana"
+
+replace rg_media_cor = ustrregexra( rg_media_cor ,"https://","")
+replace rg_media_cor = ustrregexra( rg_media_cor ,"http:","")
+
+
+
        * Capital social de l'entreprise
-	   
+gen rg_capital_cor = rg_capital
 replace rg_capital_cor = 88888888888888888 if rg_capital_cor < 1000
 replace rg_capital_cor = 88888888888888888 if rg_capital_cor > 1000000
 
        * chiffre d'affaire 2018
-	   
 gen ca_2018_cor = ca_2018
 replace ca_2018_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2019
+
        * chiffre d'affaire 2019
 	   
 gen ca_2019_cor = ca_2019
 replace ca_2019_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2020
 
 	   * chiffre d'affaire 2020
-	   
 gen ca_2020_cor = ca_2020
 replace ca_2020_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2021
 
-count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_exp2020_cor==0
+count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_2020_cor==0
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
-
+{
 	* cleaning capital social
 /* gen capitalsocial_corr = rg_capital
 replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"","")
@@ -234,7 +275,7 @@ replace capitalsocial_corr = "$check_again" if strlen( capitalsocial_corr) == 2
 
 replace capitalsocial_corr = "$check_again" if capitalsocial_corr == "tunis"
 */
-
+}
 ***********************************************************************
 * 	PART 4:  Convert string to numerical variaregises	  			
 ***********************************************************************
