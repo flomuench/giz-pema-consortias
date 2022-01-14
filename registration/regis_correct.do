@@ -68,13 +68,21 @@ example variables:
 gen rg_fte_femmes_cor = rg_fte_femmes
 replace rg_fte_femmes_cor = 88888888888888888 if rg_fte < rg_fte_femmes
 
+order rg_fte_femmes_cor, a(rg_fte_femmes)
+drop rg_fte_femmes 
+rename rg_fte_femmes_cor rg_fte_femmes 
+
         * Matricule fiscale de l'entreprise:
 gen id_admin_cor = id_admin
 replace id_admin_cor = ustrregexra( id_admin_cor ,"/","")
 replace id_admin_cor = ustrregexra( id_admin_cor ," ","")
 
+order id_admin_cor, a(id_admin)
+drop id_admin 
+rename id_admin_cor id_admin
+
 		* gen dummy if matricule fiscal is correct: 7 digit, 1 character condition
-gen id_admin_correct = ustrregexm(id_admin_cor, "([0-9]){6,7}[a-z]")
+gen id_admin_correct = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
 order id_admin_correct, a(id_admin)
 lab def correct 1 "correct" 0 "incorrect"
 lab val id_admin_correct correct
@@ -103,6 +111,7 @@ replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"00216","")
 	* Check all phone numbers having more or less than 8 digits
 replace rg_telrep_cor = "$check_again" if strlen( rg_telrep_cor ) != 8
 
+
 	* Check phone number
 gen diff = length(rg_telrep) - length(rg_telrep_cor)
 order rg_telrep_cor diff, a(rg_telrep)
@@ -114,6 +123,10 @@ rename rg_telrep_cor rg_telrep
 gen rg_nom_rep_cor = ustrlower(rg_nom_rep)
 replace rg_nom_rep_cor = "$check_again" if rg_nom_rep_cor == "sawssen" /*le nom de famille manque*/
 
+order rg_nom_rep_cor, a(rg_nom_rep)
+drop rg_nom_rep 
+rename rg_nom_rep_cor rg_nom_rep
+
 	* Téléphone du de lagérante
 
 gen rg_telpdg_cor = ustrregexra( rg_telpdg, "^216", "")
@@ -124,12 +137,20 @@ order rg_telpdg_cor, a(rg_telpdg)
 replace rg_telpdg_cor = "52710565" if rg_telpdg_cor == "(+216)52710565"
 replace rg_telpdg_cor = "97405671" if rg_telpdg_cor == "+21697405671"
 replace rg_telpdg_cor = "$check_again" if rg_telpdg_cor == "82828"
-drop rg_telpdg 
+replace rg_telpdg_cor = "28219916" if rg_telpdg_cor == "+21628219916"
+
+order rg_telpdg_cor, a(rg_telpdg)
+drop rg_telpdg
 rename rg_telpdg_cor rg_telpdg
 
 
     * adresse mail du PDG
-replace rg_emailpdg = "$check_again" if rg_emailpdg == "yosra.slama@genoviaing"
+gen rg_emailpdg_cor = rg_emailpdg
+replace rg_emailpdg_cor = "$check_again" if rg_emailpdg == "yosra.slama@genoviaing"
+
+order rg_emailpdg_cor, a(rg_emailpdg)
+drop rg_emailpdg
+rename rg_emailpdg_cor rg_emailpdg
 
 	* variable: Qualité/fonction
 
@@ -177,11 +198,16 @@ drop rg_matricule
 rename rg_matricule_cor rg_matricule
 
 		* Nom de l'entreprise:
+gen firmname_cor = firmname
 
-replace firmname = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
-replace firmname = "$check_again" if firmname == "suarl"
-replace firmname = "$check_again" if firmname == "sarl"
-replace firmname = "$check_again" if firmname == "tataouine"
+replace firmname_cor = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
+replace firmname_cor = "$check_again" if firmname == "suarl"
+replace firmname_cor = "$check_again" if firmname == "sarl"
+replace firmname_cor = "$check_again" if firmname == "tataouine"
+
+order firmname_cor, a(firmname)
+drop firmname 
+rename firmname_cor firmname 
 
 		* Adresse de l'entreprise:
 gen rg_adresse_cor = ustrlower(rg_adresse) 
@@ -190,7 +216,9 @@ replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rte saltnia, km 5"
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue new ton"
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue mohamed jamoussi"
 
-
+order rg_adresse_cor, a(rg_adresse)
+drop rg_adresse 
+rename rg_adresse_cor rg_adresse
         * Site web de l'entreprise:
 
 gen rg_siteweb_corr = rg_siteweb
@@ -210,6 +238,11 @@ replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
 
+
+order rg_siteweb_corr, a(rg_siteweb)
+drop rg_siteweb
+rename rg_siteweb_corr rg_siteweb
+
  *Réseau  social de l'entreprise:
 
 gen rg_media_cor = rg_media
@@ -227,26 +260,46 @@ replace rg_media_cor = ustrregexra( rg_media_cor ,"https://","")
 replace rg_media_cor = ustrregexra( rg_media_cor ,"http:","")
 
 
+order rg_media_cor, a(rg_media)
+drop rg_media
+rename rg_media_cor rg_media
 
        * Capital social de l'entreprise
 gen rg_capital_cor = rg_capital
-replace rg_capital_cor = 88888888888888888 if rg_capital_cor < 1000
-replace rg_capital_cor = 88888888888888888 if rg_capital_cor > 1000000
+
+replace rg_capital_cor = "$check_again"  if length(rg_capital) =< 4
+replace rg_capital_cor = "$check_again"  if length(rg_capital) >= 7
+replace rg_capital_cor = "$check_again"  if rg_capital == "8.88888922661e+16"
+order rg_capital_cor, a(rg_capital)
+drop rg_capital
+rename rg_capital_cor rg_capital
+
 
        * chiffre d'affaire 2018
 gen ca_2018_cor = ca_2018
-replace ca_2018_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2019
+replace ca_2018_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2019
 
+order ca_2018_cor, a(ca_2018)
+drop ca_2018
+rename ca_2018_cor ca_2018
        * chiffre d'affaire 2019
 	   
 gen ca_2019_cor = ca_2019
-replace ca_2019_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2020
+replace ca_2019_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2020
 
+order ca_2019_cor, a(ca_2019)
+drop ca_2019
+rename ca_2019_cor ca_2019
 	   * chiffre d'affaire 2020
 gen ca_2020_cor = ca_2020
-replace ca_2020_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2021
+replace ca_2020_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2021
 
 count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_2020_cor==0
+	
+order ca_2020_cor, a(ca_2020)
+drop ca_2020
+rename ca_2020_cor ca_2020
+
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
