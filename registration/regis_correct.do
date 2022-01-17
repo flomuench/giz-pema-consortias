@@ -35,9 +35,6 @@ foreach x of local strvars {
 		replace `x' = "" if `x' == "-"
 	}
 	
-
-
-
 scalar not_know    = 77777777777777777
 scalar refused     = 99999999999999999
 scalar check_again = 88888888888888888
@@ -46,6 +43,8 @@ scalar check_again = 88888888888888888
 	
 */
 }
+gen needs_check = 0
+gen questions_needing_check = ""
 
 ***********************************************************************
 * 	PART 2: use regular expressions to correct variables 		  			
@@ -67,6 +66,7 @@ example variables:
 *le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
 gen rg_fte_femmes_cor = rg_fte_femmes
 replace rg_fte_femmes_cor = 88888888888888888 if rg_fte < rg_fte_femmes
+
 
 order rg_fte_femmes_cor, a(rg_fte_femmes)
 drop rg_fte_femmes 
@@ -93,7 +93,9 @@ lab val id_admin_correct correct
 gen rg_codedouane_cor = rg_codedouane
 replace rg_codedouane_cor = ustrregexra(rg_codedouane," ","")
 replace rg_codedouane_cor = "1435318s" if rg_codedouane_cor == "1435318/s"
-replace rg_codedouane_cor = "77777777777777777" if rg_codedouane == "encours"
+
+replace questions_needing_check = "rg_codedouane" if id_plateforme == 1002
+replace needs_check = 1 if id_plateforme == 1002
 
 order rg_codedouane_cor, a(rg_codedouane)
 drop rg_codedouane 
@@ -106,12 +108,15 @@ rename rg_codedouane_cor rg_codedouane
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"[a-z]","")
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor," ","")
 replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"00216","")
+replace rg_telrep_cor = "29530240" if rg_telrep_cor == "(+216)29530240"
+replace rg_telrep_cor = "28219916" if rg_telrep_cor == "+21628219916"
+replace rg_telrep_cor = "97405671" if rg_telrep_cor == "+21697405671"
 
 
-	* Check all phone numbers having more or less than 8 digits
+/*	* Check all phone numbers having more or less than 8 digits
 replace rg_telrep_cor = "$check_again" if strlen( rg_telrep_cor ) != 8
 
-
+*/
 	* Check phone number
 gen diff = length(rg_telrep) - length(rg_telrep_cor)
 order rg_telrep_cor diff, a(rg_telrep)
@@ -121,7 +126,10 @@ rename rg_telrep_cor rg_telrep
 
 	* Vérifier nom et prénom du representant*
 gen rg_nom_rep_cor = ustrlower(rg_nom_rep)
+/*
 replace rg_nom_rep_cor = "$check_again" if rg_nom_rep_cor == "sawssen" /*le nom de famille manque*/
+
+*/
 
 order rg_nom_rep_cor, a(rg_nom_rep)
 drop rg_nom_rep 
@@ -136,7 +144,13 @@ replace rg_telpdg_cor = ustrregexra( rg_telpdg_cor,"00216","")
 order rg_telpdg_cor, a(rg_telpdg)
 replace rg_telpdg_cor = "52710565" if rg_telpdg_cor == "(+216)52710565"
 replace rg_telpdg_cor = "97405671" if rg_telpdg_cor == "+21697405671"
+
+/*
 replace rg_telpdg_cor = "$check_again" if rg_telpdg_cor == "82828"
+
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 
+replace needs_check = 1 if id_plateforme ==
+*/
 replace rg_telpdg_cor = "28219916" if rg_telpdg_cor == "+21628219916"
 
 order rg_telpdg_cor, a(rg_telpdg)
@@ -146,8 +160,13 @@ rename rg_telpdg_cor rg_telpdg
 
     * adresse mail du PDG
 gen rg_emailpdg_cor = rg_emailpdg
+
+/*
 replace rg_emailpdg_cor = "$check_again" if rg_emailpdg == "yosra.slama@genoviaing"
 
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 
+replace needs_check = 1 if id_plateforme ==
+*/
 order rg_emailpdg_cor, a(rg_emailpdg)
 drop rg_emailpdg
 rename rg_emailpdg_cor rg_emailpdg
@@ -156,7 +175,11 @@ rename rg_emailpdg_cor rg_emailpdg
 
 gen rg_position_repcor = ustrlower(rg_position_rep)
 replace rg_position_repcor = "directrice" if rg_position_rep == "dirctrice"
+
+/*
 replace rg_position_repcor = "$check_again" if rg_position_rep == "group task 6 - peer to peer group wee"
+
+*/
 replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
 replace rg_position_repcor = "gérante" if rg_position_rep == "gerante"
 replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
@@ -192,36 +215,41 @@ replace t4 = ustrregexra(t4, "[-]", "") if length(t4)==1
 replace rg_matricule_cor = t4 if length(rg_matricule_cor)==10
 order rg_matricule_cor , a(rg_matricule)
 drop t1 t2 t3 t4  
-
+/*
 replace rg_matricule_cor = "$check_again" if length(rg_matricule_cor) >= 12 | length(rg_matricule_cor) <= 7
+*/
 drop rg_matricule
 rename rg_matricule_cor rg_matricule
 
 		* Nom de l'entreprise:
 gen firmname_cor = firmname
-
+/*
 replace firmname_cor = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
 replace firmname_cor = "$check_again" if firmname == "suarl"
 replace firmname_cor = "$check_again" if firmname == "sarl"
 replace firmname_cor = "$check_again" if firmname == "tataouine"
 
+*/
 order firmname_cor, a(firmname)
 drop firmname 
 rename firmname_cor firmname 
 
 		* Adresse de l'entreprise:
 gen rg_adresse_cor = ustrlower(rg_adresse) 
+/*
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "17"
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rte saltnia, km 5"
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue new ton"
 replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue mohamed jamoussi"
 
+*/
 order rg_adresse_cor, a(rg_adresse)
 drop rg_adresse 
 rename rg_adresse_cor rg_adresse
         * Site web de l'entreprise:
 
 gen rg_siteweb_corr = rg_siteweb
+/*
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "zi mornag"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
@@ -233,6 +261,7 @@ replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "gouvernorat de n
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "les doigts d'or keffois"
 replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "facebook.comol%c3%a9a-amiri-113583540352584"
 
+*/ 
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"https://","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
@@ -242,39 +271,7 @@ replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
 order rg_siteweb_corr, a(rg_siteweb)
 drop rg_siteweb
 rename rg_siteweb_corr rg_siteweb
-
- *Réseau  social de l'entreprise:
-
-gen rg_media_cor = rg_media
-
-replace rg_media_cor = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media_cor == "rissala kids farm"
-replace rg_media_cor = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media_cor == "laboratoire trésors naturels"
-replace rg_media_cor = "https://www.facebook.com/aabacti/" if rg_media_cor == "bacteriolab"
-
-replace rg_media_cor = " " if rg_media_cor == "aucun pour le moment"
-
-replace rg_media_cor = "$check_again" if rg_media_cor == "presert"
-replace rg_media_cor = "$check_again" if rg_media_cor == "siliana"
-
-replace rg_media_cor = ustrregexra( rg_media_cor ,"https://","")
-replace rg_media_cor = ustrregexra( rg_media_cor ,"http:","")
-
-
-order rg_media_cor, a(rg_media)
-drop rg_media
-rename rg_media_cor rg_media
-
-       * Capital social de l'entreprise
-gen rg_capital_cor = rg_capital
-
-replace rg_capital_cor = "$check_again"  if length(rg_capital) =< 4
-replace rg_capital_cor = "$check_again"  if length(rg_capital) >= 7
-replace rg_capital_cor = "$check_again"  if rg_capital == "8.88888922661e+16"
-order rg_capital_cor, a(rg_capital)
-drop rg_capital
-rename rg_capital_cor rg_capital
-
-
+/*
        * chiffre d'affaire 2018
 gen ca_2018_cor = ca_2018
 replace ca_2018_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2019
@@ -300,35 +297,107 @@ order ca_2020_cor, a(ca_2020)
 drop ca_2020
 rename ca_2020_cor ca_2020
 
+*/
+
+ *Réseau  social de l'entreprise:
+
+gen rg_media_cor = rg_media
+
+replace rg_media_cor = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media_cor == "rissala kids farm"
+replace rg_media_cor = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media_cor == "laboratoire trésors naturels"
+replace rg_media_cor = "https://www.facebook.com/aabacti/" if rg_media_cor == "bacteriolab"
+replace rg_media_cor = "https://www.facebook.com/halfawin/" if rg_media_cor == "www,facebook,com/halfawin,7"
+
+
+replace rg_media_cor = " " if rg_media_cor == "aucun pour le moment"
+/*
+replace rg_media_cor = "$check_again" if rg_media_cor == "presert"
+replace rg_media_cor = "$check_again" if rg_media_cor == "siliana"
+
+
+*/
+replace rg_media_cor = ustrregexra( rg_media_cor ,"https://","")
+replace rg_media_cor = ustrregexra( rg_media_cor ,"http:","")
+
+
+order rg_media_cor, a(rg_media)
+drop rg_media
+rename rg_media_cor rg_media
+
+       * Capital social de l'entreprise
+/*
+gen rg_capital_cor = rg_capital
+
+replace rg_capital_cor = "$check_again"  if length(rg_capital) =< 4
+replace rg_capital_cor = "$check_again"  if length(rg_capital) >= 7
+replace rg_capital_cor = "$check_again"  if rg_capital == "8.88888922661e+16"
+*/
+
+***********************************************************************
+* 	PART 3:  Check again variables	  			
+**************************************************************
+replace questions_needing_check = "firmname" if id_plateforme == 987
+replace needs_check = 1 if id_plateforme == 987
+replace questions_needing_check = "rg_capital" if id_plateforme == 990
+replace needs_check = 1 if id_plateforme == 990
+replace questions_needing_check = "rg_emailpdg" if id_plateforme == 991
+replace needs_check = 1 if id_plateforme == 991
+replace questions_needing_check = "rg_capital" if id_plateforme == 993
+replace needs_check = 1 if id_plateforme == 993
+replace questions_needing_check = "rg_adresse" if id_plateforme == 995
+replace needs_check = 1 if id_plateforme == 995 
+replace questions_needing_check = "firmname" if id_plateforme == 1003
+replace needs_check = 1 if id_plateforme == 1003
+replace questions_needing_check = "rg_capital" if id_plateforme == 1005
+replace needs_check = 1 if id_plateforme == 1005
+replace questions_needing_check = "rg_nom_rep" if id_plateforme == 1008
+replace needs_check = 1 if id_plateforme == 1008
+replace questions_needing_check = "rg_capital" if id_plateforme == 1013
+replace needs_check = 1 if id_plateforme == 1013
+replace questions_needing_check = "firmname" if id_plateforme == 1019
+replace needs_check = 1 if id_plateforme == 1019
+replace questions_needing_check = "rg_capital" if id_plateforme == 1020
+replace needs_check = 1 if id_plateforme == 1020
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1021
+replace needs_check = 1 if id_plateforme == 1021
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1030
+replace needs_check = 1 if id_plateforme == 1030
+replace questions_needing_check = "rg_capital" if id_plateforme == 1031
+replace needs_check = 1 if id_plateforme == 1031
+replace questions_needing_check = "rg_capital" if id_plateforme == 1032
+replace needs_check = 1 if id_plateforme == 1032
+replace questions_needing_check = "rg_media" if id_plateforme == 1034
+replace needs_check = 1 if id_plateforme == 1034
+replace questions_needing_check = "rg_capital" if id_plateforme == 1035
+replace needs_check = 1 if id_plateforme == 1035
+replace questions_needing_check = "rg_siteweb/firmname" if id_plateforme == 1036
+replace needs_check = 1 if id_plateforme == 1036
+replace questions_needing_check = "rg_capital/rg_siteweb/rg_telrep/rg_telpdg" if id_plateforme == 1037
+replace needs_check = 1 if id_plateforme == 1037
+replace questions_needing_check = "firmname" if id_plateforme == 1039
+replace needs_check = 1 if id_plateforme == 1039
+replace questions_needing_check = "rg_capital" if id_plateforme == 1043
+replace needs_check = 1 if id_plateforme == 1043
+replace questions_needing_check = "firmname" if id_plateforme == 1054
+replace needs_check = 1 if id_plateforme == 1054
+replace questions_needing_check = "firmname" if id_plateforme == 1057
+replace needs_check = 1 if id_plateforme == 1057
+replace questions_needing_check = "rg_capital" if id_plateforme == 1063
+replace needs_check = 1 if id_plateforme == 1063
+replace questions_needing_check = "rg_capital" if id_plateforme == 1068
+replace needs_check = 1 if id_plateforme == 1068
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1071
+replace needs_check = 1 if id_plateforme == 1071
+replace questions_needing_check = "rg_capital" if id_plateforme == 1073
+replace needs_check = 1 if id_plateforme == 1073
+replace questions_needing_check = "rg_capital" if id_plateforme == 1074
+replace needs_check = 1 if id_plateforme == 1074
+
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
-{
-	* cleaning capital social
-/* gen capitalsocial_corr = rg_capital
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"","")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr," ","")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"dinars","")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"dt","")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"millions","000")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"mill","000")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"tnd","")
-replace capitalsocial_corr = "10000" if capitalsocial_corr == "10.000"
-replace capitalsocial_corr = "1797000" if capitalsocial_corr == "1.797.000"
-replace capitalsocial_corr = "50000" if capitalsocial_corr == "50.000"
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"e","")
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"m","")
-replace capitalsocial_corr = "30000" if capitalsocial_corr == "30000n"
 
-replace capitalsocial_corr = ustrregexra( capitalsocial_corr,"000","") if strlen( capitalsocial_corr) >= 9
-replace capitalsocial_corr = "$check_again" if strlen( capitalsocial_corr) == 1
-replace capitalsocial_corr = "$check_again" if strlen( capitalsocial_corr) == 2
-
-
-replace capitalsocial_corr = "$check_again" if capitalsocial_corr == "tunis"
-*/
-}
 ***********************************************************************
 * 	PART 4:  Convert string to numerical variaregises	  			
 ***********************************************************************
@@ -340,39 +409,15 @@ destring `x', replace
 ***********************************************************************
 * 	PART 5:  Convert problematic values for open-ended questions  			
 ***********************************************************************
-{
-
-	* Sectionname
-*replace q04 ="Hors sujet" if q04 == "OUI" 
-
-	*Correction nom du representant
-
-/*gen rg_nom_rep_corr= rg_nom_rep            
-replace rg_nom_rep_corr="$check_again" if rg_nom_rep == "Études géomatiques." */
-
- 
-}
 
 ***********************************************************************
 * 	PART 6:  Traduction reponses en arabe au francais		  			
 ***********************************************************************
-{
-* Sectionname
-/*
-replace q05="directeur des ventes"  if q05=="مدير المبيعات" 
-*/
 
-}
 
 ***********************************************************************
 * 	PART 7: 	Rename and homogenize the observed values		  			
 ***********************************************************************
-{
-	* Sectionname
-*replace regis_unite = "pièce"  if regis_unite=="par piece"
-*replace regis_unite = "pièce"  if regis_unite=="Pièce" 
-
-}
 
 
 ***********************************************************************
@@ -424,3 +469,10 @@ destring capitalsocial_corr, replace
 ***********************************************************************
 cd "$regis_intermediate"
 save "regis_inter", replace
+
+
+***********************************************************************
+* 	Export an excel sheet with needs_check variables  			
+***********************************************************************
+
+export excel id_plateforme needs_check questions_needing_check semaine etat programme treatment rg_nom_rep rg_position_rep rg_telrep rg_emailrep rg_telpdg rg_emailpdg presence_enligne rg_siteweb rg_media firmname rg_adresse codepostal id_admin id_admin_correct date_created rg_age rg_legalstatus rg_codedouane rg_matricule rg_fte rg_fte_femmes rg_capital autres ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 moyenneca moyennecaexport conditioncaetcaexport conditioncaoucaexport moyen_com rg_confidentialite rg_partage_donnees rg_enregistrement_coordonnees dateinscription commentairesequipegiz commentairesequipemsb date_creation_string date_inscription_string dup_emailpdg dup_firmname subsector rg_gender_rep rg_gender_pdg rg_resident rg_produitexp rg_intention rg_oper_exp rg_expstatus ca_mean ca_exp_mean exp_share2018 exp_share2019 exp_share2020 mean_exp_share difca ca_eligible eligible eligible_sans_matricule eligible_intention eligible_presence_enligne using "fiche_correction", firstrow(variables)

@@ -86,8 +86,8 @@ putdocx pagebreak
 sort firmname, stable
 
 		* define all the variables where respondent had to enter text
-local regis_open rg_fte rg_fte_femmes date_creation_string date_inscription_string rg_capital_cor rg_position rg_legalstatus rg_siteweb_corr rg_media_cor /// /* firm characteristics */
-	   firmname rg_nom_rep_cor rg_telrep rg_telpdg rg_emailrep rg_emailpdg rg_adresse_cor /// /* personal */
+local regis_open rg_fte rg_fte_femmes date_creation_string date_inscription_string rg_capital rg_position rg_legalstatus rg_siteweb rg_media /// /* firm characteristics */
+	   firmname rg_nom_rep rg_telrep rg_telpdg rg_emailrep rg_emailpdg rg_adresse /// /* personal */
 	   rg_matricule rg_codedouane /// /* administrative numbers */
 	   ca_2018 ca_2019 ca_2020 ca_exp2018 ca_exp2019 ca_exp2020 /* accounting */ 
 				
