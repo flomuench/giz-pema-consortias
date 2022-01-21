@@ -340,8 +340,6 @@ replace questions_needing_check = "firmname" if id_plateforme == 987
 replace needs_check = 1 if id_plateforme == 987
 replace questions_needing_check = "rg_capital" if id_plateforme == 990
 replace needs_check = 1 if id_plateforme == 990
-replace questions_needing_check = "rg_emailpdg" if id_plateforme == 991
-replace needs_check = 1 if id_plateforme == 991
 replace questions_needing_check = "rg_capital" if id_plateforme == 993
 replace needs_check = 1 if id_plateforme == 993
 replace questions_needing_check = "rg_adresse" if id_plateforme == 995
@@ -485,7 +483,8 @@ save "regis_inter", replace
 ***********************************************************************
 * 	Export an excel sheet with needs_check variables  			
 ***********************************************************************
-
-
-export excel id_plateforme needs_check questions_needing_check semaine etat programme treatment rg_nom_rep rg_position_rep rg_telrep rg_emailrep rg_telpdg rg_emailpdg rg_siteweb rg_media firmname rg_adresse codepostal id_admin id_admin_correct date_created rg_legalstatus rg_codedouane rg_matricule rg_fte rg_fte_femmes rg_capital autres ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 moyenneca moyennecaexport conditioncaetcaexport conditioncaoucaexport moyen_com rg_confidentialite rg_partage_donnees rg_enregistrement_coordonnees dateinscription commentairesequipegiz commentairesequipemsb date_creation_string date_inscription_string dup_emailpdg dup_firmname subsector rg_gender_rep using "fiche_correction", firstrow(variables)
-
+cd "$regis_checks"
+preserve 
+keep if needs_check ==1 & etat=="vérifié"
+export excel id_plateforme needs_check questions_needing_check commentairesequipegiz commentairesequipemsb semaine-dup_firmname using "fiche_correction", firstrow(variables) replace 
+restore
