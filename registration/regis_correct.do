@@ -210,6 +210,7 @@ replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
 replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
 
+<<<<<<< Updated upstream
  *Réseau  social de l'entreprise:
 
 gen rg_media_cor = rg_media
@@ -220,6 +221,53 @@ replace rg_media_cor = "https://www.facebook.com/aabacti/" if rg_media_cor == "b
 
 replace rg_media_cor = " " if rg_media_cor == "aucun pour le moment"
 
+=======
+
+order rg_siteweb_corr, a(rg_siteweb)
+drop rg_siteweb
+rename rg_siteweb_corr rg_siteweb
+replace rg_siteweb = ustrregexra( rg_siteweb ,",",".")
+
+/*
+       * chiffre d'affaire 2018
+gen ca_2018_cor = ca_2018
+replace ca_2018_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2019
+
+order ca_2018_cor, a(ca_2018)
+drop ca_2018
+rename ca_2018_cor ca_2018
+       * chiffre d'affaire 2019
+	   
+gen ca_2019_cor = ca_2019
+replace ca_2019_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2020
+
+order ca_2019_cor, a(ca_2019)
+drop ca_2019
+rename ca_2019_cor ca_2019
+	   * chiffre d'affaire 2020
+gen ca_2020_cor = ca_2020
+replace ca_2020_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2021
+
+count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_2020_cor==0
+	
+order ca_2020_cor, a(ca_2020)
+drop ca_2020
+rename ca_2020_cor ca_2020
+
+*/
+
+ *Réseau  social de l'entreprise:
+
+replace rg_media = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media == "rissala kids farm"
+replace rg_media = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media == "laboratoire trésors naturels"
+replace rg_media = "https://www.facebook.com/aabacti/" if rg_media == "bacteriolab"
+replace rg_media = "https://www.facebook.com/halfawin/" if rg_media == "www,facebook,com/halfawin,7"
+replace rg_media = "" if rg_media == "en cours de construction"
+
+
+replace rg_media = " " if rg_media == "aucun pour le moment"
+/*
+>>>>>>> Stashed changes
 replace rg_media_cor = "$check_again" if rg_media_cor == "presert"
 replace rg_media_cor = "$check_again" if rg_media_cor == "siliana"
 
@@ -237,6 +285,7 @@ replace rg_capital_cor = 88888888888888888 if rg_capital_cor > 1000000
 gen ca_2018_cor = ca_2018
 replace ca_2018_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2019
 
+<<<<<<< Updated upstream
        * chiffre d'affaire 2019
 	   
 gen ca_2019_cor = ca_2019
@@ -247,6 +296,109 @@ gen ca_2020_cor = ca_2020
 replace ca_2020_cor = 88888888888888888 if ca_2018_cor ==0 & date_created < 01/01/2021
 
 count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_2020_cor==0
+=======
+***********************************************************************
+* 	PART 3:  Check again variables	  			
+**************************************************************
+replace questions_needing_check = "firmname" if id_plateforme == 987
+replace needs_check = 1 if id_plateforme == 987
+replace questions_needing_check = "rg_capital" if id_plateforme == 990
+replace needs_check = 1 if id_plateforme == 990
+replace questions_needing_check = "rg_emailpdg" if id_plateforme == 991
+replace needs_check = 1 if id_plateforme == 991
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 992
+replace needs_check = 1 if id_plateforme == 992
+replace questions_needing_check = "rg_capital" if id_plateforme == 993
+replace needs_check = 1 if id_plateforme == 993
+replace questions_needing_check = "rg_adresse/rg_media" if id_plateforme == 995
+replace needs_check = 1 if id_plateforme == 995 
+replace questions_needing_check = "rg_codedouane" if id_plateforme == 1002
+replace needs_check = 1 if id_plateforme == 1002
+replace questions_needing_check = "firmname" if id_plateforme == 1003
+replace needs_check = 1 if id_plateforme == 1003
+replace questions_needing_check = "rg_capital" if id_plateforme == 1005
+replace needs_check = 1 if id_plateforme == 1005
+replace questions_needing_check = "rg_nom_rep/rg_nom_rep" if id_plateforme == 1008
+replace needs_check = 1 if id_plateforme == 1008
+replace questions_needing_check = "rg_capital" if id_plateforme == 1013
+replace needs_check = 1 if id_plateforme == 1013
+replace questions_needing_check = "firmname" if id_plateforme == 1019
+replace needs_check = 1 if id_plateforme == 1019
+replace questions_needing_check = "rg_capital" if id_plateforme == 1020
+replace needs_check = 1 if id_plateforme == 1020
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1021
+replace needs_check = 1 if id_plateforme == 1021
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1030
+replace needs_check = 1 if id_plateforme == 1030
+replace questions_needing_check = "rg_capital" if id_plateforme == 1031
+replace needs_check = 1 if id_plateforme == 1031
+replace questions_needing_check = "rg_capital" if id_plateforme == 1032
+replace needs_check = 1 if id_plateforme == 1032
+replace questions_needing_check = "rg_media" if id_plateforme == 1034
+replace needs_check = 1 if id_plateforme == 1034
+replace questions_needing_check = "rg_capital" if id_plateforme == 1035
+replace needs_check = 1 if id_plateforme == 1035
+replace questions_needing_check = "rg_siteweb/firmname" if id_plateforme == 1036
+replace needs_check = 1 if id_plateforme == 1036
+replace questions_needing_check = "rg_capital/rg_siteweb/rg_telrep/rg_telpdg" if id_plateforme == 1037
+replace needs_check = 1 if id_plateforme == 1037
+replace questions_needing_check = "firmname" if id_plateforme == 1039
+replace needs_check = 1 if id_plateforme == 1039
+replace questions_needing_check = "rg_capital" if id_plateforme == 1043
+replace needs_check = 1 if id_plateforme == 1043
+replace questions_needing_check = "rg_siteweb/rg_telpdg" if id_plateforme == 1053
+replace needs_check = 1 if id_plateforme == 1053
+replace questions_needing_check = "firmname" if id_plateforme == 1054
+replace needs_check = 1 if id_plateforme == 1054
+replace questions_needing_check = "firmname" if id_plateforme == 1057
+replace needs_check = 1 if id_plateforme == 1057
+replace questions_needing_check = "rg_adresse" if id_plateforme == 1063
+replace needs_check = 1 if id_plateforme == 1063
+replace questions_needing_check = "rg_capital" if id_plateforme == 1064
+replace needs_check = 1 if id_plateforme == 1064
+replace questions_needing_check = "rg_capital/rg_siteweb" if id_plateforme == 1068
+replace needs_check = 1 if id_plateforme == 1068
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1071
+replace needs_check = 1 if id_plateforme == 1071
+replace questions_needing_check = "rg_capital" if id_plateforme == 1073
+replace needs_check = 1 if id_plateforme == 1073
+replace questions_needing_check = "rg_capital" if id_plateforme == 1074
+replace needs_check = 1 if id_plateforme == 1074
+
+
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 1075
+replace needs_check = 1 if id_plateforme == 1075
+replace questions_needing_check = "rg_telrep" if id_plateforme == 1079
+replace needs_check = 1 if id_plateforme == 1079
+replace questions_needing_check = "firmname" if id_plateforme == 1080
+replace needs_check = 1 if id_plateforme == 1080
+replace questions_needing_check = "firmname" if id_plateforme == 1081
+replace needs_check = 1 if id_plateforme == 1081
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 1083
+replace needs_check = 1 if id_plateforme == 1083
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 1085
+replace needs_check = 1 if id_plateforme == 1085
+replace questions_needing_check = "rg_siteweb/rg_media" if id_plateforme == 1084
+replace needs_check = 1 if id_plateforme == 1084
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1086
+replace needs_check = 1 if id_plateforme == 1086
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1087
+replace needs_check = 1 if id_plateforme == 1087
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1089
+replace needs_check = 1 if id_plateforme == 1089
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1091
+replace needs_check = 1 if id_plateforme == 1091
+replace questions_needing_check = "rg_media/rg_capital" if id_plateforme == 1093
+replace needs_check = 1 if id_plateforme == 1093
+replace questions_needing_check = "rg_media" if id_plateforme == 1094
+replace needs_check = 1 if id_plateforme == 1094
+replace questions_needing_check = "rg_media" if id_plateforme == 1099
+replace needs_check = 1 if id_plateforme == 1099
+replace questions_needing_check = "firmname" if id_plateforme == 1100
+replace needs_check = 1 if id_plateforme == 1100
+replace questions_needing_check = "rg_media" if id_plateforme == 1102
+replace needs_check = 1 if id_plateforme == 1102
+>>>>>>> Stashed changes
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
