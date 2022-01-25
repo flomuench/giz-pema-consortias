@@ -222,7 +222,7 @@ gen `x'_age14 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >=
 
 		* eligible if matricule fiscal is corrected
 gen eligible_alt_sans_matricule = (ca_eligible_alt ==1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-
+lab val eligible_alt_sans_matricule eligible
 
 		* eligibility including also no webpage or social network
 gen eligible_presence_enligne = (presence_enligne == 1 & id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)

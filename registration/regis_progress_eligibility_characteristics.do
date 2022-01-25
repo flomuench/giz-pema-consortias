@@ -98,7 +98,7 @@ putpdf text ("Consortia: eligibility"), bold linebreak
 
 	* distribution of ca and ca export 2018, 2019, 2020
 set graphics on
-histogram ca_mean, frequency addl ///
+histogram ca_mean if ca_mean < 666666, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	subtitle("Toutes les entreprises enregistrées") ///
 	ytitle("Nombre d'entreprises") ///
@@ -111,8 +111,8 @@ gr export ca_mean.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ca_mean.png
 putpdf pagebreak
-	
-histogram ca_exp_mean, frequency addl ///
+	/*
+histogram ca_expmean < 666666, frequency addl ///
 	title("Chiffre d'affaires export moyennes 2018-2020") ///
 	subtitle("Toutes les entreprises enregistrées") ///
 	ytitle("Nombre d'entreprises") ///
@@ -120,12 +120,12 @@ histogram ca_exp_mean, frequency addl ///
 	bin(50) ///
 	xline(0.15) ///
 	note("La ligne réprésentent le minimum selon les critères d'éligibilité (15.000 Dinar).", size(vsmall)) ///
-	name(ca_exp_mean, replace)
+	name(exp_ca, replace)
 gr export ca_exp_mean.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ca_exp_mean.png
 putpdf pagebreak
-
+*/
 
 	* histogram for lower values of average CA
 			* CA 2019
@@ -135,23 +135,6 @@ hist ca_2019 if ca_2019 < 2, w(0.1) frequency addl ///
 			* CA moyenne trois années
 hist ca_mean if ca_mean < 2, w(0.1) frequency addl ///
 	xline(1.5) xlabel(0(0.1)2)
-	
-	* share of export in total sales 
-histogram mean_exp_share, frequency addl ///
-	title("Part des exportation dans le chiffre d'affaires") ///
-	subtitle("Moyennes 2018-2020: toutes les entreprises enregistrées") ///
-	ytitle("Nombre d'entreprises") ///
-	xlabel(0(0.1)5, labsize(tiny) format(%9.1fc)) ///
-	bin(50) ///
-	xline(0.15) ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
-	name(share_export, replace)
-gr export share_export.png, replace
-putpdf paragraph, halign(center) 
-putpdf image share_export.png
-putpdf pagebreak
-
-set graphics off
 
 	* identifiant unique correct (oui ou non)
 graph bar (count), over(id_admin_correct) blabel(total) ///
@@ -245,13 +228,26 @@ putpdf pagebreak
 set graphics on
 graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
-	subtitle("Opération d'export") ///
+	subtitle("Opération d'export, CA et CA export") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligibles, replace) ///
 	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, CA moyenne 2018-2020 > 150 et 15 mille exp," "a >= 6 & < 200 employés, une produit exportable, l'intention d'exporter, " ">= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
 gr export eligible.png, replace
 
+graph bar (count), over(eligible_alt_sans_matricule) blabel(total) ///
+	title("Entreprises actuellement eligibles") ///
+	subtitle("Reduced eligibility criteria") ///
+	ytitle("nombre d'enregistrement") ///
+	name(eligibles_alt, replace) ///
+	note("Chaque entreprise est éligible qui CA moyenne 2018-2020 >= 10 mille, a >= 4 & < 200 employés," "une produit exportable, l'intention d'exporter, et existe pour >= 1 ans et est résidente tunisienne.", size(vsmall) color(red))
+gr export eligible_alt.png, replace
+
+
 set graphics off
+
+
+
+
 		* just "intention d'export"
 graph bar (count), over(eligible_intention) blabel(total) ///
 	title("Entreprises actuellement éligibles") ///
@@ -303,12 +299,12 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 
 		* poles d'activité
 set graphics on
-graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
+graph hbar (count), over(subsector, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny)) aspectratio(1)  ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
 gr export subsector_tous.png, replace
-graph hbar (count) if ca_eligible_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
+graph hbar (count) if ca_eligible_alt_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) aspectratio(1)  ///
 	title("Pôle d'activité - entreprises éligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///
@@ -433,4 +429,4 @@ putpdf save "consortium-progress-eligibility-characteristics", replace
 	* export excel with list of firms that we need to contact for them to correct
 		* their matricule fiscal
 cd "$regis_checks"
-export excel potentially_eligible if eligible == 0 & eligible_sans_matricule == 1, firstrow(var) replace
+*export excel potentially_eligible if eligible == 0 & eligible_sans_matricule == 1, firstrow(var) replace
