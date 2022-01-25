@@ -302,16 +302,19 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 */
 
 		* poles d'activité
+set graphics on
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
-graph hbar (count) if eligible_intention == 1, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
+gr export subsector_tous.png, replace
+graph hbar (count) if ca_eligible_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
 	title("Pôle d'activité - entreprises éligibles") ///
-	subtitle("intention d'export") ///
+	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_eligible, replace)
-graph combine subsector_tous subsector_eligible , title("{bf: Distribution selon pôle d'activité}")
+gr export subsector_eligible_alt.png, replace
+graph combine subsector_tous subsector_eligible, title("{bf: Distribution selon pôle d'activité}")
 graph export poles.png, replace 
 putpdf paragraph, halign(center) 
 putpdf image poles.png

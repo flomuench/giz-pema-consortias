@@ -38,32 +38,32 @@ use "${regis_intermediate}/regis_inter", clear
 	4 "Industrie" ///
 	5 "Services" ///
 	6 "TIC" */
-
+/*
 label define subsector_name 1 "autres" ///
 	2 "pôle d'activités agri-agroalimentaire" ///
 	3 "pôle d'activités artisanat" ///
 	4 "pôle d'activités cosmétiques" ///
-	5 "pôle d'activités de service conseil, education et formation" ///
-	6 "pôle d'activités technologies de l'information et de la communication" ///
-	7 "pôle d'activités textiles et habillement" ///
-	8 "pôle de l'énergie durable et développement durable" ///
-	9 "pôle d’activités artisanat" ///
-	10 "pôle d’activités de service conseil, education et formation" ///
-	11 "pôle d’activités technologies de l’information et de la communication" ///
-	12 "pôle d’activités technologies de l’information et de la communication"
-
-	
+	5 "pôle d'activités de Santé" ///
+	6 "pôle d’activités de service conseil, education et formationpôle d'activités textiles et habillement" ///
+	7 "pôle d’activités technologies de l’information et de la communication" ///
+	8 "pôle d'activités textiles et habillement" ///
+	9 "pôle de l'énergie durable et développement durable" ///
+	10 "pôle d’activités technologies de l’information et de la communication" ///
+	11 "sci"
+		
+*/
 /*tempvar Sector
 encode sector, gen(`Sector')
 drop sector
 rename `Sector' sector
 lab values sector sector_name */
 
-tempvar Subsector
-encode subsector, gen(`Subsector')
+encode subsector, gen(Subsector)
+*groups Subsector
 drop subsector
-rename `Subsector' subsector
-lab values subsector subsector_name
+rename Subsector subsector
+replace subsector = 7 if subsector == 10
+*lab values subsector subsector_name
 
 
 format %-25.0fc *sector
@@ -169,29 +169,12 @@ format ca_* %12.2fc
 	* generate average for 2018-2020
 		* all three years
 foreach x in ca_ ca_exp {
-if `x'2018 < 666666666666 & `x'2018 <. & `x'2019 < 666666666666 & `x'2019 <. & `x'2020 < 666666666666 & `x'2020 <.  { 
 egen `x'mean = rowmean(`x'2018 `x'2019 `x'2020)
+egen `x'mean2 = rowmean(`x'2019 `x'2020) 
+replace `x'mean = `x'mean2 if `x'2018 > 666666666666 & `x'2019 < 666666666666
+gen `x'mean3 = `x'2020 
+replace `x'mean = `x'mean3 if `x'2018 > 666666666666 & `x'2019 > 666666666666 & `x'2019 <. & `x'2018 <.
 }
-		* only 2018 not applicable
-if `x'2018 > 666666666666 & `x'2018 <. & `x'2019 < 666666666666 {
-egen `x'mean2 = rowmean(`x'2019 `x'2020)
-replace `x'mean = `x'mean2
-drop `x'mean2
-}
-		* 2018 and 2019 not applicable
-if `x'2018 > 666666666666 & `x'2018 <. & `x'2019 > 666666666666 & `x'2019 <. {
-replace `x'mean = `x'2020
-}
-}
-lab var ca_mean "chiffre d'affaires moyenne 2018-2020"
-lab var ca_expmean "chiffre d'affaires export moyenne 2018-2020"
-
-if ca_2018 > 66666666666 & ca_2018 <. & ca_2019 < 6666666666 {
-egen ca_mean2 = rowmean(ca_2019 ca_2020) if ca_2018 == 666666666666.7 & ca_2019!= 666666666666.7
-replace ca_mean = ca_mean2
-drop ca_mean2
-}
-
 
 ***********************************************************************
 * 	PART 10: eligibiliy dummy
@@ -201,13 +184,13 @@ lab def eligible 1 "éligible" 0 "inéligible"
 		* generate a dummy for the firms that meet the CA condition and all other
 gen ca_eligible = (ca_mean > 1.5 & ca_mean < 56666666666 & ca_expmean > 0.15 & ca_expmean < 56666666666)
 gen ca_eligible20 = (ca_2020 > 1.5 & ca_2020 < 56666666666 & ca_exp2020 > 0.15 & ca_exp2020 < 56666666666)
-gen ca_eligible_alt = (ca_mean > 0.1 & ca_mean < 56666666666)
+gen ca_eligible_alt = (ca_mean >= 0.1 & ca_mean < 56666666666)
 
 		* eligible with current criteria
 gen eligible = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
 lab val eligible eligible
 
-gen eligible_alt = (id_admin_correct == 1 & ca_eligible_alt == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
+gen eligible_alt = (id_admin_correct == 1 & ca_eligible_alt == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
 lab val eligible_alt eligible
 
 
@@ -236,14 +219,10 @@ gen `x'_age15 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >=
 gen `x'_age14 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
 }
 
-		* eligibility under reduced CA, CA 
-gen eligible_age16 = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-
 
 		* eligible if matricule fiscal is corrected
-gen eligible_sans_matricule = (rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
-lab def eligible2 1 "éligible sans matricule" 0 "inéligible sans matricule"
-lab val eligible_sans_matricule eligible2
+gen eligible_alt_sans_matricule = (ca_eligible_alt ==1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
+
 
 		* eligibility including also no webpage or social network
 gen eligible_presence_enligne = (presence_enligne == 1 & id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
@@ -299,7 +278,7 @@ cd "$regis_intermediate"
 
 	* export file with potentially eligible companies
 preserve
-	keep if eligible_sans_matricule == 1
+	keep if eligible_alt_sans_matricule == 1
 	rename rg_siteweb site_web 
 	rename rg_media reseaux_sociaux
 	rename id_admin matricule_fiscale
@@ -313,7 +292,7 @@ preserve
 	rename rg_matricule matricule_cnss
 	order nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export 
 	local varlist "nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export site_web reseaux_sociaux onshore employes produit_exportable intention_export"
-	export excel `varlist' using consortia_eligibes_pme if eligible_sans_matricule == 1, firstrow(var) replace
+	export excel `varlist' using consortia_eligibes_pme if eligible_alt_sans_matricule == 1, firstrow(var) replace
 restore
 
 	* save dta file
