@@ -125,6 +125,16 @@ gr export ca_exp_mean.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ca_exp_mean.png
 putpdf pagebreak
+
+
+	* histogram for lower values of average CA
+			* CA 2019
+hist ca_2019 if ca_2019 < 2, w(0.1) frequency addl ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
+	xline(1.5) xlabel(0(0.1)2)
+			* CA moyenne trois années
+hist ca_mean if ca_mean < 2, w(0.1) frequency addl ///
+	xline(1.5) xlabel(0(0.1)2)
 	
 	* share of export in total sales 
 histogram mean_exp_share, frequency addl ///
@@ -232,13 +242,16 @@ putpdf pagebreak
 	
 	* eligibility
 		* including "operation d'export"
+set graphics on
 graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
 	subtitle("Opération d'export") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligibles, replace) ///
-	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, a >= 6 & < 200 employés, une produit exportable, " "l'intention d'exporter, >= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
+	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, CA moyenne 2018-2020 > 150 et 15 mille exp," "a >= 6 & < 200 employés, une produit exportable, l'intention d'exporter, " ">= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
+gr export eligible.png, replace
 
+set graphics off
 		* just "intention d'export"
 graph bar (count), over(eligible_intention) blabel(total) ///
 	title("Entreprises actuellement éligibles") ///

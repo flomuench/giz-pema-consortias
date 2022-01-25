@@ -38,6 +38,7 @@ foreach x of local strvars {
 scalar not_know    = 77777777777777777
 scalar refused     = 99999999999999999
 scalar check_again = 88888888888888888
+scalar not_applicable = 66666666666666666
 
 	* replace, gen, label
 	
@@ -271,6 +272,15 @@ replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
 order rg_siteweb_corr, a(rg_siteweb)
 drop rg_siteweb
 rename rg_siteweb_corr rg_siteweb
+
+       * chiffre d'affaire
+			* replace CA not applicable if company has been created after 
+foreach x in ca_ ca_exp {
+replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
+replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
+replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
+}
+
 /*
        * chiffre d'affaire 2018
 gen ca_2018_cor = ca_2018
