@@ -360,7 +360,7 @@ replace questions_needing_check = "rg_capital" if id_plateforme == 1005
 replace needs_check = 1 if id_plateforme == 1005
 replace questions_needing_check = "rg_nom_rep" if id_plateforme == 1008
 replace needs_check = 1 if id_plateforme == 1008
-replace questions_needing_check = "rg_capital" if id_plateforme == 1013
+replace questions_needing_check = "rg_capital/id_admin" if id_plateforme == 1013
 replace needs_check = 1 if id_plateforme == 1013
 replace questions_needing_check = "firmname" if id_plateforme == 1019
 replace needs_check = 1 if id_plateforme == 1019
@@ -382,7 +382,7 @@ replace questions_needing_check = "rg_siteweb/firmname" if id_plateforme == 1036
 replace needs_check = 1 if id_plateforme == 1036
 replace questions_needing_check = "rg_capital/rg_siteweb/rg_telrep/rg_telpdg" if id_plateforme == 1037
 replace needs_check = 1 if id_plateforme == 1037
-replace questions_needing_check = "firmname" if id_plateforme == 1039
+replace questions_needing_check = "firmname/id_admin" if id_plateforme == 1039
 replace needs_check = 1 if id_plateforme == 1039
 replace questions_needing_check = "rg_capital" if id_plateforme == 1043
 replace needs_check = 1 if id_plateforme == 1043
@@ -406,12 +406,28 @@ replace questions_needing_check = "rg_telpdg" if id_plateforme == 1083
 replace needs_check = 1 if id_plateforme == 1083
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1085
 replace needs_check = 1 if id_plateforme == 1085
-replace questions_needing_check = "rg_siteweb" if id_plateforme == 1091
+replace questions_needing_check = "rg_siteweb/id_admin" if id_plateforme == 1091
 replace needs_check = 1 if id_plateforme == 1091
-replace questions_needing_check = "rg_media" if id_plateforme == 1094
+replace questions_needing_check = "rg_media/id_admin" if id_plateforme == 1094
 replace needs_check = 1 if id_plateforme == 1094
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1112
 replace needs_check = 1 if id_plateforme == 1112
+replace questions_needing_check = "rg_capital" if id_plateforme == 1108
+replace needs_check = 1 if id_plateforme == 1108
+replace questions_needing_check = "firmname" if id_plateforme == 1049
+replace needs_check = 1 if id_plateforme == 1049
+replace questions_needing_check = "firmname" if id_plateforme == 1041
+replace needs_check = 1 if id_plateforme == 1041
+replace questions_needing_check = "id_admin" if id_plateforme == 1095
+replace needs_check = 1 if id_plateforme == 1095
+replace questions_needing_check = "id_admin" if id_plateforme == 1092
+replace needs_check = 1 if id_plateforme == 1092
+replace questions_needing_check = "id_admin" if id_plateforme == 1105
+replace needs_check = 1 if id_plateforme == 1105
+replace questions_needing_check = "id_admin/rg_codedouane/rg_matricule" if id_plateforme == 1124
+replace needs_check = 1 if id_plateforme == 1124
+
+
 
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
