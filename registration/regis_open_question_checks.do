@@ -34,7 +34,7 @@ putdocx text ("Quality checks open question variables: registration export conso
 ***********************************************************************
 		* keep only potentially eligible firms
 preserve
-*keep if eligible_sans_matricule == 1
+keep if etat == "vérifié"
 		* put all variables to for which we want to check for duplicates into a local
 local dupcontrol id_admin firmname rg_nom_rep rg_telrep rg_emailrep rg_telpdg rg_emailpdg
 
