@@ -281,6 +281,14 @@ replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created 
 replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
 }
 
+/* br id_plateform if ca_2018==0 & ca_exp2018==0 & ca_2019==0 & ca_exp2019==0 & ca_2020==0 & ca_exp2020==0
+id_plateforme
+1035
+1013
+1054
+986
+*/
+
 /*
        * chiffre d'affaire 2018
 gen ca_2018_cor = ca_2018
@@ -426,7 +434,12 @@ replace questions_needing_check = "id_admin" if id_plateforme == 1105
 replace needs_check = 1 if id_plateforme == 1105
 replace questions_needing_check = "id_admin/rg_codedouane/rg_matricule" if id_plateforme == 1124
 replace needs_check = 1 if id_plateforme == 1124
-
+replace questions_needing_check = "rg_telrep" if id_plateforme == 1079
+replace needs_check = 1 if id_plateforme == 1079
+replace questions_needing_check = "rg_telrep/rg_telpdg" if id_plateforme == 1133
+replace needs_check = 1 if id_plateforme == 1133
+replace questions_needing_check = "rg_telpdg" if id_plateforme == 1129
+replace needs_check = 1 if id_plateforme == 1129
 
 
 ***********************************************************************
