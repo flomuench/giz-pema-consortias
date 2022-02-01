@@ -405,8 +405,12 @@ replace questions_needing_check = "rg_capital/rg_siteweb/rg_telrep/rg_telpdg" if
 replace needs_check = 1 if id_plateforme == 1037
 replace questions_needing_check = "firmname/id_admin" if id_plateforme == 1039
 replace needs_check = 1 if id_plateforme == 1039
+replace questions_needing_check = "firmname" if id_plateforme == 1041
+replace needs_check = 1 if id_plateforme == 1041
 replace questions_needing_check = "rg_capital" if id_plateforme == 1043
 replace needs_check = 1 if id_plateforme == 1043
+replace questions_needing_check = "firmname" if id_plateforme == 1049
+replace needs_check = 1 if id_plateforme == 1049
 replace questions_needing_check = "firmname" if id_plateforme == 1054
 replace needs_check = 1 if id_plateforme == 1054
 replace questions_needing_check = "firmname" if id_plateforme == 1057
@@ -453,6 +457,8 @@ replace questions_needing_check = "rg_telrep/rg_telpdg" if id_plateforme == 1133
 replace needs_check = 1 if id_plateforme == 1133
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1129
 replace needs_check = 1 if id_plateforme == 1129
+
+
 
 
 ***********************************************************************
