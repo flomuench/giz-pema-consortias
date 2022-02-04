@@ -116,5 +116,5 @@ if (1) do "${regis_github}/regis_progress_eligibility_characteristics.do"
 /* --------------------------------------------------------------------
 	PART 4.8: De-identify and save as final for analysis
 ----------------------------------------------------------------------*/
-if (0) do "${regis_github}/regis_deidentify.do"
+if (1) do "${regis_github}/regis_deidentify.do"
 

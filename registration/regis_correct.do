@@ -34,11 +34,17 @@ local strvars "`r(varlist)'"
 foreach x of local strvars {
 		replace `x' = "" if `x' == "-"
 	}
-	
+* scalar: numerical variables & local: string variables	
 scalar not_know    = 77777777777777777
 scalar refused     = 99999999999999999
 scalar check_again = 88888888888888888
 scalar not_applicable = 66666666666666666
+
+local not_know    = 77777777777777777
+local refused     = 99999999999999999
+local check_again = 88888888888888888
+local not_applicable = 66666666666666666
+*
 
 	* replace, gen, label
 	
@@ -52,11 +58,11 @@ gen questions_needing_check = ""
 ***********************************************************************
 /* 
 example code: 
-gen id_admin_correct = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
-replace rg_nom_rep_cor = ustrregexra( rg_nom_rep_cor ,"mr ","")
-replace rg_codedouane_cor = ustrregexra( rg_codedouane_cor ,"/","")
-replace autres_cor = "services informatiques" if ustrregexm( autres_cor ,"informatique")== 1
-gen rg_telrep_cor = ustrregexra(rg_telrep, "^216", "")
+gen id_adminrect = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
+replace rg_nom_rep = ustrregexra( rg_nom_rep ,"mr ","")
+replace rg_codedouane = ustrregexra( rg_codedouane ,"/","")
+replace autres = "services informatiques" if ustrregexm( autres ,"informatique")== 1
+gen rg_telrep = ustrregexra(rg_telrep, "^216", "")
 
 example variables: 
 - id_admin, nom_rep etc.
@@ -65,22 +71,15 @@ example variables:
 
 * Nombre d'employés dans l'entreprise 
 *le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
-gen rg_fte_femmes_cor = rg_fte_femmes
-replace rg_fte_femmes_cor = 88888888888888888 if rg_fte < rg_fte_femmes
 
+replace rg_fte_femmes = 88888888888888888 if rg_fte < rg_fte_femmes
 
-order rg_fte_femmes_cor, a(rg_fte_femmes)
-drop rg_fte_femmes 
-rename rg_fte_femmes_cor rg_fte_femmes 
 
         * Matricule fiscale de l'entreprise:
-gen id_admin_cor = id_admin
-replace id_admin_cor = ustrregexra( id_admin_cor ,"/","")
-replace id_admin_cor = ustrregexra( id_admin_cor ," ","")
 
-order id_admin_cor, a(id_admin)
-drop id_admin 
-rename id_admin_cor id_admin
+replace id_admin = ustrregexra( id_admin ,"/","")
+replace id_admin = ustrregexra( id_admin ," ","")
+
 
 		* gen dummy if matricule fiscal is correct: 7 digit, 1 character condition
 gen id_admin_correct = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
@@ -91,187 +90,119 @@ lab val id_admin_correct correct
 
     *correct code de la douane
 
-gen rg_codedouane_cor = rg_codedouane
-replace rg_codedouane_cor = ustrregexra(rg_codedouane," ","")
-replace rg_codedouane_cor = "1435318s" if rg_codedouane_cor == "1435318/s"
+
+replace rg_codedouane = ustrregexra(rg_codedouane," ","")
+replace rg_codedouane = "1435318s" if rg_codedouane == "1435318/s"
 
 replace questions_needing_check = "rg_codedouane" if id_plateforme == 1002
 replace needs_check = 1 if id_plateforme == 1002
 
-order rg_codedouane_cor, a(rg_codedouane)
-drop rg_codedouane 
-rename rg_codedouane_cor rg_codedouane 
-
 
 	* correct telephone numbers with regular expressions
 		* representative
- gen rg_telrep_cor = ustrregexra(rg_telrep, "^216", "")
-replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"[a-z]","")
-replace rg_telrep_cor = ustrregexra( rg_telrep_cor," ","")
-replace rg_telrep_cor = ustrregexra( rg_telrep_cor,"00216","")
-replace rg_telrep_cor = "29530240" if rg_telrep_cor == "(+216)29530240"
-replace rg_telrep_cor = "28219916" if rg_telrep_cor == "+21628219916"
-replace rg_telrep_cor = "97405671" if rg_telrep_cor == "+21697405671"
-
+replace rg_telrep = ustrregexra(rg_telrep, "^216", "")
+replace rg_telrep = ustrregexra( rg_telrep,"[a-z]","")
+replace rg_telrep = ustrregexra( rg_telrep," ","")
+replace rg_telrep = ustrregexra( rg_telrep,"00216","")
+replace rg_telrep = ustrregexra( rg_telrep, "^[\+]216", "")
+replace rg_telrep = subinstr(rg_telrep, " ", "", .)
+replace rg_telrep = "29530240" if rg_telrep == "(+216)29530240"
+/*
+replace rg_telrep = "28219916" if rg_telrep == "+21628219916"
+replace rg_telrep = "97405671" if rg_telrep == "+21697405671"
+*/
 
 /*	* Check all phone numbers having more or less than 8 digits
-replace rg_telrep_cor = "$check_again" if strlen( rg_telrep_cor ) != 8
+replace rg_telrep = "$check_again" if strlen( rg_telrep ) != 8
 
 */
 	* Check phone number
-gen diff = length(rg_telrep) - length(rg_telrep_cor)
-order rg_telrep_cor diff, a(rg_telrep)
-*browse rg_telrep* diff
-drop rg_telrep diff
-rename rg_telrep_cor rg_telrep 
+
 
 	* Vérifier nom et prénom du representant*
-gen rg_nom_rep_cor = ustrlower(rg_nom_rep)
+replace rg_nom_rep = ustrlower(rg_nom_rep)
 /*
-replace rg_nom_rep_cor = "$check_again" if rg_nom_rep_cor == "sawssen" /*le nom de famille manque*/
+replace rg_nom_rep = "$check_again" if rg_nom_rep == "sawssen" /*le nom de famille manque*/
 
 */
 
-order rg_nom_rep_cor, a(rg_nom_rep)
-drop rg_nom_rep 
-rename rg_nom_rep_cor rg_nom_rep
 
 	* Téléphone du de lagérante
 
-gen rg_telpdg_cor = ustrregexra( rg_telpdg, "^216", "")
-replace rg_telpdg_cor = subinstr(rg_telpdg_cor, " ", "", .)
-replace rg_telpdg_cor = ustrregexra( rg_telpdg_cor,"[a-z]","")
-replace rg_telpdg_cor = ustrregexra( rg_telpdg_cor,"00216","")
-order rg_telpdg_cor, a(rg_telpdg)
-replace rg_telpdg_cor = "52710565" if rg_telpdg_cor == "(+216)52710565"
-replace rg_telpdg_cor = "97405671" if rg_telpdg_cor == "+21697405671"
-
+replace rg_telpdg = ustrregexra( rg_telpdg, "^216", "")
+replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
+replace rg_telpdg = ustrregexra( rg_telpdg,"[a-z]","")
+replace rg_telpdg = ustrregexra( rg_telpdg,"00216","")
+replace rg_telpdg = ustrregexra( rg_telpdg, "^[\+]216", "")
+replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
+replace rg_telpdg = "52710565" if rg_telpdg == "(+216)52710565"
 /*
-replace rg_telpdg_cor = "$check_again" if rg_telpdg_cor == "82828"
-
-replace questions_needing_check = "rg_telpdg" if id_plateforme == 
-replace needs_check = 1 if id_plateforme ==
+replace rg_telpdg = "97405671" if rg_telpdg == "+21697405671"
+replace rg_telpdg = "$check_again" if rg_telpdg == "82828"
+replace rg_telpdg = "28219916" if rg_telpdg == "+21628219916"
 */
-replace rg_telpdg_cor = "28219916" if rg_telpdg_cor == "+21628219916"
-
-order rg_telpdg_cor, a(rg_telpdg)
-drop rg_telpdg
-rename rg_telpdg_cor rg_telpdg
-
 
     * adresse mail du PDG
-gen rg_emailpdg_cor = rg_emailpdg
 
-/*
-replace rg_emailpdg_cor = "$check_again" if rg_emailpdg == "yosra.slama@genoviaing"
-
-replace questions_needing_check = "rg_telpdg" if id_plateforme == 
-replace needs_check = 1 if id_plateforme ==
-*/
-order rg_emailpdg_cor, a(rg_emailpdg)
-drop rg_emailpdg
-rename rg_emailpdg_cor rg_emailpdg
 
 	* variable: Qualité/fonction
 
-gen rg_position_repcor = ustrlower(rg_position_rep)
-replace rg_position_repcor = "directrice" if rg_position_rep == "dirctrice"
+replace rg_position_rep = ustrlower(rg_position_rep)
+replace rg_position_rep = "directrice" if rg_position_rep == "dirctrice"
 
 /*
 replace rg_position_repcor = "$check_again" if rg_position_rep == "group task 6 - peer to peer group wee"
 
 */
-replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
-replace rg_position_repcor = "gérante" if rg_position_rep == "gerante"
-replace rg_position_repcor = "gérant" if rg_position_rep == "gerant"
-replace rg_position_repcor = "gérante" if rg_position_rep == "gérant e"
-replace rg_position_repcor = "coo" if rg_position_rep == "c.o.o"
-order rg_position_repcor, a(rg_position_rep)
-drop rg_position_rep 
-rename rg_position_repcor rg_position_rep 
+replace rg_position_rep = "gérant" if rg_position_rep == "gerant"
+replace rg_position_rep = "gérante" if rg_position_rep == "gerante"
+replace rg_position_rep = "gérant" if rg_position_rep == "gerant"
+replace rg_position_rep = "gérante" if rg_position_rep == "gérant e"
+replace rg_position_rep = "coo" if rg_position_rep == "c.o.o"
+
 
 	* variable: Matricule CNSS
 
-gen rg_matricule_cor = ustrregexra(rg_matricule, "[ ]", "")
-replace rg_matricule_cor = ustrregexra(rg_matricule_cor, "[/]", "-")
-replace rg_matricule_cor = ustrregexra(rg_matricule_cor, "[_]", "-")
+replace rg_matricule = ustrregexra(rg_matricule, "[ ]", "")
+replace rg_matricule = ustrregexra(rg_matricule, "[/]", "-")
+replace rg_matricule = ustrregexra(rg_matricule, "[_]", "-")
 
 		* Format CNSS Number:
-gen t1 = ustrregexs(0) if ustrregexm(rg_matricule_cor, "\d{8}")
+gen t1 = ustrregexs(0) if ustrregexm(rg_matricule, "\d{8}")
 gen t2 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9][0-9][0-9][0-9][0-9]")
 gen t3 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9]$") 
 gen t4 = t2 + "-" + t3
 replace t4 = ustrregexra(t4, "[-]", "") if length(t4)==1
-replace rg_matricule_cor = t4 if length(rg_matricule_cor)==8
-order rg_matricule_cor , a(rg_matricule)
+replace rg_matricule = t4 if length(rg_matricule)==8
 drop t1 t2 t3 t4 
 
 		* Format CNRPS Number:
 
-gen t1 = ustrregexs(0) if ustrregexm(rg_matricule_cor, "\d{10}")
+gen t1 = ustrregexs(0) if ustrregexm(rg_matricule, "\d{10}")
 gen t2 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
 gen t3 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9]$") 
 gen t4 = t2 + "-" + t3
 replace t4 = ustrregexra(t4, "[-]", "") if length(t4)==1
-replace rg_matricule_cor = t4 if length(rg_matricule_cor)==10
-order rg_matricule_cor , a(rg_matricule)
+replace rg_matricule = t4 if length(rg_matricule)==10
 drop t1 t2 t3 t4  
-/*
-replace rg_matricule_cor = "$check_again" if length(rg_matricule_cor) >= 12 | length(rg_matricule_cor) <= 7
-*/
-drop rg_matricule
-rename rg_matricule_cor rg_matricule
+
 
 		* Nom de l'entreprise:
-gen firmname_cor = firmname
-/*
-replace firmname_cor = "$check_again" if firmname == "https://www.facebook.com/search/top?q=ol%c3%a9a%20amiri"
-replace firmname_cor = "$check_again" if firmname == "suarl"
-replace firmname_cor = "$check_again" if firmname == "sarl"
-replace firmname_cor = "$check_again" if firmname == "tataouine"
 
-*/
-order firmname_cor, a(firmname)
-drop firmname 
-rename firmname_cor firmname 
 
 		* Adresse de l'entreprise:
-gen rg_adresse_cor = ustrlower(rg_adresse) 
-/*
-replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "17"
-replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rte saltnia, km 5"
-replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue new ton"
-replace rg_adresse_cor = "$check_again" if rg_adresse_cor == "rue mohamed jamoussi"
+replace rg_adresse = ustrlower(rg_adresse) 
 
-*/
-order rg_adresse_cor, a(rg_adresse)
-drop rg_adresse 
-rename rg_adresse_cor rg_adresse
+
         * Site web de l'entreprise:
 
-gen rg_siteweb_corr = rg_siteweb
-/*
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "zi mornag"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "ben arous"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "facebook.comtinhinansac"
-replace rg_siteweb_corr = "$not_know" if rg_siteweb_corr == "ksibet el mediouni"
-replace rg_siteweb_corr = " " if rg_siteweb_corr == "pas de site"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "fb:rahmatabletop"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "gouvernorat de nabeul"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "les doigts d'or keffois"
-replace rg_siteweb_corr = "$check_again" if rg_siteweb_corr == "facebook.comol%c3%a9a-amiri-113583540352584"
 
-*/ 
-replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"https://","")
-replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"/","")
-replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"http:","")
-replace rg_siteweb_corr = ustrregexra( rg_siteweb_corr ,"www.","")
+replace rg_siteweb = ustrregexra( rg_siteweb ,"https://","")
+replace rg_siteweb = ustrregexra( rg_siteweb ,"/","")
+replace rg_siteweb = ustrregexra( rg_siteweb ,"http:","")
+replace rg_siteweb = ustrregexra( rg_siteweb ,"www.","")
 
 
-order rg_siteweb_corr, a(rg_siteweb)
-drop rg_siteweb
-rename rg_siteweb_corr rg_siteweb
 
        * chiffre d'affaire
 			* replace CA not applicable if company has been created after 
@@ -293,76 +224,25 @@ br id_plateform etat if ca_exp2020 > ca_2020
 			* browse capital <= 1000
 br id_plateform etat rg_capital if rg_capital <= 1000
 
- 
-/*
-id_plateforme
-1035
-1013
-1054
-986
-*/
-
-/*
-       * chiffre d'affaire 2018
-gen ca_2018_cor = ca_2018
-replace ca_2018_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2019
-
-order ca_2018_cor, a(ca_2018)
-drop ca_2018
-rename ca_2018_cor ca_2018
-       * chiffre d'affaire 2019
-	   
-gen ca_2019_cor = ca_2019
-replace ca_2019_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2020
-
-order ca_2019_cor, a(ca_2019)
-drop ca_2019
-rename ca_2019_cor ca_2019
-	   * chiffre d'affaire 2020
-gen ca_2020_cor = ca_2020
-replace ca_2020_cor = "$check_again"  if ca_2018_cor ==0 & date_created < 01/01/2021
-
-count if ca_2018_cor ==0 & ca_2019_cor==0 & ca_2020_cor==0
-	
-order ca_2020_cor, a(ca_2020)
-drop ca_2020
-rename ca_2020_cor ca_2020
-
-*/
-
  *Réseau  social de l'entreprise:
 
-gen rg_media_cor = rg_media
 
-replace rg_media_cor = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media_cor == "rissala kids farm"
-replace rg_media_cor = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media_cor == "laboratoire trésors naturels"
-replace rg_media_cor = "https://www.facebook.com/aabacti/" if rg_media_cor == "bacteriolab"
-replace rg_media_cor = "https://www.facebook.com/halfawin/" if rg_media_cor == "www,facebook,com/halfawin,7"
+replace rg_media = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media == "rissala kids farm"
+replace rg_media = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media == "laboratoire trésors naturels"
+replace rg_media = "https://www.facebook.com/aabacti/" if rg_media == "bacteriolab"
+replace rg_media = "https://www.facebook.com/halfawin/" if rg_media == "www,facebook,com/halfawin,7"
 
 
-replace rg_media_cor = " " if rg_media_cor == "aucun pour le moment"
-/*
-replace rg_media_cor = "$check_again" if rg_media_cor == "presert"
-replace rg_media_cor = "$check_again" if rg_media_cor == "siliana"
+replace rg_media = " " if rg_media == "aucun pour le moment"
 
 
 */
-replace rg_media_cor = ustrregexra( rg_media_cor ,"https://","")
-replace rg_media_cor = ustrregexra( rg_media_cor ,"http:","")
+replace rg_media = ustrregexra( rg_media ,"https://","")
+replace rg_media = ustrregexra( rg_media ,"http:","")
 
-
-order rg_media_cor, a(rg_media)
-drop rg_media
-rename rg_media_cor rg_media
 
        * Capital social de l'entreprise
-/*
-gen rg_capital_cor = rg_capital
 
-replace rg_capital_cor = "$check_again"  if length(rg_capital) =< 4
-replace rg_capital_cor = "$check_again"  if length(rg_capital) >= 7
-replace rg_capital_cor = "$check_again"  if rg_capital == "8.88888922661e+16"
-*/
 
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
@@ -464,9 +344,6 @@ replace needs_check = 1 if id_plateforme == 1133
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1129
 replace needs_check = 1 if id_plateforme == 1129
 
-
-
-
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
@@ -532,9 +409,9 @@ replace subsector = "industries chimiques" if subsector == "industrie chimique"
 	* In Tunisia, SCA and SA must have a minimum of 5000 TND of capital social
 		*All values having a too small capital social (less than 100)
 /*
-replace capitalsocial_corr = "$check_again" if capitalsocial_corr == "0"
-replace capitalsocial_corr = "$check_again" if capitalsocial_corr == "o"
-destring capitalsocial_corr, replace
+replace capitalsocialr = "$check_again" if capitalsocialr == "0"
+replace capitalsocialr = "$check_again" if capitalsocialr == "o"
+destring capitalsocialr, replace
 */
 
 ***********************************************************************
@@ -550,5 +427,5 @@ save "regis_inter", replace
 cd "$regis_checks"
 preserve 
 keep if needs_check ==1 & etat=="vérifié"
-export excel id_plateforme needs_check questions_needing_check commentairesequipegiz commentairesequipemsb semaine-dup_firmname using "fiche_correction", firstrow(variables) replace 
+export excel id_plateforme needs_check questions_needing_check commentairesequipegiz commentairesequipemsb semaine-dup_firmname using "ficherection", firstrow(variables) replace 
 restore
