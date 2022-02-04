@@ -296,7 +296,7 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 	ytitle("nombre d'entreprises") ///
 	name(sector_eligible, replace)
 */
-
+/*
 		* poles d'activité
 set graphics on
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny)) aspectratio(1)  ///
@@ -315,7 +315,7 @@ graph export poles.png, replace
 putpdf paragraph, halign(center) 
 putpdf image poles.png
 putpdf pagebreak
-
+*/
 		* categories d'autres
 set graphics on
 graph hbar (count), over(autres, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
@@ -350,7 +350,7 @@ graph export gender.png, replace
 putpdf paragraph, halign(center) 
 putpdf image gender.png
 putpdf pagebreak
-
+/*
 	* distribution of firms by gender and subsector
 graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
 	title("Pôle d'activité - Toutes les PME enregistrées") ///
@@ -365,6 +365,7 @@ graph export gender_pole.png, width(1500) height(1500) replace
 putpdf paragraph, halign(center) 
 putpdf image gender_pole.png
 putpdf pagebreak
+*/
 	* position du répresentant --> hbar
 	
 	* répresentation en ligne: ont un site web ou pas; ont un profil media ou pas
