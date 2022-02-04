@@ -283,12 +283,12 @@ replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created 
 
 			* browse for CA == 0
 br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
-br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & & ca_2020==0
+br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & ca_2020==0
 
 			* browse for ca_exp > ca_2018
 br id_plateform etat if ca_exp2018 > ca_2018
-br id_plateform etat ca_exp2019 > ca_2019
-br id_plateform etat ca_exp2020 > ca_2020
+br id_plateform etat if ca_exp2019 > ca_2019
+br id_plateform etat if ca_exp2020 > ca_2020
 
 			* browse capital <= 1000
 br id_plateform etat rg_capital if rg_capital <= 1000
@@ -371,6 +371,8 @@ replace questions_needing_check = "firmname" if id_plateforme == 987
 replace needs_check = 1 if id_plateforme == 987
 replace questions_needing_check = "rg_capital" if id_plateforme == 990
 replace needs_check = 1 if id_plateforme == 990
+replace questions_needing_check = "le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 992
+replace needs_check = 1 if id_plateforme == 992
 replace questions_needing_check = "rg_capital" if id_plateforme == 993
 replace needs_check = 1 if id_plateforme == 993
 replace questions_needing_check = "rg_adresse" if id_plateforme == 995
@@ -409,6 +411,8 @@ replace questions_needing_check = "firmname" if id_plateforme == 1041
 replace needs_check = 1 if id_plateforme == 1041
 replace questions_needing_check = "rg_capital" if id_plateforme == 1043
 replace needs_check = 1 if id_plateforme == 1043
+replace questions_needing_check = "le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 1044
+replace needs_check = 1 if id_plateforme == 1044
 replace questions_needing_check = "firmname" if id_plateforme == 1049
 replace needs_check = 1 if id_plateforme == 1049
 replace questions_needing_check = "firmname" if id_plateforme == 1054
@@ -421,7 +425,7 @@ replace questions_needing_check = "rg_capital" if id_plateforme == 1068
 replace needs_check = 1 if id_plateforme == 1068
 replace questions_needing_check = "rg_siteweb" if id_plateforme == 1071
 replace needs_check = 1 if id_plateforme == 1071
-replace questions_needing_check = "rg_capital" if id_plateforme == 1073
+replace questions_needing_check = "rg_capital/le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 1073
 replace needs_check = 1 if id_plateforme == 1073
 replace questions_needing_check = "rg_capital" if id_plateforme == 1074
 replace needs_check = 1 if id_plateforme == 1074
@@ -437,6 +441,8 @@ replace questions_needing_check = "rg_media/id_admin" if id_plateforme == 1094
 replace needs_check = 1 if id_plateforme == 1094
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1112
 replace needs_check = 1 if id_plateforme == 1112
+replace questions_needing_check = "le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 1114
+replace needs_check = 1 if id_plateforme == 1114
 replace questions_needing_check = "rg_capital" if id_plateforme == 1108
 replace needs_check = 1 if id_plateforme == 1108
 replace questions_needing_check = "firmname" if id_plateforme == 1049
