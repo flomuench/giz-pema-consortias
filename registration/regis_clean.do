@@ -129,6 +129,8 @@ rename commentavezvousapprisdelex moyen_com
 rename politiquedeconfidentialité rg_confidentialite
 rename partagerutiliserlesdonnéesco rg_partage_donnees
 rename enregistrermescoordonnéessur rg_enregistrement_coordonnees
+
+rename commentairesequipetuberlinms commentairesequipemsb
 	
 }
 ***********************************************************************

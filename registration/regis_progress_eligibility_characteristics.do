@@ -286,7 +286,8 @@ putpdf pagebreak
 putpdf paragraph, halign(center) 
 putpdf text ("Consortia d'export PME femmes: firm characteristics"), bold linebreak
 
-/*	* secteurs
+	* secteurs
+/*
 graph hbar (count), over(sector, sort(1)) blabel(total) ///
 	title("Sector - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
@@ -296,26 +297,26 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 	ytitle("nombre d'entreprises") ///
 	name(sector_eligible, replace)
 */
-/*
-		* poles d'activité
+
 set graphics on
-graph hbar (count), over(subsector, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny)) aspectratio(1)  ///
+		* poles d'activité
+graph hbar (count), over(subsector, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
 gr export subsector_tous.png, replace
-graph hbar (count) if ca_eligible_alt_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) aspectratio(1)  ///
+graph hbar (count) if ca_eligible_alt_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny))  ///
 	title("Pôle d'activité - entreprises éligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///
-	name(subsector_eligible, replace)
+	name(subsector_eligible_alt, replace)
 gr export subsector_eligible_alt.png, replace
-graph combine subsector_tous subsector_eligible, title("{bf: Distribution selon pôle d'activité}")
+graph combine subsector_tous subsector_eligible_alt, title("{bf: Distribution selon pôle d'activité}")
 graph export poles.png, replace 
 putpdf paragraph, halign(center) 
 putpdf image poles.png
 putpdf pagebreak
-*/
+
 		* categories d'autres
 set graphics on
 graph hbar (count), over(autres, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///

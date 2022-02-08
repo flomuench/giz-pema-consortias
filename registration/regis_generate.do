@@ -44,7 +44,7 @@ label define subsector_name 1 "autres" ///
 	3 "pôle d'activités artisanat" ///
 	4 "pôle d'activités cosmétiques" ///
 	5 "pôle d'activités de Santé" ///
-	6 "pôle d’activités de service conseil, education et formationpôle d'activités textiles et habillement" ///
+	6 "pôle d’activités de service conseil, education et formation" ///
 	7 "pôle d’activités technologies de l’information et de la communication" ///
 	8 "pôle d'activités textiles et habillement" ///
 	9 "pôle de l'énergie durable et développement durable" ///

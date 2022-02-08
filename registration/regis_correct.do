@@ -213,16 +213,16 @@ replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created 
 }
 
 			* browse for CA == 0
-br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
-br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & ca_2020==0
+*br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
+*br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & ca_2020==0
 
 			* browse for ca_exp > ca_2018
-br id_plateform etat if ca_exp2018 > ca_2018
-br id_plateform etat if ca_exp2019 > ca_2019
-br id_plateform etat if ca_exp2020 > ca_2020
+*br id_plateform etat if ca_exp2018 > ca_2018
+*br id_plateform etat if ca_exp2019 > ca_2019
+*br id_plateform etat if ca_exp2020 > ca_2020
 
 			* browse capital <= 1000
-br id_plateform etat rg_capital if rg_capital <= 1000
+*br id_plateform etat rg_capital if rg_capital <= 1000
 
  *Réseau  social de l'entreprise:
 
