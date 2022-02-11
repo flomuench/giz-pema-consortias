@@ -300,12 +300,12 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 
 set graphics on
 		* poles d'activité
-graph hbar (count), over(subsector, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
+graph hbar (count), over(subsector_corrige, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
 gr export subsector_tous.png, replace
-graph hbar (count) if ca_eligible_alt_age14, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny))  ///
+graph hbar (count) if ca_eligible_alt_age14, over(subsector_corrige, sort(1) label(labsize(tiny))) blabel(total, size(tiny))  ///
 	title("Pôle d'activité - entreprises éligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///

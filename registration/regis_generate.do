@@ -58,15 +58,15 @@ drop sector
 rename `Sector' sector
 lab values sector sector_name */
 
-encode subsector, gen(Subsector)
+encode subsector_corrige, gen(Subsector_corrige)
 *groups Subsector
-drop subsector
-rename Subsector subsector
-replace subsector = 7 if subsector == 10
+drop subsector_corrige
+rename Subsector_corrige subsector_corrige
+replace subsector_corrige = 7 if subsector_corrige == 10
 *lab values subsector subsector_name
 
 
-format %-25.0fc *sector
+format %-25.0fc *subsector_corrige
 
 ***********************************************************************
 * 	PART 2: factor variable gender 			  										  
