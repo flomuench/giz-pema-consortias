@@ -118,6 +118,7 @@ rename nbrdefemmessalariée rg_fte_femmes
 rename capitalsocial rg_capital 
 *rename domaine sector
 rename secteurdactivité subsector
+rename secteurdactivitémisàjourpa subsector_corrige 
 			* Export
 rename régime rg_exportstatus
 rename avezvousentaméuneopérationd rg_export
@@ -130,7 +131,7 @@ rename politiquedeconfidentialité rg_confidentialite
 rename partagerutiliserlesdonnéesco rg_partage_donnees
 rename enregistrermescoordonnéessur rg_enregistrement_coordonnees
 
-rename commentairesequipetuberlinms commentairesequipemsb
+*rename commentairesequipetuberlinms commentairesequipemsb
 	
 }
 ***********************************************************************
@@ -178,6 +179,7 @@ label variable rg_fte_femmes "nombre d'employées féminin de l'entreprise"
 label variable rg_capital "capital social"
 *label variable sector "domaine"
 label variable subsector " secteur d'acvitivté"
+label variable subsector_corrige " subsector d'acvitivté corrigé"
 
 			* Export
 label variable rg_exportstatus "régime d'exportation"

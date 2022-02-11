@@ -203,14 +203,13 @@ replace rg_siteweb = ustrregexra( rg_siteweb ,"http:","")
 replace rg_siteweb = ustrregexra( rg_siteweb ,"www.","")
 
 
-
-       * chiffre d'affaire
-			* replace CA not applicable if company has been created after 
-foreach x in ca_ ca_exp {
-replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
-replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
-replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
+/*
+foreach x in ca_ {
+replace `x'2018 = `not_applicable' if date_created > td(31dec2018) & date_created != .
+replace `x'2019 = `not_applicable' if date_created > td(31dec2019) & date_created != .
+replace `x'2020 = `not_applicable' if date_created > td(31dec2020) & date_created != .
 }
+*/
 
 			* browse for CA == 0
 *br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
@@ -351,9 +350,18 @@ replace needs_check = 1 if id_plateforme == 1129
 ***********************************************************************
 * 	PART 4:  Convert string to numerical variaregises	  			
 ***********************************************************************
+
 local destrvar "rg_fte rg_fte_femmes id_plateforme ca_2018 ca_2019 ca_2020 ca_exp2018 ca_exp2019 ca_exp2020"
 foreach x of local destrvar { 
 destring `x', replace
+}
+
+       * chiffre d'affaire
+			* replace CA not applicable if company has been created after 
+foreach x in ca_exp ca_ {
+replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
+replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
+replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
 }
 
 ***********************************************************************
@@ -426,6 +434,6 @@ save "regis_inter", replace
 ***********************************************************************
 cd "$regis_checks"
 preserve 
-keep if needs_check ==1 & etat=="vérifié"
+keep if needs_check ==1 & etat=="vérifié" 
 export excel id_plateforme needs_check questions_needing_check commentairesequipegiz commentairesequipemsb semaine-dup_firmname using "ficherection", firstrow(variables) replace 
 restore
