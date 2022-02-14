@@ -175,7 +175,7 @@ replace firmname = "archivart" if  id_plateforme == 1057
 replace rg_adresse = ustrlower(rg_adresse) 
 replace rg_adresse = "rue jaber ibn hayen, bhar lazreg  la marsa, tunis 2046" if id_plateforme == 1151
 replace rg_adresse = "" if id_plateforme == 995
-replace rg_adresse = "rue n. 290 mohi al-din alklibi almanar 2" if id_plateforme == "عدد 290 نهج محي الدين القليبي المنار 2"
+replace rg_adresse = "rue n. 290 mohi al-din alklibi almanar 2" if rg_adresse == "عدد 290 نهج محي الدين القليبي المنار 2"
 
         * Site web de l'entreprise:
 
@@ -382,10 +382,6 @@ replace needs_check = 1 if id_plateforme == 1244
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
 {
-*** cleaning capital social ***
-replace rg_capital = ustrregexra( rg_capital,",","")
-replace rg_capital = ustrregexra( rg_capital," ","")
-replace rg_capital = ustrregexra( rg_capital,"000","") if strlen( rg_capital) >= 9
 
 /*
 * br id_plateforme if rg_capital < 300
