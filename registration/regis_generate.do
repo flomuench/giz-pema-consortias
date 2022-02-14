@@ -233,11 +233,12 @@ lab val eligible_presence_enligne eligible_enligne
 		* eligibility criteria
 gen subsector_var = 0
 replace subsector_var = 1 if subsector== "pôle d’activités technologies de l’information et de la communication" | subsector== "pôle d’activités cosmétiques" | subsector== "pôle d’activités de service conseil, education et formation" | subsector== "pôle d’activités textiles et habillement" | subsector == "pôle d’activités agri-agroalimentaire" 
-
-gen eligiblilty_criteria = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & ca_mean!=0)
-lab val eligibility_criteria
+lab val subsector_var subsector_eligibile
 
 
+gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & ca_mean!=0)
+lab def eli_cri 1 "éligible" 0 "inéligible"
+lab val eli_cri eligibility_criteria
 
 ***********************************************************************
 * 	PART 10: Surplus contact information from registration
@@ -307,22 +308,16 @@ restore
 
 	* export 2nd file with potentially eligible companies
 preserve 
-    keep if eligiblilty_criteria == 1
+    keep if eli_cri == 1
 	rename rg_resident onshore
 	rename rg_produitexp produit_exportable
 	rename rg_intention intention_export
 	rename firmname nom_entreprise
 	order nom_entreprise onshore produit_exportable intention_export
 	local varlist "nom_entreprise onshore produit_exportable intention_export"
-	export excel `varlist' using eligiblilty_criteria if eligiblilty_criteria == 1, firstrow(var) replace
+	export excel `varlist' using eligiblilty_criteria if eli_cri == 1, firstrow(var) replace
 restore
 
-/*
-how many firms comply with this criteria 
-graphbar and replace it with the variable that I just generated 
-create a dummy variable
-
-intention to export produit exportable resident pole
 
 	* save dta file
 save "regis_inter", replace

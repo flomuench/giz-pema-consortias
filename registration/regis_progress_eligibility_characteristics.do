@@ -158,7 +158,7 @@ putpdf pagebreak
 graph bar (count), over(rg_legalstatus) blabel(total) ///
 	title("Statut juridique des entreprises") ///
 	ytitle("nombre d'enregistrement")
-graph export resident.png, replace
+graph export legalstatus.png, replace
 putpdf paragraph, halign(center) 
 putpdf image legalstatus.png
 putpdf pagebreak
@@ -251,17 +251,15 @@ graph bar (count), over(eligible_alt_sans_matricule) blabel(total) ///
 	note("Chaque entreprise est éligible qui CA moyenne 2018-2020 >= 10 mille, a >= 4 & < 200 employés," "une produit exportable, l'intention d'exporter, et existe pour >= 1 ans et est résidente tunisienne.", size(vsmall) color(red))
 gr export eligible_alt.png, replace
 
-graph bar (count), over(eligiblilty_criteria) blabel(total) ///
+graph bar (count), over(eli_cri) blabel(total) ///
 	title("Entreprises eligibles") ///
 	subtitle("Final eligibility criteria") ///
 	ytitle("nombre d'enregistrement") ///
-	name(eligibles, replace) ///
+	name(eligible_final, replace) ///
 	note("Chaque entreprise est éligible lorsqu'elle a CA différent de zéro, une produit exportable, l'intention d'exporter, et est résidente tunisienne.", size(vsmall) color(red))
 gr export eligible_final.png, replace
 
 set graphics off
-
-
 
 
 		* just "intention d'export"
