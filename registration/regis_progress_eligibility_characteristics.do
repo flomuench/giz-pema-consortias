@@ -30,7 +30,10 @@ putpdf text ("Consortia: registration progress, elibility, firm characteristics"
 
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 
-
+	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
+preserve
+keep if eli_cri == 1
+	
 ***********************************************************************
 * 	PART 2:  Registration progress		  			
 ***********************************************************************
@@ -153,16 +156,16 @@ graph export resident.png, replace
 putpdf paragraph, halign(center) 
 putpdf image resident.png
 putpdf pagebreak
-
-	* Legal status
-graph bar (count), over(rg_legalstatus) blabel(total) ///
+	
+* Legal status
+graph bar (count), over(rg_legalstatus) blabel(total)///
 	title("Statut juridique des entreprises") ///
 	ytitle("nombre d'enregistrement")
 graph export legalstatus.png, replace
 putpdf paragraph, halign(center) 
 putpdf image legalstatus.png
 putpdf pagebreak
-	
+
 	* nombre des employés
 histogram rg_fte, frequency addl ///
 	title("Nombre des employés") ///
@@ -256,7 +259,7 @@ graph bar (count), over(eli_cri) blabel(total) ///
 	subtitle("Final eligibility criteria") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligible_final, replace) ///
-	note("Chaque entreprise est éligible lorsqu'elle a CA différent de zéro, une produit exportable, l'intention d'exporter, et est résidente tunisienne.", size(vsmall) color(red))
+	note("Chaque entreprise est éligible lorsqu'elle a une produit exportable, l'intention d'exporter, et est résidente tunisienne.", size(vsmall) color(red))
 gr export eligible_final.png, replace
 
 set graphics off
@@ -442,6 +445,9 @@ cd "$regis_progress"
 	* pdf
 putpdf save "consortium-progress-eligibility-characteristics", replace
 
+	* restore the full data set (not only eligible firms)
+restore	
+	
 	* export excel with list of firms that we need to contact for them to correct
 		* their matricule fiscal
 cd "$regis_checks"

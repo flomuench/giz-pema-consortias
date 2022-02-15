@@ -231,14 +231,21 @@ lab val eligible_presence_enligne eligible_enligne
 
 
 		* eligibility criteria
+gen pôle_d’activités_artisanat_cosmetique =	0
+replace pôle_d’activités_artisanat_cosmetique = 1 if subsector_corrige== "pôle d’activités cosmétiques" | subsector_corrige== "pôle d'activités artisanat"
+lab val pôle_d’activités_artisanat_cosmetique pôle_d’activités_artisanat_et_cosmetique
+
+
 gen subsector_var = 0
-replace subsector_var = 1 if subsector== "pôle d’activités technologies de l’information et de la communication" | subsector== "pôle d’activités cosmétiques" | subsector== "pôle d’activités de service conseil, education et formation" | subsector== "pôle d’activités textiles et habillement" | subsector == "pôle d’activités agri-agroalimentaire" 
+replace subsector_var = 1 if subsector_corrige== "pôle d’activités technologies de l’information et de la communication" | subsector_corrige== "pôle d’activités de service conseil, education et formation" | subsector_corrige == "pôle d’activités agri-agroalimentaire" | pôle_d’activités_artisanat_cosmetique == 1
 lab val subsector_var subsector_eligibile
 
 
-gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & ca_mean!=0)
+gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 )
 lab def eli_cri 1 "éligible" 0 "inéligible"
 lab val eli_cri eligibility_criteria
+
+
 
 ***********************************************************************
 * 	PART 10: Surplus contact information from registration

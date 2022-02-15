@@ -234,13 +234,30 @@ replace rg_media = "`en_cours'" if rg_media == "en cours de construction"
 replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
 
+* subsector_ corrige
 
-       * Capital social de l'entreprise
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="chilift"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="decostar"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="ehdili"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="inometa"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="perfecta"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="woodplast"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="plastiform"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="ecopalme"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
+replace subsector_corrige = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
+replace subsector_corrige = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
 
 
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
 **************************************************************
+{
 replace questions_needing_check = "firmname" if id_plateforme == 987
 replace needs_check = 1 if id_plateforme == 987
 replace questions_needing_check = "rg_capital" if id_plateforme == 990
@@ -378,6 +395,7 @@ replace needs_check = 1 if id_plateforme == 1242
 replace questions_needing_check = "rg_capital" if id_plateforme == 1244
 replace needs_check = 1 if id_plateforme == 1244
 
+}
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
