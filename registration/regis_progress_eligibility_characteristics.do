@@ -101,10 +101,10 @@ putpdf text ("Consortia: eligibility"), bold linebreak
 
 	* distribution of ca and ca export 2018, 2019, 2020
 set graphics on
-histogram ca_mean if ca_mean < 666666, frequency addl ///
+histogram ca_mean if ca_mean < 666666 & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
-	subtitle("Toutes les entreprises enregistrées") ///
 	ytitle("Nombre d'entreprises") ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
 	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
 	bin(80) ///
 	xline(1.5) ///
@@ -114,10 +114,40 @@ gr export ca_mean.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ca_mean.png
 putpdf pagebreak
+
+histogram ca_mean if ca_mean < 15 & ca_mean > 0, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	bin(80) ///
+	xline(1.5) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
+	name(ca_mean, replace)
+gr export ca_mean_zoomin.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean_zoomin.png
+putpdf pagebreak
+
+
+histogram ca_mean if ca_mean < 1.5 & ca_mean > 0, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	bin(80) ///
+	note("Le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
+	name(ca_mean, replace)
+gr export ca_mean_zoomin2.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean_zoomin2.png
+putpdf pagebreak
+
+
 	/*
 histogram ca_expmean < 666666, frequency addl ///
 	title("Chiffre d'affaires export moyennes 2018-2020") ///
-	subtitle("Toutes les entreprises enregistrées") ///
+	
 	ytitle("Nombre d'entreprises") ///
 	xlabel(0 1 2 3 4 5 10 20 30 40 50, labsize(tiny) format(%9.0fc)) ///
 	bin(50) ///
@@ -158,7 +188,7 @@ putpdf image resident.png
 putpdf pagebreak
 	
 * Legal status
-graph bar (count), over(rg_legalstatus) blabel(total)///
+graph bar (count), over(rg_legalstatus) blabel(total) ///
 	title("Statut juridique des entreprises") ///
 	ytitle("nombre d'enregistrement")
 graph export legalstatus.png, replace
@@ -169,7 +199,6 @@ putpdf pagebreak
 	* nombre des employés
 histogram rg_fte, frequency addl ///
 	title("Nombre des employés") ///
-	subtitle("Toutes les entreprises enregistrées") ///
 	xlabel(0(20)600,  labsize(tiny) format(%20.0fc)) ///
 	bin(30) ///
 	xline(6) xline(200) ///
@@ -189,6 +218,19 @@ gr combine fte_full fte_100
 graph export fte.png, replace
 putpdf paragraph, halign(center) 
 putpdf image fte.png
+putpdf pagebreak
+
+histogram rg_fte if rg_fte <= 30, frequency addl ///
+	title("Nombre des employés") ///
+	subtitle("Entreprises ayantes <= 30 employés") ///
+	xlabel(0(1)30,  labsize(tiny) format(%20.0fc)) ///
+	bin(30) ///
+	xline(6) ///
+	note("La ligne réprésentent le minimum selon les critères d'éligibilité.", size(vsmall)) ///
+	name(fte_30, replace)
+graph export fte_zoom.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_zoom.png
 putpdf pagebreak
 	
 	* export 

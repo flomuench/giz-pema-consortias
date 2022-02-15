@@ -54,6 +54,9 @@ local en_cours  = 5555555555555
 gen needs_check = 0
 gen questions_needing_check = ""
 
+	* drop if id_plateforme is missing
+drop if id_plateforme == .
+
 ***********************************************************************
 * 	PART 2: use regular expressions to correct variables 		  			
 ***********************************************************************
@@ -235,25 +238,35 @@ replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
 
 * subsector_ corrige
-gen subsector_corrige_2= subsector_corrige
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="chilift"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="decostar"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="ehdili"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="inometa"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="perfecta"
-replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="woodplast"
-replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="plastiform"
-replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="ecopalme"
-replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
-replace subsector_corrige_2 = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
-replace subsector_corrige_2 = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
-replace subsector_corrige_2 = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
-replace subsector_corrige_2 = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="chilift"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="decostar"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="ehdili"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="inometa"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="perfecta"
+replace subsector_corrige = "pôle d'activités artisanat" if firmname =="woodplast"
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="plastiform"
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="ecopalme"
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
+replace subsector_corrige = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
+replace subsector_corrige = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
+
+replace subsector_corrige = "pôle d'activités de santé" if firmname =="les laboratoires pharmaceutiques dorcas"
+replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="mezmez"
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="no baffes architecture"
 
 
+format subsector_corrige %-20s
+
+gen subsector_manually_replaced = 0 
+local smr `" "atmosphere interieure" "chilift" "decostar" "ehdili" "inometa" "perfecta" "woodplast" "plastiform" "rmc" "société labiba"  "casti" "soteca electric" "express professional services""'
+foreach x in local smr {
+	replace subsector_manually_replaced = 1 if firmname == "`x'"
+}
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
 **************************************************************
