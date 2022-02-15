@@ -235,23 +235,23 @@ replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
 
 * subsector_ corrige
-
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="chilift"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="decostar"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="ehdili"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="inometa"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="perfecta"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="woodplast"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="plastiform"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="ecopalme"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
-replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
-replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
-replace subsector_corrige = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
-replace subsector_corrige = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
+gen subsector_corrige_2= subsector_corrige
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="chilift"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="decostar"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="ehdili"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="inometa"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="perfecta"
+replace subsector_corrige_2 = "pôle d'activités artisanat" if firmname =="woodplast"
+replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="plastiform"
+replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="ecopalme"
+replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="rmc"
+replace subsector_corrige_2 = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
+replace subsector_corrige_2 = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
+replace subsector_corrige_2 = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
+replace subsector_corrige_2 = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
+replace subsector_corrige_2 = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
 
 
 ***********************************************************************
