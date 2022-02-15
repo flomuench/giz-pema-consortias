@@ -232,6 +232,15 @@ lab val eligible_presence_enligne eligible_enligne
 
 
 		* eligibility criteria
+gen pole = .
+replace pole = 1 if subsector_corrige == 2
+replace pole = 2 if subsector_corrige == 3 | subsector_corrige == 4
+replace pole = 3 if subsector_corrige == 6 | subsector_corrige == 8
+replace pole = 4 if subsector_corrige == 11
+
+lab def pole 1 "agro-alimentaire" 2 "artisanat & cosmétique" 3 "service" 4 "TIC"
+lab val pole pole
+	
 gen subsector_var = 0
 replace subsector_var = 1 if subsector_corrige == 11 | subsector_corrige == 6 | subsector_corrige == 8 | subsector_corrige == 2 | subsector_corrige == 3 | subsector_corrige == 4
 lab val subsector_var subsector_eligibile
