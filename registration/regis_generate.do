@@ -62,7 +62,8 @@ encode subsector_corrige, gen(Subsector_corrige)
 *groups Subsector
 drop subsector_corrige
 rename Subsector_corrige subsector_corrige
-replace subsector_corrige = 7 if subsector_corrige == 10
+replace subsector_corrige = 2 if subsector_corrige == 9
+replace subsector_corrige = 6 if subsector_corrige == 10
 *lab values subsector subsector_name
 
 
@@ -231,17 +232,12 @@ lab val eligible_presence_enligne eligible_enligne
 
 
 		* eligibility criteria
-gen pôle_d’activités_artisanat_cosmetique =	0
-replace pôle_d’activités_artisanat_cosmetique = 1 if subsector_corrige_2== "pôle d’activités cosmétiques" | subsector_corrige_2== "pôle d'activités artisanat"
-lab val pôle_d’activités_artisanat_cosmetique pôle_d’activités_artisanat_et_cosmetique
-
-
 gen subsector_var = 0
-replace subsector_var = 1 if subsector_corrige_2== "pôle d’activités technologies de l’information et de la communication" | subsector_corrige_2== "pôle d’activités de service conseil, education et formation" | subsector_corrige_2 == "pôle d’activités agri-agroalimentaire" | pôle_d’activités_artisanat_cosmetique == 1
+replace subsector_var = 1 if subsector_corrige == 11 | subsector_corrige == 6 | subsector_corrige == 8 | subsector_corrige == 2 | subsector_corrige == 3 | subsector_corrige == 4
 lab val subsector_var subsector_eligibile
 
 
-gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 rg_gender_pdg== female)
+gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1)
 lab def eli_cri 1 "éligible" 0 "inéligible"
 lab val eli_cri eligibility_criteria
 
@@ -294,11 +290,10 @@ drop if id_plateforme == 133
 	* set export directory
 cd "$regis_intermediate"
 
-	* export file with potentially eligible companies
+	* export file with eligibles companies
 preserve
-	keep if eligible_alt_sans_matricule == 1
+    keep if eli_cri == 1
 	rename rg_siteweb site_web 
-	rename rg_media reseaux_sociaux
 	rename id_admin matricule_fiscale
 	rename rg_resident onshore
 	rename rg_fte employes
@@ -309,22 +304,26 @@ preserve
 	rename rg_codedouane code_douane
 	rename rg_matricule matricule_cnss
 	order nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export 
-	local varlist "nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export site_web reseaux_sociaux onshore employes produit_exportable intention_export"
-	export excel `varlist' using consortia_eligibes_pme if eligible_alt_sans_matricule == 1, firstrow(var) replace
+	local varlist "nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export onshore employes produit_exportable intention_export"
+	export excel `varlist' using consortia_eligibes_pme, firstrow(var) replace
 restore
 
-	* export 2nd file with potentially eligible companies
-preserve 
-    keep if eli_cri == 1
+	* export file with non-eligible companies
+preserve
+    keep if eli_cri == 0
+	rename id_admin matricule_fiscale
 	rename rg_resident onshore
+	rename rg_fte employes
 	rename rg_produitexp produit_exportable
 	rename rg_intention intention_export
+	rename rg_oper_exp operation_export
 	rename firmname nom_entreprise
-	order nom_entreprise onshore produit_exportable intention_export
-	local varlist "nom_entreprise onshore produit_exportable intention_export"
-	export excel `varlist' using eligiblilty_criteria if eli_cri == 1, firstrow(var) replace
+	rename rg_codedouane code_douane
+	rename rg_matricule matricule_cnss
+	order nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export 
+	local varlist "nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export onshore employes produit_exportable intention_export"
+	export excel `varlist' using consortia_eligibes_pme, firstrow(var) replace
 restore
-
 
 	* save dta file
 save "regis_inter", replace
