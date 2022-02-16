@@ -58,7 +58,7 @@ foreach x of local strvars {
 replace `x' = lower(stritrim(strtrim(`x')))
 }
 }
-	
+
 ***********************************************************************
 * 	PART 2: 	Drop all text windows from the survey		  			
 ***********************************************************************
@@ -120,6 +120,11 @@ rename capitalsocial rg_capital
 *rename domaine sector
 rename secteurdactivité subsector
 rename secteurdactivitémisàjourpa subsector_corrige 
+
+foreach x in subsector subsector_corrige {
+	replace `x' = lower(stritrim(strtrim(`x')))
+}
+
 			* Export
 rename régime rg_exportstatus
 rename avezvousentaméuneopérationd rg_export
