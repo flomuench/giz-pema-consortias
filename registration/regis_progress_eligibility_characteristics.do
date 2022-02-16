@@ -498,21 +498,22 @@ putpdf text ("Consortia descriptive statistics of only eligible firms"), bold li
 putpdf text ("Eligible --> Tunisian residant, female CEO, intention to export & exportable product"), bold linebreak
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 
+* number of eligble vs. ineligible firms
+set graphics on
+graph bar (count), over(eli_cri) blabel(total) ///
+	title("Entreprises actuellement eligibles") ///
+	ytitle("nombre d'enregistrement") ///
+	name(eligible_final, replace) ///
+	note("Chaque entreprise est éligible qui est dans un des 4 pôles, " "a l'intention d'exporter et un produit exportable, a une femme PDG et est résidente tunisienne.", size(vsmall) color(red))
+graph export eligible_final.png, replace
+putpdf paragraph, halign(center)
+putpdf image eligible_final.png
+putpdf pagebreak
+
 	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
 keep if eli_cri == 1
 
-* number of firms
-graph bar (count) id_plateforme, blabel(total) ///
-	title("Number of eligible firms") note("Date: `c(current_date)'") ///
-	ytitle("nombre d'enregistrement")
-graph export responserate.png, replace
-putpdf paragraph, halign(center)
-putpdf image responserate.png
-putpdf pagebreak
-
-
 * number of firms by pole
-set graphics on
 graph hbar (count), over(pole, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
 	title("4 Poles d'activité") ///
 	ytitle("nombre d'entreprises") ///
@@ -614,6 +615,7 @@ putpdf paragraph, halign(center)
 putpdf image age.png
 putpdf pagebreak
 
+
 	* legal status
 graph bar (count), over(rg_legalstatus) blabel(total) ///
 	title("Statut juridique des entreprises") ///
@@ -622,6 +624,14 @@ graph export legalstatus.png, replace
 putpdf paragraph, halign(center) 
 putpdf image legalstatus.png
 putpdf pagebreak
+
+	
+putpdf paragraph
+
+putpdf text ("Pole 1 = service"), bold linebreak
+putpdf text ("Pole 2 = TIC"), bold linebreak
+putpdf text ("Pole 3 = artisanat et cosmétique"), bold linebreak
+putpdf text ("Pole 4 = agro-alimentaire"), bold linebreak
 
 
 * characteristics by pole 

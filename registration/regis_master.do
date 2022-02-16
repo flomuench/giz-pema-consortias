@@ -120,5 +120,5 @@ if (0) do "${regis_github}/regis_test.do"
 /* --------------------------------------------------------------------
 	PART 4.8: De-identify and save as final for analysis
 ----------------------------------------------------------------------*/
-if (0) do "${regis_github}/regis_deidentify.do"
+if (1) do "${regis_github}/regis_deidentify.do"
 
