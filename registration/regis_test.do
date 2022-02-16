@@ -49,6 +49,8 @@ gen exp_labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
 graph box exp_labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 
 		* CA
+hist ca_mean if ca_mean < 666666666 & ca_mean > 0
+graph box ca_mean if ca_mean < 666666666 & ca_mean > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 
 		
 		* CA labor produditivity
