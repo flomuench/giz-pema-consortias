@@ -251,7 +251,6 @@ lab def eli_cri 1 "éligible" 0 "inéligible"
 lab val eli_cri eligible
 
 
-
 ***********************************************************************
 * 	PART 10: Surplus contact information from registration
 ***********************************************************************
