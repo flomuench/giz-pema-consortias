@@ -22,7 +22,7 @@ use "${regis_intermediate}/regis_inter", clear
 	* set directory to checks folder
 cd "$regis_progress"
 
-	* create word document
+	* create pdf document
 putpdf begin 
 putpdf paragraph
 
@@ -30,10 +30,6 @@ putpdf text ("Consortia: registration progress, elibility, firm characteristics"
 
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 
-	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
-preserve
-keep if eli_cri == 1
-	
 ***********************************************************************
 * 	PART 2:  Registration progress		  			
 ***********************************************************************
@@ -480,17 +476,261 @@ putpdf image gender_sector_eligible_alt.png
 */
 	
 ***********************************************************************
-* 	PART 6:  save pdf
+* 	PART 2:  save pdf
 ***********************************************************************
 	* change directory to progress folder
 cd "$regis_progress"
 	* pdf
 putpdf save "consortium-progress-eligibility-characteristics", replace
 
-	* restore the full data set (not only eligible firms)
-restore	
+
+***********************************************************************
+* 	PART 3:  set environment for descriptive statistics of eligible firms
+***********************************************************************
+	* set directory to checks folder
+cd "$regis_progress"
+
+	* create pdf document
+putpdf begin 
+putpdf paragraph
+
+putpdf text ("Consortia descriptive statistics of only eligible firms"), bold linebreak
+putpdf text ("Eligible --> Tunisian residant, female CEO, intention to export & exportable product"), bold linebreak
+putpdf text ("Date: `c(current_date)'"), bold linebreak
+
+* number of eligble vs. ineligible firms
+set graphics on
+graph bar (count), over(eli_cri) blabel(total) ///
+	title("Entreprises actuellement eligibles") ///
+	ytitle("nombre d'enregistrement") ///
+	name(eligible_final, replace) ///
+	note("Chaque entreprise est éligible qui est dans un des 4 pôles, " "a l'intention d'exporter et un produit exportable, a une femme PDG et est résidente tunisienne.", size(vsmall) color(red))
+graph export eligible_final.png, replace
+putpdf paragraph, halign(center)
+putpdf image eligible_final.png
+putpdf pagebreak
+
+	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
+keep if eli_cri == 1
+
+* number of firms by pole
+graph hbar (count), over(pole, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
+	title("4 Poles d'activité") ///
+	ytitle("nombre d'entreprises") ///
+	name(pole, replace)
+gr export pole.png, replace
+putpdf paragraph, halign(center)
+putpdf image pole.png
+putpdf pagebreak
+
+
+* sample descriptive statistics
+	* number of employees
+histogram rg_fte, frequency addl ///
+	title("Nombre des employés") ///
+	ytitle("nombre d'entreprises") ///
+	xlabel(0(10)350,  labsize(tiny) format(%20.0fc)) ///
+	bin(35) ///
+	name(fte_eligible, replace)
 	
-	* export excel with list of firms that we need to contact for them to correct
-		* their matricule fiscal
-cd "$regis_checks"
-*export excel potentially_eligible if eligible == 0 & eligible_sans_matricule == 1, firstrow(var) replace
+histogram rg_fte if rg_fte <= 30, frequency addl ///
+	title("Nombre des employés") ///
+	ytitle("nombre d'entreprises") ///
+	subtitle("Entreprises ayantes <= 30 employés") ///
+	xlabel(0(1)30,  labsize(tiny) format(%20.0fc)) ///
+	bin(30) ///
+	name(fte_30_eligible, replace)
+gr combine fte_eligible fte_30_eligible, name(fte_eligible, replace)
+graph export fte_eligible.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_eligible.png
+putpdf pagebreak
+
+
+	* CA, CA exp
+histogram ca_mean if ca_mean < 666666 & ca_mean > 0, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	ytitle("Nombre d'entreprises") ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(0 100 500 1000, labsize(tiny) format(%9.0fc)) ///
+	bin(20) ///
+	name(ca_mean, replace)
+gr export ca_mean.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean.png
+putpdf pagebreak
+
+histogram ca_mean if ca_mean < 15 & ca_mean > 0, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	bin(80) ///
+	name(ca_mean, replace)
+gr export ca_mean_zoomin.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean_zoomin.png
+putpdf pagebreak
+
+
+histogram ca_mean if ca_mean < 1.5 & ca_mean > 0, frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020") ///
+	ytitle("Nombre d'entreprises") ///
+	xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	bin(80) ///
+	name(ca_mean, replace)
+gr export ca_mean_zoomin2.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ca_mean_zoomin2.png
+putpdf pagebreak
+	
+	* capital social
+histogram rg_capital if rg_capital < 10000000, frequency addl ///
+	title("Capital Social") ///
+	ytitle("nombre d'entreprises") ///
+	xlabel(10000 100000 5000000 1000000, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	bin(20) ///
+	name(capital, replace)
+gr export capital.png, replace
+putpdf paragraph, halign(center) 
+putpdf image capital.png
+putpdf pagebreak
+	
+	
+	* age
+stripplot rg_age, jitter(4) vertical yline(2, lcolor(red)) ///
+	ytitle("Age de l'entreprise") ///
+	name(age_strip, replace)
+histogram rg_age if rg_age >= 0, frequency addl ///
+	ytitle("Age de l'entreprise") ///
+	xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
+	bin(60) ///
+	color(%30) ///
+	name(age_hist, replace)	
+gr combine age_strip age_hist, title("Age des entreprises")
+graph export age.png, replace 
+putpdf paragraph, halign(center) 
+putpdf image age.png
+putpdf pagebreak
+
+
+	* legal status
+graph bar (count), over(rg_legalstatus) blabel(total) ///
+	title("Statut juridique des entreprises") ///
+	ytitle("nombre d'enregistrement")
+graph export legalstatus.png, replace
+putpdf paragraph, halign(center) 
+putpdf image legalstatus.png
+putpdf pagebreak
+
+	
+putpdf paragraph
+
+putpdf text ("Pole 1 = service"), bold linebreak
+putpdf text ("Pole 2 = TIC"), bold linebreak
+putpdf text ("Pole 3 = artisanat et cosmétique"), bold linebreak
+putpdf text ("Pole 4 = agro-alimentaire"), bold linebreak
+
+
+* characteristics by pole 
+forvalues x = 1(1)4 {
+		* FTE
+	histogram rg_fte if pole == `x', frequency addl ///
+	title("Nombre des employés - pole `x'") ///
+	ytitle("nombre d'entreprises") ///
+	xlabel(0(10)350,  labsize(tiny) format(%20.0fc)) ///
+	bin(35) ///
+	name(fte, replace)
+
+		* CA, CA export
+	histogram ca_mean if ca_mean < 666666 & ca_mean > 0 & pole == `x', frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+	ytitle("Nombre d'entreprises") ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(0 100 500 1000, labsize(tiny) format(%9.0fc)) ///
+	bin(20) ///
+	name(ca_mean, replace)	
+	gr export ca_mean.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean.png
+	putpdf pagebreak
+
+	histogram ca_mean if ca_mean < 15 & ca_mean > 0 & pole == `x' , frequency addl ///
+		title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+		ytitle("Nombre d'entreprises") ///
+		xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+		bin(80) ///
+		name(ca_mean, replace)
+	gr export ca_mean_zoomin.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean_zoomin.png
+	putpdf pagebreak
+
+	histogram ca_mean if ca_mean < 1.5 & ca_mean > 0 & pole == `x', frequency addl ///
+		title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+		ytitle("Nombre d'entreprises") ///
+		xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+		bin(80) ///
+		name(ca_mean, replace)
+	gr export ca_mean_zoomin2.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean_zoomin2.png
+	putpdf pagebreak
+		
+		* capital social
+	histogram rg_capital if rg_capital < 10000000 & pole == `x', frequency addl ///
+		title("Capital Social  - pole `x'") ///
+		ytitle("nombre d'entreprises") ///
+		xlabel(10000 100000 5000000 1000000, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+		bin(20) ///
+		name(capital, replace)
+	gr export capital.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image capital.png
+	putpdf pagebreak
+		
+		
+		* age
+	stripplot rg_age if pole == `x', jitter(4) vertical yline(2, lcolor(red)) ///
+		ytitle("Age de l'entreprise") ///
+		name(age_strip, replace)
+	histogram rg_age if rg_age >= 0 & pole == `x', frequency addl ///
+		ytitle("Age de l'entreprise") ///
+		xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
+		bin(60) ///
+		color(%30) ///
+		name(age_hist, replace)	
+	gr combine age_strip age_hist, title("Age des entreprises - pole `x'")
+	graph export age.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image age.png
+	putpdf pagebreak
+
+		* legal status
+	graph bar (count) if pole == `x', over(rg_legalstatus) blabel(total) ///
+		title("Statut juridique des entreprises - pole `x'") ///
+		ytitle("nombre d'enregistrement")
+	graph export legalstatus.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image legalstatus.png
+	putpdf pagebreak
+	
+
+}
+
+***********************************************************************
+* 	PART 4:  save pdf
+***********************************************************************
+set graphics off
+	* change directory to progress folder
+cd "$regis_progress"
+	* pdf
+putpdf save "consortium-pme-eligible-descriptives", replace
+
+
+

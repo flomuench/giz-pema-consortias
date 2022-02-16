@@ -18,13 +18,26 @@
 	* import file
 use "${regis_intermediate}/regis_inter", clear
 	
+	* rename for better understanding
+rename eli_cri eligible_final
+	rename rg_media reseau_social
+	rename rg_siteweb site_web 
+	rename id_admin matricule_fiscale
+	rename rg_resident onshore
+	rename rg_fte employes
+	rename rg_produitexp produit_exportable
+	rename rg_intention intention_export
+	rename rg_oper_exp operation_export
+	rename rg_codedouane code_douane
+	rename rg_matricule matricule_cnss
+order id_plateforme firmname eligible_final date_created matricule_fiscale code_douane matricule_cnss operation_export 
 
 
 ***********************************************************************
 * 	PART 2:  create + save a master file	  			
 ***********************************************************************
 	* put all pii variables into a local
-local pii id_plateforme firmname id_admin rg_codedouane rg_nom_rep rg_position_rep rg_emailrep rg_emailpdg rg_telrep rg_telpdg rg_siteweb rg_media rg_adresse codepostal  date_created
+local pii id_plateforme firmname eligible_final matricule_fiscale matricule_cnss code_douane rg_nom_rep rg_position_rep rg_emailrep rg_emailpdg rg_telrep rg_telpdg site_web reseau_social rg_adresse codepostal  date_created
 
 	* change directory to 
 cd "$regis_data"
@@ -47,13 +60,16 @@ export excel `pii' using consortia_master_data, firstrow(var) replace
 cd "$regis_final"
 
 	* identify all pii but unique identifier id_plateforme
-local pii firmname id_admin rg_codedouane rg_nom_rep rg_position_rep rg_emailrep rg_emailpdg rg_telrep rg_telpdg rg_siteweb rg_media rg_adresse codepostal  date_created
+local pii firmname matricule_fiscale matricule_cnss code_douane rg_nom_rep rg_position_rep rg_emailrep rg_emailpdg rg_telrep rg_telpdg site_web reseau_social rg_adresse codepostal date_created
 
 	* drop all pii
 drop `pii'
 
 	* save 
 save "regis_final", replace
+
+	* export Excel version (for GIZ)
+export excel using regis_final, firstrow(var) replace
 
 ***********************************************************************
 * 	PART 4:  delete the 

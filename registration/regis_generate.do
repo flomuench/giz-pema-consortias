@@ -232,14 +232,23 @@ lab val eligible_presence_enligne eligible_enligne
 
 
 		* eligibility criteria
+gen pole = .
+replace pole = 1 if subsector_corrige == 2
+replace pole = 2 if subsector_corrige == 3 | subsector_corrige == 4
+replace pole = 3 if subsector_corrige == 6 | subsector_corrige == 8
+replace pole = 4 if subsector_corrige == 11
+
+lab def pole 1 "agro-alimentaire" 2 "artisanat & cosmétique" 3 "service" 4 "TIC"
+lab val pole pole
+	
 gen subsector_var = 0
 replace subsector_var = 1 if subsector_corrige == 11 | subsector_corrige == 6 | subsector_corrige == 8 | subsector_corrige == 2 | subsector_corrige == 3 | subsector_corrige == 4
 lab val subsector_var subsector_eligibile
 
 
-gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1)
+gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1 & eligible_giz != "non-éligible")
 lab def eli_cri 1 "éligible" 0 "inéligible"
-lab val eli_cri eligibility_criteria
+lab val eli_cri eligible
 
 
 
@@ -290,6 +299,10 @@ drop if id_plateforme == 133
 	* set export directory
 cd "$regis_intermediate"
 
+	* save dta file
+save "regis_inter", replace
+
+/*
 	* export file with eligibles companies
 preserve
     keep if eli_cri == 1
@@ -324,6 +337,4 @@ preserve
 	local varlist "nom_entreprise date_created matricule_fiscale code_douane matricule_cnss operation_export onshore employes produit_exportable intention_export"
 	export excel `varlist' using consortia_eligibes_pme, firstrow(var) replace
 restore
-
-	* save dta file
-save "regis_inter", replace
+*/
