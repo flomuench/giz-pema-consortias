@@ -42,7 +42,7 @@ keep if eli_cri == 1
 		* CA export
 histogram ca_expmean if ca_expmean < 666666666 & ca_expmean > 0
 graph box ca_expmean if ca_expmean < 666666666 & ca_expmean > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
-
+br if ca_expmean < 666666666 & ca_expmean > 0 & eli_cri == 1
 
 		* CA export labor productivity
 gen exp_labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
@@ -57,6 +57,8 @@ gen labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
 graph box labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 
 	* check for extremely low values
+*br id_plateforme ca_mean if ca_mean < 0.0005
+*br id_plateforme ca_mean ca_expmean if ca_mean< ca_expmean
 
 ***********************************************************************
 * 	PART 3:  absurd values of capital social		  			
