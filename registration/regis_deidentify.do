@@ -30,8 +30,35 @@ rename eli_cri eligible_final
 	rename rg_oper_exp operation_export
 	rename rg_codedouane code_douane
 	rename rg_matricule matricule_cnss
+	rename rg_capital capital
 order id_plateforme firmname eligible_final date_created matricule_fiscale code_douane matricule_cnss operation_export 
 
+	* randomly allocate firms to list experiment treatment (= 1) & control group ( = 0)
+		* sort the data by id_plateforme (stable sort --> randomisation rule 2)
+isid id_plateforme, sort
+		* rank the random number
+gen random_number = uniform() if eligible_final == 1
+egen rank = rank(random_number), unique
+		* identify the observation that divides ranked firms into half
+sum rank, d
+scalar rank_median = r(p50)
+		* allocate firms 50:50 to list treatment & control group
+gen list_group = .
+replace list_group = 1 if eligible_final == 1 & rank >= rank_median
+replace list_group = 0 if eligible_final == 1 & rank < rank_median
+
+		* evaluate balance
+cd "$regis_final"
+iebaltab ca_mean ca_expmean employes capital operation_export rg_age presence_enligne, grpvar(list_group) save(baltab_list_experiment) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+		
+		* assess replicability
+			* when re-running manually change the name of result_randomisation to compare
+preserve
+keep id_plateforme random_number rank eligible_final
+save "result_randomisation", replace
+restore
 
 ***********************************************************************
 * 	PART 2:  create + save a master file	  			

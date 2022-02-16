@@ -264,7 +264,7 @@ format subsector_corrige %-20s
 
 gen subsector_manually_replaced = 0 
 local smr `" "atmosphere interieure" "chilift" "decostar" "ehdili" "inometa" "perfecta" "woodplast" "plastiform" "rmc" "société labiba"  "casti" "soteca electric" "express professional services""'
-foreach x in local smr {
+foreach x of local smr {
 	replace subsector_manually_replaced = 1 if firmname == "`x'"
 }
 ***********************************************************************
