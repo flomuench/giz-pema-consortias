@@ -88,6 +88,8 @@ replace rg_codedouane = "1435318s" if rg_codedouane == "1435318/s"
 replace rg_codedouane = "1269807b" if rg_codedouane == "1269807/b"
 replace rg_codedouane = "" if rg_codedouane == "gr"
 replace rg_codedouane = "" if rg_codedouane == "pasencore"
+replace rg_codedouane = "" if rg_codedouane == "_____"
+
 
 	* correct telephone numbers with regular expressions
 		* representative
@@ -99,6 +101,7 @@ replace rg_telrep = ustrregexra( rg_telrep, "^[\+]216", "")
 replace rg_telrep = subinstr(rg_telrep, " ", "", .)
 replace rg_telrep = "29530240" if rg_telrep == "(+216)29530240"
 replace rg_telrep = "55507179" if rg_telpdg == "555071179"
+
 
 	* Vérifier nom et prénom du representant*
 replace rg_nom_rep = ustrlower(rg_nom_rep)
@@ -163,6 +166,9 @@ replace rg_matricule = t4 if length(rg_matricule)==10
 drop t1 t2 t3 t4  
 replace rg_matricule = "" if rg_matricule == "xxx"
 replace rg_matricule = "" if rg_matricule == "pasencore"
+replace rg_matricule = "" if rg_matricule == "1572591-z"
+replace rg_matricule = "" if rg_matricule == "000ma1326882-k"
+
 
 		* Nom de l'entreprise:
 replace firmname = "cœur du moulin" if firmname== "afef graa"
@@ -172,7 +178,8 @@ replace firmname = "" if id_plateforme== 1217
 replace firmname = "kaouther mejdi" if firmname== "كوثر الماجدي"
 replace firmname = "top management" if  id_plateforme == 1049
 replace firmname = "archivart" if  id_plateforme == 1057
-
+replace firmname = "" if  id_plateforme == 1041
+replace firmname = "" if  id_plateforme == 986
 
 		* Adresse de l'entreprise:
 replace rg_adresse = ustrlower(rg_adresse) 
@@ -200,6 +207,10 @@ replace rg_siteweb = "" if id_plateforme == 1181
 replace rg_siteweb = "" if id_plateforme == 1209
 replace rg_siteweb = "" if id_plateforme == 1159
 replace rg_siteweb = "" if id_plateforme == 1108
+replace rg_siteweb = "" if id_plateforme == 1020
+replace rg_siteweb = "" if id_plateforme == 1187
+replace rg_siteweb = "" if id_plateforme == 1086
+replace rg_siteweb = "biovall.com" if id_plateforme == 1191
 
 
 /*
@@ -236,6 +247,7 @@ replace rg_media = "`en_cours'" if rg_media == "en cours"
 replace rg_media = "`en_cours'" if rg_media == "en cours de construction"
 replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
+replace rg_media = "" if id_plateforme == 1187
 
 * subsector_ corrige
 replace subsector_corrige = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
@@ -264,7 +276,7 @@ format subsector_corrige %-20s
 
 gen subsector_manually_replaced = 0 
 local smr `" "atmosphere interieure" "chilift" "decostar" "ehdili" "inometa" "perfecta" "woodplast" "plastiform" "rmc" "société labiba"  "casti" "soteca electric" "express professional services""'
-foreach x of local smr {
+foreach x in local smr {
 	replace subsector_manually_replaced = 1 if firmname == "`x'"
 }
 ***********************************************************************
@@ -337,6 +349,8 @@ replace questions_needing_check = "rg_capital" if id_plateforme == 1074
 replace needs_check = 1 if id_plateforme == 1074
 replace questions_needing_check = "rg_telpdg" if id_plateforme == 1075
 replace needs_check = 1 if id_plateforme == 1075
+replace questions_needing_check = "rg_siteweb" if id_plateforme == 1077
+replace needs_check = 1 if id_plateforme == 1077
 replace questions_needing_check = "rg_telrep" if id_plateforme == 1079
 replace needs_check = 1 if id_plateforme == 1079
 replace questions_needing_check = "firmname" if id_plateforme == 1080
