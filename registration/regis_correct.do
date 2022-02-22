@@ -108,6 +108,9 @@ replace rg_nom_rep = ustrlower(rg_nom_rep)
 replace rg_nom_rep = "Hermassi Dorra" if  rg_nom_rep=="1724949/e"
 replace rg_nom_rep = "fathia errouki" if  rg_nom_rep=="fathia errouki import-export"
 replace rg_nom_rep = "hana youssef" if  rg_nom_rep=="هناء يوسف"
+replace rg_nom_rep = "sawssen ben msallem" if  id_plateforme == 1008
+replace rg_nom_rep = "sonda laroussi" if rg_nom_rep == "sonda larouss"
+
 
 	* Téléphone du de lagérante
 
@@ -118,17 +121,13 @@ replace rg_telpdg = ustrregexra( rg_telpdg,"00216","")
 replace rg_telpdg = ustrregexra( rg_telpdg, "^[\+]216", "")
 replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
 replace rg_telpdg = "52710565" if rg_telpdg == "(+216)52710565"
+replace rg_telpdg = "55888341" if rg_telpdg == "2165588341"
 
 
 	* variable: Qualité/fonction
 
 replace rg_position_rep = ustrlower(rg_position_rep)
 replace rg_position_rep = "directrice" if rg_position_rep == "dirctrice"
-
-/*
-replace rg_position_repcor = "$check_again" if rg_position_rep == "group task 6 - peer to peer group wee"
-
-*/
 replace rg_position_rep = "gérante" if rg_position_rep == "gerant"
 replace rg_position_rep = "gérante" if rg_position_rep == "gerante"
 replace rg_position_rep = "gérante" if rg_position_rep == "gérant"
@@ -181,6 +180,14 @@ replace firmname = "archivart" if  id_plateforme == 1057
 replace firmname = "" if  id_plateforme == 1041
 replace firmname = "" if  id_plateforme == 986
 replace firmname = "el eslek" if  id_plateforme == 1240
+replace firmname = "fiercesportswear" if  id_plateforme == 987
+replace firmname = "presert" if  id_plateforme == 1003
+replace firmname = "tunisianonlineteachers" if  id_plateforme == 1019
+replace firmname = "Oléa Amiri" if  id_plateforme == 1036
+replace firmname = "Rissala kids farm" if  id_plateforme == 1039
+replace firmname = "PassportBio" if  id_plateforme == 1054
+replace firmname = "archivart" if  id_plateforme == 1057
+
 
 
 		* Adresse de l'entreprise:
@@ -213,7 +220,7 @@ replace rg_siteweb = "" if id_plateforme == 1020
 replace rg_siteweb = "" if id_plateforme == 1187
 replace rg_siteweb = "" if id_plateforme == 1086
 replace rg_siteweb = "biovall.com" if id_plateforme == 1191
-
+replace rg_siteweb = "" if id_plateforme == 1030
 
 /*
 foreach x in ca_ {
@@ -250,12 +257,14 @@ replace rg_media = "`en_cours'" if rg_media == "en cours de construction"
 replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
 replace rg_media = "" if id_plateforme == 1187
-
+replace rg_media = "fb:rahmatabletop" if id_plateforme == 1030
 
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
 **************************************************************
 {
+replace questions_needing_check = "firmname" if id_plateforme == 986
+replace needs_check = 1 if id_plateforme == 986
 replace questions_needing_check = "firmname" if id_plateforme == 987
 replace needs_check = 1 if id_plateforme == 987
 replace questions_needing_check = "rg_capital" if id_plateforme == 990
@@ -314,7 +323,6 @@ replace questions_needing_check = "rg_capital" if id_plateforme == 1063
 replace needs_check = 1 if id_plateforme == 1063
 replace questions_needing_check = "rg_capital" if id_plateforme == 1068
 replace needs_check = 1 if id_plateforme == 1068
-replace questions_needing_check = 1, avevue du dollar -les jardins du lac -1053 tunis
 replace questions_needing_check = "rg_capital/le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 1073
 replace needs_check = 1 if id_plateforme == 1073
 replace questions_needing_check = "rg_capital" if id_plateforme == 1074
@@ -349,9 +357,7 @@ replace questions_needing_check = "le chiffre d'affaire export est supérieur au
 replace needs_check = 1 if id_plateforme == 1114
 replace questions_needing_check = "id_admin/rg_codedouane/rg_matricule" if id_plateforme == 1124
 replace needs_check = 1 if id_plateforme == 1124
-replace questions_needing_check = "rg_telpdg" if id_plateforme == 1129
-replace needs_check = 1 if id_plateforme == 1129
-replace questions_needing_check = "rg_telrep/rg_telpdg/rg_capital" if id_plateforme == 1133
+replace questions_needing_check = "rg_capital" if id_plateforme == 1133
 replace needs_check = 1 if id_plateforme == 1133
 replace questions_needing_check = "rg_capital" if id_plateforme == 1140
 replace needs_check = 1 if id_plateforme == 1140
@@ -470,6 +476,7 @@ duplicates tag firmname, gen(dup_firmname)
 drop if id_plateforme == 1078
 drop if id_plateforme == 1060
 drop if id_plateforme == 1066
+drop if id_plateforme == 1053
 
 * replace address = "Cyber parc  18 janvier Kasserine" if id_plateforme == 1214
 * Note: I cannot find the variable address to be replaced.

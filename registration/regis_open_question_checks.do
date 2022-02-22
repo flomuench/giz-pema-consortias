@@ -34,7 +34,7 @@ putdocx text ("Quality checks open question variables: registration export conso
 ***********************************************************************
 		* keep only potentially eligible firms
 preserve
-*keep if eligibilité == "eligible"
+
 *keep if eligibilité == "eligible" & subsector_corrige == 7 | subsector_corrige == 15 | subsector_corrige == 2 | subsector_corrige == 3 | subsector_corrige == 12 | subsector_corrige == 14
 
 		* put all variables to for which we want to check for duplicates into a local
