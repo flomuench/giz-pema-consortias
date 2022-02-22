@@ -1,5 +1,5 @@
 ***********************************************************************
-* 			master do file registration, email experiment e-commerce 									  
+* 			master do file baseline survey, consortias				  *					  
 ***********************************************************************
 *																	  
 *	PURPOSE: make all data work reproducible from first import to analysis
@@ -7,13 +7,12 @@
 *																	  
 *	OUTLINE: 	PART 1: Set standard settings & install packages	  
 *				PART 2: Prepare dynamic folder paths & globals		  
-*				PART 3: Run all do-files                          
+*				PART 3: Run all do-files                          											  
 *																	  
-*																	  
-*	Author:  	Florian Münch							    
+*	Author:  	Teo Firpo & Florian Münch							    
 *	ID variable: id_email		  					  
 *	Requires:  	  										  
-*	Creates:  master-data-ecommerce; emailexperiment_population_regisle.dta		                                  
+*	Creates:  master-data-consortias; 
 ***********************************************************************
 * 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
@@ -54,71 +53,114 @@ set scheme plotplain
 
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
+	global bl_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
+	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
+	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
+}
+else if c(os) == "MacOSX" {
+	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
+	global bl_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
+	global bl_backup = "/Users/`c(username)'/Documents/consortia-back-up"
+}
+
+if c(os) == "Windows" {
 	global regis_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
 	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
-	global regis_data   = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
-
 }
 else if c(os) == "MacOSX" {
 	global regis_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
-	global regis_backup = "/Users/`c(username)'/Documents/e-commerce-email-back-up"
-	global regis_data   = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
+	global regis_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 }
 
 		* paths within gdrive
 			* data
+global bl_raw = "${bl_gdrive}/raw"
+global bl_intermediate "${bl_gdrive}/intermediate"
+global bl_final = "${bl_gdrive}/final"
+global bl_checks = "${bl_gdrive}/checks"
+global bl_output = "${bl_gdrive}/output"
 global regis_raw = "${regis_gdrive}/raw"
 global regis_intermediate "${regis_gdrive}/intermediate"
 global regis_final = "${regis_gdrive}/final"
 global regis_checks = "${regis_gdrive}/checks"
 
-
 			* output (regression tables, figures)
-global regis_output = "${regis_gdrive}/output"
-global regis_figures = "${regis_output}/descriptive-statistics-figures"
-global regis_progress = "${regis_output}/progress-eligibility-characteristics"
+global bl_output = "${bl_gdrive}/output"
+global bl_figures = "${bl_output}/descriptive-statistics-figures"
+global bl_progress = "${bl_output}/progress-eligibility-characteristics"
 
-			
-		* set seeds for replication
+
+			* set seeds for replication
 set seed 8413195
 set sortseed 8413195
 		
 
 ***********************************************************************
-* 	PART 4: 	Run do-files for data cleaning & registration progress
+
+* 	PART 3: 	Run do-files for data cleaning & survey progress
+
 ***********************************************************************
 /* --------------------------------------------------------------------
-	PART 4.1: Import & raw data
+	PART 3.1: Import & raw data
 ----------------------------------------------------------------------*/		
-if (1) do "${regis_github}/regis_import.do"
+if (1) do "${bl_github}/bl_import.do"
 /* --------------------------------------------------------------------
-	PART 4.2: Clean raw data & save as intermediate data
+	PART 3.2: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_clean.do"
+if (1) do "${bl_github}/bl_clean.do"
 /* --------------------------------------------------------------------
-	PART 4.3: Correct & save intermediate data
+	PART 3.3: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_correct.do"
+if (0) do "${bl_github}/bl_correct.do"
 /* --------------------------------------------------------------------
-	PART 4.4: Generate variables for analysis or implementation
+	PART 3.4: Match to registration data
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_generate.do"
+if (0) do "${bl_github}/bl_match.do"
 /* --------------------------------------------------------------------
-	PART 4.6: export open text or number variables for RA check
+	PART 3.5: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_open_question_checks.do"
+if (0) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
-	PART 4.7: Export pdf with number, characteristics & eligibility of registered firms
+	PART 3.6: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_progress_eligibility_characteristics.do"
+if (0) do "${bl_github}/bl_open_question_checks.do"
 /* --------------------------------------------------------------------
-	PART 4.7: Export pdf with number, characteristics & eligibility of registered firms
-----------------------------------------------------------------------*/
-if (1) do "${regis_github}/regis_test.do"
+	PART 3.7: Perform logical checks
+----------------------------------------------------------------------*/	
+if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
-	PART 4.8: De-identify + randomize for list experiment + save as final for analysis
-----------------------------------------------------------------------*/
-if (1) do "${regis_github}/regis_deidentify.do"
+	PART 3.8: Export pdf with descriptive statistics on responses
+----------------------------------------------------------------------*/	
+if (0) do "${bl_github}/bl_statistics.do"
+
+
+
+/* 
+add to existing do files
++ bl_generate: digital, export readiness and export performance score
++ 
+
+new do file 1:
+- high frequency checks (generate pdf with statistics)
+	 - extreme values, outliers for numerical questions --> comptabilité
+
+
+new do file 2: (generate pdf with statistics)
+- descriptive statistics of the responses
+
+new do file 3:
+- stratification
+
+new do file 4:
+- randomisation + balance check
+
+new do file 5: 
+- allocation of treated firms to treatment groups
+
+
+ */
+
+
 

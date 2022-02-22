@@ -20,7 +20,7 @@
 cd "$regis_raw"
 
 	* excel
-import excel "${regis_raw}/regis_raw.xlsx", firstrow clear
+import excel "${regis_raw}/regis_raw.xlsm", firstrow clear
 	* csv
 *import delimited "${regis_raw}/regis_raw.csv", varn(1) clear
 

@@ -246,7 +246,7 @@ replace subsector_var = 1 if subsector_corrige == 11 | subsector_corrige == 6 | 
 lab val subsector_var subsector_eligibile
 
 
-gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1 & eligible_giz != "non-éligible")
+gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1 & eligibilité != "non-éligible")
 lab def eli_cri 1 "éligible" 0 "inéligible"
 lab val eli_cri eligible
 

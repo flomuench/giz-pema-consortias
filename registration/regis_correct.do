@@ -180,6 +180,8 @@ replace firmname = "top management" if  id_plateforme == 1049
 replace firmname = "archivart" if  id_plateforme == 1057
 replace firmname = "" if  id_plateforme == 1041
 replace firmname = "" if  id_plateforme == 986
+replace firmname = "el eslek" if  id_plateforme == 1240
+
 
 		* Adresse de l'entreprise:
 replace rg_adresse = ustrlower(rg_adresse) 
@@ -249,36 +251,7 @@ replace rg_media = ustrregexra( rg_media ,"https://","")
 replace rg_media = ustrregexra( rg_media ,"http:","")
 replace rg_media = "" if id_plateforme == 1187
 
-* subsector_ corrige
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="atmosphere interieure"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="chilift"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="decostar"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="ehdili"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="inometa"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="perfecta"
-replace subsector_corrige = "pôle d'activités artisanat" if firmname =="woodplast"
-replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="plastiform"
-replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="ecopalme"
-replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if firmname =="rmc"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="société labiba"
-replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="casti"
-replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="soteca electric"
-replace subsector_corrige = "pôle d’activités de service conseil, education et formation" if firmname =="express professional services"
-replace subsector_corrige = "pôle d'activités cosmétiques" if firmname =="societe tunisie silicone"
 
-replace subsector_corrige = "pôle d'activités de santé" if firmname =="les laboratoires pharmaceutiques dorcas"
-replace subsector_corrige = "pôle d’activités agri-agroalimentaire" if firmname =="mezmez"
-replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if firmname =="no baffes architecture"
-
-
-format subsector_corrige %-20s
-
-gen subsector_manually_replaced = 0 
-local smr `" "atmosphere interieure" "chilift" "decostar" "ehdili" "inometa" "perfecta" "woodplast" "plastiform" "rmc" "société labiba"  "casti" "soteca electric" "express professional services""'
-foreach x in local smr {
-	replace subsector_manually_replaced = 1 if firmname == "`x'"
-}
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
 **************************************************************
@@ -341,8 +314,7 @@ replace questions_needing_check = "rg_capital" if id_plateforme == 1063
 replace needs_check = 1 if id_plateforme == 1063
 replace questions_needing_check = "rg_capital" if id_plateforme == 1068
 replace needs_check = 1 if id_plateforme == 1068
-replace questions_needing_check = "rg_siteweb" if id_plateforme == 1071
-replace needs_check = 1 if id_plateforme == 1071
+replace questions_needing_check = 1, avevue du dollar -les jardins du lac -1053 tunis
 replace questions_needing_check = "rg_capital/le chiffre d'affaire export est supérieur au chiffre d'affaire total" if id_plateforme == 1073
 replace needs_check = 1 if id_plateforme == 1073
 replace questions_needing_check = "rg_capital" if id_plateforme == 1074
@@ -496,6 +468,9 @@ duplicates tag firmname, gen(dup_firmname)
 
 	* drop duplicates
 drop if id_plateforme == 1078
+drop if id_plateforme == 1060
+drop if id_plateforme == 1066
+
 * replace address = "Cyber parc  18 janvier Kasserine" if id_plateforme == 1214
 * Note: I cannot find the variable address to be replaced.
 
@@ -534,6 +509,6 @@ save "regis_inter", replace
 ***********************************************************************
 cd "$regis_checks"
 preserve 
-keep if needs_check ==1 & etat=="vérifié" 
-export excel id_plateforme needs_check questions_needing_check commentairesequipegiz commentairesequipemsb semaine-dup_firmname using "ficherection", firstrow(variables) replace 
+keep if needs_check ==1 
+export excel id_plateforme needs_check questions_needing_check eligibilité-dup_firmname using "ficherection", firstrow(variables) replace 
 restore
