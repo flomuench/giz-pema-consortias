@@ -60,50 +60,69 @@ drop if id_plateforme == .
 ***********************************************************************
 * 	PART 2: use regular expressions to correct variables 		  			
 ***********************************************************************
+{
 
-* Nombre d'employés dans l'entreprise 
-* le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
+        * le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
 
 replace rg_fte_femmes = 88888888888888888 if rg_fte < rg_fte_femmes
 
 
         * Matricule fiscale de l'entreprise:
-
 replace id_admin = ustrregexra( id_admin ,"/","")
 replace id_admin = ustrregexra( id_admin ," ","")
 
-
-		* gen dummy if matricule fiscal is correct: 7 digit, 1 character condition
+       * id_admin_correct: 7 digit, 1 character condition
 gen id_admin_correct = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
 order id_admin_correct, a(id_admin)
 lab def correct 1 "correct" 0 "incorrect"
 lab val id_admin_correct correct
 
 
-    *correct code de la douane
-
-
+        * Code de la douane
 replace rg_codedouane = ustrregexra(rg_codedouane," ","")
 replace rg_codedouane = "1435318s" if rg_codedouane == "1435318/s"
 replace rg_codedouane = "1269807b" if rg_codedouane == "1269807/b"
 replace rg_codedouane = "" if rg_codedouane == "gr"
 replace rg_codedouane = "" if rg_codedouane == "pasencore"
+replace rg_codedouane = "" if rg_codedouane == "n/a"
 replace rg_codedouane = "" if rg_codedouane == "_____"
+replace rg_codedouane = "" if rg_codedouane == "---"
+replace rg_codedouane = "" if rg_codedouane == "0"
+replace rg_codedouane = "" if rg_codedouane == "1585453"
+replace rg_codedouane = "" if rg_codedouane == "1617005"
+replace rg_codedouane = "1468409z" if rg_codedouane == "1468409z/a/m000"
+replace rg_codedouane = "1541465y" if rg_codedouane == "1541465y/m/a/000"
+replace rg_codedouane = "1562084d" if rg_codedouane == "1562084dam000"
+replace rg_codedouane = "1631389e" if rg_codedouane == "1631389eam000"
 
-
-	* correct telephone numbers with regular expressions
-		* representative
+	    * Phone numbers 
+	     	* Representative
 replace rg_telrep = ustrregexra(rg_telrep, "^216", "")
 replace rg_telrep = ustrregexra( rg_telrep,"[a-z]","")
 replace rg_telrep = ustrregexra( rg_telrep," ","")
 replace rg_telrep = ustrregexra( rg_telrep,"00216","")
 replace rg_telrep = ustrregexra( rg_telrep, "^[\+]216", "")
 replace rg_telrep = subinstr(rg_telrep, " ", "", .)
+replace rg_telrep = "216" + rg_telrep if length(rg_telrep)==5
 replace rg_telrep = "29530240" if rg_telrep == "(+216)29530240"
-replace rg_telrep = "55507179" if rg_telpdg == "555071179"
+replace rg_telrep = "55507179" if rg_telrep == "555071179" 
+replace rg_telrep = "" if rg_telrep == "778838841" 
+
+	        * PDG
+replace rg_telpdg = ustrregexra( rg_telpdg, "^216", "")
+replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
+replace rg_telpdg = ustrregexra( rg_telpdg,"[a-z]","")
+replace rg_telpdg = ustrregexra( rg_telpdg,"00216","")
+replace rg_telpdg = ustrregexra( rg_telpdg, "^[\+]216", "")
+replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
+replace rg_telpdg = "216" + rg_telpdg if length(rg_telpdg)==5
+replace rg_telpdg = "52710565" if rg_telpdg == "(+216)52710565"
+replace rg_telpdg = "55888341" if rg_telpdg == "2165588341"
+replace rg_telpdg = "97550661" if rg_telpdg == "975506661"
+replace rg_telpdg = "55888341" if rg_telpdg == "5588341"
 
 
-	* Vérifier nom et prénom du representant*
+	    * Nom et prénom du representant
 replace rg_nom_rep = ustrlower(rg_nom_rep)
 replace rg_nom_rep = "Hermassi Dorra" if  rg_nom_rep=="1724949/e"
 replace rg_nom_rep = "fathia errouki" if  rg_nom_rep=="fathia errouki import-export"
@@ -112,25 +131,11 @@ replace rg_nom_rep = "sawssen ben msallem" if  id_plateforme == 1008
 replace rg_nom_rep = "sonda laroussi" if rg_nom_rep == "sonda larouss"
 
 
-	* Téléphone du de lagérante
-
-replace rg_telpdg = ustrregexra( rg_telpdg, "^216", "")
-replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
-replace rg_telpdg = ustrregexra( rg_telpdg,"[a-z]","")
-replace rg_telpdg = ustrregexra( rg_telpdg,"00216","")
-replace rg_telpdg = ustrregexra( rg_telpdg, "^[\+]216", "")
-replace rg_telpdg = subinstr(rg_telpdg, " ", "", .)
-replace rg_telpdg = "52710565" if rg_telpdg == "(+216)52710565"
-replace rg_telpdg = "55888341" if rg_telpdg == "2165588341"
-
-
-	* variable: Qualité/fonction
-
+	    * Qualité/fonction
 replace rg_position_rep = ustrlower(rg_position_rep)
 replace rg_position_rep = "directrice" if rg_position_rep == "dirctrice"
-replace rg_position_rep = "gérante" if rg_position_rep == "gerant"
+replace rg_position_rep = "gérant" if rg_position_rep == "gerant"
 replace rg_position_rep = "gérante" if rg_position_rep == "gerante"
-replace rg_position_rep = "gérante" if rg_position_rep == "gérant"
 replace rg_position_rep = "gérante" if rg_position_rep == "gérant e"
 replace rg_position_rep = "coo" if rg_position_rep == "c.o.o"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisan"
@@ -138,14 +143,11 @@ replace rg_position_rep = "artisane" if rg_position_rep == "artisanne"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisante"
 
 
-
-	* variable: Matricule CNSS
-
+	    * Matricule CNSS
 replace rg_matricule = ustrregexra(rg_matricule, "[ ]", "")
 replace rg_matricule = ustrregexra(rg_matricule, "[/]", "-")
 replace rg_matricule = ustrregexra(rg_matricule, "[_]", "-")
-
-		* Format CNSS Number:
+		   * Format CNSS Number:
 gen t1 = ustrregexs(0) if ustrregexm(rg_matricule, "\d{8}")
 gen t2 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9][0-9][0-9][0-9][0-9]")
 gen t3 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9]$") 
@@ -153,9 +155,7 @@ gen t4 = t2 + "-" + t3
 replace t4 = ustrregexra(t4, "[-]", "") if length(t4)==1
 replace rg_matricule = t4 if length(rg_matricule)==8
 drop t1 t2 t3 t4 
-
-		* Format CNRPS Number:
-
+		   * Format CNRPS Number:
 gen t1 = ustrregexs(0) if ustrregexm(rg_matricule, "\d{10}")
 gen t2 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]")
 gen t3 = ustrregexs(0) if ustrregexm(t1, "[0-9][0-9]$") 
@@ -167,9 +167,10 @@ replace rg_matricule = "" if rg_matricule == "xxx"
 replace rg_matricule = "" if rg_matricule == "pasencore"
 replace rg_matricule = "" if rg_matricule == "1572591-z"
 replace rg_matricule = "" if rg_matricule == "000ma1326882-k"
-
+replace rg_matricule = "" if rg_matricule == "1153245aam000"
 
 		* Nom de l'entreprise:
+replace firmname = ustrlower(firmname)
 replace firmname = "cœur du moulin" if firmname== "afef graa"
 replace firmname = "ines messaoudi" if firmname== "gérante"
 replace firmname = "atmosphere interieure" if id_plateforme== 1100
@@ -183,9 +184,9 @@ replace firmname = "el eslek" if  id_plateforme == 1240
 replace firmname = "fiercesportswear" if  id_plateforme == 987
 replace firmname = "presert" if  id_plateforme == 1003
 replace firmname = "tunisianonlineteachers" if  id_plateforme == 1019
-replace firmname = "Oléa Amiri" if  id_plateforme == 1036
-replace firmname = "Rissala kids farm" if  id_plateforme == 1039
-replace firmname = "PassportBio" if  id_plateforme == 1054
+replace firmname = "oléa amiri" if  id_plateforme == 1036
+replace firmname = "rissala kids farm" if  id_plateforme == 1039
+replace firmname = "passportbio" if  id_plateforme == 1054
 replace firmname = "archivart" if  id_plateforme == 1057
 
 
@@ -195,15 +196,16 @@ replace rg_adresse = ustrlower(rg_adresse)
 replace rg_adresse = "rue jaber ibn hayen, bhar lazreg  la marsa, tunis 2046" if id_plateforme == 1151
 replace rg_adresse = "" if id_plateforme == 995
 replace rg_adresse = "rue n. 290 mohi al-din alklibi almanar 2" if rg_adresse == "عدد 290 نهج محي الدين القليبي المنار 2"
-
-        * Site web de l'entreprise:
-
-
+replace rg_adresse = "1, avevue du dollar -les jardins du lac -1053 tunis 1" if rg_siteweb == "1, avevue du dollar -les jardins du lac -1053 tunis"
+replace rg_adresse = "11, rue de l'iraq, tunis" if rg_siteweb == "11, rue de l'iraq, tunis"
+replace rg_adresse = "route el mahdia el amra sfax" if rg_siteweb == "route el mahdia el amra sfax"      
+replace rg_adresse = "57, rue aboubakker essedik sakiet ezzit, 3031 sfax - tunisie" if rg_media == "57, rue aboubakker essedik sakiet ezzit, 3031 sfax - tunisie"	   
+	   
+	   * Site web de l'entreprise:
 replace rg_siteweb = ustrregexra( rg_siteweb ,"https://","")
 replace rg_siteweb = ustrregexra( rg_siteweb ,"/","")
 replace rg_siteweb = ustrregexra( rg_siteweb ,"http:","")
 replace rg_siteweb = ustrregexra( rg_siteweb ,"www.","")
-
 replace rg_siteweb = "`en_cours'" if rg_siteweb=="en cours"
 replace rg_siteweb = "`en_cours'" if rg_siteweb=="en cours de construction"
 replace rg_siteweb = "`en_cours'" if rg_siteweb=="en cours de réalisation"
@@ -221,7 +223,39 @@ replace rg_siteweb = "" if id_plateforme == 1187
 replace rg_siteweb = "" if id_plateforme == 1086
 replace rg_siteweb = "biovall.com" if id_plateforme == 1191
 replace rg_siteweb = "" if id_plateforme == 1030
+replace rg_siteweb = "" if rg_siteweb == "avevue du dollar -les jardins du lac -1053 tunis"
+replace rg_siteweb = "" if rg_siteweb == "11, rue de l'iraq, tunis"
+replace rg_siteweb = "" if rg_siteweb == "gouvernorat de nabeul"
+replace rg_siteweb = "" if rg_siteweb == "moderncoldservicemcs@gmail.com"
+replace rg_siteweb = "" if rg_siteweb == "route el mahdia el amra sfax"
+replace rg_siteweb = "" if rg_siteweb == "sousse"
+replace rg_siteweb = "" if rg_siteweb == "tunis"
+replace rg_siteweb = "" if rg_siteweb == "zi kondar sousse"
 
+
+        *Réseau social de l'entreprise:
+replace rg_media = "facebook.comzina.boughdiri" if id_plateforme == 1193
+replace rg_media = "https://www.facebook.com/tinhinansac/   &   https://www.instagram.com/tin_hinan.tn/" if id_plateforme == 996
+replace rg_media = "https://www.facebook.com/profile.php?id=100054933390120" if id_plateforme == 1036
+replace rg_media = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media == "rissala kids farm"
+replace rg_media = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media == "laboratoire trésors naturels"
+replace rg_media = "https://www.facebook.com/aabacti/" if rg_media == "bacteriolab"
+replace rg_media = "https://www.facebook.com/halfawin/" if rg_media == "www,facebook,com/halfawin,7"
+replace rg_media = "Sonya Flowers.tn " if id_plateforme == 1108
+replace rg_media = "`en_cours'" if rg_media == "en cours"
+replace rg_media = "`en_cours'" if rg_media == "en cours de construction"
+replace rg_media = ustrregexra( rg_media ,"https://","")
+replace rg_media = ustrregexra( rg_media ,"http:","")
+replace rg_media = "" if id_plateforme == 1187
+replace rg_media = "fb:rahmatabletop" if id_plateforme == 1030
+replace rg_media = "" if rg_media == "57, rue aboubakker essedik sakiet ezzit, 3031 sfax - tunisie"
+replace rg_media = "" if rg_media == "71339864"
+replace rg_media = "" if rg_media == "sarl"
+replace rg_media = "" if rg_media == "siliana"
+
+
+}
+{
 /*
 foreach x in ca_ {
 replace `x'2018 = `not_applicable' if date_created > td(31dec2018) & date_created != .
@@ -241,23 +275,7 @@ replace `x'2020 = `not_applicable' if date_created > td(31dec2020) & date_create
 
 			* browse capital <= 1000
 *br id_plateform etat rg_capital if rg_capital <= 1000
-
- *Réseau  social de l'entreprise:
-
-replace rg_media = "facebook.comzina.boughdiri" if id_plateforme == 1193
-replace rg_media = "https://www.facebook.com/tinhinansac/   &   https://www.instagram.com/tin_hinan.tn/" if id_plateforme == 996
-replace rg_media = "https://www.facebook.com/profile.php?id=100054933390120" if id_plateforme == 1036
-replace rg_media = "https://www.facebook.com/Rissala.Kids.Farm/" if rg_media == "rissala kids farm"
-replace rg_media = "https://www.facebook.com/tresors.naturels.tunisie/" if rg_media == "laboratoire trésors naturels"
-replace rg_media = "https://www.facebook.com/aabacti/" if rg_media == "bacteriolab"
-replace rg_media = "https://www.facebook.com/halfawin/" if rg_media == "www,facebook,com/halfawin,7"
-replace rg_media = "Sonya Flowers.tn " if id_plateforme == 1108
-replace rg_media = "`en_cours'" if rg_media == "en cours"
-replace rg_media = "`en_cours'" if rg_media == "en cours de construction"
-replace rg_media = ustrregexra( rg_media ,"https://","")
-replace rg_media = ustrregexra( rg_media ,"http:","")
-replace rg_media = "" if id_plateforme == 1187
-replace rg_media = "fb:rahmatabletop" if id_plateforme == 1030
+}
 
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
