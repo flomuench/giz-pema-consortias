@@ -32,7 +32,7 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 
 	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
 preserve
-keep if eli_cri == 1
+drop if eligible == 0
 
 ***********************************************************************
 * 	PART 2:  extreme values of chiffre d'affaire		  			
@@ -42,7 +42,7 @@ keep if eli_cri == 1
 		* CA export
 histogram ca_expmean if ca_expmean < 666666666 & ca_expmean > 0
 graph box ca_expmean if ca_expmean < 666666666 & ca_expmean > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
-br if ca_expmean < 666666666 & ca_expmean > 0 & eli_cri == 1
+br if ca_expmean < 666666666 & ca_expmean > 0 & eligible == 1
 
 		* CA export labor productivity
 gen exp_labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
@@ -84,10 +84,7 @@ replace  CA_check =0 if ca_2018 > 666666666666
 * 	Export an excel sheet with CA_check variables  			
 ***********************************************************************
 cd "$regis_checks"
-preserve 
-keep if CA_check ==1 
 export excel id_plateforme CA_check eligibilité-dup_firmname using "CA_correction", firstrow(variables) replace 
-restore
 
 
 ***********************************************************************
@@ -109,6 +106,7 @@ restore
 	
 	* export excel with list of firms that we need to contact for them to correct
 		* their matricule fiscal
-cd "$regis_checks"
+*cd "$regis_checks"
 *export excel potentially_eligible if eligible == 0 & eligible_sans_matricule == 1, firstrow(var) replace
+
 

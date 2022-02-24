@@ -19,7 +19,7 @@
 use "${regis_intermediate}/regis_inter", clear
 	
 	* rename for better understanding
-rename eli_cri eligible_final
+rename eligible eligible_final
 	rename rg_media reseau_social
 	rename rg_siteweb site_web 
 	rename id_admin matricule_fiscale

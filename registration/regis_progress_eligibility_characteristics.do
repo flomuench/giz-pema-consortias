@@ -284,15 +284,15 @@ graph bar (count), over(eligible) blabel(total) ///
 	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, CA moyenne 2018-2020 > 150 et 15 mille exp," "a >= 6 & < 200 employés, une produit exportable, l'intention d'exporter, " ">= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
 gr export eligible.png, replace
 
-graph bar (count), over(eligible_alt_sans_matricule) blabel(total) ///
+/*graph bar (count), over(eligible_alt_sans_matricule) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligibles_alt, replace) ///
 	note("Chaque entreprise est éligible qui CA moyenne 2018-2020 >= 10 mille, a >= 4 & < 200 employés," "une produit exportable, l'intention d'exporter, et existe pour >= 1 ans et est résidente tunisienne.", size(vsmall) color(red))
-gr export eligible_alt.png, replace
+gr export eligible_alt.png, replace*/
 
-graph bar (count), over(eli_cri) blabel(total) ///
+graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises eligibles") ///
 	subtitle("Final eligibility criteria") ///
 	ytitle("nombre d'enregistrement") ///
@@ -304,7 +304,7 @@ set graphics off
 
 
 		* just "intention d'export"
-graph bar (count), over(eligible_intention) blabel(total) ///
+/*graph bar (count), over(eligible_intention) blabel(total) ///
 	title("Entreprises actuellement éligibles") ///
 	subtitle("Seulement intention d'export") ///
 	ytitle("nombre d'enregistrement") ///
@@ -313,7 +313,7 @@ gr combine eligibles eligible_intention, title("{bf:Eligibilité des entreprises
 graph export eligibles.png, replace
 putpdf paragraph, halign(center) 
 putpdf image eligibles.png
-putpdf pagebreak
+putpdf pagebreak */
 		
 		
 
@@ -355,12 +355,13 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 
 set graphics on
 		* poles d'activité
+
 graph hbar (count), over(subsector_corrige, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
 	name(subsector_tous, replace)
 gr export subsector_tous.png, replace
-graph hbar (count) if ca_eligible_alt_age14, over(subsector_corrige, sort(1) label(labsize(tiny))) blabel(total, size(tiny))  ///
+graph hbar (count) if eligible == 1, over(subsector_corrige, sort(1) label(labsize(tiny))) blabel(total, size(tiny))  ///
 	title("Pôle d'activité - entreprises éligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///
@@ -500,7 +501,7 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 
 * number of eligble vs. ineligible firms
 set graphics on
-graph bar (count), over(eli_cri) blabel(total) ///
+graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises actuellement eligibles") ///
 	ytitle("nombre d'enregistrement") ///
 	name(eligible_final, replace) ///
@@ -511,7 +512,7 @@ putpdf image eligible_final.png
 putpdf pagebreak
 
 	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
-keep if eli_cri == 1
+keep if eligible == 1
 
 * number of firms by pole
 graph hbar (count), over(pole, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///

@@ -108,7 +108,7 @@ if (1) do "${regis_github}/regis_generate.do"
 /* --------------------------------------------------------------------
 	PART 4.6: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
-if (1) do "${regis_github}/regis_open_question_checks.do"
+if (0) do "${regis_github}/regis_open_question_checks.do"
 /* --------------------------------------------------------------------
 	PART 4.7: Export pdf with number, characteristics & eligibility of registered firms
 ----------------------------------------------------------------------*/	

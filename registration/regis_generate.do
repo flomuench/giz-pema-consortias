@@ -58,12 +58,10 @@ drop sector
 rename `Sector' sector
 lab values sector sector_name */
 
-encode subsector_corrige, gen(Subsector_corrige)
+encode subsector_corrige, gen(subsector_corrige1)
 *groups Subsector
 drop subsector_corrige
-rename Subsector_corrige subsector_corrige
-replace subsector_corrige = 2 if subsector_corrige == 9
-replace subsector_corrige = 6 if subsector_corrige == 10
+rename subsector_corrige1 subsector_corrige
 *lab values subsector subsector_name
 
 
@@ -180,75 +178,23 @@ replace `x'mean = `x'mean3 if `x'2018 > 666666666666 & `x'2019 > 666666666666 & 
 ***********************************************************************
 * 	PART 10: eligibiliy dummy
 ***********************************************************************
-lab def eligible 1 "éligible" 0 "inéligible"
-
-		* generate a dummy for the firms that meet the CA condition and all other
-gen ca_eligible = (ca_mean > 1.5 & ca_mean < 56666666666 & ca_expmean > 0.15 & ca_expmean < 56666666666)
-gen ca_eligible20 = (ca_2020 > 1.5 & ca_2020 < 56666666666 & ca_exp2020 > 0.15 & ca_exp2020 < 56666666666)
-gen ca_eligible_alt = (ca_mean >= 0.1 & ca_mean < 56666666666)
-
-		* eligible with current criteria
-gen eligible = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
-lab val eligible eligible
-
-gen eligible_alt = (id_admin_correct == 1 & ca_eligible_alt == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
-lab val eligible_alt eligible
-
-
-	* eligible CA condition only for 2020
-gen eligible20 = (id_admin_correct == 1 & ca_eligible20 == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
-lab val eligible eligible
-
-		* eligible sans ca_eligible
-gen eligible_woca = (id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
-
-		* GIZ document starts here
-				* intention to export rather than one export operation
-gen eligible_intention = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
-lab val eligible_intention eligible
-		
-			* reduire nombre d'employees
-foreach x in ca_eligible ca_eligible_alt {
-gen `x'_fte5 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 5 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
-gen `x'_fte4 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
-}
-			
-			* reduire à un an
-foreach x in ca_eligible ca_eligible_alt {
-gen `x'_age16 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-gen `x'_age15 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 5 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-gen `x'_age14 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-}
-
-
-		* eligible if matricule fiscal is corrected
-gen eligible_alt_sans_matricule = (ca_eligible_alt ==1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
-lab val eligible_alt_sans_matricule eligible
-
-		* eligibility including also no webpage or social network
-gen eligible_presence_enligne = (presence_enligne == 1 & id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
-lab def eligible_enligne 1 "éligible avec présence en ligne" 0 "éligible sans présence en ligne"
-lab val eligible_presence_enligne eligible_enligne
-
-
 		* eligibility criteria
 gen pole = .
 replace pole = 1 if subsector_corrige == 2
 replace pole = 2 if subsector_corrige == 3 | subsector_corrige == 4
 replace pole = 3 if subsector_corrige == 6 | subsector_corrige == 8
-replace pole = 4 if subsector_corrige == 11
+replace pole = 4 if subsector_corrige == 9
 
 lab def pole 1 "agro-alimentaire" 2 "artisanat & cosmétique" 3 "service" 4 "TIC"
 lab val pole pole
 	
-gen subsector_var = 0
-replace subsector_var = 1 if subsector_corrige == 11 | subsector_corrige == 6 | subsector_corrige == 8 | subsector_corrige == 2 | subsector_corrige == 3 | subsector_corrige == 4
-lab val subsector_var subsector_eligibile
+gen subsector_var = (pole < .)
 
+replace rg_produitexp = 1 if rg_produitexp == .
 
-gen eli_cri = (rg_resident == 1 & rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1 & rg_gender_pdg== 1 & eligibilité != "non-éligible")
-lab def eli_cri 1 "éligible" 0 "inéligible"
-lab val eli_cri eligible
+gen eligible = (rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1)
+lab def eligible 1 "éligible" 0 "inéligible"
+lab val eligible eligible
 
 
 ***********************************************************************
@@ -301,10 +247,67 @@ cd "$regis_intermediate"
 	* save dta file
 save "regis_inter", replace
 
+
+
+***********************************************************************
+* 	Archive	  			
+***********************************************************************
+/* initial eligibility criteria
+
+		* generate a dummy for the firms that meet the CA condition and all other
+gen ca_eligible = (ca_mean > 1.5 & ca_mean < 56666666666 & ca_expmean > 0.15 & ca_expmean < 56666666666)
+gen ca_eligible20 = (ca_2020 > 1.5 & ca_2020 < 56666666666 & ca_exp2020 > 0.15 & ca_exp2020 < 56666666666)
+gen ca_eligible_alt = (ca_mean >= 0.1 & ca_mean < 56666666666)
+
+		* eligible with current criteria
+gen eligible = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
+lab val eligible eligible
+
+gen eligible_alt = (id_admin_correct == 1 & ca_eligible_alt == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
+lab val eligible_alt eligible
+
+
+	* eligible CA condition only for 2020
+gen eligible20 = (id_admin_correct == 1 & ca_eligible20 == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
+lab val eligible eligible
+
+		* eligible sans ca_eligible
+gen eligible_woca = (id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
+
+		* GIZ document starts here
+				* intention to export rather than one export operation
+gen eligible_intention = (id_admin_correct == 1 & ca_eligible == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
+lab val eligible_intention eligible
+		
+			* reduire nombre d'employees
+foreach x in ca_eligible ca_eligible_alt {
+gen `x'_fte5 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 5 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
+gen `x'_fte4 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=2)
+}
+			
+			* reduire à un an
+foreach x in ca_eligible ca_eligible_alt {
+gen `x'_age16 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
+gen `x'_age15 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 5 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
+gen `x'_age14 = (id_admin_correct == 1 & `x' == 1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
+}
+
+
+		* eligible if matricule fiscal is corrected
+gen eligible_alt_sans_matricule = (ca_eligible_alt ==1 & rg_resident == 1 & rg_fte >= 4 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_age>=1)
+lab val eligible_alt_sans_matricule eligible
+
+		* eligibility including also no webpage or social network
+gen eligible_presence_enligne = (presence_enligne == 1 & id_admin_correct == 1 & rg_resident == 1 & rg_fte >= 6 & rg_fte <= 199 & rg_produitexp == 1 & rg_intention == 1 & rg_oper_exp == 1 & rg_age>=2)
+lab def eligible_enligne 1 "éligible avec présence en ligne" 0 "éligible sans présence en ligne"
+lab val eligible_presence_enligne eligible_enligne
+
+*/
+
 /*
 	* export file with eligibles companies
 preserve
-    keep if eli_cri == 1
+    keep if eligible == 1
 	rename rg_siteweb site_web 
 	rename id_admin matricule_fiscale
 	rename rg_resident onshore
@@ -322,7 +325,7 @@ restore
 
 	* export file with non-eligible companies
 preserve
-    keep if eli_cri == 0
+    keep if eligible == 0
 	rename id_admin matricule_fiscale
 	rename rg_resident onshore
 	rename rg_fte employes
