@@ -626,20 +626,17 @@ putpdf paragraph, halign(center)
 putpdf image legalstatus.png
 putpdf pagebreak
 
-	
-putpdf paragraph
 
-putpdf text ("Pole 1 = service"), bold linebreak
-putpdf text ("Pole 2 = TIC"), bold linebreak
-putpdf text ("Pole 3 = artisanat et cosmétique"), bold linebreak
-putpdf text ("Pole 4 = agro-alimentaire"), bold linebreak
-
+local pole1 "agro-alimentaire"
+local pole2 "artisanat et cosmétique"
+local pole3 "service"
+local pole4 "TIC"
 
 * characteristics by pole 
 forvalues x = 1(1)4 {
 		* FTE
 	histogram rg_fte if pole == `x', frequency addl ///
-	title("Nombre des employés - pole `x'") ///
+	title("Nombre des employés - `pole`x''") ///
 	ytitle("nombre d'entreprises") ///
 	xlabel(0(10)350,  labsize(tiny) format(%20.0fc)) ///
 	bin(35) ///
@@ -647,7 +644,7 @@ forvalues x = 1(1)4 {
 
 		* CA, CA export
 	histogram ca_mean if ca_mean < 666666 & ca_mean > 0 & pole == `x', frequency addl ///
-	title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+	title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 	ytitle("Nombre d'entreprises") ///
 	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
 	xlabel(0 100 500 1000, labsize(tiny) format(%9.0fc)) ///
@@ -659,7 +656,7 @@ forvalues x = 1(1)4 {
 	putpdf pagebreak
 
 	histogram ca_mean if ca_mean < 15 & ca_mean > 0 & pole == `x' , frequency addl ///
-		title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 		ytitle("Nombre d'entreprises") ///
 		xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
 		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
@@ -671,7 +668,7 @@ forvalues x = 1(1)4 {
 	putpdf pagebreak
 
 	histogram ca_mean if ca_mean < 1.5 & ca_mean > 0 & pole == `x', frequency addl ///
-		title("Chiffre d'affaires moyennes 2018-2020  - pole `x'") ///
+		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 		ytitle("Nombre d'entreprises") ///
 		xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
 		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
@@ -684,7 +681,7 @@ forvalues x = 1(1)4 {
 		
 		* capital social
 	histogram rg_capital if rg_capital < 10000000 & pole == `x', frequency addl ///
-		title("Capital Social  - pole `x'") ///
+		title("Capital Social  - `pole`x''") ///
 		ytitle("nombre d'entreprises") ///
 		xlabel(10000 100000 5000000 1000000, labsize(tiny) format(%9.1fc)) ///
 		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
@@ -706,7 +703,7 @@ forvalues x = 1(1)4 {
 		bin(60) ///
 		color(%30) ///
 		name(age_hist, replace)	
-	gr combine age_strip age_hist, title("Age des entreprises - pole `x'")
+	gr combine age_strip age_hist, title("Age des entreprises - `pole`x''")
 	graph export age.png, replace 
 	putpdf paragraph, halign(center) 
 	putpdf image age.png
@@ -714,7 +711,7 @@ forvalues x = 1(1)4 {
 
 		* legal status
 	graph bar (count) if pole == `x', over(rg_legalstatus) blabel(total) ///
-		title("Statut juridique des entreprises - pole `x'") ///
+		title("Statut juridique des entreprises - `pole`x''") ///
 		ytitle("nombre d'enregistrement")
 	graph export legalstatus.png, replace
 	putpdf paragraph, halign(center) 
