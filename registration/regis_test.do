@@ -62,29 +62,29 @@ graph box labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabs
 *br id_plateforme ca_mean if ca_mean < 0.0005
 *br id_plateforme ca_mean ca_expmean if ca_mean< ca_expmean
 
-gen CA_check = 0 
-replace  CA_check =1 if ca_mean < 0.0005
-replace  CA_check =1 if ca_2020 < 0.0005
-replace  CA_check =1 if ca_2020 > 100 & ca_2020 < 10000
-replace  CA_check =1 if ca_mean > 100  & ca_mean < 10000
-replace  CA_check =1 if ca_mean< ca_expmean
-replace  CA_check =1 if ca_2018< ca_exp2018
-replace  CA_check =1 if ca_2019< ca_exp2019
-replace  CA_check =1 if ca_2020< ca_exp2020
-replace  CA_check =0 if ca_mean > 666666666666
-replace  CA_check =0 if ca_exp2020 > 666666666666
-replace  CA_check =0 if ca_exp2019 > 666666666666
-replace  CA_check =0 if ca_exp2018 > 666666666666
-replace  CA_check =0 if ca_2020 > 666666666666
-replace  CA_check =0 if ca_2019 > 666666666666
-replace  CA_check =0 if ca_2018 > 666666666666
+gen ca_check = 0 
+replace  ca_check =1 if ca_mean < 0.0005
+replace  ca_check =1 if ca_2020 < 0.0005
+replace  ca_check =1 if ca_2020 > 100 & ca_2020 < 10000
+replace  ca_check =1 if ca_mean > 100  & ca_mean < 10000
+replace  ca_check =1 if ca_mean< ca_expmean
+replace  ca_check =1 if ca_2018< ca_exp2018
+replace  ca_check =1 if ca_2019< ca_exp2019
+replace  ca_check =1 if ca_2020< ca_exp2020
+replace  ca_check =0 if ca_mean > 666666666666
+replace  ca_check =0 if ca_exp2020 > 666666666666
+replace  ca_check =0 if ca_exp2019 > 666666666666
+replace  ca_check =0 if ca_exp2018 > 666666666666
+replace  ca_check =0 if ca_2020 > 666666666666
+replace  ca_check =0 if ca_2019 > 666666666666
+replace  ca_check =0 if ca_2018 > 666666666666
 
 
 ***********************************************************************
-* 	Export an excel sheet with CA_check variables  			
+* 	Export an excel sheet with ca_check variables  			
 ***********************************************************************
 cd "$regis_checks"
-export excel id_plateforme CA_check eligibilité-dup_firmname using "CA_correction", firstrow(variables) replace 
+export excel id_plateforme ca_check eligibilité-dup_firmname using "ca_correction", firstrow(variables) replace 
 
 
 ***********************************************************************
