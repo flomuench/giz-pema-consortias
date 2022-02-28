@@ -35,19 +35,16 @@ foreach x of local strvars {
 		replace `x' = "" if `x' == "-"
 	}
 * scalar: numerical variables & local: string variables	
-scalar not_know    = 77777777777777777
-scalar refused     = 99999999999999999
-scalar check_again = 88888888888888888
-scalar not_applicable = 66666666666666666
+*scalar not_applicable = 66666666666666666
+*local en_cours  = 5555555555555
 
-local not_know    = 77777777777777777
-local refused     = 99999999999999999
-local check_again = 88888888888888888
-local not_applicable = 66666666666666666
-local en_cours  = 5555555555555
+scalar not_know    = -999
+scalar refused     = -888
+scalar check_again = -777
 
-
-	* replace, gen, label
+local not_know    = -999
+local refused     = -888
+local check_again = -777
 	
 */
 }
@@ -61,12 +58,6 @@ drop if id_plateforme == .
 * 	PART 2: use regular expressions to correct variables 		  			
 ***********************************************************************
 {
-
-        * le nombre d'employes féminin dans l'entreprise doit être inférieur au nombre d'employés total.
-
-replace rg_fte_femmes = 88888888888888888 if rg_fte < rg_fte_femmes
-
-
         * Matricule fiscale de l'entreprise:
 replace id_admin = ustrregexra( id_admin ,"/","")
 replace id_admin = ustrregexra( id_admin ," ","")
@@ -450,11 +441,13 @@ destring `x', replace
 
        * chiffre d'affaire
 			* replace CA not applicable if company has been created after 
+/*
 foreach x in ca_exp ca_ {
 replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
 replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
 replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
 }
+*/
 
 ***********************************************************************
 * 	PART 5:  Convert problematic values for open-ended questions  			

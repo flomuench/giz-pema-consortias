@@ -77,7 +77,7 @@ global regis_checks = "${regis_gdrive}/checks"
 
 			* output (regression tables, figures)
 global regis_output = "${regis_gdrive}/output"
-global regis_figures = "${regis_output}/descriptive-statistics-figures"
+global regis_figures = "${regis_output}/list-experiment-balance"
 global regis_progress = "${regis_output}/progress-eligibility-characteristics"
 
 			
@@ -118,7 +118,18 @@ if (0) do "${regis_github}/regis_progress_eligibility_characteristics.do"
 ----------------------------------------------------------------------*/
 if (1) do "${regis_github}/regis_test.do"
 /* --------------------------------------------------------------------
-	PART 4.8: De-identify + randomize for list experiment + save as final for analysis
+	PART 4.8: Randomize list experiment
+----------------------------------------------------------------------*/
+if (1) do "${regis_github}/regis_list_experiment.do"
+/* --------------------------------------------------------------------
+	PART 4.9: Rename + export lists of eligible 
+----------------------------------------------------------------------*/
+if (1) do "${regis_github}/regis_export_list_eligible.do"
+/* --------------------------------------------------------------------
+	PART 5: De-identify + save as final for analysis
 ----------------------------------------------------------------------*/
 if (1) do "${regis_github}/regis_deidentify.do"
+
+
+
 

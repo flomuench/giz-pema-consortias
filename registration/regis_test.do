@@ -19,94 +19,82 @@
 	* import file
 use "${regis_intermediate}/regis_inter", clear
 
-	* set directory to checks folder
-cd "$regis_progress"
-
-	* create word document
-putpdf begin 
-putpdf paragraph
-
-putpdf text ("Consortia: logical tests for data from registration progress"), bold linebreak
-putpdf text ("Subsample of eligible companies"), linebreak
-putpdf text ("Date: `c(current_date)'"), bold linebreak
-
-	* restrict sample to only firms in 4 sectors eligible (femme pdg, residante, produit et intention export)
-preserve
-drop if eligible == 0
-
 ***********************************************************************
 * 	PART 2:  extreme values of chiffre d'affaire		  			
 ***********************************************************************
 	* extremely high values
+	
+		* distribution CA 
+sum ca_2020, d /* 95% = 2,472,000 ; 99% = 25,500,000  */
+graph box ca_2020, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+	/* id's: 1120, 1108, 1011, 1220, 1092, 1103 */
+
+		* distribution CA exports
+sum ca_exp2020, d /* 95% = 549,000 ; 99% = 2,183,790  */
+graph box ca_exp2020, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+	/* id's: 1120, 1108, 1011, 1220, 1092, 1103 */
+	
+		* distribution fte (make sur CA export is not driven by size
+graph box rg_fte, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+	/* id's: 1026 1092 1207 1227 1052 1201 1071 1103 1170*/
+	
+		* distribution of export sales per employee
+sum exp_labor_productivity, d /* 95% = 41,778 ; 99% = 183,000 */
+graph box exp_labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+	/* id's 1048 1059 1942 995 1888 1242*/
 
 		* CA export
-histogram ca_expmean if ca_expmean < 666666666 & ca_expmean > 0
-graph box ca_expmean if ca_expmean < 666666666 & ca_expmean > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
-br if ca_expmean < 666666666 & ca_expmean > 0 & eligible == 1
+sum ca_exp2020, d
+histogram ca_exp2020 if ca_exp2020 > 10000000 & ca_exp2020 > 0
+graph box ca_exp2020 if ca_exp2020 > 10000000 & ca_exp2020 > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+br if ca_exp2020 > 10000000 & ca_exp2020 > 0 & eligible == 1
 
 		* CA export labor productivity
-gen exp_labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
 graph box exp_labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 
 		* CA
-hist ca_mean if ca_mean < 666666666 & ca_mean > 0
-graph box ca_mean if ca_mean < 666666666 & ca_mean > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+hist ca_2020 if ca_2020 > 10000000 & ca_2020 > 0
+graph box ca_2020 if ca_2020 > 10000000 & ca_2020 > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 		
 		* CA labor produditivity
-gen labor_productivity if ca_mean < 666666666 = ca_mean / rg_fte
 graph box labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 
 	* check for extremely low values
+*br if ca_2020 < 50 & ca_2020 > 0
+*br ca_* rg_fte if ca_2020 < 500 & ca_2020 > 0
 
 
-*br id_plateforme ca_mean if ca_mean < 0.0005
-*br id_plateforme ca_mean ca_expmean if ca_mean< ca_expmean
+	* generate dummy for firms that need checking
+gen ca_check = 0
 
-gen ca_check = 0 
-replace  ca_check =1 if ca_mean < 0.0005
-replace  ca_check =1 if ca_2020 < 0.0005
-replace  ca_check =1 if ca_2020 > 100 & ca_2020 < 10000
-replace  ca_check =1 if ca_mean > 100  & ca_mean < 10000
-replace  ca_check =1 if ca_mean< ca_expmean
-replace  ca_check =1 if ca_2018< ca_exp2018
-replace  ca_check =1 if ca_2019< ca_exp2019
-replace  ca_check =1 if ca_2020< ca_exp2020
-replace  ca_check =0 if ca_mean > 666666666666
-replace  ca_check =0 if ca_exp2020 > 666666666666
-replace  ca_check =0 if ca_exp2019 > 666666666666
-replace  ca_check =0 if ca_exp2018 > 666666666666
-replace  ca_check =0 if ca_2020 > 666666666666
-replace  ca_check =0 if ca_2019 > 666666666666
-replace  ca_check =0 if ca_2018 > 666666666666
+	* identify firm with 0 CA and CA export in 2020 created in 2020 or before
+replace ca_check =1 if ca_2020 == 0 & ca_exp2020 == 0 & year_created < 2021
+	* identify firms that have astonishingly low CA & > 2 employees 
+replace ca_check =1 if ca_2020 < 500 & ca_2020 > 0 & rg_fte > 2
 
-
-***********************************************************************
-* 	Export an excel sheet with ca_check variables  			
-***********************************************************************
-cd "$regis_checks"
-export excel id_plateforme ca_check eligibilité-dup_firmname using "ca_correction", firstrow(variables) replace 
-
-
-***********************************************************************
-* 	PART 3:  absurd values of capital social		  			
-***********************************************************************
-
-
+	* identify firms with very high CA
+forvalues x = 2018(1)2020 {
+	replace ca_check =1 if ca_`x' > 2000000 & ca_`x' < . /* > 2 million = 95 percentile */
+}
+	* identify firms with very high CA export
+forvalues x = 2018(1)2020 {
+	replace ca_check =1 if ca_`x' > 550000 & ca_`x' < . /* > 550,000 = 95 percentile */
+}	
+	* identify firms with very high labor or export labor productivity
+replace ca_check =1 if exp_labor_productivity > 40000 & exp_labor_productivity < . /* > 40,000 CA per employee */
+replace ca_check =1 if labor_productivity > 150000 & labor_productivity < .  /* > 150,000 CA per employee */
 	
-***********************************************************************
-* 	PART 6:  save pdf
-***********************************************************************
-	* change directory to progress folder
-cd "$regis_progress"
-	* pdf
-putpdf save "consortium-registration-logical-test", replace
+	* identify firms with CA export > CA
+forvalues x = 2018(1)2020 {
+	replace ca_check =1 if ca_`x' < ca_exp`x'
+}
 
-	* restore the full data set (not only eligible firms)
-restore	
-	
-	* export excel with list of firms that we need to contact for them to correct
-		* their matricule fiscal
-*cd "$regis_checks"
-*export excel potentially_eligible if eligible == 0 & eligible_sans_matricule == 1, firstrow(var) replace
+***********************************************************************
+* 	PART 6:  Save the changes made to the data + save pdf
+***********************************************************************
+	* set export directory
+cd "$regis_intermediate"
 
+	* save dta file
+save "regis_inter", replace
 

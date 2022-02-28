@@ -136,12 +136,23 @@ encode rg_exportstatus, gen(rg_expstatus)
 drop rg_exportstatus
 lab var rg_expstatus "Régime d'export de l'entreprise"
 
+***********************************************************************
+* 	PART 7: labor and export labor productivity		  										  
+***********************************************************************
+gen exp_labor_productivity = ca_exp2020 / rg_fte
+gen labor_productivity = ca_2020 / rg_fte
+
+
 
 ***********************************************************************
 * 	PART 8: age
 ***********************************************************************
-gen rg_age = round((td(01feb2022)-date_created)/365.25,1)
-order rg_age, a(date_created)
+	* age
+gen age = round((td(01feb2022)-date_created)/365.25,1)
+order age, a(date_created)
+
+	* year created
+gen year_created = year(date_created), a(date_created)
 
 ***********************************************************************
 * 	PART 8: dummy site web ou réseau social
@@ -155,12 +166,14 @@ lab values presence_enligne enligne
 * 	PART : chiffres d'affaires et chiffres d'affaires à l'export
 ***********************************************************************
 	* change the units
+/*
 forvalues x = 2018(1)2020 {
 	replace ca_`x' = ca_`x'/100000
 	lab var ca_`x' "chiffres d'affaires `x' en 100.000"
 	replace ca_exp`x' = ca_exp`x'/100000
 	lab var ca_exp`x' "chiffres d'affaires export `x' en 100.000"
 }
+*/
 
 format ca_* %12.2fc
 
@@ -168,12 +181,9 @@ format ca_* %12.2fc
 	* generate average for 2018-2020
 		* all three years
 foreach x in ca_ ca_exp {
-egen `x'mean = rowmean(`x'2018 `x'2019 `x'2020)
-egen `x'mean2 = rowmean(`x'2019 `x'2020) 
-replace `x'mean = `x'mean2 if `x'2018 > 666666666666 & `x'2019 < 666666666666
-gen `x'mean3 = `x'2020 
-replace `x'mean = `x'mean3 if `x'2018 > 666666666666 & `x'2019 > 666666666666 & `x'2019 <. & `x'2018 <.
+	egen `x'mean = rowmean(`x'2018 `x'2019 `x'2020)
 }
+
 
 ***********************************************************************
 * 	PART 10: eligibiliy dummy
@@ -192,7 +202,7 @@ gen subsector_var = (pole < .)
 
 replace rg_produitexp = 1 if rg_produitexp == .
 
-gen eligible = (rg_produitexp == 1 & rg_intention == 1 & subsector_var == 1)
+gen eligible = (rg_intention == 1 & subsector_var == 1)
 lab def eligible 1 "éligible" 0 "inéligible"
 lab val eligible eligible
 
