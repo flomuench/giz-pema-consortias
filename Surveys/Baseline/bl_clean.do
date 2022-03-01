@@ -198,6 +198,23 @@ order id_plateforme heure date attest attest2 acceptezvousdevalidervosré survey
 ***********************************************************************
 * 	PART 5: 	Rename the variables as needed
 ***********************************************************************
+ident identification
+Orienter oriontation to the representative
+ident2 identification 2
+ident_nouveau_personne identification new person
+ident_base_respondent identification base respondent
+ident_repondent_position identification respondent position
+entr_idee the enterprise's idea
+entr_bien the enterprise's good (service/product)
+produit1 first product/service
+produit2 second product/service
+produit3 third product/service
+inno_produit innovation product modification
+inno_process innovation process modification
+inno_lieu innovation place
+inno_commerce innovation commerce
+inno_aucune no innovation 
+
 {
 	* Section identification
 rename id id_plateforme
