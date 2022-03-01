@@ -246,6 +246,16 @@ replace rg_media = "" if rg_media == "siliana"
 
 
 }
+
+
+      * subsector_ corrige
+replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 985
+replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 1030
+replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 1056
+replace subsector_corrige = "pôle d’activités technologies de l’information et de la communication" if id_plateforme == 1057
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1137
+replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1248
+
 {
 /*
 foreach x in ca_ {
