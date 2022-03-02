@@ -65,12 +65,12 @@ lab var dig_mar_res_per "FTEs working on digital marketing as percentage"
 	* Bring together exp_pays_avant21 and exp_pays_21
 	
 g exp_pays_all = exp_pays_avant21 + exp_pays_21
- 
+
 
 **********************************************************************
 * 	PART 3:  Index calculation based on z-score		
 ***********************************************************************
-/*
+
 calculation of indeces is based on Kling et al. 2007 and adopted from Mckenzie et al. 2018
 JDE pre-analysis publication:
 1: calculate z-score for each individual outcome
@@ -80,9 +80,8 @@ JDE pre-analysis publication:
 3: average the three index values to get the QI index for firms
 	--> implies: same weight for all three dimensions
 */
-
 *Definition of all variables that are being used in index calculation*
-local allvars dig_presence_score dig_miseajour1 dig_miseajour2 dig_miseajour3 dig_payment1 dig_payment2 dig_payment3 dig_vente dig_marketing_lien dig_marketing_ind1 dig_marketing_ind2 dig_marketing_score dig_logistique_entrepot dig_logistique_retour_score dig_service_responsable dig_service_satisfaction expprep_cible expprep_norme expprep_demande exp_pays_all exp_per dig_description1 dig_description2 dig_description3 dig_mar_res_per dig_ser_res_per exp_prep_res_per
+local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
 foreach var of local  allvars {
@@ -107,12 +106,14 @@ end
 
 	* calculate z score for all variables that are part of the index
 	// removed dig_marketing_respons, dig_service_responsable and expprepres_per bcs we don't have fte data without matching (& abs value doesn't make sense)
-local digtalvars dig_presence_score dig_miseajour1 dig_miseajour2 dig_miseajour3 dig_payment1 dig_payment2 dig_payment3 dig_vente dig_marketing_lien dig_marketing_ind1 dig_marketing_ind2 dig_marketing_score dig_logistique_entrepot dig_logistique_retour_score dig_service_satisfaction dig_description1 dig_description2 dig_description3 dig_mar_res_per dig_ser_res_per 
-local expprep expprep_cible expprep_norme expprep_demande exp_prep_res_per
-local exportcomes exp_pays_all exp_per
+local mngtvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per 
+local markvars man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub 
+local exportmngt exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan 
+local exportprep expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique 
+local exportcombined exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique
 
 
-foreach z in digtalvars expprep exportcomes {
+foreach z in mngtvars markvars exportmngt exportprep exportcombined{
 	foreach x of local `z'  {
 			zscore `x' 
 		}
@@ -120,13 +121,18 @@ foreach z in digtalvars expprep exportcomes {
 
 		* calculate the index value: average of zscores 
 
-egen digtalvars = rowmean(dig_presence_scorez dig_miseajour1z dig_miseajour2z dig_miseajour3z dig_payment1z dig_payment2z dig_payment3z dig_ventez dig_marketing_lienz dig_marketing_ind1z dig_marketing_ind2z dig_marketing_scorez dig_logistique_entrepotz dig_logistique_retour_scorez dig_service_satisfactionz dig_description1z dig_description2z dig_description3z dig_mar_res_perz dig_ser_res_perz)
-egen expprep = rowmean(expprep_ciblez  expprep_normez expprep_demandez exp_prep_res_perz)
-egen expoutcomes = rowmean(exp_pays_allz exp_perz)
+egen mngtvars = rowmean(man_hr_objz man_hr_feedz man_pro_anoz man_fin_enrz man_fin_profitz man_fin_perz)
+egen markvars = rowmean(eman_mark_prixz man_mark_divz man_mark_clientsz man_mark_offrez man_mark_pubz )
+egen exportmngt = rowmean(exp_pra_foirez exp_pra_sciz exp_pra_rexpz exp_pra_ciblez exp_pra_missionz exp_pra_douanez exp_pra_planz)
+egen exportprep = rowmean(expprep_normez exprep_invz exprep_coutsz exp_paysz exp_pays_principalz exp_afriquez)
+egen exportcombined = rowmean(exp_pra_foirez exp_pra_sciz exp_pra_rexpz exp_pra_ciblez exp_pra_missionz exp_pra_douanez exp_pra_planz expprep_normez exprep_invz exprep_coutsz exp_paysz exp_pays_principalz exp_afriquez)
 
-label var digtalvars   "Index digitalisation"
-label var expprep "Index export preparation"
-label var expoutcomes "Index export outcomes"
+label var mngtvars   "Management practices index"
+label var markvars "Marketing practices index"
+label var exportmngt "Export management index"
+label var exportprep "Export readiness index"
+label var exportcombined "Combined export practices index"
+
 
 
 //drop scalar_issue
@@ -137,15 +143,21 @@ label var expoutcomes "Index export outcomes"
 * 	PART 4: Create sum of scores of indices (not zscores) for comparison		  										  
 **************************************************************************
 
-egen raw_digtalvars = rowtotal(`digtalvars')
+egen raw_mngtvars = rowtotal(`mngtvars')
 
-egen raw_expprep = rowtotal(`expprep')
+egen raw_markvars = rowtotal(`markvars')
 
-egen raw_expoutcomes = rowmean(`exportcomes')
+egen raw_exportmngt = rowtotal(`exportmngt')
 
-label var raw_digtalvars   "Raw index digitalisation"
-label var raw_expprep "Raw index export preparation"
-label var raw_expoutcomes "Raw index export outcomes"
+egen raw_exportprep = rowtotal(`exportprep')
+
+egen raw_exportcombined = rowtotal(`exportcombined')
+
+label var raw_mngtvars   "Management practices raw index"
+label var raw_markvars "Marketing practices raw index"
+label var raw_exportmngt "Export management raw index"
+label var raw_exportprep "Export readiness raw index"
+label var raw_exportcombined "Combined export practices raw index"
 
 
 
@@ -157,7 +169,7 @@ lab values sector sector_name
 
 
 format %-25.0fc *sector
-
+/*
 ***********************************************************************
 * 	PART 2: factor variable gender 			  										  
 ***********************************************************************
