@@ -274,24 +274,6 @@ putpdf image presence_enligne.png
 putpdf pagebreak
 	
 	* eligibility
-		* including "operation d'export"
-set graphics on
-graph bar (count), over(eligible) blabel(total) ///
-	title("Entreprises actuellement eligibles") ///
-	subtitle("Opération d'export, CA et CA export") ///
-	ytitle("nombre d'enregistrement") ///
-	name(eligibles, replace) ///
-	note("Chaque entreprise est éligible qui a fourni un matricul fiscal correct, CA moyenne 2018-2020 > 150 et 15 mille exp," "a >= 6 & < 200 employés, une produit exportable, l'intention d'exporter, " ">= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne.", size(vsmall) color(red))
-gr export eligible.png, replace
-
-/*graph bar (count), over(eligible_alt_sans_matricule) blabel(total) ///
-	title("Entreprises actuellement eligibles") ///
-	subtitle("Reduced eligibility criteria") ///
-	ytitle("nombre d'enregistrement") ///
-	name(eligibles_alt, replace) ///
-	note("Chaque entreprise est éligible qui CA moyenne 2018-2020 >= 10 mille, a >= 4 & < 200 employés," "une produit exportable, l'intention d'exporter, et existe pour >= 1 ans et est résidente tunisienne.", size(vsmall) color(red))
-gr export eligible_alt.png, replace*/
-
 graph bar (count), over(eligible) blabel(total) ///
 	title("Entreprises eligibles") ///
 	subtitle("Final eligibility criteria") ///
@@ -355,7 +337,6 @@ graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
 
 set graphics on
 		* poles d'activité
-
 graph hbar (count), over(subsector_corrige, sort(1) label(labsize(tiny) format(%-80s))) blabel(total, size(tiny))  ///
 	title("Pole d'activité - Toutes les entreprises") ///
 	ytitle("nombre d'entreprises") ///
@@ -365,9 +346,9 @@ graph hbar (count) if eligible == 1, over(subsector_corrige, sort(1) label(labsi
 	title("Pôle d'activité - entreprises éligibles") ///
 	subtitle("Reduced eligibility criteria") ///
 	ytitle("nombre d'entreprises") ///
-	name(subsector_eligible_alt, replace)
-gr export subsector_eligible_alt.png, replace
-graph combine subsector_tous subsector_eligible_alt, title("{bf: Distribution selon pôle d'activité}")
+	name(subsector_eligible, replace)
+gr export subsector_eligible.png, replace
+graph combine subsector_tous subsector_eligible, title("{bf: Distribution selon pôle d'activité}")
 graph export poles.png, replace 
 putpdf paragraph, halign(center) 
 putpdf image poles.png
