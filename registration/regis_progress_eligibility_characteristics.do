@@ -247,10 +247,10 @@ putpdf image export.png
 putpdf pagebreak
 
 	* age
-stripplot rg_age, jitter(4) vertical yline(2, lcolor(red)) ///
+stripplot age, jitter(4) vertical yline(2, lcolor(red)) ///
 	ytitle("Age de l'entreprise") ///
 	name(age_strip, replace)
-histogram rg_age if rg_age >= 0, frequency addl ///
+histogram age if age >= 0, frequency addl ///
 	ytitle("Age de l'entreprise") ///
 	xlabel(0(2)80,  labsize(tiny) format(%20.0fc)) ///
 	bin(40) ///
@@ -601,10 +601,10 @@ putpdf pagebreak
 	
 	
 	* age
-stripplot rg_age, jitter(4) vertical yline(2, lcolor(red)) ///
+stripplot age, jitter(4) vertical yline(2, lcolor(red)) ///
 	ytitle("Age de l'entreprise") ///
 	name(age_strip, replace)
-histogram rg_age if rg_age >= 0, frequency addl ///
+histogram age if age >= 0, frequency addl ///
 	ytitle("Age de l'entreprise") ///
 	xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
 	bin(60) ///
@@ -694,10 +694,10 @@ forvalues x = 1(1)4 {
 		
 		
 		* age
-	stripplot rg_age if pole == `x', jitter(4) vertical yline(2, lcolor(red)) ///
+	stripplot age if pole == `x', jitter(4) vertical yline(2, lcolor(red)) ///
 		ytitle("Age de l'entreprise") ///
 		name(age_strip, replace)
-	histogram rg_age if rg_age >= 0 & pole == `x', frequency addl ///
+	histogram age if age >= 0 & pole == `x', frequency addl ///
 		ytitle("Age de l'entreprise") ///
 		xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
 		bin(60) ///
