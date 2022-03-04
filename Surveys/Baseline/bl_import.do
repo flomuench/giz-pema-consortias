@@ -26,41 +26,31 @@
 cd "$bl_raw"
 import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
 
-gen survey_type = "online"
-
-rename BP exp_avant21_2
-rename BT exp_pays_principal2
-
-rename Jattestequetouteslesinform attest
-rename DA attest2
-
-save "temp_bl_raw", replace
-
 /* --------------------------------------------------------------------
-	PART 1.2: Import raw data from CATI survey
-----------------------------------------------------------------------*/		
-/*
-import excel "${bl_raw}/bl_raw_cati.xlsx", sheet("Feuil1") firstrow clear
+	PART 1.2: *select PII data, seperate it from raw data and merge with
+	existing master file*
+----------------------------------------------------------------------*/	
 
-drop if Id_plateforme==.
+*keep id_plateforme comptable_email comptable_numero Numero1 Numero2
 
-gen survey_type = "phone"
+*cd "$consortia_master"
+*save "add_contact_data", replace
 
-rename BR exp_avant21_2
-rename BV exp_pays_principal2
+*use "$consortia_master/add_contact_data", clear
 
-rename Jattestequetouteslesinform attest
-rename DC attest2
+*merge 1:m id_plateforme using "$consortia_master/consortia_master_data"
 
-append using temp_bl_raw, force
+*keep if _merge==3
 
-*/
+*drop _merge
+
+erase 
 ***********************************************************************
-* 	PART 2: save 						
+* 	PART 2: re-importing raw data and now dropping PII data						
 ***********************************************************************
-erase temp_bl_raw.dta
 
-cd "$bl_raw"
+*cd "$bl_raw"
+*import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
+drop id_plateforme comptable_email comptable_numero Numero1 Numero2
 save "bl_raw", replace
-
 

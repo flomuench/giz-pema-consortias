@@ -9,7 +9,7 @@
 *				PART 2: Prepare dynamic folder paths & globals		  
 *				PART 3: Run all do-files                          											  
 *																	  
-*	Author:  	Teo Firpo & Florian Münch							    
+*	Author:  	Fabian Scheifele							    
 *	ID variable: id_email		  					  
 *	Requires:  	  										  
 *	Creates:  master-data-consortias; 
@@ -56,11 +56,13 @@ if c(os) == "Windows" {
 	global bl_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
 	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
+	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
 	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
 	global bl_backup = "/Users/`c(username)'/Documents/consortia-back-up"
+	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 
 if c(os) == "Windows" {
