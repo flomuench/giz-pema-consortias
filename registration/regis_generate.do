@@ -208,6 +208,12 @@ lab def eligible 1 "éligible" 0 "inéligible"
 lab val eligible eligible
 
 
+	* change to ineligible based on GIZ calls to verify the firms
+foreach x in 1032 1053 1060 1078 1091 1145 1181 1187 1208 1212 1221 {
+	replace eligible = 0 if id_plateforme == `x'
+}
+
+
 ***********************************************************************
 * 	PART 10: Surplus contact information from registration
 ***********************************************************************

@@ -50,9 +50,11 @@ iebaltab ca_mean ca_expmean rg_fte rg_capital rg_oper_exp age presence_enligne, 
 ***********************************************************************
 			* when re-running manually change the name of result_randomisation to compare
 preserve
-keep id_plateforme random_number rank eligible
+keep id_plateforme list_group random_number rank eligible
 save "result_randomisation", replace
 restore
+
+
 
 
 ***********************************************************************
