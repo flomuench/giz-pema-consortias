@@ -15,7 +15,7 @@
 *   7) 		Removing trailing & leading spaces from string variables	
 *   8) 		Remove observations for incomplete entries									 
 *																	  													      
-*	Author:     	Teo Firpo						    
+*	Author:     	Fabian Scheifele						    
 *	ID variable: 	id_plateforme (identifiant)			  					  
 *	Requires:       bl_raw.dta 	  										  
 *	Creates:        bl_inter.dta			                                  
@@ -31,9 +31,10 @@ ds, has(type string)
 local strvars "`r(varlist)'"
 format %-20s `strvars'
 
-	* make all string obs lower case
+	* make all string obs lower case and trim leading and trailing white space
 foreach x of local strvars {
 replace `x'= lower(`x')
+*strtrim(`x')*
 }
 	* numeric 
 ds, has(type numeric) 
@@ -47,13 +48,9 @@ format Date %td
 
 }
 	* keep dates as string variables for RA quality checks
-gen date_creation_string = Datedecréation
+gen date_creation_string = Date
 format date_creation_string %td
 tostring date_creation_string, replace u force
-
-gen date_inscription_string = Dateinscription
-format date_inscription_string %td
-tostring date_inscription_string, replace u force
 
 
 /* --------------------------------------------------------------------
@@ -365,12 +362,12 @@ notes _dta : March 2022
 notes _dta : Consortium Project
 
 		* Section identification
-lab var ident "identification"
-lab var orienter "oriontation to the representative"
+*lab var ident "identification"
+*lab var orienter "oriontation to the representative"
 lab var ident2 "identification 2"
 lab var ident_nouveau_personne "identification new person"
 lab var ident_base_respondent "identification base respondent"
-lab var ident_repondent_position "identification respondent position"
+*lab var ident_repondent_position "identification respondent position"
 
 		* Section essence of the company
 lab var entr_idee "the enterprise's idea"
