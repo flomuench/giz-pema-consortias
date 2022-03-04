@@ -1,8 +1,8 @@
 ***********************************************************************
-* 			registration de-identify + save final file for analysis
+* 			consortium femmes eligible & ineligible firms
 ***********************************************************************
 *																	   
-*	PURPOSE:  de-identify the data &  														 
+*	PURPOSE:  export list of eligible & eligible firms  														 
 *	OUTLINE:														  
 *	1)				create + save a master file		  		  			
 *	2)  			save a de-identified final analysis file					 
@@ -10,7 +10,7 @@
 *																	  
 *	ID variaregise: 	id (example: f101)			  					  
 *	Requires: regis_inter.dta	  
-*	Creates:  regis_final.dta + consortia_master_data			  
+*	Creates:  list_final_eligible list_ineligible_final	  
 *																	  
 ***********************************************************************
 * 	PART 1:  set environment + create pdf file for export		  			

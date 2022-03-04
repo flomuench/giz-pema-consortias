@@ -97,28 +97,26 @@ putpdf text ("Consortia: eligibility"), bold linebreak
 
 	* distribution of ca and ca export 2018, 2019, 2020
 set graphics on
-histogram ca_mean if ca_mean < 666666 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
-	xlabel(0 1 2 3 4 5 10 20 30 40 50 60 70 80, labsize(tiny) format(%9.0fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020") ///
+	xlabel(, labsize(tiny) format(%9.0fc)) ///
 	bin(80) ///
-	xline(1.5) ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
+	xline(150000) ///
 	name(ca_mean, replace)
 gr export ca_mean.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ca_mean.png
 putpdf pagebreak
 
-histogram ca_mean if ca_mean < 15 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean < 150000 & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020") ///
 	bin(80) ///
 	xline(1.5) ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
 	name(ca_mean, replace)
 gr export ca_mean_zoomin.png, replace
 putpdf paragraph, halign(center) 
@@ -126,13 +124,12 @@ putpdf image ca_mean_zoomin.png
 putpdf pagebreak
 
 
-histogram ca_mean if ca_mean < 1.5 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean < 150000 & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020") ///
 	bin(80) ///
-	note("Le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
 	name(ca_mean, replace)
 gr export ca_mean_zoomin2.png, replace
 putpdf paragraph, halign(center) 
@@ -158,8 +155,7 @@ putpdf pagebreak
 
 	* histogram for lower values of average CA
 			* CA 2019
-hist ca_2019 if ca_2019 < 2, w(0.1) frequency addl ///
-	note("La ligne réprésentent le minimum selon les critères d'éligibilité (150.000 Dinar).", size(vsmall)) ///
+hist ca_2019 if ca_2019 < 200000, w(0.1) frequency addl ///
 	xline(1.5) xlabel(0(0.1)2)
 			* CA moyenne trois années
 hist ca_mean if ca_mean < 2, w(0.1) frequency addl ///
@@ -530,11 +526,11 @@ putpdf pagebreak
 
 
 	* CA, CA exp
-histogram ca_mean if ca_mean < 666666 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
-	xlabel(0 100 500 1000, labsize(tiny) format(%9.0fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020") ///
+	xlabel(, labsize(tiny) format(%9.0fc)) ///
 	bin(20) ///
 	name(ca_mean, replace)
 gr export ca_mean.png, replace
@@ -542,10 +538,10 @@ putpdf paragraph, halign(center)
 putpdf image ca_mean.png
 putpdf pagebreak
 
-histogram ca_mean if ca_mean < 15 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean < 150000 & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
+	xlabel(, labsize(tiny) format(%9.1fc)) ///
 	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
 	bin(80) ///
 	name(ca_mean, replace)
@@ -555,11 +551,11 @@ putpdf image ca_mean_zoomin.png
 putpdf pagebreak
 
 
-histogram ca_mean if ca_mean < 1.5 & ca_mean > 0, frequency addl ///
+histogram ca_mean if ca_mean < 20000 & ca_mean > 0, frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020") ///
 	ytitle("Nombre d'entreprises") ///
-	xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(, labsize(tiny) format(%9.1fc)) ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020") ///
 	bin(80) ///
 	name(ca_mean, replace)
 gr export ca_mean_zoomin2.png, replace
@@ -624,11 +620,11 @@ forvalues x = 1(1)4 {
 	name(fte, replace)
 
 		* CA, CA export
-	histogram ca_mean if ca_mean < 666666 & ca_mean > 0 & pole == `x', frequency addl ///
+	histogram ca_mean if ca_mean > 0 & pole == `x', frequency addl ///
 	title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 	ytitle("Nombre d'entreprises") ///
 	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
-	xlabel(0 100 500 1000, labsize(tiny) format(%9.0fc)) ///
+	xlabel(, labsize(tiny) format(%9.0fc)) ///
 	bin(20) ///
 	name(ca_mean, replace)	
 	gr export ca_mean.png, replace
@@ -636,11 +632,11 @@ forvalues x = 1(1)4 {
 	putpdf image ca_mean.png
 	putpdf pagebreak
 
-	histogram ca_mean if ca_mean < 15 & ca_mean > 0 & pole == `x' , frequency addl ///
+	histogram ca_mean if ca_mean < 150000 & ca_mean > 0 & pole == `x' , frequency addl ///
 		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 		ytitle("Nombre d'entreprises") ///
-		xlabel(0 0.5 1 1.5 2 5 10 15, labsize(tiny) format(%9.1fc)) ///
-		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+		xlabel(, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
 		bin(80) ///
 		name(ca_mean, replace)
 	gr export ca_mean_zoomin.png, replace
@@ -648,11 +644,11 @@ forvalues x = 1(1)4 {
 	putpdf image ca_mean_zoomin.png
 	putpdf pagebreak
 
-	histogram ca_mean if ca_mean < 1.5 & ca_mean > 0 & pole == `x', frequency addl ///
+	histogram ca_mean if ca_mean < 15000 & ca_mean > 0 & pole == `x', frequency addl ///
 		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
 		ytitle("Nombre d'entreprises") ///
-		xlabel(0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1 1.1 1.2 1.3 1.4 1.5, labsize(tiny) format(%9.1fc)) ///
-		xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+		xlabel(, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
 		bin(80) ///
 		name(ca_mean, replace)
 	gr export ca_mean_zoomin2.png, replace

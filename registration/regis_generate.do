@@ -185,6 +185,7 @@ foreach x in ca_ ca_exp {
 }
 
 
+* 1013 1066
 ***********************************************************************
 * 	PART 10: eligibiliy dummy
 ***********************************************************************
@@ -202,7 +203,7 @@ gen subsector_var = (pole < .)
 
 replace rg_produitexp = 1 if rg_produitexp == .
 
-gen eligible = (rg_intention == 1 & subsector_var == 1)
+gen eligible = (rg_intention == 1 & subsector_var == 1 & rg_gender_pdg == 1 & rg_resident == 1)
 lab def eligible 1 "éligible" 0 "inéligible"
 lab val eligible eligible
 

@@ -45,8 +45,8 @@ graph box exp_labor_productivity, marker(1, mlab(id_plateforme) mlabangle(alt) m
 
 		* CA export
 sum ca_exp2020, d
-histogram ca_exp2020 if ca_exp2020 > 10000000 & ca_exp2020 > 0
-graph box ca_exp2020 if ca_exp2020 > 10000000 & ca_exp2020 > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
+histogram ca_exp2020 if ca_exp2020 & ca_exp2020 > 0
+graph box ca_exp2020 if ca_exp2020 > 100000 & ca_exp2020 > 0, marker(1, mlab(id_plateforme) mlabangle(alt) mlabsize(tiny))
 br if ca_exp2020 > 10000000 & ca_exp2020 > 0 & eligible == 1
 
 		* CA export labor productivity
