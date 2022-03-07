@@ -31,7 +31,7 @@ qui cap log c
 	/*
 ssc install ietoolkit /* for iebaltab */
 ssc install randtreat, replace /* for randtreat --> random allocation */
-ssc install blindschemes, replace /* for plotplain --> scheme for graphical visualisations */
+ssc install blindschemes, replace /* for plotplain --> scheme for graphic2al visualisations */
 net install http://www.stata.com/users/kcrow/tab2docx
 ssc install betterbar
 ssc install mdesc 

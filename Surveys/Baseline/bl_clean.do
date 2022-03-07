@@ -34,7 +34,7 @@ format %-20s `strvars'
 	* make all string obs lower case and trim leading and trailing white space
 foreach x of local strvars {
 replace `x'= lower(`x')
-*strtrim(`x')*
+*strtrim(`x')
 }
 	* numeric 
 ds, has(type numeric) 
