@@ -15,7 +15,7 @@
 *   7) 		Removing trailing & leading spaces from string variables	
 *   8) 		Remove observations for incomplete entries									 
 *																	  													      
-*	Author:     	Fabian Scheifele						    
+*	Author:     	Fabian Scheifele, Siwar Hakim & Kais Jomaa						    
 *	ID variable: 	id_plateforme (identifiant)			  					  
 *	Requires:       bl_raw.dta 	  										  
 *	Creates:        bl_inter.dta			                                  
@@ -42,9 +42,10 @@ local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
 
 	* dates
-		* creation
+		* creation (HOURS TRANSFORMATION DOES NOT YET WORK)
 format Date %td
-
+*format Heuredébut %tC
+*format Heurefin %tC
 
 }
 	* keep dates as string variables for RA quality checks
@@ -53,128 +54,21 @@ format date_creation_string %td
 tostring date_creation_string, replace u force
 
 
-/* --------------------------------------------------------------------
-	PART 1.2: Turn binary questions numerical 
-----------------------------------------------------------------------*/
-/*
-local binaryvars Acceptezvousenregistrement  Nomdelapersonne Nomdelentreprise id_ident2 dig_con1 dig_con3 dig_con5 dig_presence1 dig_presence2 dig_presence3 dig_marketing_lien expprep_cible  dig_vente dig_marketing_ind1 attest attest2 dig_service_satisfaction expprep_norme expprep_demande rg_oper_exp carsoutien_gouvern perc_com1 perc_com2 exp_afrique car_ecom_prive exp_avant21 info_neces
- 
-foreach var of local binaryvars {
-	capture replace `var' = "1" if strpos(`var', "oui")
-	capture replace `var' = "0" if strpos(`var', "non")
-	capture replace `var' = "-999" if strpos(`var', "sais")
-	capture replace `var' = "-1200" if strpos(`var', "prévu")
-	capture destring `var', replace
-}
-
-
-
-/* --------------------------------------------------------------------
-	PART 1.3: Fix mutliple choice questions
-----------------------------------------------------------------------*/
-{
-	
-* entr_bien_service
-	
-//capture encode entr_bien_service, gen(entr_service_bien)
-
-* car_sex_pdg
-/*
-replace car_sex_pdg = "1" if car_sex_pdg == "femme أنثى"
-replace car_sex_pdg = "2" if car_sex_pdg == "homme ذكر"
-destring car_sex_pdg, replace
-
-* car_pdg_educ
-
-replace car_pdg_educ = "1" if car_pdg_educ == "aucune scolarité, école primaire, secondaire (sans obtention du bac) ماقراش/ تعليم ابتدائي / تعليم ثانوي (ما خذاش البكالوريا)"
-replace car_pdg_educ = "1" if car_pdg_educ == "formation professionnelle diplômante (bts/ btp...)  تكوين مهني (يمكن من الحصول على شهادة)"
-replace car_pdg_educ = "2" if car_pdg_educ == "diplôme de l'enseignement secondaire (baccalauréat) متحصل على شهادة ختم التعليم الثانوي (البكالوريا)"
-replace car_pdg_educ = "3" if car_pdg_educ == "enseignement supérieur (diplôme universitaire) متحصل على شهادة جامعية"
-replace car_pdg_educ = "-999" if car_pdg_educ == "ne sais pas (ne pas lire) - ما نعرفش (ما تقراش)"
-destring car_pdg_educ, replace
-*/	
-	
-* variable dig_con2
-gen dig_con2_internationale = 0
-replace dig_con2_internationale = 1 if strpos(dig_con2, "r1")
-
-gen dig_con2_correct = 0
-replace dig_con2_correct = 1 if strpos(dig_con2, "1")
-
-gen dig_con2_pas_paiement = 0
-replace dig_con2_pas_paiement = 1 if strpos(dig_con2, "r3")
-
-
-
-* Surlesquellesdesmarketplaces
-
-g dig_presence3_ex1 = 0
-replace dig_presence3_ex1 = 1 if strpos(Surlesquellesdesmarketplaces, "r1")
-
-g dig_presence3_ex2 = 0
-replace dig_presence3_ex2= 1 if strpos(Surlesquellesdesmarketplaces, "r2")
-
-g dig_presence3_ex3 = 0
-replace dig_presence3_ex3= 1 if strpos(Surlesquellesdesmarketplaces, "r3")
-
-g dig_presence3_ex4 = 0
-replace dig_presence3_ex4= 1 if strpos(Surlesquellesdesmarketplaces, "r4")
-
-g dig_presence3_ex5 = 0
-replace dig_presence3_ex5= 1 if strpos(Surlesquellesdesmarketplaces, "r5")
-
-g dig_presence3_ex6 = 0
-replace dig_presence3_ex6= 1 if strpos(Surlesquellesdesmarketplaces, "r6")
-
-g dig_presence3_ex7 = 0
-replace dig_presence3_ex7= 1 if strpos(Surlesquellesdesmarketplaces, "r7")
-
-g dig_presence3_ex8 = 0
-replace dig_presence3_ex8= 1 if strpos(Surlesquellesdesmarketplaces, "r8")
-
-g dig_presence3_exnsp = 0
-replace dig_presence3_exnsp= 1 if strpos(Surlesquellesdesmarketplaces, "-999")
-
-
-
-* dig_miseajour1
-
-local vars_misea dig_miseajour2 dig_miseajour1 dig_miseajour3
-
-foreach var of local vars_misea {
-	replace `var' = "0" if `var' == "jamais / أبدا"
-	replace `var' = "0.25" if `var' == "annuellement / سنويا"
-	replace `var' = "0.5" if `var' == "mensuellement / شهريا"
-	replace `var' = "0.75" if `var' == "hebdomadairement / أسبوعيا"
-	replace `var' = "1" if `var' == "plus qu'une fois par semaine / أكثر من مرة في الأسبوع"
-	destring `var', replace
-	} 
-	
-* dig_payment
-local vars_payments dig_payment1 dig_payment2 dig_payment3
-
-foreach var of local vars_payments {
-	replace `var' = "0.5" if `var' == "seulement commander en ligne, mais le paiement se fait par d'autres moyens (virement, mandat postal, cash-on-delivery...)  / تكمندي منو فقط وتخلص بوسائل أخرى"
-	replace `var' = "1" if `var' == "commander et payer en ligne /  تكمندي وتخلص منو"
-	replace `var' = "0" if `var' == "ni commander ni payer en ligne / لا تكمندي لا تخلص"
-	destring `var', replace
-}
-
 ***********************************************************************
 * 	PART 2: 	Drop all unneeded columns and rows from the survey		  			
 ***********************************************************************
 
 *drop VARNAMES
 
-drop dig_con2 dig_con6 Surlesquellesdesmarketplaces dig_marketing_num19 dig_con4 dig_logistique_retour 
+*drop dig_con2 dig_con6 Surlesquellesdesmarketplaces dig_marketing_num19 dig_con4 dig_logistique_retour 
 
-drop if Id_plateforme==.
+*UNSTAR once numerice IDs are in*drop if id_plateforme==.
 
 * 	Drop incomplete entries
 
 gen complete = 0 
 
-replace complete = 1 if attest ==1 | attest2 ==1 |  Acceptezvousdevalidervosré ==1 
+replace complete = 1 if validation ==1 | attest ==1
 
 // keep if complete == 1
 
@@ -189,7 +83,7 @@ rename *, lower
 * 	PART 4: 	Order the variables in the data set		  			
 ***********************************************************************
 /*
-order id_plateforme heure date attest attest2 acceptezvousdevalidervosré survey_type
+order id_plateforme heure date attest attest2 acceptezvousdevalidervosré 
 
 
 ***********************************************************************
@@ -354,8 +248,8 @@ rename raisonsociale firmname
 ***********************************************************************
 * 	PART 6: 	Label the variables		  			
 ***********************************************************************
+/*
 {
-
         * label the dataset
 label data "Baseline Survey"
 notes _dta : March 2022
@@ -381,7 +275,7 @@ lab var inno_produit "innovation product modification"
 lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
-lab var inno_aucune "no innovation"
+*lab var inno_aucune "no innovation"
 lab var inno_mot_idee "personal idea"
 lab var inno_mot_conc "exchange ideas with a competitor"
 lab var inno_mot_cons "exchange ideas with a consultant"
@@ -503,11 +397,12 @@ lab var tel_supl "other phone number"
 lab var attest "validation"
 
 }
+*/
 ***********************************************************************
 * 	PART 7: 	Label the variables values	  			
 ***********************************************************************
 
-
+/*
 local yesnovariables ident ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
 exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1
 
@@ -559,7 +454,7 @@ label values tel_supl label_tel_supl
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
-/*
+
 ***********************************************************************
 * 	PART 8: Removing trail and leading spaces in from string variables  			
 ***********************************************************************
@@ -577,8 +472,13 @@ replace `x' = stritrim(strtrim(`x'))
 }
 
 */
+
 ***********************************************************************
-* 	Part 9: Save the changes made to the data		  			
+* 	PART 9: Manual cleaning  			
+***********************************************************************
+
+***********************************************************************
+* 	Part 10: Save the changes made to the data		  			
 ***********************************************************************
 cd "$bl_intermediate"
 save "bl_inter", replace

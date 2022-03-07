@@ -126,11 +126,11 @@ quietly by id_plateforme:  gen dup = cond(_N==1,0,_n)
 
 replace needs_check = 1 if dup>0
 
-gen commentaires_ElAmouri = 0
+gen commentaires_ElAmouri = .
 
 cd "$bl_checks"
 
-order commentaires_ElAmouri id_plateforme commentsmsb 
+order id_plateforme check questions_needing_check commentaires_ElAmouri commentsmsb 
 
-export excel commentaires_ElAmouri id_plateforme commentsmsb needs_check questions_needing_check heure date-dig_logistique_retour_score using "fiche_correction" if needs_check==1, firstrow(variables) replace
+export excel commentaires_ElAmouri id_plateforme commentsmsb check questions_needing_check heure date-dig_logistique_retour_score using "fiche_correction" if needs_check>=1, firstrow(variables) replace
 

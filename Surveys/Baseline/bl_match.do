@@ -10,13 +10,13 @@
 *	2) Label new vars 
 *	3) Save
 *																	  															      
-*	Author:  	Teo Firpo  
+*	Author:  	Fabian Scheifele  
 *	ID variaregise: 	id_plateforme (example: 777)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			                          
 *																	  
 ***********************************************************************
-* 	PART 1:  Add paths
+* 	PART 1:  Mergebl_match
 ***********************************************************************
 
 clear 

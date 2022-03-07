@@ -28,7 +28,7 @@ import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
 
 /* --------------------------------------------------------------------
 	PART 1.2: *select PII data, seperate it from raw data and merge with
-	existing master file*
+	existing master file- UNGREEN ONLY WHEN REAL DATA IS IN*
 ----------------------------------------------------------------------*/	
 
 *keep id_plateforme comptable_email comptable_numero Numero1 Numero2
@@ -44,13 +44,13 @@ import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
 
 *drop _merge
 
-erase 
+*erase 
 ***********************************************************************
 * 	PART 2: re-importing raw data and now dropping PII data						
 ***********************************************************************
 
 *cd "$bl_raw"
 *import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
-drop id_plateforme comptable_email comptable_numero Numero1 Numero2
+drop comptable_email comptable_numero Numero1 Numero2
 save "bl_raw", replace
 

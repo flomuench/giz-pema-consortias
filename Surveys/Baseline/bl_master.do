@@ -123,7 +123,7 @@ if (0) do "${bl_github}/bl_match.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_generate.do"
+if (1) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
@@ -133,7 +133,12 @@ if (0) do "${bl_github}/bl_open_question_checks.do"
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
-	PART 3.8: Export pdf with descriptive statistics on responses
+	PART 3.8: Create indices
+----------------------------------------------------------------------*/	
+if (0) do "${bl_github}/bl_index.do"
+
+/* --------------------------------------------------------------------
+	PART 3.9: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_statistics.do"
 
