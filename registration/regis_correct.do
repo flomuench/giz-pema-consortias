@@ -85,6 +85,8 @@ replace rg_codedouane = "1468409z" if rg_codedouane == "1468409z/a/m000"
 replace rg_codedouane = "1541465y" if rg_codedouane == "1541465y/m/a/000"
 replace rg_codedouane = "1562084d" if rg_codedouane == "1562084dam000"
 replace rg_codedouane = "1631389e" if rg_codedouane == "1631389eam000"
+replace rg_codedouane = "584949V" if id_plateforme == 1128
+
 
 	    * Phone numbers 
 	     	* Representative
@@ -111,6 +113,8 @@ replace rg_telpdg = "52710565" if rg_telpdg == "(+216)52710565"
 replace rg_telpdg = "55888341" if rg_telpdg == "2165588341"
 replace rg_telpdg = "97550661" if rg_telpdg == "975506661"
 replace rg_telpdg = "55888341" if rg_telpdg == "5588341"
+replace rg_telpdg = "97865995" if id_plateforme == 1128
+replace rg_telpdg = "28215251" if id_plateforme == 1154
 
 
 	    * Nom et prénom du representant
@@ -120,7 +124,7 @@ replace rg_nom_rep = "fathia errouki" if  rg_nom_rep=="fathia errouki import-exp
 replace rg_nom_rep = "hana youssef" if  rg_nom_rep=="هناء يوسف"
 replace rg_nom_rep = "sawssen ben msallem" if  id_plateforme == 1008
 replace rg_nom_rep = "sonda laroussi" if rg_nom_rep == "sonda larouss"
-
+replace rg_nom_rep = "Aira arafa" if id_plateforme == 1239
 
 	    * Qualité/fonction
 replace rg_position_rep = ustrlower(rg_position_rep)
@@ -132,7 +136,12 @@ replace rg_position_rep = "coo" if rg_position_rep == "c.o.o"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisan"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisanne"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisante"
-
+replace rg_position_rep = "gérante" id_plateforme == 1154
+replace rg_position_rep = "gérante" id_plateforme == 1161
+replace rg_position_rep = "gérante" id_plateforme == 1185
+replace rg_position_rep = "gérante" id_plateforme == 1231
+replace rg_position_rep = "gérante" id_plateforme == 1239
+replace rg_position_rep = "gérante" id_plateforme == 1248
 
 	    * Matricule CNSS
 replace rg_matricule = ustrregexra(rg_matricule, "[ ]", "")
@@ -179,8 +188,8 @@ replace firmname = "oléa amiri" if  id_plateforme == 1036
 replace firmname = "rissala kids farm" if  id_plateforme == 1039
 replace firmname = "passportbio" if  id_plateforme == 1054
 replace firmname = "archivart" if  id_plateforme == 1057
-
-
+replace firmname = "Decopalme" if  id_plateforme == 1128
+replace firmname = "Bioart Kefois" if  id_plateforme == 1185
 
 		* Adresse de l'entreprise:
 replace rg_adresse = ustrlower(rg_adresse) 
@@ -246,9 +255,21 @@ replace rg_media = "" if rg_media == "siliana"
 
 
 }
+        *e-mail PDG:
+replace rg_emailpdg = "ameni.riahi@steps.tn" if id_plateforme == 1028
+replace rg_emailpdg = "archivart2020@gmail.com" if id_plateforme == 1057
+replace rg_emailpdg = "baltagidorra@gmail.com" if id_plateforme == 1148
+replace rg_emailpdg = "jedlisonia@gmail.com" if id_plateforme == 1192
+replace rg_emailpdg = "maryemrebaitaher@gmail.com" if id_plateforme == 1204
+replace rg_emailpdg = "boughdiri_nakhli@yahoo.fr" if id_plateforme == 1231
 
-
-      * subsector_ corrige
+        *e-mail rep:
+replace rg_emailrep = "faridalaimech@gmail.com" if id_plateforme == 1128
+replace rg_emailrep = "jedlisonia@gmail.com" if id_plateforme == 1192
+replace rg_emailrep = "maryemrebaitaher@gmail.com" if id_plateforme == 1204
+replace rg_emailrep = "contact@biozelfen.com" if id_plateforme == 1231
+    
+	    * subsector_ corrige
 replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 985
 replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 1030
 replace subsector_corrige = "pôle d'activités artisanat" if id_plateforme == 1056
