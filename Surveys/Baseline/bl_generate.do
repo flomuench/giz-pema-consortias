@@ -47,6 +47,39 @@ lab var dig_presence3_exscore "Score on examples of digital channels used"
 **********************************************************************
 * 	PART 2:  Additional calculated variables
 ***********************************************************************
+* create a categorical variable netcoop
+gen netcoop=1 if net_coop== "Gagner"
+replace netcoop=2 if net_coop== "Éloigner"
+replace netcoop=3 if net_coop== "Communication"
+replace netcoop=4 if net_coop== "Partenariat"
+replace netcoop=5 if net_coop== "Confiance"
+replace netcoop=6 if net_coop== "Adversaire"
+replace netcoop=7 if net_coop== "Abattre"
+replace netcoop=8 if net_coop== "Connecter"
+replace netcoop=9 if net_coop== "Pouvoir"
+replace netcoop=10 if net_coop== "Dominer"
+
+*labeling netcoop
+label var netcoop "perception of interaction between the enterprises"
+*labeling the values of netcoop
+label define label_netcoop 1 "Gagner" 2 "Éloigner" 3 "Communication" 4 "Partenariat" 5 "Confiance" 6 "Adversaire" 7 "Abattre" 8 "Connecter" 9 "Pouvoir" 10 "Dominer"
+label values netcoop label_netcoop
+
+* create a dummy for the list experiment
+gen listexp_percentage=0 
+gen listexp_treat=0 
+gen listexp_control=0 
+replace listexp_treat= mean(listexp) if list_group=1
+replace listexp_control= mean(listexp) if list_group=0
+replace listexp_percentage= (listexp_treat - listexp_control) *100
+
+*labeling listexp_treat
+label var listexp_treat "average list experiment for the treatment group"
+*labeling listexp_control
+label var listexp_control "average list experiment for the control group"
+*labeling listexp_percentage
+label var listexp_percentage "percentage mean difference of the list experiment between treatment & control groups"
+
 /*
 g time_survey= heurefin-heuredébut
 lab var time_survey "Time used to complete the survey"
