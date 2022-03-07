@@ -255,6 +255,9 @@ label data "Baseline Survey"
 notes _dta : March 2022
 notes _dta : Consortium Project
 
+
+label variable list_group "Treatment or Control Group"
+
 		* Section identification
 *lab var ident "identification"
 *lab var orienter "oriontation to the representative"
@@ -424,6 +427,9 @@ label define agree 1 "Strongly disagree" 2 "Disagree" 3 "Neither agree nor disag
 foreach var in local agreevariables {
 	label values `var' agree
 }
+
+label define label_list_group 1 "treatment_group" 0 "control_group"
+label values d_list_group label_list_group 
 
 label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
 label values orienter label_orienter
