@@ -45,7 +45,7 @@ local refused     = -888
 local check_again = -777
 
 	* replace, gen, label
-gen needs_check = 0
+gen check = 0
 gen questions_needing_checks = ""
 gen commentsmsb = ""
 */
