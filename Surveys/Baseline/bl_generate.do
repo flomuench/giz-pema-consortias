@@ -67,9 +67,9 @@ label var listexp_percentage "percentage mean difference of the list experiment 
 */
 
 
-/*2.3 time used to fill survey
+*2.3 time used to fill survey
 
-g time_survey= heurefin-heuredébut
+*g time_survey= heurefin-heuredebut
 *lab var time_survey "Time used to complete the survey"
 
 
