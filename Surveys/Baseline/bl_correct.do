@@ -52,6 +52,15 @@ gen commentsmsb = ""
 }
 
 ***********************************************************************
+* 	PART 1.2:  Identify and remove duplicates 
+***********************************************************************
+* duplicates report id_plateforme
+* duplicates tag id_plateforme, gen(dup)
+
+
+
+
+***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
 * 2.1 Remove commas, dots, dt and dinar from numeric vars
@@ -160,13 +169,14 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 4:  Convert remaining strings to numerical variabales (to be adapted to consortia)	  			
 ***********************************************************************
 
+
 ***********************************************************************
-* 	PART 5:  Highlight problematic, non-sensical values for open-ended questions  			
+* 	PART 5:  Highlight non-sensical values for open and numerical answers(answers that do not correspond to the desired answer format)  			
 ***********************************************************************
 
-* Correction de la variable investcom_2021
-*replace investcom_2021 = "`check_again'" if investcom_2021== "a"
-*replace investcom_2021 = "30000" if investcom_2021== "trente milles dinars"
+* Marquer non-sensical value with check=1 and question_needing_check with the problem
+
+
 
 
 ***********************************************************************
@@ -182,7 +192,7 @@ replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
 */
 
 ***********************************************************************
-* 	PART 7:  Import categorisation for opend ended QI questions (DONT KNOW YET WHAT TO DO)
+* 	PART 7:  Import categorisation for opend ended QI questions (NOT REQUIRED AT THE MOMENT)
 ***********************************************************************
 {
 /*
@@ -234,12 +244,8 @@ lab var q42f "(in-) formel argument de vente"
 ***********************************************************************
 * 	PART 8:  Convert data types to the appropriate format
 ***********************************************************************
-* 8.1 Convert close ended questions to integers*
 
-
-
-
-* 8.2 Destring remaining numerical vars
+* 8.1 Destring remaining numerical vars
 * local destrvar XX
 *foreach x of local destrvar { 
 *destring `x', replace
@@ -250,12 +256,6 @@ destring `x', replace
 format `x' %25.0fc
 }
 */
-
-
-***********************************************************************
-* 	PART 9:  Identify and remove duplicates 
-***********************************************************************
-
 
 
 
