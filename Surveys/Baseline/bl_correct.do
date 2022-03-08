@@ -38,14 +38,12 @@ foreach x of local strvars {
 	
 scalar not_know    = -999
 scalar refused     = -888
-scalar check_again = -777
 
 local not_know    = -999
 local refused     = -888
-local check_again = -777
 
 	* replace, gen, label
-gen check = 0
+gen check_again = 0
 gen questions_needing_checks = ""
 gen commentsmsb = ""
 */
@@ -75,7 +73,8 @@ gen commentsmsb = ""
 *2.4 Remove linking words like un, une, des,les, from product descriptions
 
 
-
+*2.5 fill inno_mot for firms without innovations
+replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_lieu==0 & inno_commerce==0
 
 ***********************************************************************
 * 	PART 3:  Manual correction (by variable not by row)
@@ -89,7 +88,7 @@ gen commentsmsb = ""
 
 
 
-*3.3 Mark any non-numerical answers to numeric questions as check=1
+*3.3 Mark any non-numerical answers to numeric questions as check_again=1
 
 
 
@@ -174,7 +173,7 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 5:  Highlight non-sensical values for open and numerical answers(answers that do not correspond to the desired answer format)  			
 ***********************************************************************
 
-* Marquer non-sensical value with check=1 and question_needing_check with the problem
+* Marquer non-sensical value with check_again=1 and question_needing_check with the problem
 
 
 
