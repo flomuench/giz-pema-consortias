@@ -16,20 +16,16 @@
 *	Creates:  bl_inter.dta			                          
 *																	  
 ***********************************************************************
-* 	PART 1:  Mergebl_match
+* 	PART 1:  Merge bl_match
 ***********************************************************************
 
 clear 
 
 use "${regis_final}/regis_final", clear
+rename questions_needing_check question_unclear_regis
+drop eligible eligibilité programme treatment rg_legalstatus moyen_com rg_confidentialite rg_partage_donnees rg_enregistrement_coordonnees dateinscription date_creation_string date_inscription_string dup_emailpdg dup_firmname onshore produit_exportable intention_export rg_expstatus ca_check random_number rank list_group
+merge 1:m id_plateforme using "${bl_intermediate}/bl_inter", keep(match) nogenerate
 
-*keep id_plateforme presence_enligne rg_age fte fte_femmes capital sector subsector rg_gender_rep rg_gender_pdg produit_exportable export2017 export2018 export2019 export2020 export2021
-
-*merge 1:m id_plateforme using "${bl_intermediate}/bl_inter"
-
-*keep if _merge==3
-
-*drop _merge
 
 ***********************************************************************
 * 	PART 2:  Label new variables

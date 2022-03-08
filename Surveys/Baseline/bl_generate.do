@@ -89,9 +89,12 @@ g time_survey= heurefin-heuredébut
 * 	PART 4: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 
-egen miss1 = rowmiss(entr_idee - profit_2021)
-egen miss2 = rowmiss (car_efi_fin1 - support7)
-gen miss = miss1 + miss2
+egen miss1 = rowmiss(entr_idee - produit1)
+egen miss2 = rowmiss(inno_produit - inno_mot)
+egen miss3 =rowmiss (inno_rd -profit_2021)
+egen miss4 = rowmiss (car_efi_fin1 - att_adh5)
+gen miss = miss1 + miss2 +miss3+miss4
+drop miss1 miss2 miss3 miss4
 *egen nomiss1 = rownonmiss(entr_idee - profit_2021)
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
 *gen nomiss= nomiss1 + nomiss2
