@@ -82,17 +82,28 @@ replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_li
 *3.1 Translate arab product names and inno_mot_autre, autresapreciser to french*
 
 
+*3.2	Rename and homogenize the product names	  			
+	* Example
+	/*
+replace entr_produit1 = "céramique"  if entr_produit1=="ciramic"
+replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
+replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
+replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
 
-*3.2 Manually Transform any remaining "word numerics" to actual numerics 
+
+*3.3 Manually Transform any remaining "word numerics" to actual numerics 
 
 
 
 
-*3.3 Mark any non-numerical answers to numeric questions as check_again=1
+*3.4 Mark any non-numerical answers to numeric questions as check_again=1
 
 
 
-*3.4 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+*3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
+
+
 
 
 
@@ -165,11 +176,6 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 }
 
 ***********************************************************************
-* 	PART 4:  Convert remaining strings to numerical variabales (to be adapted to consortia)	  			
-***********************************************************************
-
-
-***********************************************************************
 * 	PART 5:  Highlight non-sensical values for open and numerical answers(answers that do not correspond to the desired answer format)  			
 ***********************************************************************
 
@@ -178,20 +184,11 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 
 
 
-***********************************************************************
-* 	PART 6: 	Rename and homogenize the products		  			
-***********************************************************************
 
-	* Example
-	/*
-replace entr_produit1 = "céramique"  if entr_produit1=="ciramic"
-replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
-replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
-replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
 */
 
 ***********************************************************************
-* 	PART 7:  Import categorisation for opend ended QI questions (NOT REQUIRED AT THE MOMENT)
+* 	PART 6:  Import categorisation for opend ended QI questions (NOT REQUIRED AT THE MOMENT)
 ***********************************************************************
 {
 /*
@@ -241,7 +238,7 @@ lab var q42f "(in-) formel argument de vente"
 
 
 ***********************************************************************
-* 	PART 8:  Convert data types to the appropriate format
+* 	PART 7:  Convert data types to the appropriate format
 ***********************************************************************
 
 * 8.1 Destring remaining numerical vars
@@ -260,7 +257,7 @@ format `x' %25.0fc
 
 
 ***********************************************************************
-* 	PART 10:  autres / miscellaneous adjustments
+* 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
 
 */
