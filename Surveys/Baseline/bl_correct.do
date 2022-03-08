@@ -18,7 +18,7 @@
 *	10)		Remove duplicates
 *
 *																	  															      
-*	Author:  	Florian Muench & Kais Jomaa							  
+*	Author:  	Fabian Scheifele, Kais Jomaa & Siwar Jakim							  
 *	ID variaregise: 	id (example: f101)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			                          
@@ -52,30 +52,44 @@ gen commentsmsb = ""
 }
 
 ***********************************************************************
-* 	PART 2:  Manually fix wrong answers
+* 	PART 2:  Automatic corrections
 ***********************************************************************
-
-{
-* Needs check
-//replace needs_check = 1 if id_plateforme = 572== "a"
-//replace needs_check = 1 if id_plateforme = 572 == "aa"
+* 2.1 Remove commas, dots, dt and dinar from numeric vars
 
 
-/*
-* Questions needing check
-*replace questions_needing_check = "investcom_2021/investcom_futur" if id_plateforme==572
-*replace questions_needing_check = "exp_pays_21" if id_plateforme==757
-*replace questions_needing_check = "comp_benefice2020" if id_plateforme==592
-*replace needs_check = 1 if id_plateforme == 592
-*replace questions_needing_check = "compexp_2020/comp_ca2020/comp_benefice2020" if id_plateforme==365
-*replace questions_needing_check = "dig_revenues_ecom" if id_plateforme==375
-replace questions_needing_check = "comp_benefice2020" if id_plateforme == 89
-replace needs_check = 1 if id_plateforme == 89
+*2.2 Turn zero, zéro into 0 for all numeric vars
+
+
+*2.3 Use strim trim to remove space BETWEEN numbers/characters in accounting variables*
+
+
+*2.4 Remove linking words like un, une, des,les, from product descriptions
+
 
 
 
 ***********************************************************************
-* 	PART 3: use regular expressions to correct variables 		  			
+* 	PART 3:  Manual correction (by variable not by row)
+***********************************************************************
+*3.1 Translate arab product names and inno_mot_autre, autresapreciser to french*
+
+
+
+*3.2 Manually Transform any remaining "word numerics" to actual numerics 
+
+
+
+
+*3.3 Mark any non-numerical answers to numeric questions as check=1
+
+
+
+*3.4 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
+
+
+***********************************************************************
+* 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
 ***********************************************************************
 /* for reference and guidance, regularly these commands are used in this section
 gen XXX = ustrregexra(XXX, "^216", "")
@@ -86,7 +100,7 @@ lab def correct 1 "correct" 0 "incorrect"
 lab val id_adminrect correct
 
 */
-
+/*
 * Correction des variables investissement
 replace investcom_2021 = ustrregexra( investcom_2021,"k","000")
 //replace investcom_futur = ustrregexra( investcom_futur,"dinars","")
@@ -127,7 +141,7 @@ replace investcom_futur = ustrregexra( investcom_futur ," dinars","")
 
 
 ***********************************************************************
-* 	PART 4:  Replace string with numeric values		  			
+* 	EXAMPLE CODE:  Replace string with numeric values		  			
 ***********************************************************************
 {
 *Remplacer les textes de la variable investcom_2021
@@ -143,19 +157,11 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 }
 
 ***********************************************************************
-* 	PART 5:  Convert string to numerical variabales	  			
+* 	PART 4:  Convert remaining strings to numerical variabales (to be adapted to consortia)	  			
 ***********************************************************************
-* local destrvar XX
-*foreach x of local destrvar { 
-*destring `x', replace
-local destrvar investcom_futur investcom_2021 dig_revenues_ecom comp_benefice2020 car_carempl_div1 car_carempl_dive2 car_carempl_div3 compexp_2020 comp_ca2020
-foreach x of local destrvar {
-destring `x', replace
-format `x' %25.0fc
-}
 
 ***********************************************************************
-* 	PART 6:  Convert problematic values for open-ended questions  			
+* 	PART 5:  Highlight problematic, non-sensical values for open-ended questions  			
 ***********************************************************************
 
 * Correction de la variable investcom_2021
@@ -164,26 +170,19 @@ format `x' %25.0fc
 
 
 ***********************************************************************
-* 	PART 7:  Traduction reponses en arabe au francais		  			
+* 	PART 6: 	Rename and homogenize the products		  			
 ***********************************************************************
 
-*Traduction des produits principaux de l'entreprise
-replace entr_produit1 = "Farine à la tomate" if entr_produit1 == "فارينة طماطم"
-
-
-***********************************************************************
-* 	PART 8: 	Rename and homogenize the observed values		  			
-***********************************************************************
-
-	* Sectionname
+	* Example
+	/*
 replace entr_produit1 = "céramique"  if entr_produit1=="ciramic"
 replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
 replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
 replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
-
+*/
 
 ***********************************************************************
-* 	PART 9:  Import categorisation for opend ended QI questions
+* 	PART 7:  Import categorisation for opend ended QI questions (DONT KNOW YET WHAT TO DO)
 ***********************************************************************
 {
 /*
@@ -233,80 +232,37 @@ lab var q42f "(in-) formel argument de vente"
 
 
 ***********************************************************************
-* 	PART 10:  Convert data types to the appropriate format
+* 	PART 8:  Convert data types to the appropriate format
 ***********************************************************************
-* Convert string variable to integer variables
+* 8.1 Convert close ended questions to integers*
 
 
-***********************************************************************
-* 	PART 11:  Identify and remove duplicates 
-***********************************************************************
 
-* Dropping duplicates:
-{
 
-drop if id_plateforme == 813
-	
-}
-
-* Correcting the second duplicates:
-{
-replace id_base_repondent= "sana farjallah" if id_plateforme == 108
-replace entr_produit1= "skit solaire connecté réseau,site isolé et pompage solaire" if id_plateforme == 108
-replace i= "africa@growatt.pro" if id_plateforme == 108
-
-	* Drop incomplete answers (only once the survey is complete!!!)
-	
-//keep if complete==1
-
-	* Check remaining duplicates (after manual corrections above)
-	
-bysort id_plateforme:  gen dup = cond(_N==1,0,_n)	
-
-	// 350 total obs | 239 unique
-
-	* Check which observations are more complete
-	
-ds, has(type numeric)
-local all_nums `r(varlist)'
-
-egen sum_allvars = rowtotal(`all_nums')
-
-	* Drop duplicates that are less complete
-
-bysort id_plateforme: egen max_length = max(sum_allvars)
-
-// Suggestion to check which are duplicates – turn duplicate observations
-// that is shorter (ie has fewer answers) into dup==4
-
-replace dup = 4 if dup>0 & sum_allvars<max_length
-
-// you can now sort id_plateforme dup and check if indeed the one coded 4 
-// is to be dropped
-drop if dup ==4 & attest!=1 & attest2!=1 & acceptezvousdevalidervosré!=1
-
-drop if id_plateforme == 70 & dup == 4
-drop if id_plateforme == 82 & dup == 4
-drop if id_plateforme == 91 & dup == 4
-
+* 8.2 Destring remaining numerical vars
+* local destrvar XX
+*foreach x of local destrvar { 
+*destring `x', replace
 /*
-drop if dup>0 & sum_allvars<max_length
-
-drop dup
-
-bysort id_plateforme:  gen dup = cond(_N==1,0,_n)	
- 
-keep if dup<2
+local destrvar investcom_futur investcom_2021 dig_revenues_ecom comp_benefice2020 car_carempl_div1 car_carempl_dive2 car_carempl_div3 compexp_2020 comp_ca2020
+foreach x of local destrvar {
+destring `x', replace
+format `x' %25.0fc
+}
 */
 
 
+***********************************************************************
+* 	PART 9:  Identify and remove duplicates 
+***********************************************************************
+
+
+
+
 
 ***********************************************************************
-* 	PART 11:  autres / miscellaneous adjustments
+* 	PART 10:  autres / miscellaneous adjustments
 ***********************************************************************
-	* correct the response categories for moyen de communication
-*replace moyen_com = "site institution gouvernmentale" if moyen_com == "site web d'une autre institution gouvernementale" 
-*replace moyen_com = "bulletin d'information giz" if moyen_com == "bulletin d'information de la giz"
 
 */
 ***********************************************************************
