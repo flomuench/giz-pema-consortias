@@ -34,7 +34,7 @@ format %-20s `strvars'
 	* make all string obs lower case and trim leading and trailing white space
 foreach x of local strvars {
 replace `x'= lower(`x')
-*strtrim(`x')
+replace `x' = stritrim(strtrim(`x'))
 }
 	* numeric 
 ds, has(type numeric) 
@@ -79,12 +79,7 @@ replace complete = 1 if validation ==1 | attest ==1
 ***********************************************************************
 rename *, lower
 
-***********************************************************************
-* 	PART 4: 	Order the variables in the data set		  			
-***********************************************************************
 /*
-order id_plateforme heure date attest attest2 acceptezvousdevalidervosré 
-
 
 ***********************************************************************
 * 	PART 5: 	Rename the variables as needed
@@ -248,7 +243,7 @@ rename raisonsociale firmname
 ***********************************************************************
 * 	PART 6: 	Label the variables		  			
 ***********************************************************************
-/*
+
 {
         * label the dataset
 label data "Baseline Survey"
@@ -279,14 +274,14 @@ lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
 *lab var inno_aucune "no innovation"
-lab var inno_mot_idee "personal idea"
-lab var inno_mot_conc "exchange ideas with a competitor"
-lab var inno_mot_cons "exchange ideas with a consultant"
-lab var inno_mot_cont "exchange ideas with business network"
-lab var inno_mot_eve "exchange ideas in an event"
-lab var inno_mot_emp "exchnage ideas with employees"
-lab var inno_mot_test "test"
-lab var inno_mot_autre "other"
+*lab var inno_mot_idee "personal idea"
+*lab var inno_mot_conc "exchange ideas with a competitor"
+*lab var inno_mot_cons "exchange ideas with a consultant"
+*lab var inno_mot_cont "exchange ideas with business network"
+*lab var inno_mot_eve "exchange ideas in an event"
+*lab var inno_mot_emp "exchange ideas with employees"
+*lab var inno_mot_test "test"
+lab var inno_mot_autre "other source for innovation"
 lab var inno_rd "innovation research and development"
 
 		* Section networking size/business contacts
@@ -304,8 +299,9 @@ lab var man_fin_enr "registration of sales and purchases"
 lab var man_fin_profit "knowing the profit per product/service"
 lab var man_fin_per "frequency of examinin gfinancial performance"
 
-		* Section marketing practices
-lab var man_mark_prix  "study the prices and/or products of one of competitors"
+		* Section marketing practices: man_mark_prix was changed to man_mark_pra/
+		*but has to be verified with El-Amouri
+lab var man_mark_pra  "study the prices and/or products of one of competitors"
 lab var man_mark_div  "ask customers what other products they would like to be produced"
 lab var man_mark_clients "investigate why past customers have stopped buying from the company"
 lab var man_mark_offre "attract customers with a special offer"
@@ -328,8 +324,6 @@ lab var exp_afrique "past direct/indirect export activities to an africain count
 
 		* Section accounting
 lab var info_neces "obtaining necessary information"
-lab var comptable_numero "phone number of accountant" 
-lab var comptable_email "email of accountant"
 lab var ca_2021 "turnover in 2021"
 lab var ca_exp_2021 "export turnover in 2021"
 lab var profit_2021 "profit in 2021"
@@ -367,15 +361,17 @@ lab var att_adh3 "develop exporting skills"
 lab var att_adh4 "being part of a female business network to learn from other female CEOs"
 lab var att_adh5 "reduce export costs"
 lab var att_adh6 "other"
-lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
-lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
-lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
-lab var att_strat4 "other"
-lab var att_cont1 "no contribution"
-lab var att_cont2 "fixed, lump sum contribution"
-lab var att_cont3 "proportional contribution to the turnover"
-lab var att_cont4 "proportional contribution to the turnover achieved at export"
-lab var att_cont5 "other"
+*lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
+*lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
+*lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
+*lab var att_strat4 "other"
+*lab var att_cont1 "no contribution"
+*lab var att_cont2 "fixed, lump sum contribution"
+*lab var att_cont3 "proportional contribution to the turnover"
+*lab var att_cont4 "proportional contribution to the turnover achieved at export"
+*lab var att_cont5 "other"
+lab var att_jour "preferred day for meetings"
+/*
 lab var lundi "monday"
 lab var mardi "tuesday"
 lab var mercredi "wednesday"
@@ -388,6 +384,8 @@ lab var att_hor2 "preffered time for meeting 9-12h30"
 lab var att_hor3 "preffered time for meeting 12h30-15h30" 
 lab var att_hor4 "preffered time for meeting 15h30-19h"
 lab var att_hor5 "preffered time for meeting 18-20h"
+*/
+lab var support1 "Pas besoin de support, je me débrouille seule pour participer aux rencontres"
 lab var support2 "organize virtual meetings (zoom or skype)"
 lab var support3 "change the meeting place"
 lab var support4 "adopt a time slot before or after the regular working day"
@@ -396,17 +394,17 @@ lab var support6 "provide financial support for transportation and accommodation
 lab var support7 "other"
 
 		* Section contact & validation
-lab var tel_supl "other phone number"
-lab var attest "validation"
+lab var validation "respondent validated his/her answers"
+lab var attest "respondents attest that his/her responses correspond to truth"
 
 }
 */
 ***********************************************************************
 * 	PART 7: 	Label the variables values	  			
 ***********************************************************************
-
 /*
-local yesnovariables ident ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
+
+local yesnovariables ident ident2 man_fin_profit man_mark_pra man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
 exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1
 
 label define yesno 1 "Yes" 0 "No"
@@ -460,31 +458,11 @@ label values tel_supl label_tel_supl
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
-
-***********************************************************************
-* 	PART 8: Removing trail and leading spaces in from string variables  			
-***********************************************************************
-* Creating global according to the variable type
-global varstring info_compt2 exp_afrique_principal exp_pays_principal_21 car_attend1 car_attend2 car_attend3 exp_produit_services_avant21 exp_produit_services21 entr_histoire entr_bien_service entr_produit1 entr_produit2 entr_produit3 dig_presence3_exemples_autres investcom_benefit3_1 investcom_benefit3_2 investcom_benefit3_3 expprep_norme2
-global numvars info_compt1 dig_revenues_ecom comp_benefice2020 comp_ca2020 compexp_2020 tel_sup2 tel_sup1 car_carempl_div1 car_carempl_dive2 car_carempl_div3 dig_marketing_respons investcom_futur investcom_2021 expprep_responsable exp_pays_avant21 exp_pays_principal_avant21 exp_pays_21
-
-
-{
-ds, has(type string) 
-local strvars "`r(varlist)'"
-foreach x of local strvars {
-replace `x' = stritrim(strtrim(`x'))
-}
-}
-
 */
 
-***********************************************************************
-* 	PART 9: Manual cleaning  			
-***********************************************************************
 
 ***********************************************************************
-* 	Part 10: Save the changes made to the data		  			
+* 	Part 8: Save the changes made to the data		  			
 ***********************************************************************
 cd "$bl_intermediate"
 save "bl_inter", replace
