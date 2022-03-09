@@ -75,6 +75,23 @@ putpdf paragraph, halign(center)
 putpdf image complete_responses.png
 putpdf pagebreak
 
+*Type of support desired by firms
+gr hbar (sum) support1 - support6, blabel(total) legend (pos (6) label (1 "no support need") label(2 "virtual meetings") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "garde d'enfance") label(6 "support pour transport et heberge")) ///
+	title("Comment est-ce qu’on pourra vous faciliter la participation aux rencontres de consortium?")
+gr export support.png, replace
+putpdf paragraph, halign(center) 
+putpdf image support.png
+putpdf pagebreak
+
+*Reasons why firms want to join the program
+gr hbar (sum) att_adh1 - att_adh5, blabel(total) legend (pos (6) label (1 "Développer l’export ") label(2 "Accéder à des services d’accompagnement et de soutien à l'international") label(3 "Développer vos compétences en matière d’exportation") label (4 "Faire partie d’un réseau d’entreprise femmes pour apprendre des autres PDG femmes ") label(5 "Réduire les coûts d’exportation")) ///
+	title("Pourquoi souhaitez-vous adhérer à ce programme ?")
+gr export attents.png, replace
+putpdf paragraph, halign(center) 
+putpdf image attents.png
+putpdf pagebreak
+
+
 *Statistics with average time per survey
 /*graph bar (mean) time_survey, blabel(total) ///
 	title("Temps moyen pour remplir le sondage") 
