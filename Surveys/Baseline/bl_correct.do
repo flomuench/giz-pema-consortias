@@ -59,10 +59,12 @@ gen commentsmsb = ""
 ***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
-*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars (DOES NOT YET WORK)
+*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
 local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
 foreach var of local numvars {
 replace `var' = ustrregexra( `var',"dinars","")
+replace `var' = ustrregexra( `var',"dinar","")
+replace `var' = ustrregexra( `var',"milles","000")
 replace `var' = ustrregexra( `var',"mille","000")
 replace `var' = ustrregexra( `var',"dt","")
 replace `var' = ustrregexra( `var',"k","000")
@@ -82,14 +84,22 @@ replace `var' = ustrregexra( `var',"sept","7")
 replace `var' = ustrregexra( `var',"huit","8")
 replace `var' = ustrregexra( `var',"neuf","9")
 replace `var' = ustrregexra( `var',"dix","10")
+replace `var' = ustrregexra( `var',"O","0")
+replace `var' = ustrregexra( `var',"o","0")
+replace `var' = ustrregexra( `var',"دينار تونسي","")
+replace `var' = ustrregexra( `var',"دينار","")
+replace `var' = ustrregexra( `var',"تونسي","")
+replace `var' = ustrregexra( `var',"د","")
 replace `var' = "1000" if `var' == "000"
 replace `var' = subinstr(`var', ".", "",.)
+replace `var' = "`not_know'" if `var' =="je ne sais pas"
+replace `var' = "`not_know'" if `var' =="لا أعرف"
 
 }
 */
 
 
-*2.4 Remove linking words like un, une, des,les, from product descriptions (DOES NOT YET WORK)
+*2.4 Remove linking words like un, une, des,les, from product descriptions
 local products produit1 produit2 produit3
 foreach var of local products {
 replace `var' = ustrregexra( `var',"les ","")
@@ -108,49 +118,41 @@ replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_li
 * 	PART 3:  Manual correction (by variable not by row)
 ***********************************************************************
 *3.1 Translate arab product names and inno_mot_autre, autresapreciser to french*
+replace produit1 = "comprehensive media training course"  if produit1 =="دورة تدريبية في الاعلامي الشامل"
+replace produit1 = "deglet nour dates"  if produit1 =="تمر دقلة نور"
+replace produit1 = "tourism of all kinds: business, commerce, study, entertainment"  if produit1 =="السياحة بكل انواعها :أعمال، تجارة، دراسة، ترفيه"
+replace produit1 = "nurseries production"  if produit1 =="انتاج المشاتل"
 
+
+replace produit2 = "voice over training course"  if produit2 =="دورة تدريبية في التعليق الصوتي"
+replace produit2 = "olive oil"  if produit2 =="زيت زيتون"
+replace produit2 = "selling nurseries"  if produit2 =="بيع المشاتل"
+replace produit2 = "electrical appliances, food, clothes"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
+
+
+replace produit3 = "a course in creating content on social media platforms"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
+replace produit3 = "food and agricultural materials"  if produit3 =="مواد غذائية وزراعية"
+replace produit3 = "follow-up and agricultural guidance"  if produit3 =="المتابعة والإرشاد الفلاحي"
+replace produit3 = "buying and selling real estate in Tunisia and abroad"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
+
+
+replace inno_mot_autre = "after 16 years of experience in the field of nursery production and training in..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
 
 *3.2	Rename and homogenize the product names	  			
 	* Example
-	/*
-replace entr_produit1 = "céramique"  if entr_produit1=="ciramic"
-replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
-replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
-replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
 
-*/
 /*
+replace produit1 = "tuiles"  if produit1=="9armoud"
+replace produit1 = "dattes"  if produit1=="tmar"
+replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
+*/
+
+
 *3.3 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
-      * ca_2018:
-      * ca_2019:
-      * ca_2020:
-      * ca_2021:
-replace ca_2021 = ustrregexra( ca_2021 ,"dt","")
-replace ca_2021= "150000" if ca_2021 == "150 mille"
-replace ca_2021= "6000" if ca_2021 == "six mille dinars"
+replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
-      * ca_exp_2020:
-      * ca_exp_2021:
-replace ca_exp_2021 = ustrregexra( ca_exp_2021 ,"dt","")
-replace ca_exp_2021= "0" if ca_exp_2021 == "zero"
-replace ca_exp_2021= "0" if ca_exp_2021 == "zéro"
-replace ca_exp_2021= "20000" if ca_exp_2021 == "20 mille"
-      * profit_2021:
-replace profit_2021 = ustrregexra( profit_2021 ,"dt","")
-replace profit_2021= "1000" if profit_2021 == "mille dinars"
-replace profit_2021= "10000" if profit_2021 == "10 mille"
 
-      * ca_2018_cor:
-      * ca_2019_cor:
-replace ca_2019_cor = ustrregexra( ca_2019_cor ,"dt","")
-      * ca_2020_cor:
-replace ca_2020_cor = ustrregexra( ca_2020_cor ,"dt","")	  
-      * ca_exp2018_cor:
-      * ca_exp2019_cor: 
-      * ca_exp2020_cor:
-
-*/
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 
 
@@ -181,36 +183,7 @@ replace investcom_2021 = ustrregexra( investcom_2021,"k","000")
 //replace investcom_futur = ustrregexra( investcom_futur,"dt","")
 //replace investcom_futur = ustrregexra( investcom_futur,"k","000")
 
-* Enlever tout les déterminants du nom des produits
-{
-replace entr_produit1 = ustrregexra( entr_produit1 ,"la ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"le ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"les ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"un ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"une ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"des ","")
-
-replace entr_produit2 = ustrregexra( entr_produit2 ,"la ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"le ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"les ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"un ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"une ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"des ","")
-
-replace entr_produit3 = ustrregexra( entr_produit3 ,"la ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"le ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"les ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"un ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"une ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"des ","")
-
 replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
-
-replace investcom_futur = ustrregexra( investcom_futur ," dinars","")
-
-
-
-* Remplacer tout les points par des virgules & Enlever les virgules au niveau des numéros de téléphone
 
 
 
@@ -311,7 +284,9 @@ destring `x', replace
 * 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
 
-*/
+replace questions_needing_check = "The whole raw needs to be checked" if id_plateforme == 1237
+replace needs_check = 1 if id_plateforme == 1237
+
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
