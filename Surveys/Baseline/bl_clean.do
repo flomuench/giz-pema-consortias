@@ -345,6 +345,7 @@ lab var att_cont_autres "other"
 lab var att_hor "the best time slot to participate in consortium meetings"
 lab var att_voyage "availablibility for travel and participate in events in another city in Tunisia"
 lab var att_jour "preferred day for meetings"
+
 *lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
 *lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
 *lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
@@ -354,6 +355,7 @@ lab var att_jour "preferred day for meetings"
 *lab var att_cont3 "proportional contribution to the turnover"
 *lab var att_cont4 "proportional contribution to the turnover achieved at export"
 *lab var att_cont5 "other"
+
 /*
 lab var lundi "monday"
 lab var mardi "tuesday"
@@ -386,68 +388,88 @@ label variable list_group "treatment or control Group"
 label variable heuredébut "beginning hour"
 label variable date "date"
 label variable heurefin "finish hour"
- 
+
 }
 */
 ***********************************************************************
 * 	PART 7: 	Label the variables values	  			
 ***********************************************************************
-/*
 
-local yesnovariables ident ident2 man_fin_profit man_mark_pra man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
-exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1
+local yesnovariables ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
+exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1 ///
+inno_produit inno_process inno_lieu inno_commerce att_adh1 att_adh2 att_adh3 att_adh4 att_adh5 att_adh6 ///
+support1 support2 support3 support4 support5 support6 support7 complete
 
 label define yesno 1 "Yes" 0 "No"
-foreach var in local yesnovariables {
+foreach var of local yesnovariables {
 	label values `var' yesno
 }
 
 local frequencyvariables man_hr_obj man_hr_feed man_pro_ano man_fin_per 
 
 label define frequency 0 "Never" 1 "Annually" 2 "Monthly" 3 "Weekly" 4 "Daily"
-foreach var in local frequencyvariables {
+foreach var of local frequencyvariables {
 	label values `var' frequency
 }
 
 local agreevariables car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
 
 label define agree 1 "Strongly disagree" 2 "Disagree" 3 "Neither agree nor disagree" 4 "Agree" 5 "Strongly agree" 
-foreach var in local agreevariables {
+foreach var of local agreevariables {
 	label values `var' agree
 }
 
 label define label_list_group 1 "treatment_group" 0 "control_group"
-label values d_list_group label_list_group 
+label values list_group label_list_group 
 
-label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
-label values orienter label_orienter
+*label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
+*label values orienter label_orienter
 
 label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
 label values ident_nouveau_personne label_ident_nouveau_personne
 
-label define label_ident_repondent_position 1 "La propriétaire" 2 "La PDG" 3 "Propriétaire et PDG" 4 "Je ne veux pas répondre" 5 "Aucune des deux" 
-label values ident_repondent_position label_ident_repondent_position
+*label define label_ident_repondent_position 1 "La propriétaire" 2 "La PDG" 3 "Propriétaire et PDG" 4 "Je ne veux pas répondre" 5 "Aucune des deux" 
+*label values ident_repondent_position label_ident_repondent_position
 
 label define label_entr_bien 1 "Bien" 2 "Service" 3 "Les deux"
 label values entr_bien label_entr_bien
 
-label define label_net_coop  1 "Winning" 2 "Communication" 3 "Trust" 4 "Elimination" 5 "Exchange" 6 "Power" 7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
-label values net_coop label_net_coop
+*label define label_net_coop  1 "Winning" 2 "Communication" 3 "Trust" 4 "Elimination" 5 "Exchange" 6 "Power" 7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
+*label values net_coop label_net_coop
 
-label define label_man_fin_enr 1 "yes, in paper" 2 "yes, in digital" 3 "yes, in paper and digital" 4 "No" 
-label values man_fin_enr label_man_fin_enr
-
-label define label_exprep_couts 1 "very low" 10 "very high"
-label values exprep_couts label_exprep_couts
+label define label_aw 1 "very low" 10 "very high"
+label values aw label_aw
 
 label define label_att_voyage 1 "participant can travel" 2 "particiapant can travel if there is a financial support" 3 "participant can not travel"
 label values att_voyage label_att_voyage 
 
-label define label_tel_supl 1 "phone number 1" 2 "phone number 2"
-label values tel_supl label_tel_supl
+*label define label_tel_supl 1 "phone number 1" 2 "phone number 2"
+*label values tel_supl label_tel_supl
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
+
+* lab values of att_strat:
+replace att_strat = "participant don't have an export strategy. She would adopt that of the consortium" if att_strat == "att_strat1"  
+replace att_strat = "the consortium's strategy must be consistent with her own strategy" if att_strat == "att_strat2"  
+replace att_strat = "the company has an export strategy and the consortium is a vector for certain actions" if att_strat == "att_strat3"  
+replace att_strat = "other" if att_strat == "att_strat4"  
+
+
+* lab values of att_cont:
+replace att_cont = "no contribution" if att_cont == "att_cont1" 
+replace att_cont = "fixed, lump sum contribution" if att_cont == "att_cont2" 
+replace att_cont = "proportional contribution to the turnover" if att_cont == "att_cont3" 
+replace att_cont = "proportional contribution to the turnover achieved at export" if att_cont == "att_cont4"
+replace att_cont = "other" if att_cont == "att_cont5"   
+
+* lab values of man_fin_enr:
+tostring man_fin_enr, replace
+replace man_fin_enr = "yes, in paper" if man_fin_enr == "0.5"
+replace man_fin_enr = "yes, in digital" if man_fin_enr == "1"
+replace man_fin_enr = "yes, in paper and digital" if man_fin_enr == "1.01"
+replace man_fin_enr = "No" if man_fin_enr == "0"
+
 */
 
 

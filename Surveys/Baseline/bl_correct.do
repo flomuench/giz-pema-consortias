@@ -296,9 +296,9 @@ destring `x', replace
 * 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
 
-replace questions_needing_check = "The whole raw needs to be checked" if id_plateforme == 1237
+replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1237
 replace needs_check = 1 if id_plateforme == 1237
-replace questions_needing_check = "The whole raw needs to be checked" if id_plateforme == 1154
+replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1154
 replace needs_check = 1 if id_plateforme == 1154
 
 ***********************************************************************
