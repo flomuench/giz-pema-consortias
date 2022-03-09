@@ -118,25 +118,37 @@ replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_li
 * 	PART 3:  Manual correction (by variable not by row)
 ***********************************************************************
 *3.1 Translate arab product names and inno_mot_autre, autresapreciser to french*
-replace produit1 = "comprehensive media training course"  if produit1 =="دورة تدريبية في الاعلامي الشامل"
+replace produit1 = "cours complet de formation aux médias"  if produit1 =="دورة تدريبية في الاعلامي الشامل"
 replace produit1 = "deglet nour dates"  if produit1 =="تمر دقلة نور"
-replace produit1 = "tourism of all kinds: business, commerce, study, entertainment"  if produit1 =="السياحة بكل انواعها :أعمال، تجارة، دراسة، ترفيه"
-replace produit1 = "nurseries production"  if produit1 =="انتاج المشاتل"
+replace produit1 = "tourisme de toutes sortes : affaires, commerce, étude, divertissement"  if produit1 =="السياحة بكل انواعها :أعمال، تجارة، دراسة، ترفيه"
+replace produit1 = "pépinières production" if produit1 =="انتاج المشاتل"
 
 
-replace produit2 = "voice over training course"  if produit2 =="دورة تدريبية في التعليق الصوتي"
+replace produit2 = "cours de formation sur le voix off"  if produit2 =="دورة تدريبية في التعليق الصوتي"
 replace produit2 = "olive oil"  if produit2 =="زيت زيتون"
-replace produit2 = "selling nurseries"  if produit2 =="بيع المشاتل"
-replace produit2 = "electrical appliances, food, clothes"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
+replace produit2 = "vente de pépinières"  if produit2 =="بيع المشاتل"
+replace produit2 = "appareils électriques, nourriture, vêtements"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
 
 
-replace produit3 = "a course in creating content on social media platforms"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
-replace produit3 = "food and agricultural materials"  if produit3 =="مواد غذائية وزراعية"
-replace produit3 = "follow-up and agricultural guidance"  if produit3 =="المتابعة والإرشاد الفلاحي"
-replace produit3 = "buying and selling real estate in Tunisia and abroad"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
+replace produit3 = "un cours de création de contenu sur les plateformes de médias sociaux"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
+replace produit3 = "matériel alimentaire et agricole"  if produit3 =="مواد غذائية وزراعية"
+replace produit3 = "suivi et orientation agricole"  if produit3 =="المتابعة والإرشاد الفلاحي"
+replace produit3 = "achat et vente de biens immobiliers en Tunisie et à l'étranger"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
 
 
-replace inno_mot_autre = "after 16 years of experience in the field of nursery production and training in..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+replace inno_mot_autre = "Après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+
+
+replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
+
+replace att_adh_autres ="Développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
+
+replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
+replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
+replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if entr_idee== "تثمين المنتوجات الفلاحية و حمايتها من الإتلاف "
+replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
+replace entr_idee= "appareils électroménagers, nourriture, vêtements," if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
+
 
 *3.2	Rename and homogenize the product names	  			
 	* Example
@@ -286,6 +298,8 @@ destring `x', replace
 
 replace questions_needing_check = "The whole raw needs to be checked" if id_plateforme == 1237
 replace needs_check = 1 if id_plateforme == 1237
+replace questions_needing_check = "The whole raw needs to be checked" if id_plateforme == 1154
+replace needs_check = 1 if id_plateforme == 1154
 
 ***********************************************************************
 * 	Save the changes made to the data		  			

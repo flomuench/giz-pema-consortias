@@ -208,37 +208,6 @@ support7
 tel_supl 
 attest
 
-
- forvalues i=1/100 {
-    rename `i'"-"`varlist' `varlist'
-  }
-  
-  foreach v of var *_? {
-           local new = substr("`v'", 1, length("`v'") - 2)
-           rename `v' `new'
-}
-
-
-
-
-{
-	* Section identification
-rename id id_plateforme
-rename groupe treatment
-
-	* Section informations personnelles répresentantes
-rename nometprénomdudelaparticipa rg_nom_rep
-rename qualitéfonction rg_position_rep
-rename sexe rg_gender_rep
-rename téléphonedudelaparticipante rg_telrep 
-rename adressemaildudelaparticipan rg_emailrep
-rename téléphonedudelagérante rg_telpdg
-rename adressemaildudelagérante rg_emailpdg
-rename sexedudelagérante rg_sex_pdg
-rename adressesiègesociale rg_adresse 
-rename raisonsociale firmname 
-
-}
 */
 ***********************************************************************
 * 	PART 6: 	Label the variables		  			
@@ -251,7 +220,6 @@ notes _dta : March 2022
 notes _dta : Consortium Project
 
 
-label variable list_group "Treatment or Control Group"
 
 		* Section identification
 *lab var ident "identification"
@@ -273,6 +241,7 @@ lab var inno_produit "innovation product modification"
 lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
+lab var inno_mot "innovation motivation"
 *lab var inno_aucune "no innovation"
 *lab var inno_mot_idee "personal idea"
 *lab var inno_mot_conc "exchange ideas with a competitor"
@@ -317,6 +286,7 @@ lab var exp_pra_douane "access the customs website"
 lab var exp_pra_plan "maintain or develop an export plan"
 lab var expprep_norme "product is certified according to the quality standards in target markets"
 lab var exprep_inv "investment in export activities"
+lab var aw "investment in export activities"
 *lab var exprep_couts "costs of export activities"
 lab var exp_pays "number of countries exported to in 2021"
 lab var exp_pays_principal "main market exported to in 2021"
@@ -334,6 +304,12 @@ lab var ca_exp2020 "export turnover in 2020"
 lab var ca_exp2019 "export turnover in 2019"
 lab var ca_exp2018 "export turnover in 2018"
 lab var id_admin "tax identification number"
+lab var ca_2020_cor "turnover in 2020 corrected"
+lab var ca_exp2020_cor "export turnover in 2020 corrected"
+lab var ca_2019_cor "turnover in 2019 corrected"
+lab var ca_2018_cor "turnover in 2018 corrected"
+lab var ca_exp2019_cor "export turnover in 2019 corrected"
+lab var ca_exp_2018_cor "export turnover in 2018 corrected"
 
 		* Section characteristics of the company
 lab var car_efi_fin1 "participant have the skills to access new sources of funding"
@@ -361,6 +337,14 @@ lab var att_adh3 "develop exporting skills"
 lab var att_adh4 "being part of a female business network to learn from other female CEOs"
 lab var att_adh5 "reduce export costs"
 lab var att_adh6 "other"
+lab var att_adh_autres "other"
+lab var att_strat "role of consortium in establishing export strategy"
+lab var att_strat_autres "other"
+lab var att_cont "the best mode of financial contribution of each member in the consortium"
+lab var att_cont_autres "other"
+lab var att_hor "the best time slot to participate in consortium meetings"
+lab var att_voyage "availablibility for travel and participate in events in another city in Tunisia"
+lab var att_jour "preferred day for meetings"
 *lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
 *lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
 *lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
@@ -370,7 +354,6 @@ lab var att_adh6 "other"
 *lab var att_cont3 "proportional contribution to the turnover"
 *lab var att_cont4 "proportional contribution to the turnover achieved at export"
 *lab var att_cont5 "other"
-lab var att_jour "preferred day for meetings"
 /*
 lab var lundi "monday"
 lab var mardi "tuesday"
@@ -385,18 +368,25 @@ lab var att_hor3 "preffered time for meeting 12h30-15h30"
 lab var att_hor4 "preffered time for meeting 15h30-19h"
 lab var att_hor5 "preffered time for meeting 18-20h"
 */
-lab var support1 "Pas besoin de support, je me débrouille seule pour participer aux rencontres"
+lab var support1 "no need for support"
 lab var support2 "organize virtual meetings (zoom or skype)"
 lab var support3 "change the meeting place"
 lab var support4 "adopt a time slot before or after the regular working day"
 lab var support5 "offer free childcare during consortia meetings"
 lab var support6 "provide financial support for transportation and accommodation"
 lab var support7 "other"
-
+lab var support_autres "other"
 		* Section contact & validation
 lab var validation "respondent validated his/her answers"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
+
+		* other:
+label variable list_group "treatment or control Group"
+label variable heuredébut "beginning hour"
+label variable date "date"
+label variable heurefin "finish hour"
+ 
 }
 */
 ***********************************************************************
