@@ -208,37 +208,6 @@ support7
 tel_supl 
 attest
 
-
- forvalues i=1/100 {
-    rename `i'"-"`varlist' `varlist'
-  }
-  
-  foreach v of var *_? {
-           local new = substr("`v'", 1, length("`v'") - 2)
-           rename `v' `new'
-}
-
-
-
-
-{
-	* Section identification
-rename id id_plateforme
-rename groupe treatment
-
-	* Section informations personnelles répresentantes
-rename nometprénomdudelaparticipa rg_nom_rep
-rename qualitéfonction rg_position_rep
-rename sexe rg_gender_rep
-rename téléphonedudelaparticipante rg_telrep 
-rename adressemaildudelaparticipan rg_emailrep
-rename téléphonedudelagérante rg_telpdg
-rename adressemaildudelagérante rg_emailpdg
-rename sexedudelagérante rg_sex_pdg
-rename adressesiègesociale rg_adresse 
-rename raisonsociale firmname 
-
-}
 */
 ***********************************************************************
 * 	PART 6: 	Label the variables		  			
@@ -385,7 +354,7 @@ lab var att_hor3 "preffered time for meeting 12h30-15h30"
 lab var att_hor4 "preffered time for meeting 15h30-19h"
 lab var att_hor5 "preffered time for meeting 18-20h"
 */
-lab var support1 "Pas besoin de support, je me débrouille seule pour participer aux rencontres"
+lab var support1 "no need for support"
 lab var support2 "organize virtual meetings (zoom or skype)"
 lab var support3 "change the meeting place"
 lab var support4 "adopt a time slot before or after the regular working day"
