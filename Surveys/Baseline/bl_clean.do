@@ -301,7 +301,7 @@ lab var man_fin_per "frequency of examinin gfinancial performance"
 
 		* Section marketing practices: man_mark_prix was changed to man_mark_pra/
 		*but has to be verified with El-Amouri
-lab var man_mark_pra  "study the prices and/or products of one of competitors"
+lab var man_mark_prix  "study the prices and/or products of one of competitors"
 lab var man_mark_div  "ask customers what other products they would like to be produced"
 lab var man_mark_clients "investigate why past customers have stopped buying from the company"
 lab var man_mark_offre "attract customers with a special offer"
@@ -317,7 +317,7 @@ lab var exp_pra_douane "access the customs website"
 lab var exp_pra_plan "maintain or develop an export plan"
 lab var expprep_norme "product is certified according to the quality standards in target markets"
 lab var exprep_inv "investment in export activities"
-lab var exprep_couts "costs of export activities"
+*lab var exprep_couts "costs of export activities"
 lab var exp_pays "number of countries exported to in 2021"
 lab var exp_pays_principal "main market exported to in 2021"
 lab var exp_afrique "past direct/indirect export activities to an africain country"

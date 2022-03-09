@@ -32,9 +32,7 @@ putdocx text ("Quality checks variables: baseline consortias training"), bold
 ***********************************************************************
 * 	PART 2:  Identify variables that should be numerical but aren't	  			
 ***********************************************************************
-/*NEEDS TO BE UPDATED WITH CONSORTIA VARIABLES 
-
-local numvars info_compt1 dig_revenues_ecom comp_benefice2020 comp_ca2020 compexp_2020 tel_sup2 tel_sup1 dig_marketing_respons investcom_futur investcom_2021 expprep_responsable exp_pays_avant21  exp_pays_21 car_carempl_div1 car_carempl_dive2 car_carempl_div3 dig_service_responsable investcom_benefit2 investcom_benefit1 car_pdg_age car_adop_peer car_credit1 car_risque
+local numvars ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
 
 local correct_vars 
 local incorrect_vars
@@ -72,7 +70,7 @@ replace duplabel`x' = id_plateforme if dup`x' > 0
 }
 		* visualise and save the visualisations
 
-alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
+/*alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
 gen duplabel = .
 replace duplabel = id_plateforme if dup_id_admin > 0 | dup_firmname > 0 | dup_rg_nom_rep > 0 | dup_rg_telrep > 0 | dup_rg_emailrep > 0 | dup_rg_telpdg > 0 | dup_rg_emailpdg > 0
 stripplot id_plateforme, over(dup_firmname) jitter(4) vertical mlabel(duplabel) /* alternative: scatter id_plateforme dup_firmname, jitter(4) mlabel(duplabel) */
