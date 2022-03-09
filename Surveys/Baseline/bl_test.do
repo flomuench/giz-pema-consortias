@@ -30,36 +30,42 @@ use "${bl_intermediate}/bl_inter", clear
 /* --------------------------------------------------------------------
 	PART 2.1: Comptabilité / accounting questions
 ----------------------------------------------------------------------*/		
-/
+
 * If any of the accounting vars has missing value or zero, create 
 
-local accountvars ca_2021 ca_exp_2021 profit_2021 inno_rd exprep_inv
-
+local accountvars ca_2021 ca_exp_2021 profit_2021
 
 foreach var of local accountvars {
 	replace check_again = 2 if `var' == 0 
-	replace questions_needing_checks = questions_needing_checks + "`var' zero, validé /" if `var' == 0 & validation==1
+	replace questions_needing_checks = questions_needing_checks + "`var' zero/ " if `var' == 0 
 	replace check_again = 2 if `var' == . 
-	replace questions_needing_checks = questions_needing_checks + "`var' manque, validé /" if `var' == . & validation==1
+	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
 }
 
-/* check whether the companies that had to re-fill accounting data actually corrected it
+local accountvars2  inno_rd exprep_inv
+foreach var of local accountvars2 {
+	replace check_again = 2 if `var' == . 
+	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
+}
 
-local vars_checked ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020
+
+*check whether the companies that had to re-fill accounting data actually corrected it
+/*
+local vars_checked ca_2018_cor ca_exp2018_cor ca_2019 ca_exp2019 ca_2020 ca_exp2020
 foreach var of local vars_checked {
-	replace check_again = 2 if `var' == . & needs_check==1
+	replace check_again = 3 if `var' == . & needs_check==1
 	replace questions_needing_checks = questions_needing_checks + "`var' manque, validé /" if `var' == .& needs_check==1 
 	
-	replace check_again = 2 if `var' == 0 & needs_check==1  & validation==1
+	replace check_again = 3 if `var' == 0 & needs_check==1  & validation==1
 	replace questions_needing_checks = questions_needing_checks +  "`var' zero, validé /" if `var' == 0 & needs_check==1 
 
 }
-
+*/
 
 * If profits are larger than 'chiffres d'affaires' need to check: 
  
-replace check_again = 2 if profit2021>ca_2021 & ca_2021!=. & profit2021!=.
-replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA/ " if profit2021>ca_2021 & ca_2021!=. & profit2021!=.
+replace check_again = 3 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
+replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=.
 
 
 * Check if export values are larger than total revenues 
@@ -85,38 +91,36 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 *firms that reported to be exporters according to registration data
 
 replace check_again=1 if operation_export==1 & exp_pays==. 
-replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur/" if operation_export==1 & exp_pays==0 
+replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur selon registre/ " if operation_export==1 & exp_pays==. 
 replace check_again=1 if operation_export==1 & exp_pays==0 
-replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur/" if operation_export==1 & exp_pays==0 
+replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0 
 
 
 * If number of export countries is higher than 50 – needs check 
 replace check_again=1 if exp_pays>49 & exp_pays!=.
-replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé/"
+replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé/ " if exp_pays>49 & exp_pays!=.
 
-
-
-
-
-
+*Add 1 point in priority if survey was validated
+replace check_again = check_again+1 if validation==1 & check_again>0
 
 ***********************************************************************
-* 	Part 3 Export an excel sheet with needs_check variables  			
+* 	Part 3 Re-shape the correction sheet			
 ***********************************************************************
-
-capture drop dup
-
-sort id_plateforme, stable
-
-quietly by id_plateforme:  gen dup = cond(_N==1,0,_n)
-
-replace needs_check = 1 if dup>0
-
+preserve
+split questions_needing_checks, parse(/) generate(questions)
+drop questions_needing_checks 
+reshape long questions, i(id_plateforme)
+drop if questions==""
+by id_plateforme: gene nombre_questions=_n
+drop _j
 gen commentaires_ElAmouri = .
-
+gen valeur_actuelle=.
+gen correction_propose=.
+gen correction_valide=.
 cd "$bl_checks"
+order id_plateforme miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
+export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche de correction" if check_again>=1,  firstrow(variables)replace
+restore
 
-order id_plateforme check questions_needing_check commentaires_ElAmouri commentsmsb 
 
-export excel commentaires_ElAmouri id_plateforme commentsmsb check questions_needing_check heure date-dig_logistique_retour_score using "fiche_correction" if needs_check>=1, firstrow(variables) replace
 

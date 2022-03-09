@@ -346,6 +346,16 @@ lab var att_hor "the best time slot to participate in consortium meetings"
 lab var att_voyage "availablibility for travel and participate in events in another city in Tunisia"
 lab var att_jour "preferred day for meetings"
 
+*lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
+*lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
+*lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
+*lab var att_strat4 "other"
+*lab var att_cont1 "no contribution"
+*lab var att_cont2 "fixed, lump sum contribution"
+*lab var att_cont3 "proportional contribution to the turnover"
+*lab var att_cont4 "proportional contribution to the turnover achieved at export"
+*lab var att_cont5 "other"
+
 /*
 lab var lundi "monday"
 lab var mardi "tuesday"
@@ -372,13 +382,13 @@ lab var support_autres "other"
 lab var validation "respondent validated his/her answers"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
+
 		* other:
 label variable list_group "treatment or control Group"
 label variable heuredébut "beginning hour"
 label variable date "date"
 label variable heurefin "finish hour"
 
- 
 }
 */
 ***********************************************************************
