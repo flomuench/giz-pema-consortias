@@ -57,30 +57,30 @@ gen commentsmsb = ""
 
 
 
-
 ***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
-/* 2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
-local numvars ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
+/*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars (DOES NOT YET WORK)
+local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
 foreach var of local numvars {
-ustrregexra( `var',"dinars",""))
-ustrregexra( `var',"dinar",""))
-ustrregexra( `var',"k","000"))
-ustrregexra( `var',"dt",""))
-ustrregexra( `var',"tnd",""))
-ustrregexra( `var',"TND","")
-ustrregexra( `var',",","")
-ustrregexra( `var',".","")
-ustrregexra( `var',"zéro","0")
-ustrregexra( `var',"zero","0")
-ustrregexra( `var'," ","")
+replace `var' = ustrregexra( `var',"dinars","")
+replace `var' = ustrregexra( `var',"dinar","")
+replace `var' = ustrregexra( `var',"mille","000")
+replace `var' = ustrregexra( `var',"dt","")
+replace `var' = ustrregexra( `var',"k","000")
+replace `var' = ustrregexra( `var',"dt","")
+replace `var' = ustrregexra( `var',"tnd","")
+replace `var' = ustrregexra( `var',"TND","")
+replace `var' = ustrregexra( `var',".","")
+replace `var' = ustrregexra( `var',"zéro","0")
+replace `var' = ustrregexra( `var',"zero","0")
+replace `var' = ustrregexra( `var'," ","")
 }
 */
 
 
 
-/*2.4 Remove linking words like un, une, des,les, from product descriptions
+/*2.4 Remove linking words like un, une, des,les, from product descriptions (DOES NOT YET WORK)
 local products produit1 produit2 produit3
 foreach var of local products {
 ustrregexra( `var',"les ",""))
