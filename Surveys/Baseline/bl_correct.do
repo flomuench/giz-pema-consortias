@@ -56,39 +56,48 @@ gen commentsmsb = ""
 * duplicates tag id_plateforme, gen(dup)
 
 
-
 ***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
-/*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars (DOES NOT YET WORK)
-local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
+*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars (DOES NOT YET WORK)
+local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
 foreach var of local numvars {
 replace `var' = ustrregexra( `var',"dinars","")
-replace `var' = ustrregexra( `var',"dinar","")
 replace `var' = ustrregexra( `var',"mille","000")
 replace `var' = ustrregexra( `var',"dt","")
 replace `var' = ustrregexra( `var',"k","000")
 replace `var' = ustrregexra( `var',"dt","")
 replace `var' = ustrregexra( `var',"tnd","")
 replace `var' = ustrregexra( `var',"TND","")
-replace `var' = ustrregexra( `var',".","")
 replace `var' = ustrregexra( `var',"zéro","0")
 replace `var' = ustrregexra( `var',"zero","0")
 replace `var' = ustrregexra( `var'," ","")
+replace `var' = ustrregexra( `var',"un","1")
+replace `var' = ustrregexra( `var',"deux","2")
+replace `var' = ustrregexra( `var',"trois","3")
+replace `var' = ustrregexra( `var',"quatre","4")
+replace `var' = ustrregexra( `var',"cinq","5")
+replace `var' = ustrregexra( `var',"six","6")
+replace `var' = ustrregexra( `var',"sept","7")
+replace `var' = ustrregexra( `var',"huit","8")
+replace `var' = ustrregexra( `var',"neuf","9")
+replace `var' = ustrregexra( `var',"dix","10")
+replace `var' = "1000" if `var' == "000"
+replace `var' = subinstr(`var', ".", "",.)
+
 }
 */
 
 
-
-/*2.4 Remove linking words like un, une, des,les, from product descriptions (DOES NOT YET WORK)
+*2.4 Remove linking words like un, une, des,les, from product descriptions (DOES NOT YET WORK)
 local products produit1 produit2 produit3
 foreach var of local products {
-ustrregexra( `var',"les ",""))
-ustrregexra( `var',"des ",""))
-ustrregexra( `var',"un ",""))
-ustrregexra( `var',"une ",""))
-ustrregexra( `var',"la ",""))
-ustrregexra( `var',"le ",""))
+replace `var' = ustrregexra( `var',"les ","")
+replace `var' = ustrregexra( `var',"des ","")
+replace `var' = ustrregexra( `var',"un ","")
+replace `var' = ustrregexra( `var',"une ","")
+replace `var' = ustrregexra( `var',"la ","")
+replace `var' = ustrregexra( `var',"le ","")
 }
 */ 
 
@@ -109,12 +118,39 @@ replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
 replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
 replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
 
-
+*/
+/*
 *3.3 Manually Transform any remaining "word numerics" to actual numerics 
+* browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
+      * ca_2018:
+      * ca_2019:
+      * ca_2020:
+      * ca_2021:
+replace ca_2021 = ustrregexra( ca_2021 ,"dt","")
+replace ca_2021= "150000" if ca_2021 == "150 mille"
+replace ca_2021= "6000" if ca_2021 == "six mille dinars"
 
+      * ca_exp_2020:
+      * ca_exp_2021:
+replace ca_exp_2021 = ustrregexra( ca_exp_2021 ,"dt","")
+replace ca_exp_2021= "0" if ca_exp_2021 == "zero"
+replace ca_exp_2021= "0" if ca_exp_2021 == "zéro"
+replace ca_exp_2021= "20000" if ca_exp_2021 == "20 mille"
+      * profit_2021:
+replace profit_2021 = ustrregexra( profit_2021 ,"dt","")
+replace profit_2021= "1000" if profit_2021 == "mille dinars"
+replace profit_2021= "10000" if profit_2021 == "10 mille"
 
+      * ca_2018_cor:
+      * ca_2019_cor:
+replace ca_2019_cor = ustrregexra( ca_2019_cor ,"dt","")
+      * ca_2020_cor:
+replace ca_2020_cor = ustrregexra( ca_2020_cor ,"dt","")	  
+      * ca_exp2018_cor:
+      * ca_exp2019_cor: 
+      * ca_exp2020_cor:
 
-
+*/
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 
 
@@ -261,16 +297,12 @@ lab var q42f "(in-) formel argument de vente"
 ***********************************************************************
 
 * 8.1 Destring remaining numerical vars
-* local destrvar XX
-*foreach x of local destrvar { 
-*destring `x', replace
-/*
-local destrvar investcom_futur investcom_2021 dig_revenues_ecom comp_benefice2020 car_carempl_div1 car_carempl_dive2 car_carempl_div3 compexp_2020 comp_ca2020
-foreach x of local destrvar {
+local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
+foreach x of local destrvar { 
 destring `x', replace
-format `x' %25.0fc
+*format `x' %25.0fc
 }
-*/
+
 
 
 
