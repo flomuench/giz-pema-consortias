@@ -61,17 +61,36 @@ gen commentsmsb = ""
 ***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
-* 2.1 Remove commas, dots, dt and dinar from numeric vars
+/* 2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
+local numvars ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
+foreach var of local numvars {
+ustrregexra( `var',"dinars",""))
+ustrregexra( `var',"dinar",""))
+ustrregexra( `var',"k","000"))
+ustrregexra( `var',"dt",""))
+ustrregexra( `var',"tnd",""))
+ustrregexra( `var',"TND","")
+ustrregexra( `var',",","")
+ustrregexra( `var',".","")
+ustrregexra( `var',"zéro","0")
+ustrregexra( `var',"zero","0")
+ustrregexra( `var'," ","")
+}
+*/
 
 
-*2.2 Turn zero, zéro into 0 for all numeric vars
 
-
-*2.3 Use strim trim to remove space BETWEEN numbers/characters in accounting variables*
-
-
-*2.4 Remove linking words like un, une, des,les, from product descriptions
-
+/*2.4 Remove linking words like un, une, des,les, from product descriptions
+local products produit1 produit2 produit3
+foreach var of local products {
+ustrregexra( `var',"les ",""))
+ustrregexra( `var',"des ",""))
+ustrregexra( `var',"un ",""))
+ustrregexra( `var',"une ",""))
+ustrregexra( `var',"la ",""))
+ustrregexra( `var',"le ",""))
+}
+*/ 
 
 *2.5 fill inno_mot for firms without innovations
 replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_lieu==0 & inno_commerce==0
