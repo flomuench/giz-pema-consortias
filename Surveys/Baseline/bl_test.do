@@ -50,14 +50,14 @@ foreach var of local accountvars2 {
 
 
 *check whether the companies that had to re-fill accounting data actually corrected it
-/*
-local vars_checked ca_2018_cor ca_exp2018_cor ca_2019 ca_exp2019 ca_2020 ca_exp2020
+
+local vars_checked ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor
 foreach var of local vars_checked {
 	replace check_again = 3 if `var' == . & needs_check==1
-	replace questions_needing_checks = questions_needing_checks + "`var' manque, validé /" if `var' == .& needs_check==1 
+	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& needs_check==1 
 	
 	replace check_again = 3 if `var' == 0 & needs_check==1  & validation==1
-	replace questions_needing_checks = questions_needing_checks +  "`var' zero, validé /" if `var' == 0 & needs_check==1 
+	replace questions_needing_checks = questions_needing_checks +  "`var' zero, entreprise dans la liste pour re-fournier donnés 2018-2020  /" if `var' == 0 & needs_check==1 
 
 }
 */
@@ -78,7 +78,7 @@ replace questions_needing_checks = questions_needing_checks + "Exports plus éle
 replace check_again =2 if ca_exp_2021<500 & ca_exp_2021>0
 replace questions_needing_checks = questions_needing_checks + "export moins que 500 TND/ " if ca_exp_2021<500 & ca_exp_2021>0
 
-replace check_again =2 if ca_2021<1000 & ca_2021>0 & validation==1
+replace check_again =2 if ca_2021<1000 & ca_2021>0
 replace questions_needing_checks = questions_needing_checks + "CA moins que 1000 TND/ " if ca_exp_2021<500 & ca_exp_2021>0
 
 replace check_again =2 if profit_2021<100 & profit_2021>0 
@@ -90,11 +90,24 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 ***********************************************************************
 *firms that reported to be exporters according to registration data
 
-replace check_again=1 if operation_export==1 & exp_pays==. 
+replace check_again=2 if operation_export==1 & exp_pays==. 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur selon registre/ " if operation_export==1 & exp_pays==. 
-replace check_again=1 if operation_export==1 & exp_pays==0 
-replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0 
+replace check_again=2 if operation_export==1 & exp_pays==0 
+replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0
 
+replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+replace questions_needing_checks = questions_needing_checks + " ca_exp2021 manquent mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+
+replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==0
+replace questions_needing_checks = questions_needing_checks + " ca_exp2021 zéro mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+
+replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==. 
+replace questions_needing_checks = questions_needing_checks + " ca_2021 manquent mais ca_2021 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==.  
+
+replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==0
+replace questions_needing_checks = questions_needing_checks + " ca_2021 zéro mais ca_2020 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==0
+
+ 
 
 * If number of export countries is higher than 50 – needs check 
 replace check_again=1 if exp_pays>49 & exp_pays!=.
