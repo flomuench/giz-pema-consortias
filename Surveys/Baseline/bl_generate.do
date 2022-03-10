@@ -117,7 +117,7 @@ label var inno_pers "Innovation coming from a personal/ employee inniative "
 
 	* Create continuous variable for number of innovation: 
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
-label var num_inno "Number of innovation done by a firm"
+label var num_inno "Number of different types innovation introduced by a firm"
 
 
 /*

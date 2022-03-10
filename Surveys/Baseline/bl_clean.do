@@ -41,6 +41,35 @@ ds, has(type numeric)
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
 
+
+{
+* dates
+		* creation (HOURS TRANSFORMATION DOES NOT YET WORK)
+format Date %td
+replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
+replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
+replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
+str2time Heuredébut, generate(eHeuredébut)
+
+replace Heurefin = ustrregexra( Heurefin ,"h",":")
+replace Heurefin = ustrregexra( Heurefin ,"`",":")
+replace Heurefin = substr(Heurefin,1,length(Heuredébut)-1)
+str2time Heurefin, generate(eHeurefin)
+
+* Creation of the time variable
+/*gen etime = eHeurefin - eHeuredébut
+
+*gen etime_positive = etime* -1 if etime < 0 &else if etime >
+time2str etime_positive, generate(time)
+label var time "durée du questionnaire par entreprise"
+
+
+drop etime
+drop etime_positive
+drop eHeuredébut
+drop eHeurefin*/
+}
+
 }
 	* keep dates as string variables for RA quality checks
 gen date_creation_string = Date
@@ -78,6 +107,10 @@ rename *, lower
 ***********************************************************************
 * 	PART 5: 	Rename the variables as needed
 ***********************************************************************
+
+*rename aw exprep_couts
+/*
+
 ident 
 orienter 
 ident2
@@ -245,7 +278,9 @@ notes _dta : March 2022
 notes _dta : Consortium Project
 
 
-label variable list_group "Treatment or Control Group"
+
+*label variable list_group "Treatment or Control Group"
+
 
 		* Section identification
 *lab var ident "identification"
@@ -295,7 +330,7 @@ lab var man_fin_per "frequency of examinin gfinancial performance"
 
 		* Section marketing practices: man_mark_prix was changed to man_mark_pra/
 		*but has to be verified with El-Amouri
-lab var man_mark_pra  "study the prices and/or products of one of competitors"
+lab var man_mark_prix  "study the prices and/or products of one of competitors"
 lab var man_mark_div  "ask customers what other products they would like to be produced"
 lab var man_mark_clients "investigate why past customers have stopped buying from the company"
 lab var man_mark_offre "attract customers with a special offer"
