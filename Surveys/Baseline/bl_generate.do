@@ -58,7 +58,7 @@ generate inno_mot5 = regexm(inno_mot, "inno_mot_eve")
 generate inno_mot6 = regexm(inno_mot, "inno_mot_emp")
 generate inno_mot7 = regexm(inno_mot, "inno_mot_test")
 generate inno_mot8 = regexm(inno_mot, "inno_mot_autre")
-label var inno_mot1 "Idée personnelle."
+label var inno_mot1 "Idée personnelle"
 label var inno_mot2 "Concurrent"
 label var inno_mot3 "Consultant"
 label var inno_mot4 "Contact affaires"
@@ -92,8 +92,34 @@ label var att_hor2 "9-12h30"
 label var att_hor3 "12h30-15h30"
 label var att_hor4 "15h30-19h"
 label var att_hor5 "18-20h"
- 
- 
+
+    *Convert the above variables in numeric (non float variables)
+local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 
+foreach x of local destrvar {
+destring `x', replace
+format `x' %25.0fc
+}
+	
+	* 2.2 Create calculated variables
+
+	* Creation of positive and negative network cooperation variables
+generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
+label var net_coop_pos "Positive answers for the the perception of interactions between CEOs" 
+generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
+label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
+
+	* Create variable to know if personal idea or not
+generate inno_pers = 0
+replace inno_pers = 1 if inno_mot1 == 1 
+replace inno_pers = 1 if inno_mot5 == 1 
+replace inno_pers = 1 if inno_mot6 == 1
+label var inno_pers "Innovation coming from a personal/ employee inniative "
+
+	* Create continuous variable for number of innovation: 
+generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
+label var num_inno "Number of innovation done by a firm"
+
+
 /*
 gen netcoop=1 if net_coop== "Gagner"
 replace netcoop=2 if net_coop== "Éloigner"
