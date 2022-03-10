@@ -18,11 +18,12 @@
 *	10)		Remove duplicates
 *
 *																	  															      
-*	Author:  	Florian Muench & Kais Jomaa							  
+*	Author:  	Fabian Scheifele, Kais Jomaa & Siwar Jakim							  
 *	ID variaregise: 	id (example: f101)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			                          
-*																	  
+*	
+																  
 ***********************************************************************
 * 	PART 1:  Define non-response categories  			
 ***********************************************************************
@@ -38,44 +39,162 @@ foreach x of local strvars {
 	
 scalar not_know    = -999
 scalar refused     = -888
-scalar check_again = -777
 
 local not_know    = -999
 local refused     = -888
-local check_again = -777
 
 	* replace, gen, label
-gen check = 0
+gen check_again = 0
 gen questions_needing_checks = ""
 gen commentsmsb = ""
 */
 }
 
 ***********************************************************************
-* 	PART 2:  Manually fix wrong answers
+* 	PART 1.2:  Identify and remove duplicates 
 ***********************************************************************
+sort id_plateforme heuredébut
+quietly by id_plateforme heuredébut:  gen dup = cond(_N==1,0,_n)
+drop if dup>1
 
-{
-* Needs check
-//replace needs_check = 1 if id_plateforme = 572== "a"
-//replace needs_check = 1 if id_plateforme = 572 == "aa"
+/*duplicates report id_plateforme heuredébut
+duplicates tag id_plateforme heuredébut, gen(dup)
+drop if dup>1
+*/
 
+
+*Individual duplicate drops (where heure debut is not the same). If the re-shape
+*command in bl_test gives an error it is because there are remaining duplicates,
+*please check them individually and drop (actually el-amouri is supposed to that)
+drop if id_plateforme==1239 & heuredébut=="16h02`55``"
+
+*restore original order
+sort date heuredébut
+***********************************************************************
+* 	PART 2:  Automatic corrections
+***********************************************************************
+*2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
+local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
+foreach var of local numvars {
+replace `var' = ustrregexra( `var',"dinars","")
+replace `var' = ustrregexra( `var',"dinar","")
+replace `var' = ustrregexra( `var',"milles","000")
+replace `var' = ustrregexra( `var',"mille","000")
+replace `var' = ustrregexra( `var',"dt","")
+replace `var' = ustrregexra( `var',"k","000")
+replace `var' = ustrregexra( `var',"dt","")
+replace `var' = ustrregexra( `var',"tnd","")
+replace `var' = ustrregexra( `var',"TND","")
+replace `var' = ustrregexra( `var',"zéro","0")
+replace `var' = ustrregexra( `var',"zero","0")
+replace `var' = ustrregexra( `var'," ","")
+replace `var' = ustrregexra( `var',"un","1")
+replace `var' = ustrregexra( `var',"deux","2")
+replace `var' = ustrregexra( `var',"trois","3")
+replace `var' = ustrregexra( `var',"quatre","4")
+replace `var' = ustrregexra( `var',"cinq","5")
+replace `var' = ustrregexra( `var',"six","6")
+replace `var' = ustrregexra( `var',"sept","7")
+replace `var' = ustrregexra( `var',"huit","8")
+replace `var' = ustrregexra( `var',"neuf","9")
+replace `var' = ustrregexra( `var',"dix","10")
+replace `var' = ustrregexra( `var',"O","0")
+replace `var' = ustrregexra( `var',"o","0")
+replace `var' = ustrregexra( `var',"دينار تونسي","")
+replace `var' = ustrregexra( `var',"دينار","")
+replace `var' = ustrregexra( `var',"تونسي","")
+replace `var' = ustrregexra( `var',"د","")
+replace `var' = ustrregexra( `var',"d","")
+replace `var' = ustrregexra( `var',"na","")
+replace `var' = "1000" if `var' == "000"
+replace `var' = subinstr(`var', ".", "",.)
+replace `var' = subinstr(`var', ",", ".",.)
+replace `var' = "`not_know'" if `var' =="je ne sais pas"
+replace `var' = "`not_know'" if `var' =="لا أعرف"
+
+}
+*/
+
+
+*2.4 Remove linking words like un, une, des,les, from product descriptions
+local products produit1 produit2 produit3
+foreach var of local products {
+replace `var' = ustrregexra( `var',"les ","")
+replace `var' = ustrregexra( `var',"des ","")
+replace `var' = ustrregexra( `var',"un ","")
+replace `var' = ustrregexra( `var',"une ","")
+replace `var' = ustrregexra( `var',"la ","")
+replace `var' = ustrregexra( `var',"le ","")
+}
+*/ 
+
+*2.5 fill inno_mot for firms without innovations
+replace inno_mot ="no innovation" if inno_produit==0 & inno_process==0 & inno_lieu==0 & inno_commerce==0
+
+***********************************************************************
+* 	PART 3:  Manual correction (by variable not by row)
+***********************************************************************
+*3.1 Translate arab product names and inno_mot_autre, autresapreciser to french*
+replace produit1 = "cours complet de formation aux médias"  if produit1 =="دورة تدريبية في الاعلامي الشامل"
+replace produit1 = "deglet nour dates"  if produit1 =="تمر دقلة نور"
+replace produit1 = "tourisme de toutes sortes : affaires, commerce, étude, divertissement"  if produit1 =="السياحة بكل انواعها :أعمال، تجارة، دراسة، ترفيه"
+replace produit1 = "pépinières production" if produit1 =="انتاج المشاتل"
+
+
+replace produit2 = "cours de formation sur le voix off"  if produit2 =="دورة تدريبية في التعليق الصوتي"
+replace produit2 = "olive oil"  if produit2 =="زيت زيتون"
+replace produit2 = "vente de pépinières"  if produit2 =="بيع المشاتل"
+replace produit2 = "appareils électriques, nourriture, vêtements"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
+
+
+replace produit3 = "un cours de création de contenu sur les plateformes de médias sociaux"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
+replace produit3 = "matériel alimentaire et agricole"  if produit3 =="مواد غذائية وزراعية"
+replace produit3 = "suivi et orientation agricole"  if produit3 =="المتابعة والإرشاد الفلاحي"
+replace produit3 = "achat et vente de biens immobiliers en Tunisie et à l'étranger"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
+
+
+replace inno_mot_autre = "Après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+
+
+replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
+
+replace att_adh_autres ="Développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
+
+replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
+replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
+replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if entr_idee== "تثمين المنتوجات الفلاحية و حمايتها من الإتلاف "
+replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
+replace entr_idee= "appareils électroménagers, nourriture, vêtements," if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
+
+
+*3.2	Rename and homogenize the product names	  			
+	* Example
 
 /*
-* Questions needing check
-*replace questions_needing_check = "investcom_2021/investcom_futur" if id_plateforme==572
-*replace questions_needing_check = "exp_pays_21" if id_plateforme==757
-*replace questions_needing_check = "comp_benefice2020" if id_plateforme==592
-*replace needs_check = 1 if id_plateforme == 592
-*replace questions_needing_check = "compexp_2020/comp_ca2020/comp_benefice2020" if id_plateforme==365
-*replace questions_needing_check = "dig_revenues_ecom" if id_plateforme==375
-replace questions_needing_check = "comp_benefice2020" if id_plateforme == 89
-replace needs_check = 1 if id_plateforme == 89
+replace produit1 = "tuiles"  if produit1=="9armoud"
+replace produit1 = "dattes"  if produit1=="tmar"
+replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
+*/
+
+
+*3.3 Manually Transform any remaining "word numerics" to actual numerics 
+* browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
+replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
+
+
+*3.4 Mark any non-numerical answers to numeric questions as check_again=1
+
+
+
+*3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
+
+
 
 
 
 ***********************************************************************
-* 	PART 3: use regular expressions to correct variables 		  			
+* 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
 ***********************************************************************
 /* for reference and guidance, regularly these commands are used in this section
 gen XXX = ustrregexra(XXX, "^216", "")
@@ -86,48 +205,19 @@ lab def correct 1 "correct" 0 "incorrect"
 lab val id_adminrect correct
 
 */
-
+/*
 * Correction des variables investissement
 replace investcom_2021 = ustrregexra( investcom_2021,"k","000")
 //replace investcom_futur = ustrregexra( investcom_futur,"dinars","")
 //replace investcom_futur = ustrregexra( investcom_futur,"dt","")
 //replace investcom_futur = ustrregexra( investcom_futur,"k","000")
 
-* Enlever tout les déterminants du nom des produits
-{
-replace entr_produit1 = ustrregexra( entr_produit1 ,"la ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"le ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"les ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"un ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"une ","")
-replace entr_produit1 = ustrregexra( entr_produit1 ,"des ","")
-
-replace entr_produit2 = ustrregexra( entr_produit2 ,"la ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"le ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"les ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"un ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"une ","")
-replace entr_produit2 = ustrregexra( entr_produit2 ,"des ","")
-
-replace entr_produit3 = ustrregexra( entr_produit3 ,"la ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"le ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"les ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"un ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"une ","")
-replace entr_produit3 = ustrregexra( entr_produit3 ,"des ","")
-
 replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
-
-replace investcom_futur = ustrregexra( investcom_futur ," dinars","")
-
-
-
-* Remplacer tout les points par des virgules & Enlever les virgules au niveau des numéros de téléphone
 
 
 
 ***********************************************************************
-* 	PART 4:  Replace string with numeric values		  			
+* 	EXAMPLE CODE:  Replace string with numeric values		  			
 ***********************************************************************
 {
 *Remplacer les textes de la variable investcom_2021
@@ -143,47 +233,19 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 }
 
 ***********************************************************************
-* 	PART 5:  Convert string to numerical variabales	  			
-***********************************************************************
-* local destrvar XX
-*foreach x of local destrvar { 
-*destring `x', replace
-local destrvar investcom_futur investcom_2021 dig_revenues_ecom comp_benefice2020 car_carempl_div1 car_carempl_dive2 car_carempl_div3 compexp_2020 comp_ca2020
-foreach x of local destrvar {
-destring `x', replace
-format `x' %25.0fc
-}
-
-***********************************************************************
-* 	PART 6:  Convert problematic values for open-ended questions  			
+* 	PART 5:  Highlight non-sensical values for open and numerical answers(answers that do not correspond to the desired answer format)  			
 ***********************************************************************
 
-* Correction de la variable investcom_2021
-*replace investcom_2021 = "`check_again'" if investcom_2021== "a"
-*replace investcom_2021 = "30000" if investcom_2021== "trente milles dinars"
+* Marquer non-sensical value with check_again=1 and question_needing_check with the problem
 
 
-***********************************************************************
-* 	PART 7:  Traduction reponses en arabe au francais		  			
-***********************************************************************
 
-*Traduction des produits principaux de l'entreprise
-replace entr_produit1 = "Farine à la tomate" if entr_produit1 == "فارينة طماطم"
 
+
+*/
 
 ***********************************************************************
-* 	PART 8: 	Rename and homogenize the observed values		  			
-***********************************************************************
-
-	* Sectionname
-replace entr_produit1 = "céramique"  if entr_produit1=="ciramic"
-replace entr_produit1 = "tuiles"  if entr_produit1=="9armoud"
-replace entr_produit1 = "dattes"  if entr_produit1=="tmar"
-replace entr_produit1 = "maillots de bain"  if entr_produit1=="mayo de bain"
-
-
-***********************************************************************
-* 	PART 9:  Import categorisation for opend ended QI questions
+* 	PART 6:  Import categorisation for opend ended QI questions (NOT REQUIRED AT THE MOMENT)
 ***********************************************************************
 {
 /*
@@ -233,82 +295,29 @@ lab var q42f "(in-) formel argument de vente"
 
 
 ***********************************************************************
-* 	PART 10:  Convert data types to the appropriate format
-***********************************************************************
-* Convert string variable to integer variables
-
-
-***********************************************************************
-* 	PART 11:  Identify and remove duplicates 
+* 	PART 7:  Convert data types to the appropriate format
 ***********************************************************************
 
-* Dropping duplicates:
-{
-
-drop if id_plateforme == 813
-	
+* 8.1 Destring remaining numerical vars
+local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
+foreach x of local destrvar { 
+destring `x', replace
+*format `x' %25.0fc
 }
 
-* Correcting the second duplicates:
-{
-replace id_base_repondent= "sana farjallah" if id_plateforme == 108
-replace entr_produit1= "skit solaire connecté réseau,site isolé et pompage solaire" if id_plateforme == 108
-replace i= "africa@growatt.pro" if id_plateforme == 108
 
-	* Drop incomplete answers (only once the survey is complete!!!)
-	
-//keep if complete==1
-
-	* Check remaining duplicates (after manual corrections above)
-	
-bysort id_plateforme:  gen dup = cond(_N==1,0,_n)	
-
-	// 350 total obs | 239 unique
-
-	* Check which observations are more complete
-	
-ds, has(type numeric)
-local all_nums `r(varlist)'
-
-egen sum_allvars = rowtotal(`all_nums')
-
-	* Drop duplicates that are less complete
-
-bysort id_plateforme: egen max_length = max(sum_allvars)
-
-// Suggestion to check which are duplicates – turn duplicate observations
-// that is shorter (ie has fewer answers) into dup==4
-
-replace dup = 4 if dup>0 & sum_allvars<max_length
-
-// you can now sort id_plateforme dup and check if indeed the one coded 4 
-// is to be dropped
-drop if dup ==4 & attest!=1 & attest2!=1 & acceptezvousdevalidervosré!=1
-
-drop if id_plateforme == 70 & dup == 4
-drop if id_plateforme == 82 & dup == 4
-drop if id_plateforme == 91 & dup == 4
-
-/*
-drop if dup>0 & sum_allvars<max_length
-
-drop dup
-
-bysort id_plateforme:  gen dup = cond(_N==1,0,_n)	
- 
-keep if dup<2
-*/
 
 
 
 ***********************************************************************
-* 	PART 11:  autres / miscellaneous adjustments
+* 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
-	* correct the response categories for moyen de communication
-*replace moyen_com = "site institution gouvernmentale" if moyen_com == "site web d'une autre institution gouvernementale" 
-*replace moyen_com = "bulletin d'information giz" if moyen_com == "bulletin d'information de la giz"
 
-*/
+replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1237
+replace needs_check = 1 if id_plateforme == 1237
+replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1154
+replace needs_check = 1 if id_plateforme == 1154
+
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************

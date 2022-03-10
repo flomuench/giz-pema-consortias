@@ -1,4 +1,4 @@
-2***********************************************************************
+***********************************************************************
 * 			baseline progress, firm characteristics
 ***********************************************************************
 *																	   
@@ -31,17 +31,17 @@ putpdf text ("Consortias: survey progress, firm characteristics"), bold linebrea
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 
 
-/***********************************************************************
+***********************************************************************
 * 	PART 2:  Survey progress		  			
 ***********************************************************************
 putpdf paragraph, halign(center) 
-putpdf text ("consortias training: survey progress")
+putpdf text ("consortias : baseline survey progress")
 
 {
-	* total number of firms registered
+	* total number of firms that responded
 graph bar (count) id_plateforme, blabel(total) ///
-	title("Number of firms that responded") note("Date: `c(current_date)'") ///
-	ytitle("Number of complete survey response")
+	title("Nombres des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
+	ytitle("Number of entries")
 graph export responserate.png, replace
 putpdf paragraph, halign(center)
 putpdf image responserate.png
@@ -50,7 +50,7 @@ putpdf pagebreak
 	
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
-		tlabel(17jan2022(1)01mar2022, angle(60) labsize(vsmall)) ///
+		tlabel(04mar2022(1)01apr2022, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Baseline survey: number of responses}") 
 gr export survey_response_byday.png, replace
@@ -59,11 +59,50 @@ putpdf image survey_response_byday.png
 putpdf pagebreak
 		
 	
-	* firm size
-graph box rg_fte, over(moyen_com, sort(1) lab(labsize(tiny))) blabel(total) ///
-	title("Nombre des employés des entreprises selon moyen de communication") ///
-	ytitle("Nombre des employés")
+	* firms with complete entries
+graph bar (count) id_plateforme if miss==0, blabel(total) ///
+	title("Nombre des entreprises avec reponses complète") 
+gr export complete_responses.png, replace
+putpdf paragraph, halign(center) 
+putpdf image complete_responses.png
+putpdf pagebreak
 
+	* firms with validated entries
+graph bar (count) id_plateforme if validation==1, blabel(total) ///
+	title("Nombre des entreprises avec reponses validés")
+gr export complete_responses.png, replace
+putpdf paragraph, halign(center) 
+putpdf image complete_responses.png
+putpdf pagebreak
+
+*Type of support desired by firms
+gr hbar (sum) support1 - support6, blabel(total) legend (pos (6) label (1 "no support need") label(2 "virtual meetings") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "garde d'enfance") label(6 "support pour transport et heberge")) ///
+	title("Comment est-ce qu’on pourra vous faciliter la participation aux rencontres de consortium?")
+gr export support.png, replace
+putpdf paragraph, halign(center) 
+putpdf image support.png
+putpdf pagebreak
+
+*Reasons why firms want to join the program
+gr hbar (sum) att_adh1 - att_adh5, blabel(total) legend (pos (6) label (1 "Développer l’export ") label(2 "Accéder à des services d’accompagnement et de soutien à l'international") label(3 "Développer vos compétences en matière d’exportation") label (4 "Faire partie d’un réseau d’entreprise femmes pour apprendre des autres PDG femmes ") label(5 "Réduire les coûts d’exportation")) ///
+	title("Pourquoi souhaitez-vous adhérer à ce programme ?")
+gr export attents.png, replace
+putpdf paragraph, halign(center) 
+putpdf image attents.png
+putpdf pagebreak
+
+
+*Statistics with average time per survey
+/*graph bar (mean) time_survey, blabel(total) ///
+	title("Temps moyen pour remplir le sondage") 
+gr export temps_moyen_sondage.png, replace
+putpdf paragraph, halign(center) 
+putpdf image temps_moyen_sondage.png
+sum time_survey,d
+putpdf paragraph
+putpdf text ("Survey time statistics"), linebreak bold
+putpdf text ("min. `: display %9.0g `r(min)'' minutes, max. `: display %9.0g `r(max)'' minutes & median `: display %9.0g `r(p50)'' minutes."), linebreak
+putpdf pagebreak*/
 }
 */
 ***********************************************************************

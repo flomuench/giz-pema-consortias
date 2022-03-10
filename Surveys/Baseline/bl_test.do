@@ -30,107 +30,110 @@ use "${bl_intermediate}/bl_inter", clear
 /* --------------------------------------------------------------------
 	PART 2.1: Comptabilité / accounting questions
 ----------------------------------------------------------------------*/		
-/*
-* If any of the accounting vars corresponds to the scalars (not_know: -999 ; refused: -888; or check_again = -777) change needs_check to 2
 
-local accountvars investcom_2021 investcom_futur expprep_responsable exp_pays_avant21 exp_pays_21 compexp_2020 comp_ca2020 comp_benefice2020 dig_revenues_ecom car_carempl_div1 car_carempl_dive2 car_carempl_div3 car_adop_peer
+* If any of the accounting vars has missing value or zero, create 
 
-gen scalar_issue = 0
+local accountvars ca_2021 ca_exp_2021 profit_2021
 
 foreach var of local accountvars {
-	replace needs_check = 2 if `var' == -999 
-	replace scalar_issue = 1 if `var' ==  -999
-	replace questions_needing_checks = "`var' pas connue & " + questions_needing_checks if `var' == -999 
+	replace check_again = 2 if `var' == 0 
+	replace questions_needing_checks = questions_needing_checks + "`var' zero/ " if `var' == 0 
+	replace check_again = 2 if `var' == . 
+	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
+}
 
-	replace needs_check = 2 if `var' == -888 
-	replace scalar_issue = 1 if `var' == -888
-	replace questions_needing_checks = "`var' refusée & " + questions_needing_checks if `var' == -888 
+local accountvars2  inno_rd exprep_inv
+foreach var of local accountvars2 {
+	replace check_again = 2 if `var' == . 
+	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
+}
+
+
+*check whether the companies that had to re-fill accounting data actually corrected it
+
+local vars_checked ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor
+foreach var of local vars_checked {
+	replace check_again = 3 if `var' == . & needs_check==1
+	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& needs_check==1 
 	
-	replace needs_check = 2 if `var' == -777 
-	replace scalar_issue = 1 if `var' == -777
-	replace questions_needing_checks = "`var' doit être verifiée & " + questions_needing_checks if `var' == -777 
+	replace check_again = 3 if `var' == 0 & needs_check==1  & validation==1
+	replace questions_needing_checks = questions_needing_checks +  "`var' zero, entreprise dans la liste pour re-fournier donnés 2018-2020  /" if `var' == 0 & needs_check==1 
 
 }
+*/
 
 * If profits are larger than 'chiffres d'affaires' need to check: 
  
-replace needs_check = 1 if comp_benefice2020>comp_ca2020 & comp_ca2020!=. & comp_benefice2020!=. & scalar_issue==0
-replace questions_needing_checks = questions_needing_checks + " Benefices sont plus élevés que comptes d'affaires & " if comp_benefice2020>comp_ca2020 & comp_ca2020!=. & comp_benefice2020!=. & scalar_issue==0
+replace check_again = 3 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
+replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=.
+
 
 * Check if export values are larger than total revenues 
 
-replace needs_check = 1 if comp_ca2020< compexp_2020 & comp_ca2020!=. & compexp_2020!=. & scalar_issue==0
-replace questions_needing_checks = questions_needing_checks +  " Export sont plus élevés que comptes d'affaires & " if comp_ca2020< compexp_2020 & comp_ca2020!=. & compexp_2020!=. & scalar_issue==0
-
-* Check if online revenu is higher than overall revenue
-
-capture replace needs_check = 1 if  comp_ca2020 < dig_revenues_ecom & dig_revenues_ecom!=. & comp_ca2020!=. & scalar_issue==0
-capture replace questions_needing_checks = questions_needing_checks +  "Revenues en ligne sont plus élevés que comptes d'affaires & " if  comp_ca2020 < dig_revenues_ecom & dig_revenues_ecom!=. & comp_ca2020!=. & scalar_issue==0
-
-* If number of export countries is higher than 100 – needs check (it's sus)
-
-capture replace needs_check = 1 if  exp_pays_avant21 > 100 & exp_pays_avant21!=. & rg_oper_exp == 1
-//capture replace needs_check = 1 if exp_pays_avant21==. &  rg_oper_exp == 1 & exp_pays>1
-capture replace questions_needing_checks = questions_needing_checks +  "Vérifer nombre de pays dans exp_pays_avant21 & " if  exp_pays_avant21 > 100 & exp_pays_avant21!=. & rg_oper_exp == 1
-
-capture replace needs_check = 1 if  exp_pays_21 > 100 & exp_pays_21!=. & rg_oper_exp == 1
-capture replace questions_needing_checks = questions_needing_checks +  "Vérifer nombre de pays dans exp_pays_21 & " if  exp_pays_21 > 100 & exp_pays_21!=. & rg_oper_exp == 1
+replace check_again = 2 if ca_exp_2021>ca_2021 & ca_2021!=. & ca_exp_2021!=. 
+replace questions_needing_checks = questions_needing_checks + "Exports plus élevés que CA/ " if ca_exp_2021>ca_2021 & ca_2021!=. & ca_exp_2021!=. 
 
 
+*Very low values
+replace check_again =2 if ca_exp_2021<500 & ca_exp_2021>0
+replace questions_needing_checks = questions_needing_checks + "export moins que 500 TND/ " if ca_exp_2021<500 & ca_exp_2021>0
 
+replace check_again =2 if ca_2021<1000 & ca_2021>0
+replace questions_needing_checks = questions_needing_checks + "CA moins que 1000 TND/ " if ca_exp_2021<500 & ca_exp_2021>0
 
-/* --------------------------------------------------------------------
-	PART 2.2: Indices / questions with points
-----------------------------------------------------------------------*/		
-
-local unit_scores dig_presence_score dig_miseajour1 dig_miseajour2 dig_miseajour3 dig_payment1 dig_payment2 dig_payment3 dig_vente dig_marketing_lien dig_marketing_score dig_marketing_ind1 dig_marketing_ind2 dig_logistique_entrepot dig_logistique_retour_score dig_service_satisfaction expprep_cible expprep_norme rg_oper_exp exp_afrique 
-
-foreach var of local acunit_scores {
-	replace needs_check = 1 if `var'>1 & `var'!=.
-	replace questions_needing_checks = questions_needing_checks + "`var' too high & " if `var'>1 & `var'!=.
-	
-	replace needs_check = 1 if `var'<0 & `var'!=-999  & `var'!=-888 & `var'!=-777
-	replace questions_needing_checks = questions_needing_checks + "`var' too low & " if `var'<0 & `var'!=-999  & `var'!=-888 & `var'!=-777
-
-} 
-
-local cont_vars dig_marketing_respons dig_service_responsable expprep_responsable exp_pays_avant21 exp_pays_21
-
-foreach var of local cont_vars {
-
-	replace needs_check = 1 if `var'<0 & `var'!=-999 & `var'!=-888 & `var'!=-777
-	replace questions_needing_checks = questions_needing_checks + "`var' too low & " if `var'<0 & `var'!=-999 & `var'!=-888 & `var'!=-777
-
-} 
-
-* check accounting answers that are empty: 
-
-foreach var of local accountvars {
-	capture replace needs_check = 1 if `var' == . 
-	capture replace questions_needing_checks = questions_needing_checks + "`var' manque & " if `var' == . 
-}
-
-
-drop scalar_issue
+replace check_again =2 if profit_2021<100 & profit_2021>0 
+replace questions_needing_checks = questions_needing_checks + "benefice moins que 100 TND/ " if profit_2021<100 & profit_2021>0 
 
 
 ***********************************************************************
-* 	Export an excel sheet with needs_check variables  			
+* 	Part 2.2 Additional logical test cross-checking answers from registration			
 ***********************************************************************
+*firms that reported to be exporters according to registration data
 
-capture drop dup
+replace check_again=2 if operation_export==1 & exp_pays==. 
+replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur selon registre/ " if operation_export==1 & exp_pays==. 
+replace check_again=2 if operation_export==1 & exp_pays==0 
+replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0
 
-sort id_plateforme, stable
+replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+replace questions_needing_checks = questions_needing_checks + " ca_exp2021 manquent mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 
-quietly by id_plateforme:  gen dup = cond(_N==1,0,_n)
+replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==0
+replace questions_needing_checks = questions_needing_checks + " ca_exp2021 zéro mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 
-replace needs_check = 1 if dup>0
+replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==. 
+replace questions_needing_checks = questions_needing_checks + " ca_2021 manquent mais ca_2021 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==.  
 
+replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==0
+replace questions_needing_checks = questions_needing_checks + " ca_2021 zéro mais ca_2020 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==0
+
+ 
+
+* If number of export countries is higher than 50 – needs check 
+replace check_again=1 if exp_pays>49 & exp_pays!=.
+replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé/ " if exp_pays>49 & exp_pays!=.
+
+*Add 1 point in priority if survey was validated
+replace check_again = check_again+1 if validation==1 & check_again>0
+
+***********************************************************************
+* 	Part 3 Re-shape the correction sheet			
+***********************************************************************
+preserve
+split questions_needing_checks, parse(/) generate(questions)
+drop questions_needing_checks 
+reshape long questions, i(id_plateforme)
+drop if questions==""
+by id_plateforme: gene nombre_questions=_n
+drop _j
 gen commentaires_ElAmouri = .
-
+gen valeur_actuelle=.
+gen correction_propose=.
+gen correction_valide=.
 cd "$bl_checks"
+order id_plateforme miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
+export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche de correction" if check_again>=1,  firstrow(variables)replace
+restore
 
-order id_plateforme check questions_needing_check commentaires_ElAmouri commentsmsb 
 
-export excel commentaires_ElAmouri id_plateforme commentsmsb check questions_needing_check heure date-dig_logistique_retour_score using "fiche_correction" if needs_check>=1, firstrow(variables) replace
 

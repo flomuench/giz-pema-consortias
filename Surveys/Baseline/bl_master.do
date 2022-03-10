@@ -31,7 +31,7 @@ qui cap log c
 	/*
 ssc install ietoolkit /* for iebaltab */
 ssc install randtreat, replace /* for randtreat --> random allocation */
-ssc install blindschemes, replace /* for plotplain --> scheme for graphical visualisations */
+ssc install blindschemes, replace /* for plotplain --> scheme for graphic2al visualisations */
 net install http://www.stata.com/users/kcrow/tab2docx
 ssc install betterbar
 ssc install mdesc 
@@ -43,6 +43,8 @@ net install http://www.stata.com/users/kcrow/tab2docx
 ssc install labutil
 */
 
+net from https://www.sealedenvelope.com/
+net install time.pkg
 
 	* define graph scheme for visual outputs
 set scheme plotplain
@@ -115,11 +117,11 @@ if (1) do "${bl_github}/bl_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.3: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_correct.do"
+if (1) do "${bl_github}/bl_correct.do"
 /* --------------------------------------------------------------------
 	PART 3.4: Match to registration data
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_match.do"
+if (1) do "${bl_github}/bl_match.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
@@ -127,11 +129,11 @@ if (1) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_open_question_checks.do"
+if (1) do "${bl_github}/bl_open_question_checks.do"
 /* --------------------------------------------------------------------
 	PART 3.7: Perform logical checks
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_test.do"
+if (1) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
 	PART 3.8: Create indices
 ----------------------------------------------------------------------*/	
@@ -140,7 +142,7 @@ if (0) do "${bl_github}/bl_index.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_statistics.do"
+if (1) do "${bl_github}/bl_statistics.do"
 
 
 

@@ -35,6 +35,7 @@ putdocx text ("Quality checks variables: baseline consortias training"), bold
 
 local numvars inno_rd net_nb_fam net_nb_dehors net_time exprep_inv exp_pays ca_2021 ca_exp_2021 comp_benefice2021 ca_2020 ca_2019 ca_2018  ca_exp2020  ca_exp2019 ca_exp2018  ca_2020_cor car_empl1  car_empl2 car_empl3 car_empl4 car_empl5  famille2
 
+
 local correct_vars 
 local incorrect_vars 
 
@@ -70,8 +71,9 @@ replace duplabel`x' = id_plateforme if dup`x' > 0
 
 }
 		* visualise and save the visualisations
-/*
-alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
+
+
+/*alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
 gen duplabel = .
 replace duplabel = id_plateforme if dup_id_admin > 0 | dup_firmname > 0 | dup_rg_nom_rep > 0 | dup_rg_telrep > 0 | dup_rg_emailrep > 0 | dup_rg_telpdg > 0 | dup_rg_emailpdg > 0
 stripplot id_plateforme, over(dup_firmname) jitter(4) vertical mlabel(duplabel) /* alternative: scatter id_plateforme dup_firmname, jitter(4) mlabel(duplabel) */
