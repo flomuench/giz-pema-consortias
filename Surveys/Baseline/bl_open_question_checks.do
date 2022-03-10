@@ -32,12 +32,9 @@ putdocx text ("Quality checks variables: baseline consortias training"), bold
 ***********************************************************************
 * 	PART 2:  Identify variables that should be numerical but aren't	  			
 ***********************************************************************
-<<<<<<< Updated upstream
-local numvars ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
-=======
 
 local numvars inno_rd net_nb_fam net_nb_dehors net_time exprep_inv exp_pays ca_2021 ca_exp_2021 comp_benefice2021 ca_2020 ca_2019 ca_2018  ca_exp2020  ca_exp2019 ca_exp2018  ca_2020_cor car_empl1  car_empl2 car_empl3 car_empl4 car_empl5  famille2
->>>>>>> Stashed changes
+
 
 local correct_vars 
 local incorrect_vars 
@@ -74,6 +71,7 @@ replace duplabel`x' = id_plateforme if dup`x' > 0
 
 }
 		* visualise and save the visualisations
+
 
 /*alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
 gen duplabel = .
