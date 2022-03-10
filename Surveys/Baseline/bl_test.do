@@ -90,16 +90,16 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 ***********************************************************************
 *firms that reported to be exporters according to registration data
 
-replace check_again=2 if operation_export==1 & exp_pays==. 
-replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur selon registre/ " if operation_export==1 & exp_pays==. 
+replace check_again=2 if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
+replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur/ " if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
 replace check_again=2 if operation_export==1 & exp_pays==0 
 replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0
 
 replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 replace questions_needing_checks = questions_needing_checks + " ca_exp2021 manquent mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 
-replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==0
-replace questions_needing_checks = questions_needing_checks + " ca_exp2021 zéro mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+*replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==0
+*replace questions_needing_checks = questions_needing_checks + " ca_exp2021 zéro mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 
 replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==. 
 replace questions_needing_checks = questions_needing_checks + " ca_2021 manquent mais ca_2021 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==.  
@@ -115,6 +115,15 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays très e
 
 *Add 1 point in priority if survey was validated
 replace check_again = check_again+1 if validation==1 & check_again>0
+
+***********************************************************************
+* 	Part 2.3 Outliers			
+***********************************************************************
+sum ca_2021, d
+scalar ca_95p = r(p95)
+scalar list
+replace check_again=2 if ca_2021> 2800000 & ca_2021!=.
+
 
 ***********************************************************************
 * 	Part 3 Re-shape the correction sheet			
