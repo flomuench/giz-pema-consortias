@@ -32,10 +32,12 @@ putdocx text ("Quality checks variables: baseline consortias training"), bold
 ***********************************************************************
 * 	PART 2:  Identify variables that should be numerical but aren't	  			
 ***********************************************************************
-local numvars ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor exprep_inv inno_rd
+
+local numvars inno_rd net_nb_fam net_nb_dehors net_time exprep_inv exp_pays ca_2021 ca_exp_2021 comp_benefice2021 ca_2020 ca_2019 ca_2018  ca_exp2020  ca_exp2019 ca_exp2018  ca_2020_cor car_empl1  car_empl2 car_empl3 car_empl4 car_empl5  famille2
+
 
 local correct_vars 
-local incorrect_vars
+local incorrect_vars 
 
 foreach v of local numvars {
 	capture confirm numeric variable `v'
@@ -69,6 +71,7 @@ replace duplabel`x' = id_plateforme if dup`x' > 0
 
 }
 		* visualise and save the visualisations
+
 
 /*alternative code for jitter dot plots instead of bar plots which allow to identify the id of the duplicate response:
 gen duplabel = .
@@ -106,18 +109,17 @@ putdocx pagebreak
 * 	PART 3:  Open question variables		  			
 ***********************************************************************/*
 		* define all the variables where respondent had to enter text
-/*
-local bl_open  investcom_benefit3_1 investcom_benefit3_2 investcom_benefit3_3 expprep_norme2 exp_pays_principal_avant21  /// /* firm characteristics */
 
+local open_questions ident_base_respondent ident_repondent_position entr_idee produit1 produit2 produit3 exp_pays_principal id_admin att_adh6 att_strat4 att_cont5 support7
 				
 		* export all the variables into a word document
-foreach x of local bl_open {
+foreach x of local open_questions {
 putdocx paragraph, halign(center)
 tab2docx `x'
 putdocx pagebreak
 }
-*/	
-*/	
+
+	
 ***********************************************************************
 * 	End:  save dta, word file		  			
 ***********************************************************************

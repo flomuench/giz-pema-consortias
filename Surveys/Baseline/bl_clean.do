@@ -41,12 +41,34 @@ ds, has(type numeric)
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
 
-	* dates
+	
+{
+* dates
 		* creation (HOURS TRANSFORMATION DOES NOT YET WORK)
 format Date %td
-*format Heuredébut %tC
-*format Heurefin %tC
+replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
+replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
+replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
+str2time Heuredébut, generate(eHeuredébut)
 
+replace Heurefin = ustrregexra( Heurefin ,"h",":")
+replace Heurefin = ustrregexra( Heurefin ,"`",":")
+replace Heurefin = substr(Heurefin,1,length(Heuredébut)-1)
+str2time Heurefin, generate(eHeurefin)
+
+* Creation of the time variable
+gen etime = eHeurefin - eHeuredébut
+
+*gen etime_positive = etime* -1 if etime < 0 &else if etime >
+time2str etime_positive, generate(time)
+label var time "durée du questionnaire par entreprise"
+
+
+drop etime
+drop etime_positive
+drop eHeuredébut
+drop eHeurefin
+}
 }
 	* keep dates as string variables for RA quality checks
 gen date_creation_string = Date
@@ -244,6 +266,9 @@ notes _dta : Consortium Project
 
 
 
+label variable list_group "Treatment or Control Group"
+=======
+
 		* Section identification
 *lab var ident "identification"
 *lab var orienter "oriontation to the representative"
@@ -293,7 +318,7 @@ lab var man_fin_per "frequency of examinin gfinancial performance"
 
 		* Section marketing practices: man_mark_prix was changed to man_mark_pra/
 		*but has to be verified with El-Amouri
-lab var man_mark_prix  "study the prices and/or products of one of competitors"
+lab var man_mark_pra  "study the prices and/or products of one of competitors"
 lab var man_mark_div  "ask customers what other products they would like to be produced"
 lab var man_mark_clients "investigate why past customers have stopped buying from the company"
 lab var man_mark_offre "attract customers with a special offer"
@@ -359,6 +384,7 @@ lab var att_adh3 "develop exporting skills"
 lab var att_adh4 "being part of a female business network to learn from other female CEOs"
 lab var att_adh5 "reduce export costs"
 lab var att_adh6 "other"
+
 lab var att_adh_autres "other"
 lab var att_strat "role of consortium in establishing export strategy"
 lab var att_strat_autres "other"
@@ -367,8 +393,15 @@ lab var att_cont_autres "other"
 lab var att_hor "the best time slot to participate in consortium meetings"
 lab var att_voyage "availablibility for travel and participate in events in another city in Tunisia"
 lab var att_jour "preferred day for meetings"
-
-
+/*
+lab var lundi "monday"
+lab var mardi "tuesday"
+lab var mercredi "wednesday"
+lab var jeudi "tuesday"
+lab var vendredi "friday"
+lab var samedi "saturday"
+lab var dimanche "sunday"
+*/
 lab var support1 "no need for support"
 lab var support2 "organize virtual meetings (zoom or skype)"
 lab var support3 "change the meeting place"
@@ -382,13 +415,11 @@ lab var support_autres "other"
 lab var validation "respondent validated his/her answers"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
-
 		* other:
 label variable list_group "treatment or control Group"
 label variable heuredébut "beginning hour"
 label variable date "date"
 label variable heurefin "finish hour"
-
 }
 */
 
@@ -396,6 +427,7 @@ label variable heurefin "finish hour"
 ***********************************************************************
 * 	PART 8: 	Label the variables values	  			
 ***********************************************************************
+
 
 local yesnovariables ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
 exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1 ///
@@ -422,6 +454,7 @@ foreach var of local agreevariables {
 }
 
 label define label_list_group 1 "treatment_group" 0 "control_group"
+
 label values list_group label_list_group 
 
 *label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
@@ -454,6 +487,7 @@ label values man_fin_enr label_man_fin_enr
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
+
 
 * lab values of att_strat:
 replace att_strat = "participant don't have an export strategy. She would adopt that of the consortium" if att_strat == "att_strat1"  
