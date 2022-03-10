@@ -286,8 +286,7 @@ lab var exp_pra_douane "access the customs website"
 lab var exp_pra_plan "maintain or develop an export plan"
 lab var expprep_norme "product is certified according to the quality standards in target markets"
 lab var exprep_inv "investment in export activities"
-lab var aw "investment in export activities"
-*lab var exprep_couts "costs of export activities"
+lab var exprep_couts "costs of export activities"
 lab var exp_pays "number of countries exported to in 2021"
 lab var exp_pays_principal "main market exported to in 2021"
 lab var exp_afrique "past direct/indirect export activities to an africain country"
@@ -437,8 +436,8 @@ label values entr_bien label_entr_bien
 *label define label_net_coop  1 "Winning" 2 "Communication" 3 "Trust" 4 "Elimination" 5 "Exchange" 6 "Power" 7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
 *label values net_coop label_net_coop
 
-label define label_aw 1 "very low" 10 "very high"
-label values aw label_aw
+label define label_export_cost 1 "very low" 10 "very high"
+label values exprep_couts label_export_cost
 
 label define label_att_voyage 1 "participant can travel" 2 "particiapant can travel if there is a financial support" 3 "participant can not travel"
 label values att_voyage label_att_voyage 
@@ -469,8 +468,6 @@ replace man_fin_enr = "yes, in paper" if man_fin_enr == "0.5"
 replace man_fin_enr = "yes, in digital" if man_fin_enr == "1"
 replace man_fin_enr = "yes, in paper and digital" if man_fin_enr == "1.01"
 replace man_fin_enr = "No" if man_fin_enr == "0"
-
-*/
 
 
 ***********************************************************************

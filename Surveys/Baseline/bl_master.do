@@ -140,7 +140,7 @@ if (0) do "${bl_github}/bl_index.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_statistics.do"
+if (1) do "${bl_github}/bl_statistics.do"
 
 
 

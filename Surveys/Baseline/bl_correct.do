@@ -22,7 +22,8 @@
 *	ID variaregise: 	id (example: f101)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			                          
-*																	  
+*	
+																  
 ***********************************************************************
 * 	PART 1:  Define non-response categories  			
 ***********************************************************************
@@ -52,10 +53,23 @@ gen commentsmsb = ""
 ***********************************************************************
 * 	PART 1.2:  Identify and remove duplicates 
 ***********************************************************************
-* duplicates report id_plateforme
-* duplicates tag id_plateforme, gen(dup)
+sort id_plateforme heuredébut
+quietly by id_plateforme heuredébut:  gen dup = cond(_N==1,0,_n)
+drop if dup>1
+
+/*duplicates report id_plateforme heuredébut
+duplicates tag id_plateforme heuredébut, gen(dup)
+drop if dup>1
+*/
 
 
+*Individual duplicate drops (where heure debut is not the same). If the re-shape
+*command in bl_test gives an error it is because there are remaining duplicates,
+*please check them individually and drop (actually el-amouri is supposed to that)
+drop if id_plateforme==1239 & heuredébut=="16h02`55``"
+
+*restore original order
+sort date heuredébut
 ***********************************************************************
 * 	PART 2:  Automatic corrections
 ***********************************************************************
@@ -90,8 +104,11 @@ replace `var' = ustrregexra( `var',"دينار تونسي","")
 replace `var' = ustrregexra( `var',"دينار","")
 replace `var' = ustrregexra( `var',"تونسي","")
 replace `var' = ustrregexra( `var',"د","")
+replace `var' = ustrregexra( `var',"d","")
+replace `var' = ustrregexra( `var',"na","")
 replace `var' = "1000" if `var' == "000"
 replace `var' = subinstr(`var', ".", "",.)
+replace `var' = subinstr(`var', ",", ".",.)
 replace `var' = "`not_know'" if `var' =="je ne sais pas"
 replace `var' = "`not_know'" if `var' =="لا أعرف"
 
