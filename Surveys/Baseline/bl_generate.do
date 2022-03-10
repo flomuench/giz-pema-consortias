@@ -157,15 +157,48 @@ label var listexp_percentage "percentage mean difference of the list experiment 
 */
 
 
-/*2.3 time used to fill survey
+//2.3 time used to fill survey
+{
+format Date %td
+replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
+replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
+replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
+str2time Heuredébut, generate(eheuredébut)
 
-g time_survey= heurefin-heuredébut
+replace Heurefin = ustrregexra( Heurefin ,"h",":")
+replace Heurefin = ustrregexra( Heurefin ,"`",":")
+replace Heurefin = substr(Heurefin,1,length(Heurefin)-2)
+str2time Heurefin, generate(eheurefin)
+
+* Creation of the time variable
+gen etime = eheurefin - eheuredébut
+gen etime_positive = abs(etime)
+time2str etime_positive, generate(time) seconds
+label var time "durée du questionnaire par entreprise"
+
+gen str8 stime = time
+gen shours = substr(stime, 1, 2) //takes the first two digits//
+gen hours = real(shour) //reads first two digits as number
+gen sminutes = substr(stime, 4, 2)
+gen minutes = real(sminutes)
+gen sseconds = substr(stime, 7, 2)
+gen seconds = real(sseconds)
+gen time_secs = 3600*hours + 60*minutes + seconds
+gen time_mins = time_secs/60
+label var time_secs "Durée du questionnaire par entreprise en secondes"
+label var time_mins "Durée du questionnaire par entreprise en minutes"
+
+drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
+}
+
 *lab var time_survey "Time used to complete the survey"
 
 
 * 2.4 CREATE nb_dehors_famille/(net_nb_dehors_famille+ net_nb_famille)
+generate prop_hors_fam = 0
+replace prop_hors_fam = net_nb_dehors / (net_nb_dehors + net_nb_fam)
+lab var prop_hors_fam "Proportion of employees that are not family"
 
-*/
 /*
 ***********************************************************************
 * 	PART 3: factor variable gender 			  										  
