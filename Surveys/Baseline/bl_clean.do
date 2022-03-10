@@ -41,34 +41,6 @@ ds, has(type numeric)
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
 
-	
-{
-* dates
-		* creation (HOURS TRANSFORMATION DOES NOT YET WORK)
-format Date %td
-replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
-replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
-replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
-str2time Heuredébut, generate(eHeuredébut)
-
-replace Heurefin = ustrregexra( Heurefin ,"h",":")
-replace Heurefin = ustrregexra( Heurefin ,"`",":")
-replace Heurefin = substr(Heurefin,1,length(Heuredébut)-1)
-str2time Heurefin, generate(eHeurefin)
-
-* Creation of the time variable
-gen etime = eHeurefin - eHeuredébut
-
-*gen etime_positive = etime* -1 if etime < 0 &else if etime >
-time2str etime_positive, generate(time)
-label var time "durée du questionnaire par entreprise"
-
-
-drop etime
-drop etime_positive
-drop eHeuredébut
-drop eHeurefin
-}
 }
 	* keep dates as string variables for RA quality checks
 gen date_creation_string = Date
@@ -101,14 +73,11 @@ replace complete = 1 if validation ==1 | attest ==1
 ***********************************************************************
 rename *, lower
 
-
+/*
 
 ***********************************************************************
 * 	PART 5: 	Rename the variables as needed
 ***********************************************************************
-
-rename aw exprep_couts
-/*
 ident 
 orienter 
 ident2
@@ -233,29 +202,40 @@ support7
 tel_supl 
 attest
 
+
+ forvalues i=1/100 {
+    rename `i'"-"`varlist' `varlist'
+  }
+  
+  foreach v of var *_? {
+           local new = substr("`v'", 1, length("`v'") - 2)
+           rename `v' `new'
+}
+
+
+
+
+{
+	* Section identification
+rename id id_plateforme
+rename groupe treatment
+
+	* Section informations personnelles répresentantes
+rename nometprénomdudelaparticipa rg_nom_rep
+rename qualitéfonction rg_position_rep
+rename sexe rg_gender_rep
+rename téléphonedudelaparticipante rg_telrep 
+rename adressemaildudelaparticipan rg_emailrep
+rename téléphonedudelagérante rg_telpdg
+rename adressemaildudelagérante rg_emailpdg
+rename sexedudelagérante rg_sex_pdg
+rename adressesiègesociale rg_adresse 
+rename raisonsociale firmname 
+
+}
 */
 ***********************************************************************
-* 	PART 6: 	Converting continuous variables to indicator variables 			
-***********************************************************************
-
-* converting att_voyage :
-generate att_voyage1 = att_voyage
-replace att_voyage1= 2 if att_voyage == 0.5
-order att_voyage1, a(att_voyage)
-drop att_voyage
-rename att_voyage1 att_voyage
-
-* converting man_fin_enr :
-generate man_fin_enr1 = man_fin_enr
-replace man_fin_enr1= 1 if man_fin_enr == 0.5
-replace man_fin_enr1= 2 if man_fin_enr == 1
-replace man_fin_enr1= 3 if man_fin_enr == 1.01
-order man_fin_enr1, a(man_fin_enr)
-drop man_fin_enr
-rename man_fin_enr1 man_fin_enr
-
-***********************************************************************
-* 	PART 7: 	Label the variables		  			
+* 	PART 6: 	Label the variables		  			
 ***********************************************************************
 
 {
@@ -265,9 +245,7 @@ notes _dta : March 2022
 notes _dta : Consortium Project
 
 
-
 label variable list_group "Treatment or Control Group"
-=======
 
 		* Section identification
 *lab var ident "identification"
@@ -289,7 +267,6 @@ lab var inno_produit "innovation product modification"
 lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
-lab var inno_mot "innovation motivation"
 *lab var inno_aucune "no innovation"
 *lab var inno_mot_idee "personal idea"
 *lab var inno_mot_conc "exchange ideas with a competitor"
@@ -351,12 +328,6 @@ lab var ca_exp2020 "export turnover in 2020"
 lab var ca_exp2019 "export turnover in 2019"
 lab var ca_exp2018 "export turnover in 2018"
 lab var id_admin "tax identification number"
-lab var ca_2020_cor "turnover in 2020 corrected"
-lab var ca_exp2020_cor "export turnover in 2020 corrected"
-lab var ca_2019_cor "turnover in 2019 corrected"
-lab var ca_2018_cor "turnover in 2018 corrected"
-lab var ca_exp2019_cor "export turnover in 2019 corrected"
-lab var ca_exp_2018_cor "export turnover in 2018 corrected"
 
 		* Section characteristics of the company
 lab var car_efi_fin1 "participant have the skills to access new sources of funding"
@@ -384,14 +355,15 @@ lab var att_adh3 "develop exporting skills"
 lab var att_adh4 "being part of a female business network to learn from other female CEOs"
 lab var att_adh5 "reduce export costs"
 lab var att_adh6 "other"
-
-lab var att_adh_autres "other"
-lab var att_strat "role of consortium in establishing export strategy"
-lab var att_strat_autres "other"
-lab var att_cont "the best mode of financial contribution of each member in the consortium"
-lab var att_cont_autres "other"
-lab var att_hor "the best time slot to participate in consortium meetings"
-lab var att_voyage "availablibility for travel and participate in events in another city in Tunisia"
+*lab var att_strat1 "participant don't have an export strategy. She would adopt that of the consortium"
+*lab var att_strat2 "the consortium's strategy must be consistent with her own strategy"
+*lab var att_strat3 "the company has an export strategy and the consortium is a vector for certain actions"
+*lab var att_strat4 "other"
+*lab var att_cont1 "no contribution"
+*lab var att_cont2 "fixed, lump sum contribution"
+*lab var att_cont3 "proportional contribution to the turnover"
+*lab var att_cont4 "proportional contribution to the turnover achieved at export"
+*lab var att_cont5 "other"
 lab var att_jour "preferred day for meetings"
 /*
 lab var lundi "monday"
@@ -401,119 +373,90 @@ lab var jeudi "tuesday"
 lab var vendredi "friday"
 lab var samedi "saturday"
 lab var dimanche "sunday"
-*/
-lab var support1 "no need for support"
-lab var support2 "organize virtual meetings (zoom or skype)"
-lab var support3 "change the meeting place"
-lab var support4 "adopt a time slot before or after the regular working day"
-lab var support5 "offer free childcare during consortia meetings"
-lab var support6 "provide financial support for transportation and accommodation"
-lab var support7 "other"
-lab var support_autres "other"
-
-		* Section contact & validation
-lab var validation "respondent validated his/her answers"
-lab var attest "respondents attest that his/her responses correspond to truth"
-
-		* other:
-label variable list_group "treatment or control Group"
-label variable heuredébut "beginning hour"
-label variable date "date"
-label variable heurefin "finish hour"
-}
-*/
-
-
-***********************************************************************
-* 	PART 8: 	Label the variables values	  			
-***********************************************************************
-
-
-local yesnovariables ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
-exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1 ///
-inno_produit inno_process inno_lieu inno_commerce att_adh1 att_adh2 att_adh3 att_adh4 att_adh5 att_adh6 ///
-support1 support2 support3 support4 support5 support6 support7 complete
-
-label define yesno 1 "Yes" 0 "No"
-foreach var of local yesnovariables {
-	label values `var' yesno
-}
-
-local frequencyvariables man_hr_obj man_hr_feed man_pro_ano man_fin_per 
-
-label define frequency 0 "Never" 1 "Annually" 2 "Monthly" 3 "Weekly" 4 "Daily"
-foreach var of local frequencyvariables {
-	label values `var' frequency
-}
-
-local agreevariables car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
-
-label define agree 1 "Strongly disagree" 2 "Disagree" 3 "Neither agree nor disagree" 4 "Agree" 5 "Strongly agree" 
-foreach var of local agreevariables {
-	label values `var' agree
-}
-
-label define label_list_group 1 "treatment_group" 0 "control_group"
-
-label values list_group label_list_group 
-
-*label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
-*label values orienter label_orienter
-
-label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
-label values ident_nouveau_personne label_ident_nouveau_personne
-
-*label define label_ident_repondent_position 1 "La propriétaire" 2 "La PDG" 3 "Propriétaire et PDG" 4 "Je ne veux pas répondre" 5 "Aucune des deux" 
-*label values ident_repondent_position label_ident_repondent_position
-
-label define label_entr_bien 1 "Bien" 2 "Service" 3 "Les deux"
-label values entr_bien label_entr_bien
-
-*label define label_net_coop  1 "Winning" 2 "Communication" 3 "Trust" 4 "Elimination" 5 "Exchange" 6 "Power" 7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
-*label values net_coop label_net_coop
-
-label define label_exprep_couts 1 "very low" 10 "very high"
-label values exprep_couts label_exprep_couts
-
-label define label_att_voyage 1 "participant can travel" 2 "particiapant can travel if there is a financial support" 0 "participant can not travel"
-label values att_voyage label_att_voyage 
-
-
-label define label_man_fin_enr 1 "yes, in paper" 2 "yes, in digital" 3 "yes, in paper and digital" 0 "No"
-label values man_fin_enr label_man_fin_enr
-
-*label define label_tel_supl 1 "phone number 1" 2 "phone number 2"
-*label values tel_supl label_tel_supl
-
-label define label_attest 1 "Yes" 
-label values attest label_attest 
-
-
-* lab values of att_strat:
-replace att_strat = "participant don't have an export strategy. She would adopt that of the consortium" if att_strat == "att_strat1"  
-replace att_strat = "the consortium's strategy must be consistent with her own strategy" if att_strat == "att_strat2"  
-replace att_strat = "the company has an export strategy and the consortium is a vector for certain actions" if att_strat == "att_strat3"  
-replace att_strat = "other" if att_strat == "att_strat4"  
-
-
-* lab values of att_cont:
-replace att_cont = "no contribution" if att_cont == "att_cont1" 
-replace att_cont = "fixed, lump sum contribution" if att_cont == "att_cont2" 
-replace att_cont = "proportional contribution to the turnover" if att_cont == "att_cont3" 
-replace att_cont = "proportional contribution to the turnover achieved at export" if att_cont == "att_cont4"
-replace att_cont = "other" if att_cont == "att_cont5"   
-
-/*
-* lab values of att_hor:
 lab var att_hor1 "preffered time for meeting 8-10h" 
 lab var att_hor2 "preffered time for meeting 9-12h30" 
 lab var att_hor3 "preffered time for meeting 12h30-15h30" 
 lab var att_hor4 "preffered time for meeting 15h30-19h"
 lab var att_hor5 "preffered time for meeting 18-20h"
 */
+lab var support1 "Pas besoin de support, je me débrouille seule pour participer aux rencontres"
+lab var support2 "organize virtual meetings (zoom or skype)"
+lab var support3 "change the meeting place"
+lab var support4 "adopt a time slot before or after the regular working day"
+lab var support5 "offer free childcare during consortia meetings"
+lab var support6 "provide financial support for transportation and accommodation"
+lab var support7 "other"
+
+		* Section contact & validation
+lab var validation "respondent validated his/her answers"
+lab var attest "respondents attest that his/her responses correspond to truth"
+
+}
+*/
+***********************************************************************
+* 	PART 7: 	Label the variables values	  			
+***********************************************************************
+/*
+
+local yesnovariables ident ident2 man_fin_profit man_mark_pra man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
+exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1
+
+label define yesno 1 "Yes" 0 "No"
+foreach var in local yesnovariables {
+	label values `var' yesno
+}
+
+local frequencyvariables man_hr_obj man_hr_feed man_pro_ano man_fin_per 
+
+label define frequency 0 "Never" 1 "Annually" 2 "Monthly" 3 "Weekly" 4 "Daily"
+foreach var in local frequencyvariables {
+	label values `var' frequency
+}
+
+local agreevariables car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
+
+label define agree 1 "Strongly disagree" 2 "Disagree" 3 "Neither agree nor disagree" 4 "Agree" 5 "Strongly agree" 
+foreach var in local agreevariables {
+	label values `var' agree
+}
+
+label define label_list_group 1 "treatment_group" 0 "control_group"
+label values d_list_group label_list_group 
+
+label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
+label values orienter label_orienter
+
+label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
+label values ident_nouveau_personne label_ident_nouveau_personne
+
+label define label_ident_repondent_position 1 "La propriétaire" 2 "La PDG" 3 "Propriétaire et PDG" 4 "Je ne veux pas répondre" 5 "Aucune des deux" 
+label values ident_repondent_position label_ident_repondent_position
+
+label define label_entr_bien 1 "Bien" 2 "Service" 3 "Les deux"
+label values entr_bien label_entr_bien
+
+label define label_net_coop  1 "Winning" 2 "Communication" 3 "Trust" 4 "Elimination" 5 "Exchange" 6 "Power" 7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
+label values net_coop label_net_coop
+
+label define label_man_fin_enr 1 "yes, in paper" 2 "yes, in digital" 3 "yes, in paper and digital" 4 "No" 
+label values man_fin_enr label_man_fin_enr
+
+label define label_exprep_couts 1 "very low" 10 "very high"
+label values exprep_couts label_exprep_couts
+
+label define label_att_voyage 1 "participant can travel" 2 "particiapant can travel if there is a financial support" 3 "participant can not travel"
+label values att_voyage label_att_voyage 
+
+label define label_tel_supl 1 "phone number 1" 2 "phone number 2"
+label values tel_supl label_tel_supl
+
+label define label_attest 1 "Yes" 
+label values attest label_attest 
+*/
+
 
 ***********************************************************************
-* 	Part 9: Save the changes made to the data		  			
+* 	Part 8: Save the changes made to the data		  			
 ***********************************************************************
 cd "$bl_intermediate"
 save "bl_inter", replace
