@@ -121,9 +121,14 @@ replace check_again = check_again+1 if validation==1 & check_again>0
 ***********************************************************************
 sum ca_2021, d
 scalar ca_95p = r(p95)
-scalar list
 replace check_again=2 if ca_2021> 2800000 & ca_2021!=.
+replace questions_needing_checks = questions_needing_checks + "ca_2021 très grand/" if ca_2021> 2800000 & ca_2021!=.
 
+
+***********************************************************************
+* 	Part 2.4 Remove observations with more than 10 missing fields			
+***********************************************************************
+replace check_again=0 if miss>10
 
 ***********************************************************************
 * 	Part 3 Re-shape the correction sheet			
