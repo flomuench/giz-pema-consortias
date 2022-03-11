@@ -162,7 +162,7 @@ replace att_adh_autres ="Développer un réseau de relations avec des femmes ent
 
 replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
 replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
-replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if entr_idee== "تثمين المنتوجات الفلاحية و حمايتها من الإتلاف "
+replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if id_plateforme == 1196
 replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
 replace entr_idee= "appareils électroménagers, nourriture, vêtements," if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
 
@@ -181,6 +181,8 @@ replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
 * browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
 replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
+replace ca_2021 = "600000" if ca_2021 == "6cent000"
+replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 

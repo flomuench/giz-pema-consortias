@@ -123,84 +123,244 @@ putpdf paragraph, halign(center)
 putpdf image strip_ca2021.png
 putpdf pagebreak
 
+
+
 *scatter plots between CA and CA_Exp
-
-
 
 
 ***********************************************************************
 *** PART 4: Indices statistics	  			
 ***********************************************************************
-/*PLEASE ADAPT TO INDICES USED IN CONSORTIA and USE STRIPPLOTS & BARCHARTS RATHER THAN HIST
+*PLEASE ADAPT TO INDICES USED IN CONSORTIA and USE STRIPPLOTS & BARCHARTS RATHER THAN HIST
 
 
 putpdf paragraph, halign(center) 
 putpdf text ("consortias training: Z scores"), bold linebreak
 
-	* Digital Z-scores
+	* Management practices Z-scores
 	
-hist digtalvars, ///
-	title("Zscores of digital scores") ///
+hist mngtvars, ///
+	title("Zscores of management practices questions") ///
 	xtitle("Zscores")
-graph export digital_zscores.png, replace
+graph export mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image digital_zscores.png
+putpdf image mngtvars_zscores.png
 putpdf pagebreak
 
-	* Export preparation Z-scores
-	
-hist expprep, ///
-	title("Zscores of export preparation questions") ///
-	xtitle("Zscores")
-graph export expprep_zscores.png, replace
+graph mngtvars
+gr export mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image expprep_zscores.png
+putpdf image mngtvars_zscores.png
 putpdf pagebreak
 
-	* Export outcomes Z-scores
-	
-hist expoutcomes, ///
-	title("Zscores of export outcomes questions") ///
-	xtitle("Zscores")
-graph export expoutcomes_zscores.png, replace
+stripplot mngtvars
+gr export mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image expoutcomes_zscores.png
+putpdf image mngtvars_zscores.png
 putpdf pagebreak
 
+	* Marketing practices Z-scores
+	
+hist markvars, ///
+	title("Zscores of marketing practices questions") ///
+	xtitle("Zscores")
+graph export markvars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image markvars_zscores.png
+putpdf pagebreak
+
+graph markvars
+gr export markvars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image markvars_zscores.png
+putpdf pagebreak
+
+stripplot markvars
+gr export markvars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image markvars_zscores.png
+putpdf pagebreak
+
+	* Export management Z-scores
+	
+hist exportmngt, ///
+	title("Zscores of export management questions") ///
+	xtitle("Zscores")
+graph export exportmngt_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportmngt_zscores.png
+putpdf pagebreak
+
+graph exportmngt
+gr export exportmngt_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportmngt_zscores.png
+putpdf pagebreak
+
+stripplot exportmngt
+gr export exportmngt_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportmngt_zscores.png
+putpdf pagebreak
+
+	* Export readiness Z-scores
+	
+hist exportprep, ///
+	title("Zscores of export readiness questions") ///
+	xtitle("Zscores")
+graph export exportprep_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportprep_zscores.png
+putpdf pagebreak
+
+graph exportprep
+gr export exportprep_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportprep_zscores.png
+putpdf pagebreak
+
+stripplot exportprep
+gr export exportprep_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportprep_zscores.png
+putpdf pagebreak
+
+	* Combined export practices Z-scores
+	
+hist exportcombined, ///
+	title("Zscores of combined export practices questions") ///
+	xtitle("Zscores")
+graph export exportcombined_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportcombined_zscores.png
+putpdf pagebreak
+
+graph exportcombined
+gr export exportcombined_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportcombined_zscores.png
+putpdf pagebreak
+
+stripplot exportcombined
+gr export exportcombined_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportcombined_zscores.png
+putpdf pagebreak
 
 	* For comparison, the 'raw' indices: 
+
+	* Management practices Z-scores
 	
-	* Digital Z-scores
-	
-hist raw_digtalvars, ///
-	title("Raw sum of all digital scores") ///
+hist raw_mngtvars, ///
+	title("raw sum of all management practices scores") ///
 	xtitle("Sum")
-graph export raw_digital.png, replace
+graph export raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_digital.png
+putpdf image raw_mngtvars.png
 putpdf pagebreak
 
-	* Export preparation Z-scores
-	
-hist raw_expprep, ///
-	title("Raw sum of all export preparation questions") ///
-	xtitle("Sum")
-graph export raw_expprep.png, replace
+graph raw_mngtvars
+gr export raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_expprep.png
+putpdf image raw_mngtvars.png
+putpdf pagebreak
+
+stripplot raw_mngtvars
+gr export raw_mngtvars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_mngtvars.png
+putpdf pagebreak
+
+	* Marketing practices Z-scores
+	
+hist raw_markvars, ///
+	title("Raw sum of all marketing practices questions") ///
+	xtitle("Sum")
+graph export raw_markvars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_markvars.png
+putpdf pagebreak
+
+graph raw_markvars
+gr export raw_markvars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_markvars.png
+putpdf pagebreak
+
+stripplot raw_markvars
+gr export raw_markvars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_markvars.png
 putpdf pagebreak
 
 	* Export outcomes Z-scores
-	
-hist raw_expoutcomes, ///
-	title("Raw sum of all export outcomes questions") ///
+
+hist raw_exportmngt, ///
+	title("Raw sum of all export management questions") ///
 	xtitle("Sum")
-graph export raw_expoutcomes.png, replace
+graph export raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_expoutcomes.png
+putpdf image raw_exportmngt.png
 putpdf pagebreak
+
+graph raw_exportmngt
+gr export raw_exportmngt.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportmngt.png
+putpdf pagebreak
+
+stripplot raw_exportmngt
+gr export raw_exportmngt.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportmngt.png
+putpdf pagebreak
+
+
+	* Export readiness Z-scores
 	
-*/		
+hist raw_exportprep, ///
+	title("Raw sum of all export readiness questions") ///
+	xtitle("Sum")
+graph export raw_exportprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportprep.png
+putpdf pagebreak
+
+graph raw_exportprep
+gr export raw_exportprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportprep.png
+putpdf pagebreak
+
+stripplot raw_exportprep
+gr export raw_exportprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportprep.png
+putpdf pagebreak
+
+	* Combined export practices Z-scores
+	
+hist raw_exportcombined, ///
+	title("Raw sum of allcombined export practices questions") ///
+	xtitle("Sum")
+graph export raw_exportcombined.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportcombined.png
+putpdf pagebreak
+
+graph raw_exportcombined
+gr export raw_exportcombined.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportcombined.png
+putpdf pagebreak
+
+stripplot raw_exportcombined
+gr export raw_exportcombined.png, replace
+putpdf paragraph, halign(center) 
+putpdf image raw_exportcombined.png
+putpdf pagebreak
+
+		
 /***********************************************************************
 * 	PART 4:  Firm characteristics
 ***********************************************************************
