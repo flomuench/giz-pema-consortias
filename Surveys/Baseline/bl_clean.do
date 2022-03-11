@@ -25,7 +25,7 @@
 
 use "${bl_raw}/bl_raw", clear
 
-{
+
 	* string
 ds, has(type string) 
 local strvars "`r(varlist)'"
@@ -35,16 +35,13 @@ format %-20s `strvars'
 foreach x of local strvars {
 replace `x'= lower(`x')
 replace `x' = stritrim(strtrim(`x'))
-}
+
 	* numeric 
 ds, has(type numeric) 
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 }
+*/
 	* keep dates as string variables for RA quality checks
 gen date_creation_string = Date
 format date_creation_string %td
@@ -76,11 +73,21 @@ replace complete = 1 if validation ==1 | attest ==1
 ***********************************************************************
 rename *, lower
 
-/*
+
 
 ***********************************************************************
 * 	PART 5: 	Rename the variables as needed
 ***********************************************************************
+*rename variables that are also in the registration file so that the merge works
+rename ca_2018 ca_2018_rg
+rename ca_exp2018 ca_exp2018_rg
+rename ca_2019 ca_2019_rg
+rename ca_exp2019 ca_exp2019_rg
+rename ca_2020 ca_2020_rg
+rename ca_exp2020 ca_exp2020_rg
+
+/*
+
 ident 
 orienter 
 ident2
@@ -241,14 +248,16 @@ rename raisonsociale firmname
 * 	PART 6: 	Label the variables		  			
 ***********************************************************************
 
-{
+
         * label the dataset
 label data "Baseline Survey"
 notes _dta : March 2022
 notes _dta : Consortium Project
 
 
-label variable list_group "Treatment or Control Group"
+
+*label variable list_group "Treatment or Control Group"
+
 
 		* Section identification
 *lab var ident "identification"
@@ -298,7 +307,7 @@ lab var man_fin_per "frequency of examinin gfinancial performance"
 
 		* Section marketing practices: man_mark_prix was changed to man_mark_pra/
 		*but has to be verified with El-Amouri
-lab var man_mark_pra  "study the prices and/or products of one of competitors"
+lab var man_mark_prix  "study the prices and/or products of one of competitors"
 lab var man_mark_div  "ask customers what other products they would like to be produced"
 lab var man_mark_clients "investigate why past customers have stopped buying from the company"
 lab var man_mark_offre "attract customers with a special offer"
@@ -324,12 +333,12 @@ lab var info_neces "obtaining necessary information"
 lab var ca_2021 "turnover in 2021"
 lab var ca_exp_2021 "export turnover in 2021"
 lab var profit_2021 "profit in 2021"
-lab var ca_2020 "turnover in 2020"
-lab var ca_2019 "turnover in 2019"
-lab var ca_2018 "turnover in 2018"
-lab var ca_exp2020 "export turnover in 2020"
-lab var ca_exp2019 "export turnover in 2019"
-lab var ca_exp2018 "export turnover in 2018"
+lab var ca_2020_rg "turnover in 2020"
+lab var ca_2019_rg "turnover in 2019"
+lab var ca_2018_rg "turnover in 2018"
+lab var ca_exp2020_rg "export turnover in 2020"
+lab var ca_exp2019_rg "export turnover in 2019"
+lab var ca_exp2018_rg "export turnover in 2018"
 lab var id_admin "tax identification number"
 
 		* Section characteristics of the company
@@ -376,6 +385,7 @@ lab var jeudi "tuesday"
 lab var vendredi "friday"
 lab var samedi "saturday"
 lab var dimanche "sunday"
+
 lab var att_hor1 "preffered time for meeting 8-10h" 
 lab var att_hor2 "preffered time for meeting 9-12h30" 
 lab var att_hor3 "preffered time for meeting 12h30-15h30" 
@@ -394,7 +404,7 @@ lab var support7 "other"
 lab var validation "respondent validated his/her answers"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
-}
+
 */
 ***********************************************************************
 * 	PART 7: 	Label the variables values	  			

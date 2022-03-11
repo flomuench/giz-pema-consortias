@@ -60,15 +60,15 @@ putpdf pagebreak
 		
 	
 	* firms with complete entries
-graph bar (count) id_plateforme if miss==0, blabel(total) ///
+graph bar (count), over(miss) blabel(total) ///
 	title("Nombre des entreprises avec reponses complète") 
 gr export complete_responses.png, replace
 putpdf paragraph, halign(center) 
 putpdf image complete_responses.png
 putpdf pagebreak
-
+*/
 	* firms with validated entries
-graph bar (count) id_plateforme if validation==1, blabel(total) ///
+graph bar (count),over(validation) blabel(total) ///
 	title("Nombre des entreprises avec reponses validés")
 gr export complete_responses.png, replace
 putpdf paragraph, halign(center) 
@@ -105,10 +105,35 @@ putpdf text ("min. `: display %9.0g `r(min)'' minutes, max. `: display %9.0g `r(
 putpdf pagebreak*/
 }
 */
+
 ***********************************************************************
-*** PART 3: Z Scores 		  			
+*** PART 3: Baseline descriptive statistics 		  			
 ***********************************************************************
-/*
+
+*bar chart and boxplots of accounting variable by poles
+graph bar ca_2021, over(pole)
+gr export bar_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_ca2021.png
+putpdf pagebreak
+
+stripplot ca_2021 if ca_2021<ca_95p, over(pole) vertical
+gr export strip_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_ca2021.png
+putpdf pagebreak
+
+*scatter plots between CA and CA_Exp
+
+
+
+
+***********************************************************************
+*** PART 4: Indices statistics	  			
+***********************************************************************
+/*PLEASE ADAPT TO INDICES USED IN CONSORTIA and USE STRIPPLOTS & BARCHARTS RATHER THAN HIST
+
+
 putpdf paragraph, halign(center) 
 putpdf text ("consortias training: Z scores"), bold linebreak
 

@@ -66,7 +66,7 @@ drop if dup>1
 *Individual duplicate drops (where heure debut is not the same). If the re-shape
 *command in bl_test gives an error it is because there are remaining duplicates,
 *please check them individually and drop (actually el-amouri is supposed to that)
-drop if id_plateforme==1239 & heuredébut=="16h02`55``"
+drop if id_plateforme==1239 & heuredébut=="16:02:55"
 
 *restore original order
 sort date heuredébut
@@ -189,7 +189,9 @@ replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 *3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
 
 
-
+*3.6 Comparison of newly provided accounting data for firms with needs_check=1
+*Please compare new and old and decide whether to replace the value. 
+*If new value continues to be strange, then check_again plus comment
 
 
 

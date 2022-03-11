@@ -117,7 +117,7 @@ label var inno_pers "Innovation coming from a personal/ employee inniative "
 
 	* Create continuous variable for number of innovation: 
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
-label var num_inno "Number of innovation done by a firm"
+label var num_inno "Number of different types innovation introduced by a firm"
 
 
 /*
@@ -159,16 +159,16 @@ label var listexp_percentage "percentage mean difference of the list experiment 
 
 //2.3 time used to fill survey
 {
-format Date %td
-replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
-replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
-replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
-str2time Heuredébut, generate(eheuredébut)
+format date %td
+replace heuredébut = ustrregexra( heuredébut ,"h",":")
+replace heuredébut = ustrregexra( heuredébut ,"`",":")
+replace heuredébut = substr(heuredébut,1,length(heuredébut)-2)
+str2time heuredébut, generate(eheuredébut)
 
-replace Heurefin = ustrregexra( Heurefin ,"h",":")
-replace Heurefin = ustrregexra( Heurefin ,"`",":")
-replace Heurefin = substr(Heurefin,1,length(Heurefin)-2)
-str2time Heurefin, generate(eheurefin)
+replace heurefin = ustrregexra( heurefin ,"h",":")
+replace heurefin = ustrregexra( heurefin ,"`",":")
+replace heurefin = substr(heurefin,1,length(heurefin)-2)
+str2time heurefin, generate(eheurefin)
 
 * Creation of the time variable
 gen etime = eheurefin - eheuredébut
@@ -222,9 +222,13 @@ lab values rg_gender_pdg sex
 * 	PART 4: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 
-egen miss1 = rowmiss(entr_idee - profit_2021)
-egen miss2 = rowmiss (car_efi_fin1 - support7)
-gen miss = miss1 + miss2
+egen miss1 = rowmiss(entr_idee - inno_mot)
+egen miss2 = rowmiss (inno_rd - profit_2021)
+egen miss3 = rowmiss (car_efi_fin1 - att_adh6)
+egen miss4 = rowmiss (att_strat)
+egen miss5 = rowmiss (att_cont)
+egen miss6 = rowmiss (att_jour - support6)
+gen miss = miss1 + miss2 +miss3 +miss4+miss5+miss6
 *egen nomiss1 = rownonmiss(entr_idee - profit_2021)
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
 *gen nomiss= nomiss1 + nomiss2
