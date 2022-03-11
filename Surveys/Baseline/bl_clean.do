@@ -40,7 +40,10 @@ replace `x' = stritrim(strtrim(`x'))
 ds, has(type numeric) 
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 }
 	* keep dates as string variables for RA quality checks
 gen date_creation_string = Date
