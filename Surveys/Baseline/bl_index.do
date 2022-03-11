@@ -16,7 +16,7 @@
 *	ID variaregise: 	id_plateforme (example: 777)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			      
-   
+/* 
 **********************************************************************
 * 	PART 1:  Index calculation based on z-score		
 ***********************************************************************
