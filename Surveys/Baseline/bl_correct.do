@@ -80,6 +80,7 @@ replace `var' = ustrregexra( `var',"dinars","")
 replace `var' = ustrregexra( `var',"dinar","")
 replace `var' = ustrregexra( `var',"milles","000")
 replace `var' = ustrregexra( `var',"mille","000")
+replace `var' = ustrregexra( `var',"million","000000")
 replace `var' = ustrregexra( `var',"dt","")
 replace `var' = ustrregexra( `var',"k","000")
 replace `var' = ustrregexra( `var',"dt","")
@@ -106,6 +107,8 @@ replace `var' = ustrregexra( `var',"تونسي","")
 replace `var' = ustrregexra( `var',"د","")
 replace `var' = ustrregexra( `var',"d","")
 replace `var' = ustrregexra( `var',"na","")
+replace `var' = ustrregexra( `var',"r","")
+replace `var' = ustrregexra( `var',"مليون","000000")
 replace `var' = "1000" if `var' == "000"
 replace `var' = subinstr(`var', ".", "",.)
 replace `var' = subinstr(`var', ",", ".",.)
@@ -183,6 +186,7 @@ replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
+replace inno_rd ="1000000" if id_plateforme==1054
 
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 

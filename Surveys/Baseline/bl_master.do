@@ -43,8 +43,8 @@ net install http://www.stata.com/users/kcrow/tab2docx
 ssc install labutil
 */
 
-net from https://www.sealedenvelope.com/
-net install time.pkg
+*net from https://www.sealedenvelope.com/
+*net install time.pkg
 
 	* define graph scheme for visual outputs
 set scheme plotplain

@@ -158,7 +158,7 @@ label var listexp_percentage "percentage mean difference of the list experiment 
 
 
 //2.3 time used to fill survey
-{
+/*{
 format date %td
 replace heuredébut = ustrregexra( heuredébut ,"h",":")
 replace heuredébut = ustrregexra( heuredébut ,"`",":")
@@ -189,9 +189,9 @@ label var time_secs "Durée du questionnaire par entreprise en secondes"
 label var time_mins "Durée du questionnaire par entreprise en minutes"
 
 drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
-}
+}*/
 
-*lab var time_survey "Time used to complete the survey"
+
 
 
 * 2.4 CREATE nb_dehors_famille/(net_nb_dehors_famille+ net_nb_famille)
