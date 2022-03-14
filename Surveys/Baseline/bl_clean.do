@@ -41,29 +41,6 @@ ds, has(type numeric)
 local numvars "`r(varlist)'"
 format %-25.2fc `numvars'
 
-	* dates
-		* creation (HOURS TRANSFORMATION DOES NOT YET WORK)
-format Date %td
-replace Heuredébut = ustrregexra( Heuredébut ,"h",":")
-replace Heuredébut = ustrregexra( Heuredébut ,"`",":")
-replace Heuredébut = substr(Heuredébut,1,length(Heuredébut)-2)
-str2time Heuredébut, generate(eHeuredébut)
-
-replace Heurefin = ustrregexra( Heurefin ,"h",":")
-replace Heurefin = ustrregexra( Heurefin ,"`",":")
-replace Heurefin = substr(Heurefin,1,length(Heuredébut)-1)
-str2time Heurefin, generate(eHeurefin)
-
-* Creation of the time variable
-/*gen etime = eHeurefin - eHeuredébut
-
-*gen etime_positive = etime* -1 if etime < 0 &else if etime >
-time2str etime_positive, generate(time)
-label var time "durée du questionnaire par entreprise"
-drop etime
-drop etime_positive
-drop eHeuredébut
-drop eHeurefin*/
 }
 
 	* keep dates as string variables for RA quality checks

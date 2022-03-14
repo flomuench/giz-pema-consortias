@@ -137,7 +137,7 @@ if (1) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
 	PART 3.8: Create indices
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_index.do"
+if (1) do "${bl_github}/bl_index.do"
 
 /* --------------------------------------------------------------------
 	PART 3.9: Export pdf with descriptive statistics on responses

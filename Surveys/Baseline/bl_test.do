@@ -145,8 +145,9 @@ gen valeur_actuelle=.
 gen correction_propose=.
 gen correction_valide=.
 cd "$bl_checks"
+sort date heuredébut
 order id_plateforme miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
-export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche de correction" if check_again>=1,  firstrow(variables)replace
+export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche_de_correction.xlsx" if check_again>=1,  firstrow(variables)replace
 restore
 
 
