@@ -33,7 +33,7 @@ use "${bl_intermediate}/bl_inter", clear
 
 * If any of the accounting vars has missing value or zero, create 
 
-local accountvars ca_2021 ca_exp_2021 profit_2021
+local accountvars ca_2021 profit_2021
 
 foreach var of local accountvars {
 	replace check_again = 2 if `var' == 0 
@@ -42,7 +42,7 @@ foreach var of local accountvars {
 	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
 }
 
-local accountvars2  inno_rd exprep_inv
+local accountvars2  inno_rd exprep_inv ca_exp_2021
 foreach var of local accountvars2 {
 	replace check_again = 2 if `var' == . 
 	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
@@ -56,15 +56,11 @@ foreach var of local vars_checked {
 	replace check_again = 3 if `var' == . & needs_check==1
 	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& needs_check==1 
 	
-	replace check_again = 3 if `var' == 0 & needs_check==1  & validation==1
-	replace questions_needing_checks = questions_needing_checks +  "`var' zero, entreprise dans la liste pour re-fournier donnés 2018-2020  /" if `var' == 0 & needs_check==1 
-
 }
 */
 
 * If profits are larger than 'chiffres d'affaires' need to check: 
- 
-replace check_again = 3 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
+ replace check_again = 2 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
 replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=.
 
 
@@ -92,22 +88,17 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 
 replace check_again=2 if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur/ " if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
-replace check_again=2 if operation_export==1 & exp_pays==0 
-replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur selon registre/ " if operation_export==1 & exp_pays==0
 
-replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
-replace questions_needing_checks = questions_needing_checks + " ca_exp2021 manquent mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
+replace check_again=2 if ca_exp_2021>0 & ca_exp_2021!=. & exp_pays==0 
+replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur/ " if ca_exp_2021>0 & ca_exp_2021!=.
 
-*replace check_again=2 if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==0
-*replace questions_needing_checks = questions_needing_checks + " ca_exp2021 zéro mais exp2020 rapporté/ " if ca_exp2020>0 & ca_exp2020!=. & ca_exp_2021==. 
 
-replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==. 
-replace questions_needing_checks = questions_needing_checks + " ca_2021 manquent mais ca_2021 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==.  
+replace check_again=2 if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & ca_exp_2021==0 
+replace questions_needing_checks = questions_needing_checks + " ca_exp_2021 zéro mais export rapporté dans le passé/ " if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & ca_exp_2021==0 
 
-replace check_again=2 if ca_2020>0 & ca_2020==. & ca_2021==0
-replace questions_needing_checks = questions_needing_checks + " ca_2021 zéro mais ca_2020 rapporté/ " if ca_2020>0 & ca_2020==. & ca_2021==0
-
- 
+replace check_again=2 if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & exp_pays==. 
+replace questions_needing_checks = questions_needing_checks + " exp_pays manquent mais export rapporté dans le passé/ " if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & exp_pays==. 
+*/
 
 * If number of export countries is higher than 50 – needs check 
 replace check_again=1 if exp_pays>49 & exp_pays!=.
@@ -117,13 +108,32 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays très e
 replace check_again = check_again+1 if validation==1 & check_again>0
 
 ***********************************************************************
-* 	Part 2.3 Outliers			
+* 	Part 2.3 large Outliers			
 ***********************************************************************
 sum ca_2021, d
-scalar ca_95p = r(p95)
-replace check_again=2 if ca_2021> 2800000 & ca_2021!=.
-replace questions_needing_checks = questions_needing_checks + "ca_2021 très grand/" if ca_2021> 2800000 & ca_2021!=.
+scalar ca_90p = r(p90)
+replace check_again=2 if ca_2021> ca_90p & ca_2021!=.
+replace questions_needing_checks = questions_needing_checks + "ca_2021 très grand/" if ca_2021> ca_90p & ca_2021!=.
 
+sum ca_exp_2021, d
+scalar ca_exp90p = r(p90)
+replace check_again=2 if ca_exp_2021> ca_exp90p & ca_exp_2021!=.
+replace questions_needing_checks = questions_needing_checks + "ca_exp_2021 très grand/" if ca_exp_2021> ca_exp90p & ca_exp_2021!=.
+
+sum profit_2021, d
+scalar profit_90p = r(p90)
+replace check_again=2 if profit_2021> profit_90p & profit_2021!=.
+replace questions_needing_checks = questions_needing_checks + "profit très grand/" if profit_2021> profit_90p & profit_2021!=.
+
+sum inno_rd, d
+scalar inno_rd_90p = r(p90)
+replace check_again=2 if inno_rd> inno_rd_90p & inno_rd!=.
+replace questions_needing_checks = questions_needing_checks + "investissement recherche très grand/" if inno_rd> inno_rd_90p & inno_rd!=.
+
+sum exprep_inv, d
+scalar exprep_inv_90p = r(p90)
+replace check_again=2 if exprep_inv> exprep_inv_90p & exprep_inv!=.
+replace questions_needing_checks = questions_needing_checks + "investissement export très grand/" if exprep_inv> exprep_inv_90p & exprep_inv!=.
 
 ***********************************************************************
 * 	Part 2.4 Remove observations with more than 10 missing fields			
@@ -145,8 +155,9 @@ gen valeur_actuelle=.
 gen correction_propose=.
 gen correction_valide=.
 cd "$bl_checks"
-order id_plateforme miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
-export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche de correction" if check_again>=1,  firstrow(variables)replace
+sort date heuredébut validation nombre_question
+order id_plateforme date heuredébut miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
+export excel id_plateforme miss validation check_again nombre_questions questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide using "fiche_de_correction.xlsx" if check_again>=1,  firstrow(variables)replace
 restore
 
 
