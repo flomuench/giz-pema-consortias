@@ -122,7 +122,8 @@ label var num_inno "Number of different types innovation introduced by a firm"
 * create a new variable for survey start: 
 generate survey_started= 0
 replace survey_started= 1 if _merge == 3
-
+label var survey_started "Number of firms which started the survey"
+label values survey_started yesno
 /*
 
 * 2.2 create variables for list experiment
@@ -220,8 +221,14 @@ gen miss = miss1 + miss2 +miss3 +miss4+miss5+miss6
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
 *gen nomiss= nomiss1 + nomiss2
 
- 
+ ***********************************************************************
+* 	PART 5: Generate variable to assess completed answers			  										  
+***********************************************************************
 
+generate survey_completed= 0
+replace survey_completed= 1 if miss == 0
+label var survey_completed "Number of firms which completed the survey"
+label values survey_completed yesno
 */
 */
 	* save dta file

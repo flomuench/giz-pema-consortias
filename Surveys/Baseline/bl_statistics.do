@@ -38,15 +38,17 @@ putpdf paragraph, halign(center)
 putpdf text ("consortias : baseline survey progress")
 
 {
-	* total number of firms that responded
-graph bar (count) id_plateforme, blabel(total) ///
-	title("Nombres des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
+	* Share of firms that started the survey
+count if survey_started==1
+gen share= (`r(N)'/263)*100
+graph bar share, blabel(total) ///
+	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries")
 graph export responserate.png, replace
 putpdf paragraph, halign(center)
 putpdf image responserate.png
 putpdf pagebreak
-
+drop share
 	
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
@@ -60,20 +62,26 @@ putpdf pagebreak
 		
 	
 	* firms with complete entries
-graph bar (count), over(miss) blabel(total) ///
-	title("Nombre des entreprises avec reponses complète") 
+count if survey_completed==1
+gen share= (`r(N)'/263)*100
+graph bar share, blabel(total) ///
+	title("La part des entreprises avec reponses complète") 
 gr export complete_responses.png, replace
 putpdf paragraph, halign(center) 
 putpdf image complete_responses.png
 putpdf pagebreak
+drop share
 */
 	* firms with validated entries
-graph bar (count),over(validation) blabel(total) ///
-	title("Nombre des entreprises avec reponses validés")
-gr export complete_responses.png, replace
+count if validation==1
+gen share= (`r(N)'/263)*100
+graph bar share, blabel(total) ///
+	title("La part des entreprises avec reponses validés")
+gr export validated_responses.png, replace
 putpdf paragraph, halign(center) 
-putpdf image complete_responses.png
+putpdf image validated_responses.png
 putpdf pagebreak
+drop share
 
 *Type of support desired by firms
 gr hbar (sum) support1 - support6, blabel(total) legend (pos (6) label (1 "no support need") label(2 "virtual meetings") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "garde d'enfance") label(6 "support pour transport et heberge")) ///
@@ -107,26 +115,183 @@ putpdf pagebreak*/
 */
 
 ***********************************************************************
+* 	PART 3:  Statistics on numeric variables by pole 		  			
+***********************************************************************
+/*
+putpdf paragraph, halign(center) 
+putpdf text ("consortias : Statistics by pole")
+
+forvalues x = 1(1)4 {
+
+		* CA, CA export
+	histogram ca_mean if ca_mean > 0 & pole == `x', frequency addl ///
+	title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
+	ytitle("Nombre d'entreprises") ///
+	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
+	xlabel(, labsize(tiny) format(%9.0fc)) ///
+	bin(20) ///
+	name(ca_mean, replace)	
+	gr export ca_mean.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean.png
+	putpdf pagebreak
+
+	histogram ca_mean if ca_mean < 150000 & ca_mean > 0 & pole == `x' , frequency addl ///
+		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
+		ytitle("Nombre d'entreprises") ///
+		xlabel(, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
+		bin(80) ///
+		name(ca_mean, replace)
+	gr export ca_mean_zoomin.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean_zoomin.png
+	putpdf pagebreak
+
+	histogram ca_mean if ca_mean < 15000 & ca_mean > 0 & pole == `x', frequency addl ///
+		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
+		ytitle("Nombre d'entreprises") ///
+		xlabel(, labsize(tiny) format(%9.1fc)) ///
+		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
+		bin(80) ///
+		name(ca_mean, replace)
+	gr export ca_mean_zoomin2.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ca_mean_zoomin2.png
+	putpdf pagebreak
+		
+		
+		* age
+	stripplot age if pole == `x', jitter(4) vertical yline(2, lcolor(red)) ///
+		ytitle("Age de l'entreprise") ///
+		name(age_strip, replace)
+	histogram age if age >= 0 & pole == `x', frequency addl ///
+		ytitle("Age de l'entreprise") ///
+		xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
+		bin(60) ///
+		color(%30) ///
+		name(age_hist, replace)	
+	gr combine age_strip age_hist, title("Age des entreprises - `pole`x''")
+	graph export age.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image age.png
+	putpdf pagebreak
+
+		* legal status
+	graph bar (count) if pole == `x', over(rg_legalstatus) blabel(total) ///
+		title("Statut juridique des entreprises - `pole`x''") ///
+		ytitle("nombre d'enregistrement")
+	graph export legalstatus.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image legalstatus.png
+	putpdf pagebreak
+
+}
+*/
+***********************************************************************
 *** PART 3: Baseline descriptive statistics 		  			
 ***********************************************************************
 
 *bar chart and boxplots of accounting variable by poles
-graph bar ca_2021, over(pole)
+     * variable ca_2021:
+graph bar ca_2021 if ca_2021<ca_90p, over(pole)
 gr export bar_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_ca2021.png
 putpdf pagebreak
 
-stripplot ca_2021 if ca_2021<ca_95p, over(pole) vertical
+stripplot ca_2021 if ca_2021<ca_90p, over(pole) vertical
 gr export strip_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_ca2021.png
 putpdf pagebreak
 
+     * variable ca_exp_2021:
+graph bar ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole)
+gr export bar_ca_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_ca_exp2021.png
+putpdf pagebreak
 
+stripplot ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole) vertical
+gr export strip_ca_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_ca_exp2021.png
+putpdf pagebreak
+
+     * variable profit_2021:
+	 
+graph bar profit_2021 if profit_2021<profit_90p, over(pole)
+gr export bar_profit_2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_profit_2021.png
+putpdf pagebreak
+
+stripplot profit_2021 if profit_2021<profit_90p, over(pole) vertical
+gr export strip_profit_2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_profit_2021.png
+putpdf pagebreak
+
+
+     * variable inno_rd:
+	 
+graph bar inno_rd if inno_rd<inno_rd_90p, over(pole)
+gr export bar_inno_rd.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_inno_rd.png
+putpdf pagebreak
+
+stripplot inno_rd if inno_rd<inno_rd_90p, over(pole) vertical
+gr export strip_inno_rd.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_inno_rd.png
+putpdf pagebreak
+
+     * variable exprep_inv:
+	 
+graph bar exprep_inv if exprep_inv<exprep_inv_90p, over(pole)
+gr export bar_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_exprep_inv.png
+putpdf pagebreak
+
+stripplot exprep_inv if exprep_inv<exprep_inv_90p, over(pole) vertical
+gr export strip_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_exprep_inv.png
+putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
+scatter ca_exp_2021 ca_2021 if ca_2021<ca_90p & ca_exp_2021<ca_exp90p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+gr export scatter_ca.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_ca.png
+putpdf pagebreak
 
+*scatter plots between CA_Exp and exprep_inv
+scatter ca_exp_2021 exprep_inv if ca_exp_2021<ca_exp90p & exprep_inv<exprep_inv_90p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+gr export scatter_exprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_exprep.png
+putpdf pagebreak
+
+*scatter plots between CA and inno_rd
+scatter ca_2021 inno_rd if inno_rd<inno_rd_90p & ca_2021<ca_90p, title("Proportion des investissements dans l'innovation (R&D) par rapport au chiffre d'affaires")
+gr export scatter_exprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_exprep.png
+putpdf pagebreak
+
+*scatter plots by pole
+forvalues x = 1(1)4 {
+		* between CA and CA_Exp
+twoway scatter ca_2021 ca_exp_2021 if ca_2021<ca_90p & ca_exp_2021<ca_exp90p & pole == `x', title("Proportion de CA exp par rapport au CA- pole`x'")
+gr export scatter_capole.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_capole.png
+putpdf pagebreak
+}
 
 ***********************************************************************
 *** PART 4: Indices statistics	  			
@@ -140,101 +305,101 @@ putpdf text ("consortias training: Z scores"), bold linebreak
 	* Management practices Z-scores
 	
 hist mngtvars, title("Zscores of management practices questions") xtitle("Zscores")
-graph export mngtvars_zscores.png, replace
+graph export hist_mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image mngtvars_zscores.png
+putpdf image hist_mngtvars_zscores.png
 putpdf pagebreak
 
-graph bar mngtvars
-gr export mngtvars_zscores.png, replace
+graph bar mngtvars, over(pole)
+gr export bar_mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image mngtvars_zscores.png
+putpdf image bar_mngtvars_zscores.png
 putpdf pagebreak
 
-stripplot mngtvars
-gr export mngtvars_zscores.png, replace
+stripplot mngtvars, over(pole) vertical
+gr export strip_mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image mngtvars_zscores.png
+putpdf image strip_mngtvars_zscores.png
 putpdf pagebreak
 
 	* Marketing practices Z-scores
 	
 hist markvars, title("Zscores of marketing practices questions") xtitle("Zscores")
-graph export markvars_zscores.png, replace
+graph export hist_markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image markvars_zscores.png
+putpdf image hist_markvars_zscores.png
 putpdf pagebreak
 
-graph bar markvars
-gr export markvars_zscores.png, replace
+graph bar markvars, over(pole)
+gr export bar_markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image markvars_zscores.png
+putpdf image bar_markvars_zscores.png
 putpdf pagebreak
 
-stripplot markvars
-gr export markvars_zscores.png, replace
+stripplot markvars, over(pole) vertical
+gr export strip_markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image markvars_zscores.png
+putpdf image strip_markvars_zscores.png
 putpdf pagebreak
 
 	* Export management Z-scores
 	
 hist exportmngt, title("Zscores of export management questions") xtitle("Zscores")
-graph export exportmngt_zscores.png, replace
+graph export hist_exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportmngt_zscores.png
+putpdf image hist_exportmngt_zscores.png
 putpdf pagebreak
 
-graph bar exportmngt
-gr export exportmngt_zscores.png, replace
+graph bar exportmngt, over(pole)
+gr export bar_exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportmngt_zscores.png
+putpdf image bar_exportmngt_zscores.png
 putpdf pagebreak
 
-stripplot exportmngt
-gr export exportmngt_zscores.png, replace
+stripplot exportmngt, over(pole) vertical
+gr export strip_exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportmngt_zscores.png
+putpdf image strip_exportmngt_zscores.png
 putpdf pagebreak
 
 	* Export readiness Z-scores
 	
 hist exportprep, title("Zscores of export readiness questions") xtitle("Zscores")
-graph export exportprep_zscores.png, replace
+graph export hist_exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportprep_zscores.png
+putpdf image hist_exportprep_zscores.png
 putpdf pagebreak
 
-graph bar exportprep
-gr export exportprep_zscores.png, replace
+graph bar exportprep, over(pole)
+gr export bar_exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportprep_zscores.png
+putpdf image bar_exportprep_zscores.png
 putpdf pagebreak
 
-stripplot exportprep
-gr export exportprep_zscores.png, replace
+stripplot exportprep, over(pole) vertical
+gr export strip_exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportprep_zscores.png
+putpdf image strip_exportprep_zscores.png
 putpdf pagebreak
 
 	* Combined export practices Z-scores
 	
 hist exportcombined, title("Zscores of combined export practices questions") xtitle("Zscores")
-graph export exportcombined_zscores.png, replace
+graph export hist_exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportcombined_zscores.png
+putpdf image hist_exportcombined_zscores.png
 putpdf pagebreak
 
-graph bar exportcombined
-gr export exportcombined_zscores.png, replace
+graph bar exportcombined, over(pole)
+gr export bar_exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportcombined_zscores.png
+putpdf image bar_exportcombined_zscores.png
 putpdf pagebreak
 
-stripplot exportcombined
-gr export exportcombined_zscores.png, replace
+stripplot exportcombined, over(pole) vertical
+gr export strip_exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
-putpdf image exportcombined_zscores.png
+putpdf image strip_exportcombined_zscores.png
 putpdf pagebreak
 
 	* For comparison, the 'raw' indices: 
@@ -242,21 +407,21 @@ putpdf pagebreak
 	* Management practices Z-scores
 	
 hist raw_mngtvars, title("raw sum of all management practices scores") xtitle("Sum")
-graph export raw_mngtvars.png, replace
+graph export hist_raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_mngtvars.png
+putpdf image hist_raw_mngtvars.png
 putpdf pagebreak
 
-graph bar raw_mngtvars
-gr export raw_mngtvars.png, replace
+graph bar raw_mngtvars, over(pole)
+gr export bar_raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_mngtvars.png
+putpdf image bar_raw_mngtvars.png
 putpdf pagebreak
 
-stripplot raw_mngtvars
-gr export raw_mngtvars.png, replace
+stripplot raw_mngtvars, over(pole) vertical
+gr export strip_raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_mngtvars.png
+putpdf image strip_raw_mngtvars.png
 putpdf pagebreak
 
 	* Marketing practices Z-scores
@@ -267,16 +432,16 @@ putpdf paragraph, halign(center)
 putpdf image raw_markvars.png
 putpdf pagebreak
 
-graph bar raw_markvars
-gr export raw_markvars.png, replace
+graph bar raw_markvars, over(pole)
+gr export bar_raw_markvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_markvars.png
+putpdf image bar_raw_markvars.png
 putpdf pagebreak
 
-stripplot raw_markvars
-gr export raw_markvars.png, replace
+stripplot raw_markvars, over(pole) vertical
+gr export strip_raw_markvars.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_markvars.png
+putpdf image strip_raw_markvars.png
 putpdf pagebreak
 
 	* Export outcomes Z-scores
@@ -287,16 +452,16 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportmngt.png
 putpdf pagebreak
 
-graph bar raw_exportmngt
-gr export raw_exportmngt.png, replace
+graph bar raw_exportmngt, over(pole)
+gr export bar_raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportmngt.png
+putpdf image bar_raw_exportmngt.png
 putpdf pagebreak
 
-stripplot raw_exportmngt
-gr export raw_exportmngt.png, replace
+stripplot raw_exportmngt, over(pole) vertical
+gr export strip_raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportmngt.png
+putpdf image strip_raw_exportmngt.png
 putpdf pagebreak
 
 
@@ -308,16 +473,16 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportprep.png
 putpdf pagebreak
 
-graph bar raw_exportprep
-gr export raw_exportprep.png, replace
+graph bar raw_exportprep, over(pole)
+gr export bar_raw_exportprep.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportprep.png
+putpdf image bar_raw_exportprep.png
 putpdf pagebreak
 
-stripplot raw_exportprep
-gr export raw_exportprep.png, replace
+stripplot raw_exportprep, over(pole) vertical
+gr export strip_raw_exportprep.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportprep.png
+putpdf image strip_raw_exportprep.png
 putpdf pagebreak
 
 	* Combined export practices Z-scores
@@ -328,16 +493,16 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportcombined.png
 putpdf pagebreak
 
-graph bar raw_exportcombined
-gr export raw_exportcombined.png, replace
+graph bar raw_exportcombined, over(pole)
+gr export bar_raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportcombined.png
+putpdf image bar_raw_exportcombined.png
 putpdf pagebreak
 
-stripplot raw_exportcombined
-gr export raw_exportcombined.png, replace
+stripplot raw_exportcombined, over(pole) vertical
+gr export strip_raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
-putpdf image raw_exportcombined.png
+putpdf image strip_raw_exportcombined.png
 putpdf pagebreak
 
 		
