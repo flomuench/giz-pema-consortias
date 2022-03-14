@@ -16,7 +16,7 @@
 * 	PART 1:  set environment + create pdf file for export		  			
 ***********************************************************************
 	* import file
-use "${bl_intermediate}/bl_inter", clear
+*use "${bl_intermediate}/bl_inter", clear
 
 	* set directory to checks folder
 cd "$bl_output"
@@ -139,15 +139,13 @@ putpdf text ("consortias training: Z scores"), bold linebreak
 
 	* Management practices Z-scores
 	
-hist mngtvars, ///
-	title("Zscores of management practices questions") ///
-	xtitle("Zscores")
+hist mngtvars, title("Zscores of management practices questions") xtitle("Zscores")
 graph export mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image mngtvars_zscores.png
 putpdf pagebreak
 
-graph mngtvars
+graph bar mngtvars
 gr export mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image mngtvars_zscores.png
@@ -161,15 +159,13 @@ putpdf pagebreak
 
 	* Marketing practices Z-scores
 	
-hist markvars, ///
-	title("Zscores of marketing practices questions") ///
-	xtitle("Zscores")
+hist markvars, title("Zscores of marketing practices questions") xtitle("Zscores")
 graph export markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image markvars_zscores.png
 putpdf pagebreak
 
-graph markvars
+graph bar markvars
 gr export markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image markvars_zscores.png
@@ -183,15 +179,13 @@ putpdf pagebreak
 
 	* Export management Z-scores
 	
-hist exportmngt, ///
-	title("Zscores of export management questions") ///
-	xtitle("Zscores")
+hist exportmngt, title("Zscores of export management questions") xtitle("Zscores")
 graph export exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportmngt_zscores.png
 putpdf pagebreak
 
-graph exportmngt
+graph bar exportmngt
 gr export exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportmngt_zscores.png
@@ -205,15 +199,13 @@ putpdf pagebreak
 
 	* Export readiness Z-scores
 	
-hist exportprep, ///
-	title("Zscores of export readiness questions") ///
-	xtitle("Zscores")
+hist exportprep, title("Zscores of export readiness questions") xtitle("Zscores")
 graph export exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportprep_zscores.png
 putpdf pagebreak
 
-graph exportprep
+graph bar exportprep
 gr export exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportprep_zscores.png
@@ -227,15 +219,13 @@ putpdf pagebreak
 
 	* Combined export practices Z-scores
 	
-hist exportcombined, ///
-	title("Zscores of combined export practices questions") ///
-	xtitle("Zscores")
+hist exportcombined, title("Zscores of combined export practices questions") xtitle("Zscores")
 graph export exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportcombined_zscores.png
 putpdf pagebreak
 
-graph exportcombined
+graph bar exportcombined
 gr export exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportcombined_zscores.png
@@ -251,15 +241,13 @@ putpdf pagebreak
 
 	* Management practices Z-scores
 	
-hist raw_mngtvars, ///
-	title("raw sum of all management practices scores") ///
-	xtitle("Sum")
+hist raw_mngtvars, title("raw sum of all management practices scores") xtitle("Sum")
 graph export raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_mngtvars.png
 putpdf pagebreak
 
-graph raw_mngtvars
+graph bar raw_mngtvars
 gr export raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_mngtvars.png
@@ -273,15 +261,13 @@ putpdf pagebreak
 
 	* Marketing practices Z-scores
 	
-hist raw_markvars, ///
-	title("Raw sum of all marketing practices questions") ///
-	xtitle("Sum")
+hist raw_markvars, title("Raw sum of all marketing practices questions") xtitle("Sum")
 graph export raw_markvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_markvars.png
 putpdf pagebreak
 
-graph raw_markvars
+graph bar raw_markvars
 gr export raw_markvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_markvars.png
@@ -295,15 +281,13 @@ putpdf pagebreak
 
 	* Export outcomes Z-scores
 
-hist raw_exportmngt, ///
-	title("Raw sum of all export management questions") ///
-	xtitle("Sum")
+hist raw_exportmngt, title("Raw sum of all export management questions") xtitle("Sum")
 graph export raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportmngt.png
 putpdf pagebreak
 
-graph raw_exportmngt
+graph bar raw_exportmngt
 gr export raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportmngt.png
@@ -318,15 +302,13 @@ putpdf pagebreak
 
 	* Export readiness Z-scores
 	
-hist raw_exportprep, ///
-	title("Raw sum of all export readiness questions") ///
-	xtitle("Sum")
+hist raw_exportprep, title("Raw sum of all export readiness questions") xtitle("Sum")
 graph export raw_exportprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportprep.png
 putpdf pagebreak
 
-graph raw_exportprep
+graph bar raw_exportprep
 gr export raw_exportprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportprep.png
@@ -340,15 +322,13 @@ putpdf pagebreak
 
 	* Combined export practices Z-scores
 	
-hist raw_exportcombined, ///
-	title("Raw sum of allcombined export practices questions") ///
-	xtitle("Sum")
+hist raw_exportcombined, title("Raw sum of allcombined export practices questions") xtitle("Sum")
 graph export raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportcombined.png
 putpdf pagebreak
 
-graph raw_exportcombined
+graph bar raw_exportcombined
 gr export raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
 putpdf image raw_exportcombined.png

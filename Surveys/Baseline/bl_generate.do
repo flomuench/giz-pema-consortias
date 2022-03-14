@@ -119,24 +119,11 @@ label var inno_pers "Innovation coming from a personal/ employee inniative "
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
 label var num_inno "Number of different types innovation introduced by a firm"
 
+* create a new variable for survey start: 
+generate survey_started= 0
+replace survey_started= 1 if _merge == 3
 
 /*
-gen netcoop=1 if net_coop== "Gagner"
-replace netcoop=2 if net_coop== "Éloigner"
-replace netcoop=3 if net_coop== "Communication"
-replace netcoop=4 if net_coop== "Partenariat"
-replace netcoop=5 if net_coop== "Confiance"
-replace netcoop=6 if net_coop== "Adversaire"
-replace netcoop=7 if net_coop== "Abattre"
-replace netcoop=8 if net_coop== "Connecter"
-replace netcoop=9 if net_coop== "Pouvoir"
-replace netcoop=10 if net_coop== "Dominer"
-
-*labeling netcoop
-label var netcoop "perception of interaction between the enterprises"
-*labeling the values of netcoop
-label define label_netcoop 1 "Gagner" 2 "Éloigner" 3 "Communication" 4 "Partenariat" 5 "Confiance" 6 "Adversaire" 7 "Abattre" 8 "Connecter" 9 "Pouvoir" 10 "Dominer"
-label values netcoop label_netcoop
 
 * 2.2 create variables for list experiment
 gen listexp_percentage=0 

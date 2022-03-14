@@ -32,7 +32,7 @@ JDE pre-analysis publication:
 	--> implies: same weight for all three dimensions
 */
 *Definition of all variables that are being used in index calculation*
-local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique
+local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays 
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
 foreach var of local  allvars {
@@ -60,11 +60,11 @@ end
 local mngtvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per 
 local markvars man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub 
 local exportmngt exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan 
-local exportprep expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique 
-local exportcombined exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays exp_pays_principal exp_afrique
+local exportprep expprep_norme exprep_inv exprep_couts exp_pays exp_afrique 
+local exportcombined exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays exp_afrique
 
 
-foreach z in mngtvars markvars exportmngt exportprep exportcombined{
+foreach z in mngtvars markvars exportmngt exportprep{
 	foreach x of local `z'  {
 			zscore `x' 
 		}
@@ -73,10 +73,10 @@ foreach z in mngtvars markvars exportmngt exportprep exportcombined{
 		* calculate the index value: average of zscores 
 
 egen mngtvars = rowmean(man_hr_objz man_hr_feedz man_pro_anoz man_fin_enrz man_fin_profitz man_fin_perz)
-egen markvars = rowmean(eman_mark_prixz man_mark_divz man_mark_clientsz man_mark_offrez man_mark_pubz )
+egen markvars = rowmean(man_mark_prixz man_mark_divz man_mark_clientsz man_mark_offrez man_mark_pubz )
 egen exportmngt = rowmean(exp_pra_foirez exp_pra_sciz exp_pra_rexpz exp_pra_ciblez exp_pra_missionz exp_pra_douanez exp_pra_planz)
-egen exportprep = rowmean(expprep_normez exprep_invz exprep_coutsz exp_paysz exp_pays_principalz exp_afriquez)
-egen exportcombined = rowmean(exp_pra_foirez exp_pra_sciz exp_pra_rexpz exp_pra_ciblez exp_pra_missionz exp_pra_douanez exp_pra_planz expprep_normez exprep_invz exprep_coutsz exp_paysz exp_pays_principalz exp_afriquez)
+egen exportprep = rowmean(expprep_normez exprep_invz exprep_coutsz exp_paysz)
+egen exportcombined = rowmean(exp_pra_foirez exp_pra_sciz exp_pra_rexpz exp_pra_ciblez exp_pra_missionz exp_pra_douanez exp_pra_planz expprep_normez exprep_invz exprep_coutsz exp_paysz)
 
 label var mngtvars   "Management practices index"
 label var markvars "Marketing practices index"
@@ -108,7 +108,7 @@ label var raw_exportprep "Export readiness raw index"
 label var raw_exportcombined "Combined export practices raw index"
 
 
-
+/*
 tempvar Sector
 encode sector, gen(`Sector')
 drop sector
