@@ -188,6 +188,24 @@ replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
 
+replace ca_2018 =45000 if id_plateforme==1136
+replace ca_2018 =150000 if id_plateforme==1159
+replace ca_2018 =5000 if id_plateforme==1210
+replace ca_2018 =10000 if id_plateforme==1162
+replace ca_2018 =2663000 if id_plateforme==1240
+
+replace ca_2019 =250000 if id_plateforme==1074
+replace ca_2019 =20000 if id_plateforme==1210
+replace ca_2019 =20000 if id_plateforme==1162
+replace ca_2019 =480294 if id_plateforme==1168
+
+replace ca_2020 =25000 if id_plateforme==1159
+replace ca_2020 =200000 if id_plateforme==1074
+replace ca_2020 =1200000 if id_plateforme==1188
+replace ca_2020 =20000 if id_plateforme==1210
+replace ca_2020 =5500 if id_plateforme==1162
+replace ca_2020 =38500 if id_plateforme==1157
+
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 
 

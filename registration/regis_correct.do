@@ -277,6 +277,9 @@ replace subsector_corrige = "pôle d’activités technologies de l’informatio
 replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1137
 replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1248
 
+	    * eligibilite
+replace eligibilité= "eligible" if id_plateforme == 1119
+
 {
 /*
 foreach x in ca_ {
