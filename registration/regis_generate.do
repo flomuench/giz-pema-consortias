@@ -207,6 +207,10 @@ gen eligible = (rg_intention == 1 & subsector_var == 1 & rg_gender_pdg == 1 & rg
 lab def eligible 1 "éligible" 0 "inéligible"
 lab val eligible eligible
 
+	    * eligibilite
+replace eligible = 1 if id_plateforme == 1119
+replace eligible = 0 if id_plateforme == 1218
+
 
 	* change to ineligible based on GIZ calls to verify the firms
 foreach x in 1032 1053 1060 1078 1091 1145 1181 1187 1208 1212 1221 {
