@@ -136,12 +136,12 @@ replace rg_position_rep = "coo" if rg_position_rep == "c.o.o"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisan"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisanne"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisante"
-replace rg_position_rep = "gérante" id_plateforme == 1154
-replace rg_position_rep = "gérante" id_plateforme == 1161
-replace rg_position_rep = "gérante" id_plateforme == 1185
-replace rg_position_rep = "gérante" id_plateforme == 1231
-replace rg_position_rep = "gérante" id_plateforme == 1239
-replace rg_position_rep = "gérante" id_plateforme == 1248
+replace rg_position_rep = "gérante" if id_plateforme == 1154
+replace rg_position_rep = "gérante" if id_plateforme == 1161
+replace rg_position_rep = "gérante" if id_plateforme == 1185
+replace rg_position_rep = "gérante" if id_plateforme == 1231
+replace rg_position_rep = "gérante" if id_plateforme == 1239
+replace rg_position_rep = "gérante" if id_plateforme == 1248
 
 	    * Matricule CNSS
 replace rg_matricule = ustrregexra(rg_matricule, "[ ]", "")
@@ -280,27 +280,6 @@ replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plat
 	    * eligibilite
 replace eligibilité= "eligible" if id_plateforme == 1119
 
-{
-/*
-foreach x in ca_ {
-replace `x'2018 = `not_applicable' if date_created > td(31dec2018) & date_created != .
-replace `x'2019 = `not_applicable' if date_created > td(31dec2019) & date_created != .
-replace `x'2020 = `not_applicable' if date_created > td(31dec2020) & date_created != .
-}
-*/
-
-			* browse for CA == 0
-*br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
-*br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & ca_2020==0
-
-			* browse for ca_exp > ca_2018
-*br id_plateform etat if ca_exp2018 > ca_2018
-*br id_plateform etat if ca_exp2019 > ca_2019
-*br id_plateform etat if ca_exp2020 > ca_2020
-
-			* browse capital <= 1000
-*br id_plateform etat rg_capital if rg_capital <= 1000
-}
 
 ***********************************************************************
 * 	PART 3:  Check again variables	  			
@@ -447,23 +426,7 @@ replace needs_check = 1 if id_plateforme == 1244
 ***********************************************************************
 * 	PART 3:  Replace string with numeric values		  			
 ***********************************************************************
-{
 
-/*
-* br id_plateforme if rg_capital < 300
-
-         *Test logical values*
-
-* In Tunisia, SCA and SA must have a minimum of 5000 TND of capital social
-
-*All values having a too small capital social (less than 100)
-replace rg_capital = "`check_again'" if rg_capital == "0"
-replace rg_capital = "`check_again'" if rg_capital == "o"
-
-
-*/
-
-}
 ***********************************************************************
 * 	PART 4:  Convert string to numerical variaregises	  			
 ***********************************************************************
@@ -473,15 +436,6 @@ foreach x of local destrvar {
 destring `x', replace
 }
 
-       * chiffre d'affaire
-			* replace CA not applicable if company has been created after 
-/*
-foreach x in ca_exp ca_ {
-replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
-replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
-replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
-}
-*/
 
 ***********************************************************************
 * 	PART 5:  Convert problematic values for open-ended questions  			
@@ -523,30 +477,47 @@ drop if id_plateforme == 1060
 drop if id_plateforme == 1066
 drop if id_plateforme == 1053
 
-* replace address = "Cyber parc  18 janvier Kasserine" if id_plateforme == 1214
-* Note: I cannot find the variable address to be replaced.
+	* drop eligible firms that refused to join the program:
+drop if id_plateforme == 1218
+
 
 ***********************************************************************
 * 	PART 10:  autres / miscallaneous adjustments
 ***********************************************************************
-/*
-	* correct the response categories for moyen de communication
-replace moyen_com = "site institution gouvernmentale" if moyen_com == "site web d'une autre institution gouvernementale" 
-replace moyen_com = "bulletin d'information giz" if moyen_com == "bulletin d'information de la giz"
-
-	* correct wrong response categories for subsectors
-replace subsector = "industries chimiques" if subsector == "industrie chimique"
-*/
 
 ***********************************************************************
 * 	PART:  Test logical values		  			
 ***********************************************************************
-	* In Tunisia, SCA and SA must have a minimum of 5000 TND of capital social
-		*All values having a too small capital social (less than 100)
+
+       * chiffre d'affaire
+			* replace CA not applicable if company has been created after 
 /*
-replace capitalsocialr = "$check_again" if capitalsocialr == "0"
-replace capitalsocialr = "$check_again" if capitalsocialr == "o"
-destring capitalsocialr, replace
+foreach x in ca_exp ca_ {
+replace `x'2018 = not_applicable if date_created > td(31dec2018) & date_created != .
+replace `x'2019 = not_applicable if date_created > td(31dec2019) & date_created != .
+replace `x'2020 = not_applicable if date_created > td(31dec2020) & date_created != .
+
+
+
+foreach x in ca_ {
+replace `x'2018 = `not_applicable' if date_created > td(31dec2018) & date_created != .
+replace `x'2019 = `not_applicable' if date_created > td(31dec2019) & date_created != .
+replace `x'2020 = `not_applicable' if date_created > td(31dec2020) & date_created != .
+
+
+			* browse for CA == 0
+*br id_plateform etat ca_???? if ca_exp2018==0 & ca_exp2019==0 & ca_exp2020==0
+*br id_plateform etat ca_???? if ca_2018==0  & ca_2019==0 & ca_2020==0
+
+			* browse for ca_exp > ca_2018
+*br id_plateform etat if ca_exp2018 > ca_2018
+*br id_plateform etat if ca_exp2019 > ca_2019
+*br id_plateform etat if ca_exp2020 > ca_2020
+
+			* browse capital <= 1000
+*br id_plateform etat rg_capital if rg_capital <= 1000
+
+
 */
 
 ***********************************************************************

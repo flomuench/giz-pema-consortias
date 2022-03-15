@@ -26,6 +26,7 @@
 cd "$bl_raw"
 import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
 
+
 /* --------------------------------------------------------------------
 	PART 1.2: *select PII data, seperate it from raw data and merge with
 	existing master file- ONLY HAS TO BE DONE ONCE*
@@ -49,5 +50,7 @@ save "consortia_master_data",replace
 cd "$bl_raw"
 import excel "${bl_raw}/bl_raw.xlsx", sheet("Feuil1") firstrow clear
 drop nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2
+	* drop if id_plateforme is missing
+drop if id_plateforme==.
 save "bl_raw", replace
 
