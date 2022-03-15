@@ -100,6 +100,9 @@ putpdf image attents.png
 putpdf pagebreak
 
 
+
+
+
 *Statistics with average time per survey
 /*graph bar (mean) time_survey, blabel(total) ///
 	title("Temps moyen pour remplir le sondage") 
@@ -194,7 +197,7 @@ forvalues x = 1(1)4 {
 
 *bar chart and boxplots of accounting variable by poles
      * variable ca_2021:
-graph bar ca_2021 if ca_2021<ca_90p, over(pole, sort(1))
+graph bar ca_2021 if ca_2021<ca_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_ca2021.png
@@ -207,7 +210,7 @@ putpdf image strip_ca2021.png
 putpdf pagebreak
 
      * variable ca_exp_2021:
-graph bar ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole, sort(1))
+graph bar ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_ca_exp2021.png
@@ -221,7 +224,7 @@ putpdf pagebreak
 
      * variable profit_2021:
 	 
-graph bar profit_2021 if profit_2021<profit_90p, over(pole, sort(1))
+graph bar profit_2021 if profit_2021<profit_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_profit_2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_profit_2021.png
@@ -236,7 +239,7 @@ putpdf pagebreak
 
      * variable inno_rd:
 	 
-graph bar inno_rd if inno_rd<inno_rd_90p, over(pole, sort(1))
+graph bar inno_rd if inno_rd<inno_rd_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_inno_rd.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_inno_rd.png
@@ -250,7 +253,7 @@ putpdf pagebreak
 
      * variable exprep_inv:
 	 
-graph bar exprep_inv if exprep_inv<exprep_inv_90p, over(pole, sort(1))
+graph bar exprep_inv if exprep_inv<exprep_inv_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_exprep_inv.png
@@ -310,7 +313,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_mngtvars_zscores.png
 putpdf pagebreak
 
-graph bar mngtvars, over(pole, sort(1))
+graph bar mngtvars, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_mngtvars_zscores.png
@@ -330,7 +333,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_markvars_zscores.png
 putpdf pagebreak
 
-graph bar markvars, over(pole, sort(1))
+graph bar markvars, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_markvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_markvars_zscores.png
@@ -350,7 +353,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_exportmngt_zscores.png
 putpdf pagebreak
 
-graph bar exportmngt, over(pole, sort(1))
+graph bar exportmngt, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_exportmngt_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_exportmngt_zscores.png
@@ -370,7 +373,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_exportprep_zscores.png
 putpdf pagebreak
 
-graph bar exportprep, over(pole, sort(1))
+graph bar exportprep, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_exportprep_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_exportprep_zscores.png
@@ -390,7 +393,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_exportcombined_zscores.png
 putpdf pagebreak
 
-graph bar exportcombined, over(pole, sort(1))
+graph bar exportcombined, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_exportcombined_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_exportcombined_zscores.png
@@ -412,7 +415,7 @@ putpdf paragraph, halign(center)
 putpdf image hist_raw_mngtvars.png
 putpdf pagebreak
 
-graph bar raw_mngtvars, over(pole, sort(1))
+graph bar raw_mngtvars, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_raw_mngtvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_raw_mngtvars.png
@@ -432,7 +435,7 @@ putpdf paragraph, halign(center)
 putpdf image raw_markvars.png
 putpdf pagebreak
 
-graph bar raw_markvars, over(pole, sort(1))
+graph bar raw_markvars, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_raw_markvars.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_raw_markvars.png
@@ -452,7 +455,7 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportmngt.png
 putpdf pagebreak
 
-graph bar raw_exportmngt, over(pole, sort(1))
+graph bar raw_exportmngt, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_raw_exportmngt.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_raw_exportmngt.png
@@ -473,7 +476,7 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportprep.png
 putpdf pagebreak
 
-graph bar raw_exportprep, over(pole, sort(1))
+graph bar raw_exportprep, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_raw_exportprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_raw_exportprep.png
@@ -493,7 +496,7 @@ putpdf paragraph, halign(center)
 putpdf image raw_exportcombined.png
 putpdf pagebreak
 
-graph bar raw_exportcombined, over(pole, sort(1))
+graph bar raw_exportcombined, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_raw_exportcombined.png
@@ -508,8 +511,12 @@ putpdf pagebreak
 ***********************************************************************
 * 	PART 4:  List experiment
 ************************************************************************
-*(something like graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-		
+*graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
+graph bar listexp, over(list_group, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_listexp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_listexp.png
+putpdf pagebreak		
 /***********************************************************************
 * 	PART 5:  Firm characteristics
 ***********************************************************************
