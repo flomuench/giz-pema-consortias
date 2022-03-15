@@ -37,9 +37,21 @@ restore
 export excel `pii' using consortia_master_data, firstrow(var) replace
 
 	* master data + raw file need manual encryption
+***********************************************************************
+* 	PART 3:  de-identified variables  			
+***********************************************************************
+rename rg_legalstatus legalstatus 
+rename rg_fte_femmes fte_femmes 
+rename rg_confidentialite confidentialite 
+rename rg_partage_donnees partage_donnees 
+rename rg_enregistrement_coordonnees enregistrement_coordonnees 
+rename rg_gender_rep gender_rep 
+rename rg_gender_pdg gender_pdg 
+rename rg_expstatus expstatus
+
 
 ***********************************************************************
-* 	PART 3:  save a de-identified final analysis file	
+* 	PART 4:  save a de-identified final analysis file	
 ***********************************************************************
 	* change directory to final folder
 cd "$regis_final"
@@ -57,7 +69,7 @@ save "regis_final", replace
 export excel using regis_final, firstrow(var) replace
 
 ***********************************************************************
-* 	PART 4:  delete the 
+* 	PART 5:  delete the 
 ***********************************************************************
 	* change directory to the intermediate folder
 cd "$regis_intermediate"

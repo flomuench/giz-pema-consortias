@@ -136,12 +136,12 @@ replace rg_position_rep = "coo" if rg_position_rep == "c.o.o"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisan"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisanne"
 replace rg_position_rep = "artisane" if rg_position_rep == "artisante"
-replace rg_position_rep = "gérante" id_plateforme == 1154
-replace rg_position_rep = "gérante" id_plateforme == 1161
-replace rg_position_rep = "gérante" id_plateforme == 1185
-replace rg_position_rep = "gérante" id_plateforme == 1231
-replace rg_position_rep = "gérante" id_plateforme == 1239
-replace rg_position_rep = "gérante" id_plateforme == 1248
+replace rg_position_rep = "gérante" if id_plateforme == 1154
+replace rg_position_rep = "gérante" if id_plateforme == 1161
+replace rg_position_rep = "gérante" if id_plateforme == 1185
+replace rg_position_rep = "gérante" if id_plateforme == 1231
+replace rg_position_rep = "gérante" if id_plateforme == 1239
+replace rg_position_rep = "gérante" if id_plateforme == 1248
 
 	    * Matricule CNSS
 replace rg_matricule = ustrregexra(rg_matricule, "[ ]", "")
@@ -277,8 +277,7 @@ replace subsector_corrige = "pôle d’activités technologies de l’informatio
 replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1137
 replace subsector_corrige = "pôle d'activités agri-agroalimentaire" if id_plateforme == 1248
 
-	    * eligibilite
-replace eligibilité= "eligible" if id_plateforme == 1119
+
 
 {
 /*
