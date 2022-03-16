@@ -143,10 +143,8 @@ replace check_again=0 if miss>10
 ***********************************************************************
 * 	Part 3 Re-shape the correction sheet			
 ***********************************************************************
-/*re-merge additional contact information to dataset
-use "${consortia_master}/add_contact_data", clear
-drop if id_plateforme==.
-merge 1:1 id_plateforme using "${bl_intermediate}/bl_inter", generate(_merge_cd)
+*re-merge additional contact information to dataset
+merge 1:1 id_plateforme using "${consortia_master}/add_contact_data", generate(_merge_cd)
 
 *Split questions needing check and move it from wide to long
 preserve
@@ -170,5 +168,4 @@ sort date heuredébut validation nombre_questions
 export excel id_plateforme miss validation check_again nombre_questions comptable_numero comptable_email Numero1 Numero2 questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide ca_2021 profit_2021 inno_rd exprep_inv ca_exp_2021 ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor using "fiche_de_correction2.xls" if check_again>=1, firstrow(variables) replace
 restore
 
-*/
 
