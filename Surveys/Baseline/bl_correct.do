@@ -168,12 +168,16 @@ replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
 
-replace inno_mot_autre = "Après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
-
+replace inno_mot_autre = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+replace inno_mot_autre = "ca depends la demande des clients/ son mari"  if inno_mot_autre =="7asb demande clients / son marie"
+replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
 
 replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
 
-replace att_adh_autres ="Développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
+replace att_adh_autres ="développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
+replace att_adh_autres ="introduire le produit tunisien et augmenter les transactions commerciales" if att_adh_autres == "ta3rif bel produit tunisien/zyedet elmou3amlet tij"
+replace att_adh_autres ="certification ou formation lel produit" if att_adh_autres == "certification wala formation lel produit"
+
 
 replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
 replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
@@ -182,8 +186,12 @@ replace entr_idee= "production et vente de pépinières" if entr_idee=="انتا
 replace entr_idee= "appareils électroménagers, nourriture, vêtements" if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
 replace entr_idee= "un atelier de fabrication et de vente de poteries à partir de pots, d'antiquités et de céramiques murales" if entr_idee=="ورشة لصناعة و بيع الفخار من اواني و تحف و خزف حائط"
 replace entr_idee= "industries traditionnelles spécialisées dans le tissage à la main" if entr_idee=="صناعات تقليدية مختصة في النسيج اليدوي"
-replace entr_idee= "Valoriser les déchets organiques et les transformer en engrais naturel" if entr_idee=="تثمين النفايات العضوية و تحويلها الى سماد طبيعي"
-replace entr_idee= "Exportation de poissons fruits et légumes tunisiens par avion vers les pays" if entr_idee=="تصدير فواكه و خضروات اسماك تونسية بالطائرة لبلدان"
+replace entr_idee= "valoriser les déchets organiques et les transformer en engrais naturel" if entr_idee=="تثمين النفايات العضوية و تحويلها الى سماد طبيعي"
+replace entr_idee= "exportation de poissons fruits et légumes tunisiens par avion vers les pays" if entr_idee=="تصدير فواكه و خضروات اسماك تونسية بالطائرة لبلدان"
+replace entr_idee= "aider les parents et les spécialistes" if entr_idee=="lمساعدة الاولياء و الاخصائيين"
+replace entr_idee= "commercialisation de produits artisanaux" if id_plateforme==1214
+replace entr_idee= "" if entr_idee==""
+
 *3.2	Rename and homogenize the product names	  			
 	* Example
 
