@@ -155,17 +155,16 @@ drop if questions==""
 by id_plateforme: gene nombre_questions=_n
 drop _j
 gen commentaires_ElAmouri = .
-gen valeur_actuelle=.
 gen correction_propose=.
 gen correction_valide=.
 cd "$bl_checks"
 sort date heuredébut validation nombre_question
-order id_plateforme date heuredébut miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide
+order id_plateforme date heuredébut miss check_again questions nombre_questions commentaires_ElAmouri commentsmsb correction_propose correction_valide
 
 *Export the fiche de correction with additional contact information
 cd "$bl_checks"
 sort date heuredébut validation nombre_questions
-export excel id_plateforme miss validation check_again nombre_questions comptable_numero comptable_email Numero1 Numero2 questions commentaires_ElAmouri commentsmsb valeur_actuelle correction_propose correction_valide ca_2021 profit_2021 inno_rd exprep_inv ca_exp_2021 ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor using "fiche_de_correction2.xls" if check_again>=1, firstrow(variables) replace
+export excel id_plateforme miss validation check_again nombre_questions comptable_numero comptable_email Numero1 Numero2 questions commentaires_ElAmouri commentsmsb correction_propose correction_valide ca_2021 profit_2021 inno_rd exprep_inv ca_exp_2021 ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor using "fiche_de_correction.xlsx" if check_again>=1, firstrow(variables) replace
 restore
 
 
