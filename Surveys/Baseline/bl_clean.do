@@ -459,22 +459,6 @@ label values man_fin_enr label_man_fin_enr
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
-
-* lab values of att_strat:
-replace att_strat = "participant don't have an export strategy. She would adopt that of the consortium" if att_strat == "att_strat1"  
-replace att_strat = "the consortium's strategy must be consistent with her own strategy" if att_strat == "att_strat2"  
-replace att_strat = "the company has an export strategy and the consortium is a vector for certain actions" if att_strat == "att_strat3"  
-replace att_strat = "other" if att_strat == "att_strat4"  
-
-
-* lab values of att_cont:
-replace att_cont = "no contribution" if att_cont == "att_cont1" 
-replace att_cont = "fixed, lump sum contribution" if att_cont == "att_cont2" 
-replace att_cont = "proportional contribution to the turnover" if att_cont == "att_cont3" 
-replace att_cont = "proportional contribution to the turnover achieved at export" if att_cont == "att_cont4"
-replace att_cont = "other" if att_cont == "att_cont5"   
-
-
 ***********************************************************************
 * 	Part 9: Save the changes made to the data		  			
 ***********************************************************************

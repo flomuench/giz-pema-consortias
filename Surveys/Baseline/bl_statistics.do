@@ -84,7 +84,7 @@ putpdf pagebreak
 drop share
 
 *Type of support desired by firms
-gr hbar (sum) support1 - support6, blabel(total, format(%9.2fc)) legend (pos (6) label (1 "no support need") label(2 "virtual meetings") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "garde d'enfance") label(6 "support pour transport et heberge")) ///
+gr hbar (sum) support1 - support6, blabel(total, format(%9.2fc)) legend (pos (6) label (1 "Pas besoin d'assistance") label(2 "Réunions virtuelles") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "Garde d'enfants") label(6 "Support pour transport et hébergement")) ///
 	title("Comment est-ce qu’on pourra vous faciliter la participation aux rencontres de consortium?")
 gr export support.png, replace
 putpdf paragraph, halign(center) 
@@ -99,8 +99,42 @@ putpdf paragraph, halign(center)
 putpdf image attents.png
 putpdf pagebreak
 
+*Role of consortium in establishing export strategy
+gr bar (sum) att_strat1 - att_strat4, scale(*.75) blabel(total, format(%9.2fc)) legend (pos (4) label (1 "La participante n'a pas de stratégie d'exportation") label(2 "la stratégie du consortium doit être cohérente avec sa stratégie") label(3 "L'entreprise a une stratégie d'exportation" ) label (4 "Autres")) ///
+	title("Rôle du consortium dans l'établissement de la stratégie d'exportation")
+gr export att_strat.png, replace
+putpdf paragraph, halign(center) 
+putpdf image att_strat.png
+putpdf pagebreak
 
+*Best mode of financial contribution of each member in the consortium
+gr hbar (sum) att_cont1 - att_cont5, blabel(total, format(%9.2fc)) legend (pos (5) label (1 "Aucune contribution") label(2 "Une contribution fixe, forfaitaire") label(3 "Une contribution proportionnelle à la taille de chaque membre (selon CA)") label (4 "Une contribution au prorata du chiffre d’affaires réalisé à l’export") label(5 "Autres")) ///
+	title("Meilleur mode de contribution financière de chaque membre du consortium")
+gr export att_cont.png, replace
+putpdf paragraph, halign(center) 
+putpdf image att_cont.png
+putpdf pagebreak
 
+*Preferred day for meetings
+gr hbar (sum) att_jour1 - att_jour7, blabel(total, format(%9.2fc)) legend (pos (7) label (1 "Lundi") label(2 "Mardi") label(3 "Mercredi") label(4 "Jeudi") label(5 "Vendredi") label(6 "Samedi") label(7 "Dimanche")) title("Jour préféré pour les réunions")
+gr export att_jour.png, replace
+putpdf paragraph, halign(center) 
+putpdf image att_jour.png
+putpdf pagebreak
+
+*Preferred hours for meetings
+gr hbar (sum) att_hor1 - att_hor5, blabel(total, format(%9.2fc)) legend (pos (5) label (1 "8:00h - 10:00h") label(2 "9:00h - 12:30h") label(3 "12:30h - 15:30h") label(4 "15:30h - 19:00h") label(5 "18:00h - 20:00h")) title("Heures préférées pour les réunions")
+gr export att_hor.png, replace
+putpdf paragraph, halign(center) 
+putpdf image att_hor.png
+putpdf pagebreak
+
+*Availablibility for travel and participate in events in another city 
+hist att_voyage, gap(40) xlabel(1 2 0, valuelabel)
+graph export att_voyage.png, replace
+putpdf paragraph, halign(center) 
+putpdf image att_voyage.png
+putpdf pagebreak
 
 
 *Statistics with average time per survey

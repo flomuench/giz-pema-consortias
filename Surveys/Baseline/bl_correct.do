@@ -142,19 +142,31 @@ replace produit1 = "cours complet de formation aux médias"  if produit1 =="دو
 replace produit1 = "deglet nour dates"  if produit1 =="تمر دقلة نور"
 replace produit1 = "tourisme de toutes sortes : affaires, commerce, étude, divertissement"  if produit1 =="السياحة بكل انواعها :أعمال، تجارة، دراسة، ترفيه"
 replace produit1 = "pépinières production" if produit1 =="انتاج المشاتل"
-
+replace produit1 = "art de la table / table en porcelaine" if produit1 =="فن الطاولة /خزف الطاولة"
+replace produit1 = "tapis traditionnelle (klim, margoum)" if produit1 =="كليم مرقوم"
+replace produit1 = "légume" if produit1 =="خضار"
+replace produit1 = "" if produit1 ==""
+replace produit1 = "" if produit1 ==""
 
 replace produit2 = "cours de formation sur le voix off"  if produit2 =="دورة تدريبية في التعليق الصوتي"
 replace produit2 = "olive oil"  if produit2 =="زيت زيتون"
 replace produit2 = "vente de pépinières"  if produit2 =="بيع المشاتل"
 replace produit2 = "appareils électriques, nourriture, vêtements"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
-
+replace produit2 = "antiquités et décorations"  if produit2 =="التحف و الديكورات"
+replace produit2 = "fruits"  if produit2 =="فواكه"
+replace produit2 = ""  if produit2 ==""
+replace produit2 = ""  if produit2 ==""
 
 replace produit3 = "un cours de création de contenu sur les plateformes de médias sociaux"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
 replace produit3 = "matériel alimentaire et agricole"  if produit3 =="مواد غذائية وزراعية"
 replace produit3 = "suivi et orientation agricole"  if produit3 =="المتابعة والإرشاد الفلاحي"
 replace produit3 = "achat et vente de biens immobiliers en Tunisie et à l'étranger"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
-
+replace produit3 = "porcelaine murale"  if produit3 =="الخزف الحائطي"
+replace produit3 = "poisson"  if produit3 =="أسماك"
+replace produit3 = ""  if produit3 ==""
+replace produit3 = ""  if produit3 ==""
+replace produit3 = ""  if produit3 ==""
+replace produit3 = ""  if produit3 ==""
 
 replace inno_mot_autre = "Après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
 
@@ -167,9 +179,11 @@ replace entr_idee= "media training, formation de journalistes et d'amateurs en r
 replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
 replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if id_plateforme == 1196
 replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
-replace entr_idee= "appareils électroménagers, nourriture, vêtements," if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
-
-
+replace entr_idee= "appareils électroménagers, nourriture, vêtements" if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
+replace entr_idee= "un atelier de fabrication et de vente de poteries à partir de pots, d'antiquités et de céramiques murales" if entr_idee=="ورشة لصناعة و بيع الفخار من اواني و تحف و خزف حائط"
+replace entr_idee= "industries traditionnelles spécialisées dans le tissage à la main" if entr_idee=="صناعات تقليدية مختصة في النسيج اليدوي"
+replace entr_idee= "Valoriser les déchets organiques et les transformer en engrais naturel" if entr_idee=="تثمين النفايات العضوية و تحويلها الى سماد طبيعي"
+replace entr_idee= "Exportation de poissons fruits et légumes tunisiens par avion vers les pays" if entr_idee=="تصدير فواكه و خضروات اسماك تونسية بالطائرة لبلدان"
 *3.2	Rename and homogenize the product names	  			
 	* Example
 
@@ -331,10 +345,6 @@ destring `x', replace
 *format `x' %25.0fc
 }
 
-
-
-
-
 ***********************************************************************
 * 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
@@ -345,7 +355,7 @@ replace questions_needing_check = "The whole raw needs to be checked /" if id_pl
 replace needs_check = 1 if id_plateforme == 1154
 
 ***********************************************************************
-* 	Save the changes made to the data		  			
+* 	Part 9: Save the changes made to the data		  			
 ***********************************************************************
 cd "$bl_intermediate"
 save "bl_inter", replace

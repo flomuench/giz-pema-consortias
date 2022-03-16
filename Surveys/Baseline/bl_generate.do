@@ -27,7 +27,7 @@ use "${bl_intermediate}/bl_inter", clear
 * 	PART 2:  Additional calculated variables
 ***********************************************************************
 										  
-	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor using regex
+	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor, att_strat, att_cont using regex
 	
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
@@ -93,7 +93,28 @@ label var att_hor3 "12h30-15h30"
 label var att_hor4 "15h30-19h"
 label var att_hor5 "18-20h"
 
-    *Convert the above variables in numeric (non float variables)
+generate att_strat1 = regexm(att_strat , "att_strat1")
+generate att_strat2 = regexm(att_strat , "att_strat2")
+generate att_strat3 = regexm(att_strat , "att_strat3")
+generate att_strat4 = regexm(att_strat , "att_strat4")
+label var att_strat1 "La participante n'a pas de stratégie d'exportation. Elle adopterait celle du consortium"
+label var att_strat2 "la stratégie du consortium doit être cohérente avec sa propre stratégie"
+label var att_strat3 "L'entreprise a une stratégie d'exportation et le consortium est vecteur de certaines actions" 
+label var att_strat4 "Autres"
+
+generate att_cont1 = regexm(att_cont , "att_cont1")
+generate att_cont2 = regexm(att_cont , "att_cont2")
+generate att_cont3 = regexm(att_cont , "att_cont3")
+generate att_cont4 = regexm(att_cont , "att_cont4")
+generate att_cont5 = regexm(att_cont , "att_cont5")
+label var att_cont1 "Aucune contribution"
+label var att_cont2 "Une contribution fixe, forfaitaire" 
+label var att_cont3 "Une contribution proportionnelle à la taille de chaque membre (selon CA)."
+label var att_cont4 "Une contribution au prorata du chiffre d’affaires réalisé à l’export."
+label var att_cont5 "Autres"
+
+
+    *Convert the below variables in numeric (non float variables)
 local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 
 foreach x of local destrvar {
 destring `x', replace
