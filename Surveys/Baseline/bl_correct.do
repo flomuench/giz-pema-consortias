@@ -74,7 +74,7 @@ sort date heuredébut
 * 	PART 2:  Automatic corrections
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
-local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
+local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd 
 foreach var of local numvars {
 replace `var' = ustrregexra( `var',"dinars","")
 replace `var' = ustrregexra( `var',"dinar","")
@@ -116,7 +116,7 @@ replace `var' = "`not_know'" if `var' =="je ne sais pas"
 replace `var' = "`not_know'" if `var' =="لا أعرف"
 
 }
-*/
+
 
 
 *2.4 Remove linking words like un, une, des,les, from product descriptions
@@ -207,8 +207,15 @@ replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
 replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
+replace ca_2021 = "3000000" if ca_2021 == "3m"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
+replace ca_2018_cor = "300000" if ca_2018_cor == "300k"
+replace ca_exp_2018_cor = "50000" if ca_exp_2018_cor == "50k"
+replace ca_exp2019_cor = "50000" if  ca_exp2019_cor == "50k"
+replace ca_2020_cor = "2000000" if ca_2020_cor == "2m"
+replace ca_exp2020_cor = "800000" if ca_exp2020_cor == "800k"
+replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m" ////To be checked again///
 
 replace ca_2018 =45000 if id_plateforme==1136
 replace ca_2018 =150000 if id_plateforme==1159
@@ -227,6 +234,8 @@ replace ca_2020 =1200000 if id_plateforme==1188
 replace ca_2020 =20000 if id_plateforme==1210
 replace ca_2020 =5500 if id_plateforme==1162
 replace ca_2020 =38500 if id_plateforme==1157
+ 
+
 
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
 
@@ -347,7 +356,7 @@ lab var q42f "(in-) formel argument de vente"
 ***********************************************************************
 
 * 8.1 Destring remaining numerical vars
-local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd
+local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd  ca_2018_cor ca_exp_2018_cor ca_exp2019_cor ca_exp2020_cor
 foreach x of local destrvar { 
 destring `x', replace
 *format `x' %25.0fc
