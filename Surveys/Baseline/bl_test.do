@@ -104,41 +104,54 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays manquen
 replace check_again=1 if exp_pays>49 & exp_pays!=.
 replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé/ " if exp_pays>49 & exp_pays!=.
 
-*Add 1 point in priority if survey was validated
-replace check_again = check_again+1 if validation==1 & check_again>0
 
 ***********************************************************************
 * 	Part 2.3 large Outliers			
 ***********************************************************************
 sum ca_2021, d
-scalar ca_90p = r(p90)
-replace check_again=2 if ca_2021> ca_90p & ca_2021!=.
-replace questions_needing_checks = questions_needing_checks + "ca_2021 très grand/" if ca_2021> ca_90p & ca_2021!=.
+scalar ca_95p = r(p95)
+replace check_again=2 if ca_2021> ca_95p & ca_2021!=.
+replace questions_needing_checks = questions_needing_checks + "ca_2021 très grand/" if ca_2021> ca_95p & ca_2021!=.
 
 sum ca_exp_2021, d
-scalar ca_exp90p = r(p90)
-replace check_again=2 if ca_exp_2021> ca_exp90p & ca_exp_2021!=.
-replace questions_needing_checks = questions_needing_checks + "ca_exp_2021 très grand/" if ca_exp_2021> ca_exp90p & ca_exp_2021!=.
+scalar ca_exp95p = r(p95)
+replace check_again=2 if ca_exp_2021> ca_exp95p & ca_exp_2021!=.
+replace questions_needing_checks = questions_needing_checks + "ca_exp_2021 très grand/" if ca_exp_2021> ca_exp95p & ca_exp_2021!=.
 
 sum profit_2021, d
-scalar profit_90p = r(p90)
-replace check_again=2 if profit_2021> profit_90p & profit_2021!=.
-replace questions_needing_checks = questions_needing_checks + "profit très grand/" if profit_2021> profit_90p & profit_2021!=.
+scalar profit_95p = r(p95)
+replace check_again=2 if profit_2021> profit_95p & profit_2021!=.
+replace questions_needing_checks = questions_needing_checks + "profit très grand/" if profit_2021> profit_95p & profit_2021!=.
 
 sum inno_rd, d
-scalar inno_rd_90p = r(p90)
-replace check_again=2 if inno_rd> inno_rd_90p & inno_rd!=.
-replace questions_needing_checks = questions_needing_checks + "investissement recherche très grand/" if inno_rd> inno_rd_90p & inno_rd!=.
+scalar inno_rd_95p = r(p95)
+replace check_again=2 if inno_rd> inno_rd_95p & inno_rd!=.
+replace questions_needing_checks = questions_needing_checks + "investissement recherche très grand/" if inno_rd> inno_rd_95p & inno_rd!=.
 
 sum exprep_inv, d
-scalar exprep_inv_90p = r(p90)
-replace check_again=2 if exprep_inv> exprep_inv_90p & exprep_inv!=.
-replace questions_needing_checks = questions_needing_checks + "investissement export très grand/" if exprep_inv> exprep_inv_90p & exprep_inv!=.
+scalar exprep_inv_95p = r(p95)
+replace check_again=2 if exprep_inv> exprep_inv_95p & exprep_inv!=.
+replace questions_needing_checks = questions_needing_checks + "investissement export très grand/" if exprep_inv> exprep_inv_95p & exprep_inv!=.
 
 ***********************************************************************
-* 	Part 2.4 Remove observations with more than 10 missing fields			
+* 	Part 2.4 manual approval of values that appear illogical/very high
+			
 ***********************************************************************
+*Please create check_again=0 if the value would be captured by 
+*the logical tests above, but it was confirmed by the survey institute
+*that it is indeed the correct value
+
+
+
+
+***********************************************************************
+* 	Part 2.5 Remove observations with more than 10 missing fields			
+***********************************************************************
+*Add 1 point in priority if survey was validated
+replace check_again = check_again+1 if validation==1 & check_again>0
 replace check_again=0 if miss>10
+
+
 
 ***********************************************************************
 * 	Part 3 Re-shape the correction sheet			
