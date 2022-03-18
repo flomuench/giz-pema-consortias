@@ -53,14 +53,14 @@ foreach var of local accountvars2 {
 
 local vars_checked ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor
 foreach var of local vars_checked {
-	replace check_again = 3 if `var' == . & needs_check==1
+	replace check_again = 2 if `var' == . & needs_check==1
 	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& needs_check==1 
 	
 }
 */
 
 * If profits are larger than 'chiffres d'affaires' need to check: 
- replace check_again = 2 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
+replace check_again = 2 if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=. 
 replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit_2021>ca_2021 & ca_2021!=. & profit_2021!=.
 
 
@@ -87,11 +87,10 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 *firms that reported to be exporters according to registration data
 
 replace check_again=2 if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
-replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour exporteur/ " if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
+replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour entreprise avec ca_exp2021>0/ " if ca_exp_2021>0 & ca_exp_2021!=.  & exp_pays==. 
 
 replace check_again=2 if ca_exp_2021>0 & ca_exp_2021!=. & exp_pays==0 
-replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour exporteur/ " if ca_exp_2021>0 & ca_exp_2021!=.
-
+replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour entreprise avec ca_exp2021>0/ " if ca_exp_2021>0 & ca_exp_2021!=. & exp_pays==0 
 
 replace check_again=2 if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & ca_exp_2021==0 
 replace questions_needing_checks = questions_needing_checks + " ca_exp_2021 zéro mais export rapporté dans le passé/ " if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)) & ca_exp_2021==0 
