@@ -38,7 +38,7 @@ cd "$consortia_master"
 save "add_contact_data", replace
 use "$consortia_master/consortia_master_data",clear
 drop _merge
-merge 1:m id_plateforme using "$consortia_master/add_contact_data"
+merge 1:m id_plateforme using "$consortia_master/add_contact_data", force
 
 save "consortia_master_data",replace
 */

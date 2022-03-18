@@ -231,40 +231,42 @@ forvalues x = 1(1)4 {
 
 *bar chart and boxplots of accounting variable by poles
      * variable ca_2021:
-graph bar ca_2021 if ca_2021<ca_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen ca_95p = pctile(ca_2021), p(95)
+graph bar ca_2021 if ca_2021<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_ca2021.png
 putpdf pagebreak
 
-stripplot ca_2021 if ca_2021<ca_90p, over(pole) vertical
+stripplot ca_2021 if ca_2021<ca_95p, over(pole) vertical
 gr export strip_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_ca2021.png
 putpdf pagebreak
 
      * variable ca_exp_2021:
-graph bar ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen ca_exp90p = pctile(ca_exp_2021), p(95)
+graph bar ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_ca_exp2021.png
 putpdf pagebreak
 
-stripplot ca_exp_2021 if ca_exp_2021<ca_exp90p, over(pole) vertical
+stripplot ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole) vertical
 gr export strip_ca_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_ca_exp2021.png
 putpdf pagebreak
 
      * variable profit_2021:
-	 
-graph bar profit_2021 if profit_2021<profit_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen profit_95p = pctile(profit_2021), p(95)
+graph bar profit_2021 if profit_2021<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_profit_2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_profit_2021.png
 putpdf pagebreak
 
-stripplot profit_2021 if profit_2021<profit_90p, over(pole) vertical
+stripplot profit_2021 if profit_2021<profit_95p, over(pole) vertical
 gr export strip_profit_2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_profit_2021.png
@@ -272,49 +274,49 @@ putpdf pagebreak
 
 
      * variable inno_rd:
-	 
-graph bar inno_rd if inno_rd<inno_rd_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen inno_rd_95p = pctile(inno_rd), p(95)
+graph bar inno_rd if inno_rd<inno_rd_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_inno_rd.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_inno_rd.png
 putpdf pagebreak
 
-stripplot inno_rd if inno_rd<inno_rd_90p, over(pole) vertical
+stripplot inno_rd if inno_rd<inno_rd_95p, over(pole) vertical
 gr export strip_inno_rd.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_inno_rd.png
 putpdf pagebreak
 
      * variable exprep_inv:
-	 
-graph bar exprep_inv if exprep_inv<exprep_inv_90p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen exprep_inv_95p = pctile(exprep_inv), p(95)
+graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_exprep_inv.png
 putpdf pagebreak
 
-stripplot exprep_inv if exprep_inv<exprep_inv_90p, over(pole) vertical
+stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(pole) vertical
 gr export strip_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_exprep_inv.png
 putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
-scatter ca_exp_2021 ca_2021 if ca_2021<ca_90p & ca_exp_2021<ca_exp90p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+scatter ca_exp_2021 ca_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
 gr export scatter_ca.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_ca.png
 putpdf pagebreak
 
 *scatter plots between CA_Exp and exprep_inv
-scatter ca_exp_2021 exprep_inv if ca_exp_2021<ca_exp90p & exprep_inv<exprep_inv_90p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+scatter ca_exp_2021 exprep_inv if ca_exp_2021<ca_exp95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
 gr export scatter_exprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_exprep.png
 putpdf pagebreak
 
 *scatter plots between CA and inno_rd
-scatter ca_2021 inno_rd if inno_rd<inno_rd_90p & ca_2021<ca_90p, title("Proportion des investissements dans l'innovation (R&D) par rapport au chiffre d'affaires")
+scatter ca_2021 inno_rd if inno_rd<inno_rd_95p & ca_2021<ca_95p, title("Proportion des investissements dans l'innovation (R&D) par rapport au chiffre d'affaires")
 gr export scatter_exprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_exprep.png
@@ -323,7 +325,7 @@ putpdf pagebreak
 *scatter plots by pole
 forvalues x = 1(1)4 {
 		* between CA and CA_Exp
-twoway scatter ca_2021 ca_exp_2021 if ca_2021<ca_90p & ca_exp_2021<ca_exp90p & pole == `x', title("Proportion de CA exp par rapport au CA- pole`x'")
+twoway scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x', title("Proportion de CA exp par rapport au CA- pole`x'")
 gr export scatter_capole.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_capole.png
