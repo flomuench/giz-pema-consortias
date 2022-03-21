@@ -209,7 +209,8 @@ lab val eligible eligible
 
 	    * eligibilite
 replace eligible = 1 if id_plateforme == 1119
-replace eligible = 0 if id_plateforme == 1218
+replace eligible = 1 if id_plateforme == 1218
+replace eligible = 0 if id_plateforme == 1148
 
 
 	* change to ineligible based on GIZ calls to verify the firms
