@@ -16,12 +16,12 @@
 *	ID variaregise: 	id_plateforme (example: 777)			  					  
 *	Requires: bl_inter.dta 	  								  
 *	Creates:  bl_inter.dta			      
-/* 
+
 **********************************************************************
 * 	PART 1:  Index calculation based on z-score		
 ***********************************************************************
 use "${bl_intermediate}/bl_inter", clear
-
+/*
 calculation of indeces is based on Kling et al. 2007 and adopted from Mckenzie et al. 2018
 JDE pre-analysis publication:
 1: calculate z-score for each individual outcome

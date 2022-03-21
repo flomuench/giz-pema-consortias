@@ -31,7 +31,7 @@ preserve
 	PART 1.2: *select PII data, seperate it from raw data and merge with
 	existing master file- ONLY HAS TO BE DONE ONCE*
 ----------------------------------------------------------------------*/	
-
+/*
 keep id_plateforme nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2
 gen survey_round =2
 cd "$consortia_master"
