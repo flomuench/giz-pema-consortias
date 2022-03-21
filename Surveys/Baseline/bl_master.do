@@ -142,34 +142,14 @@ if (1) do "${bl_github}/bl_index.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_statistics.do"
+if (0) do "${bl_github}/bl_statistics.do"
 
 
-
-/* 
-add to existing do files
-+ bl_generate: digital, export readiness and export performance score
-+ 
-
-new do file 1:
-- high frequency checks (generate pdf with statistics)
-	 - extreme values, outliers for numerical questions --> comptabilité
-
-
-new do file 2: (generate pdf with statistics)
-- descriptive statistics of the responses
-
-new do file 3:
-- stratification
-
-new do file 4:
-- randomisation + balance check
-
-new do file 5: 
-- allocation of treated firms to treatment groups
-
-
- */
-
-
-
+/* --------------------------------------------------------------------
+	PART 4.1: Stratification 
+----------------------------------------------------------------------*/	
+if (1) do "${bl_github}/bl_stratification.do"
+/* --------------------------------------------------------------------
+	PART 4.2: Randomisation 
+----------------------------------------------------------------------*/	
+if (0) do "${bl_github}/bl_randomisation.do"

@@ -231,13 +231,14 @@ lab values rg_gender_pdg sex
 * 	PART 4: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 
-egen miss1 = rowmiss(entr_idee - inno_mot)
+egen miss0 = rowmiss(entr_idee - produit1)
+egen miss1 = rowmiss(inno_produit - inno_mot)
 egen miss2 = rowmiss (inno_rd - profit_2021)
-egen miss3 = rowmiss (car_efi_fin1 - att_adh6)
+egen miss3 = rowmiss (car_efi_fin1 - att_adh5)
 egen miss4 = rowmiss (att_strat)
 egen miss5 = rowmiss (att_cont)
 egen miss6 = rowmiss (att_jour - support6)
-gen miss = miss1 + miss2 +miss3 +miss4+miss5+miss6
+gen miss = miss0 + miss1 + miss2 +miss3 +miss4+miss5+miss6
 *egen nomiss1 = rownonmiss(entr_idee - profit_2021)
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
 *gen nomiss= nomiss1 + nomiss2
@@ -248,7 +249,7 @@ gen miss = miss1 + miss2 +miss3 +miss4+miss5+miss6
 
 generate survey_completed= 0
 replace survey_completed= 1 if miss == 0
-label var survey_completed "Number of firms which completed the survey"
+label var survey_completed "Number of firms which fully completed the survey"
 label values survey_completed yesno
 */
 */

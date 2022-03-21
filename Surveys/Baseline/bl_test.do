@@ -21,8 +21,8 @@
 	* import file
 
 use "${bl_intermediate}/bl_inter", clear
-
-
+*drop all entries that have not yet started answering the questionnaire
+drop if _merge_ab==1
 ***********************************************************************
 * 	PART 2:  Define logical tests
 ***********************************************************************
