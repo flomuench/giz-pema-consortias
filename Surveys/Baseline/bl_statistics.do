@@ -16,7 +16,7 @@
 * 	PART 1:  set environment + create pdf file for export		  			
 ***********************************************************************
 	* import file
-*use "${bl_intermediate}/bl_inter", clear
+use "$bl_final/bl_final", clear
 
 	* set directory to checks folder
 cd "$bl_output"
@@ -245,7 +245,7 @@ putpdf image strip_ca2021.png
 putpdf pagebreak
 
      * variable ca_exp_2021:
-egen ca_exp90p = pctile(ca_exp_2021), p(95)
+egen ca_exp95p = pctile(ca_exp_2021), p(95)
 graph bar ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca_exp2021.png, replace
 putpdf paragraph, halign(center) 
@@ -325,7 +325,8 @@ putpdf pagebreak
 *scatter plots by pole
 forvalues x = 1(1)4 {
 		* between CA and CA_Exp
-twoway scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x', title("Proportion de CA exp par rapport au CA- pole`x'")
+twoway (scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
+(lfit ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x', lcol(blue))
 gr export scatter_capole.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_capole.png
@@ -553,124 +554,65 @@ gr export bar_listexp.png, replace
 putpdf paragraph, halign(center) 
 putpdf image bar_listexp.png
 putpdf pagebreak		
-/***********************************************************************
-* 	PART 5:  Firm characteristics
 ***********************************************************************
-	* create a heading for the section in the pdf
-putpdf paragraph, halign(center) 
-putpdf text ("consortias training: firm characteristics"), bold linebreak
-
-	* secteurs
-graph hbar (count), over(sector, sort(1)) blabel(total) ///
-	title("Sector - Toutes les entreprises") ///
-	ytitle("nombre d'entreprises") ///
-	name(sector_tous, replace)
-graph hbar (count) if eligible == 1, over(sector, sort(1)) blabel(total) ///
-	title("Sector - Entreprises eligibles") ///
-	ytitle("nombre d'entreprises") ///
-	name(sector_eligible, replace)
-graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les entreprises") ///
-	ytitle("nombre d'entreprises") ///
-	name(subsector_tous, replace)
-graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les entreprises") ///
-	ytitle("nombre d'entreprises") ///
-	name(subsector_eligible, replace)
-gr combine sector_tous sector_eligible subsector_tous subsector_eligible , title("{bf: Distribution sectorielle}")
-graph export sector.png, replace 
-putpdf paragraph, halign(center) 
-putpdf image sector.png
-putpdf pagebreak
-	
-	* gender
-graph bar (count), over(rg_gender_rep) blabel(total) ///
-	title("Genre répresentant(e) entreprise") subtitle("Toutes les PME enregistrées") ///
-	ytitle("nombre d'enregistrement") ///
-	name(gender_rep_tot, replace)
-graph bar (count), over(rg_gender_rep) over(eligible) blabel(total, format(%-9.0fc)) ///
-	title("Gender of firm representative") subtitle("Selon statut d'éligibilité") ///
-	ytitle("pourcentage des entreprises") ///
-	name(gender_rep_eligible, replace)
-graph bar (count), over(rg_gender_pdg) blabel(total) ///
-	title("Genre PDG entreprise") subtitle("Toutes les PME enregistrées") ///
-	ytitle("nombre d'enregistrement") ///
-	name(gender_ceo_tot, replace)
-graph bar (count), over(rg_gender_pdg) over(eligible) blabel(total, format(%-9.0fc)) ///
-	title("Gender of firm CEO") subtitle("Selon statut d'éligibilité") ///
-	ytitle("pourcentage des entreprises") ///
-	name(gender_ceo_eligible, replace)
-gr combine gender_rep_tot gender_rep_eligible gender_ceo_tot gender_ceo_eligible, title("{bf:Genre des réprésentantes et des PDG}")
-graph export gender.png, replace 
-putpdf paragraph, halign(center) 
-putpdf image gender.png
-putpdf pagebreak
-
-	* distribution of firms by gender and subsector
-graph hbar (count), over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Subsector - Toutes les PME enregistrées") ///
-	ytitle("nombre d'entreprises") ///
-	name(gender_ssector_tot, replace)
-graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Subsector - PME éligibles") ///
-	ytitle("nombre d'entreprises") ///
-	name(gender_ssector_eligible, replace)
-gr combine gender_ssector_tot gender_ssector_eligible, title("{bf:Genre des réprésentantes selon secteur}")
-graph export gender_sector.png, width(1500) height(1500) replace
-putpdf paragraph, halign(center) 
-putpdf image gender_sector.png
-putpdf pagebreak
-	* position du répresentant --> hbar
-	
-	* répresentation en ligne: ont un site web ou pas; ont un profil media ou pas
-		* bar chart avec qutre bars et une légende; over(rg_siteweb) over(rg_media)
-		
-	* statut legal
-	
-	* nombre employés féminins rélatif à employés masculins
-*graph bar rg_fte rg_fte_femmes
-	
-	* 
-
-	
+* 	PART 5:  Comparing matched vs new data
 ***********************************************************************
-* 	PART 6:  Alternative eligibility
-************************************************************************
-putpdf paragraph, halign(center) 
-putpdf text ("Eligibilité sous contraintes lachés"), bold linebreak
+egen ca20_95p = pctile(ca_2020), p(95)
+twoway (scatter ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, title("Correlation CA")) || ///
+(lfit ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, lcol(blue))
 
-	* alternative eligibility
-graph bar (count), over(eligible) blabel(total) ///
-	title("Entreprises actuellement eligibles") ///
-	ytitle("nombre d'enregistrement") ///
-	name(eligibles, replace) ///
-	note(`"Chaque entreprise est éligible qui a fourni un matricul fiscal correct, a >= 6 & < 200 employés, une produit exportable, "' `"l'intention d'exporter, >= 1 opération d'export, existe pour >= 2 ans et est résidente tunisienne."', size(vsmall) color(red))
-graph bar (count), over(eligible_alternative) blabel(total) ///
-	title("Entreprises éligibles sans opération d'export") ///
-	ytitle("nombre d'enregistrement") ///
-	note(`"Chaque entreprise est éligible qui a fourni un matricul fiscal correct, a >= 6 & < 200 employés, une produit exportable, "' `"l'intention d'exporter, existe pour >= 2 ans et est résidente tunisienne."', size(vsmall) color(green)) ///
-	name(eligibles_alt, replace)
-gr combine eligibles eligibles_alt, title("{bf:Eligibilité des entreprises sans opération d'export}")
-graph export eligibles_alt.png, replace 
+egen exp20_95p = pctile(ca_exp2020), p(95)
+twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p, title("Correlation Export")) || ///
+(lfit ca_2021 ca_2020 if ca_2021<ca_exp95p & ca_2020<exp20_95p, lcol(blue))
+
+forvalues x = 1(1)4 {
+		* between CA21 and CA20
+twoway (scatter ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, title("Correlation CA")) || ///
+(lfit ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, lcol(blue))
+gr export old_new_ca_scatter_pole.png, replace
 putpdf paragraph, halign(center) 
-putpdf image eligibles_alt.png
+putpdf image old_new_ca_scatter_pole.png
 putpdf pagebreak
+}
 
-	* alternative eligibility by sector and gender
-graph hbar (count) if eligible == 1, over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Critères d'éligibilité actuelle") ///
-	ytitle("nombre d'entreprises") ///
-	name(gender_ssector_eligible, replace)
-graph hbar (count) if eligible_alternative == 1, over(subsector, sort(1) label(labsize(tiny))) over(rg_gender_rep) blabel(total, size(tiny)) ///
-	title("Critères d'éligibilités alternatives") ///
-	ytitle("nombre d'entreprises") ///
-	name(gender_ssector_eligible_alt, replace)
-gr combine gender_ssector_eligible gender_ssector_eligible_alt, title("{bf:Eligibilité des entreprises sans opération d'export}")
-graph export gender_sector_eligible_alt.png, replace
+forvalues x = 1(1)4 {
+		* between exp21 and exp20
+twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p, title("Correlation Export")) || ///
+(lfit ca_2021 ca_2020 if ca_2021<ca_exp95p & ca_2020<exp20_95p, lcol(blue))
+gr export old_new_exps_scatter_pole.png, replace
 putpdf paragraph, halign(center) 
-putpdf image gender_sector_eligible_alt.png
+putpdf image old_new_exps_scatter_pole.png
+putpdf pagebreak
+}
 
 */	
+***********************************************************************
+* 	PART 6:  Correlation of index variables with accounting data
+***********************************************************************
+twoway (scatter ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p) || ///
+(lfit ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p, lcol(blue))
+gr export cor_exportmanag_exp2021.png, replace
+
+twoway (scatter ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p) || ///
+(lfit ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p, lcol(blue))
+gr export cor_manageprac_exp2021.png, replace
+
+twoway (scatter ca_exp_2021 exportcombined if ca_exp_2021<ca_exp95p) || ///
+(lfit ca_exp_2021 exportcombined if ca_exp_2021<ca_exp95p, lcol(blue))
+gr export cor_expcombinedindex_exp2021.png, replace
+
+twoway (scatter ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p) || ///
+(lfit ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p, lcol(blue))
+gr export cor_expprep_exp2021.png, replace
+
+twoway (scatter ca_2021 exportmngt if ca_2021<ca_95p) || ///
+(lfit ca_2021 exportmngt if ca_2021<ca_95p, lcol(blue))
+gr export cor_exportmanag_ca2021.png, replace
+
+twoway (scatter ca_2021 mngtvars if ca_2021<ca_95p) || ///
+(lfit ca_2021 mngtvars if ca_2021<ca_95p, lcol(blue))
+gr export cor_manageprac_ca2021.png, replace
+
 ***********************************************************************
 * 	PART 7:  save pdf
 ***********************************************************************
