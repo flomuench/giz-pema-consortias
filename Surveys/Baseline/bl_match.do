@@ -26,7 +26,7 @@ drop if id_plateforme==.
 drop if eligible==0
 
 rename questions_needing_check question_unclear_regis
-drop eligible eligibilité programme treatment legalstatus moyen_com confidentialite partage_donnees enregistrement_coordonnees dateinscription date_creation_string date_inscription_string dup_emailpdg dup_firmname onshore produit_exportable intention_export expstatus ca_check random_number rank list_group
+drop eligible eligibilité programme treatment legalstatus moyen_com confidentialite partage_donnees enregistrement_coordonnees dateinscription date_creation_string date_inscription_string dup_emailpdg dup_firmname onshore produit_exportable intention_export expstatus random_number rank list_group
 merge 1:1 id_plateforme using "${bl_intermediate}/bl_inter", generate(_merge_ab)
 
 ***********************************************************************
