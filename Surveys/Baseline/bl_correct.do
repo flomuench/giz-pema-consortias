@@ -198,12 +198,13 @@ replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
 
 *3.3 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
-replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
+replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace ca_2021 = "3000000" if ca_2021 == "3m"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
+
 /*
 replace ca_2018_cor = "300000" if ca_2018_cor =="300k"
 replace ca_exp_2018_cor = "50000" if ca_exp_2018_cor == "50k"
@@ -221,6 +222,7 @@ replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m" ////To be checked again
 
 
 *3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
 replace inno_mot_autre = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
 replace inno_mot_autre = "ca depends la demande des clients/ son mari"  if inno_mot_autre =="7asb demande clients / son marie"
 replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
@@ -305,6 +307,7 @@ replace ca_2020 =20000 if id_plateforme==1210
 replace ca_2020 =5500 if id_plateforme==1162
 replace ca_2020 =38500 if id_plateforme==1157
  
+
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
 ***********************************************************************

@@ -252,7 +252,7 @@ putpdf paragraph, halign(center)
 putpdf image bar_ca_exp2021.png
 putpdf pagebreak
 
-stripplot ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole) vertical
+stripplot ca_exp_2021 , over(pole) vertical
 gr export strip_ca_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_ca_exp2021.png
@@ -592,31 +592,64 @@ putpdf pagebreak
 twoway (scatter ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p) || ///
 (lfit ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p, lcol(blue))
 gr export cor_exportmanag_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_exportmanag_exp2021.png
+putpdf pagebreak
 
 twoway (scatter ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p) || ///
 (lfit ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p, lcol(blue))
 gr export cor_manageprac_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_manageprac_exp2021.png
+putpdf pagebreak
 
 twoway (scatter ca_exp_2021 exportcombined if ca_exp_2021<ca_exp95p) || ///
 (lfit ca_exp_2021 exportcombined if ca_exp_2021<ca_exp95p, lcol(blue))
 gr export cor_expcombinedindex_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_expcombinedindex_exp2021.png
+putpdf pagebreak
 
 twoway (scatter ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p) || ///
 (lfit ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p, lcol(blue))
 gr export cor_expprep_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_expprep_exp2021.png
+putpdf pagebreak
 
 twoway (scatter ca_2021 exportmngt if ca_2021<ca_95p) || ///
 (lfit ca_2021 exportmngt if ca_2021<ca_95p, lcol(blue))
 gr export cor_exportmanag_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_exportmanag_ca2021.png
+putpdf pagebreak
+
 
 twoway (scatter ca_2021 mngtvars if ca_2021<ca_95p) || ///
 (lfit ca_2021 mngtvars if ca_2021<ca_95p, lcol(blue))
 gr export cor_manageprac_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image cor_manageprac_ca2021.png
+putpdf pagebreak
+
+cd "$bl_output"
+
+asdoc cor ca_2021 ca_exp_2021 profit_2021 exprep_inv inno_rd exportmngt mngtvars exportcombined, save(cor_matrix_bldata.doc) title(Correlation matrix of indices and 2021 data)
+asdoc cor ca_2021 ca_2020 ca_2019 ca_2018 ca_exp_2021 ca_exp2020 ca_exp2020 ca_exp2019 ca_exp2018 profit_2021, save(cor_matrix_20182021.doc) title(2021 vs. 2018-2020 financial data)
+
+tab ca_2021
+tab ca_2020
+tab ca_2019
+tab ca_exp_2021
+tab ca_exp2020
+tab ca_exp2019
+
+*There are less missing values for the newest data from 2021, so probably better to take this one*
 
 ***********************************************************************
 * 	PART 7:  save pdf
 ***********************************************************************
 	* change directory to progress folder
-cd "$bl_output"
+
 	* pdf
 putpdf save "baseline_statistics", replace

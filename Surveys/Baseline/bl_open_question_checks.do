@@ -125,7 +125,5 @@ putdocx pagebreak
 ***********************************************************************
 	* word file
 cd "$bl_checks"
-putdocx save "bl-checks-question-ouvertes.docx", replace
-	* restore all the observations
-
+putdocx save "bl-checks-question-ouvertes", replace
 
