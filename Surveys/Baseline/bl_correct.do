@@ -145,17 +145,33 @@ replace produit1 = "pépinières production" if produit1 =="انتاج المش�
 replace produit1 = "art de la table / table en porcelaine" if produit1 =="فن الطاولة /خزف الطاولة"
 replace produit1 = "tapis traditionnelle (klim, margoum)" if produit1 =="كليم مرقوم"
 replace produit1 = "légume" if produit1 =="خضار"
+replace produit1 = "Rédaction de programmes de formation pour les organisations" if produit1 =="seyaghet baramej tadribia lel monadhmet"
+replace produit1 = "Peintures" if produit1 =="law7at l faniya"
+replace produit1 = "alliés plante" if produit1 =="l7alfa"
+replace produit1 = "huile essentielle (Caletus Couronne Za'atar)" if produit1 =="lhuiessentiel(kalatous w klil w zater)"
+replace produit1 = "engrais liquide" if produit1 =="سماد liquide"
+replace produit1 = "pots" if produit1 =="m7abes"
+replace produit1 = "huil de alovera" if produit1 =="huil de hendi"
+replace produit1 = "huil d'olive bio" if produit1 =="huidolive bio"
+replace produit1 = "alliés plante" if produit1 =="halfa"
+replace produit1 = "margoum /tapis" if produit1 =="margoum /zrabi"
+replace produit1 = "" if produit1 ==""
+replace produit1 = "" if produit1 ==""
+replace produit1 = "" if produit1 ==""
 replace produit1 = "" if produit1 ==""
 replace produit1 = "" if produit1 ==""
 
 replace produit2 = "cours de formation sur le voix off"  if produit2 =="دورة تدريبية في التعليق الصوتي"
-replace produit2 = "olive oil"  if produit2 =="زيت زيتون"
+replace produit2 = "huil d'olive"  if produit2 =="زيت زيتون"
 replace produit2 = "vente de pépinières"  if produit2 =="بيع المشاتل"
 replace produit2 = "appareils électriques, nourriture, vêtements"  if produit2 =="الأجهزة الكهرومنزلية، المواد الغذائية ،الملابس"
 replace produit2 = "antiquités et décorations"  if produit2 =="التحف و الديكورات"
 replace produit2 = "fruits"  if produit2 =="فواكه"
+replace produit2 = "engrais poudre"  if produit2 =="سماد poudre"
+replace produit2 = "alliés plante"  if produit2 =="halfa"
 replace produit2 = ""  if produit2 ==""
 replace produit2 = ""  if produit2 ==""
+
 
 replace produit3 = "un cours de création de contenu sur les plateformes de médias sociaux"  if produit3 =="دورة في صناعة المحتوى على منصات التواصل الاجتماعي"
 replace produit3 = "matériel alimentaire et agricole"  if produit3 =="مواد غذائية وزراعية"
@@ -168,29 +184,7 @@ replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
 
-replace inno_mot_autre = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
-replace inno_mot_autre = "ca depends la demande des clients/ son mari"  if inno_mot_autre =="7asb demande clients / son marie"
-replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
 
-replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
-
-replace att_adh_autres ="développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
-replace att_adh_autres ="introduire le produit tunisien et augmenter les transactions commerciales" if att_adh_autres == "ta3rif bel produit tunisien/zyedet elmou3amlet tij"
-replace att_adh_autres ="certification ou formation lel produit" if att_adh_autres == "certification wala formation lel produit"
-
-
-replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
-replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
-replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if id_plateforme == 1196
-replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
-replace entr_idee= "appareils électroménagers, nourriture, vêtements" if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
-replace entr_idee= "un atelier de fabrication et de vente de poteries à partir de pots, d'antiquités et de céramiques murales" if entr_idee=="ورشة لصناعة و بيع الفخار من اواني و تحف و خزف حائط"
-replace entr_idee= "industries traditionnelles spécialisées dans le tissage à la main" if entr_idee=="صناعات تقليدية مختصة في النسيج اليدوي"
-replace entr_idee= "valoriser les déchets organiques et les transformer en engrais naturel" if entr_idee=="تثمين النفايات العضوية و تحويلها الى سماد طبيعي"
-replace entr_idee= "exportation de poissons fruits et légumes tunisiens par avion vers les pays" if entr_idee=="تصدير فواكه و خضروات اسماك تونسية بالطائرة لبلدان"
-replace entr_idee= "aider les parents et les spécialistes" if entr_idee=="lمساعدة الاولياء و الاخصائيين"
-replace entr_idee= "commercialisation de produits artisanaux" if id_plateforme==1214
-replace entr_idee= "" if entr_idee==""
 
 *3.2	Rename and homogenize the product names	  			
 	* Example
@@ -210,10 +204,17 @@ replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace ca_2021 = "3000000" if ca_2021 == "3m"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
+
+/*
+replace ca_2018_cor = "300000" if ca_2018_cor =="300k"
+replace ca_exp_2018_cor = "50000" if ca_exp_2018_cor == "50k"
+replace ca_exp2019_cor = "50000" if  ca_exp2019_cor == "50k"
 replace ca_2020_cor = "2000000" if ca_2020_cor == "2m"
-replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m"
+replace ca_exp2020_cor = "800000" if ca_exp2020_cor == "800k"
+replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m" ////To be checked again///
+*/ 
 
-
+ 
 
 
 *3.4 Mark any non-numerical answers to numeric questions as check_again=1
@@ -221,6 +222,58 @@ replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m"
 
 
 *3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
+replace inno_mot_autre = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+replace inno_mot_autre = "ca depends la demande des clients/ son mari"  if inno_mot_autre =="7asb demande clients / son marie"
+replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
+replace inno_mot_autre = "idée de groupe sur le savoir faire" if inno_mot_autre =="fekra jama3eya ala savoir faire"
+
+replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
+
+replace att_adh_autres ="développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
+replace att_adh_autres ="introduire le produit tunisien et augmenter les transactions commerciales" if att_adh_autres == "ta3rif bel produit tunisien/zyedet elmou3amlet tij"
+replace att_adh_autres ="certification ou formation lel produit" if att_adh_autres == "certification wala formation lel produit"
+replace att_adh_autres ="ouvrir de nouveaux perspectives" if att_adh_autres =="فتح افاق جديدة"
+replace att_adh_autres ="rencontrer d'autres femmes d'affaires" if att_adh_autres =="besh ta3ref akther des femmes d'affaire"
+replace att_adh_autres ="commencer de nouvelles expériences" if att_adh_autres =="theb tod5el fi tajareb jdida"
+replace att_adh_autres ="développer / networking / apprendre d'autres expériences" if att_adh_autres =="التطوير networking الاستفادة من التجارب"
+replace att_adh_autres ="motivation pour que je démarre" if att_adh_autres =="7afez pour que je démarre"
+replace att_adh_autres ="mon ambition c'est l'export" if att_adh_autres =="tomou7i l'export"
+replace att_adh_autres ="Je recherche de l'expérience et du financement" if att_adh_autres =="t7eb expérience w tamwil"
+replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="" if att_adh_autres ==""
+
+
+replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
+replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"
+replace entr_idee= "valoriser les produits agricoles et les protéger de la détérioration" if id_plateforme == 1196
+replace entr_idee= "production et vente de pépinières" if entr_idee=="انتاج وبيع المشاتل"
+replace entr_idee= "appareils électroménagers, nourriture, vêtements" if entr_idee=="الأجهزة الكهرومنزلية، المواد الغذائية، الملابس،"
+replace entr_idee= "un atelier de fabrication et de vente de poteries à partir de pots, d'antiquités et de céramiques murales" if entr_idee=="ورشة لصناعة و بيع الفخار من اواني و تحف و خزف حائط"
+replace entr_idee= "industries traditionnelles spécialisées dans le tissage à la main" if entr_idee=="صناعات تقليدية مختصة في النسيج اليدوي"
+replace entr_idee= "valoriser les déchets organiques et les transformer en engrais naturel" if entr_idee=="تثمين النفايات العضوية و تحويلها الى سماد طبيعي"
+replace entr_idee= "exportation de poissons fruits et légumes tunisiens par avion vers les pays" if entr_idee=="تصدير فواكه و خضروات اسماك تونسية بالطائرة لبلدان"
+replace entr_idee= "aider les parents et les spécialistes" if entr_idee=="lمساعدة الاولياء و الاخصائيين"
+replace entr_idee= "commercialisation de produits artisanaux" if id_plateforme==1214
+replace entr_idee= "produits artisanaux depuis 2017" if id_plateforme==1197
+replace entr_idee= "pots en béton" if entr_idee=="ma7bes en béton"
+replace entr_idee= "tapis (1990) ou Halfa (2017)" if entr_idee=="zarbia (1990)ou halfa (2017)"
+replace entr_idee= "artisana (tapis ; margoum : crochet, couture, goutte à goutte" if entr_idee=="artizana (zrabi ; margoum : crochet , 5iata, ta9tir"
+replace entr_idee= "ils ont commencé avec de la confiture (2014)" if id_plateforme==1231
+replace entr_idee= "produits artisanaux, depuis 2017" if entr_idee=="depuis 2017 sina3a ta9lideya"
+replace entr_idee= "services techniologie de l'information depuis decembre 2020" if id_plateforme==1155
+replace entr_idee= "developper l'education a tunisie at l'afrique (2020)" if entr_idee=="tatwir ta3lim fi tounes w ifri9iya (2020)"
+replace entr_idee= "volorisation les déchet d'engrais naturelle/ créé en 2018" if entr_idee=="volorisation les déchet سماد طبيعي créé en 2018"
+replace entr_idee= "profiter de fourrure/ recyclage" if entr_idee=="istighlel elfourrure :i3adet raskla . pdt recylable."
+replace entr_idee= "planter des fleurs pour manger, l'ouverture en 2018" if entr_idee=="tezra3 des fleurs lel akel l'ouverture en 2018"
+replace entr_idee= "piece de decoration de diche du paume 2011" if id_plateforme==1128
+replace entr_idee= "industrie des équipements de réfrigération 2010" if entr_idee=="sine3et el mo3edet mta3 tabrid 2010"
+replace entr_idee= "Fil et aiguille de vêtements traditionnels" if entr_idee=="5it w ebra tradition malabes artisanat"
+replace entr_idee= "nous avons commencé avec 9 artisans" if id_plateforme==1186
+replace entr_idee= "home-made pâte" if id_plateforme==1230
+replace entr_idee= "" if entr_idee==""
 
 
 *3.6 Comparison of newly provided accounting data for firms with needs_check=1
@@ -232,6 +285,15 @@ replace ca_2018 =150000 if id_plateforme==1159
 replace ca_2018 =5000 if id_plateforme==1210
 replace ca_2018 =10000 if id_plateforme==1162
 replace ca_2018 =2663000 if id_plateforme==1240
+replace ca_2018 =40000 if id_plateforme==1041
+replace ca_2018 =70000 if id_plateforme==1197
+replace ca_2018 =350000 if id_plateforme==1168
+replace ca_2018 =150000 if id_plateforme==1074
+replace ca_2018 =100000 if id_plateforme==1035
+replace ca_2018 =120000 if id_plateforme==1159
+replace ca_2018 =33000 if id_plateforme==1013
+replace ca_2018 =295000 if id_plateforme==1043
+
 
 replace ca_2019 =250000 if id_plateforme==1074
 replace ca_2019 =20000 if id_plateforme==1210
