@@ -54,7 +54,7 @@ foreach var of local accountvars2 {
 local vars_checked ca_2018_cor ca_exp_2018_cor ca_2019_cor ca_exp2019_cor ca_2020_cor ca_exp2020_cor
 foreach var of local vars_checked {
 	replace check_again = 2 if `var' == . & ca_check==1
-	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& needs_check==1 
+	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2018-2020 /" if `var' == .& ca_check==1 
 	
 }
 */

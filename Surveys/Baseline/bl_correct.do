@@ -204,18 +204,28 @@ replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
 
 *3.3 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020 ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_exp2020_cor ca_2019_cor ca_exp2019_cor ca_2018_cor ca_exp_2018_cor
-replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 
+replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace ca_2021 = "3000000" if ca_2021 == "3m"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
-replace ca_2018_cor = "300000" if ca_2018_cor == "300k"
-replace ca_exp_2018_cor = "50000" if ca_exp_2018_cor == "50k"
-replace ca_exp2019_cor = "50000" if  ca_exp2019_cor == "50k"
 replace ca_2020_cor = "2000000" if ca_2020_cor == "2m"
-replace ca_exp2020_cor = "800000" if ca_exp2020_cor == "800k"
-replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m" ////To be checked again///
+replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m"
+
+
+
+
+*3.4 Mark any non-numerical answers to numeric questions as check_again=1
+
+
+
+*3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
+
+
+*3.6 Comparison of newly provided accounting data for firms with needs_check=1
+*Please compare new and old and decide whether to replace the value. 
+*If new value continues to be strange, then check_again plus comment
 
 replace ca_2018 =45000 if id_plateforme==1136
 replace ca_2018 =150000 if id_plateforme==1159
@@ -235,20 +245,6 @@ replace ca_2020 =20000 if id_plateforme==1210
 replace ca_2020 =5500 if id_plateforme==1162
 replace ca_2020 =38500 if id_plateforme==1157
  
-
-
-*3.4 Mark any non-numerical answers to numeric questions as check_again=1
-
-
-
-*3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
-
-
-*3.6 Comparison of newly provided accounting data for firms with needs_check=1
-*Please compare new and old and decide whether to replace the value. 
-*If new value continues to be strange, then check_again plus comment
-
-
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			

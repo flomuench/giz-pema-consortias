@@ -76,17 +76,19 @@ putdocx paragraph
 putdocx text ("We miss some information on management practices variables for `r(miss)' `: display %9.2fc`r(percent)'''%) out of `r(total)'.")	
 
 
-*Use older figures for CA and exp if 2021 figures are missing
-gen exp_strata=ca_exp_2021
-replace exp_strata=ca_exp2020 if ca_exp_2021==0 | ca_exp_2021==.
-replace exp_strata=ca_exp2019 if (ca_exp2020==0 | ca_exp2020==.) & (ca_exp_2021==0 | ca_exp_2021==.)
-replace exp_strata=ca_exp2018 if (ca_exp2020==0 | ca_exp2020==.) & (ca_exp_2021==0 | ca_exp_2021==.)& (ca_exp2019==0 | ca_exp2019==.)
+*Use older figures for CA and exp if 2021 figures are missing (NOT GOOD IDEA
+*BECAUSE LITTLE CORRELATION BETWEEN 2021 and previous years*
+/*
+gen ca_exp_2021=ca_exp_2021
+replace ca_exp_2021=ca_exp2020 if ca_exp_2021==0 | ca_exp_2021==.
+replace ca_exp_2021=ca_exp2019 if (ca_exp2020==0 | ca_exp2020==.) & (ca_exp_2021==0 | ca_exp_2021==.)
+replace ca_exp_2021=ca_exp2018 if (ca_exp2020==0 | ca_exp2020==.) & (ca_exp_2021==0 | ca_exp_2021==.)& (ca_exp2019==0 | ca_exp2019==.)
 
-gen ca_strata=ca_2021
-replace ca_strata=ca_2020 if ca_exp_2021==0 | ca_exp_2021==.
-replace ca_strata=ca_2019 if (ca_2020==0 | ca_2020==.) & (ca_2021==0 | ca_2021==.)
-replace ca_strata=ca_2018 if (ca_2020==0 | ca_2020==.) & (ca_2021==0 | ca_2021==.)& (ca_2019==0 | ca_2019==.)
-
+gen ca_2021=ca_2021
+replace ca_2021=ca_2020 if ca_exp_2021==0 | ca_exp_2021==.
+replace ca_2021=ca_2019 if (ca_2020==0 | ca_2020==.) & (ca_2021==0 | ca_2021==.)
+replace ca_2021=ca_2018 if (ca_2020==0 | ca_2020==.) & (ca_2021==0 | ca_2021==.)& (ca_2019==0 | ca_2019==.)
+*/
 ***********************************************************************
 * 	PART 3: create strata
 ***********************************************************************
@@ -94,56 +96,78 @@ replace ca_strata=ca_2018 if (ca_2020==0 | ca_2020==.) & (ca_2021==0 | ca_2021==
 ***********************************************************************
 * 	Approach 1: only poles strata
 ***********************************************************************
+gen strata1= pole
+
+***********************************************************************
+* 	Approach 2: Poles & revenues by quartiles
+***********************************************************************
+gen strata2_prep=1 
+
+forvalues x = 1(1)4 {
+sum ca_2021 if pole == `x',d 
+replace strata2_prep = 2 if ca_2021>`r(p75)' & ca_2021!=. & pole== `x'
+replace strata2_prep = 3 if ca_2021<=`r(p75)' & ca_2021>`r(p50)' & ca_2021!=. & pole== `x'
+replace strata2_prep = 4 if ca_2021<=`r(p50)' & ca_2021>`r(p25)' & ca_2021!=.& pole== `x'
+replace strata2_prep = 5 if ca_2021<=`r(p25)' & ca_2021!=. & pole== `x'
+
+}
+
+egen strata2 = group(strata2_prep pole)
 
 
 ***********************************************************************
-* 	Approach 2: Poles & Top-25th percentile revenues & missing revenues
-***********************************************************************
-gen strata2_ca2021=1
-sum ca_strata, d
-replace strata2_ca2021 = 2 if ca_strata>`r(p75)' & ca_strata!=.
-replace strata2_ca2021 = 3 if ca_strata==.
-egen strata2 = group(strata2_ca2021 pole)
-
-
-***********************************************************************
-* 	Approach 3: strata3s & Top-25th percentile revenues, missing revenues & low management practices=0
-***********************************************************************
-/*Makes no sense because groups too small*
-gen strata3_ca2021=1
-sum ca_2021, d
-replace strata3_ca2021 = 2 if ca_2021>`r(p75)' & ca_2021!=.
-replace strata3_ca2021 = 3 if ca_2021==.
-
-*Create additional strata for companies <75p turnover and low management practices
-replace strata3_ca2021 = 4 if strata3_ca2021==1 & raw_mngtvars<=8
-*group strata =4 does not exist so 
-replace strata3_ca2021 = 5 if strata3_ca2021==3 & raw_mngtvars<=8
-
-egen strata3 = group(strata3_ca2021 pole)
-*/
-
-***********************************************************************
-* 	Approach 4: Poles & Top-50th percentile exports, missing exports and zero
+* 	Approach 3: Poles & exports by quartiles
 ***********************************************************************
 
+gen strata3_prep=1 
 
-gen strata4_prep=1
-sum exp_strata, d
-replace strata4_prep = 2 if exp_strata>`r(p50)' & exp_strata!=.
-replace strata4_prep = 3 if exp_strata==0
-replace strata4_prep = 4 if exp_strata==.
-egen strata4 = group(strata4_prep pole)
+forvalues x = 1(1)4 {
+sum ca_exp_2021 if pole == `x',d 
+replace strata3_prep = 2 if ca_exp_2021>`r(p75)' & ca_exp_2021!=. & pole== `x'
+replace strata3_prep = 3 if ca_exp_2021<=`r(p75)' & ca_exp_2021>`r(p50)' & ca_exp_2021!=. & pole== `x'
+replace strata3_prep = 4 if ca_exp_2021<=`r(p50)' & ca_exp_2021>`r(p25)' & ca_exp_2021!=.& pole== `x'
+replace strata3_prep = 5 if ca_exp_2021<=`r(p25)' & ca_exp_2021!=. & pole== `x'
+
+}
+
+egen strata3 = group(strata3_prep pole)
+
 *small strata are strata with missing export data, Problem?*
 
 ***********************************************************************
-* 	Approach 5: Poles & missing exports and zero (4*3= 12 groups)
+* 	Approach 4: Poles & revenues by quartile and top 10%exporters
 ***********************************************************************
-gen strata5_prep=1
-sum exp_strata, d
-replace strata5_prep = 2 if exp_strata==0
-replace strata5_prep = 3 if exp_strata==.
+gen strata4_prep=1 
+
+forvalues x = 1(1)4 {
+sum ca_2021 if pole == `x',d 
+replace strata4_prep = 2 if ca_2021>`r(p75)' & ca_2021!=. & pole== `x'
+replace strata4_prep = 3 if ca_2021<=`r(p75)' & ca_2021>`r(p50)' & ca_2021!=. & pole== `x'
+replace strata4_prep = 4 if ca_2021<=`r(p50)' & ca_2021>`r(p25)' & ca_2021!=.& pole== `x'
+replace strata4_prep = 5 if ca_2021<=`r(p25)' & ca_2021!=. & pole== `x'
+sum ca_exp_2021 if pole == `x',d 
+replace strata4_prep = 6 if ca_exp_2021>=`r(p90)' & ca_exp_2021!=. & pole== `x'
+}
+
+egen strata4 = group(strata4_prep pole)
+
+***********************************************************************
+* 	Approach 5: Poles & revenues by quartile and top 25%exporters
+***********************************************************************
+gen strata5_prep=1 
+
+forvalues x = 1(1)4 {
+sum ca_2021 if pole == `x',d 
+replace strata5_prep = 2 if ca_2021>`r(p75)' & ca_2021!=. & pole== `x'
+replace strata5_prep = 3 if ca_2021<=`r(p75)' & ca_2021>`r(p50)' & ca_2021!=. & pole== `x'
+replace strata5_prep = 4 if ca_2021<=`r(p50)' & ca_2021>`r(p25)' & ca_2021!=.& pole== `x'
+replace strata5_prep = 5 if ca_2021<=`r(p25)' & ca_2021!=. & pole== `x'
+sum ca_exp_2021 if pole == `x',d 
+replace strata5_prep = 6 if ca_exp_2021>=`r(p75)' & ca_exp_2021!=. & pole== `x'
+}
+
 egen strata5 = group(strata5_prep pole)
+
 
 
 
@@ -155,41 +179,41 @@ egen strata5 = group(strata5_prep pole)
 ***********************************************************************
 putdocx paragraph
 putdocx text ("Strata1: average SDs"), linebreak bold
-putdocx text ("This approach creates 1 stratum for each strata3 d'activité")
+putdocx text ("This approach creates 1 stratum for each pole d'activité")
 putdocx paragraph
-tab2docx pole
+tab2docx strata1
 putdocx paragraph
 
 	*** total revenues
 	
-bysort pole: egen ca_sd_strata1 = sd(ca_strata)
+bysort strata1: egen ca_sd_strata1 = sd(ca_2021)
 sum ca_sd_strata1, d
-local s1_pole : display %9.2fc  `r(mean)'
+local s1_strata1 : display %9.2fc  `r(mean)'
 display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum ca_strata,d
+sum ca_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total exports
 	
-bysort pole: egen exp_sd_strata1 = sd(exp_strata)
+bysort strata1: egen exp_sd_strata1 = sd(ca_exp_2021)
 sum exp_sd_strata1, d
-local s1_pole : display %9.2fc  `r(mean)'
+local s1_strata1 : display %9.2fc  `r(mean)'
 display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum exp_strata,d
+sum ca_exp_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total profits
-bysort pole: egen profit_sd_strata1 = sd(profit_2021)
+bysort strata1: egen profit_sd_strata1 = sd(profit_2021)
 sum profit_sd_strata1, d
-local s1_pole : display %9.2fc  `r(mean)'
+local s1_strata1 : display %9.2fc  `r(mean)'
 display "With these strata, profit 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  profit 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
@@ -199,9 +223,9 @@ putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** number of countries
-bysort pole: egen pays_sd_strata1 = sd(exp_pays)
+bysort strata1: egen pays_sd_strata1 = sd(exp_pays)
 sum pays_sd_strata1, d
-local s1_pole : display %9.2fc  `r(mean)'
+local s1_strata1 : display %9.2fc  `r(mean)'
 display "With these strata, number of export countries by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  number of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
@@ -209,40 +233,40 @@ sum exp_pays,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
-
+putdocx pagebreak
 
 ***********************************************************************
 * 	Approach 2
 ***********************************************************************
 putdocx paragraph
 putdocx text ("Strata2: average SDs"), linebreak bold
-putdocx text ("This approach creates 3 groups based on revenue (>75p, below, missing) per pole")
+putdocx text ("This approach creates 5 groups based on revenue (quartiles and missing) per pole")
 putdocx paragraph
 tab2docx strata2
 putdocx paragraph
 
 	*** total revenues
 	
-bysort strata2: egen ca_sd_strata2 = sd(ca_strata)
+bysort strata2: egen ca_sd_strata2 = sd(ca_2021)
 sum ca_sd_strata2, d
 local s1_strata2 : display %9.2fc  `r(mean)'
 display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum ca_strata,d
+sum ca_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total exports
 	
-bysort strata2: egen exp_sd_strata2 = sd(exp_strata)
+bysort strata2: egen exp_sd_strata2 = sd(ca_exp_2021)
 sum exp_sd_strata2, d
 local s1_strata2 : display %9.2fc  `r(mean)'
 display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum exp_strata,d
+sum ca_exp_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
@@ -270,41 +294,40 @@ sum exp_pays,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
-
+putdocx pagebreak
 
 ***********************************************************************
-* 	Approach 3
+* 	Approach 3: Pole& export quartiles*
 ***********************************************************************
-/*
 putdocx paragraph
-putdocx text ("Strata1: average SDs"), linebreak bold
-putdocx text ("This approach creates 12 strata (4 strata3s * 3 Revenue groups)")
+putdocx text ("strata3: average SDs"), linebreak bold
+putdocx text ("This approach creates 5 groups on exports (quartiles plus missing) for each pole d'activité")
 putdocx paragraph
 tab2docx strata3
 putdocx paragraph
 
 	*** total revenues
 	
-bysort strata3: egen ca_sd_strata3 = sd(ca_strata)
+bysort strata3: egen ca_sd_strata3 = sd(ca_2021)
 sum ca_sd_strata3, d
 local s1_strata3 : display %9.2fc  `r(mean)'
 display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum ca_strata,d
+sum ca_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total exports
 	
-bysort strata3: egen exp_sd_strata3 = sd(exp_strata)
+bysort strata3: egen exp_sd_strata3 = sd(ca_exp_2021)
 sum exp_sd_strata3, d
 local s1_strata3 : display %9.2fc  `r(mean)'
 display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum exp_strata,d
+sum ca_exp_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
@@ -313,9 +336,9 @@ putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 bysort strata3: egen profit_sd_strata3 = sd(profit_2021)
 sum profit_sd_strata3, d
 local s1_strata3 : display %9.2fc  `r(mean)'
-display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
+display "With these strata, profit 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
-putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+putdocx text ("With these strata,  profit 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
 sum profit_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
@@ -327,48 +350,45 @@ sum pays_sd_strata3, d
 local s1_strata3 : display %9.2fc  `r(mean)'
 display "With these strata, number of export countries by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
-putdocx text ("With these strata,  tnumber of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+putdocx text ("With these strata,  number of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
 sum exp_pays,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
-*/
-
-
+putdocx pagebreak
 ***********************************************************************
-* 	Approach 4: Pole& above median exports and zero or missing exports*
+* 	Approach 4 Revenue quartiles and top 10% exporters*
 ***********************************************************************
 putdocx paragraph
 putdocx text ("strata4: average SDs"), linebreak bold
-putdocx text ("This approach creates 4 strata on exports (above median, below, zero and missing) for each pole d'activité")
+putdocx text ("This approach creates 5 groups on revenues(quartiles plus missing) plus one group for top10% of exports for each pole d'activité")
 putdocx paragraph
 tab2docx strata4
 putdocx paragraph
 
 	*** total revenues
 	
-bysort strata4: egen ca_sd_strata4 = sd(ca_strata)
+bysort strata4: egen ca_sd_strata4 = sd(ca_2021)
 sum ca_sd_strata4, d
 local s1_strata4 : display %9.2fc  `r(mean)'
 display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum ca_strata,d
+sum ca_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total exports
 	
-bysort strata4: egen exp_sd_strata4 = sd(exp_strata)
+bysort strata4: egen exp_sd_strata4 = sd(ca_exp_2021)
 sum exp_sd_strata4, d
 local s1_strata4 : display %9.2fc  `r(mean)'
 display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum exp_strata,d
+sum ca_exp_2021,d
 display %9.2fc  `r(sd)'
-putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total profits
@@ -392,46 +412,42 @@ putdocx paragraph
 putdocx text ("With these strata,  number of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
 sum exp_pays,d
 display %9.2fc  `r(sd)'
-putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
-
-
-
+putdocx pagebreak
 
 ***********************************************************************
-* 	Approach 5: Pole& and zero or missing exports*
+* 	Approach 5: 
 ***********************************************************************
 putdocx paragraph
 putdocx text ("strata5: average SDs"), linebreak bold
-putdocx text ("This approach creates 3 strata on exports (above zero, zero and missing) for each pole d'activité")
+putdocx text ("This approach creates 5 groups on revenues(quartiles plus missing) and one group for Top10% exports for each pole d'activité")
 putdocx paragraph
 tab2docx strata5
 putdocx paragraph
 
 	*** total revenues
 	
-bysort strata5: egen ca_sd_strata5 = sd(ca_strata)
+bysort strata5: egen ca_sd_strata5 = sd(ca_2021)
 sum ca_sd_strata5, d
 local s1_strata5 : display %9.2fc  `r(mean)'
 display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum ca_strata,d
+sum ca_2021,d
 display %9.2fc  `r(sd)'
 putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total exports
 	
-bysort strata5: egen exp_sd_strata5 = sd(exp_strata)
+bysort strata5: egen exp_sd_strata5 = sd(ca_exp_2021)
 sum exp_sd_strata5, d
 local s1_strata5 : display %9.2fc  `r(mean)'
 display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
 putdocx paragraph
 putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
-sum exp_strata,d
+sum ca_exp_2021,d
 display %9.2fc  `r(sd)'
-putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 *** total profits
@@ -455,8 +471,9 @@ putdocx paragraph
 putdocx text ("With these strata,  number of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
 sum exp_pays,d
 display %9.2fc  `r(sd)'
-putdocx paragraph
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
+putdocx pagebreak
+
 
 ***********************************************************************
 * 	PART 5: Save
@@ -464,13 +481,13 @@ putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 
 	* Save doc
 	
-putdocx save stratification3_withall.docx, replace
+putdocx save stratification.docx, replace
 
 	* Pick one strata approach, delete others
 
-g strata = strata2
+*g strata = strata2
 
-drop strata4
+*drop strata4
 	
 cd "$bl_final"
 
