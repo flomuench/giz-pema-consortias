@@ -86,6 +86,7 @@ rename ca_2019 ca_2019_rg
 rename ca_exp2019 ca_exp2019_rg
 rename ca_2020 ca_2020_rg
 rename ca_exp2020 ca_exp2020_rg
+rename ca_exp_2018_cor ca_exp2018_cor
 
 /*
 ident 
@@ -332,7 +333,7 @@ lab var ca_exp2020_cor "export turnover in 2020 corrected"
 lab var ca_2019_cor "turnover in 2019 corrected"
 lab var ca_2018_cor "turnover in 2018 corrected"
 lab var ca_exp2019_cor "export turnover in 2019 corrected"
-lab var ca_exp_2018_cor "export turnover in 2018 corrected"
+lab var ca_exp2018_cor "export turnover in 2018 corrected"
 
 		* Section characteristics of the company
 lab var car_efi_fin1 "participant have the skills to access new sources of funding"

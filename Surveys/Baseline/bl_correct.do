@@ -74,13 +74,15 @@ sort date heuredébut
 * 	PART 2:  Automatic corrections
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
+ 
 local numvars ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd 
+* we may add these variables to check if they changed to string variables: ca_exp2018_cor  ca_exp2019_cor ca_exp2020_cor ca_2018_cor 
 foreach var of local numvars {
 replace `var' = ustrregexra( `var',"dinars","")
 replace `var' = ustrregexra( `var',"dinar","")
 replace `var' = ustrregexra( `var',"milles","000")
 replace `var' = ustrregexra( `var',"mille","000")
-replace `var' = ustrregexra( `var',"million","000000")
+replace `var' = ustrregexra( `var',"million","000")
 replace `var' = ustrregexra( `var',"dt","")
 replace `var' = ustrregexra( `var',"k","000")
 replace `var' = ustrregexra( `var',"dt","")
@@ -108,7 +110,8 @@ replace `var' = ustrregexra( `var',"د","")
 replace `var' = ustrregexra( `var',"d","")
 replace `var' = ustrregexra( `var',"na","")
 replace `var' = ustrregexra( `var',"r","")
-replace `var' = ustrregexra( `var',"مليون","000000")
+replace `var' = ustrregexra( `var',"m","000")
+replace `var' = ustrregexra( `var',"مليون","000")
 replace `var' = "1000" if `var' == "000"
 replace `var' = subinstr(`var', ".", "",.)
 replace `var' = subinstr(`var', ",", ".",.)
@@ -155,8 +158,8 @@ replace produit1 = "huil de alovera" if produit1 =="huil de hendi"
 replace produit1 = "huil d'olive bio" if produit1 =="huidolive bio"
 replace produit1 = "alliés plante" if produit1 =="halfa"
 replace produit1 = "margoum /tapis" if produit1 =="margoum /zrabi"
-replace produit1 = "" if produit1 ==""
-replace produit1 = "" if produit1 ==""
+replace produit1 = "halelem" if produit1 =="la7lelem"
+replace produit1 = "thmara (plant)" if produit1 =="thmara"
 replace produit1 = "" if produit1 ==""
 replace produit1 = "" if produit1 ==""
 replace produit1 = "" if produit1 ==""
@@ -179,7 +182,7 @@ replace produit3 = "suivi et orientation agricole"  if produit3 =="المتاب�
 replace produit3 = "achat et vente de biens immobiliers en Tunisie et à l'étranger"  if produit3 =="بيع وشراء عقارات في تونس و الخارج"
 replace produit3 = "porcelaine murale"  if produit3 =="الخزف الحائطي"
 replace produit3 = "poisson"  if produit3 =="أسماك"
-replace produit3 = ""  if produit3 ==""
+replace produit3 = "mhames"  if produit3 =="m7ames"
 replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
 replace produit3 = ""  if produit3 ==""
@@ -189,11 +192,6 @@ replace produit3 = ""  if produit3 ==""
 *3.2	Rename and homogenize the product names	  			
 	* Example
 
-/*
-replace produit1 = "tuiles"  if produit1=="9armoud"
-replace produit1 = "dattes"  if produit1=="tmar"
-replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
-*/
 
 
 *3.3 Manually Transform any remaining "word numerics" to actual numerics 
@@ -201,18 +199,9 @@ replace produit1 = "maillots de bain"  if produit1=="mayo de bain"
 
 replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
-replace ca_2021 = "3000000" if ca_2021 == "3m"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
 
-/*
-replace ca_2018_cor = "300000" if ca_2018_cor =="300k"
-replace ca_exp_2018_cor = "50000" if ca_exp_2018_cor == "50k"
-replace ca_exp2019_cor = "50000" if  ca_exp2019_cor == "50k"
-replace ca_2020_cor = "2000000" if ca_2020_cor == "2m"
-replace ca_exp2020_cor = "800000" if ca_exp2020_cor == "800k"
-replace ca_exp_2021 = "19000000" if ca_exp_2021 == "19m" ////To be checked again///
-*/ 
 
  
 
@@ -229,6 +218,15 @@ replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateform
 replace inno_mot_autre = "idée de groupe sur le savoir faire" if inno_mot_autre =="fekra jama3eya ala savoir faire"
 
 replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
+replace support_autres = "valorisation des manifestations en réseaux sociaux"  if support_autres =="tathmin tadhahoraat fi reseaux sociaux"
+replace support_autres = "faites-nous savoir à l'avance" if support_autres == "te3lmouna bel msabbe9"
+replace support_autres = "envoyer un questionnaire sur l'heure et la date appropriées" if support_autres == "بعث استبيان حول الوقت و التاريخ المناسب"
+replace support_autres = "le temps nous convient" if support_autres == "lwa9t ykon moneseb"
+replace support_autres = "nous connaissons la participation avant une semaine" if support_autres == "ykon el e3lem 3al mocherka 9bal bjem3a"
+replace support_autres = "choisir un lieu fix (club, hotel,..etc)" if support_autres == "chusir un lieu fixe: club, hotel etc,,,"
+replace support_autres = "" if support_autres == ""
+replace support_autres = "" if support_autres == ""
+
 
 replace att_adh_autres ="développer un réseau de relations avec des femmes entrepreneures"  if att_adh_autres =="تطوير شبكة العلاقات مع رائدات الأعمال"
 replace att_adh_autres ="introduire le produit tunisien et augmenter les transactions commerciales" if att_adh_autres == "ta3rif bel produit tunisien/zyedet elmou3amlet tij"
@@ -240,7 +238,7 @@ replace att_adh_autres ="développer / networking / apprendre d'autres expérien
 replace att_adh_autres ="motivation pour que je démarre" if att_adh_autres =="7afez pour que je démarre"
 replace att_adh_autres ="mon ambition c'est l'export" if att_adh_autres =="tomou7i l'export"
 replace att_adh_autres ="Je recherche de l'expérience et du financement" if att_adh_autres =="t7eb expérience w tamwil"
-replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="des formations pour savoir comment interagir avec les douanes" if att_adh_autres =="des formations bech taref tet3amel maa douanes"
 replace att_adh_autres ="" if att_adh_autres ==""
 replace att_adh_autres ="" if att_adh_autres ==""
 replace att_adh_autres ="" if att_adh_autres ==""
@@ -273,7 +271,14 @@ replace entr_idee= "industrie des équipements de réfrigération 2010" if entr_
 replace entr_idee= "Fil et aiguille de vêtements traditionnels" if entr_idee=="5it w ebra tradition malabes artisanat"
 replace entr_idee= "nous avons commencé avec 9 artisans" if id_plateforme==1186
 replace entr_idee= "home-made pâte" if id_plateforme==1230
+replace entr_idee= "le nom d'une plante est "thmara" (des produits de cette plante koffa/corbeille) depuis 2008" if entr_idee=="nabta esmha thmara (koffa corbeille)depuis2008"
+replace entr_idee= "terrain amande" if entr_idee=="saniya amande"
+replace entr_idee= "des produits d'alliés plante (corbeille) depuis 2003" if entr_idee=="mantoujet mel 7alfa (corbeille artizana)depuis 2003"
 replace entr_idee= "" if entr_idee==""
+replace entr_idee= "" if entr_idee==""
+replace entr_idee= "" if entr_idee==""
+replace entr_idee= "" if entr_idee==""
+
 
 
 *3.6 Comparison of newly provided accounting data for firms with needs_check=1
@@ -299,6 +304,25 @@ replace ca_2019 =250000 if id_plateforme==1074
 replace ca_2019 =20000 if id_plateforme==1210
 replace ca_2019 =20000 if id_plateforme==1162
 replace ca_2019 =480294 if id_plateforme==1168
+replace ca_2019 =150000 if id_plateforme==1154
+replace ca_2019 =25000 if id_plateforme==1197
+replace ca_2019 =20000 if id_plateforme==1182
+replace ca_2019 =50000 if id_plateforme==1231
+replace ca_2019 =138826 if id_plateforme==1027
+replace ca_2019 =1300000 if id_plateforme==1222
+replace ca_2019 =100000 if id_plateforme==1110
+replace ca_2019 =500000 if id_plateforme==1170
+replace ca_2019 =1400000 if id_plateforme==991
+replace ca_2019 =80000 if id_plateforme==1035
+replace ca_2019 =50000 if id_plateforme==1159
+replace ca_2019 =45000 if id_plateforme==1013
+replace ca_2019 =25000 if id_plateforme==1030
+replace ca_2019 =113280 if id_plateforme==1088
+replace ca_2019 =15000 if id_plateforme==1123
+replace ca_2019 =550000 if id_plateforme==1043
+replace ca_2019 =21100 if id_plateforme==1157
+replace ca_2019 =1502130 if id_plateforme==1240
+replace ca_2019 =150000 if id_plateforme==1041
 
 replace ca_2020 =25000 if id_plateforme==1159
 replace ca_2020 =200000 if id_plateforme==1074
@@ -306,7 +330,51 @@ replace ca_2020 =1200000 if id_plateforme==1188
 replace ca_2020 =20000 if id_plateforme==1210
 replace ca_2020 =5500 if id_plateforme==1162
 replace ca_2020 =38500 if id_plateforme==1157
- 
+replace ca_2020 =250000 if id_plateforme==1041
+replace ca_2020 =20000 if id_plateforme==1154
+replace ca_2020 =55000 if id_plateforme==1197
+replace ca_2020 =310000 if id_plateforme==1168
+replace ca_2020 =300000 if id_plateforme==1087
+replace ca_2020 =147000 if id_plateforme==1096
+replace ca_2020 =100000 if id_plateforme==1231
+replace ca_2020 =2420000 if id_plateforme==1027
+replace ca_2020 =37000 if id_plateforme==1110
+replace ca_2020 =2000000 if id_plateforme==1170
+replace ca_2020 =6000 if id_plateforme==1035
+replace ca_2020 =5000 if id_plateforme==1108
+replace ca_2020 =3000 if id_plateforme==1020
+replace ca_2020 =123000 if id_plateforme==1013
+replace ca_2020 =60000 if id_plateforme==1030
+replace ca_2020 =75831 if id_plateforme==1088
+replace ca_2020 =15000 if id_plateforme==1123
+replace ca_2020 =10000 if id_plateforme==1019
+replace ca_2020 =300000 if id_plateforme==1043
+replace ca_2020 =82630 if id_plateforme==1240
+
+
+replace ca_exp2018 =75000 if id_plateforme==1074
+replace ca_exp2018 =80000 if id_plateforme==1159
+replace ca_exp2018 =9326 if id_plateforme==1168
+
+
+replace ca_exp2019 =100000 if id_plateforme==1074
+replace ca_exp2019 =80000 if id_plateforme==1041
+replace ca_exp2019 =100000 if id_plateforme==1110
+replace ca_exp2019 =20000 if id_plateforme==1044
+replace ca_exp2019 =150000 if id_plateforme==1154
+replace ca_exp2019 =5000 if id_plateforme==1231
+replace ca_exp2019 =25000 if id_plateforme==1222
+replace ca_exp2019 =5000 if id_plateforme==1162
+
+
+replace ca_exp2020 =50000 if id_plateforme==1074
+replace ca_exp2020 =147000 if id_plateforme==1096
+replace ca_exp2020 =2000 if id_plateforme==1231
+replace ca_exp2020 =25000 if id_plateforme==1222
+replace ca_exp2020 =15960 if id_plateforme==1027
+replace ca_exp2020 =4000 if id_plateforme==1197
+
+
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
@@ -414,7 +482,7 @@ lab var q42f "(in-) formel argument de vente"
 ***********************************************************************
 
 * 8.1 Destring remaining numerical vars
-local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd  ca_2018_cor ca_exp_2018_cor ca_exp2019_cor ca_exp2020_cor
+local destrvar ca_2021 ca_exp_2021 profit_2021 ca_2020_cor ca_2019_cor exprep_inv inno_rd  ca_2018_cor ca_exp2018_cor ca_exp2019_cor ca_exp2020_cor
 foreach x of local destrvar { 
 destring `x', replace
 *format `x' %25.0fc
@@ -424,9 +492,9 @@ destring `x', replace
 * 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
 
-replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1237
+replace questions_needing_check = "toute la ligne doit être vérifiée /" if id_plateforme == 1237
 replace needs_check = 1 if id_plateforme == 1237
-replace questions_needing_check = "The whole raw needs to be checked /" if id_plateforme == 1154
+replace questions_needing_check = "Ttoute la ligne doit être vérifiée /" if id_plateforme == 1154
 replace needs_check = 1 if id_plateforme == 1154
 
 ***********************************************************************
