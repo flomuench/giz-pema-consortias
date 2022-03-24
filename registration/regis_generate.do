@@ -211,7 +211,9 @@ lab val eligible eligible
 replace eligible = 1 if id_plateforme == 1119
 replace eligible = 1 if id_plateforme == 1218
 replace eligible = 0 if id_plateforme == 1148
-
+replace eligible = 1 if id_plateforme == 1117
+replace eligible = 1 if id_plateforme == 1055
+	
 
 	* change to ineligible based on GIZ calls to verify the firms
 foreach x in 1032 1053 1060 1078 1091 1145 1181 1187 1208 1212 1221 {
