@@ -558,30 +558,38 @@ putpdf pagebreak
 * 	PART 5:  Comparing matched vs new data
 ***********************************************************************
 egen ca20_95p = pctile(ca_2020), p(95)
-twoway (scatter ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, title("Correlation CA")) || ///
+twoway (scatter ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, title("Correlation CA2021-2021 full sample<95p")) || ///
 (lfit ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, lcol(blue))
+gr export old_new_ca_scatter.png, replace
+putpdf paragraph, halign(center) 
+putpdf image old_new_ca_scatter.png
+putpdf pagebreak
 
 egen exp20_95p = pctile(ca_exp2020), p(95)
-twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p, title("Correlation Export")) || ///
+twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p, title("Correlation Export 2021-2020 full sample<95p")) || ///
 (lfit ca_2021 ca_2020 if ca_2021<ca_exp95p & ca_2020<exp20_95p, lcol(blue))
+gr export old_new_exp_scatter.png, replace
+putpdf paragraph, halign(center) 
+putpdf image old_new_exp_scatter.png
+putpdf pagebreak
 
 forvalues x = 1(1)4 {
-		* between CA21 and CA20
-twoway (scatter ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, title("Correlation CA")) || ///
-(lfit ca_2021 ca_2020 if ca_2021<ca_95p & ca_2020<ca20_95p, lcol(blue))
-gr export old_new_ca_scatter_pole.png, replace
+		* between CA21 and CA exp
+twoway (scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole==`x', title("CA-Exp <95p for each pole")) || ///
+(lfit ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole==`x', lcol(blue))
+gr export caexp_cor_`x'.png, replace
 putpdf paragraph, halign(center) 
-putpdf image old_new_ca_scatter_pole.png
+putpdf image caexp_cor_`x'.png
 putpdf pagebreak
 }
 
 forvalues x = 1(1)4 {
 		* between exp21 and exp20
-twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p, title("Correlation Export")) || ///
-(lfit ca_2021 ca_2020 if ca_2021<ca_exp95p & ca_2020<exp20_95p, lcol(blue))
-gr export old_new_exps_scatter_pole.png, replace
+twoway (scatter ca_exp_2021 ca_exp2020 if ca_exp_2021<ca_exp95p & ca_exp2020<exp20_95p & pole==`x', title("Correlation Export<95p by pole")) || ///
+(lfit ca_2021 ca_2020 if ca_2021<ca_exp95p & ca_2020<exp20_95p & pole==`x', lcol(blue))
+gr export old_new_exps_scatter_`x'.png, replace
 putpdf paragraph, halign(center) 
-putpdf image old_new_exps_scatter_pole.png
+putpdf image old_new_exps_scatter_`x'.png
 putpdf pagebreak
 }
 
