@@ -661,3 +661,11 @@ tab ca_exp2019
 
 	* pdf
 putpdf save "baseline_statistics", replace
+
+
+***********************************************************************
+* 	PART 8:  Export excel for missing information
+***********************************************************************
+cd "$bl_checks"
+export excel id_plateforme miss validation using "Missing_info.xlsx" if miss>0, firstrow(variables) replace
+
