@@ -201,7 +201,7 @@ replace inno_rd = "300000" if inno_rd == "اكثرمن300000"
 replace ca_2021 = "600000" if ca_2021 == "6cent000"
 replace profit_2021 = "150000" if profit_2021 == "cent5uante000"
 replace inno_rd ="1000000" if id_plateforme==1054
-
+replace ca_2018_cor="26423000" if id_plateforme==1092
 
  
 
