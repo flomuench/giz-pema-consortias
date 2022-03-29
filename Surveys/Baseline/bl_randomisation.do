@@ -120,7 +120,7 @@ testparm `balancevarlist'
 
 		*exporting pstest with rubin's d
 log using pstesttables.txt, text replace
-local tvars treatmentstrata1 treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7
+local tvars treatmentstrata1 treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8
 foreach var of local tvars{
 display"`var'"
 pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, t(`var') raw rubin label dist
