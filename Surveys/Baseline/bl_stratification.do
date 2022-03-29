@@ -206,9 +206,19 @@ egen strata7 = group(strata7_prep pole)
 ***********************************************************************
 * 	Approach 8: Create pair of 6 per pole by revenue
 ***********************************************************************
-egen exp_ca_rank = group(ca_2021 ca_exp_2021 ca_2020 ca_2019)
+gen ca_all= ca_2021
+replace ca_all= ca_2020 if ca_all==.
+
+egen exp_ca_rank = group(ca_all ca_exp_2021), missing
 bysort pole: egen rank = rank(exp_ca_rank), unique
-bysort pole: egen group2=cut(rank), group(6)
+sort pole rank
+egen group2=cut(rank), group(6)
+egen strata8= group(pole group2)
+replace strata8=24 if ca_all>=1000000 & pole==2
+replace strata8=25 if ca_all>1000000 & pole==3
+replace strata8=26 if ca_all>1100000 & pole==4
+replace strata8=27 if ca_all>1300000 & pole==1
+replace strata8=28 if ca_all>250000 & ca_all<1000000 & pole==2
 ***********************************************************************
 * 	PART 4: Compare Variance per approach
 ***********************************************************************
@@ -702,7 +712,8 @@ putdocx save stratification.docx, replace
 *g strata = strata2
 
 *drop strata4
-	
+*drop ca_all
+
 cd "$bl_final"
 
 save "bl_final", replace
