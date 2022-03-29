@@ -40,7 +40,7 @@ putpdf text ("consortias : baseline survey progress")
 {
 	* Share of firms that started the survey
 count if survey_started==1
-gen share= (`r(N)'/179)*100
+gen share= (`r(N)'/181)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries")
@@ -63,7 +63,7 @@ putpdf pagebreak
 	
 	* firms with complete entries
 count if survey_completed==1
-gen share= (`r(N)'/179)*100
+gen share= (`r(N)'/181)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses complète") 
 gr export complete_responses.png, replace
@@ -74,7 +74,7 @@ drop share
 */
 	* firms with validated entries
 count if validation==1
-gen share= (`r(N)'/179)*100
+gen share= (`r(N)'/181)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses validés")
 gr export validated_responses.png, replace
