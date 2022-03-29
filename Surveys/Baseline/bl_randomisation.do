@@ -47,7 +47,7 @@ sort id_plateforme, stable
 ***********************************************************************
 * 	PART 2: Randomise
 ***********************************************************************
-local stratavars strata1 strata2 strata3 strata4 strata5 strata6 strata7
+local stratavars strata1 strata2 strata3 strata4 strata5 strata6 strata7 strata8
 foreach var of local stratavars{
 	* random allocation, with seed generated random number on random.org between 1 million & 1 billion
 randtreat, gen(treatment`var') strata(`var') misfits(strata) setseed(2202)
@@ -102,7 +102,7 @@ graph hbar (count), over(treatment`var', lab(labs(tiny))) over(pole, lab(labs(vs
 * 	PART 3b: comparing different options
 ***********************************************************************	
 *Baltab for different options
-local tvars treatmentstrata1 treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7
+local tvars treatmentstrata1 treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8
 foreach var of local tvars{
 display"`var'"
 iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, grpvar(`var') ftest save(baltab_`var') replace ///
