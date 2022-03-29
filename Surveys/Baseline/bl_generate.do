@@ -145,24 +145,25 @@ generate survey_started= 0
 replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
+
 /*
+* create a new variable for survey round: 
+generate survey_round= .
+replace survey_round= 1 if surveyround== "session1"
+replace survey_round= 2 if surveyround== "session2"
+replace survey_round= 3 if surveyround== "session3"
+replace survey_round= 4 if surveyround== "session4"
+replace survey_round= 5 if surveyround== "session5"
+replace survey_round= 6 if surveyround== "session6"
+replace survey_round= 7 if surveyround== "registration"
+replace survey_round= 8 if surveyround== "baseline"
+replace survey_round= 9 if surveyround== "midline"
+replace survey_round= 10 if surveyround== "endline"
 
-* 2.2 create variables for list experiment
-gen listexp_percentage=0 
-gen listexp_treat=0 
-gen listexp_control=0 
-replace listexp_treat= mean(listexp) if list_group=1
-replace listexp_control= mean(listexp) if list_group=0
-replace listexp_percentage= (listexp_treat - listexp_control) *100
+label var survey_round "which survey round?"
 
-*labeling listexp_treat
-label var listexp_treat "average list experiment for the treatment group"
-*labeling listexp_control
-label var listexp_control "average list experiment for the control group"
-*labeling listexp_percentage
-label var listexp_percentage "percentage mean difference of the list experiment between treatment & control groups"
-
-
+label define label_survey_round  1 "session1" 2 "session2" 3 "session3" 4 "session4" 5 "session5" 6 "session6" 7 "registration" 8 "baseline" 9 "midline" 10 "endline" 
+label values survey_round  label_survey_round 
 */
 
 
