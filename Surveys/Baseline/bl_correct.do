@@ -239,7 +239,7 @@ replace att_adh_autres ="motivation pour que je démarre" if att_adh_autres =="7
 replace att_adh_autres ="mon ambition c'est l'export" if att_adh_autres =="tomou7i l'export"
 replace att_adh_autres ="Je recherche de l'expérience et du financement" if att_adh_autres =="t7eb expérience w tamwil"
 replace att_adh_autres ="des formations pour savoir comment interagir avec les douanes" if att_adh_autres =="des formations bech taref tet3amel maa douanes"
-replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="pour voir comment le formateur enseigne" if att_adh_autres =="bach nchouf l formateur kifech y9ari"
 replace att_adh_autres ="" if att_adh_autres ==""
 replace att_adh_autres ="" if att_adh_autres ==""
 
@@ -298,6 +298,8 @@ replace ca_2018 =100000 if id_plateforme==1035
 replace ca_2018 =120000 if id_plateforme==1159
 replace ca_2018 =33000 if id_plateforme==1013
 replace ca_2018 =295000 if id_plateforme==1043
+replace ca_2018 =256000 if id_plateforme==1117
+replace ca_2018 =4500 if id_plateforme==1186
 
 
 replace ca_2019 =250000 if id_plateforme==1074
@@ -323,6 +325,9 @@ replace ca_2019 =550000 if id_plateforme==1043
 replace ca_2019 =21100 if id_plateforme==1157
 replace ca_2019 =1502130 if id_plateforme==1240
 replace ca_2019 =150000 if id_plateforme==1041
+replace ca_2019 =20000 if id_plateforme==1044
+replace ca_2019 =2000 if id_plateforme==1186
+replace ca_2019 =10000 if id_plateforme==1193
 
 replace ca_2020 =25000 if id_plateforme==1159
 replace ca_2020 =200000 if id_plateforme==1074
@@ -350,11 +355,19 @@ replace ca_2020 =15000 if id_plateforme==1123
 replace ca_2020 =10000 if id_plateforme==1019
 replace ca_2020 =300000 if id_plateforme==1043
 replace ca_2020 =82630 if id_plateforme==1240
+replace ca_2020 =176000 if id_plateforme==1117
+replace ca_2020 =1000 if id_plateforme==1186
+replace ca_2020 =20000 if id_plateforme==1193
+replace ca_2020 =3000 if id_plateforme==1192
+replace ca_2020 =4500 if id_plateforme==1245
+replace ca_2020 =0 if id_plateforme==1136
 
 
 replace ca_exp2018 =75000 if id_plateforme==1074
 replace ca_exp2018 =80000 if id_plateforme==1159
 replace ca_exp2018 =9326 if id_plateforme==1168
+replace ca_exp2018 =13000 if id_plateforme==1117
+replace ca_exp2018 =2100 if id_plateforme==1186
 
 
 replace ca_exp2019 =100000 if id_plateforme==1074
@@ -365,7 +378,9 @@ replace ca_exp2019 =150000 if id_plateforme==1154
 replace ca_exp2019 =5000 if id_plateforme==1231
 replace ca_exp2019 =25000 if id_plateforme==1222
 replace ca_exp2019 =5000 if id_plateforme==1162
-
+replace ca_exp2019 =800 if id_plateforme==1197
+replace ca_exp2019 =26000 if id_plateforme==1117
+replace ca_exp2019 =400000 if id_plateforme==1158
 
 replace ca_exp2020 =50000 if id_plateforme==1074
 replace ca_exp2020 =147000 if id_plateforme==1096
@@ -373,8 +388,8 @@ replace ca_exp2020 =2000 if id_plateforme==1231
 replace ca_exp2020 =25000 if id_plateforme==1222
 replace ca_exp2020 =15960 if id_plateforme==1027
 replace ca_exp2020 =4000 if id_plateforme==1197
-
-
+replace ca_exp2020 =5000 if id_plateforme==1117
+replace ca_exp2020 =3000 if id_plateforme==1245
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
