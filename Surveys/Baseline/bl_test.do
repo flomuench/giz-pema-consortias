@@ -139,12 +139,13 @@ replace questions_needing_checks = questions_needing_checks + "investissement ex
 *Please create check_again=0 if the value would be captured by 
 *the logical tests above, but it was confirmed by the survey institute
 *that it is indeed the correct value
-
+replace check_again=0 if id_plateforme == 985
 replace check_again=0 if id_plateforme == 986
 replace check_again=0 if id_plateforme == 990
 replace check_again=0 if id_plateforme == 991
 replace check_again=0 if id_plateforme == 994
 replace check_again=0 if id_plateforme == 999
+replace check_again=0 if id_plateforme == 1001
 replace check_again=0 if id_plateforme == 1005
 replace check_again=0 if id_plateforme == 1007
 replace check_again=0 if id_plateforme == 1013
@@ -162,7 +163,10 @@ replace check_again=0 if id_plateforme == 1046
 replace check_again=0 if id_plateforme == 1050
 replace check_again=0 if id_plateforme == 1054
 replace check_again=0 if id_plateforme == 1057
+replace check_again=0 if id_plateforme == 1059
+replace check_again=0 if id_plateforme == 1061
 replace check_again=0 if id_plateforme == 1064
+replace check_again=0 if id_plateforme == 1071
 replace check_again=0 if id_plateforme == 1081
 replace check_again=0 if id_plateforme == 1083
 replace check_again=0 if id_plateforme == 1084
@@ -178,6 +182,7 @@ replace check_again=0 if id_plateforme == 1126
 replace check_again=0 if id_plateforme == 1128
 replace check_again=0 if id_plateforme == 1133
 replace check_again=0 if id_plateforme == 1136
+replace check_again=0 if id_plateforme == 1138
 replace check_again=0 if id_plateforme == 1140
 replace check_again=0 if id_plateforme == 1143
 replace check_again=0 if id_plateforme == 1150
@@ -190,12 +195,16 @@ replace check_again=0 if id_plateforme == 1165
 replace check_again=0 if id_plateforme == 1167
 replace check_again=0 if id_plateforme == 1168
 replace check_again=0 if id_plateforme == 1170
+replace check_again=0 if id_plateforme == 1172
 replace check_again=0 if id_plateforme == 1175
 replace check_again=0 if id_plateforme == 1176
 replace check_again=0 if id_plateforme == 1178
 replace check_again=0 if id_plateforme == 1179
 replace check_again=0 if id_plateforme == 1182
 replace check_again=0 if id_plateforme == 1185
+replace check_again=0 if id_plateforme == 1186
+replace check_again=0 if id_plateforme == 1190
+replace check_again=0 if id_plateforme == 1192
 replace check_again=0 if id_plateforme == 1195
 replace check_again=0 if id_plateforme == 1197
 replace check_again=0 if id_plateforme == 1199
