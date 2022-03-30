@@ -396,7 +396,13 @@ replace ca_exp2020 =3000 if id_plateforme==1245
 replace ca_2019=4000 if id_plateforme == 1192
 replace ca_2020=3000 if id_plateforme == 1192
 replace ca_2018=8000 if id_plateforme == 1192
-
+replace profit_2021="2000" if id_plateforme == 1037
+replace ca_2021="211000" if id_plateforme == 1045
+replace ca_exp_2021="21700" if id_plateforme == 1045
+replace inno_rd="1000" if id_plateforme == 1054
+replace profit_2021="-7000" if id_plateforme == 1110
+replace profit_2021="-3000" if id_plateforme == 1128
+replace profit_2021="50000" if id_plateforme == 1178
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
