@@ -240,7 +240,7 @@ replace att_adh_autres ="mon ambition c'est l'export" if att_adh_autres =="tomou
 replace att_adh_autres ="Je recherche de l'expérience et du financement" if att_adh_autres =="t7eb expérience w tamwil"
 replace att_adh_autres ="des formations pour savoir comment interagir avec les douanes" if att_adh_autres =="des formations bech taref tet3amel maa douanes"
 replace att_adh_autres ="pour voir comment le formateur enseigne" if att_adh_autres =="bach nchouf l formateur kifech y9ari"
-replace att_adh_autres ="" if att_adh_autres ==""
+replace att_adh_autres ="introduit à de nouvelles opportunités sur les marchés étrangers" if att_adh_autres =="tet3aref 3la afa9 aswa9 5arijiya"
 replace att_adh_autres ="" if att_adh_autres ==""
 
 
@@ -390,6 +390,13 @@ replace ca_exp2020 =15960 if id_plateforme==1027
 replace ca_exp2020 =4000 if id_plateforme==1197
 replace ca_exp2020 =5000 if id_plateforme==1117
 replace ca_exp2020 =3000 if id_plateforme==1245
+
+
+
+replace ca_2019=4000 if id_plateforme == 1192
+replace ca_2020=3000 if id_plateforme == 1192
+replace ca_2018=8000 if id_plateforme == 1192
+
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			

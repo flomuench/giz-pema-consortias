@@ -146,25 +146,6 @@ replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
 
-/*
-* create a new variable for survey round: 
-generate survey_round= .
-replace survey_round= 1 if surveyround== "session1"
-replace survey_round= 2 if surveyround== "session2"
-replace survey_round= 3 if surveyround== "session3"
-replace survey_round= 4 if surveyround== "session4"
-replace survey_round= 5 if surveyround== "session5"
-replace survey_round= 6 if surveyround== "session6"
-replace survey_round= 7 if surveyround== "registration"
-replace survey_round= 8 if surveyround== "baseline"
-replace survey_round= 9 if surveyround== "midline"
-replace survey_round= 10 if surveyround== "endline"
-
-label var survey_round "which survey round?"
-
-label define label_survey_round  1 "session1" 2 "session2" 3 "session3" 4 "session4" 5 "session5" 6 "session6" 7 "registration" 8 "baseline" 9 "midline" 10 "endline" 
-label values survey_round  label_survey_round 
-*/
 
 
 //2.3 time used to fill survey
