@@ -62,6 +62,33 @@ local pii firmname matricule_fiscale matricule_cnss code_douane nom_rep position
 	* drop all pii
 drop `pii'
 
+
+***********************************************************************
+* 	PART 5:  create a new variable for survey round
+***********************************************************************
+/*
+
+generate survey_round= .
+replace survey_round= 1 if surveyround== "registration"
+replace survey_round= 2 if surveyround== "baseline"
+replace survey_round= 3 if surveyround== "session1"
+replace survey_round= 4 if surveyround== "session2"
+replace survey_round= 5 if surveyround== "session3"
+replace survey_round= 6 if surveyround== "session4"
+replace survey_round= 7 if surveyround== "session5"
+replace survey_round= 8 if surveyround== "session6"
+replace survey_round= 9 if surveyround== "midline"
+replace survey_round= 10 if surveyround== "endline"
+
+label var survey_round "which survey round?"
+
+label define label_survey_round  1 "registration" 2 "baseline" 3 "session1" 4 "session2" 5 "session3" 6 "session4" 7 "session5" 8 "session6" 9 "midline" 10 "endline" 
+label values survey_round  label_survey_round 
+*/
+
+***********************************************************************
+* 	PART 6:  save final
+***********************************************************************
 	* save 
 save "regis_final", replace
 
