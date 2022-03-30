@@ -392,6 +392,7 @@ replace ca_exp2020 =5000 if id_plateforme==1117
 replace ca_exp2020 =3000 if id_plateforme==1245
 
 
+*3.6 Manual corrections that were in correction but not automatically update in raw data
 
 replace ca_2019=4000 if id_plateforme == 1192
 replace ca_2020=3000 if id_plateforme == 1192
