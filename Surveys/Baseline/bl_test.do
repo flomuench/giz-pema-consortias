@@ -162,6 +162,7 @@ replace check_again=0 if id_plateforme == 1045
 replace check_again=0 if id_plateforme == 1046
 replace check_again=0 if id_plateforme == 1050
 replace check_again=0 if id_plateforme == 1054
+replace check_again=0 if id_plateforme == 1056
 replace check_again=0 if id_plateforme == 1057
 replace check_again=0 if id_plateforme == 1059
 replace check_again=0 if id_plateforme == 1061
@@ -170,6 +171,7 @@ replace check_again=0 if id_plateforme == 1071
 replace check_again=0 if id_plateforme == 1081
 replace check_again=0 if id_plateforme == 1083
 replace check_again=0 if id_plateforme == 1084
+replace check_again=0 if id_plateforme == 1092
 replace check_again=0 if id_plateforme == 1093
 replace check_again=0 if id_plateforme == 1094
 replace check_again=0 if id_plateforme == 1096
@@ -214,6 +216,7 @@ replace check_again=0 if id_plateforme == 1231
 replace check_again=0 if id_plateforme == 1233
 replace check_again=0 if id_plateforme == 1235
 replace check_again=0 if id_plateforme == 1243
+replace check_again=0 if id_plateforme == 1248
 
 ***********************************************************************
 * 	Part 2.5 Remove observations with more than 10 missing fields			
