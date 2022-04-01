@@ -404,6 +404,15 @@ replace inno_rd="1000" if id_plateforme == 1054
 replace profit_2021="-7000" if id_plateforme == 1110
 replace profit_2021="-3000" if id_plateforme == 1128
 replace profit_2021="50000" if id_plateforme == 1178
+replace ca_2021= "4191110" if id_plateforme == 1119
+replace profit_2021= "-77505" if id_plateforme == 1119
+replace ca_exp_2021 ="4015384" if id_plateforme == 1119
+replace ca_2018_cor ="2847421" if id_plateforme == 1119
+replace ca_exp2018_cor =2649925 if id_plateforme == 1119
+replace ca_2019_cor= "3792943" if id_plateforme == 1119
+replace ca_exp2019_cor =3441390 if id_plateforme == 1119
+replace ca_2020_cor ="3904562" if id_plateforme == 1119
+replace ca_exp2020_cor =3380415 if id_plateforme == 1119
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
