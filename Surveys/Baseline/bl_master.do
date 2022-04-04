@@ -142,7 +142,7 @@ if (1) do "${bl_github}/bl_index.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_statistics.do"
+if (0) do "${bl_github}/bl_statistics.do"
 
 
 /* --------------------------------------------------------------------
@@ -152,4 +152,10 @@ if (1) do "${bl_github}/bl_stratification.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Randomisation 
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_randomisation.do"
+if (1) do "${bl_github}/bl_randomisation_tests.do"
+
+/* --------------------------------------------------------------------
+	PART 4.2: Randomisation 
+----------------------------------------------------------------------*/	
+if (1) do "${bl_github}/bl_final_randomisation.do"
+

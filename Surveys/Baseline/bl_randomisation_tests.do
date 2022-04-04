@@ -126,34 +126,25 @@ display"`var'"
 pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, t(`var') raw rubin label dist
 }
 log close
-***********************************************************************
-* 	PART 4: Export excel spreadsheet
-***********************************************************************			 		
-/*
 
-	* save dta file with treatments and strata
-	
-cd "$bl_final"
-
-save "bl_final", replace
-
-	* Add a bunch of variables about the firms knowledge and digital presence in case the consultant want to group by ability*
-
-order id_plateforme treatment pole
-
-cd "$consortia_master"
-
-merge 1:1 id_plateforme using consortia_master_data.dta, generate(_merge2) force
-
-keep if _merge2==3
-
-drop _merge2	
-
-cd "$bl_output/randomisation"
-
-local consortialist treatment id_plateforme pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep Numero1 Numero2 produit1 produit2 produit3 
-export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
-export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
-*/
 	* save word document with visualisations
 putdocx save results_randomisation.docx, replace
+
+***********************************************************************
+* 	PART 5: Deciding on final approach and dropping remaining 
+***********************************************************************	
+	* Pick one strata approach, delete others
+
+g strata_final = strata8
+
+*delete intermediary variables used for tests*
+drop strata2-strata9
+drop strata?_prep
+drop treatmentstrata?
+drop ca_sd_strata?
+drop exp_sd_strata?
+drop profit_sd_strata?
+drop pays_sd_strata?
+
+cd "$bl_final"
+save "bl_final", replace

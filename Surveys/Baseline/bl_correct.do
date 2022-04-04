@@ -408,11 +408,22 @@ replace ca_2021= "4191110" if id_plateforme == 1119
 replace profit_2021= "-77505" if id_plateforme == 1119
 replace ca_exp_2021 ="4015384" if id_plateforme == 1119
 replace ca_2018_cor ="2847421" if id_plateforme == 1119
-replace ca_exp2018_cor =2649925 if id_plateforme == 1119
+replace ca_exp2018_cor ="2649925" if id_plateforme == 1119
 replace ca_2019_cor= "3792943" if id_plateforme == 1119
-replace ca_exp2019_cor =3441390 if id_plateforme == 1119
+replace ca_exp2019_cor ="3441390" if id_plateforme == 1119
 replace ca_2020_cor ="3904562" if id_plateforme == 1119
-replace ca_exp2020_cor =3380415 if id_plateforme == 1119
+replace ca_exp2020_cor ="3380415" if id_plateforme == 1119
+
+*1137 says the figures are confidential but puts zeros for 2021 figures, hence missing is more realistic*
+replace ca_2021 ="" if id_plateforme == 1137
+replace ca_exp_2021 ="" if id_plateforme == 1137
+replace profit_2021 ="" if id_plateforme == 1137
+
+*1137 reports exports are 20.6%, 9.2% and 2.16% of total revenue for 2018,2019 and 2020 respectively
+replace ca_exp2018_cor ="497078" if id_plateforme == 1137
+replace ca_exp2020_cor="42790" if id_plateforme == 1137
+replace ca_exp2019_cor="265972" if id_plateforme == 1137
+replace ca_exp_2021="0" if id_plateforme == 1137
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
