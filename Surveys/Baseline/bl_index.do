@@ -113,6 +113,10 @@ label var raw_exportcombined "Combined export practices raw index"
 drop temp_*
 
 ***********************************************************************
+* 	PART 3:  Drop companies that decided to not take part in experiment
+***********************************************************************
+drop if id_plateforme == 1008 | id_plateforme == 1018| id_plateforme == 1048 | id_plateforme == 1113
+***********************************************************************
 * 	PART 3:  create a new variable for survey round
 ***********************************************************************
 /*
