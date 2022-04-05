@@ -135,7 +135,7 @@ putdocx save results_randomisation.docx, replace
 ***********************************************************************	
 	* Pick one strata approach, delete others
 
-g strata_final = strata10
+g strata_final = strata8
 
 *delete intermediary variables used for tests*
 drop strata2-strata10

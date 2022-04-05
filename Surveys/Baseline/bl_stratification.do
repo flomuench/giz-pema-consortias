@@ -198,7 +198,7 @@ egen strata7 = group(strata7_prep pole)
 
 
 ***********************************************************************
-* 	Approach 8: Create pair of 6 per pole by revenue (if ca_2021 was missing or zero, then ca_2020)
+* 	Approach 8: Create pair of 6 per pole by revenue (if ca_2021 was missing , then ca_2020)
 ***********************************************************************
 gen ca_all= ca_2021
 replace ca_all= ca_2020 if ca_all==. 

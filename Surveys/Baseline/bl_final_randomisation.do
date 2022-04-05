@@ -57,7 +57,7 @@ lab values treatment treat_status
 tab treatment, missing
 
 	* visualising treatment status by strata
-graph hbar (count), over(treatment, lab(labs(tiny))) over(strata, lab(labs(small))) ///
+graph hbar (count), over(treatment, lab(labs(tiny))) over(strata_final, lab(labs(small))) ///
 	title("Firms by trial arm within each strata") ///
 	blabel(bar, format(%4.0f) size(tiny)) ///
 	ylabel(, labsize(minuscule) format(%-100s))
@@ -119,7 +119,7 @@ save "bl_final", replace
 
 	* Add a bunch of variables about the firms knowledge and digital presence in case the consultant want to group by ability*
 
-order id_plateforme treatment pole2
+order id_plateforme treatment pole
 
 cd "$consortia_master"
 
@@ -130,8 +130,8 @@ keep if _merge2==3
 drop _merge2	
 
 cd "$bl_output/randomisation/final"
-sort pole2 id_plateforme
-local consortialist treatment id_plateforme pole2 codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
+sort pole id_plateforme
+local consortialist treatment id_plateforme pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
 export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
 export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
 */
