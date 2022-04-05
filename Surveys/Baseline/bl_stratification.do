@@ -198,10 +198,10 @@ egen strata7 = group(strata7_prep pole)
 
 
 ***********************************************************************
-* 	Approach 8: Create pair of 6 per pole by revenue
+* 	Approach 8: Create pair of 6 per pole by revenue (if ca_2021 was missing or zero, then ca_2020)
 ***********************************************************************
 gen ca_all= ca_2021
-replace ca_all= ca_2020 if ca_all==.
+replace ca_all= ca_2020 if ca_all==. 
 
 egen exp_ca_rank = group(ca_all ca_exp_2021), missing
 bysort pole: egen rank = rank(exp_ca_rank), unique
@@ -211,7 +211,7 @@ egen strata8= group(pole group2)
 
 replace strata8=6 if ca_all>600000 & pole==1
 replace strata8=24 if ca_all>=175000 & pole==2
-replace strata8=26 if ca_all>1100000 & pole==4
+replace strata8=26 if ca_all>800000 & pole==4
 replace strata8=27 if ca_all>1300000 & pole==1
 replace strata8=28 if ca_all>500000 & pole==2
 
@@ -231,6 +231,19 @@ replace strata9_prep = 4 if ca_2021<=`r(p25)' & ca_2021!=.& pole== `x'
 
 egen strata9 = group(strata9_prep pole)
 
+***********************************************************************
+* 	Approach 10: Replicate approach 8 with 5 poles instead of 4
+***********************************************************************
+gen ca_all2= ca_2021
+replace ca_all2= ca_2020 if ca_all2==. 
+
+egen exp_ca_rank2 = group(ca_all2 ca_exp_2021), missing
+bysort pole2: egen rank2 = rank(exp_ca_rank2), unique
+sort pole2 rank2
+egen group3=cut(rank2), group(6)
+egen strata10= group(pole2 group3)
+replace strata10=29 if ca_all>1100000 & pole==1
+replace strata10=30 if ca_all>610000 & pole==3
 
 ***********************************************************************
 * 	PART 4: Compare Variance per approach
@@ -711,6 +724,67 @@ display %9.2fc  `r(sd)'
 putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
 putdocx pagebreak
 
+
+***********************************************************************
+* 	Approach 10 replicate approach 8 with 5 poles
+***********************************************************************
+putdocx paragraph
+putdocx text ("strata10: average SDs"), linebreak bold
+putdocx text ("This approach creates replicates approach 8 (six-seven groups on revenue) with 5 poles")
+putdocx paragraph
+tab2docx strata10
+putdocx paragraph
+
+	*** total revenues
+	
+bysort strata10: egen ca_sd_strata10 = sd(ca_2021)
+sum ca_sd_strata10, d
+local s1_strata10 : display %9.2fc  `r(mean)'
+display "With these strata, total revenue 2021 by stratum has an average standard deviation of `r(mean)'."
+putdocx paragraph
+putdocx text ("With these strata,  total revenue 2021  by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+sum ca_2021,d
+display %9.2fc  `r(sd)'
+putdocx paragraph
+putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
+
+*** total exports
+	
+bysort strata10: egen exp_sd_strata10 = sd(ca_exp_2021)
+sum exp_sd_strata10, d
+local s1_strata10 : display %9.2fc  `r(mean)'
+display "With these strata, total exports 2021 by stratum has an average standard deviation of `r(mean)'."
+putdocx paragraph
+putdocx text ("With these strata,  total export 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+sum ca_exp_2021,d
+display %9.2fc  `r(sd)'
+putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
+
+*** total profits
+bysort strata10: egen profit_sd_strata10 = sd(profit_2021)
+sum profit_sd_strata10, d
+local s1_strata10 : display %9.2fc  `r(mean)'
+display "With these strata, profit 2021 by stratum has an average standard deviation of `r(mean)'."
+putdocx paragraph
+putdocx text ("With these strata,  profit 2021 by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+sum profit_2021,d
+display %9.2fc  `r(sd)'
+putdocx paragraph
+putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
+
+*** number of countries
+bysort strata10: egen pays_sd_strata10 = sd(exp_pays)
+sum pays_sd_strata10, d
+local s1_strata10 : display %9.2fc  `r(mean)'
+display "With these strata, number of export countries by stratum has an average standard deviation of `r(mean)'."
+putdocx paragraph
+putdocx text ("With these strata,  number of export countries by stratum has an average standard deviation of `: display %9.2fc `r(mean)''")
+sum exp_pays,d
+display %9.2fc  `r(sd)'
+putdocx text ("Compared to overall sd of `: display %9.2fc `r(sd)''.")
+putdocx pagebreak
+
+
 ***********************************************************************
 * 	PART 5: Save
 ***********************************************************************
@@ -720,11 +794,6 @@ putdocx pagebreak
 putdocx save stratification.docx, replace
 
 	* Pick one strata approach, delete others
-
-*g strata = strata2
-
-*drop strata4
-*drop ca_all
 
 cd "$bl_final"
 

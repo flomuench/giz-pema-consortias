@@ -47,7 +47,7 @@ sort id_plateforme, stable
 ***********************************************************************
 * 	PART 2: Randomise
 ***********************************************************************
-local stratavars strata2 strata3 strata4 strata5 strata6 strata7 strata8 strata9
+local stratavars strata2 strata3 strata4 strata5 strata6 strata7 strata8 strata9 strata10
 foreach var of local stratavars{
 	* random allocation, with seed generated random number on random.org between 1 million & 1 billion
 randtreat, gen(treatment`var') strata(`var') misfits(strata) setseed(2202)
@@ -102,7 +102,7 @@ graph hbar (count), over(treatment`var', lab(labs(tiny))) over(pole, lab(labs(vs
 * 	PART 3b: comparing different options
 ***********************************************************************	
 *Baltab for different options
-local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9
+local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9 treatmentstrata10
 foreach var of local tvars{
 display"`var'"
 iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, grpvar(`var') ftest save(baltab_`var') replace ///
@@ -120,7 +120,7 @@ testparm `balancevarlist'
 
 		*exporting pstest with rubin's d
 log using pstesttables.txt, text replace
-local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9
+local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9 treatmentstrata10
 foreach var of local tvars{
 display"`var'"
 pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, t(`var') raw rubin label dist
@@ -135,10 +135,10 @@ putdocx save results_randomisation.docx, replace
 ***********************************************************************	
 	* Pick one strata approach, delete others
 
-g strata_final = strata7
+g strata_final = strata10
 
 *delete intermediary variables used for tests*
-drop strata2-strata9
+drop strata2-strata10
 drop strata?_prep
 drop treatmentstrata?
 drop ca_sd_strata?

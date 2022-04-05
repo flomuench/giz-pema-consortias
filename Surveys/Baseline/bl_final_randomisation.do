@@ -24,7 +24,7 @@
 use "${bl_final}/bl_final", clear
 
 	* change directory to visualisations
-cd "$bl_output/randomisation"
+cd "$bl_output/randomisation/final"
 
 	* continue word export
 putdocx clear
@@ -38,7 +38,7 @@ putdocx text ("Results of randomisation"), bold linebreak
 
 	* Set a seed for today
 
-set seed 542022
+set seed 642022
 
 	* Sort 
 sort id_plateforme, stable
@@ -49,7 +49,7 @@ sort id_plateforme, stable
 ***********************************************************************
 
 	* random allocation, with seed generated random number on random.org between 1 million & 1 billion
-randtreat, gen(treatment) strata(strata_final) misfits(strata) setseed(542022)
+randtreat, gen(treatment) strata(strata_final) misfits(strata) setseed(642022)
 
 	* label treatment assignment status
 lab def treat_status 0 "Control" 1 "Treatment" 
@@ -71,13 +71,24 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(strata, lab(labs(small
 ***********************************************************************
 		
 		* balance for continuous and few units categorical variables
-iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final) replace ///
+set matsize 25
+iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
-
+			 
+*Balance table without Outlier (ID=1092)
+preserve
+drop if id_plateforme==1092
+iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final_nooutlier) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+log using pstesttables_final_nooutlier.txt, text replace
+pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+log close
+restore
 	* Manully check the f-test for joint orthogonality using hc3:
 	
-local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars
+local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars
 
 reg treatment `balancevarlist', vce(hc3)
 testparm `balancevarlist'		
@@ -93,7 +104,7 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(pole, lab(labs(vsmall)
 		
 	*exporting pstest with rubin's d
 log using pstesttables_final.txt, text replace
-pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
 log close
 ***********************************************************************
 * 	PART 4: Export excel spreadsheet
@@ -108,7 +119,7 @@ save "bl_final", replace
 
 	* Add a bunch of variables about the firms knowledge and digital presence in case the consultant want to group by ability*
 
-order id_plateforme treatment pole
+order id_plateforme treatment pole2
 
 cd "$consortia_master"
 
@@ -118,9 +129,9 @@ keep if _merge2==3
 
 drop _merge2	
 
-cd "$bl_output/randomisation"
-
-local consortialist treatment id_plateforme pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
+cd "$bl_output/randomisation/final"
+sort pole2 id_plateforme
+local consortialist treatment id_plateforme pole2 codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
 export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
 export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
 */
