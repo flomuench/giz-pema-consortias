@@ -273,6 +273,16 @@ replace reasons="still missing baseline information" if id_plateforme==1124
 cd "$bl_checks"
 export excel id_plateforme waiting_list reasons using "waiting_list.xlsx" if waiting_list==1, firstrow(variables) replace
 
+ ***********************************************************************
+* 	PART 7: Winsorizing key outcome variables			  										  
+***********************************************************************
+winsor ca_2021, gen(w_ca2021) p(0.01) highonly
+winsor ca_exp_2021, gen(w_caexp2021) p(0.02) highonly
+winsor profit_2021, gen(w_profit2021) p(0.01)
+winsor net_nb_dehors, gen(w_nonfamilynetwork) p(0.02) highonly
+winsor exprep_inv, gen (w_exprep_inv) p(0.01) highonly
+
+
 	* save dta file
 cd "$bl_intermediate"
 save "bl_inter", replace
