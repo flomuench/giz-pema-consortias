@@ -431,6 +431,10 @@ replace ca_2021 = "163000" if id_plateforme == 1049
 replace ca_exp_2021 = "163000" if id_plateforme == 1049
 replace profit_2021 = "43000" if id_plateforme == 1049
 
+replace ca_2021= "344281" if id_plateforme == 998
+replace profit_2021= "264318" if id_plateforme == 998
+replace ca_exp_2021= "32842" if id_plateforme == 998
+
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
 ***********************************************************************
