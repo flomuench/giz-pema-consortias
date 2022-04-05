@@ -106,6 +106,17 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(pole, lab(labs(vsmall)
 log using pstesttables_final.txt, text replace
 pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
 log close
+
+
+
+*balance check winsorized at 99th percentile
+iebaltab w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final_winsorized) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+log using pstesttables_final_winsorized.txt, text replace
+pstest w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+log close
+
 ***********************************************************************
 * 	PART 4: Export excel spreadsheet
 ***********************************************************************			 		
