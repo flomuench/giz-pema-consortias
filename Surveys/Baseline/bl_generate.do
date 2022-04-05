@@ -233,8 +233,16 @@ generate survey_completed= 0
 replace survey_completed= 1 if miss == 0
 label var survey_completed "Number of firms which fully completed the survey"
 label values survey_completed yesno
-*/
-*/
+
+ ***********************************************************************
+* 	PART 6: Create dummy variable to assess artisant sector 			  										  
+***********************************************************************
+gen pole2=pole
+replace pole2=5 if subsector =="pôle d'activités artisanat"
+lab var pole2 "alternative sector classification with 5 sectors"
+lab def pole2 1 "agro-alimentaire" 2 "Cosmétique, Textile et autres produits artisanat" 3 "service" 4 "TIC" 5"artisanat"
+lab val pole2 pole2
+
 	* save dta file
 cd "$bl_intermediate"
 save "bl_inter", replace

@@ -423,7 +423,13 @@ replace profit_2021 ="" if id_plateforme == 1137
 replace ca_exp2018_cor ="497078" if id_plateforme == 1137
 replace ca_exp2020_cor="42790" if id_plateforme == 1137
 replace ca_exp2019_cor="265972" if id_plateforme == 1137
-replace ca_exp_2021="0" if id_plateforme == 1137
+
+*995 reports profits are 15% of total revenue
+replace profit_2021 = "300000" if id_plateforme == 995
+
+replace ca_2021 = "163000" if id_plateforme == 1049
+replace ca_exp_2021 = "163000" if id_plateforme == 1049
+replace profit_2021 = "43000" if id_plateforme == 1049
 
 ***********************************************************************
 * 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
