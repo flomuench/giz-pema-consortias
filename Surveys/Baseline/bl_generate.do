@@ -243,6 +243,36 @@ lab var pole2 "alternative sector classification with 5 sectors"
 lab def pole2 1 "agro-alimentaire" 2 "Cosmétique, Textile et autres produits artisanat" 3 "service" 4 "TIC" 5"artisanat"
 lab val pole2 pole2
 
+gen waiting_list=0 
+gen reasons=""
+
+* br id_plateforme pole2 pole produit1 produit2 produit3 employes ca_2021 ca_2020 ca_2019 subsector_corrige ca_exp_2021 ca_exp2020 exp_pays year_created operation_export if pole==2
+
+replace waiting_list=1 if id_plateforme==1031
+replace reasons="2 employees only/ no export activity/ ca_2021=6000 &ca_2020 = 2000" if id_plateforme==1031
+
+replace waiting_list=1 if id_plateforme==1102
+replace reasons="1 employee only/ 1 product only: poupee/ ca_2021=0 /no export activity/ new firm (year created= 2021) " if id_plateforme== 1102
+
+replace waiting_list=1 if id_plateforme==1175
+replace reasons="1 employee only/ ca_2021=0 /no export activity/ new firm (year created= 2021) " if id_plateforme== 1175
+
+replace waiting_list=1 if id_plateforme==1230
+replace reasons="products: couscous/mhames are not artisanat/cosmetique" if id_plateforme==1230
+
+replace waiting_list=1 if id_plateforme==1242
+replace reasons="products are not artisanat/cosmetique" if id_plateforme==1242
+
+replace waiting_list=1 if id_plateforme==1234
+replace reasons="still missing baseline information" if id_plateforme==1234
+
+replace waiting_list=1 if id_plateforme==1124
+replace reasons="still missing baseline information" if id_plateforme==1124
+ 
+*Export excel sheet for waiting list
+cd "$bl_checks"
+export excel id_plateforme waiting_list reasons using "waiting_list.xlsx" if waiting_list==1, firstrow(variables) replace
+
 	* save dta file
 cd "$bl_intermediate"
 save "bl_inter", replace
