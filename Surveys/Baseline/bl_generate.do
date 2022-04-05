@@ -238,7 +238,7 @@ label values survey_completed yesno
 * 	PART 6: Create dummy variable to assess artisant sector 			  										  
 ***********************************************************************
 gen pole2=pole
-replace pole2=5 if subsector =="pôle d'activités artisanat"
+replace pole2=5 if subsector_corrige ==3
 lab var pole2 "alternative sector classification with 5 sectors"
 lab def pole2 1 "agro-alimentaire" 2 "Cosmétique, Textile et autres produits artisanat" 3 "service" 4 "TIC" 5"artisanat"
 lab val pole2 pole2
