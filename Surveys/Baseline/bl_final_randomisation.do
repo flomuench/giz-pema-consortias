@@ -38,7 +38,7 @@ putdocx text ("Results of randomisation"), bold linebreak
 
 	* Set a seed for today
 
-set seed 642022
+set seed 060422
 
 	* Sort 
 sort id_plateforme, stable
@@ -49,7 +49,7 @@ sort id_plateforme, stable
 ***********************************************************************
 
 	* random allocation, with seed generated random number on random.org between 1 million & 1 billion
-randtreat, gen(treatment) strata(strata_final) misfits(strata) setseed(642022)
+randtreat, gen(treatment) strata(strata_final) misfits(strata) setseed(060422)
 
 	* label treatment assignment status
 lab def treat_status 0 "Control" 1 "Treatment" 

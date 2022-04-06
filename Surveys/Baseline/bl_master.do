@@ -1,5 +1,5 @@
 ***********************************************************************
-* 			master do file baseline survey, consortias				  *					  
+* 			master do file baseline survey, Export consortias				  *					  
 ***********************************************************************
 *																	  
 *	PURPOSE: make all data work reproducible from first import to analysis
