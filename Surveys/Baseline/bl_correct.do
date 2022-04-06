@@ -556,6 +556,8 @@ replace needs_check = 1 if id_plateforme == 1237
 replace questions_needing_check = "Ttoute la ligne doit être vérifiée /" if id_plateforme == 1154
 replace needs_check = 1 if id_plateforme == 1154
 
+
+
 ***********************************************************************
 * 	Part 9: Save the changes made to the data		  			
 ***********************************************************************
