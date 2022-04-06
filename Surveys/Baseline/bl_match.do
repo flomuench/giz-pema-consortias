@@ -32,7 +32,7 @@ merge 1:1 id_plateforme using "${bl_intermediate}/bl_inter", generate(_merge_ab)
 ***********************************************************************
 * 	PART 2:   Drop companies that decided to not take part in experiment
 ***********************************************************************
-drop if id_plateforme == 1018| id_plateforme == 1048 | id_plateforme == 1113
+drop if id_plateforme == 1018| id_plateforme == 1048 | id_plateforme == 1113 | id_plateforme == 1160 | id_plateforme == 1095
 
 
 ***********************************************************************

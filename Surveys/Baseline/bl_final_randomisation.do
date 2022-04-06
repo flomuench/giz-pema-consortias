@@ -142,7 +142,7 @@ drop _merge2
 
 cd "$bl_output/randomisation/final"
 sort pole id_plateforme
-local consortialist treatment id_plateforme pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
+local consortialist treatment id_plateforme firmname pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
 export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
 export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
 */

@@ -201,7 +201,30 @@ egen strata7 = group(strata7_prep pole)
 * 	Approach 8: Create pair of 6 per pole by revenue (if ca_2021 was missing , then ca_2020)
 ***********************************************************************
 gen ca_all= ca_2021
-replace ca_all= ca_2020 if ca_all==. 
+replace ca_all= ca_2020 if ca_all==. | ca_all==0
+
+sort pole (ca_all), stable
+by pole: gen rankstrata8=_n
+
+gen strata8_prep=.
+replace strata8_prep= 1 if rankstrata8<=6
+replace strata8_prep= 2 if rankstrata8>6 &rankstrata8<=12 
+replace strata8_prep= 3 if rankstrata8>12 & rankstrata8<=18
+replace strata8_prep= 4 if rankstrata8>18 & rankstrata8<=24
+replace strata8_prep= 5 if rankstrata8>24 & rankstrata8<=30
+replace strata8_prep= 6 if rankstrata8>30 & rankstrata8<=36
+replace strata8_prep= 7 if rankstrata8>36 & rankstrata8<=42
+replace strata8_prep= 8 if rankstrata8>42 & rankstrata8<=48
+replace strata8_prep= 9 if rankstrata8>48 & rankstrata8<=54
+replace strata8_prep= 10 if rankstrata8>54
+
+egen strata8= group(pole strata8_prep)
+*manually attributing small rests to previous strata to avoid small group*
+/*
+replace strata8 =    if strata8_prep == & pole_nouveau
+replace strata8 =    if strata8_prep == & pole_nouveau
+replace strata8 =    if strata8_prep == & pole_nouveau
+replace strata8 =    if strata8_prep == & pole_nouveau
 
 egen exp_ca_rank = group(ca_all ca_exp_2021), missing
 bysort pole: egen rank = rank(exp_ca_rank), unique
@@ -214,7 +237,7 @@ replace strata8=24 if ca_all>=175000 & pole==2
 replace strata8=26 if ca_all>800000 & pole==4
 replace strata8=27 if ca_all>1300000 & pole==1
 replace strata8=28 if ca_all>500000 & pole==2
-
+*/
 ***********************************************************************
 * 	Approach 9: Only revenue poles(90,90-75,75-50, below 50)
 ***********************************************************************
