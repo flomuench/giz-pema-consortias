@@ -556,7 +556,13 @@ replace needs_check = 1 if id_plateforme == 1237
 replace questions_needing_check = "Ttoute la ligne doit être vérifiée /" if id_plateforme == 1154
 replace needs_check = 1 if id_plateforme == 1154
 
-
+***********************************************************************
+* 	PART 8:  Changes poles for firms whose products dont fit with industry from registration
+***********************************************************************
+replace pole=3 if id_plateforme == 997
+replace pole=3 if id_plateforme == 998
+replace pole=4 if id_plateforme == 999
+replace pole=1 if id_plateforme == 1054
 
 ***********************************************************************
 * 	Part 9: Save the changes made to the data		  			
