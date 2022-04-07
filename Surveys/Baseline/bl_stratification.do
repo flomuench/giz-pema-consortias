@@ -219,13 +219,11 @@ replace strata8_prep= 9 if rankstrata8>48 & rankstrata8<=54
 replace strata8_prep= 10 if rankstrata8>54
 
 egen strata8= group(pole strata8_prep)
-*manually attributing small rests to previous strata to avoid small group*
-/*
-replace strata8 =    if strata8_prep == & pole_nouveau
-replace strata8 =    if strata8_prep == & pole_nouveau
-replace strata8 =    if strata8_prep == & pole_nouveau
-replace strata8 =    if strata8_prep == & pole_nouveau
 
+*manually attributing small rests to previous strata to avoid small group*
+replace strata8 = 17 if strata8 == 18    
+replace strata8= 8 if pole == 1 & rankstrata8 == 42
+/*
 egen exp_ca_rank = group(ca_all ca_exp_2021), missing
 bysort pole: egen rank = rank(exp_ca_rank), unique
 sort pole rank
