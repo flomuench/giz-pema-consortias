@@ -107,42 +107,45 @@ set sortseed 8413195
 
 ***********************************************************************
 /* --------------------------------------------------------------------
-	PART 3.1: Import & raw data
+	PART 3.0: Import & raw data
 ----------------------------------------------------------------------*/		
 if (1) do "${bl_github}/bl_import.do"
 /* --------------------------------------------------------------------
-	PART 3.2: Clean raw data & save as intermediate data
+	PART 3.1: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_clean.do"
 /* --------------------------------------------------------------------
-	PART 3.3: Match to registration data
+	PART 3.2: Match to registration data
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_match.do"
 /* --------------------------------------------------------------------
-	PART 3.4: Correct & save intermediate data
+	PART 3.3: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_correct.do"
 /* --------------------------------------------------------------------
-	PART 3.5: Generate variables for analysis or implementation
+	PART 3.4: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
-	PART 3.6: export open text or number variables for RA check
+	PART 3.5: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_open_question_checks.do"
 /* --------------------------------------------------------------------
-	PART 3.7: Perform logical checks
+	PART 3.6: Perform logical checks
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
-	PART 3.8: Create indices
+	PART 3.7: Create indices
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_index.do"
-
 /* --------------------------------------------------------------------
-	PART 3.9: Export pdf with descriptive statistics on responses
+	PART 3.8: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_statistics.do"
+/* --------------------------------------------------------------------
+	PART 3.9: Diagnostic
+----------------------------------------------------------------------*/	
+if (0) do "${bl_github}/bl_diagnostic.do"
 
 
 /* --------------------------------------------------------------------
@@ -153,9 +156,8 @@ if (1) do "${bl_github}/bl_stratification.do"
 	PART 4.2: Randomisation 
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_randomisation_tests.do"
-
 /* --------------------------------------------------------------------
-	PART 4.2: Randomisation 
+	PART 4.3: Randomisation 
 ----------------------------------------------------------------------*/	
 if (1) do "${bl_github}/bl_final_randomisation.do"
 
