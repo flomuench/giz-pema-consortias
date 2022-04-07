@@ -109,12 +109,39 @@ label var raw_exportmngt "Export management raw index"
 label var raw_exportprep "Export readiness raw index"
 label var raw_exportcombined "Combined export practices raw index"
 
-*drop temporary vars
+**************************************************************************
+* 	PART 3: create index based on total points rather than z-score		  										  
+**************************************************************************
+local mngtvars temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per 
+local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
+local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
+local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
+
+	* find out max. points
+sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
+sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
+sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
+
+	
+
+egen mngtvars_points = rowtotal(`mngtvars'), missing
+lab var mngtvars_points "score en pratiques de management"
+egen markvars_points = rowtotal(`markvars'), missing
+lab var mngtvars_points "score en pratiques de marketing"
+egen exportmngt_points = rowtotal(`exportmngt'), missing
+lab var exportmngt_points "score en management d'export"
+egen exportprep_points = rowtotal(`exportprep'), missing
+lab var exportprep_points "score en readiness d'export"
+
+
+**************************************************************************
+* 	PART 4: drop temporary vars		  										  
+**************************************************************************
 drop temp_*
 
 
 ***********************************************************************
-* 	PART 3:  create a new variable for survey round
+* 	PART 5:  create a new variable for survey round
 ***********************************************************************
 /*
 

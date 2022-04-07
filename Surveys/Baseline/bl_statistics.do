@@ -21,7 +21,7 @@ use "$bl_final/bl_final", clear
 	* set directory to checks folder
 cd "$bl_output"
 
-	* create word document
+	* create pdf document
 putpdf clear
 putpdf begin 
 putpdf paragraph
