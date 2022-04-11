@@ -241,8 +241,9 @@ replace att_adh_autres ="Je recherche de l'expérience et du financement" if att
 replace att_adh_autres ="des formations pour savoir comment interagir avec les douanes" if att_adh_autres =="des formations bech taref tet3amel maa douanes"
 replace att_adh_autres ="pour voir comment le formateur enseigne" if att_adh_autres =="bach nchouf l formateur kifech y9ari"
 replace att_adh_autres ="introduit à de nouvelles opportunités sur les marchés étrangers" if att_adh_autres =="tet3aref 3la afa9 aswa9 5arijiya"
+replace att_adh_autres ="rencontrer de nouvelles personnes" if att_adh_autres =="tet3aref 3la 3bed jdod"
+replace att_adh_autres ="certification ou formation pour le produit" if att_adh_autres =="certification ou formation lel produit"
 replace att_adh_autres ="" if att_adh_autres ==""
-
 
 replace entr_idee= "media training, formation de journalistes et d'amateurs en radio et télévision" if entr_idee== "تدريب اعلامي تكوين صحفيين و هواة في الاذاعة والتلفزة" 
 replace entr_idee= "la ville de Douz produit des dattes, Deglet Nour, et mon père était un agriculteur" if entr_idee=="مدينة دوز تنتج التمر دقلة نور وابي كان فلاح"

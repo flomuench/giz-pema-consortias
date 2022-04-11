@@ -100,8 +100,18 @@ putpdf image attents.png
 putpdf pagebreak
 
 *Role of consortium in establishing export strategy
-gr bar (sum) att_strat1 - att_strat4, scale(*.75) blabel(total, format(%9.2fc)) legend (pos (4) label (1 "La participante n'a pas de stratégie d'exportation") label(2 "la stratégie du consortium doit être cohérente avec sa stratégie") label(3 "L'entreprise a une stratégie d'exportation" ) label (4 "Autres")) ///
-	title("Rôle du consortium dans l'établissement de la stratégie d'exportation")
+preserve
+rename (att_strat1 att_strat2 att_strat3 att_strat4) (attstrat#), addnumber(1)
+gen n= _n
+reshape long attstrat, i(n)
+label define _j 1 "Pas de stratégie d'exportation" 2 "les deux stratégies doit être cohérente" 3 "L'entreprise a une stratégie d'exportation" 4 "Autres" 
+label values _j _j
+graph hbar (sum) attstrat, over(_j, label relabel(2 "les deux stratégies doit être cohérente" 3 "L'entreprise a une stratégie d'exportation") sort(1) descending) bargap(100) asyvars showyvars ///
+                           legend(off) blabel(total,format(%9.2fc) pos(outside)) yla(0(20)100) ///
+                           graphregion(margin(55 2 2 2)) ylabel(, angle(forty_five) valuelabel) ///
+                           title("Rôle du consortium dans l'établissement de la stratégie d'exportation", position(middle) size(small))
+
+restore
 gr export att_strat.png, replace
 putpdf paragraph, halign(center) 
 putpdf image att_strat.png
@@ -130,7 +140,20 @@ putpdf image att_hor.png
 putpdf pagebreak
 
 *Availablibility for travel and participate in events in another city 
-hist att_voyage, gap(40) xlabel(1 2 0, valuelabel)
+
+preserve
+tab att_voyage, g(att_voyage)
+rename (att_voyage1 - att_voyage3) (attvoyage#), addnumber(1)
+gen n= _n
+reshape long attvoyage, i(n)
+label define _j 1 "la participante ne peut pas voyager" 2 "la participante peut voyager" 3 "la participante peut voyager s'il y a un soutien financier"
+label values _j _j
+graph hbar (sum) attvoyage, over(_j, label relabel(1 "la participante ne peut pas voyager" 2 "la participante peut voyager" 3 "la participante peut voyager s'il y a un soutien financier") sort(1) descending) bargap(100) asyvars showyvars ///
+                           legend(off) blabel(total,format(%9.2fc) pos(outside)) yla(0(20)100) ///
+                           graphregion(margin(70 2 2 2)) ylabel(, angle(forty_five) valuelabel) ///
+                           title("la possibilité de voyager pour la participante")
+
+restore
 graph export att_voyage.png, replace
 putpdf paragraph, halign(center) 
 putpdf image att_voyage.png
@@ -361,7 +384,7 @@ gr export strip_mngtvars_zscores.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_mngtvars_zscores.png
 putpdf pagebreak
-
+ 
 	* Marketing practices Z-scores
 	
 hist markvars, title("Zscores of marketing practices questions") xtitle("Zscores")
