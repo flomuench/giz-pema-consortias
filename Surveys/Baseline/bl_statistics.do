@@ -465,6 +465,27 @@ putpdf paragraph, halign(center)
 putpdf image strip_exportcombined_zscores.png
 putpdf pagebreak
 
+
+	* Gender Z-scores
+	
+hist gendervars, title("Zscores of gender-related questions") xtitle("Zscores")
+graph export hist_gendervars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image hist_gendervars_zscores.png
+putpdf pagebreak
+
+graph bar gendervars, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_gendervars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_gendervars_zscores.png
+putpdf pagebreak
+
+stripplot gendervars, over(pole) vertical
+gr export strip_gendervars_zscores.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_gendervars_zscores.png
+putpdf pagebreak
+
 	* For comparison, the 'raw' indices: 
 
 	* Management practices Z-scores
@@ -566,6 +587,26 @@ stripplot raw_exportcombined, over(pole) vertical
 gr export strip_raw_exportcombined.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_raw_exportcombined.png
+putpdf pagebreak
+
+    * Gender Z-scores
+	
+hist raw_gendervars, title("raw sum of all gender_related scores") xtitle("Sum")
+graph export hist_raw_gendervars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image hist_raw_gendervars.png
+putpdf pagebreak
+
+graph bar raw_gendervars, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_raw_gendervars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_raw_gendervars.png
+putpdf pagebreak
+
+stripplot raw_gendervars, over(pole) vertical
+gr export strip_raw_gendervars.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_raw_gendervars.png
 putpdf pagebreak
 
 ***********************************************************************

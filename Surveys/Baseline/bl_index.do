@@ -32,7 +32,8 @@ JDE pre-analysis publication:
 	--> implies: same weight for all three dimensions
 */
 *Definition of all variables that are being used in index calculation*
-local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays 
+local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
+
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
 *Temporary variable creation turning missing into zeros
@@ -64,9 +65,9 @@ local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_m
 local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
 local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
 local exportcombined temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays
+local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 
-
-foreach z in mngtvars markvars exportmngt exportprep{
+foreach z in mngtvars markvars exportmngt exportprep gendervars{
 	foreach x of local `z'  {
 			zscore `x' 
 		}
@@ -79,12 +80,15 @@ egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_cli
 egen exportmngt = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
 egen exportprep = rowmean(temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
 egen exportcombined = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
+egen gendervars = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)
 
 label var mngtvars   "Management practices index-Z Score"
 label var markvars "Marketing practices index -Z Score"
 label var exportmngt "Export management index -Z Score"
 label var exportprep "Export readiness index -Z Score"
 label var exportcombined "Combined export practices index -Z Score"
+label var gendervars "Gender index -Z Score"
+
 //drop scalar_issue
 
 
@@ -103,11 +107,14 @@ egen raw_exportprep = rowtotal(`exportprep')
 
 egen raw_exportcombined = rowtotal(`exportcombined')
 
+egen raw_gendervars = rowtotal(`gendervars')
+
 label var raw_mngtvars   "Management practices raw index"
 label var raw_markvars "Marketing practices raw index"
 label var raw_exportmngt "Export management raw index"
 label var raw_exportprep "Export readiness raw index"
 label var raw_exportcombined "Combined export practices raw index"
+label var raw_gendervars "Gender raw index"
 
 **************************************************************************
 * 	PART 3: create index based on total points rather than z-score		  										  
@@ -116,11 +123,13 @@ local mngtvars temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_en
 local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
 local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
 local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
+local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 
 	* find out max. points
 sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
 sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
+sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 
 	
 
@@ -132,7 +141,8 @@ egen exportmngt_points = rowtotal(`exportmngt'), missing
 lab var exportmngt_points "score en management d'export"
 egen exportprep_points = rowtotal(`exportprep'), missing
 lab var exportprep_points "score en readiness d'export"
-
+egen gendervars_points = rowtotal(`gendervars'), missing
+lab var gendervars_points "score en genre"
 
 **************************************************************************
 * 	PART 4: drop temporary vars		  										  

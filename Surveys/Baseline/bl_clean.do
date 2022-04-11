@@ -88,132 +88,6 @@ rename ca_2020 ca_2020_rg
 rename ca_exp2020 ca_exp2020_rg
 rename ca_exp_2018_cor ca_exp2018_cor
 
-/*
-ident 
-orienter 
-ident2
-ident_nouveau_personne 
-ident_base_respondent 
-ident_repondent_position 
-entr_idee 
-entr_bien 
-produit1 
-produit2 
-produit3 
-inno_produit 
-inno_process 
-inno_lieu 
-inno_commerce 
-inno_aucune 
-inno_mot_idee 
-inno_mot_conc 
-inno_mot_cons 
-inno_mot_cont 
-inno_mot_eve
-inno_mot_emp 
-inno_mot_test 
-inno_mot_autre 
-inno_rd 
-net_nb_fam 
-net_nb_dehors 
-net_nb_qualite 
-net_time 
-net_coop 
-man_hr_obj 
-man_hr_feed 
-man_pro_ano 
-man_fin_enr 
-man_fin_profit 
-man_fin_per 
-man_mark_prix 
-man_mark_div 
-man_mark_clients 
-man_mark_offre 
-man_mark_pub 
-exp_pra_foire 
-exp_pra_sci 
-exp_pra_rexp 
-exp_pra_cible 
-exp_pra_mission 
-exp_pra_douane 
-exp_pra_plan 
-expprep_norme 
-exprep_inv 
-exprep_couts 
-exp_pays 
-exp_pays_principal 
-exp_afrique 
-info_neces 
-comptable_numero
-Comptable_email 
-ca_2021 
-ca_exp_2021 
-profit_2021 
-ca_2020 
-ca_2019 
-ca_2018 
-ca_exp2020 
-ca_exp2019 
-ca_exp2018 
-id_admin 
-car_efi_fin1 
-car_efi_nego
-car_efi_conv  
-car_init_prob 
-car_init_init 
-car_init_opp  
-car_loc_succ 
-car_loc_env 
-car_loc_insp  
-listexp 
-car_empl1 
-car_empl2 
-car_empl3 
-car_empl4 
-car_empl5 
-famille1 
-famille2 
-Att_adh1 
-Att_adh2 
-Att_adh3 
-Att_adh4 
-Att_adh5 
-Att_adh6 
-att_strat1 
-att_strat2 
-att_strat3 
-att_strat4 
-att_cont1 
-att_cont2 
-att_cont3 
-att_cont4 
-att_cont5 
-lundi 
-mardi 
-mercredi 
-jeudi 
-vendredi 
-samedi 
-dimanche 
-Att_hor1
-Att_hor2 
-Att_hor3 
-Att_hor4 
-Att_hor5 
-Att_voyage1 
-Att_voyage2 
-Att_voyage3 
-support1 
-support2 
-support3 
-support4 
-support5 
-support6 
-support7 
-tel_supl 
-attest
-
-*/
 ***********************************************************************
 * 	PART 6: 	Converting continuous variables to indicator variables 			
 ***********************************************************************
@@ -247,12 +121,10 @@ notes _dta : Consortium Project
 
 
 		* Section identification
-*lab var ident "identification"
-*lab var orienter "oriontation to the representative"
 lab var ident2 "identification 2"
 lab var ident_nouveau_personne "identification new person"
 lab var ident_base_respondent "identification base respondent"
-*lab var ident_repondent_position "identification respondent position"
+
 
 		* Section essence of the company
 lab var entr_idee "the enterprise's idea"
@@ -392,7 +264,7 @@ label variable date "date"
 label variable heurefin "finish hour"
 
 }
-*/
+
 
 
 lab var ca_2020_rg "turnover in 2020"
@@ -433,14 +305,10 @@ foreach var of local agreevariables {
 label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 
 
-*label define label_orienter 1 "Currently not available" 2 "Does not answer" 3 "No longer part of the team" 4 "Refuse to take the call" 5 "Mrs NAME-REPRESENTATIVE" 6 "The respondent decides to answer the questionnaire"
-*label values orienter label_orienter
 
 label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
 label values ident_nouveau_personne label_ident_nouveau_personne
 
-*label define label_ident_repondent_position 1 "La propriétaire" 2 "La PDG" 3 "Propriétaire et PDG" 4 "Je ne veux pas répondre" 5 "Aucune des deux" 
-*label values ident_repondent_position label_ident_repondent_position
 
 label define label_entr_bien 1 "Bien" 2 "Service" 3 "Les deux"
 label values entr_bien label_entr_bien
@@ -454,9 +322,6 @@ label values att_voyage label_att_voyage
 
 label define label_man_fin_enr 1 "yes, in paper" 2 "yes, in digital" 3 "yes, in paper and digital" 0 "No"
 label values man_fin_enr label_man_fin_enr
-
-*label define label_tel_supl 1 "phone number 1" 2 "phone number 2"
-*label values tel_supl label_tel_supl
 
 label define label_attest 1 "Yes" 
 label values attest label_attest 
