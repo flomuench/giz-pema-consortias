@@ -145,6 +145,7 @@ drop ca_sd_strata?
 drop exp_sd_strata?
 drop profit_sd_strata?
 drop pays_sd_strata?
+drop pole2 
 
 cd "$bl_final"
 save "bl_final", replace

@@ -66,8 +66,11 @@ local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_
 local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
 local exportcombined temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays
 local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
+local efficacy temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv 
+local initiative temp_car_init_prob temp_car_init_init temp_car_init_opp
+local control temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 
-foreach z in mngtvars markvars exportmngt exportprep gendervars{
+foreach z in mngtvars markvars exportmngt exportprep gendervars {
 	foreach x of local `z'  {
 			zscore `x' 
 		}
@@ -77,9 +80,14 @@ foreach z in mngtvars markvars exportmngt exportprep gendervars{
 
 egen mngtvars = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz)
 egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz )
+
 egen exportmngt = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
 egen exportprep = rowmean(temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
 egen exportcombined = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
+
+egen efficacy = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz)
+egen initiative = rowmean(temp_car_init_probz temp_car_init_initz temp_car_init_oppz)
+egen control = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)
 egen gendervars = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)
 
 label var mngtvars   "Management practices index-Z Score"
@@ -88,62 +96,55 @@ label var exportmngt "Export management index -Z Score"
 label var exportprep "Export readiness index -Z Score"
 label var exportcombined "Combined export practices index -Z Score"
 label var gendervars "Gender index -Z Score"
+label var efficacy "belief in own ability - Z Score"
+label var initiative "sense of own initiative - Z Score"
+label var control "sense of control over business situation - Z Score"
+
 
 //drop scalar_issue
 
 
 
 **************************************************************************
-* 	PART 2: Create sum of scores of indices (not zscores) for comparison		  										  
+* 	PART 2: Create indexes as total points (not zscores)		  										  
 **************************************************************************
-
-egen raw_mngtvars = rowtotal(`mngtvars')
-
-egen raw_markvars = rowtotal(`markvars')
-
-egen raw_exportmngt = rowtotal(`exportmngt')
-
-egen raw_exportprep = rowtotal(`exportprep')
-
-egen raw_exportcombined = rowtotal(`exportcombined')
-
-egen raw_gendervars = rowtotal(`gendervars')
-
-label var raw_mngtvars   "Management practices raw index"
-label var raw_markvars "Marketing practices raw index"
-label var raw_exportmngt "Export management raw index"
-label var raw_exportprep "Export readiness raw index"
-label var raw_exportcombined "Combined export practices raw index"
-label var raw_gendervars "Gender raw index"
-
-**************************************************************************
-* 	PART 3: create index based on total points rather than z-score		  										  
-**************************************************************************
-local mngtvars temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per 
-local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
-local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
-local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
-local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
-
 	* find out max. points
 sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
 sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
 sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 
-	
-
+	* create total points per index dimension
 egen mngtvars_points = rowtotal(`mngtvars'), missing
-lab var mngtvars_points "score en pratiques de management"
-egen markvars_points = rowtotal(`markvars'), missing
-lab var mngtvars_points "score en pratiques de marketing"
-egen exportmngt_points = rowtotal(`exportmngt'), missing
-lab var exportmngt_points "score en management d'export"
-egen exportprep_points = rowtotal(`exportprep'), missing
-lab var exportprep_points "score en readiness d'export"
-egen gendervars_points = rowtotal(`gendervars'), missing
-lab var gendervars_points "score en genre"
 
+egen markvars_points = rowtotal(`markvars'), missing
+
+egen exportmngt_points = rowtotal(`exportmngt'), missing
+
+egen exportprep_points = rowtotal(`exportprep'), missing
+
+egen exportcombined_points = rowtotal(`exportcombined'), missing
+
+egen efficacy_points = rowtotal(`efficacy'), missing
+
+egen initiative_points = rowtotal(`initiative'), missing
+
+egen control_points = rowtotal(`control'), missing
+
+egen gendervars_points = rowtotal(`gendervars'), missing
+
+	* label variables
+
+label var mngtvars_points "Management practices points"
+label var markvars_points "Marketing practices points"
+label var exportmngt_points "Export management points"
+label var exportprep_points "Export readiness points"
+label var exportcombined_points "Combined export practices points"
+label var gendervars_points "Gender points"
+label var efficacy_points "belief in own ability - points"
+label var initiative_points "sense of own initiative - points"
+label var control_points "sense of control over business situation - points"
+	
 **************************************************************************
 * 	PART 4: drop temporary vars		  										  
 **************************************************************************

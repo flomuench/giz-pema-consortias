@@ -142,16 +142,13 @@ drop _merge2
 
 cd "$bl_output/randomisation/final"
 sort pole id_plateforme
-local consortialist treatment id_plateforme firmname pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 
+local consortialist treatment id_plateforme firmname pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 entr_idee operation_export age employes ca_2018 ca_2019 ca_2020 ca_2021 ca_exp2018 ca_exp2019 ca_exp2020 ca_exp_2021 att_adh_autres mngtvars_points markvars_points exportmngt_points 
+
 export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
 export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
 */
 	* save word document with visualisations
 putdocx save results_randomisation.docx, replace
-
-
-
-
 
 
 
