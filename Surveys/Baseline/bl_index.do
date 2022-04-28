@@ -32,7 +32,7 @@ JDE pre-analysis publication:
 	--> implies: same weight for all three dimensions
 */
 *Definition of all variables that are being used in index calculation*
-local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exprep_inv exprep_couts exp_pays car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
+local allvars man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp
 
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -63,8 +63,8 @@ end
 local mngtvars temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per 
 local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
 local exportmngt temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
-local exportprep temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
-local exportcombined temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_expprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays
+local exportprep temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays 
+local exportcombined temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays
 local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 local efficacy temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv 
 local initiative temp_car_init_prob temp_car_init_init temp_car_init_opp
@@ -82,8 +82,8 @@ egen mngtvars = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz tem
 egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz )
 
 egen exportmngt = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
-egen exportprep = rowmean(temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
-egen exportcombined = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_expprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
+egen exportprep = rowmean(temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
+egen exportcombined = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz)
 
 egen efficacy = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz)
 egen initiative = rowmean(temp_car_init_probz temp_car_init_initz temp_car_init_oppz)
