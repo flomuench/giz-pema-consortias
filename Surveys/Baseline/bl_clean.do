@@ -87,6 +87,8 @@ rename ca_exp2019 ca_exp2019_rg
 rename ca_2020 ca_2020_rg
 rename ca_exp2020 ca_exp2020_rg
 rename ca_exp_2018_cor ca_exp2018_cor
+*other corrections :
+rename expprep_norme exprep_norme 
 
 ***********************************************************************
 * 	PART 6: 	Converting continuous variables to indicator variables 			
@@ -181,7 +183,7 @@ lab var exp_pra_cible "undertake an analysis of target export markets"
 lab var exp_pra_mission "undertake a trade mission/travel to one of target markets"
 lab var exp_pra_douane "access the customs website"
 lab var exp_pra_plan "maintain or develop an export plan"
-lab var expprep_norme "product is certified according to the quality standards in target markets"
+lab var exprep_norme "product is certified according to the quality standards in target markets"
 lab var exprep_inv "investment in export activities"
 lab var exprep_couts "costs of export activities"
 lab var exp_pays "number of countries exported to in 2021"
@@ -279,7 +281,7 @@ lab var ca_exp2018_rg "export turnover in 2018"
 ***********************************************************************
 
 local yesnovariables ident2 man_fin_profit man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci    ///
-exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan expprep_norme exp_afrique info_neces famille1 ///
+exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_afrique info_neces famille1 ///
 inno_produit inno_process inno_lieu inno_commerce att_adh1 att_adh2 att_adh3 att_adh4 att_adh5 att_adh6 ///
 support1 support2 support3 support4 support5 support6 support7 complete
 
