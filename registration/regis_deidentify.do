@@ -19,7 +19,7 @@
 use "${regis_intermediate}/regis_inter", clear
 	
 ***********************************************************************
-* 	PART 2:  create + save a master file	  			
+* 	PART 2:  create + save regis-pii file	  			
 ***********************************************************************
 	* put all pii variables into a local
 local pii id_plateforme firmname eligible matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse codepostal  date_created
@@ -30,15 +30,20 @@ cd "$regis_data"
 	* save as stata master data
 preserve
 keep `pii'
-save "consortia_master_data", replace
+
+	* change directory to final folder
+cd "$regis_final"
+
+	* save to final folder
+save "consortia_regis_pii", replace
 restore
 
 	* export the pii data as new consortia_master_data 
-export excel `pii' using consortia_master_data, firstrow(var) replace
+export excel `pii' using consortia_regis_pii, firstrow(var) replace
 
 	* master data + raw file need manual encryption
 ***********************************************************************
-* 	PART 3:  de-identified variables  			
+* 	PART 3:  rename variables  			
 ***********************************************************************
 rename rg_legalstatus legalstatus 
 rename rg_fte_femmes fte_femmes 
@@ -53,8 +58,6 @@ rename rg_expstatus expstatus
 ***********************************************************************
 * 	PART 4:  save a de-identified final analysis file	
 ***********************************************************************
-	* change directory to final folder
-cd "$regis_final"
 
 	* identify all pii but unique identifier id_plateforme
 local pii firmname matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse codepostal date_created
@@ -103,4 +106,4 @@ cd "$regis_intermediate"
 
 	* delete intermediate data file as it contains pii; raw file needs to be encrypted
 erase regis_inter.dta
-		* add consortias_eligibles_pme
+
