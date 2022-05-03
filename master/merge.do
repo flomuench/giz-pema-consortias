@@ -13,7 +13,7 @@
 *	Author:  						    
 *	ID variable: 	id_plateforme			  					  
 *	Requires: consortia_bl_pii.dta	consortia_regis_pii.dta										  
-*	Creates:  contact_info.dta			                                  
+*	Creates:  consortia_database_raw.dta			                                  
 ***********************************************************************
 * 	PART 1: merge & append to create master data set (pii)
 ***********************************************************************
