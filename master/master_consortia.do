@@ -120,11 +120,11 @@ set sortseed 8413195
 * 	PART 3: 	Run consortium do-files			  	 				  *
 ***********************************************************************
 /*--------------------------------------------------------------------
-	PART 3.2: Merge monitoring & pii data
+	PART 3.1: Merge monitoring & pii data
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/merge.do"
 /* --------------------------------------------------------------------
-	PART 3.1: clean final raw registration + baseline 
+	PART 3.2: clean final raw registration + baseline 
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/master_clean.do"
 
