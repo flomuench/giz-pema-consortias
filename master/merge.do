@@ -13,7 +13,7 @@
 *	Author:  						    
 *	ID variable: 	id_plateforme			  					  
 *	Requires: consortia_bl_pii.dta	consortia_regis_pii.dta										  
-*	Creates:  consortia_database_raw.dta			                                  
+*	Creates:  contact_info_master.dta			                                  
 ***********************************************************************
 * 	PART 1: merge & append to create master data set (pii)
 ***********************************************************************
@@ -39,9 +39,9 @@ append using el_final
 */
 
 ***********************************************************************
-* 	PART 2: save as Consortium_database
+* 	PART 2: save as Consortium_contact_info_master
 ***********************************************************************
 cd "$master_gdrive"
-save "consortium_database_raw", replace
+save "contact_info_master", replace
 
 

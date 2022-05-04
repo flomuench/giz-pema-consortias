@@ -58,6 +58,9 @@ keep `pii'
 tostring nom_rep, gen(nom_rep2) format(%15.0f)
         drop nom_rep
         ren nom_rep2 nom_rep
+tostring id_plateforme, gen(id_plateforme2) format(%15.0f)
+        drop id_plateforme
+        ren id_plateforme2 id_plateforme
 		
 save "consortia_bl_pii", replace
 restore
