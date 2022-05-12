@@ -124,8 +124,8 @@ notes _dta : Consortium Project
 
 		* Section identification
 lab var ident2 "identification 2"
-lab var ident_nouveau_personne "identification new person"
-lab var ident_base_respondent "identification base respondent"
+*lab var ident_nouveau_personne "identification new person"
+*lab var ident_base_respondent "identification base respondent"
 
 
 		* Section essence of the company
@@ -308,8 +308,8 @@ label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 
 
 
-label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
-label values ident_nouveau_personne label_ident_nouveau_personne
+*label define label_ident_nouveau_personne 1  "check with the representative of the company" 0 "continue with the questionnaire"
+*label values ident_nouveau_personne label_ident_nouveau_personne
 
 
 label define label_entr_bien 1 "Bien" 2 "Service" 3 "Les deux"
