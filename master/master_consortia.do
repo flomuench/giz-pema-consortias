@@ -94,6 +94,7 @@ global master_intermediate "${master_gdrive}/intermediate"
 global master_final = "${master_gdrive}/final"
 global master_checks = "${master_gdrive}/checks"
 global master_output = "${master_gdrive}/output"
+global master_raw = "${master_gdrive}/raw"
 
 global bl_raw = "${bl_gdrive}/raw"
 global bl_intermediate "${bl_gdrive}/intermediate"
