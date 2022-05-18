@@ -65,7 +65,7 @@ duplicates drop
 save "contact_info_master", replace
 */
 ***********************************************************************
-* 	PART 4: merge & append to create analysis data set
+* 	PART 4: merge to create analysis data set
 ***********************************************************************
 		* change directory to master folder for merge with regis + baseline (final)
 cd "$master_raw"
@@ -78,12 +78,20 @@ use "${regis_final}/regis_final", clear
 
 merge 1:1 id_plateforme using "${bl_final}/bl_final"
 
-keep if _merge==3
+keep if _merge==3 /* companies that were eligible and answered on the registration + baseline surveys */
 drop _merge
 
+    * create panel ID
+gen surveyround=1
+ 
     * save as ecommerce_database
 
 save "consortium_database_raw", replace
+
+***********************************************************************
+* 	PART 5: append analysis data set with midline & endline
+***********************************************************************
+
 
 /*
 	* append registration +  baseline data with midline
@@ -96,8 +104,9 @@ cd "$endline_final"
 append using el_final
 
 
+/*
 ***********************************************************************
-* 	PART 5: merge with participation data
+* 	PART 6: merge with participation data
 ***********************************************************************
 
 *Note: here should the Suivi_mise_en_oeuvre_consortium.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
@@ -115,10 +124,4 @@ merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw"
     * save as ecommerce_database
 
 save "consortium_database_raw", replace
-
-***********************************************************************
-* 	PART 6: 
-***********************************************************************
-
-
 
