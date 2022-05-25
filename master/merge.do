@@ -75,6 +75,7 @@ cd "$master_raw"
 clear 
 
 use "${regis_final}/regis_final", clear
+drop treatment /* as it's just missing values in the registration data & in case we keep it then it will replace the data in the using file when merged*/
 
 merge 1:1 id_plateforme using "${bl_final}/bl_final"
 
@@ -84,7 +85,7 @@ drop _merge
     * create panel ID
 gen surveyround=1
  
-    * save as ecommerce_database
+    * save as consortium_database
 
 save "consortium_database_raw", replace
 
@@ -102,26 +103,76 @@ append using ml_final
 	* append with endline
 cd "$endline_final"
 append using el_final
+*/
 
 
-/*
 ***********************************************************************
 * 	PART 6: merge with participation data
 ***********************************************************************
 
-*Note: here should the Suivi_mise_en_oeuvre_consortium.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
-clear 
-import excel "${master_gdrive}/Suivi_consortium.xlsx", sheet("Suivi_formation") firstrow clear
-keep id_plateforme groupe module1 module2 module3 module4 module5
-drop if id_plateforme== ""
-drop if id_plateforme== "id_plateforme"
-drop _merge
-encode id_plateforme, generate(id_plateforme2)
-drop id_plateforme
-rename id_plateforme2 id_plateforme
-merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw"
+*Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
 
-    * save as ecommerce_database
+* 1st merge with Groupe Agri-Agro:
+clear 
+import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Agri-Agro") firstrow clear
+keep id_plateforme Gouvernorat GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405
+merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw", force
+drop _merge
+order GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405, last
+    * save as consortium_database
 
 save "consortium_database_raw", replace
 
+
+* 2nd merge with Groupe Artisanat:
+clear 
+import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Artisanat") firstrow clear
+rename I GroupeArtisanatRencontre2
+keep id_plateforme Gouvernorat GroupeArtisanatRencontre1 GroupeArtisanatRencontre2
+merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw", force
+drop _merge
+order GroupeArtisanatRencontre1 GroupeArtisanatRencontre2, last
+    
+    * save as consortium_database
+
+save "consortium_database_raw", replace
+
+
+* 3d merge with Groupe Services:
+clear 
+import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Services") firstrow clear
+rename I GroupeServicesRencontre2
+rename GroupeServicesRencontre11 GroupeServicesRencontre1
+keep id_plateforme Gouvernorat GroupeServicesRencontre1 GroupeServicesRencontre2
+merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw", force
+drop _merge
+order GroupeServicesRencontre1 GroupeServicesRencontre2, last
+    
+    * save as consortium_database
+
+save "consortium_database_raw", replace
+
+* 4th merge with Groupe TIC:
+clear 
+import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe TIC") firstrow clear
+keep id_plateforme Gouvernorat GroupeTICRencontre11205 GroupeTICRencontre11305
+merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw", force
+drop _merge
+order GroupeTICRencontre11205 GroupeTICRencontre11305, last
+    
+    * save as consortium_database
+
+save "consortium_database_raw", replace
+
+
+* 5th merge with Webinaire:
+clear 
+import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Webinaire") firstrow clear
+keep id_plateforme Gouvernorat PrésenceWebinairedelancement Commentaires
+merge 1:1 id_plateforme using "${master_raw}/consortium_database_raw", force
+drop _merge
+order PrésenceWebinairedelancement Commentaires, last
+order treatment    
+    * save as consortium_database
+
+save "consortium_database_raw", replace
