@@ -31,9 +31,11 @@ drop NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident
 * 	PART 2:     clean & correct analysis data set
 ***********************************************************************
 use "${master_raw}/consortium_database_raw", clear
-drop treatment eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 ident_base_respondent ident_nouveau_personne questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
+drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
+    * save as consortium_database
 
+save "consortium_database_raw", replace
 
 
 /*

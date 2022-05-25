@@ -1,5 +1,5 @@
 ***********************************************************************
-* 			E-commerce experiment randomisation								  		  
+* 			Consortium experiment randomisation								  		  
 ***********************************************************************
 *																	   
 *	PURPOSE: 						  								  
@@ -11,7 +11,7 @@
 *	3)	 balance table
 *	4) 	 generate Excel sheets by treatment status
 *																 	 *
-*	Author:  	Fabian												  
+*	Author:  	Fabian										  
 *	ID variable: 	id_plateforme			  									  
 *	Requires:		bl_final.dta
 *	Creates:		bl_final.dta					  
@@ -132,9 +132,15 @@ save "bl_final", replace
 
 order id_plateforme treatment pole
 
+
+tostring id_plateforme, gen(id_plateforme2) format(%15.0f)
+        drop id_plateforme
+        ren id_plateforme2 id_plateforme
+		
+
 cd "$consortia_master"
 
-merge 1:1 id_plateforme using consortia_master_data.dta, generate(_merge2) force
+merge 1:1 id_plateforme using contact_info_master.dta, generate(_merge2) force
 
 keep if _merge2==3
 
@@ -151,11 +157,42 @@ export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet
 putdocx save results_randomisation.docx, replace
 
 
+***********************************************************************
+* 	PART 5: Add variable treatment to consortium_bl_pii
+***********************************************************************		
+preserve
+keep id_plateforme treatment
 
+* change directory to bl folder for merge with bl_final
+cd "$bl_raw"
 
+		* merge 1:1 based on project id_plateforme
+merge 1:1 id_plateforme using consortia_bl_pii
+drop _merge
 
+    * save as consortia_bl_pii
 
+save "consortia_bl_pii", replace
 
+restore
+
+***********************************************************************
+* 	PART 6: Add variable treatment to consortium_bl_final
+***********************************************************************		
+preserve
+keep id_plateforme treatment
+destring id_plateforme, replace
+* change directory to bl folder for merge with bl_final
+cd "$bl_final"
+
+		* merge 1:1 based on project id_plateforme
+merge 1:1 id_plateforme using "${bl_final}/bl_final"
+drop _merge
+
+    * save as consortia_bl_final
+
+save "bl_final", replace
+restore
 
 
 

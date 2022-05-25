@@ -130,11 +130,11 @@ if (1) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.5: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_open_question_checks.do"
+if (0) do "${bl_github}/bl_open_question_checks.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Perform logical checks
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_test.do"
+if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
 	PART 3.7: Create indices
 ----------------------------------------------------------------------*/	
@@ -160,5 +160,5 @@ if (1) do "${bl_github}/bl_randomisation_tests.do"
 /* --------------------------------------------------------------------
 	PART 4.3: Randomisation 
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_final_randomisation.do"
+if (0) do "${bl_github}/bl_final_randomisation.do"
 

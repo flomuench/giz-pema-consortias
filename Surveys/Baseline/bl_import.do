@@ -75,7 +75,7 @@ export excel `pii' using consortia_bl_pii, firstrow(var) replace
 cd "$bl_final"
 
 	* drop all pii
-drop `pii'
+drop nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2
 
 ***********************************************************************
 * 	PART 4: re-importing raw data 					
