@@ -43,6 +43,7 @@ net install http://www.stata.com/users/kcrow/tab2docx
 ssc install labutil
 ssc install asdoc
 ssc install psmatch2
+ssc install winsor
 */
 *net from https://www.sealedenvelope.com/
 *net install time.pkg

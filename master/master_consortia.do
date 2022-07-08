@@ -107,9 +107,15 @@ global regis_final = "${regis_gdrive}/final"
 global regis_checks = "${regis_gdrive}/checks"
 
 			* output (regression tables, figures)
+				* baseline
 global bl_output = "${bl_gdrive}/output"
 global bl_figures = "${bl_output}/descriptive-statistics-figures"
 global bl_progress = "${bl_output}/progress-eligibility-characteristics"
+
+				* master
+global master_power = "${master_output}/power"
+global master_regressiontables = "${master_output}/regression_tables"
+global master_figures = "${master_figures}/figures"
 
 		
 			* set seeds for replication
@@ -123,11 +129,15 @@ set sortseed 8413195
 /*--------------------------------------------------------------------
 	PART 3.1: Merge monitoring & pii data
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/merge.do"
-/* --------------------------------------------------------------------
-	PART 3.2: clean final raw registration + baseline 
+if (1) do "${master_github}/consortia_merge.do"
+/*--------------------------------------------------------------------
+	PART 3.2: Baseline power
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/master_clean.do"
+if (1) do "${master_github}/consortia_power.do"
+/* --------------------------------------------------------------------
+	PART 3.3: clean final raw registration + baseline 
+----------------------------------------------------------------------*/		
+if (1) do "${master_github}/consortia_clean.do"
 
 /*
 /* --------------------------------------------------------------------
