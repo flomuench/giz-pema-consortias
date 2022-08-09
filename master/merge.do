@@ -110,7 +110,7 @@ append using el_final
 * 	PART 6: merge with participation data
 ***********************************************************************
 
-*Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
+*Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 
 * 1st merge with Groupe Agri-Agro:
 clear 
