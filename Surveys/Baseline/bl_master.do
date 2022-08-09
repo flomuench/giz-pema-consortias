@@ -54,13 +54,20 @@ set scheme plotplain
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
-
+		* define user
+	if "`c(username)'" == "SIWAR" {
+	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
+	} 
+	
+	else {
+	global person = "C:/Users/`c(username)'/Google Drive" 
+}
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
-	global bl_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
+	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
 	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
-	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
+	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
 	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
@@ -69,8 +76,9 @@ else if c(os) == "MacOSX" {
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 
+
 if c(os) == "Windows" {
-	global regis_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
+	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
 	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 }
@@ -161,5 +169,5 @@ if (1) do "${bl_github}/bl_randomisation_tests.do"
 /* --------------------------------------------------------------------
 	PART 4.3: Randomisation 
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_final_randomisation.do"
+if (1) do "${bl_github}/bl_final_randomisation.do"
 
