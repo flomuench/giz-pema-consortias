@@ -73,9 +73,9 @@ format %-td dateinscription
 		
 	
 	* communication channels
-graph bar (count), over(moyen_com, sort(1) lab(labsize(tiny))) blabel(total) ///
-	title("Enregistrement selon les moyens de communication") ///
-	ytitle("nombre d'enregistrement") 
+graph hbar (count), over(moyen_com, sort(1) lab(labsize(vsmall))) blabel(total, format(%9.0fc)) ///
+	ytitle("number of registered firms") ///
+	aspectratio(0.9)
 graph export moyen_com.png, replace 
 putpdf paragraph, halign(center) 
 putpdf image moyen_com.png

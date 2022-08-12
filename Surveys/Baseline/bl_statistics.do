@@ -84,8 +84,22 @@ putpdf pagebreak
 drop share
 
 *Type of support desired by firms
-gr hbar (sum) support1 - support6, blabel(total, format(%9.2fc)) legend (pos (6) label (1 "Pas besoin d'assistance") label(2 "Réunions virtuelles") label(3 "Changer l’endroit de rencontre, par exemple d’une ville à une autre") label(4 "Creneau avant ou apres du travail") label(5 "Garde d'enfants") label(6 "Support pour transport et hébergement")) ///
-	title("Comment est-ce qu’on pourra vous faciliter la participation aux rencontres de consortium?")
+gr hbar (sum) support2 support6 support3 support4 support5 support1, blabel(total, format(%9.0fc)) ///
+	legend (pos(3) row(6) label (1 "1: Virtual meetings") label(2 "2: Transport or accomodation") ///
+	label(3 "3: Alternate location, e.g. by city") label(4 "4: Time slot before or after work") ///
+	label(5 "5: Child care") label(6 "6: No need for support")) ///
+	ytitle("number of firms", size(small)) ///
+	name(support_options, replace)
+gr export support_options.png, replace
+
+
+gr bar (mean) age, over(support5) blabel(total, format(%9.1fc)) /* firms needing support with childcare are 2 years younger */
+gr bar (mean) famille2, over(support5) blabel(total, format(%9.1fc)) /* & have half a child < 18 more */
+gr bar (mean) w_ca2021, over(support5) blabel(total, format(%9.1fc)) /* & half CA in 2021 */
+gr bar (mean) operation_export, over(support5) blabel(total, format(%9.1fc)) /* 10pp less likely exporter */
+gr bar (mean) employes, over(support5) blabel(total, format(%9.1fc)) /* 10pp less likely exporter */
+
+	
 gr export support.png, replace
 putpdf paragraph, halign(center) 
 putpdf image support.png
