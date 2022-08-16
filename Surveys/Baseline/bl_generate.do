@@ -58,6 +58,7 @@ generate inno_mot5 = regexm(inno_mot, "inno_mot_eve")
 generate inno_mot6 = regexm(inno_mot, "inno_mot_emp")
 generate inno_mot7 = regexm(inno_mot, "inno_mot_test")
 generate inno_mot8 = regexm(inno_mot, "inno_mot_autre")
+generate inno_aucune = regexm(inno_mot, "no innovation")
 label var inno_mot1 "Idée personnelle"
 label var inno_mot2 "Concurrent"
 label var inno_mot3 "Consultant"
@@ -66,6 +67,7 @@ label var inno_mot5 "Evenement"
 label var inno_mot6 "Employée"
 label var inno_mot7 "Normes"
 label var inno_mot8 "Autres"
+label var inno_aucune "No innovation"
 
 generate att_jour1  = regexm(att_jour , "lundi")
 generate att_jour2  = regexm(att_jour , "mardi")

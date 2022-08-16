@@ -51,10 +51,10 @@ putdocx paragraph
 putdocx text ("Chiffre d'affaire 2021"), bold
 
 
-g missing_ca2021 = 1
-replace missing_ca2021 =. if ca_2021==.
+g miss_ca2021 = 1
+replace miss_ca2021 =. if ca_2021==.
 
-mdesc missing_ca2021
+mdesc miss_ca2021
 display "We miss some information on CA2021 for `r(miss)' (`r(percent)'%) out of `r(total)'."
 putdocx paragraph
 putdocx text ("We miss some information on CA2021 for `r(miss)' (`: display %9.2fc `r(percent)''%) out of `r(total)'.")	
@@ -64,13 +64,13 @@ putdocx text ("We miss some information on CA2021 for `r(miss)' (`: display %9.2
 putdocx paragraph
 putdocx text ("Management practices questions"), bold
 
-g missing_mgmt_prc = 1
+g miss_mgmt_prc = 1
 local mgmt_prc_m  man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per
 foreach var of local  mgmt_prc_m {
-	replace missing_mgmt_prc = . if `var' == .
+	replace miss_mgmt_prc = . if `var' == .
 }
 
-mdesc missing_mgmt_prc
+mdesc miss_mgmt_prc
 display "We miss some information on management practices variables for `r(miss)' (`r(percent)'%) out of `r(total)'."
 putdocx paragraph
 putdocx text ("We miss some information on management practices variables for `r(miss)' `: display %9.2fc`r(percent)'''%) out of `r(total)'.")	
