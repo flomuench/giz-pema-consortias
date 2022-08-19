@@ -89,6 +89,7 @@ gr hbar (sum) support2 support6 support3 support4 support5 support1, blabel(tota
 	label(3 "3: Alternate location, e.g. by city") label(4 "4: Time slot before or after work") ///
 	label(5 "5: Child care") label(6 "6: No need for support")) ///
 	ytitle("number of firms", size(small)) ///
+	note("{it:N = 176}", size(small)) ///
 	name(support_options, replace)
 gr export support_options.png, replace
 
