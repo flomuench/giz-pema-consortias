@@ -50,11 +50,12 @@ putexcel B2 = "Export at all", border(bottom) hcenter
 putexcel C2 = "IHS export sales", border(bottom) hcenter
 putexcel D2 = "Countries exported", border(bottom) hcenter
 putexcel E2 = "Log employees", border(bottom) hcenter
-putexcel F2 = "Export practices index", border(bottom) hcenter
+putexcel F2 = "Export readiness index", border(bottom) hcenter
 putexcel G2 = "Management practices index", border(bottom) hcenter
-putexcel H2 = "Gender index", border(bottom) hcenter
-putexcel I2 = "Network index", border(bottom) hcenter
-
+putexcel H2 = "Marketing practices index", border(bottom) hcenter
+putexcel I2 = "Innovation index", border(bottom) hcenter
+putexcel J2 = "Gender index", border(bottom) hcenter
+ 
 ***********************************************************************
 * 	PART 2:    estimate power for export at all
 ***********************************************************************
@@ -162,8 +163,6 @@ local power = r(power)
 putexcel B20 = 0.095, hcenter nformat(number_d2) border(bottom)
 
 
-
-
 ***********************************************************************
 * 	PART 3:    estimate power for export sales
 ***********************************************************************
@@ -269,7 +268,7 @@ putexcel D4 = `exp_pays_mean', hcenter nformat(number_d2)
 
 	* add SD
 local exp_pays_sd = r(sd)
-putexcel D5 = `ihs_ca_exp2020_sd', hcenter nformat(number_d2)
+putexcel D5 = `exp_pays_sd', hcenter nformat(number_d2)
 scalar exp_pays_sd = r(sd)
 
 	* add residual SD
@@ -284,59 +283,405 @@ putexcel D6 = `exp_pays_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 	* exported countries extensive margin
 		* as percent
-putexcel D9	= "0.43", hcenter
+putexcel D9	= "0.5", hcenter
 		* as percentage point
-putexcel D10 = "0.1", hcenter
+putexcel D10 = "***", hcenter
 
 ***********************************************************************
 * 	PART 4.3:     power calculations
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-* sum exp_pays if treatment==1
-*
-sampsi  1.421687 4.77, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+
+sampsi  1.27 1.77, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
 putexcel D12 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.27 1.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
 putexcel D13 = `power', hcenter nformat(number_d2)
 
-	* Ancova 1 year before
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(`correlation1')
-local power = r(power)
-putexcel D14 = `power', hcenter nformat(number_d2)
-
-	* Ancova 2 years before 
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(2) post(2) r1(`correlation2')
-local power = r(power)
-putexcel D15 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 4.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 4.34 6.84, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+sampsi 1.27 2.37, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
-putexcel D17 = 2.5, hcenter nformat(number_d2)
+putexcel D17 = 1.1, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 4.34 6.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.27 2.27, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
-putexcel D18 = 2.1, hcenter nformat(number_d2)
+putexcel D18 = 1.0, hcenter nformat(number_d2)
 
-	* Ancova 1-year before
-sampsi 4.34 5.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(0.8)
+
+***********************************************************************
+* 	PART 5:    estimate power for log employees
+***********************************************************************
+gen log_employees= log(employes)
+
+***********************************************************************
+* 	PART 5.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum log_employees
+local log_employees_mean = r(mean)
+putexcel E4 = `log_employees_mean', hcenter nformat(number_d2)
+
+	* add SD
+local log_employees_sd = r(sd)
+putexcel E5 = `log_employees_sd', hcenter nformat(number_d2)
+scalar log_employees_sd = r(sd)
+
+	* add residual SD
+regress log_employees i.strata_final, vce(hc3)
+scalar log_employees_ressd = sqrt(1 - e(r2))
+local log_employees_ressd = log_employees_sd * log_employees_ressd
+putexcel E6 = `log_employees_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 5.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel E9	= "0.2", hcenter
+		* as percentage point
+putexcel E10 = "***", hcenter
+
+***********************************************************************
+* 	PART 5.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi  1.68 1.88, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
-putexcel D19 = 1.1, hcenter nformat(number_d2)
+putexcel E12 = `power', hcenter nformat(number_d2)
 
-	* Ancova 2 years before 
-sampsi 4.34 5.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(2) post(2) r1(0.7)
+	* after controlling for strata_final --> add
+sampsi 1.68 1.88, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
-putexcel D20 = 1, hcenter nformat(number_d2) border(bottom)
+putexcel E13 = `power', hcenter nformat(number_d2)
 
+
+***********************************************************************
+* 	PART 5.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi 1.68 2.78, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+local power = r(power)
+putexcel E17 = 1.1, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi 1.68 2.68, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+local power = r(power)
+putexcel E18 = 1.0, hcenter nformat(number_d2)
+
+***********************************************************************
+* 	PART 6:    estimate power for Export preparation
+***********************************************************************
+***********************************************************************
+* 	PART 6.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum exportprep
+local exportprep_mean = r(mean)
+putexcel F4 = `exportprep_mean', hcenter nformat(number_d2)
+
+	* add SD
+local exportprep_sd = r(sd)
+putexcel F5 = `exportprep_sd', hcenter nformat(number_d2)
+scalar exportprep_sd = r(sd)
+
+	* add residual SD
+regress exportprep i.strata_final, vce(hc3)
+scalar exportprep_ressd = sqrt(1 - e(r2))
+local exportprep_ressd = exportprep_sd * exportprep_ressd
+putexcel F6 = `exportprep_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 6.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel F9	= "0.1", hcenter
+		* as percentage point
+putexcel F10 = "***", hcenter
+
+***********************************************************************
+* 	PART 6.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi  0.03 0.13, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
+local power = r(power)
+putexcel F12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi 0.03 0.13, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
+local power = r(power)
+putexcel F13 = `power', hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 6.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi 0.03 0.28, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
+local power = r(power)
+putexcel F17 = 0.25, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi 0.03 0.29, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
+local power = r(power)
+putexcel F18 = 0.26, hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 7:    estimate power for Management practices index
+***********************************************************************
+***********************************************************************
+* 	PART 7.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum mngtvars
+local mngtvars_mean = r(mean)
+putexcel G4 = `mngtvars_mean', hcenter nformat(number_d2)
+
+	* add SD
+local mngtvars_sd = r(sd)
+putexcel G5 = `mngtvars_sd', hcenter nformat(number_d2)
+scalar mngtvars_sd = r(sd)
+
+	* add residual SD
+regress mngtvars i.strata_final, vce(hc3)
+scalar mngtvars_ressd = sqrt(1 - e(r2))
+local mngtvars_ressd = mngtvars_sd * mngtvars_ressd
+putexcel G6 = `mngtvars_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 7.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel G9	= "0.1", hcenter
+		* as percentage point
+putexcel G10 = "***", hcenter
+
+***********************************************************************
+* 	PART 7.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi  0.03 0.13, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
+local power = r(power)
+putexcel G12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi 0.03 0.13, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
+local power = r(power)
+putexcel G13 = `power', hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 7.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
+local power = r(power)
+putexcel G17 = 0.26, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
+local power = r(power)
+putexcel G18 = 0.26, hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 8:    estimate power for Marketing practices index
+***********************************************************************
+***********************************************************************
+* 	PART 8.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum markvars
+local markvars_mean = r(mean)
+putexcel H4 = `markvars_mean', hcenter nformat(number_d2)
+
+	* add SD
+local markvars_sd = r(sd)
+putexcel H5 = `markvars_sd', hcenter nformat(number_d2)
+scalar markvars_sd = r(sd)
+
+	* add residual SD
+regress markvars i.strata_final, vce(hc3)
+scalar markvars_ressd = sqrt(1 - e(r2))
+local markvars_ressd = markvars_sd * markvars_ressd
+putexcel H6 = `markvars_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 8.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel H9	= "0.1", hcenter
+		* as percentage point
+putexcel H10 = "***", hcenter
+
+***********************************************************************
+* 	PART 8.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
+local power = r(power)
+putexcel H12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
+local power = r(power)
+putexcel H13 = `power', hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 8.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
+local power = r(power)
+putexcel H17 = 0.27, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
+local power = r(power)
+putexcel H18 = 0.27, hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 9:    estimate power for Innovation index
+***********************************************************************
+***********************************************************************
+* 	PART 9.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum innovars
+local innovars_mean = r(mean)
+putexcel I4 = `innovars_mean', hcenter nformat(number_d2)
+
+	* add SD
+local innovars_sd = r(sd)
+putexcel I5 = `innovars_sd', hcenter nformat(number_d2)
+scalar innovars_sd = r(sd)
+
+	* add residual SD
+regress innovars i.strata_final, vce(hc3)
+scalar innovars_ressd = sqrt(1 - e(r2))
+local innovars_ressd = innovars_sd * innovars_ressd
+putexcel I6 = `innovars_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 9.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel I9	= "0.13", hcenter
+		* as percentage point
+putexcel I10 = "***", hcenter
+
+***********************************************************************
+* 	PART 9.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi  -0.01 0.12, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
+local power = r(power)
+putexcel I12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi -0.01 0.12, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
+local power = r(power)
+putexcel I13 = `power', hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 9.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi -0.01 0.19, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
+local power = r(power)
+putexcel I17 = 0.20, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi -0.01 0.18, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
+local power = r(power)
+putexcel I18 = 0.19, hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 10:    estimate power for Gender index
+***********************************************************************
+***********************************************************************
+* 	PART 10.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum gendervars
+local gendervars_mean = r(mean)
+putexcel J4 = `gendervars_mean', hcenter nformat(number_d2)
+
+	* add SD
+local gendervars_sd = r(sd)
+putexcel J5 = `gendervars_sd', hcenter nformat(number_d2)
+scalar gendervars_sd = r(sd)
+
+	* add residual SD
+regress gendervars i.strata_final, vce(hc3)
+scalar gendervars_ressd = sqrt(1 - e(r2))
+local gendervars_ressd = gendervars_sd * gendervars_ressd
+putexcel J6 = `gendervars_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 10.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel J9	= "0.1", hcenter
+		* as percentage point
+putexcel J10 = "***", hcenter
+
+***********************************************************************
+* 	PART 10.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+sampsi  -0.01 0.09, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
+local power = r(power)
+putexcel J12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi -0.01 0.09, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
+local power = r(power)
+putexcel J13 = `power', hcenter nformat(number_d2)
+
+
+***********************************************************************
+* 	PART 10.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi -0.01 0.36, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
+local power = r(power)
+putexcel J17 = 0.37, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi -0.01 0.33, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
+local power = r(power)
+putexcel J18 = 0.34, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART end:     Table notes
