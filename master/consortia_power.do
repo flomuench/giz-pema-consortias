@@ -56,40 +56,63 @@ putexcel H2 = "Marketing practices index", border(bottom) hcenter
 putexcel I2 = "Innovation index", border(bottom) hcenter
 putexcel J2 = "Gender index", border(bottom) hcenter
  
+ 
+* define first column
+putexcel A3 = "A. Parameters from baseline data", italic left
+
+*define row headings
+putexcel A4 = "Baseline mean", hcenter
+putexcel A5 = "Baseline SD", hcenter
+putexcel A6 = "Residual SD", hcenter
+putexcel A7 = "1-year autocorrelation", hcenter
+putexcel A8 = "2-year autocorrelation", hcenter
+putexcel A10 = "B. Assumed treatment effect", italic left
+putexcel A11 = "Assumed take-up", hcenter
+putexcel A12 = "take-up adjusted treatment effect", hcenter
+putexcel A13 = "as a percentage change", hcenter
+putexcel A14 = "C. Power of take-up adjusted treatment effect", italic left
+putexcel A15 = "comparison of means", hcenter
+putexcel A16 = "after controll for strata", hcenter
+putexcel A17 = "Ancova 1-year before", hcenter
+putexcel A18 = "Ancova 2-year before", hcenter
+putexcel A19 = "D. MDE at 80% power and 67% take up (compare with assumed treatment effect)", italic left
+putexcel A20 = "comparison of means", hcenter
+putexcel A21 = "after controll for strata", hcenter
+putexcel A22 = "Ancova 1-year before", hcenter
+putexcel A23 = "Ancova 2-year before", hcenter
+putexcel A24 = "Notes:"
+putexcel A25 = "n.a. denotes not available."
+putexcel A26 = "MDE denotes minimum detectable effect size."
+putexcel A27 = "Residual SD is standard deviation after controlling for strata fixed effects."
+putexcel A28 = "One-and two-year autocorrelation come frome self-reported registration data."
+
 ***********************************************************************
 * 	PART 2:    estimate power for export at all
 ***********************************************************************
 ***********************************************************************
 * 	PART 2.1:     get all the relevant baseline parameters
 ***********************************************************************
-	* define first column
-putexcel A3 = "Parameters from baseline data", italic left
 
 	* add mean
-putexcel A4 = "Baseline mean", hcenter
 sum operation_export
 local operation_export_mean = r(mean)
 putexcel B4 = `operation_export_mean', hcenter nformat(number_d2)
 
 	* add SD
-putexcel A5 = "Baseline SD", hcenter
 local operation_export_sd = r(sd)
 putexcel B5 = `operation_export_sd', hcenter nformat(number_d2)
 scalar operation_export_sd = r(sd)
 
 	* add residual SD
-putexcel A6 = "Residual SD", hcenter
 regress operation_export i.strata_final, vce(hc3)
 scalar operation_export_ressd = sqrt(1 - e(r2))
 local operation_export_ressd = operation_export_sd * operation_export_ressd
 putexcel B6 = `operation_export_ressd', hcenter nformat(number_d2)
 		
 		* 1-year (only applies to export sales)
-putexcel A7 = "1-year autocorrelation", hcenter
 putexcel B7 = "0,80", hcenter
 		
 		* average 2-year autocorrelation (only applies to export sales)
-putexcel A8 = "2-year autocorrelation", hcenter
 putexcel B8 = "0,70", hcenter
 
 ***********************************************************************
@@ -97,70 +120,61 @@ putexcel B8 = "0,70", hcenter
 ***********************************************************************
 	* export extensive margin
 		* as percent
-putexcel A9 = "Assumed treatment effect", italic left
-putexcel B9	= "0.175", hcenter
+putexcel B10 = "0.175", hcenter
+		* assumed take-up
+putexcel B11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel B12 = formula(=SUM(B10*B11)), hcenter			
 		* as percentage point
-putexcel A10 = "as a percentage change", hcenter
-putexcel B10 = "0.343", hcenter
+putexcel B13 = formula(=SUM(B12/B4)), hcenter
 
 ***********************************************************************
 * 	PART 2.3:     power calculations
 ***********************************************************************
-* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
-putexcel A11 = "Power", italic left
 
 	* comparison of means
-putexcel A12 = "comparison of means", hcenter
 sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
 local power = r(power)
-putexcel B12 = `power', hcenter nformat(number_d2)
+putexcel B15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-putexcel A13 = "after controll for strata", hcenter
 sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
 local power = r(power)
-putexcel B13 = `power', hcenter nformat(number_d2)
+putexcel B16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-putexcel A14 = "Ancova 1-year before", hcenter
 sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel B14 = `power', hcenter nformat(number_d2)
+putexcel B17 = `power', hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
-putexcel A15 = "Ancova 2-years before", hcenter
 sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
-putexcel B15 = `power', hcenter nformat(number_d2)
+putexcel B18 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 2.4:     MDE at 80% power
 ***********************************************************************
-putexcel A16 = "MDE at 80% power", italic
 
 	*  comparison of means
-putexcel A17 = "comparison of means", hcenter
 sampsi .51 0.74, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
 local power = r(power)
-putexcel B17 = 0.23, hcenter nformat(number_d2)
+putexcel B20 = 0.23, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-putexcel A18 = "after controll for strata", hcenter
 sampsi .51 0.695, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
 local power = r(power)
-putexcel B18 = 0.185, hcenter nformat(number_d2)
+putexcel B21 = 0.185, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-putexcel A19 = "Ancova 1-year before", hcenter
 sampsi 0.45 0.545, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel B19 = 0.095, hcenter nformat(number_d2)
+putexcel B22 = 0.095, hcenter nformat(number_d2)
 
 	* Ancova 5 years before 
-putexcel A20 = "Ancova 2-years before", hcenter border(bottom)
 sampsi 0.45 0.545, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
-putexcel B20 = 0.095, hcenter nformat(number_d2) border(bottom)
+putexcel B23 = 0.095, hcenter nformat(number_d2) border(bottom)
 
 
 ***********************************************************************
@@ -200,11 +214,17 @@ putexcel C8 = `correlation2', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 3.2.:     define assumed treatment effects
 ***********************************************************************
+
 	* export extensive margin
 		* as percent
-putexcel C9	= "0.43", hcenter
+putexcel C10= "0.43", hcenter
+		* assumed take-up
+putexcel C11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel C12 = formula(=SUM(C10*C11)), hcenter			
 		* as percentage point
-putexcel C10 = "0.1", hcenter
+putexcel C13 = formula(=SUM(C12/C4)), hcenter
+
 
 ***********************************************************************
 * 	PART 3.3:     power calculations
@@ -213,22 +233,22 @@ putexcel C10 = "0.1", hcenter
 	* comparison of means
 sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_sd') sd2(`ihs_ca_exp2020_sd')
 local power = r(power)
-putexcel C12 = `power', hcenter nformat(number_d2)
+putexcel C15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd')
 local power = r(power)
-putexcel C13 = `power', hcenter nformat(number_d2)
+putexcel C16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
 sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
-putexcel C14 = `power', hcenter nformat(number_d2)
+putexcel C17 = `power', hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
 sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(`correlation2')
 local power = r(power)
-putexcel C15 = `power', hcenter nformat(number_d2)
+putexcel C18 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 3.4:     MDE at 80% power
@@ -236,22 +256,22 @@ putexcel C15 = `power', hcenter nformat(number_d2)
 	*  comparison of means
 sampsi 4.34 6.84, n1(80) n2(80) sd1(`ihs_ca_exp2020_sd') sd2(`ihs_ca_exp2020_sd')
 local power = r(power)
-putexcel C17 = 2.5, hcenter nformat(number_d2)
+putexcel C20 = 2.5, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi 4.34 6.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd')
 local power = r(power)
-putexcel C18 = 2.1, hcenter nformat(number_d2)
+putexcel C21 = 2.1, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
 sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel C19 = 1.1, hcenter nformat(number_d2)
+putexcel C22 = 1.1, hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
 sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
-putexcel C20 = 1, hcenter nformat(number_d2) border(bottom)
+putexcel C23 = 1, hcenter nformat(number_d2) border(bottom)
 
 
 ***********************************************************************
@@ -281,12 +301,16 @@ putexcel D6 = `exp_pays_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 4.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
-		* as percent
-putexcel D9	= "0.5", hcenter
-		* as percentage point
-putexcel D10 = "***", hcenter
 
+	* extensive margin
+		* as percent
+putexcel D10= "0.5", hcenter
+		* assumed take-up
+putexcel D11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel D12 = formula(=SUM(D10*D11)), hcenter			
+		* as percentage point
+putexcel D13 = formula(=SUM(D12/D4)), hcenter
 ***********************************************************************
 * 	PART 4.3:     power calculations
 ***********************************************************************
@@ -295,13 +319,17 @@ putexcel D10 = "***", hcenter
 
 sampsi  1.27 1.77, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
-putexcel D12 = `power', hcenter nformat(number_d2)
+putexcel D15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi 1.27 1.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
-putexcel D13 = `power', hcenter nformat(number_d2)
+putexcel D16 = `power', hcenter nformat(number_d2)
 
+	* Ancova 1 year before
+sampsi 1.27 1.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel D17 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 4.4:     MDE at 80% power
@@ -309,12 +337,17 @@ putexcel D13 = `power', hcenter nformat(number_d2)
 	*  comparison of means
 sampsi 1.27 2.37, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
-putexcel D17 = 1.1, hcenter nformat(number_d2)
+putexcel D20 = 1.1, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi 1.27 2.27, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
-putexcel D18 = 1.0, hcenter nformat(number_d2)
+putexcel D21 = 1.0, hcenter nformat(number_d2)
+
+	* Ancova 1-year before
+sampsi 1.27 2.27, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel D22 = 1.0, hcenter nformat(number_d2)
 
 
 ***********************************************************************
@@ -345,40 +378,52 @@ putexcel E6 = `log_employees_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 5.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
-		* as percent
-putexcel E9	= "0.2", hcenter
-		* as percentage point
-putexcel E10 = "***", hcenter
 
+	* extensive margin
+		* as percent
+putexcel E10= "0.2", hcenter
+		* assumed take-up
+putexcel E11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel E12 = formula(=SUM(E10*E11)), hcenter			
+		* as percentage point
+putexcel E13 = formula(=SUM(E12/E4)), hcenter
 ***********************************************************************
 * 	PART 5.3:     power calculations
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  1.68 1.88, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+sampsi  1.68 1.88, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
 local power = r(power)
-putexcel E12 = `power', hcenter nformat(number_d2)
+putexcel E15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 1.68 1.88, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.68 1.88, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
 local power = r(power)
-putexcel E13 = `power', hcenter nformat(number_d2)
+putexcel E16 = `power', hcenter nformat(number_d2)
 
+	* Ancova 1 year before
+sampsi 1.27 1.77, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel E17 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 5.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 1.68 2.78, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+sampsi 1.68 2.78, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
 local power = r(power)
-putexcel E17 = 1.1, hcenter nformat(number_d2)
+putexcel E20 = 1.1, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 1.68 2.68, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.68 2.68, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
 local power = r(power)
-putexcel E18 = 1.0, hcenter nformat(number_d2)
+putexcel E21 = 1.0, hcenter nformat(number_d2)
 
+	* Ancova 1-year before
+sampsi 1.68 2.68, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel E22 = 1.0, hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 6:    estimate power for Export preparation
 ***********************************************************************
@@ -405,11 +450,16 @@ putexcel F6 = `exportprep_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 6.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
+
+	* extensive margin
 		* as percent
-putexcel F9	= "0.1", hcenter
+putexcel F10= "0.1", hcenter
+		* assumed take-up
+putexcel F11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel F12 = formula(=SUM(F10*F11)), hcenter			
 		* as percentage point
-putexcel F10 = "***", hcenter
+putexcel F13 = formula(=SUM(F12/F4)), hcenter
 
 ***********************************************************************
 * 	PART 6.3:     power calculations
@@ -418,27 +468,34 @@ putexcel F10 = "***", hcenter
 	* comparison of means
 sampsi  0.03 0.13, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
 local power = r(power)
-putexcel F12 = `power', hcenter nformat(number_d2)
+putexcel F15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi 0.03 0.13, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
 local power = r(power)
-putexcel F13 = `power', hcenter nformat(number_d2)
+putexcel F16 = `power', hcenter nformat(number_d2)
 
-
+	* Ancova 1 year before
+sampsi 0.03 0.13, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel F17 = `power', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 6.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
 sampsi 0.03 0.28, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
 local power = r(power)
-putexcel F17 = 0.25, hcenter nformat(number_d2)
+putexcel F20 = 0.25, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi 0.03 0.29, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
 local power = r(power)
-putexcel F18 = 0.26, hcenter nformat(number_d2)
+putexcel F21 = 0.26, hcenter nformat(number_d2)
 
+	* Ancova 1-year before
+sampsi 0.03 0.29, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel F22 = 0.26, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 7:    estimate power for Management practices index
@@ -466,12 +523,16 @@ putexcel G6 = `mngtvars_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 7.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
-		* as percent
-putexcel G9	= "0.1", hcenter
-		* as percentage point
-putexcel G10 = "***", hcenter
 
+	* extensive margin
+		* as percent
+putexcel G10= "0.1", hcenter
+		* assumed take-up
+putexcel G11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel G12 = formula(=SUM(G10*G11)), hcenter			
+		* as percentage point
+putexcel G13 = formula(=SUM(G12/G4)), hcenter
 ***********************************************************************
 * 	PART 7.3:     power calculations
 ***********************************************************************
@@ -479,13 +540,17 @@ putexcel G10 = "***", hcenter
 	* comparison of means
 sampsi  0.03 0.13, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
 local power = r(power)
-putexcel G12 = `power', hcenter nformat(number_d2)
+putexcel G15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi 0.03 0.13, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
 local power = r(power)
-putexcel G13 = `power', hcenter nformat(number_d2)
+putexcel G16 = `power', hcenter nformat(number_d2)
 
+	* Ancova 1 year before
+sampsi 0.03 0.13, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel G17 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 7.4:     MDE at 80% power
@@ -493,13 +558,17 @@ putexcel G13 = `power', hcenter nformat(number_d2)
 	*  comparison of means
 sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
 local power = r(power)
-putexcel G17 = 0.26, hcenter nformat(number_d2)
+putexcel G20 = 0.26, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
 local power = r(power)
-putexcel G18 = 0.26, hcenter nformat(number_d2)
+putexcel G21 = 0.26, hcenter nformat(number_d2)
 
+	* Ancova 1-year before
+sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel G22 = 0.26, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 8:    estimate power for Marketing practices index
@@ -527,11 +596,15 @@ putexcel H6 = `markvars_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 8.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
+	* extensive margin
 		* as percent
-putexcel H9	= "0.1", hcenter
+putexcel H10= "0.1", hcenter
+		* assumed take-up
+putexcel H11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel H12 = formula(=SUM(H10*H11)), hcenter			
 		* as percentage point
-putexcel H10 = "***", hcenter
+putexcel H13 = formula(=SUM(H12/H4)), hcenter
 
 ***********************************************************************
 * 	PART 8.3:     power calculations
@@ -540,28 +613,34 @@ putexcel H10 = "***", hcenter
 	* comparison of means
 sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
 local power = r(power)
-putexcel H12 = `power', hcenter nformat(number_d2)
+putexcel H15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
 local power = r(power)
-putexcel H13 = `power', hcenter nformat(number_d2)
+putexcel H16 = `power', hcenter nformat(number_d2)
 
-
+	* Ancova 1 year before
+sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel H17 = `power', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 8.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
 sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
 local power = r(power)
-putexcel H17 = 0.27, hcenter nformat(number_d2)
+putexcel H20 = 0.27, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
 local power = r(power)
-putexcel H18 = 0.27, hcenter nformat(number_d2)
+putexcel H21 = 0.27, hcenter nformat(number_d2)
 
-
+	* Ancova 1-year before
+sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel H22 = 0.27, hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 9:    estimate power for Innovation index
 ***********************************************************************
@@ -588,11 +667,16 @@ putexcel I6 = `innovars_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 9.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
+
+	* extensive margin
 		* as percent
-putexcel I9	= "0.13", hcenter
+putexcel I10= "0.13", hcenter
+		* assumed take-up
+putexcel I11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel I12 = formula(=SUM(I10*I11)), hcenter			
 		* as percentage point
-putexcel I10 = "***", hcenter
+putexcel I13 = formula(=SUM(I12/I4)), hcenter
 
 ***********************************************************************
 * 	PART 9.3:     power calculations
@@ -601,13 +685,17 @@ putexcel I10 = "***", hcenter
 	* comparison of means
 sampsi  -0.01 0.12, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
 local power = r(power)
-putexcel I12 = `power', hcenter nformat(number_d2)
+putexcel I15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi -0.01 0.12, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
 local power = r(power)
-putexcel I13 = `power', hcenter nformat(number_d2)
+putexcel I16 = `power', hcenter nformat(number_d2)
 
+	* Ancova 1 year before
+sampsi -0.01 0.12, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel I17 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 9.4:     MDE at 80% power
@@ -615,13 +703,17 @@ putexcel I13 = `power', hcenter nformat(number_d2)
 	*  comparison of means
 sampsi -0.01 0.19, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
 local power = r(power)
-putexcel I17 = 0.20, hcenter nformat(number_d2)
+putexcel I20 = 0.20, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi -0.01 0.18, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
 local power = r(power)
-putexcel I18 = 0.19, hcenter nformat(number_d2)
+putexcel I21 = 0.19, hcenter nformat(number_d2)
 
+	* Ancova 1-year before
+sampsi -0.01 0.18, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel I22 = 0.27, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 10:    estimate power for Gender index
@@ -649,11 +741,16 @@ putexcel J6 = `gendervars_ressd', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 10.2.:     define assumed treatment effects
 ***********************************************************************
-	* exported countries extensive margin
+
+	* extensive margin
 		* as percent
-putexcel J9	= "0.1", hcenter
+putexcel J10= "0.1", hcenter
+		* assumed take-up
+putexcel J11 = "0.67", hcenter	
+		* take-up adjusted treatment effect
+putexcel J12 = formula(=SUM(J10*J11)), hcenter			
 		* as percentage point
-putexcel J10 = "***", hcenter
+putexcel J13 = formula(=SUM(J12/J4)), hcenter
 
 ***********************************************************************
 * 	PART 10.3:     power calculations
@@ -662,13 +759,17 @@ putexcel J10 = "***", hcenter
 	* comparison of means
 sampsi  -0.01 0.09, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
 local power = r(power)
-putexcel J12 = `power', hcenter nformat(number_d2)
+putexcel J15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
 sampsi -0.01 0.09, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
 local power = r(power)
-putexcel J13 = `power', hcenter nformat(number_d2)
+putexcel J16 = `power', hcenter nformat(number_d2)
 
+	* Ancova 1 year before
+sampsi -0.01 0.09, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel J17 = `power', hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 10.4:     MDE at 80% power
@@ -676,20 +777,14 @@ putexcel J13 = `power', hcenter nformat(number_d2)
 	*  comparison of means
 sampsi -0.01 0.36, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
 local power = r(power)
-putexcel J17 = 0.37, hcenter nformat(number_d2)
+putexcel J20 = 0.37, hcenter nformat(number_d2)
 
 	* after controlling for strata 
 sampsi -0.01 0.33, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
 local power = r(power)
-putexcel J18 = 0.34, hcenter nformat(number_d2)
+putexcel J21 = 0.34, hcenter nformat(number_d2)
 
-***********************************************************************
-* 	PART end:     Table notes
-***********************************************************************
-putexcel A21 = "Notes:"
-putexcel A22 = "n.a. denotes not available."
-putexcel A23 = "MDE denotes minimum detectable effect size."
-putexcel A24 = "Residual SD is standard deviation after controlling for strata fixed effects."
-putexcel A25 = "One-and two-year autocorrelation come frome self-reported registration data."
-	
-	
+	* Ancova 1-year before
+sampsi -0.01 0.33, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel J22 = 0.34, hcenter nformat(number_d2)
