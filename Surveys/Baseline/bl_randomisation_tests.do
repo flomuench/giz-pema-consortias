@@ -1,5 +1,5 @@
 ***********************************************************************
-* 			E-commerce experiment randomisation								  		  
+* 			Consortium experiment randomisation								  		  
 ***********************************************************************
 *																	   
 *	PURPOSE: 						  								  
@@ -98,20 +98,22 @@ graph hbar (count), over(treatment`var', lab(labs(tiny))) over(pole, lab(labs(vs
 }
 */
 
+
 ***********************************************************************
-* 	PART 3b: comparing different options
+* 	PART 3c: comparing different options
 ***********************************************************************	
 *Baltab for different options
 local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9 treatmentstrata10
+
 foreach var of local tvars{
 display"`var'"
-iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, grpvar(`var') ftest save(baltab_`var') replace ///
+iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam, grpvar(`var') ftest save(baltab_`var') replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 
 	* Manully check the f-test for joint orthogonality using hc3:
 	
-local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars
+local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam 
 
 reg `var' `balancevarlist', vce(hc3)
 testparm `balancevarlist'		
@@ -123,7 +125,7 @@ log using pstesttables.txt, text replace
 local tvars treatmentstrata2 treatmentstrata3 treatmentstrata4 treatmentstrata5 treatmentstrata6 treatmentstrata7 treatmentstrata8 treatmentstrata9 treatmentstrata10
 foreach var of local tvars{
 display"`var'"
-pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars, t(`var') raw rubin label dist
+pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam, t(`var') raw rubin label dist
 }
 log close
 

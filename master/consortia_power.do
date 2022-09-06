@@ -7,7 +7,7 @@
 *	OUTLINE: 	PART 1: set the stage  
 *				Part 2: estimate power for export at all
 *					PART 2.1: get all relevant baseline parameters
-*					PART 2.2:	define assumed treatment effects
+*					PART 2.2: define assumed treatment effects
 *					PART 2.3: estimate power given relevant parameters
 *					PART 2.4: estimate MDE at 80% power
 *				Part 3: estimate power for ihs export sales
@@ -32,9 +32,8 @@ cd "$master_power"
 forvalues year = 2018(1) 2020 {
 	ihstrans ca_exp`year'
 }
-		* average export sales 2018, 2019
+	* average export sales 2018, 2019
 gen mean_caexp_1819 = (ihs_ca_exp2018 + ihs_ca_exp2019)/2
-
 	
 	* create excel document
 putexcel set power_consortia, replace
@@ -101,7 +100,7 @@ putexcel A9 = "Assumed treatment effect", italic left
 putexcel B9	= "0.175", hcenter
 		* as percentage point
 putexcel A10 = "as a percentage change", hcenter
-putexcel B10 = "34.3", hcenter
+putexcel B10 = "0.343", hcenter
 
 ***********************************************************************
 * 	PART 2.3:     power calculations
@@ -254,6 +253,89 @@ putexcel C19 = 1.1, hcenter nformat(number_d2)
 sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
 putexcel C20 = 1, hcenter nformat(number_d2) border(bottom)
+
+
+***********************************************************************
+* 	PART 4:    estimate power for countries exported
+***********************************************************************
+
+***********************************************************************
+* 	PART 4.1:     get all the relevant baseline parameters
+***********************************************************************		
+	* add mean
+sum exp_pays
+local exp_pays_mean = r(mean)
+putexcel D4 = `exp_pays_mean', hcenter nformat(number_d2)
+
+	* add SD
+local exp_pays_sd = r(sd)
+putexcel D5 = `ihs_ca_exp2020_sd', hcenter nformat(number_d2)
+scalar exp_pays_sd = r(sd)
+
+	* add residual SD
+regress exp_pays i.strata_final, vce(hc3)
+scalar exp_pays_ressd = sqrt(1 - e(r2))
+local exp_pays_ressd = exp_pays_sd * exp_pays_ressd
+putexcel D6 = `exp_pays_ressd', hcenter nformat(number_d2)
+		
+
+***********************************************************************
+* 	PART 4.2.:     define assumed treatment effects
+***********************************************************************
+	* exported countries extensive margin
+		* as percent
+putexcel D9	= "0.43", hcenter
+		* as percentage point
+putexcel D10 = "0.1", hcenter
+
+***********************************************************************
+* 	PART 4.3:     power calculations
+***********************************************************************
+* we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
+	* comparison of means
+* sum exp_pays if treatment==1
+*
+sampsi  1.421687 4.77, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+local power = r(power)
+putexcel D12 = `power', hcenter nformat(number_d2)
+
+	* after controlling for strata_final --> add
+sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+local power = r(power)
+putexcel D13 = `power', hcenter nformat(number_d2)
+
+	* Ancova 1 year before
+sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(`correlation1')
+local power = r(power)
+putexcel D14 = `power', hcenter nformat(number_d2)
+
+	* Ancova 2 years before 
+sampsi 4.34 4.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(2) post(2) r1(`correlation2')
+local power = r(power)
+putexcel D15 = `power', hcenter nformat(number_d2)
+
+***********************************************************************
+* 	PART 4.4:     MDE at 80% power
+***********************************************************************
+	*  comparison of means
+sampsi 4.34 6.84, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+local power = r(power)
+putexcel D17 = 2.5, hcenter nformat(number_d2)
+
+	* after controlling for strata 
+sampsi 4.34 6.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+local power = r(power)
+putexcel D18 = 2.1, hcenter nformat(number_d2)
+
+	* Ancova 1-year before
+sampsi 4.34 5.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(0.8)
+local power = r(power)
+putexcel D19 = 1.1, hcenter nformat(number_d2)
+
+	* Ancova 2 years before 
+sampsi 4.34 5.44, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(2) post(2) r1(0.7)
+local power = r(power)
+putexcel D20 = 1, hcenter nformat(number_d2) border(bottom)
 
 
 ***********************************************************************

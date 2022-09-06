@@ -72,23 +72,23 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(strata_final, lab(labs
 		
 		* balance for continuous and few units categorical variables
 set matsize 25
-iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final) replace ///
+iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, grpvar(treatment) ftest save(baltab_final) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 			 
 *Balance table without Outlier (ID=1092)
 preserve
 drop if id_plateforme==1092
-iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final_nooutlier) replace ///
+iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, grpvar(treatment) ftest save(baltab_final_nooutlier) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 log using pstesttables_final_nooutlier.txt, text replace
-pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, t(treatment) raw rubin label dist
 log close
 restore
 	* Manully check the f-test for joint orthogonality using hc3:
 	
-local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam exportmngt exportprep mngtvars
+local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam
 
 reg treatment `balancevarlist', vce(hc3)
 testparm `balancevarlist'		
@@ -104,18 +104,20 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(pole, lab(labs(vsmall)
 		
 	*exporting pstest with rubin's d
 log using pstesttables_final.txt, text replace
-pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+pstest ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, t(treatment) raw rubin label dist
 log close
 
 
 
 *balance check winsorized at 99th percentile
-iebaltab w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final_winsorized) replace ///
+iebaltab w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite, grpvar(treatment) ftest save(baltab_final_winsorized) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 log using pstesttables_final_winsorized.txt, text replace
-pstest w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, t(treatment) raw rubin label dist
+pstest w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite, t(treatment) raw rubin label dist
 log close
+
+/*
 
 ***********************************************************************
 * 	PART 4: Export excel spreadsheet
@@ -148,11 +150,11 @@ drop _merge2
 
 cd "$bl_output/randomisation/final"
 sort pole id_plateforme
-local consortialist treatment id_plateforme firmname pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 entr_idee operation_export age employes ca_2018 ca_2019 ca_2020 ca_2021 ca_exp2018 ca_exp2019 ca_exp2020 ca_exp_2021 att_adh_autres mngtvars_points markvars_points exportmngt_points 
+local consortialist treatment id_plateforme firmname pole codepostal rg_adresse email_pdg email_rep tel_pdg tel_rep produit1 produit2 produit3 entr_idee operation_export age employes ca_2018 ca_2019 ca_2020 ca_2021 ca_exp2018 ca_exp2019 ca_exp2020 ca_exp_2021 att_adh_autres  
 
 export excel `consortialist' using "consortia_listfinale" if treatment==1, sheet("Groupe participants") sheetreplace firstrow(var) 
 export excel `consortialist' using "consortia_listfinale" if treatment==0, sheet("Groupe control") sheetreplace firstrow(var) 
-*/
+
 	* save word document with visualisations
 putdocx save results_randomisation.docx, replace
 
@@ -175,7 +177,7 @@ drop _merge
 save "consortia_bl_pii", replace
 
 restore
-
+*/
 ***********************************************************************
 * 	PART 6: Add variable treatment to consortium_bl_final
 ***********************************************************************		
