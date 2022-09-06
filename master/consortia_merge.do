@@ -107,67 +107,11 @@ append using el_final
 
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
 
-* 1st merge with Groupe Agri-Agro:
 clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Agri-Agro") firstrow clear
-keep id_plateforme Gouvernorat GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405
+import excel "${master_gdrive}/suivi_consortium.xlsx", firstrow clear
+drop if id_plateforme==.
 merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
 drop _merge
-order GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405, last
-    * save as consortium_database
-
-save "consiortium_raw", replace
-
-
-* 2nd merge with Groupe Artisanat:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Artisanat") firstrow clear
-rename I GroupeArtisanatRencontre2
-keep id_plateforme Gouvernorat GroupeArtisanatRencontre1 GroupeArtisanatRencontre2
-merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
-drop _merge
-order GroupeArtisanatRencontre1 GroupeArtisanatRencontre2, last
-    
-    * save as consortium_database
-
-save "consortium_raw", replace
-
-
-* 3d merge with Groupe Services:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Services") firstrow clear
-rename I GroupeServicesRencontre2
-rename GroupeServicesRencontre11 GroupeServicesRencontre1
-keep id_plateforme Gouvernorat GroupeServicesRencontre1 GroupeServicesRencontre2
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order GroupeServicesRencontre1 GroupeServicesRencontre2, last
-    
-    * save as consortium_database
-
-save "consortium_raw", replace
-
-* 4th merge with Groupe TIC:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe TIC") firstrow clear
-keep id_plateforme Gouvernorat GroupeTICRencontre11205 GroupeTICRencontre11305
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order GroupeTICRencontre11205 GroupeTICRencontre11305, last
-    
-    * save as consortium_database
-
-save "consortium_raw", replace
-
-
-* 5th merge with Webinaire:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Webinaire") firstrow clear
-keep id_plateforme Gouvernorat PrésenceWebinairedelancement Commentaires
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order PrésenceWebinairedelancement Commentaires, last
-order treatment    
-    * save as consortium_database
+   * save as consortium_database
 
 save "consortium_raw", replace

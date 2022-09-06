@@ -21,7 +21,7 @@
 ***********************************************************************
 
 	* import data
-use "${bl_final}/bl_final", clear
+use "${bl_intermediate}/bl_inter", clear
 
 	* change directory to visualisations
 cd "$bl_output/stratification"
