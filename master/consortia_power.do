@@ -133,22 +133,22 @@ putexcel B13 = formula(=SUM(B12/B4)), hcenter
 ***********************************************************************
 
 	* comparison of means
-sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
+sampsi 0.49 0.607, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
 local power = r(power)
 putexcel B15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
+sampsi 0.49 0.607, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
 local power = r(power)
 putexcel B16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
+sampsi 0.49 0.607, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
 putexcel B17 = `power', hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
-sampsi 0.45 0.625, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
+sampsi 0.49 0.607, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
 putexcel B18 = `power', hcenter nformat(number_d2)
 
@@ -157,22 +157,22 @@ putexcel B18 = `power', hcenter nformat(number_d2)
 ***********************************************************************
 
 	*  comparison of means
-sampsi .51 0.74, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
+sampsi 0.49 0.71, n1(80) n2(80) sd1(`operation_export_sd') sd2(`operation_export_sd')
 local power = r(power)
-putexcel B20 = 0.23, hcenter nformat(number_d2)
+putexcel B20 = 0.22, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi .51 0.695, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
+sampsi 0.49 0.68, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd')
 local power = r(power)
-putexcel B21 = 0.185, hcenter nformat(number_d2)
+putexcel B21 = 0.18, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 0.45 0.545, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
+sampsi 0.49 0.585, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
 putexcel B22 = 0.095, hcenter nformat(number_d2)
 
 	* Ancova 5 years before 
-sampsi 0.45 0.545, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
+sampsi 0.49 0.585, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_export_ressd') pre(2) post(2) r1(0.7)
 local power = r(power)
 putexcel B23 = 0.095, hcenter nformat(number_d2) border(bottom)
 
@@ -217,7 +217,7 @@ putexcel C8 = `correlation2', hcenter nformat(number_d2)
 
 	* export extensive margin
 		* as percent
-putexcel C10= "0.43", hcenter
+putexcel C10= "1.5", hcenter
 		* assumed take-up
 putexcel C11 = "0.67", hcenter	
 		* take-up adjusted treatment effect
@@ -231,22 +231,22 @@ putexcel C13 = formula(=SUM(C12/C4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_sd') sd2(`ihs_ca_exp2020_sd')
+sampsi 4.34 5.345, n1(80) n2(80) sd1(`ihs_ca_exp2020_sd') sd2(`ihs_ca_exp2020_sd')
 local power = r(power)
 putexcel C15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd')
+sampsi 4.34 5.345, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd')
 local power = r(power)
 putexcel C16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(`correlation1')
+sampsi 4.34 5.345, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel C17 = `power', hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
-sampsi 4.34 4.77, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(`correlation2')
+sampsi 4.34 5.345, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(`correlation2')
 local power = r(power)
 putexcel C18 = `power', hcenter nformat(number_d2)
 
@@ -264,9 +264,9 @@ local power = r(power)
 putexcel C21 = 2.1, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(0.8)
+sampsi 4.34 5.45, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel C22 = 1.1, hcenter nformat(number_d2)
+putexcel C22 = 1.11, hcenter nformat(number_d2)
 
 	* Ancova 2 years before 
 sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_ressd') pre(2) post(2) r1(0.7)
@@ -296,7 +296,9 @@ regress exp_pays i.strata_final, vce(hc3)
 scalar exp_pays_ressd = sqrt(1 - e(r2))
 local exp_pays_ressd = exp_pays_sd * exp_pays_ressd
 putexcel D6 = `exp_pays_ressd', hcenter nformat(number_d2)
-		
+
+	* add 1-year autocorrelation
+putexcel D7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 4.2.:     define assumed treatment effects
@@ -304,7 +306,7 @@ putexcel D6 = `exp_pays_ressd', hcenter nformat(number_d2)
 
 	* extensive margin
 		* as percent
-putexcel D10= "0.5", hcenter
+putexcel D10= "0.7", hcenter
 		* assumed take-up
 putexcel D11 = "0.67", hcenter	
 		* take-up adjusted treatment effect
@@ -317,17 +319,17 @@ putexcel D13 = formula(=SUM(D12/D4)), hcenter
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
 
-sampsi  1.27 1.77, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+sampsi  1.13 1.60, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
 putexcel D15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 1.27 1.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.13 1.60, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
 putexcel D16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 1.27 1.77, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(`correlation1')
+sampsi 1.13 1.60, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel D17 = `power', hcenter nformat(number_d2)
 
@@ -335,19 +337,19 @@ putexcel D17 = `power', hcenter nformat(number_d2)
 * 	PART 4.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 1.27 2.37, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
+sampsi 1.13 2.23, n1(80) n2(80) sd1(`exp_pays_sd') sd2(`exp_pays_sd')
 local power = r(power)
 putexcel D20 = 1.1, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 1.27 2.27, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
+sampsi 1.13 2.13, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd')
 local power = r(power)
 putexcel D21 = 1.0, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 1.27 2.27, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(0.8)
+sampsi 1.13 1.63, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel D22 = 1.0, hcenter nformat(number_d2)
+putexcel D22 = 0.50, hcenter nformat(number_d2)
 
 
 ***********************************************************************
@@ -374,6 +376,8 @@ scalar log_employees_ressd = sqrt(1 - e(r2))
 local log_employees_ressd = log_employees_sd * log_employees_ressd
 putexcel E6 = `log_employees_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel E7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 5.2.:     define assumed treatment effects
@@ -381,7 +385,7 @@ putexcel E6 = `log_employees_ressd', hcenter nformat(number_d2)
 
 	* extensive margin
 		* as percent
-putexcel E10= "0.2", hcenter
+putexcel E10= "0.3", hcenter
 		* assumed take-up
 putexcel E11 = "0.67", hcenter	
 		* take-up adjusted treatment effect
@@ -393,17 +397,17 @@ putexcel E13 = formula(=SUM(E12/E4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  1.68 1.88, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
+sampsi 1.58 1.781, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
 local power = r(power)
 putexcel E15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 1.68 1.88, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
+sampsi 1.58 1.781, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
 local power = r(power)
 putexcel E16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 1.27 1.77, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(`correlation1')
+sampsi 1.58 1.781, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel E17 = `power', hcenter nformat(number_d2)
 
@@ -411,19 +415,21 @@ putexcel E17 = `power', hcenter nformat(number_d2)
 * 	PART 5.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 1.68 2.78, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
+sampsi 1.58 2.02, n1(80) n2(80) sd1(`log_employees_sd') sd2(`log_employees_sd')
 local power = r(power)
-putexcel E20 = 1.1, hcenter nformat(number_d2)
+putexcel E20 = 0.44, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 1.68 2.68, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
+sampsi 1.58 1.92, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd')
 local power = r(power)
-putexcel E21 = 1.0, hcenter nformat(number_d2)
+putexcel E21 = 0.34, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 1.68 2.68, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(0.8)
+sampsi 1.58 1.75, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel E22 = 1.0, hcenter nformat(number_d2)
+putexcel E22 = 0.17, hcenter nformat(number_d2)
+
+
 ***********************************************************************
 * 	PART 6:    estimate power for Export preparation
 ***********************************************************************
@@ -446,6 +452,8 @@ scalar exportprep_ressd = sqrt(1 - e(r2))
 local exportprep_ressd = exportprep_sd * exportprep_ressd
 putexcel F6 = `exportprep_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel F7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 6.2.:     define assumed treatment effects
@@ -466,36 +474,37 @@ putexcel F13 = formula(=SUM(F12/F4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  0.03 0.13, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
+sampsi -0.0000000308 0.099, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
 local power = r(power)
 putexcel F15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 0.03 0.13, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
+sampsi -0.0000000308 0.099, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
 local power = r(power)
 putexcel F16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 0.03 0.13, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(`correlation1')
+sampsi -0.0000000308 0.099, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel F17 = `power', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 6.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 0.03 0.28, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
+sampsi -0.0000000308 0.264, n1(80) n2(80) sd1(`exportprep_sd') sd2(`exportprep_sd')
 local power = r(power)
-putexcel F20 = 0.25, hcenter nformat(number_d2)
+putexcel F20 = 0.265, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 0.03 0.29, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
+sampsi -0.0000000308 0.229, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd')
 local power = r(power)
-putexcel F21 = 0.26, hcenter nformat(number_d2)
+putexcel F21 = 0.23, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 0.03 0.29, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(0.8)
+sampsi -0.0000000308 0.114, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportprep_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel F22 = 0.26, hcenter nformat(number_d2)
+putexcel F22 = 0.115, hcenter nformat(number_d2)
+
 
 ***********************************************************************
 * 	PART 7:    estimate power for Management practices index
@@ -519,6 +528,8 @@ scalar mngtvars_ressd = sqrt(1 - e(r2))
 local mngtvars_ressd = mngtvars_sd * mngtvars_ressd
 putexcel G6 = `mngtvars_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel G7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 7.2.:     define assumed treatment effects
@@ -538,17 +549,17 @@ putexcel G13 = formula(=SUM(G12/G4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  0.03 0.13, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
+sampsi -0.0000000593 0.099, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
 local power = r(power)
 putexcel G15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 0.03 0.13, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
+sampsi -0.0000000593 0.099, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
 local power = r(power)
 putexcel G16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 0.03 0.13, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(`correlation1')
+sampsi -0.0000000593 0.099, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel G17 = `power', hcenter nformat(number_d2)
 
@@ -556,19 +567,20 @@ putexcel G17 = `power', hcenter nformat(number_d2)
 * 	PART 7.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
+sampsi -0.0000000593 0.279, n1(80) n2(80) sd1(`mngtvars_sd') sd2(`mngtvars_sd')
 local power = r(power)
-putexcel G20 = 0.26, hcenter nformat(number_d2)
+putexcel G20 = 0.28, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
+sampsi -0.0000000593 0.259, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd')
 local power = r(power)
 putexcel G21 = 0.26, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 0.03 0.29, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(0.8)
+sampsi -0.0000000593 0.129, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel G22 = 0.26, hcenter nformat(number_d2)
+putexcel G22 = 0.13, hcenter nformat(number_d2)
+
 
 ***********************************************************************
 * 	PART 8:    estimate power for Marketing practices index
@@ -592,6 +604,8 @@ scalar markvars_ressd = sqrt(1 - e(r2))
 local markvars_ressd = markvars_sd * markvars_ressd
 putexcel H6 = `markvars_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel H7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 8.2.:     define assumed treatment effects
@@ -611,36 +625,38 @@ putexcel H13 = formula(=SUM(H12/H4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
+sampsi -0.0000000419 0.099, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
 local power = r(power)
 putexcel H15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
+sampsi -0.0000000419 0.099, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
 local power = r(power)
 putexcel H16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi 0.04 0.14, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(`correlation1')
+sampsi -0.0000000419 0.099, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel H17 = `power', hcenter nformat(number_d2)
 ***********************************************************************
 * 	PART 8.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
+sampsi -0.0000000419 0.279, n1(80) n2(80) sd1(`markvars_sd') sd2(`markvars_sd')
 local power = r(power)
-putexcel H20 = 0.27, hcenter nformat(number_d2)
+putexcel H20 = 0.28, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
+sampsi -0.0000000419 0.259, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd')
 local power = r(power)
-putexcel H21 = 0.27, hcenter nformat(number_d2)
+putexcel H21 = 0.26, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi 0.04 0.31, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(0.8)
+sampsi -0.0000000419 0.134, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel H22 = 0.27, hcenter nformat(number_d2)
+putexcel H22 = 0.135, hcenter nformat(number_d2)
+
+
 ***********************************************************************
 * 	PART 9:    estimate power for Innovation index
 ***********************************************************************
@@ -663,6 +679,8 @@ scalar innovars_ressd = sqrt(1 - e(r2))
 local innovars_ressd = innovars_sd * innovars_ressd
 putexcel I6 = `innovars_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel I7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 9.2.:     define assumed treatment effects
@@ -683,17 +701,17 @@ putexcel I13 = formula(=SUM(I12/I4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  -0.01 0.12, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
+sampsi  0.0000000132 0.1200000132, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
 local power = r(power)
 putexcel I15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi -0.01 0.12, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
+sampsi 0.0000000132 0.1200000132, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
 local power = r(power)
 putexcel I16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi -0.01 0.12, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(`correlation1')
+sampsi 0.0000000132 0.1200000132, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel I17 = `power', hcenter nformat(number_d2)
 
@@ -701,19 +719,20 @@ putexcel I17 = `power', hcenter nformat(number_d2)
 * 	PART 9.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi -0.01 0.19, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
+sampsi 0.0000000132 0.2000000132, n1(80) n2(80) sd1(`innovars_sd') sd2(`innovars_sd')
 local power = r(power)
 putexcel I20 = 0.20, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi -0.01 0.18, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
+sampsi 0.0000000132 0.1850000132, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd')
 local power = r(power)
-putexcel I21 = 0.19, hcenter nformat(number_d2)
+putexcel I21 = 0.185, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi -0.01 0.18, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(0.8)
+sampsi 0.0000000132 0.0950000132, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innovars_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel I22 = 0.27, hcenter nformat(number_d2)
+putexcel I22 = 0.095, hcenter nformat(number_d2)
+
 
 ***********************************************************************
 * 	PART 10:    estimate power for Gender index
@@ -737,6 +756,8 @@ scalar gendervars_ressd = sqrt(1 - e(r2))
 local gendervars_ressd = gendervars_sd * gendervars_ressd
 putexcel J6 = `gendervars_ressd', hcenter nformat(number_d2)
 		
+	* add 1-year autocorrelation
+putexcel J7 = 0.8, hcenter nformat(number_d2)
 
 ***********************************************************************
 * 	PART 10.2.:     define assumed treatment effects
@@ -757,17 +778,17 @@ putexcel J13 = formula(=SUM(J12/J4)), hcenter
 ***********************************************************************
 * we assume attrition = 0.1 (hence control group goes from 89 to 80, treatment group 87 to 80)
 	* comparison of means
-sampsi  -0.01 0.09, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
+sampsi 0.0000000379 0.1000000379, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
 local power = r(power)
 putexcel J15 = `power', hcenter nformat(number_d2)
 
 	* after controlling for strata_final --> add
-sampsi -0.01 0.09, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
+sampsi 0.0000000379 0.1000000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
 local power = r(power)
 putexcel J16 = `power', hcenter nformat(number_d2)
 
 	* Ancova 1 year before
-sampsi -0.01 0.09, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(`correlation1')
+sampsi 0.0000000379 0.1000000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(`correlation1')
 local power = r(power)
 putexcel J17 = `power', hcenter nformat(number_d2)
 
@@ -775,16 +796,16 @@ putexcel J17 = `power', hcenter nformat(number_d2)
 * 	PART 10.4:     MDE at 80% power
 ***********************************************************************
 	*  comparison of means
-sampsi -0.01 0.36, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
+sampsi 0.0000000379 0.3700000379, n1(80) n2(80) sd1(`gendervars_sd') sd2(`gendervars_sd')
 local power = r(power)
 putexcel J20 = 0.37, hcenter nformat(number_d2)
 
 	* after controlling for strata 
-sampsi -0.01 0.33, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
+sampsi 0.0000000379 0.3400000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd')
 local power = r(power)
 putexcel J21 = 0.34, hcenter nformat(number_d2)
 
 	* Ancova 1-year before
-sampsi -0.01 0.33, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(0.8)
+sampsi 0.0000000379 0.1750000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
-putexcel J22 = 0.34, hcenter nformat(number_d2)
+putexcel J22 = 0.175, hcenter nformat(number_d2)
