@@ -107,28 +107,12 @@ append using el_final
 /*NEEDS TO BE ADAPTED BECAUSE STRUCTURE OF SHEET CHANGED!!
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
 
-* 1st merge with Groupe Agri-Agro:
 clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Agri-Agro") firstrow clear
-keep id_plateforme Gouvernorat GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405
+import excel "${master_gdrive}/suivi_consortium.xlsx", firstrow clear
+drop if id_plateforme==.
 merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
 drop _merge
-order GroupeAgroRencontre10905 GroupeAgroRencontre11005 Réponsequestionnaire GroupeAgroRencontre22405, last
-    * save as consortium_database
-
-save "consiortium_raw", replace
-
-
-* 2nd merge with Groupe Artisanat:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Artisanat") firstrow clear
-rename I GroupeArtisanatRencontre2
-keep id_plateforme Gouvernorat GroupeArtisanatRencontre1 GroupeArtisanatRencontre2
-merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
-drop _merge
-order GroupeArtisanatRencontre1 GroupeArtisanatRencontre2, last
-    
-    * save as consortium_database
+   * save as consortium_database
 
 save "consortium_raw", replace
 

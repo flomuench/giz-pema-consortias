@@ -46,17 +46,21 @@ ssc install coefplot, replace
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
 	* set first level globals for code and data
+
 	
 		* define user
 	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" {
+
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
 	else {
 	global person = "C:/Users/`c(username)'/Google Drive" 
 }
-		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
-	
+
+
+	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
+
 	if c(os) == "Windows" {
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
