@@ -809,3 +809,4 @@ putexcel J21 = 0.34, hcenter nformat(number_d2)
 sampsi 0.0000000379 0.1750000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gendervars_ressd') pre(1) post(2) r1(0.8)
 local power = r(power)
 putexcel J22 = 0.175, hcenter nformat(number_d2)
+

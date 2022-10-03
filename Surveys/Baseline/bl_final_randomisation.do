@@ -72,7 +72,9 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(strata_final, lab(labs
 		
 		* balance for continuous and few units categorical variables
 set matsize 25
-iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, grpvar(treatment) ftest save(baltab_final) replace ///
+
+iebaltab ca_2021 ca_exp_2021 profit_2021 capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final) replace ///
+
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 			 
