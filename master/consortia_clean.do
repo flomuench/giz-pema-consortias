@@ -35,7 +35,7 @@ drop eligible programme needs_check questions_needing_check eligibilité dup_ema
 
     * save as consortium_database
 
-save "consortium_raw", replace
+save "${master_intermediate}/consortium_int", replace
 
 
 /*

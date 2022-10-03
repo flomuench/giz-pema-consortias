@@ -104,7 +104,7 @@ append using el_final
 ***********************************************************************
 * 	PART 6: merge with participation data
 ***********************************************************************
-
+/*NEEDS TO BE ADAPTED BECAUSE STRUCTURE OF SHEET CHANGED!!
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
 
 * 1st merge with Groupe Agri-Agro:
@@ -169,5 +169,6 @@ drop _merge
 order PrésenceWebinairedelancement Commentaires, last
 order treatment    
     * save as consortium_database
+	*/
 
 save "consortium_raw", replace

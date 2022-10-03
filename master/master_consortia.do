@@ -46,12 +46,19 @@ ssc install coefplot, replace
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
 	* set first level globals for code and data
-		* dynamic folder path to data
-
-
-	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
+	
+		* define user
+	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" {
+	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
+	} 
+	
+	else {
+	global person = "C:/Users/`c(username)'/Google Drive" 
+}
+		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
+	
 	if c(os) == "Windows" {
-	global master_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
+	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
 	global master_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global master_consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
@@ -64,7 +71,7 @@ else if c(os) == "MacOSX" {
 }
 
 if c(os) == "Windows" {
-	global bl_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
+	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
 	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
@@ -77,7 +84,7 @@ else if c(os) == "MacOSX" {
 }
 
 if c(os) == "Windows" {
-	global regis_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
+	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
 	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 }
@@ -138,18 +145,19 @@ if (1) do "${master_github}/consortia_power.do"
 	PART 3.3: clean final raw registration + baseline 
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/consortia_clean.do"
-
-/*
 /* --------------------------------------------------------------------
-	PART 3.3: Clean AQE intermediate data
+
+
+/* --------------------------------------------------------------------
+	PART 3.4: Clean intermediate data
 ----------------------------------------------------------------------*/
 if (0) do "${aqe_github}/aqe_clean.do"
 /* --------------------------------------------------------------------
-	PART 3.4: Correct observations in AQE intermediate data
+	PART 3.5: Correct intermediate data
 ----------------------------------------------------------------------*/
 if (0) do "${aqe_github}/aqe_correct.do"
 /*--------------------------------------------------------------------
-	PART 3.5: Generate variables in AQE intermediate data
+	PART 3.6: Generate variables intermediate data
 ----------------------------------------------------------------------*/
 if (0) do "${aqe_github}/aqe_generate.do"
 
