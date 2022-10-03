@@ -26,10 +26,26 @@ replace firmname="flav'or" if id_plateforme==1150
 
 drop NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position
 
+*update matricule fiscale data: 
+replace matricule_fiscale = upper(matricule_fiscale)
+export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
+using "${master_gdrive}/matricule_consortium", firstrow(var) sheetreplace
+
+*dummies whether matricule is correct or where it is a matricule of a physical person rather than company
+gen matricule_fisc_incorrect=0
+gen matricule_physique=0
+
+*now replace these two variables for the firms where the ID is not findable on registre-entreprise.tn 
+*or physical
+
+
+
+save "${master_gdrive}/contact_info_master", replace
 
 ***********************************************************************
 * 	PART 2:     clean & correct analysis data set
 ***********************************************************************
+clear
 use "${master_raw}/consortium_raw", clear
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 

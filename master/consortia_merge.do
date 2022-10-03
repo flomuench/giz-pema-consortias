@@ -26,7 +26,8 @@ cd "$bl_raw"
 		* merge 1:1 based on project id_plateforme
 merge 1:1 id_plateforme using consortia_bl_pii
 
-drop _merge
+*drop unselected firms from registration
+drop if _merge<3
 
 /*
 	* append registration +  baseline data with midline

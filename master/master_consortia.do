@@ -144,7 +144,7 @@ if (1) do "${master_github}/consortia_merge.do"
 /*--------------------------------------------------------------------
 	PART 3.2: Baseline power
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/consortia_power.do"
+if (0) do "${master_github}/consortia_power.do"
 /* --------------------------------------------------------------------
 	PART 3.3: clean final raw registration + baseline 
 ----------------------------------------------------------------------*/		
