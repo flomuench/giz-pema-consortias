@@ -28,17 +28,25 @@ drop NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident
 
 *update matricule fiscale data: 
 replace matricule_fiscale = upper(matricule_fiscale)
-export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
+/*export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
 using "${master_gdrive}/matricule_consortium", firstrow(var) sheetreplace
+*/ 
 
 *dummies whether matricule is correct or where it is a matricule of a physical person rather than company
 gen matricule_fisc_incorrect=0
 gen matricule_physique=0
 
+
+
 *now replace these two variables for the firms where the ID is not findable on registre-entreprise.tn 
 *or physical
+replace matricule_physique=1 if id_plateforme==983
+
+*to correct existing entries replace matricule_fiscale if id_plateforme==XXX
 
 
+export excel id_plateforme matricule_fiscale matricule_fisc_incorrect matricule_physique ///
+using "${master_gdrive}/cepex_matricule_consortium", firstrow(var) sheetreplace
 
 save "${master_gdrive}/contact_info_master", replace
 
