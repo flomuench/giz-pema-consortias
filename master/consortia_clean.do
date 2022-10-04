@@ -70,32 +70,21 @@ replace matricule_physique = 1 if id_plateforme == 1210
 replace matricule_physique = 1 if id_plateforme == 1222
 replace matricule_physique = 1 if id_plateforme == 1230
 replace matricule_physique = 1 if id_plateforme == 1231
+replace matricule_physique = 1 if id_plateforme == 1159
+replace matricule_physique = 1 if id_plateforme == 997
+replace matricule_physique = 1 if id_plateforme == 1134
+replace matricule_physique = 1 if id_plateforme == 1169
+replace matricule_physique = 1 if id_plateforme == 1248
 
-
-replace matricule_fisc_incorrect=1 if id_plateforme == 994
-replace matricule_fisc_incorrect=1 if id_plateforme == 997
 replace matricule_fisc_incorrect=1 if id_plateforme == 1013
-replace matricule_fisc_incorrect=1 if id_plateforme == 1033
-replace matricule_fisc_incorrect=1 if id_plateforme == 1036
 replace matricule_fisc_incorrect=1 if id_plateforme == 1081
 replace matricule_fisc_incorrect=1 if id_plateforme == 1083
 replace matricule_fisc_incorrect=1 if id_plateforme == 1094
 replace matricule_fisc_incorrect=1 if id_plateforme == 1095
 replace matricule_fisc_incorrect=1 if id_plateforme == 1128
-replace matricule_fisc_incorrect=1 if id_plateforme == 1134
 replace matricule_fisc_incorrect=1 if id_plateforme == 1146
 replace matricule_fisc_incorrect=1 if id_plateforme == 1150
-replace matricule_fisc_incorrect=1 if id_plateforme == 1159
-replace matricule_fisc_incorrect=1 if id_plateforme == 1169
-replace matricule_fisc_incorrect=1 if id_plateforme == 1170
-replace matricule_fisc_incorrect=1 if id_plateforme == 1171
-replace matricule_fisc_incorrect=1 if id_plateforme == 1172
-replace matricule_fisc_incorrect=1 if id_plateforme == 1175
-replace matricule_fisc_incorrect=1 if id_plateforme == 1176
-replace matricule_fisc_incorrect=1 if id_plateforme == 1178
-replace matricule_fisc_incorrect=1 if id_plateforme == 1179
 replace matricule_fisc_incorrect=1 if id_plateforme == 1182
-replace matricule_fisc_incorrect=1 if id_plateforme == 1184
 replace matricule_fisc_incorrect=1 if id_plateforme == 1185
 replace matricule_fisc_incorrect=1 if id_plateforme == 1190
 replace matricule_fisc_incorrect=1 if id_plateforme == 1191
@@ -104,7 +93,7 @@ replace matricule_fisc_incorrect=1 if id_plateforme == 1197
 replace matricule_fisc_incorrect=1 if id_plateforme == 1205
 replace matricule_fisc_incorrect=1 if id_plateforme == 1214
 replace matricule_fisc_incorrect=1 if id_plateforme == 1245
-replace matricule_fisc_incorrect=1 if id_plateforme == 1248
+
 
 *now replace these two variables for the firms where the ID is not findable on registre-entreprise.tn 
 *or physical
@@ -117,14 +106,34 @@ replace matricule_fiscale = "1585453H" if id_plateforme == 1108
 replace matricule_fiscale = "1175102E" if id_plateforme == 1153
 replace matricule_fiscale = "1140685D" if id_plateforme == 1161
 replace matricule_fiscale = "0448240Y" if id_plateforme == 1159
+replace matricule_fiscale = "1225272C" if id_plateforme == 994
+replace matricule_fiscale = "1677629Z" if id_plateforme == 997
+replace matricule_fiscale = "1721782L" if id_plateforme == 1036
+replace matricule_fiscale = "1219150E?" if id_plateforme == 1095
+replace matricule_fiscale = "1463126T" if id_plateforme == 1134
+replace matricule_fiscale = "1748667A" if id_plateforme == 1191
+replace matricule_fiscale = "1179494D?" if id_plateforme == 1205
+replace matricule_fiscale = "0111519V" if id_plateforme == 1248
+
+
 
 *change also firmname or representatives name if difference found in registry
 replace firmname = "el maarifaa ennasr" if id_plateforme == 1033
+replace firmname = "zayta" if id_plateforme == 994
+replace firmname = "STE AMIRI DE HUILE D'OLIVE KAIROUAN" if id_plateforme == 1036
+replace firmname = "decopalm" if id_plateforme == 1128
+replace firmname = "bio valley" if id_plateforme == 1191
+
+
 replace nom_rep = "Fathiya bin Abdul Mawla" if id_plateforme == 1159
 
+replace rg_adresse = "boutique numero 11 Village artisanal Castila 2200 Tozeur" ///
+if id_plateforme == 1128
 
 gen mothercompany= ""
 replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
+gen comment =""
+replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
 export excel id_plateforme matricule_fiscale matricule_fisc_incorrect matricule_physique ///
 using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
