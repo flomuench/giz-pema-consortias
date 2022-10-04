@@ -108,6 +108,7 @@ replace matricule_fisc_incorrect=1 if id_plateforme == 1248
 
 *now replace these two variables for the firms where the ID is not findable on registre-entreprise.tn 
 *or physical
+replace matricule_fiscale = "0601414N" if id_plateforme == 1033
 replace matricule_fiscale = "0334058Y" if id_plateforme == 1092
 replace matricule_fiscale = "1680517R" if id_plateforme == 1110
 replace matricule_fiscale = "1479684C" if id_plateforme == 1136
@@ -115,10 +116,18 @@ replace matricule_fiscale = "0002171D" if id_plateforme == 1137
 replace matricule_fiscale = "1585453H" if id_plateforme == 1108
 replace matricule_fiscale = "1175102E" if id_plateforme == 1153
 replace matricule_fiscale = "1140685D" if id_plateforme == 1161
+replace matricule_fiscale = "0448240Y" if id_plateforme == 1159
+
+*change also firmname or representatives name if difference found in registry
+replace firmname = "el maarifaa ennasr" if id_plateforme == 1033
+replace nom_rep = "Fathiya bin Abdul Mawla" if id_plateforme == 1159
+
 
 gen mothercompany= ""
 replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 
+export excel id_plateforme matricule_fiscale matricule_fisc_incorrect matricule_physique ///
+using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 save "${master_gdrive}/contact_info_master", replace
 
 ***********************************************************************
