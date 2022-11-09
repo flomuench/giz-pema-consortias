@@ -20,7 +20,7 @@ use "$bl_final/bl_final", clear
 
 	* set directory to checks folder
 cd "$bl_output"
-
+set graphics off
 	* create pdf document
 putpdf clear
 putpdf begin 
@@ -187,82 +187,85 @@ putpdf text ("Survey time statistics"), linebreak bold
 putpdf text ("min. `: display %9.0g `r(min)'' minutes, max. `: display %9.0g `r(max)'' minutes & median `: display %9.0g `r(p50)'' minutes."), linebreak
 putpdf pagebreak*/
 }
-*/
+
 
 ***********************************************************************
-* 	PART 3:  Statistics on numeric variables by pole 		  			
+* 	PART 3:  Statistics for donor report		  			
 ***********************************************************************
-/*
-putpdf paragraph, halign(center) 
-putpdf text ("consortias : Statistics by pole")
+set scheme s1color
 
-forvalues x = 1(1)4 {
 
 		* CA, CA export
-	histogram ca_mean if ca_mean > 0 & pole == `x', frequency addl ///
-	title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
-	ytitle("Nombre d'entreprises") ///
-	xtitle("Chiffre d'affaires moyennes 2018-2020 (en unité de 100.000)") ///
-	xlabel(, labsize(tiny) format(%9.0fc)) ///
-	bin(20) ///
-	name(ca_mean, replace)	
-	gr export ca_mean.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ca_mean.png
-	putpdf pagebreak
+gen w_ca2021_usd=w_ca2021/3
+sum w_ca2021_usd,d
+graph bar w_ca2021_usd, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("USD") ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/ca_mean.png", replace
+	
+sum age,d
+graph bar age, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("Years") ///
+	ylabel(0(1)9) ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/age.png", replace
 
-	histogram ca_mean if ca_mean < 150000 & ca_mean > 0 & pole == `x' , frequency addl ///
-		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
-		ytitle("Nombre d'entreprises") ///
-		xlabel(, labsize(tiny) format(%9.1fc)) ///
-		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
-		bin(80) ///
-		name(ca_mean, replace)
-	gr export ca_mean_zoomin.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ca_mean_zoomin.png
-	putpdf pagebreak
+sum employes,d
+graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of Employees") ///
+	ylabel(0(2)22) ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/employees.png", replace
+	
+sum exp_pays,d
+graph bar exp_pays, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of countries") ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/export_countries2.png", replace
 
-	histogram ca_mean if ca_mean < 15000 & ca_mean > 0 & pole == `x', frequency addl ///
-		title("Chiffre d'affaires moyennes 2018-2020  - `pole`x''") ///
-		ytitle("Nombre d'entreprises") ///
-		xlabel(, labsize(tiny) format(%9.1fc)) ///
-		xtitle("Chiffre d'affaires moyennes 2018-2020") ///
-		bin(80) ///
-		name(ca_mean, replace)
-	gr export ca_mean_zoomin2.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ca_mean_zoomin2.png
-	putpdf pagebreak
-		
-		
-		* age
-	stripplot age if pole == `x', jitter(4) vertical yline(2, lcolor(red)) ///
-		ytitle("Age de l'entreprise") ///
-		name(age_strip, replace)
-	histogram age if age >= 0 & pole == `x', frequency addl ///
-		ytitle("Age de l'entreprise") ///
-		xlabel(0(1)60,  labsize(tiny) format(%20.0fc)) ///
-		bin(60) ///
-		color(%30) ///
-		name(age_hist, replace)	
-	gr combine age_strip age_hist, title("Age des entreprises - `pole`x''")
-	graph export age.png, replace 
-	putpdf paragraph, halign(center) 
-	putpdf image age.png
-	putpdf pagebreak
+sum exp_pays,d
+histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("Number of export destinations") ///
+	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(100 `r(p50)' "Median", size(vsmall) place(e))
+	gr export "$bl_output/donor/export_countries.png", replace
 
-		* legal status
-	graph bar (count) if pole == `x', over(rg_legalstatus) blabel(total) ///
-		title("Statut juridique des entreprises - `pole`x''") ///
-		ytitle("nombre d'enregistrement")
-	graph export legalstatus.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image legalstatus.png
-	putpdf pagebreak
+graph bar net_nb_dehors net_nb_fam, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT"))stack ///
+	ytitle("Person") ///
+	ylabel(0(2)16) ///
+	legend(order(1 "Non-family contacts" 2 "family contacts") pos(6))
+	gr export "$bl_output/donor/network.png", replace
 
-}
-*/
+	
+*graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
+graph bar listexp, over(list_group, sort(1) relabel(1"non-sensitive" 2"sensitive option incl.")) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+ytitle("No. of affirmations")
+gr export "$bl_output/donor/bar_listexp.png", replace
+
+	
+*locus of control and initiative
+graph hbar (mean) car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Competence to access financial sources") label(2 "Ability to manage the business") ///
+	label(3 "Able to convince employees & partners") label(4 "Proactive problem confrontation") label(5 "Taking initiative when others do not") ///
+	label(6 "Idenfication and pursue of opportunities"))
+	gr export "$bl_output/donor/initiative.png", replace
+	
+graph hbar (mean) car_loc_succ car_loc_env car_loc_insp, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Able to determine the success of her business") label(2 "Control over internal and external environment of the firm") ///
+	label(3 "Inspiring other women to become better entrepreneurs") )
+	gr export "$bl_output/donor/locuscontrol.png", replace
+	
 ***********************************************************************
 *** PART 3: Baseline descriptive statistics 		  			
 ***********************************************************************
@@ -375,12 +378,7 @@ putpdf pagebreak
 ***********************************************************************
 * 	PART 4:  List experiment
 ************************************************************************
-*graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group, sort(1)) blabel(total, format(%9.2fc))
-gr export bar_listexp.png, replace
-putpdf paragraph, halign(center) 
-putpdf image bar_listexp.png
-putpdf pagebreak		
+
 ***********************************************************************
 * 	PART 5:  Comparing matched vs new data
 ***********************************************************************
