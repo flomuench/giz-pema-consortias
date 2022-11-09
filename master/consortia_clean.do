@@ -135,7 +135,7 @@ replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
-export excel id_plateforme matricule_fiscale matricule_fisc_incorrect matricule_physique ///
+export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect ///
 using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 save "${master_gdrive}/contact_info_master", replace
 
@@ -149,7 +149,7 @@ drop eligible programme needs_check questions_needing_check eligibilité dup_ema
     * save as consortium_database
 
 save "${master_intermediate}/consortium_int", replace
-
+export excel id_plateforme produit1 using  "${master_gdrive}/cepex_produits", sheetreplace firstrow(var)
 
 /*
 ***********************************************************************
