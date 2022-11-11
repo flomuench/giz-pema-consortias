@@ -201,6 +201,7 @@ sum w_ca2021_usd,d
 graph bar w_ca2021_usd, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
 	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
 	ytitle("USD") ///
+	ylabel (0(100000)200000 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/ca_mean.png", replace
@@ -209,7 +210,7 @@ sum age,d
 graph bar age, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
 	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
 	ytitle("Years") ///
-	ylabel(0(1)9) ///
+	ylabel(0(1)9 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/age.png", replace
@@ -218,7 +219,7 @@ sum employes,d
 graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
 	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of Employees") ///
-	ylabel(0(2)22) ///
+	ylabel(0(2)22 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/employees.png", replace
@@ -227,30 +228,45 @@ sum exp_pays,d
 graph bar exp_pays, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
 	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of countries") ///
+	ylabel(0(1)2.5 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/export_countries2.png", replace
 
 sum exp_pays,d
-histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8) discrete ///
+histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8, nogrid) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of firms") ///
 	xtitle("Number of export destinations") ///
+	ylabel(0(20)100 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
 	text(100 `r(p50)' "Median", size(vsmall) place(e))
 	gr export "$bl_output/donor/export_countries.png", replace
 
 graph bar net_nb_dehors net_nb_fam, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT"))stack ///
 	ytitle("Person") ///
-	ylabel(0(2)16) ///
+	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Non-family contacts" 2 "family contacts") pos(6))
 	gr export "$bl_output/donor/network.png", replace
+
+tw ///
+	(kdensity net_nb_dehors, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(kdensity net_nb_fam, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	xtitle("Distribution of family vs non-family contact", size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Non-Family contacts" 2 "Family contacts")) ///
+	xlabel(0(20)100, nogrid) ///
+	name(network_density, replace)
+gr export "$bl_output/donor/network_density.png", replace
 
 	
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"non-sensitive" 2"sensitive option incl.")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
-ytitle("No. of affirmations")
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
 gr export "$bl_output/donor/bar_listexp.png", replace
 
 	
@@ -258,12 +274,14 @@ gr export "$bl_output/donor/bar_listexp.png", replace
 graph hbar (mean) car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp, blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Competence to access financial sources") label(2 "Ability to manage the business") ///
 	label(3 "Able to convince employees & partners") label(4 "Proactive problem confrontation") label(5 "Taking initiative when others do not") ///
-	label(6 "Idenfication and pursue of opportunities"))
+	label(6 "Idenfication and pursue of opportunities")) ///
+	ylabel(0(1)5, nogrid) 
 	gr export "$bl_output/donor/initiative.png", replace
 	
 graph hbar (mean) car_loc_succ car_loc_env car_loc_insp, blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Able to determine the success of her business") label(2 "Control over internal and external environment of the firm") ///
-	label(3 "Inspiring other women to become better entrepreneurs") )
+	label(3 "Inspiring other women to become better entrepreneurs") ) ///
+	ylabel(0(1)5, nogrid) 
 	gr export "$bl_output/donor/locuscontrol.png", replace
 	
 ***********************************************************************

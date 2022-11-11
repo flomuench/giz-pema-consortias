@@ -55,7 +55,7 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" {
+	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog"  {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
@@ -123,19 +123,19 @@ if (1) do "${bl_github}/bl_import.do"
 /* --------------------------------------------------------------------
 	PART 3.1: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_clean.do"
+if (1) do "${bl_github}/bl_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.2: Match to registration data
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_match.do"
+if (1) do "${bl_github}/bl_match.do"
 /* --------------------------------------------------------------------
 	PART 3.3: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_correct.do"
+if (1) do "${bl_github}/bl_correct.do"
 /* --------------------------------------------------------------------
 	PART 3.4: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_generate.do"
+if (1) do "${bl_github}/bl_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.5: export open text or number variables for RA check
 ----------------------------------------------------------------------*/	
@@ -147,11 +147,11 @@ if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
 	PART 3.8: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_statistics.do"
+if (1) do "${bl_github}/bl_statistics.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Diagnostic
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_diagnostic.do"
+if (1) do "${bl_github}/bl_diagnostic.do"
 
 
 /* --------------------------------------------------------------------
