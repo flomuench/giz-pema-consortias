@@ -243,23 +243,32 @@ histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8, n
 	text(100 `r(p50)' "Median", size(vsmall) place(e))
 	gr export "$bl_output/donor/export_countries.png", replace
 
+	*Family vs non-family contact*
 graph bar net_nb_dehors net_nb_fam, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT"))stack ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Non-family contacts" 2 "Family contacts") pos(6))
 	gr export "$bl_output/donor/network.png", replace
 
+graph bar (mean) net_nb_dehors net_nb_fam , blabel(total, format(%9.2fc) gap(-0.2))  ///
+	title("Number of family vs non-family contacts") ///
+	ylabel(0(1)11, nogrid) /// 
+	legend(order(1 "Non-family contacts" 2 "Family contacts") pos(6))
+	gr export "$bl_output/donor/famcont.png", replace	
+	
 tw ///
-	(kdensity net_nb_dehors, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(kdensity net_nb_fam, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(kdensity net_nb_dehors if net_nb_dehors < 40, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram net_nb_dehors if net_nb_dehors < 40, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity net_nb_fam if net_nb_fam < 40, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram net_nb_fam if net_nb_fam < 40, freq w(.1) recast(scatter) msize(small) mc(green)) ///
 	, ///
-	title("{bf:Full sample}") ///
 	xtitle("Distribution of family vs non-family contacts", size(vsmall)) ///
 	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Non-Family contacts" 2 "Family contacts")) ///
-	xlabel(0(20)100, nogrid) ///
+	legend(symxsize(small) order(1 "Non-Family contacts" 2 "Family contacts")  pos(6) row(1)) ///
+	xlabel(0(5)35, nogrid format(%9.0f)) ///
 	name(network_density, replace)
 gr export "$bl_output/donor/network_density.png", replace
+
 
 	
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
@@ -270,20 +279,100 @@ ylabel(0(1)3.2, nogrid)
 gr export "$bl_output/donor/bar_listexp.png", replace
 
 	
-*locus of control and initiative
-graph hbar (mean) car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp, blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Competence to access financial sources") label(2 "Ability to manage the business") ///
-	label(3 "Able to convince employees & partners") label(4 "Proactive problem confrontations") label(5 "Taking initiatives when others do not") ///
-	label(6 "Identification and pursue of opportunities")) ///
-	ylabel(0(1)5, nogrid) 
-	gr export "$bl_output/donor/initiative.png", replace
-	
-graph hbar (mean) car_loc_succ car_loc_env car_loc_insp, blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Able to determine the success of her business") label(2 "Control over the internal and external environment of the firm") ///
-	label(3 "Inspiring other women to become better entrepreneurs") ) ///
+*locus of control and initiative	
+graph hbar (mean) car_loc_insp car_loc_succ car_loc_env, blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Inspiring other women to become better entrepreneurs") label (2 "Able to determine the success of her business") ///
+	label  (3 "Control over the internal and external environment of the firm") ) ///
+	title("Locus of control for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid) 
 	gr export "$bl_output/donor/locuscontrol.png", replace
 	
+graph hbar (mean) car_init_init car_init_prob car_init_opp, blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Taking initiatives when others do not") label (2 "Proactive problem confrontations") ///
+	label  (3 "Identification and pursue of opportunities") ) ///
+	title("Locus of initiative for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid) 
+	gr export "$bl_output/donor/initiative.png", replace
+	
+	
+	
+graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(9) label(1 "Manage to convince employees and partners to agree") label(2 "Negotiate the affairs of the company well") ///
+	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
+	title("Locus of entrepreuneurhsip for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid)    
+	gr export "$bl_output/donor/locus_efi.png", replace
+	
+	
+	
+*Interactions between CEO	
+graph bar (mean) net_coop_pos net_coop_neg, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
+	title("Perception of interactions between CEOs") ///
+	ylabel(0(1)3, nogrid) 
+	gr export "$bl_output/donor/perceptions_interactions.png", replace
+	
+graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, blabel(total, format(%9.2fc) gap(-0.2))  ///
+	legend (pos(6) row(6) label (1 "Power") label(2 "Partnership") ///
+	label(3 "Communicate") label(4 "Win") label(5 "Trust") ///
+	label(6 "Connect") label(7 "Opponent") label(8 "Dominate") ///
+	label(9 "Beat") label(10 "Retreat")) ///
+	title("Perception of interactions between CEOs") ///
+	ylabel(0(0.5)0.7, nogrid) 
+	gr export "$bl_output/donor/perceptions_interactions_details.png", replace
+
+
+*Number of CEO met*
+
+sum net_time,d
+histogram net_time if net_time<35, width(5) frequency addlabels xlabel(0(5)35, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("Number of other directors met during the last 12 months") ///
+	ylabel(0(10)80 , nogrid) ///
+	text(100 `r(mean)' "Mean", size(small) place(e)) ///
+	text(100 `r(p50)' "Median", size(small) place(e))
+	gr export "$bl_output/donor/CEO_network.png", replace
+	
+
+*Quality of advice*
+
+sum net_time,d
+histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("Quality of advice of the business network") ///
+	ylabel(0(10)50 , nogrid) ///
+	text(100 `r(mean)' "Mean", size(small) place(e)) ///
+	text(100 `r(p50)' "Median", size(small) place(e))
+	gr export "$bl_output/donor/quality_advice.png", replace
+	
+	
+*Management & Marketing practices
+graph hbar (mean) man_pro_ano man_hr_feed man_fin_enr man_fin_per man_hr_obj, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Frequency of measuring anomalies in production") label(2 "Regular meetings with employees for feedback") ///
+	label(3 "Registration of sales and purchases") label(4 "Frequency of examining financial performance") label(5 "Performance indicators for employees")) ///
+	title("Management Practices") ///
+	ylabel(0(1)4, nogrid) 
+	gr export "$bl_output/donor/managementpractices.png", replace
+
+graph hbar (mean) man_mark_offre man_mark_div man_fin_profit man_mark_prix man_mark_pub man_mark_clients, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Attract customers with a special offer") label(2 "Ask customers what other products they would like to be produced") label(3 "Knowing the profit per product/service") ///
+	label(4 "Study the prices and/or products of one of competitors") label(5 "Advertising in any form") ///
+	label(6 "Investigate why past customers have stopped buying from the company")) ///
+	title("Management & Marketing Practices") ///
+	ylabel(0(0.5)1, nogrid) 
+	gr export "$bl_output/donor/mgntmktpractices.png", replace
+
+*Export management/readiness
+graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(7) label (1 "Undertake an analysis of target export markets") label(2 "Maintain or develop an export plan") ///
+	label(3 "Undertake a trade mission/travel to one of target markets") label(4 "Access the customs website") label(5 "Participate in international trade exhibitions/fairs") ///
+	label(6 "Designate an employee in charge of export-related activities") label(7 "Engage or work with an international trading company")size(vsmall)) ///
+	title("Export Readiness Practices") ///
+	ylabel(0(0.2)1, nogrid)    
+	gr export "$bl_output/donor/erp.png", replace
+
 ***********************************************************************
 *** PART 3: Baseline descriptive statistics 		  			
 ***********************************************************************
