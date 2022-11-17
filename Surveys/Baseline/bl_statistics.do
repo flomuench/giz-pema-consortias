@@ -337,12 +337,12 @@ histogram net_time if net_time<35, width(5) frequency addlabels xlabel(0(5)35, n
 
 *Quality of advice*
 
-sum net_time,d
+sum net_nb_qualite,d
 histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of firms") ///
-	xtitle("Quality of advice of the business network") ///
-	ylabel(0(10)50 , nogrid) ///
+	xtitle("Number of other directors met during the last 12 months") ///
+	ylabel(0(5)50 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(small) place(e)) ///
 	text(100 `r(p50)' "Median", size(small) place(e))
 	gr export "$bl_output/donor/quality_advice.png", replace
@@ -372,6 +372,14 @@ graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_
 	title("Export Readiness Practices") ///
 	ylabel(0(0.2)1, nogrid)    
 	gr export "$bl_output/donor/erp.png", replace
+	
+*Correlation between firm size & network size
+scatter employes net_time  if employes <65 & net_time< 25.00 || lfit  employes net_time //
+gr export "$bl_output/donor/scatter_network.png", replace
+
+*Correlation between firm size & management practice index
+scatter employes net_nb_qualite if employes <65  || lfit  employes net_nb_qualite
+gr export "$bl_output/donor/scatter_qua.png", replace
 
 ***********************************************************************
 *** PART 3: Baseline descriptive statistics 		  			
