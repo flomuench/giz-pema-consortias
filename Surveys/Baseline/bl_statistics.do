@@ -377,7 +377,6 @@ graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_
 scatter employes net_time  if employes <65 & net_time< 25.00 || lfit  employes net_time //
 gr export "$bl_output/donor/scatter_network.png", replace
 
-
 *Correlation between firm size & management practice index
 scatter employes net_nb_qualite if employes <65  || lfit  employes net_nb_qualite
 gr export "$bl_output/donor/scatter_qua.png", replace
