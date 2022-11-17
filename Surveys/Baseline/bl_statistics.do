@@ -341,7 +341,7 @@ sum net_nb_qualite,d
 histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of firms") ///
-	xtitle("Number of other directors met during the last 12 months") ///
+	xtitle("Quality of advice of the business network") ///
 	ylabel(0(5)50 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(small) place(e)) ///
 	text(100 `r(p50)' "Median", size(small) place(e))
@@ -376,6 +376,7 @@ graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_
 *Correlation between firm size & network size
 scatter employes net_time  if employes <65 & net_time< 25.00 || lfit  employes net_time //
 gr export "$bl_output/donor/scatter_network.png", replace
+
 
 *Correlation between firm size & management practice index
 scatter employes net_nb_qualite if employes <65  || lfit  employes net_nb_qualite
