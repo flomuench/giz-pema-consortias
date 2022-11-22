@@ -105,6 +105,20 @@ append using el_final
 ***********************************************************************
 * 	PART 6: merge with participation data
 ***********************************************************************
+*Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
+clear
+import excel "${master_gdrive}/presence_ateliers.xlsx", firstrow clear
+drop if id_plateforme==.
+keep id_plateforme Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
+drop _merge
+order Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2, last
+
+    * save as consortium_database
+
+save "consortium_raw", replace
+
+
 /*NEEDS TO BE ADAPTED BECAUSE STRUCTURE OF SHEET CHANGED!!
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
 
