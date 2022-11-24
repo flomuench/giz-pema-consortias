@@ -18,6 +18,21 @@
 ***********************************************************************
 use "${master_gdrive}/contact_info_master", clear
 
+* put key variables first
+order id_plateforme, first
+
+
+*remove leading and trailing white space
+{
+ds, has(type string) 
+local strvars "`r(varlist)'"
+foreach x of local strvars {
+replace `x' = stritrim(strtrim(`x'))
+}
+}
+
+
+
 destring id_plateforme, replace
 replace nom_rep="Nesrine dhahri" if id_plateforme==1040
 replace firmname="zone art najet omri" if id_plateforme==1133
@@ -146,8 +161,53 @@ clear
 use "${master_raw}/consortium_raw", clear
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
-    * save as consortium_database
 
+
+*  label variables from participation "presence_ateliers"
+gen launching_event =.
+replace launching_event= 1 if Webinaire_de_lancement == "Présente " & treatment == 1
+replace launching_event= 1 if Webinaire_de_lancement == "présente" & treatment == 1
+replace launching_event= 0 if Webinaire_de_lancement == "absente" & treatment == 1
+
+gen workshop1_1 =.
+replace workshop1_1= 1 if Rencontre1_Atelier1 == "Présente " & treatment == 1
+replace workshop1_1= 1 if Rencontre1_Atelier1 == "présente" & treatment == 1
+replace workshop1_1= 0 if Rencontre1_Atelier1 == "absente" & treatment == 1
+
+gen workshop1_2 =.
+replace workshop1_2= 1 if Rencontre1_Atelier2 == "Présente " & treatment == 1
+replace workshop1_2= 1 if Rencontre1_Atelier2 == "présente" & treatment == 1
+replace workshop1_2= 0 if Rencontre1_Atelier2 == "absente" & treatment == 1
+
+gen workshop2_1 =.
+replace workshop2_1= 1 if Rencontre2_Atelier1 == "Présente " & treatment == 1
+replace workshop2_1= 1 if Rencontre2_Atelier1 == "présente" & treatment == 1
+replace workshop2_1= 0 if Rencontre2_Atelier1 == "absente" & treatment == 1
+
+gen workshop2_2 =.
+replace workshop2_2= 1 if Rencontre2_Atelier2 == "Présente " & treatment == 1
+replace workshop2_2= 1 if Rencontre2_Atelier2 == "présente" & treatment == 1
+replace workshop2_2= 0 if Rencontre2_Atelier2 == "absente" & treatment == 1
+
+gen workshop3_1 =.
+replace workshop3_1= 1 if Rencontre3_Atelier1 == "Présente " & treatment == 1
+replace workshop3_1= 1 if Rencontre3_Atelier1 == "présente" & treatment == 1
+replace workshop3_1= 0 if Rencontre3_Atelier1 == "absente" & treatment == 1
+
+gen workshop3_2 =.
+replace workshop3_2= 1 if Rencontre3_Atelier2 == "Présente " & treatment == 1
+replace workshop3_2= 1 if Rencontre3_Atelier2 == "présente" & treatment == 1
+replace workshop3_2= 0 if Rencontre3_Atelier2 == "absente" & treatment == 1
+
+lab def presence_status 0 "Absent" 1 "Present" 
+lab values launching_event workshop1_1 workshop1_2 workshop2_1 workshop2_2 workshop3_1 workshop3_2 presence_status
+
+drop Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+
+* Create take-up percentage per firm
+
+
+    * save as consortium_database
 save "${master_intermediate}/consortium_int", replace
 export excel id_plateforme produit1 using  "${master_gdrive}/cepex_produits", sheetreplace firstrow(var)
 
