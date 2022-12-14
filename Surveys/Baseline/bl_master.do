@@ -55,7 +55,7 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog"  {
+	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
