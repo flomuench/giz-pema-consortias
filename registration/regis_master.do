@@ -28,8 +28,10 @@ set graphics off /* switch off to on to display graphs */
 capture program drop zscore /* drops the program programname */
 qui cap log c
 
-	* install packages
+	* install packages 
 	/*
+	
+	
 ssc install ietoolkit /* for iebaltab */
 ssc install randtreat, replace /* for randtreat --> random allocation */
 ssc install blindschemes, replace /* for plotplain --> scheme for graphical visualisations */
@@ -42,7 +44,7 @@ ssc install strgroup
 ssc install stripplot
 net install http://www.stata.com/users/kcrow/tab2docx
 ssc install labutil
-*/
+*/ 
 
 
 	* define graph scheme for visual outputs
@@ -51,13 +53,19 @@ set scheme plotplain
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
-
+if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog"  | "`c(username)'" == "Amina"{
+	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
+	} 
+	
+	else {
+	global person = "C:/Users/`c(username)'/Google Drive" 
+	}
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
-if c(os) == "Windows" {
-	global regis_gdrive = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
+if c(os) == "Windows" { 
+	global regis_gdrive ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
 	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
-	global regis_data   = "C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
+	global regis_data   = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
 
 }
 else if c(os) == "MacOSX" {

@@ -21,8 +21,8 @@ use "${regis_intermediate}/regis_inter", clear
 ***********************************************************************
 * 	PART 2:  create + save regis-pii file	  			
 ***********************************************************************
-	* put all pii variables into a local
-local pii id_plateforme firmname eligible matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse codepostal  date_created
+	* put all pii variables into a local 
+local pii id_plateforme firmname eligible matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse date_created codepostal
 
 	* change directory to 
 cd "$regis_data"
@@ -60,7 +60,7 @@ rename rg_expstatus expstatus
 ***********************************************************************
 
 	* identify all pii but unique identifier id_plateforme
-local pii firmname matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse codepostal date_created
+local pii firmname matricule_fiscale matricule_cnss code_douane nom_rep position_rep email_rep email_pdg tel_rep tel_pdg site_web reseau_social rg_adresse codepostal date_created 
 
 	* drop all pii
 drop `pii'

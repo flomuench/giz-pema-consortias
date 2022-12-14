@@ -49,7 +49,7 @@ ssc install coefplot, replace
 
 	
 		* define user
-	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog"  {
+	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "Amina" {
 
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 

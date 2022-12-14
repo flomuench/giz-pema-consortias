@@ -261,7 +261,39 @@ drop if id_plateforme == 133
 
 */
 
+***********************************************************************
+* 	PART 11: Creation of governorates from postal codes 
+***********************************************************************
+gen gouvernorat = int(codepostal/100), a(codepostal)
 
+label var gouvernorat "gouvernorat based on 1st two digit of code postal" 
+
+lab def gov 10 "Grand Tunis:Tunis"
+lab def gov 11 "Grand Tunis: Ben Arous/Mannouba/Zaghouan", add
+lab def gov 12 "Kasserine", add
+lab def gov 20 "Grand Tunis: Ariana/ Ben Arous/Mannouba/Tunis", add
+lab def gov 21 "Gafsa", add
+lab def gov 22 "Tozeur", add
+lab def gov 30 "Sfax", add
+lab def gov 31 "Kairouan", add
+lab def gov 32 "Tataouine", add
+lab def gov 40 "Sousse", add
+lab def gov 41 "Médenine", add
+lab def gov 42 "Kebili", add
+lab def gov 50 "Monastir", add
+lab def gov 51 "Mahdia", add
+lab def gov 60 "Gabès", add
+lab def gov 61 "Siliana", add
+lab def gov 70 "Bizerte", add
+lab def gov 71 "Kef", add
+lab def gov 80 "Nabeul", add
+lab def gov 81 "Jendouba", add
+lab def gov 240 "non identifié", add
+lab def gov 90 "Béja", add
+lab def gov 91 "Sidi Bouzid", add
+
+
+lab val gouvernorat gov
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
