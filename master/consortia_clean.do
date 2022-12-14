@@ -206,6 +206,20 @@ drop Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_A
 
 * Create take-up percentage per firm
 
+***********************************************************************
+* 	PART 5:    Create missing variables for accounting number			  
+***********************************************************************
+gen profit_2021_missing=0
+replace profit_2021_missing= 1 if profit_2021==.
+replace profit_2021_missing= 1 if profit_2021==0
+
+gen ca_2021_missing =0
+replace ca_2021_missing= 1 if ca_2021==.
+replace ca_2021_missing= 1 if ca_2021==0
+
+gen ca_exp_2021_missing=0
+replace ca_exp_2021_missing= 1 if ca_exp_2021==.
+
 
     * save as consortium_database
 save "${master_intermediate}/consortium_int", replace
