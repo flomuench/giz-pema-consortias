@@ -5,69 +5,73 @@
 *	PURPOSE: make all data work reproducible, merge & analysis survey 
 *            & pii data related to consoritum program Tunisia
 *  
-*	OUTLINE: 	PART 1:   
-*				PART 2: 	  
-*				PART 3:               
-*																	  
-*																	  
-*	Author:  						    
-*	ID variable: 	id_plateforme			  					  
+*	OUTLINE: 	PART I: PII data   
+*					PART 1: combine pii data from regis, bl, ml, el  
+*					PART 2: integrate pii updates         
+*
+*				PART II: Analysis data					  
+*					Part 3: append regis + bl, ml, el									
+*					Part 4: integrate take-up data
+*
+*	Author:  		Florian Münch				    
+*	ID variable: 	id_plateforme (panel unit id), surveyround (panel time id)
 *	Requires: consortia_bl_pii.dta	consortia_regis_pii.dta										  
-*	Creates:  contact_info_master.dta			                                  
+*	Creates:  contact_info_master.dta, consortium_raw.dta
+***********************************************************************
+********************* 	I: PII data ***********************************
+***********************************************************************	
+	                                  
 ***********************************************************************
 * 	PART 1: merge & append to create master data set (pii)
 ***********************************************************************
 	* merge registration with baseline data
 use "${regis_final}/consortia_regis_pii", clear
-		
-		* change directory to baseline folder for merge with baseline_final
-cd "$bl_raw"
-
+				
 		* merge 1:1 based on project id_plateforme
-merge 1:1 id_plateforme using consortia_bl_pii
+merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii"
 
-*drop unselected firms from registration
+			*drop unselected firms from registration
 drop if _merge<3
 
+
 /*
-	* append registration +  baseline data with midline
-cd "$midline_final"
-append using ml_final
+		* merge 1:1  with midline
+merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
 
 
-	* append with endline
-cd "$endline_final"
-append using el_final
+		* merge 1:1 with endline
+merge 1:1 id_plateforme using "${el_raw}/consortia_el_pii"
+
 */
 
-***********************************************************************
-* 	PART 2: save as Consortium_contact_info_master
-***********************************************************************
-cd "$master_gdrive"
-save "contact_info_master", replace
+	* save as Consortium_contact_info_master
+save "${master_gdrive}/contact_info_master", replace
 
 /*
 ***********************************************************************
-* 	PART 3: integrate and replace contact updates
+* 	PART2: integrate and replace contact updates (pii)
 ***********************************************************************
-*Note: here should the Update_file.xlsx be downloaded from teams, renamed and uploaded again in 6-master
+*Note: the Update_file.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 
 clear
 import excel "${master_gdrive}/Update_file.xlsx", sheet("update_entreprises") firstrow clear
 
-merge 1:1 id_plateforme using contact_info_master
+merge 1:1 id_plateforme using "${master_gdrive}/contact_info_master"
 drop _merge
 duplicates drop 
-save "contact_info_master", replace
+save "${master_gdrive}/contact_info_master", replace
+
+
 */
-***********************************************************************
-* 	PART 4: merge to create analysis data set
-***********************************************************************
-		* change directory to master folder for merge with regis + baseline (final)
-cd "$master_raw"
 
+***********************************************************************
+********************* II: Analysis data *******************************
+***********************************************************************	
+
+***********************************************************************
+* 	PART 3: merge to create analysis data set (analysis data)
+***********************************************************************
 	* merge registration with baseline data
-
 clear 
 
 use "${regis_final}/regis_final", clear
@@ -82,92 +86,38 @@ drop _merge
 gen surveyround=1
  
     * save as consortium_database
-
-save "consortium_raw", replace
+save "${master_raw}/consortium_raw", replace
 
 ***********************************************************************
-* 	PART 5: append analysis data set with midline & endline
+* 	PART 4: append analysis data set with midline & endline
 ***********************************************************************
-
 
 /*
 	* append registration +  baseline data with midline
-cd "$midline_final"
-append using ml_final
-
+append using "${midline_final/ml_final}
 
 	* append with endline
-cd "$endline_final"
-append using el_final
+append using "${endline_final/el_final}"
 */
 
 
 ***********************************************************************
-* 	PART 6: merge with participation data
+* 	PART 5: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
 ***********************************************************************
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
-clear
+		*  import participation data
 import excel "${master_gdrive}/presence_ateliers.xlsx", firstrow clear
+
+		* remove blank lines
 drop if id_plateforme==.
+
+		* select take-up variables
 keep id_plateforme Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+
+		* merge to analysis data
 merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
 drop _merge
 order Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2, last
 
     * save as consortium_database
-
-save "consortium_raw", replace
-
-
-/*NEEDS TO BE ADAPTED BECAUSE STRUCTURE OF SHEET CHANGED!!
-*Note: here should the Présence des ateliers.xlsx be downloaded from teams, legend deleted, renamed and uploaded again in 6-master
-
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", firstrow clear
-drop if id_plateforme==.
-merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
-drop _merge
-   * save as consortium_database
-
-save "consortium_raw", replace
-
-
-* 3d merge with Groupe Services:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe Services") firstrow clear
-rename I GroupeServicesRencontre2
-rename GroupeServicesRencontre11 GroupeServicesRencontre1
-keep id_plateforme Gouvernorat GroupeServicesRencontre1 GroupeServicesRencontre2
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order GroupeServicesRencontre1 GroupeServicesRencontre2, last
-    
-    * save as consortium_database
-
-save "consortium_raw", replace
-
-* 4th merge with Groupe TIC:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Groupe TIC") firstrow clear
-keep id_plateforme Gouvernorat GroupeTICRencontre11205 GroupeTICRencontre11305
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order GroupeTICRencontre11205 GroupeTICRencontre11305, last
-    
-    * save as consortium_database
-
-save "consortium_raw", replace
-
-
-* 5th merge with Webinaire:
-clear 
-import excel "${master_gdrive}/suivi_consortium.xlsx", sheet("Webinaire") firstrow clear
-keep id_plateforme Gouvernorat PrésenceWebinairedelancement Commentaires
-merge 1:1 id_plateforme using "${master_raw}/consiortium_raw", force
-drop _merge
-order PrésenceWebinairedelancement Commentaires, last
-order treatment    
-    * save as consortium_database
-	*/
-
-save "consortium_raw", replace
+save "${master_raw}/consortium_raw", replace

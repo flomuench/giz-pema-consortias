@@ -55,7 +55,7 @@ ssc install coefplot, replace
 	} 
 	
 	else {
-	global person = "C:/Users/`c(username)'/Google Drive" 
+	global person = "G:/Meine Ablage/" 
 }
 
 
@@ -150,20 +150,23 @@ if (0) do "${master_github}/consortia_power.do"
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/consortia_clean.do"
 /* --------------------------------------------------------------------
-
-
-/* --------------------------------------------------------------------
 	PART 3.4: Clean intermediate data
 ----------------------------------------------------------------------*/
-if (0) do "${aqe_github}/aqe_clean.do"
+if (0) do "${master_github}/consortia_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Correct intermediate data
 ----------------------------------------------------------------------*/
-if (0) do "${aqe_github}/aqe_correct.do"
+if (0) do "${master_github}/consortia_correct.do"
 /*--------------------------------------------------------------------
-	PART 3.6: Generate variables intermediate data
+	PART 3.6: Generate variables
+	Cretes: Final analysis data set
 ----------------------------------------------------------------------*/
-if (0) do "${aqe_github}/aqe_generate.do"
+if (0) do "${master_github}/consortia_generate.do"
+/*--------------------------------------------------------------------
+	PART 3.7: Exports a list of participants with most important info (for survey institute or political partners)
+	Cretes: Final analysis data set
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_export.do"
 
 
 ***********************************************************************
@@ -176,4 +179,4 @@ if (0) do "${aqe_github}/aqe_visualisations.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions
 ----------------------------------------------------------------------*/
-if (1) do "${aqe_github}/aqe_regressions.do"
+if (0) do "${aqe_github}/aqe_regressions.do"
