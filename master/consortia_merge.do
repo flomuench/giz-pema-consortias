@@ -34,11 +34,11 @@ merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii"
 drop if _merge<3
 
 
-/*
+
 		* merge 1:1  with midline
 merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
 
-
+/*
 		* merge 1:1 with endline
 merge 1:1 id_plateforme using "${el_raw}/consortia_el_pii"
 
