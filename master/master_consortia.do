@@ -49,7 +49,9 @@ ssc install coefplot, replace
 
 	
 		* define user
-	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
+		
+	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
+
 
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
@@ -98,6 +100,18 @@ else if c(os) == "MacOSX" {
 	global regis_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 }
 
+if c(os) == "Windows" {
+	global ml_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
+	global ml_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
+	global ml_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
+	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
+}
+else if c(os) == "MacOSX" {
+	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
+	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/midline"
+	global ml_backup = "/Users/`c(username)'/Documents/consortia-back-up"
+	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
+}
 		
 * paths within gdrive
 			* data
@@ -112,21 +126,32 @@ global ml_intermediate "${ml_gdrive}/intermediate"
 global ml_final = "${ml_gdrive}/final"
 global ml_checks = "${ml_gdrive}/checks"
 global ml_output = "${ml_gdrive}/output"
-global bl_raw = "${bl_gdrive}/raw"
-global bl_intermediate "${bl_gdrive}/intermediate"
-global bl_final = "${bl_gdrive}/final"
-global bl_checks = "${bl_gdrive}/checks"
-global bl_output = "${bl_gdrive}/output"
+
 global regis_raw = "${regis_gdrive}/raw"
 global regis_intermediate "${regis_gdrive}/intermediate"
 global regis_final = "${regis_gdrive}/final"
 global regis_checks = "${regis_gdrive}/checks"
+
+global bl_raw = "${bl_gdrive}/raw"
+global bl_intermediate "${bl_gdrive}/intermediate"
+global bl_final = "${bl_gdrive}/final"
+global bl_checks = "${bl_gdrive}/checks"
+
+global ml_raw = "${gdrive}/3-midline/raw"
+global ml_intermediate = "${gdrive}/3-midline/intermediate"
+global ml_final = "${gdrive}/3-midline/final"
+global ml_checks = "${gdrive}/3-midline/checks"
 
 			* output (regression tables, figures)
 				* baseline
 global bl_output = "${bl_gdrive}/output"
 global bl_figures = "${bl_output}/descriptive-statistics-figures"
 global bl_progress = "${bl_output}/progress-eligibility-characteristics"
+
+				* midline
+global ml_output = "${ml_gdrive}/output"
+global ml_figures = "${ml_output}/descriptive-statistics-figures"
+global ml_progress = "${ml_output}/progress-eligibility-characteristics"
 
 				* master
 global master_power = "${master_output}/power"
@@ -179,13 +204,13 @@ if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************
-* 	PART 4: 	Run AQE analysis do-files
+* 	PART 4: 	Run consortia analysis do-files
 ***********************************************************************
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
 ----------------------------------------------------------------------*/		
-if (0) do "${aqe_github}/aqe_visualisations.do"
+if (0) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions
 ----------------------------------------------------------------------*/
-if (0) do "${aqe_github}/aqe_regressions.do"
+if (0) do "${master_github}/consortia_regressions.do"
