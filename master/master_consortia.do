@@ -49,7 +49,7 @@ ssc install coefplot, replace
 
 	
 		* define user
-	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "Amina" {
+	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
 
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
@@ -107,6 +107,11 @@ global master_checks = "${master_gdrive}/checks"
 global master_output = "${master_gdrive}/output"
 global master_raw = "${master_gdrive}/raw"
 
+global ml_raw = "${ml_gdrive}/raw"
+global ml_intermediate "${ml_gdrive}/intermediate"
+global ml_final = "${ml_gdrive}/final"
+global ml_checks = "${ml_gdrive}/checks"
+global ml_output = "${ml_gdrive}/output"
 global bl_raw = "${bl_gdrive}/raw"
 global bl_intermediate "${bl_gdrive}/intermediate"
 global bl_final = "${bl_gdrive}/final"
@@ -167,6 +172,10 @@ if (0) do "${master_github}/consortia_generate.do"
 	Cretes: Final analysis data set
 ----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_export.do"
+/*--------------------------------------------------------------------
+	PART 3.6: Test coherence between survey rounds
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

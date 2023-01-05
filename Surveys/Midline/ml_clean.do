@@ -59,13 +59,18 @@ drop if id_plateforme ==.
 * 	PART 3: 	Make all variables names lower case		  			
 ***********************************************************************
 rename *, lower
-*rename empl fte
+
 
 ***********************************************************************
 * 	PART 4: 	Rename the variables as needed
 ***********************************************************************
 
-*In case we need to rename duplicate variable (chiffre_d'affaire)
+rename ca ca_2022
+rename ca_exp ca_exp2022
+rename profit profit_2022
+rename ca_2021 ca_2021_check
+rename ca_exp2021 ca_exp2021_check
+*rename empl fte
 
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
@@ -173,6 +178,9 @@ lab var comptable_email "accountant email"
 lab var ca_2022 "turnover in 2022"
 lab var ca_exp2022 "export turnover in 2022"
 lab var profit_2022 "profit in 2022"
+
+lab var ca_2021_check "double check CA with baseline&regis data"
+lab var ca_exp2021_check "double check export CA with baseline&regis data"
 
 lab var id_admin "matricule fiscale"
 
