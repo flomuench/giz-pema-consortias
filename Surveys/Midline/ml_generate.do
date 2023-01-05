@@ -78,6 +78,12 @@ label var netcoop8 "Adversaire"
 label var netcoop9 "Connecter" 
 label var netcoop10 "Dominer"
 
+generate listexp1 = regexm(listexp, "Je soutiens et encourage toujours mon équipe.")
+generate listexp2 = regexm(listexp, "Je rêvais d'être une femme qui réussit quand j'étais enfant.")
+generate listexp3 = regexm(listexp, "J'essaie de faire de mon mieux dans mon travail.")
+generate listexp4 = regexm(listexp, "Je me sens obligée à consulter mon mari (ou un autre homme dans ma famille) avant de prendre des décisions pour l'entreprise.")
+
+
 
     *Convert the below variables in numeric (non float variables)
 local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
@@ -111,6 +117,8 @@ replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
 
+* Create a dummy that gives the percentage of women that ask their husbands for advice for strategic business decision-making
+generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3)
 
 
 //2.3 time used to fill survey
