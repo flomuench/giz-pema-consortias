@@ -6,7 +6,7 @@
 *																	  
 *																	  
 *	OUTLINE:			
-*	1) Import data											  
+*	1) Import data & generate surveyround										  
 *	1) Additional calculated variables
 * 	3) Indices
 *
@@ -21,6 +21,9 @@
 ***********************************************************************
 
 use "${ml_intermediate}/ml_intermediate", clear
+
+gen surveyround = 2
+lab var surveyround "1-baseline 2-midline 3-endline"
 
 ***********************************************************************
 * 	PART 2:  Additional calculated variables
