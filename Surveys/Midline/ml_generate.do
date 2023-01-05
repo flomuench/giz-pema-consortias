@@ -1,33 +1,61 @@
 ***********************************************************************
-* 			baseline generate									  	  
+* 			midline generate									  	  
 ***********************************************************************
 *																	    
-*	PURPOSE: generate baseline variables				  							  
+*	PURPOSE: generate midline variables				  							  
 *																	  
 *																	  
-*	OUTLINE:														  
-*	1) Sum up points of info questions
-* 	2) Indices
+*	OUTLINE:			
+*	1) Import data & generate surveyround										  
+*	1) Additional calculated variables
+* 	3) Indices
 *
 *																	  															      
-*	Author:  	Fabian Scheifele						  
-*	ID variaregise: 	id_plateforme (example: 777)			  					  
-*	Requires: bl_inter.dta 	  								  
-*	Creates:  bl_inter.dta			                          
+*	Author:  	Ayoub Chamakhi, Kais Jomaa, Amina Bousnina		 												  
+*	ID variaregise: 	id_plateforme 			  					  
+*	Requires: ml_intermediate.dta 	  								  
+*	Creates:  ml_final.dta			                          
 *																	  
 ***********************************************************************
-* 	PART 1:  Create and label vars that are sums of multiple answer questions			
+* 	PART 1:  Import data 			
 ***********************************************************************
 
-use "${bl_intermediate}/bl_inter", clear
-/*
+use "${ml_intermediate}/ml_intermediate", clear
 
-*/
-**********************************************************************
+gen surveyround = 2
+lab var surveyround "1-baseline 2-midline 3-endline"
+
+***********************************************************************
 * 	PART 2:  Additional calculated variables
 ***********************************************************************
 										  
 	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor, att_strat, att_cont using regex
+	
+generate inno_type1 = regexm(inno_types, "inno_produit")
+generate inno_type2 = regexm(inno_types, "inno_process")
+generate inno_type3 = regexm(inno_types, "inno_lieu")
+generate inno_type4 = regexm(inno_types, "inno_commerce")
+generate inno_type0 = regexm(inno_types, "inno_aucune")
+label var inno_type0 "product change"
+label var inno_type1 "process change"
+label var inno_type2 "place change"
+label var inno_type3 "commerce change"
+label var inno_type4 "no change"
+
+generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
+generate inno_mot2 = regexm(inno_mot, "inno_mot_cons")
+generate inno_mot3 = regexm(inno_mot, "inno_mot_cont")
+generate inno_mot4 = regexm(inno_mot, "inno_mot_eve")
+generate inno_mot5 = regexm(inno_mot, "inno_mot_emp")
+generate inno_mot6 = regexm(inno_mot, "inno_mot_test")
+generate inno_mot7 = regexm(inno_mot, "inno_mot_autre")
+label var inno_mot1 "Idée personnelle"
+label var inno_mot2 "Consultant"
+label var inno_mot3 "Contact affaires"
+label var inno_mot4 "Evenement"
+label var inno_mot5 "Employée"
+label var inno_mot6 "Normes"
+label var inno_mot7 "Autres"
 	
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
@@ -50,74 +78,15 @@ label var netcoop8 "Adversaire"
 label var netcoop9 "Connecter" 
 label var netcoop10 "Dominer"
 
-generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
-generate inno_mot2 = regexm(inno_mot, "inno_mot_conc")
-generate inno_mot3 = regexm(inno_mot, "inno_mot_cons")
-generate inno_mot4 = regexm(inno_mot, "inno_mot_cont")
-generate inno_mot5 = regexm(inno_mot, "inno_mot_eve")
-generate inno_mot6 = regexm(inno_mot, "inno_mot_emp")
-generate inno_mot7 = regexm(inno_mot, "inno_mot_test")
-generate inno_mot8 = regexm(inno_mot, "inno_mot_autre")
-generate inno_aucune = regexm(inno_mot, "no innovation")
-label var inno_mot1 "Idée personnelle"
-label var inno_mot2 "Concurrent"
-label var inno_mot3 "Consultant"
-label var inno_mot4 "Contact affaires"
-label var inno_mot5 "Evenement"
-label var inno_mot6 "Employée"
-label var inno_mot7 "Normes"
-label var inno_mot8 "Autres"
-label var inno_aucune "No innovation"
+generate listexp1 = regexm(listexp, "Je soutiens et encourage toujours mon équipe.")
+generate listexp2 = regexm(listexp, "Je rêvais d'être une femme qui réussit quand j'étais enfant.")
+generate listexp3 = regexm(listexp, "J'essaie de faire de mon mieux dans mon travail.")
+generate listexp4 = regexm(listexp, "Je me sens obligée à consulter mon mari (ou un autre homme dans ma famille) avant de prendre des décisions pour l'entreprise.")
 
-generate att_jour1  = regexm(att_jour , "lundi")
-generate att_jour2  = regexm(att_jour , "mardi")
-generate att_jour3  = regexm(att_jour , "mercredi")
-generate att_jour4  = regexm(att_jour , "jeudi")
-generate att_jour5  = regexm(att_jour , "vendredi")
-generate att_jour6  = regexm(att_jour , "samedi")
-generate att_jour7  = regexm(att_jour , "dimanche")
-label var att_jour1 "Lundi"
-label var att_jour2 "Mardi"
-label var att_jour3 "Mercredi"
-label var att_jour4 "Jeudi"
-label var att_jour5 "Vendredi"
-label var att_jour6 "Samedi"
-label var att_jour7 "Dimanche"
-
-generate att_hor1 = regexm(att_hor , "att_hor1")
-generate att_hor2 = regexm(att_hor , "att_hor2")
-generate att_hor3 = regexm(att_hor , "att_hor3")
-generate att_hor4 = regexm(att_hor , "att_hor4")
-generate att_hor5 = regexm(att_hor , "att_hor5")
-label var att_hor1 "8-10h"
-label var att_hor2 "9-12h30"
-label var att_hor3 "12h30-15h30"
-label var att_hor4 "15h30-19h"
-label var att_hor5 "18-20h"
-
-generate att_strat1 = regexm(att_strat , "att_strat1")
-generate att_strat2 = regexm(att_strat , "att_strat2")
-generate att_strat3 = regexm(att_strat , "att_strat3")
-generate att_strat4 = regexm(att_strat , "att_strat4")
-label var att_strat1 "La participante n'a pas de stratégie d'exportation. Elle adopterait celle du consortium"
-label var att_strat2 "la stratégie du consortium doit être cohérente avec sa propre stratégie"
-label var att_strat3 "L'entreprise a une stratégie d'exportation et le consortium est vecteur de certaines actions" 
-label var att_strat4 "Autres"
-
-generate att_cont1 = regexm(att_cont , "att_cont1")
-generate att_cont2 = regexm(att_cont , "att_cont2")
-generate att_cont3 = regexm(att_cont , "att_cont3")
-generate att_cont4 = regexm(att_cont , "att_cont4")
-generate att_cont5 = regexm(att_cont , "att_cont5")
-label var att_cont1 "Aucune contribution"
-label var att_cont2 "Une contribution fixe, forfaitaire" 
-label var att_cont3 "Une contribution proportionnelle à la taille de chaque membre (selon CA)."
-label var att_cont4 "Une contribution au prorata du chiffre d’affaires réalisé à l’export."
-label var att_cont5 "Autres"
 
 
     *Convert the below variables in numeric (non float variables)
-local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 
+local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
 foreach x of local destrvar {
 destring `x', replace
 format `x' %25.0fc
@@ -148,6 +117,8 @@ replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
 
+* Create a dummy that gives the percentage of women that ask their husbands for advice for strategic business decision-making
+generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3 + listexp4)
 
 
 //2.3 time used to fill survey
@@ -184,15 +155,6 @@ label var time_mins "Durée du questionnaire par entreprise en minutes"
 drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
 }*/
 
-
-
-
-* 2.4 CREATE nb_dehors_famille/(net_nb_dehors_famille+ net_nb_famille)
-generate prop_hors_fam = 0
-replace prop_hors_fam = net_nb_dehors / (net_nb_dehors + net_nb_fam)
-lab var prop_hors_fam "Proportion of employees that are not family"
-
-/*
 ***********************************************************************
 * 	PART 3: factor variable gender 			  										  
 ***********************************************************************
@@ -214,7 +176,7 @@ lab values rg_gender_pdg sex
 ***********************************************************************
 * 	PART 4: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
-
+/*
 egen miss0 = rowmiss(entr_idee - produit1)
 egen miss1 = rowmiss(inno_produit - inno_mot)
 egen miss2 = rowmiss (inno_rd - profit_2021)
@@ -226,7 +188,7 @@ gen miss = miss0 + miss1 + miss2 +miss3 +miss4+miss5+miss6
 *egen nomiss1 = rownonmiss(entr_idee - profit_2021)
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
 *gen nomiss= nomiss1 + nomiss2
-
+*/
  ***********************************************************************
 * 	PART 5: Generate variable to assess completed answers			  										  
 ***********************************************************************
@@ -236,55 +198,8 @@ replace survey_completed= 1 if miss == 0
 label var survey_completed "Number of firms which fully completed the survey"
 label values survey_completed yesno
 
- ***********************************************************************
-* 	PART 6: Create dummy variable to assess artisant sector 			  										  
-***********************************************************************
-gen pole2=pole
-replace pole2=5 if subsector_corrige ==3
-lab var pole2 "alternative sector classification with 5 sectors"
-lab def pole2 1 "agro-alimentaire" 2 "Cosmétique, Textile et autres produits artisanat" 3 "service" 4 "TIC" 5"artisanat"
-lab val pole2 pole2
 
-gen waiting_list=0 
-gen reasons=""
-
-* br id_plateforme pole2 pole produit1 produit2 produit3 employes ca_2021 ca_2020 ca_2019 subsector_corrige ca_exp_2021 ca_exp2020 exp_pays year_created operation_export if pole==2
-
-replace waiting_list=1 if id_plateforme==1031
-replace reasons="2 employees only/ no export activity/ ca_2021=6000 &ca_2020 = 2000" if id_plateforme==1031
-
-replace waiting_list=1 if id_plateforme==1102
-replace reasons="1 employee only/ 1 product only: poupee/ ca_2021=0 /no export activity/ new firm (year created= 2021) " if id_plateforme== 1102
-
-replace waiting_list=1 if id_plateforme==1175
-replace reasons="1 employee only/ ca_2021=0 /no export activity/ new firm (year created= 2021) " if id_plateforme== 1175
-
-replace waiting_list=1 if id_plateforme==1230
-replace reasons="products: couscous/mhames are not artisanat/cosmetique" if id_plateforme==1230
-
-replace waiting_list=1 if id_plateforme==1242
-replace reasons="products are not artisanat/cosmetique" if id_plateforme==1242
-
-replace waiting_list=1 if id_plateforme==1234
-replace reasons="still missing baseline information" if id_plateforme==1234
-
-replace waiting_list=1 if id_plateforme==1124
-replace reasons="still missing baseline information" if id_plateforme==1124
- 
-*Export excel sheet for waiting list
-cd "$bl_checks"
-export excel id_plateforme waiting_list reasons using "waiting_list.xlsx" if waiting_list==1, firstrow(variables) replace
-
- ***********************************************************************
-* 	PART 7: Winsorizing key outcome variables			  										  
-***********************************************************************
-winsor ca_2021, gen(w_ca2021) p(0.01) highonly
-winsor ca_exp_2021, gen(w_caexp2021) p(0.02) highonly
-winsor profit_2021, gen(w_profit2021) p(0.01)
-winsor net_nb_dehors, gen(w_nonfamilynetwork) p(0.02) highonly
-winsor exprep_inv, gen (w_exprep_inv) p(0.01) highonly
 
 
 	* save dta file
-cd "$bl_intermediate"
-save "bl_inter", replace
+save "${ml_fina}/ml_final", replace

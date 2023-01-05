@@ -73,7 +73,7 @@ else if c(os) == "MacOSX" {
 	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Midline"
 	global ml_backup = "/Users/`c(username)'/Documents/consortia-back-up"
-	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
+	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 }
 
 		* paths within gdrive
@@ -111,14 +111,6 @@ if (1) do "${ml_github}/ml_correct.do"
 	PART 3.3: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
 if (1) do "${ml_github}/ml_generate.do"
-/* --------------------------------------------------------------------
-	PART 3.4: Perform logical checks
-----------------------------------------------------------------------*/	
-if (1) do "${ml_github}/ml_test.do"
-/* --------------------------------------------------------------------
-	PART 3.5: Create indices
-----------------------------------------------------------------------*/	
-if (1) do "${ml_github}/ml_index.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
