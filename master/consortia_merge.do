@@ -92,11 +92,11 @@ save "${master_raw}/consortium_raw", replace
 * 	PART 4: append analysis data set with midline & endline
 ***********************************************************************
 
-/*
+
 	* append registration +  baseline data with midline
 append using "${midline_final/ml_final}
 
-	* append with endline
+/*	* append with endline
 append using "${endline_final/el_final}"
 */
 
