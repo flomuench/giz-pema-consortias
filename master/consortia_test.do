@@ -6,7 +6,7 @@
 *																	  
 *																	  
 *	OUTLINE:														  
-*	1)		Load data
+*	1)		Load data & generate check variables
 * 	2) 		Define logical tests
 *	2.1) 	Tests for accounting
 *	2.1) 	Tests for indices	
@@ -18,11 +18,16 @@
 *	Creates:  fiche_correction.xls			                          
 *																	  
 ***********************************************************************
-* 	PART 1:  Load data	  		
+* 	PART 1:  Load data & generate check variables 		
 ***********************************************************************
 	 
 use "${master_final}/consortium_int", clear
 
+gen needs_check = 0
+lab var needs_check "logical test to be checked by ElAMouri"
+
+gen questions_need_check  = 0
+lab var questions_need_check "questions to be checked by ElAMouri"
 ***********************************************************************
 * 	PART 2:  Define logical tests
 ***********************************************************************
