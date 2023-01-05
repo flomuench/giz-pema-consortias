@@ -118,7 +118,7 @@ label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
 
 * Create a dummy that gives the percentage of women that ask their husbands for advice for strategic business decision-making
-generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3)
+generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3 + listexp4)
 
 
 //2.3 time used to fill survey
