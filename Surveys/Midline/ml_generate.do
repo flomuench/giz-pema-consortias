@@ -49,13 +49,22 @@ generate inno_mot4 = regexm(inno_mot, "inno_mot_eve")
 generate inno_mot5 = regexm(inno_mot, "inno_mot_emp")
 generate inno_mot6 = regexm(inno_mot, "inno_mot_test")
 generate inno_mot7 = regexm(inno_mot, "inno_mot_autre")
-label var inno_mot1 "Idée personnelle"
-label var inno_mot2 "Consultant"
-label var inno_mot3 "Contact affaires"
-label var inno_mot4 "Evenement"
-label var inno_mot5 "Employée"
-label var inno_mot6 "Normes"
-label var inno_mot7 "Autres"
+label var inno_mot1 "personal idea"
+label var inno_mot2 "exchange ideas with a consultant"
+label var inno_mot3 "exchange ideas with business network"
+label var inno_mot4 "exchange ideas in an event"
+label var inno_mot5 "exchange ideas with employees"
+label var inno_mot6 "Norms"
+label var inno_mot7 "other source for innovation"
+
+		*yes/no variables loop after the clean:
+local yesnovariables1 inno_produit inno_process inno_lieu inno_commerce inno_aucune inno_mot_idee inno_mot_cons inno_mot_cont ///
+inno_mot_eve inno_mot_emp inno_mot_test inno_mot_autre     
+
+label define yesno1 1 "Yes" 0 "No"
+foreach var of local yesnovariables1 {
+	label values `var' yesno
+}
 	
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
@@ -67,23 +76,25 @@ generate netcoop7 = regexm(net_coop, "7")
 generate netcoop8 = regexm(net_coop, "8")
 generate netcoop9 = regexm(net_coop, "9")
 generate netcoop10 = regexm(net_coop, "10")
-label var netcoop1 "Gagner"
-label var netcoop2 "Communication"
-label var netcoop3 "Confiance"
-label var netcoop4 "Battre"
-label var netcoop5 "Pouvoir"
-label var netcoop6 "Eloigner"
-label var netcoop7 "Partneriat" 
-label var netcoop8 "Adversaire"
-label var netcoop9 "Connecter" 
-label var netcoop10 "Dominer"
+label var netcoop1 "Win"
+label var netcoop2 "Communicate"
+label var netcoop3 "Trust"
+label var netcoop4 "Beat"
+label var netcoop5 "Power"
+label var netcoop6 "Retreat"
+label var netcoop7 "Partnership" 
+label var netcoop8 "Opponent"
+label var netcoop9 "Connect" 
+label var netcoop10 "Dominate"
 
 generate listexp1 = regexm(listexp, "Je soutiens et encourage toujours mon équipe.")
 generate listexp2 = regexm(listexp, "Je rêvais d'être une femme qui réussit quand j'étais enfant.")
 generate listexp3 = regexm(listexp, "J'essaie de faire de mon mieux dans mon travail.")
 generate listexp4 = regexm(listexp, "Je me sens obligée à consulter mon mari (ou un autre homme dans ma famille) avant de prendre des décisions pour l'entreprise.")
-
-
+lab var listexp1 "support and encourage my team"
+lab var listexp2 "I dreamed of being a successful woman when I was a child."
+lab var listexp3 "I try to do my best in my work"
+lab var listexp4 "I feel compelled to consult with my husband (or another man in my family) before making decisions for the company."
 
     *Convert the below variables in numeric (non float variables)
 local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
@@ -155,24 +166,6 @@ label var time_mins "Durée du questionnaire par entreprise en minutes"
 drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
 }*/
 
-***********************************************************************
-* 	PART 3: factor variable gender 			  										  
-***********************************************************************
-label define sex 1 "female" 0 "male"
-tempvar Gender
-encode rg_gender, gen(`Gender')
-drop rg_gender
-rename `Gender' rg_gender_rep
-replace rg_gender = 0 if rg_gender == 2
-lab values rg_gender sex
-
-tempvar Genderpdg
-encode rg_sex_pdg, gen(`Genderpdg')
-drop rg_sex_pdg
-rename `Genderpdg' rg_gender_pdg
-replace rg_gender_pdg = 0 if rg_gender_pdg == 2
-lab values rg_gender_pdg sex
-*/
 ***********************************************************************
 * 	PART 4: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
