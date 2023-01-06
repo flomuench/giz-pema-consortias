@@ -52,7 +52,7 @@ drop share
 	
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
-		tlabel(04mar2022(1)01apr2022, angle(60) labsize(vsmall)) ///
+		tlabel(09janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Baseline survey: number of responses}") 
 gr export survey_response_byday.png, replace
@@ -347,6 +347,19 @@ histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid for
 	text(100 `r(p50)' "Median", size(small) place(e))
 	gr export "$bl_output/donor/quality_advice.png", replace
 	
+<<<<<<< Updated upstream
+=======
+*Locus of efficience
+graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(9) label(1 "Manage to convince employees and partners to agree") label(2 "Negotiate the affairs of the company well") ///
+	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
+	title("Locus of efficience for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid)    
+gr export ml_locusefi.png, replace
+putpdf paragraph, halign(center) 
+putpdf ml_locusefi.png
+putpdf pagebreak	
+>>>>>>> Stashed changes
 	
 *Management & Marketing practices
 graph hbar (mean) man_pro_ano man_hr_feed man_fin_enr man_fin_per man_hr_obj, blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -386,6 +399,7 @@ gr export "$bl_output/donor/scatter_qua.png", replace
 ***********************************************************************
 
 *bar chart and boxplots of accounting variable by poles
+<<<<<<< Updated upstream
      * variable ca_2021:
 egen ca_95p = pctile(ca_2021), p(95)
 graph bar ca_2021 if ca_2021<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
@@ -404,41 +418,76 @@ putpdf pagebreak
 egen ca_exp95p = pctile(ca_exp_2021), p(95)
 graph bar ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_ca_exp2021.png, replace
+=======
+     * variable ca_2022:
+egen ca_95p = pctile(ca), p(95)
+graph bar ca if ca<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export ml_bar_ca_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image bar_ca_exp2021.png
 putpdf pagebreak
 
+<<<<<<< Updated upstream
 stripplot ca_exp_2021 , over(pole) vertical
 gr export strip_ca_exp2021.png, replace
+=======
+stripplot ca if ca<ca_95p, over(pole) vertical
+gr export ml_strip_ca_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image strip_ca_exp2021.png
 putpdf pagebreak
 
+<<<<<<< Updated upstream
      * variable profit_2021:
 egen profit_95p = pctile(profit_2021), p(95)
 graph bar profit_2021 if profit_2021<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_profit_2021.png, replace
+=======
+     * variable ca_exp_2022:
+egen ca_exp_95p = pctile(ca_exp), p(95)
+graph bar ca_exp if ca_exp<ca_exp_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export ml_bar_ca_exp_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image bar_profit_2021.png
 putpdf pagebreak
 
+<<<<<<< Updated upstream
 stripplot profit_2021 if profit_2021<profit_95p, over(pole) vertical
 gr export strip_profit_2021.png, replace
+=======
+stripplot ca_exp if ca_exp<ca_exp_95p , over(pole) vertical
+gr export ml_strip_ca_exp_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image strip_profit_2021.png
 putpdf pagebreak
 
+<<<<<<< Updated upstream
 
      * variable inno_rd:
 egen inno_rd_95p = pctile(inno_rd), p(95)
 graph bar inno_rd if inno_rd<inno_rd_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export bar_inno_rd.png, replace
+=======
+     * variable profit_2022:
+egen profit_95p = pctile(profit), p(95)
+graph bar profit if profit<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export ml_bar_profit_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image bar_inno_rd.png
 putpdf pagebreak
 
+<<<<<<< Updated upstream
 stripplot inno_rd if inno_rd<inno_rd_95p, over(pole) vertical
 gr export strip_inno_rd.png, replace
+=======
+stripplot profit if profit<profit_95p, over(pole) vertical
+gr export ml_strip_profit_2022.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image strip_inno_rd.png
 putpdf pagebreak
@@ -458,15 +507,25 @@ putpdf image strip_exprep_inv.png
 putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
+<<<<<<< Updated upstream
 scatter ca_exp_2021 ca_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
 gr export scatter_ca.png, replace
+=======
+scatter ca_exp ca if ca<ca_95p & ca_exp<ca_exp_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+gr export ml_scatter_ca.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image scatter_ca.png
 putpdf pagebreak
 
 *scatter plots between CA_Exp and exprep_inv
+<<<<<<< Updated upstream
 scatter ca_exp_2021 exprep_inv if ca_exp_2021<ca_exp95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
 gr export scatter_exprep.png, replace
+=======
+scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+gr export ml_scatter_exprep.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image scatter_exprep.png
 putpdf pagebreak
@@ -481,9 +540,15 @@ putpdf pagebreak
 *scatter plots by pole
 forvalues x = 1(1)4 {
 		* between CA and CA_Exp
+<<<<<<< Updated upstream
 twoway (scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
 (lfit ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x', lcol(blue))
 gr export scatter_capole.png, replace
+=======
+twoway (scatter ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
+(lfit ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x', lcol(blue))
+gr export ml_scatter_capole.png, replace
+>>>>>>> Stashed changes
 putpdf paragraph, halign(center) 
 putpdf image scatter_capole.png
 putpdf pagebreak
@@ -532,6 +597,31 @@ putpdf paragraph, halign(center)
 putpdf image old_new_exps_scatter_`x'.png
 putpdf pagebreak
 }
+<<<<<<< Updated upstream
+=======
+/*
+
+		* CA, CA export
+gen w_ca2021_usd=w_ca2021/3
+sum w_ca2021_usd,d
+graph bar w_ca2021_usd, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("USD") ///
+	ylabel (0(100000)200000 , nogrid) ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/ca_mean.png", replace
+	
+sum employes,d
+graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
+	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of Employees") ///
+	ylabel(0(2)22 , nogrid) ///
+	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
+	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
+	gr export "$bl_output/donor/employees.png", replace
+*/
+>>>>>>> Stashed changes
 ***********************************************************************
 * 	PART 7:  save pdf
 ***********************************************************************
