@@ -29,7 +29,7 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 * 	PART 2:  Additional calculated variables
 ***********************************************************************
 										  
-	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor, att_strat, att_cont using regex
+	* 2.1 create and label variable for each answer of net_coop, inno_mot using regex
 	
 generate inno_type1 = regexm(inno_types, "inno_produit")
 generate inno_type2 = regexm(inno_types, "inno_process")
@@ -180,10 +180,6 @@ lab values rg_gender_pdg sex
 egen miss0 = rowmiss(entr_idee - produit1)
 egen miss1 = rowmiss(inno_produit - inno_mot)
 egen miss2 = rowmiss (inno_rd - profit_2021)
-egen miss3 = rowmiss (car_efi_fin1 - att_adh5)
-egen miss4 = rowmiss (att_strat)
-egen miss5 = rowmiss (att_cont)
-egen miss6 = rowmiss (att_jour - support1)
 gen miss = miss0 + miss1 + miss2 +miss3 +miss4+miss5+miss6
 *egen nomiss1 = rownonmiss(entr_idee - profit_2021)
 *egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
@@ -202,4 +198,4 @@ label values survey_completed yesno
 
 
 	* save dta file
-save "${ml_fina}/ml_final", replace
+save "${ml_final}/ml_final", replace

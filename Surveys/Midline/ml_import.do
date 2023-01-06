@@ -29,7 +29,7 @@ import excel "${ml_raw}/ml_raw.xlsx", firstrow clear
 ***********************************************************************
 
 /*
-keep id_plateforme nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2
+keep id_plateforme nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2 tel_supl 
 gen survey_round =2
 cd "$consortia_master"
 save "contact_data_ml", replace
@@ -44,7 +44,7 @@ save "consortia_master_data",replace
 ***********************************************************************
 
 	* drop all pii
-drop nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2
+drop nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2 tel_supl 
 
 ***********************************************************************
 * 	PART 4: re-importing raw data 					
