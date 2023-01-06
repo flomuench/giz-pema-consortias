@@ -54,7 +54,7 @@ drop share
 	
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
-		tlabel(04mar2022(1)01apr2022, angle(60) labsize(vsmall)) ///
+		tlabel(09janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Midline survey: number of responses}") 
 gr export ml_survey_response_byday.png, replace
@@ -178,11 +178,11 @@ putpdf paragraph, halign(center)
 putpdf ml_locuscontrol.png
 putpdf pagebreak
 	
-*Locus of entrepreuneurhsip
+*Locus of efficience
 graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(9) label(1 "Manage to convince employees and partners to agree") label(2 "Negotiate the affairs of the company well") ///
 	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
-	title("Locus of entrepreuneurhsip for female entrepreuneurs") ///
+	title("Locus of efficience for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid)    
 gr export ml_locusefi.png, replace
 putpdf paragraph, halign(center) 
@@ -191,42 +191,42 @@ putpdf pagebreak
 	
 *bar chart and boxplots of accounting variable by poles
      * variable ca_2022:
-egen ca_2022_95p = pctile(ca_2022), p(95)
-graph bar ca_2022 if ca_2022<ca_2022_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen ca_95p = pctile(ca), p(95)
+graph bar ca if ca<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export ml_bar_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_2022.png
 putpdf pagebreak
 
-stripplot ca_2022 if ca_2022<ca_2022_95p, over(pole) vertical
+stripplot ca if ca<ca_95p, over(pole) vertical
 gr export ml_strip_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_2022.png
 putpdf pagebreak
 
      * variable ca_exp_2022:
-egen ca_exp_2022_95p = pctile(ca_exp_2022), p(95)
-graph bar ca_exp_2022 if ca_exp_2022<ca_exp_2022_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen ca_exp_95p = pctile(ca_exp), p(95)
+graph bar ca_exp if ca_exp<ca_exp_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export ml_bar_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_exp_2022.png
 putpdf pagebreak
 
-stripplot ca_exp_2022 if ca_exp_2022<ca_exp_2022_95p , over(pole) vertical
+stripplot ca_exp if ca_exp<ca_exp_95p , over(pole) vertical
 gr export ml_strip_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_exp_2022.png
 putpdf pagebreak
 
      * variable profit_2022:
-egen profit_2022_95p = pctile(profit_2022), p(95)
-graph bar profit_2022 if profit_2022<profit_2022_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+egen profit_95p = pctile(profit), p(95)
+graph bar profit if profit<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
 gr export ml_bar_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_profit_2022.png
 putpdf pagebreak
 
-stripplot profit_2022 if profit_2022<profit_2022_95p, over(pole) vertical
+stripplot profit if profit<profit_95p, over(pole) vertical
 gr export ml_strip_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_profit_2022.png
@@ -247,14 +247,14 @@ putpdf image ml_strip_exprep_inv.png
 putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
-scatter ca_exp_2022 ca_2022 if ca_2022<ca_2022_95p & ca_exp_2022<ca_exp_2022_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+scatter ca_exp ca if ca<ca_95p & ca_exp<ca_exp_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
 gr export ml_scatter_ca.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_scatter_ca.png
 putpdf pagebreak
 
 *scatter plots between CA_Exp and exprep_inv
-scatter ca_exp_2022 exprep_inv if ca_exp_2022<ca_exp_2022_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
 gr export ml_scatter_exprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf ml_image scatter_exprep.png
@@ -263,8 +263,8 @@ putpdf pagebreak
 *scatter plots by pole
 forvalues x = 1(1)4 {
 		* between CA and CA_Exp
-twoway (scatter ca_2022 ca_exp_2022 if ca_2022<ca_2022_95p & ca_exp_2022<ca_exp_2022_95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
-(lfit ca_2022 ca_exp_2022 if ca_2022<ca_2022_95p & ca_exp_2022<ca_exp_2022_95p & pole == `x', lcol(blue))
+twoway (scatter ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
+(lfit ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x', lcol(blue))
 gr export ml_scatter_capole.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_scatter_capole.png
@@ -317,8 +317,6 @@ graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/employees.png", replace
-	
-	
 */
 ***********************************************************************
 * 	PART 7:  save pdf
