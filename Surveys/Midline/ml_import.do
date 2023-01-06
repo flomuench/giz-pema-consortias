@@ -29,6 +29,7 @@ import excel "${ml_raw}/ml_raw.xlsx", firstrow clear
 ***********************************************************************
 
 /*
+preserve 
 keep id_plateforme nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2 tel_supl 
 gen survey_round =2
 cd "$consortia_master"
@@ -38,14 +39,15 @@ drop _merge
 merge 1:m id_plateforme using "$consortia_master/contact_data_ml", force
 
 save "consortia_master_data",replace
-*/
+restore
+
 ***********************************************************************
 * 	PART 3:  save a de-identified final analysis file	
 ***********************************************************************
 
 	* drop all pii
 drop nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptable_email comptable_numero Numero1 Numero2 tel_supl 
-
+*/
 ***********************************************************************
 * 	PART 4: re-importing raw data 					
 ***********************************************************************
