@@ -18,65 +18,60 @@
 ********************* 	I: PII data ***********************************
 ***********************************************************************	
 ***********************************************************************
-* 	PART 1:    clean & correct consortium contact_info	  
+* 	PART 1:    import data  
 ***********************************************************************
-use "${master_gdrive}/contact_info_master", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 ***********************************************************************
-* 	PART II.1:  generate dummy account contact information missing
+* 	PART 2:  generate dummy account contact information missing
 ***********************************************************************
+
+
+
+
+***********************************************************************
+* 	PART 3:  save
+***********************************************************************
+save "${master_final}/consortium_pii_final", replace
+
+
 
 
 ***********************************************************************
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
-use "${master_raw}/consortium_raw", clear
+use "${master_intermediate}/consortium_inter", clear
 
 ***********************************************************************
-* 	PART II.1:  generate take-up variable
+* 	PART 1:  generate take-up variable
 ***********************************************************************
 	*  label variables from participation "presence_ateliers"
-gen launching_event =.
-replace launching_event= 1 if Webinaire_de_lancement == "Présente " & treatment == 1
-replace launching_event= 1 if Webinaire_de_lancement == "présente" & treatment == 1
-replace launching_event= 0 if Webinaire_de_lancement == "absente" & treatment == 1
-
-gen workshop1_1 =.
-replace workshop1_1= 1 if Rencontre1_Atelier1 == "Présente " & treatment == 1
-replace workshop1_1= 1 if Rencontre1_Atelier1 == "présente" & treatment == 1
-replace workshop1_1= 0 if Rencontre1_Atelier1 == "absente" & treatment == 1
-
-gen workshop1_2 =.
-replace workshop1_2= 1 if Rencontre1_Atelier2 == "Présente " & treatment == 1
-replace workshop1_2= 1 if Rencontre1_Atelier2 == "présente" & treatment == 1
-replace workshop1_2= 0 if Rencontre1_Atelier2 == "absente" & treatment == 1
-
-gen workshop2_1 =.
-replace workshop2_1= 1 if Rencontre2_Atelier1 == "Présente " & treatment == 1
-replace workshop2_1= 1 if Rencontre2_Atelier1 == "présente" & treatment == 1
-replace workshop2_1= 0 if Rencontre2_Atelier1 == "absente" & treatment == 1
-
-gen workshop2_2 =.
-replace workshop2_2= 1 if Rencontre2_Atelier2 == "Présente " & treatment == 1
-replace workshop2_2= 1 if Rencontre2_Atelier2 == "présente" & treatment == 1
-replace workshop2_2= 0 if Rencontre2_Atelier2 == "absente" & treatment == 1
-
-gen workshop3_1 =.
-replace workshop3_1= 1 if Rencontre3_Atelier1 == "Présente " & treatment == 1
-replace workshop3_1= 1 if Rencontre3_Atelier1 == "présente" & treatment == 1
-replace workshop3_1= 0 if Rencontre3_Atelier1 == "absente" & treatment == 1
-
-gen workshop3_2 =.
-replace workshop3_2= 1 if Rencontre3_Atelier2 == "Présente " & treatment == 1
-replace workshop3_2= 1 if Rencontre3_Atelier2 == "présente" & treatment == 1
-replace workshop3_2= 0 if Rencontre3_Atelier2 == "absente" & treatment == 1
+local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
 
 lab def presence_status 0 "Absent" 1 "Present" 
-lab values launching_event workshop1_1 workshop1_2 workshop2_1 workshop2_2 workshop3_1 workshop3_2 presence_status
 
-drop Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+foreach var of local take_up_vars {
+	gen `var'1 = `var'
+	replace `var'1 = "1" if `var' == "présente"
+	replace `var'1 = "0" if `var' == "absente" | `var' == "désistement"
+	drop `var'
+	destring `var'1, replace
+	rename `var'1 `var'
+	lab values `var' presence_status
+}
+	
 
-* Create take-up percentage per firm
+
+
+	* Create take-up percentage per firm
+egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
+replace take_up_per = take_up_per/10
+
+	* create a take_up
+gen 
+
+	* create a status variable for surveys
+gen status = 
 
 ***********************************************************************
 * 	PART II.2:    Create missing variables for accounting number			  
