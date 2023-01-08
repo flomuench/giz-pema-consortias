@@ -20,7 +20,7 @@
 ***********************************************************************
 * 	PART 1:    correct leading & trailing spaces	  
 ***********************************************************************
-use "${master_gdrive}/contact_info_master", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 *remove leading and trailing white space
 {
@@ -149,17 +149,25 @@ replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
-export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect ///
-using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
-save "${master_gdrive}/contact_info_master", replace
+export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
+"${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
+
+
+
+***********************************************************************
+* 	PART: save consortia pii data
+***********************************************************************
+save "${master_intermediate}/consortium_pii_inter", replace
+
 
 
 ***********************************************************************
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
+use "${master_intermediate}/consortium_inter", clear
 
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
-save "${master_intermediate}/consortium_int", replace
+save "${master_intermediate}/consortium_inter", replace
