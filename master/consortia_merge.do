@@ -59,7 +59,7 @@ merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
     Matched                               176  (_merge==3)
     -----------------------------------------
 */
-
+drop _merge
 		* merge 1:1  with midline
 *merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
 

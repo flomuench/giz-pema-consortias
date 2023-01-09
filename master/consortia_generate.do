@@ -93,6 +93,7 @@ replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 ***********************************************************************
 * 	PART III:   Create the indices 			  
 ***********************************************************************
+/* uncomment this part once we started collecting midline data
 *Definition of all variables that are being used in index calculation*
 local allvars man_source man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_rd inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 inno_pers num_inno
 
@@ -190,8 +191,9 @@ label var exportmngt_points "Export management"
 	
 * 	PART 4: drop temporary vars		  										  
 drop temp_*
+*/
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
-save "${master_final}/consortia_final", replace
+save "${master_final}/consortium_final", replace
