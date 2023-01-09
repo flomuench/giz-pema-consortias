@@ -66,50 +66,42 @@ ssc install coefplot, replace
 	if c(os) == "Windows" {
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
-	global master_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global master_consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
 	global master_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
-	global master_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 	global master_consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 
 if c(os) == "Windows" {
 	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
-	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
 	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
-	global bl_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 
 if c(os) == "Windows" {
 	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
-	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 }
 else if c(os) == "MacOSX" {
 	global regis_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
 	global regis_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
-	global regis_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 }
 
 if c(os) == "Windows" {
 	global ml_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
-	global ml_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
 	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/midline"
-	global ml_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 		
@@ -118,7 +110,7 @@ else if c(os) == "MacOSX" {
 global master_intermediate "${master_gdrive}/intermediate"
 global master_final = "${master_gdrive}/final"
 global master_checks = "${master_gdrive}/checks"
-global master_output = "${master_gdrive}/output"
+global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_raw = "${master_gdrive}/raw"
 
 global ml_raw = "${ml_gdrive}/raw"
