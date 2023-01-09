@@ -25,19 +25,40 @@
 * 	PART 1: merge & append to create master data set (pii)
 ***********************************************************************
 	* merge registration with baseline data
-use "${regis_final}/consortia_regis_pii", clear
+use "${regis_final}/consortia_regis_pii", clear // 263 firms
 				
 		* merge 1:1 based on project id_plateforme
-merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii"
+merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii" // 169 firms
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            94
+        from master                        94  (_merge==1)
+        from using                          0  (_merge==2)
 
+    Matched                               169  (_merge==3)
+    -----------------------------------------
+*/
 			*drop unselected firms from registration
-drop if _merge<3
+* check: id_plateforme. 
+	* baseline but no info:  1008 1079 1097 1109 1124 1234 1244 1247
+	* registration but not randomized after baseline: 1095
+drop if id_plateforme == 1095 // firm not eligible
+drop if _merge<3 & !inlist(id_plateforme, 1008, 1079, 1097, 1109, 1124, 1234, 1244, 1247)  /* ineligible firms */
 drop _merge
 
 		* add treatment status after bl randomization
 merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             1
+        from master                         1  (_merge==1)
+        from using                          0  (_merge==2)
 
-
+    Matched                               176  (_merge==3)
+    -----------------------------------------
+*/
 
 		* merge 1:1  with midline
 *merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"

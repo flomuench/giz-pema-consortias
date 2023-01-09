@@ -25,7 +25,10 @@ use "${master_intermediate}/consortium_pii_inter", clear
 ***********************************************************************
 * 	PART 2:  generate dummy account contact information missing
 ***********************************************************************
-
+gen comptable_missing = 0, a(comptable_email)
+	replace comptable_missing = 1 if comptable_numero == . & comptable_email == ""
+	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "nsp@nsp.com"
+	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
 
 
 
@@ -68,10 +71,9 @@ egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1at
 replace take_up_per = take_up_per/10
 
 	* create a take_up
-gen 
 
 	* create a status variable for surveys
-gen status = 
+gen status = (take_up_per > 0 & take_up_per < .)
 
 ***********************************************************************
 * 	PART II.2:    Create missing variables for accounting number			  
@@ -126,22 +128,23 @@ local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_m
 local gendervars temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
 local exportmngt temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
 
+forvalues x = 1(1)2 {
+	foreach z in markvars innovars gendervars mngtvars exportprep exportmngt {
+		foreach x of local `z'  {
+				zscore `x' 
+			}
+	}	
 
-foreach z in markvars innovars gendervars mngtvars exportprep exportmngt {
-	foreach x of local `z'  {
-			zscore `x' 
-		}
-}	
+			* calculate the index value: average of zscores 
 
-		* calculate the index value: average of zscores 
-
-egen mngtvars = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz)
-egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz )
-egen exportprep = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
-egen gendervars = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)
-egen innovars = rowmean(temp_inno_produitz temp_inno_processz temp_inno_lieuz temp_inno_commercez temp_inno_rdz temp_inno_mot1z temp_inno_mot2z temp_inno_mot3z temp_inno_mot4z temp_inno_mot5z temp_inno_mot6z temp_inno_mot7z temp_inno_mot8z temp_inno_persz temp_num_innoz)
-egen exportmngt = rowmean(temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz temp_exp_afriquez)
-
+	egen mngtvars = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz)
+	egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz )
+	egen exportprep = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
+	egen gendervars = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)
+	egen innovars = rowmean(temp_inno_produitz temp_inno_processz temp_inno_lieuz temp_inno_commercez temp_inno_rdz temp_inno_mot1z temp_inno_mot2z temp_inno_mot3z temp_inno_mot4z temp_inno_mot5z temp_inno_mot6z temp_inno_mot7z temp_inno_mot8z temp_inno_persz temp_num_innoz)
+	egen exportmngt = rowmean(temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz temp_exp_afriquez)
+}
+	
 label var mngtvars "Management practices index-Z Score"
 label var exportprep "Export readiness index -Z Score"
 label var markvars "Marketing practices index -Z Score"

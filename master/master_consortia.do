@@ -45,6 +45,7 @@ ssc install coefplot, replace
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
+{
 	* set first level globals for code and data
 
 	
@@ -57,7 +58,7 @@ ssc install coefplot, replace
 	} 
 	
 	else {
-	global person = "G:/Meine Ablage/" 
+	global person = "G:/Meine Ablage" 
 }
 
 
@@ -165,7 +166,7 @@ global master_figures = "${master_figures}/figures"
 set seed 8413195
 set sortseed 8413195
 		
-
+}
 ***********************************************************************
 * 	PART 3: 	Run consortium do-files			  	 				  *
 ***********************************************************************
@@ -176,11 +177,12 @@ if (1) do "${master_github}/consortia_merge.do"
 /*--------------------------------------------------------------------
 	PART 3.2: Baseline power
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/consortia_power.do"
+if (0) do "${master_github}/consortia_power.do"
 /*--------------------------------------------------------------------
 	PART 3.3: List experiment randomization for midline + endline
-----------------------------------------------------------------------*/		
-if (0) do "${master_github}/consortia_list_experiment.do"
+	Creates: consortia_pii_inter
+----------------------------------------------------------------------*/
+if (1) do "${master_github}/consortia_list_experiment.do"
 /* --------------------------------------------------------------------
 	PART 3.4: Clean intermediate data
 ----------------------------------------------------------------------*/

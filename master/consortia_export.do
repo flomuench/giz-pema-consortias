@@ -15,22 +15,10 @@
 ***********************************************************************
 * 	PART 1:    link analysis with pii data	  
 ***********************************************************************
-frame create consortium_analysis, replace
-frame change consortium_analysis
-use "${master_final}/consortium_final", clear
-
-frame create consortium_pii, replace
-frame change consortium_pii
-
+	* variable required in pii data from analysis: take-up
 use "${master_final}/consortium_pii_final", clear
+merge 1:1 id_plateforme using "${master_final}/consortium_final", keepusing(status ca_2021 ca_exp_2021 profit_2021_missing ca_2021_missing ca_exp_2021_missing)
 
-frame change consortium_analysis
-
-frlink m:1 id_plateforme, frame(consortium_pii [take_up_per])
-
-
-* variables required from analysis data
-	* take-up,
 
 ***********************************************************************
 * 	PART 2: select variables for export
@@ -39,7 +27,7 @@ frlink m:1 id_plateforme, frame(consortium_pii [take_up_per])
 local baseline_vars "id_plateforme firmname id_admin_correct matricule_fiscale nom_rep position_rep email_pdg email_rep tel_pdg tel_rep list_group ca_check ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020"
 
 	* export for midline survey
-local midline_vars "id_plateforme firmname treatment formation id_admin_correct matricule_fiscale nom_rep position_rep email_pdg email_rep tel_pdg tel_rep list_group ca_check_bl comptable_missing"
+local midline_vars "id_plateforme firmname treatment status matricule_fiscale matricule_fisc_incorrect nom_rep position_rep email_pdg email_rep tel_pdg tel_rep list_group ca_check_bl comptable_missing profit_2021_missing ca_2021_missing ca_exp_2021_missing"
 
 ***********************************************************************
 * 	PART 3: export file

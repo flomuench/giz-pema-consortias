@@ -18,9 +18,6 @@
 ***********************************************************************
 * 	PART 1:  Merge bl_match*
 ***********************************************************************
-
-clear 
-
 use "${regis_final}/regis_final", clear
 drop if id_plateforme==.
 drop if eligible==0

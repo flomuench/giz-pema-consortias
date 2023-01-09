@@ -63,5 +63,10 @@ tab list_group treatment
 			* when re-running manually change the name of result_randomisation to compare
 preserve
 keep id_plateforme list_group* random_number_ml rank treatment
-save "result_randomisation_list_ml", replace
+save "${ml_output}/result_randomisation_list_ml", replace
 restore
+
+***********************************************************************
+* 	PART 5: save 
+***********************************************************************
+save "${master_intermediate}/consortium_pii_inter", replace

@@ -39,7 +39,6 @@ replace firmname="zone art najet omri" if id_plateforme==1133
 replace nom_rep="najet omri" if id_plateforme==1133
 replace firmname="flav'or" if id_plateforme==1150
 replace firmname="Al chatti Agro" if id_plateforme== 1041
-drop NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position
 
 replace matricule_fiscale = upper(matricule_fiscale)
 export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
