@@ -28,6 +28,7 @@ use "${master_intermediate}/consortium_pii_inter", clear
 gen comptable_missing = 0, a(comptable_email)
 	replace comptable_missing = 1 if comptable_numero == . & comptable_email == ""
 	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "nsp@nsp.com"
+	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "refus@refus.com"
 	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
 
 
@@ -120,7 +121,7 @@ end
 
 	* calculate z score for all variables that are part of the index
 	// removed dig_marketing_respons, dig_service_responsable and expprepres_per bcs we don't have fte data without matching (& abs value doesn't make sense)
-
+local exportprep temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
 local innovars1 temp_inno_produit temp_inno_process temp_inno_lieu temp_inno_commerce temp_inno_rd temp_inno_mot1 temp_inno_mot2 temp_inno_mot3 temp_inno_mot4 temp_inno_mot5 temp_inno_mot6 temp_inno_mot7 temp_inno_mot8 temp_inno_pers temp_num_inno
 local markvars1 temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
 local gendervars1 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
@@ -193,4 +194,4 @@ drop temp_*
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
-save "${master_final}/consortia_master_final", replace
+save "${master_final}/consortia_final", replace
