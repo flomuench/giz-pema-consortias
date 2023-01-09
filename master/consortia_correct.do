@@ -16,7 +16,8 @@
 *	Creates:     regis_final.dta bl_final.dta
 ***********************************************************************
 ********************* 	I: PII data ***********************************
-***********************************************************************	
+***********************************************************************
+	
 ***********************************************************************
 * 	PART 1:    correct leading & trailing spaces	  
 ***********************************************************************
@@ -130,13 +131,30 @@ replace matricule_fiscale = "1179494D?" if id_plateforme == 1205
 replace matricule_fiscale = "0111519V" if id_plateforme == 1248
 
 
-
+***********************************************************************
+* 	PART 3:   	Change of contact information
+***********************************************************************
 *change also firmname or representatives name if difference found in registry
 replace firmname = "el maarifaa ennasr" if id_plateforme == 1033
 replace firmname = "zayta" if id_plateforme == 994
 replace firmname = "STE AMIRI DE HUILE D'OLIVE KAIROUAN" if id_plateforme == 1036
 replace firmname = "decopalm" if id_plateforme == 1128
 replace firmname = "bio valley" if id_plateforme == 1191
+replace firmname = "Eleslek" if id_plateforme == 1240
+
+replace email_pdg = "myriamjemai9@gmail.com" if id_plateforme == 1218
+replace email_pdg = "samia.guissouma.mokni@gmail.com" if id_plateforme == 1049
+replace email_pdg = "gharbisabra2711@gmail.com" if id_plateforme == 1244
+replace email_pdg = "ndeconsultings@gmail.com" if id_plateforme == 1225
+replace email_pdg = "yasmineyosra6@gmail.com" if id_plateforme == 1242
+replace email_pdg = "chaloueh.essia8@gmail.com" if id_plateforme == 1168
+replace email_pdg = "contact@nakawabio.com" if id_plateforme == 1074
+replace email_pdg = "maouia.belkhodja.alia@gmail.com" if id_plateforme == 1010
+replace email_pdg = "bso.productrice@gmail.com" if id_plateforme == 1108
+
+replace tel_pdg = 98945250 if id_plateforme == 1117
+replace tel_pdg = 29891161 if id_plateforme == 1045
+replace tel_pdg = 33613306178 if id_plateforme == 1170
 
 
 replace nom_rep = "Fathiya bin Abdul Mawla" if id_plateforme == 1159
@@ -149,9 +167,33 @@ replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
+<<<<<<< Updated upstream
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect ///
 using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 save "${master_gdrive}/contact_info_master", replace
+=======
+
+
+***********************************************************************
+* 	PART 4:  change pole information
+***********************************************************************
+replace pole = 4 if id_plateforme == 1001
+replace pole = 4 if id_plateforme == 1134
+replace pole = 4 if id_plateforme == 1163
+
+
+
+export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
+"${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
+
+
+
+***********************************************************************
+* 	PART: save consortia pii data
+***********************************************************************
+save "${master_intermediate}/consortium_pii_inter", replace
+
+>>>>>>> Stashed changes
 
 
 ***********************************************************************
@@ -162,4 +204,8 @@ save "${master_gdrive}/contact_info_master", replace
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
+<<<<<<< Updated upstream
 save "${master_intermediate}/consortium_int", replace
+=======
+save "${master_intermediate}/consortium_inter", replace
+>>>>>>> Stashed changes
