@@ -22,6 +22,8 @@ use "${master_raw}/consortium_pii_raw", clear
 ***********************************************************************
 * 	PART 2: midline: randomize firms, by treatment group, into two groups  			
 ***********************************************************************
+set seed 8413195
+set sortseed 8413195
 		*
 order treatment, a(id_plateforme)
 
