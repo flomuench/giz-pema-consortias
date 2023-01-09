@@ -19,7 +19,7 @@
 ***********************************************************************
 * 	PART 1:    clean consortium pii data
 ***********************************************************************
-use "${master_raw}/consortium_pii_raw", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 	* put key variables first
 order id_plateforme, first

@@ -25,7 +25,10 @@ use "${master_intermediate}/consortium_pii_inter", clear
 ***********************************************************************
 * 	PART 2:  generate dummy account contact information missing
 ***********************************************************************
-
+gen comptable_missing = 0, a(comptable_email)
+	replace comptable_missing = 1 if comptable_numero == . & comptable_email == ""
+	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "nsp@nsp.com"
+	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
 
 
 
@@ -68,10 +71,9 @@ egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1at
 replace take_up_per = take_up_per/10
 
 	* create a take_up
-gen 
 
 	* create a status variable for surveys
-gen status = 
+gen status = (take_up_per > 0 & take_up_per < .)
 
 ***********************************************************************
 * 	PART II.2:    Create missing variables for accounting number			  

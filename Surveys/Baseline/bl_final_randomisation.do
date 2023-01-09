@@ -19,7 +19,6 @@
 ***********************************************************************
 * 	PART Start: Import the data + set the seed				  		  *
 ***********************************************************************
-
 	* import data
 use "${bl_final}/bl_final", clear
 
@@ -37,7 +36,6 @@ putdocx text ("Results of randomisation"), bold linebreak
 ***********************************************************************
 
 	* Set a seed for today
-
 set seed 07042022
 
 	* Sort 

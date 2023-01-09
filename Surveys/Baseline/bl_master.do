@@ -60,7 +60,7 @@ set scheme plotplain
 	} 
 	
 	else {
-	global person = "C:/Users/`c(username)'/Google Drive" 
+	global person = "G:/Meine Ablage" 
 }
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
@@ -119,7 +119,7 @@ set sortseed 8413195
 /* --------------------------------------------------------------------
 	PART 3.0: Import & raw data
 ----------------------------------------------------------------------*/		
-if (1) do "${bl_github}/bl_import.do"
+if (1) do "${bl_github}/bl_import.do" // N = 169
 /* --------------------------------------------------------------------
 	PART 3.1: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
@@ -127,7 +127,7 @@ if (1) do "${bl_github}/bl_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.2: Match to registration data
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_match.do"
+if (1) do "${bl_github}/bl_match.do" // N = 176
 /* --------------------------------------------------------------------
 	PART 3.3: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
@@ -147,27 +147,28 @@ if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
 	PART 3.8: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_statistics.do"
+if (0) do "${bl_github}/bl_statistics.do"
 /* --------------------------------------------------------------------
 	PART 3.9: Diagnostic
 ----------------------------------------------------------------------*/	
-if (1) do "${bl_github}/bl_diagnostic.do"
+if (0) do "${bl_github}/bl_diagnostic.do"
 
 
 /* --------------------------------------------------------------------
-	PART 4.1: Stratification 
+	PART 4.1: Stratification
+	Creates: bl_final (N = 176)
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_stratification.do"
+if (1) do "${bl_github}/bl_stratification.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Randomisation 
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_randomisation_tests.do"
+if (1) do "${bl_github}/bl_randomisation_tests.do"
 /* --------------------------------------------------------------------
 	PART 4.3: Randomisation 
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_final_randomisation.do"
+if (1) do "${bl_github}/bl_final_randomisation.do"
 
 /* --------------------------------------------------------------------
 	PART 4.4: Create indices
 ----------------------------------------------------------------------*/	
-if (0) do "${bl_github}/bl_index.do"
+if (1) do "${bl_github}/bl_index.do"
