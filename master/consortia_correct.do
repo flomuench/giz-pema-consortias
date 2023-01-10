@@ -151,9 +151,9 @@ replace email_pdg = "contact@nakawabio.com" if id_plateforme == 1074
 replace email_pdg = "maouia.belkhodja.alia@gmail.com" if id_plateforme == 1010
 replace email_pdg = "bso.productrice@gmail.com" if id_plateforme == 1108
 
-replace tel_pdg = 98945250 if id_plateforme == 1117
-replace tel_pdg = 29891161 if id_plateforme == 1045
-replace tel_pdg = 33613306178 if id_plateforme == 1170
+replace tel_pdg = "98945250" if id_plateforme == 1117
+replace tel_pdg = "29891161" if id_plateforme == 1045
+replace tel_pdg = "33613306178" if id_plateforme == 1170
 
 replace nom_rep = "Fathiya bin Abdul Mawla" if id_plateforme == 1159
 
@@ -168,14 +168,8 @@ replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==
 
 
 ***********************************************************************
-* 	PART 4:  change pole information
+* 	PART 5:  export matricule fiscal for admin data from CEPEX
 ***********************************************************************
-replace pole = 4 if id_plateforme == 1001
-replace pole = 4 if id_plateforme == 1134
-replace pole = 4 if id_plateforme == 1163
-
-
-
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
 "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 
@@ -193,6 +187,12 @@ save "${master_intermediate}/consortium_pii_inter", replace
 ***********************************************************************	
 use "${master_intermediate}/consortium_inter", clear
 
+***********************************************************************
+* 	PART 1:  change pole information
+***********************************************************************
+replace pole = 4 if id_plateforme == 1001
+replace pole = 4 if id_plateforme == 1134
+replace pole = 4 if id_plateforme == 1163
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
