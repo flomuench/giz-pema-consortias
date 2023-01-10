@@ -27,6 +27,10 @@ order id_plateforme, first
 	* format id_plateforme
 destring id_plateforme, replace
 
+	* 
+rename Numero1 tel_sup1_bl
+rename Numero2 tel_sup2_bl
+
 
 save "${master_intermediate}/consortium_pii_inter", replace
 
