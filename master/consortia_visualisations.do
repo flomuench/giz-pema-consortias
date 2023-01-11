@@ -415,6 +415,446 @@ putpdf pagebreak
 putpdf save "baseline_statistics", replace
 
 
+***********************************************************************
+* 	PART 2: Midline statistics
+***********************************************************************
+* create word document
+set scheme s1color
+putpdf clear
+putpdf begin 
+putpdf paragraph
+
+putpdf text ("Consortia: Midline Statistics"), bold linebreak
+
+putpdf text ("Date: `c(current_date)'"), bold linebreak
+putpdf paragraph, halign(center) 
+
+{
+	* Share of firms that started the survey
+count if survey_started==1
+gen share= (`r(N)'/176)*100
+graph bar share, blabel(total, format(%9.2fc)) ///
+	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
+	ytitle("Number of entries")
+graph export ml_responserate.png, replace
+putpdf paragraph, halign(center)
+putpdf image responserate.png
+putpdf pagebreak
+drop share
+	
+	* firms with complete entries
+count if survey_completed==1
+gen share= (`r(N)'/176)*100
+graph bar share, blabel(total, format(%9.2fc)) ///
+	title("La part des entreprises avec reponses complète") 
+gr export complete_responses.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_complete_responses.png
+putpdf pagebreak
+drop share
+
+**** Section 1: Innovation*****
+*Innovation	
+graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
+	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
+	label  (5 "No innovation")) ///
+	title("Type of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_innovation_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_innovation_share.png
+	putpdf pagebreak
+
+graph hbar (sum) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
+	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
+	label  (5 "No innovation")) ///
+	title("Type of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_innovation.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_innovation.png
+	putpdf pagebreak
+	
+*Source of the innovation	
+graph hbar (mean) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
+	label  (3 "Business contact") label  (4 "Evenement") ///
+	label  (5 "Employee") label  (6 "Standards and norms")) ///
+	title("Source of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_source_innovation_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_source_innovation_share.png
+	putpdf pagebreak
+
+graph hbar (sum) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
+	label  (3 "Business contact") label  (4 "Evenement") ///
+	label  (5 "Employee") label  (6 "Standards and norms")) ///
+	title("Source of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_source_innovation.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_source_innovation.png
+	putpdf pagebreak
+
+**** Section 2: Networking*****
+
+*Network advice quality
+*Quality of advice*
+sum net_nb_qualite,d
+histogram net_nb_qualite if surveyround == 2, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("Midline: Quality of advice of the business network") ///
+	ylabel(0(5)50 , nogrid) ///
+	text(100 `r(mean)' "Mean", size(small) place(e)) ///
+	text(100 `r(p50)' "Median", size(small) place(e))
+	gr export ml_quality_advice.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_quality_advice.png
+	putpdf pagebreak
+	
+*Interactions between CEO	
+graph bar (mean) net_coop_pos net_coop_neg, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
+	title("Perception of interactions between CEOs") ///
+	ylabel(0(1)3, nogrid) 
+	gr export ml_perceptions_interactions.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_perceptions_interactions.png
+	putpdf pagebreak
+		
+graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2))  ///
+	legend (pos(6) row(6) label (1 "Power") label(2 "Partnership") ///
+	label(3 "Communicate") label(4 "Win") label(5 "Trust") ///
+	label(6 "Connect") label(7 "Opponent") label(8 "Dominate") ///
+	label(9 "Beat") label(10 "Retreat")) ///
+	title("Perception of interactions between CEOs") ///
+	ylabel(0(0.5)0.7, nogrid) 
+	gr export ml_perceptions_interactions_details.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_perceptions_interactions_details.png
+	putpdf pagebreak
+
+**** Section 3: Export*****
+
+*Export management/readiness
+graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(7) label (1 "Undertake an analysis of target export markets") label(2 "Maintain or develop an export plan") ///
+	label(3 "Undertake a trade mission/travel to one of target markets") label(4 "Access the customs website") label(5 "Participate in international trade exhibitions/fairs") ///
+	label(6 "Designate an employee in charge of export-related activities") label(7 "Engage or work with an international trading company")size(vsmall)) ///
+	title("Export Readiness Practices") ///
+	ylabel(0(0.2)1, nogrid)    
+	gr export ml_erp.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_erp.png
+putpdf pagebreak
+		
+				
+**** Section 4: Locus*****
+
+*Locus of efficiency	
+graph hbar (mean) car_efi_fin1 car_efi_nego car_efi_conv, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Participant have the skills to access new sources of funding") label (2 "Participant negotiate the affairs of the company well") ///
+	label  (3 "Manage to convince employees and partners to agree") ) ///
+	title("Locus of control for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_locusefficiency_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_locusefficiency_share.png
+	putpdf pagebreak
+	
+*Locus of efficiency	
+graph hbar (sum) car_efi_fin1 car_efi_nego car_efi_conv, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Participant have the skills to access new sources of funding") label (2 "Participant negotiate the affairs of the company well") ///
+	label  (3 "Manage to convince employees and partners to agree") ) ///
+	title("Locus of control for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_locusefficiency.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_locusefficiency.png
+	putpdf pagebreak
+
+*Locus of control	
+graph hbar (mean)car_loc_succ car_loc_env,  over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Inspiring other women to become better entrepreneurs") label (2 "Able to determine the success of her business") ///
+	label  (3 "Control over the internal and external environment of the firm") ) ///
+	title("Locus of control for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_locuscontrol_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_locuscontrol_share.png
+	putpdf pagebreak
+
+/*
+*Correlation between firm size & network size
+scatter employes net_time  if employes <65 & net_time< 25.00 || lfit  employes net_time //
+gr export scatter_network.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_network.png
+putpdf pagebreak
+
+*Correlation between firm size & management practice index
+scatter employes net_nb_qualite if employes <65  || lfit  employes net_nb_qualite
+gr export scatter_qua.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_qua.png
+putpdf pagebreak
+
+*bar chart and boxplots of accounting variable by poles
+     * variable ca_2021:
+egen ca_95p = pctile(ca_2021), p(95)
+graph bar ca_2021 if ca_2021<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_ca2021.png
+putpdf pagebreak
+
+stripplot ca_2021 if ca_2021<ca_95p, over(pole) vertical
+gr export strip_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_ca2021.png
+putpdf pagebreak
+
+     * variable ca_exp_2021:
+egen ca_exp95p = pctile(ca_exp_2021), p(95)
+graph bar ca_exp_2021 if ca_exp_2021<ca_exp95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_ca_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_ca_exp2021.png
+putpdf pagebreak
+
+stripplot ca_exp_2021 , over(pole) vertical
+gr export strip_ca_exp2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_ca_exp2021.png
+putpdf pagebreak
+
+     * variable profit_2021:
+egen profit_95p = pctile(profit_2021), p(95)
+graph bar profit_2021 if profit_2021<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_profit_2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_profit_2021.png
+putpdf pagebreak
+
+stripplot profit_2021 if profit_2021<profit_95p, over(pole) vertical
+gr export strip_profit_2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_profit_2021.png
+putpdf pagebreak
+
+
+     * variable inno_rd:
+egen inno_rd_95p = pctile(inno_rd), p(95)
+graph bar inno_rd if inno_rd<inno_rd_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_inno_rd.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_inno_rd.png
+putpdf pagebreak
+
+stripplot inno_rd if inno_rd<inno_rd_95p, over(pole) vertical
+gr export strip_inno_rd.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_inno_rd.png
+putpdf pagebreak
+
+     * variable exprep_inv:
+egen exprep_inv_95p = pctile(exprep_inv), p(95)
+graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+gr export bar_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_exprep_inv.png
+putpdf pagebreak
+
+stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(pole) vertical
+gr export strip_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image strip_exprep_inv.png
+putpdf pagebreak
+
+*scatter plots between CA and CA_Exp
+scatter ca_exp_2021 ca_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+gr export scatter_ca.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_ca.png
+putpdf pagebreak
+
+*scatter plots between CA_Exp and exprep_inv
+scatter ca_exp_2021 exprep_inv if ca_exp_2021<ca_exp95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+gr export scatter_exprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_exprep.png
+putpdf pagebreak
+
+*scatter plots between CA and inno_rd
+scatter ca_2021 inno_rd if inno_rd<inno_rd_95p & ca_2021<ca_95p, title("Proportion des investissements dans l'innovation (R&D) par rapport au chiffre d'affaires")
+gr export scatter_exprep.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_exprep.png
+putpdf pagebreak
+
+*scatter plots by pole
+forvalues x = 1(1)4 {
+		* between CA and CA_Exp
+twoway (scatter ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
+(lfit ca_2021 ca_exp_2021 if ca_2021<ca_95p & ca_exp_2021<ca_exp95p & pole == `x', lcol(blue))
+gr export scatter_capole.png, replace
+putpdf paragraph, halign(center) 
+putpdf image scatter_capole.png
+putpdf pagebreak
+}
+*/
+}
+
+putpdf save "midline_statistics", replace
+
+***********************************************************************
+* 	PART 4:  Mdiline Indexes
+***********************************************************************
+
+putpdf clear
+putpdf begin 
+putpdf paragraph
+
+putpdf text ("Consortia: Midline Indexes"), bold linebreak
+putpdf text ("Date: `c(current_date)'"), bold linebreak
+putpdf paragraph, halign(center) 
+
+{
+* Midline Knowledge Index
+gr tw ///
+	(kdensity mngtvars if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mngtvars if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mngtvars if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram mngtvars if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity mngtvars if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mngtvars if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Management Index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Management index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N=*** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(mngtvars_ml, replace)
+graph export mngtvars_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image mngtvars_ml.png
+putpdf pagebreak
+
+* Midline Export preparation index	
+gr tw ///
+	(kdensity exportprep if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram exportprep if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity exportprep if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram exportprep if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity exportprep if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram exportprep if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Export preparation index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export preparation index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(exportprep_ml, replace)
+graph export exportprep_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportprep_ml.png
+putpdf pagebreak
+
+
+* Midline Gender index	
+gr tw ///
+	(kdensity gendervars if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram gendervars if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity gendervars if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram gendervars if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity gendervars if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram gendervars if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Gender index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Gender index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(gendervars_ml, replace)
+graph export gendervars_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image gendervars_ml.png
+putpdf pagebreak
+
+
+* Midline Innovation index	
+gr tw ///
+	(kdensity innovars if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram innovars if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity innovars if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram innovars if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity innovars if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram innovars if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Innovation index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Innovation index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(innovars_ml, replace)
+graph export innovars_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image innovars_ml.png
+putpdf pagebreak
+
+* Export Management index
+gr tw ///
+	(kdensity exportmngt if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram exportmngt if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity exportmngt if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram exportmngt if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity exportmngt if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram exportmngt if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Export Management index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export Management index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(exportmngt_ml, replace)
+graph export exportmngt_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportmngt_ml.png
+putpdf pagebreak
+}
+putpdf save "midline_index_statistics", replace
+
+
 
 
 /*
@@ -916,222 +1356,7 @@ stripplot car_carempl_div5  if surveyround == 2, by(treatment) jitter(4) vertica
 		
 	
 putpdf save "midline_statistics", replace
-***********************************************************************
-* 	PART 4:  Mdiline Indexes
-***********************************************************************
 
-putpdf clear
-putpdf begin 
-putpdf paragraph
-
-putpdf text ("E-commerce: Midline Indexes"), bold linebreak
-
-putpdf text ("Date: `c(current_date)'"), bold linebreak
-
-
-putpdf paragraph, halign(center) 
-
-* Midline Knowledge Index
-gr tw ///
-	(kdensity knowledge_index if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram knowledge_index if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity knowledge_index if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram knowledge_index if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity knowledge_index if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram knowledge_index if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Knowledge Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Knowledge index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(knowledge_index, replace)
-graph export knowledge_index.png, replace
-putpdf paragraph, halign(center) 
-putpdf image knowledge_index.png
-putpdf pagebreak
-
-* Midline Digital Marketing index
-gr tw ///
-	(kdensity dig_marketing_index if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram dig_marketing_index if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity dig_marketing_index if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram dig_marketing_index if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity dig_marketing_index if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram dig_marketing_index if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Digital Marketing Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Digital Marketing Index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(dig_marketing_index_ml, replace)
-graph export dig_marketing_index_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image dig_marketing_index_ml.png
-putpdf pagebreak
-
-* Midline Perception index
-gr tw ///
-	(kdensity perception_index_ml if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram perception_index_ml if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity perception_index_ml if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram perception_index_ml if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity perception_index_ml if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram perception_index_ml if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Digital Marketing Perception Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Digital Marketing Perception Index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(perception_index_ml, replace)
-graph export perception_index_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image perception_index_ml.png
-putpdf pagebreak
-
-* Midline Digital Presence index
-gr tw ///
-	(kdensity dig_presence_index if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_index if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity dig_presence_index if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_index if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity dig_presence_index if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_index if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Digital Presence Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Digital Presence Index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(dig_presence_index, replace)
-graph export dig_presence_index.png, replace
-putpdf paragraph, halign(center) 
-putpdf image dig_presence_index.png
-putpdf pagebreak
-
-
-gr tw ///
-	(kdensity dig_presence_weightedz if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_weightedz if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity dig_presence_weightedz if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_weightedz if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity dig_presence_weightedz if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram dig_presence_weightedz if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Weighted e-commerce presence}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Weighted e-commerce presence index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(vsmall) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(dig_presence_weightedz_ml, replace)
-graph export dig_presence_weightedz_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image dig_presence_weightedz_ml.png
-putpdf pagebreak
-
-* Midline Web index
-gr tw ///
-	(kdensity webindexz if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram webindexz if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity webindexz if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram webindexz if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity webindexz if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram webindexz if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Web Presence index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Web Presence index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(webindexz_ml, replace)
-graph export webindexz_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image webindexz_ml.png
-putpdf pagebreak
-
-* Midline Social media index
-gr tw ///
-	(kdensity social_media_indexz if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram social_media_indexz if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity social_media_indexz if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram social_media_indexz if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity social_media_indexz if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram social_media_indexz if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Social Media index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Social Media index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(social_media_indexz_ml, replace)
-graph export social_media_indexz_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image social_media_indexz_ml.png
-putpdf pagebreak
-
-* Midline Platform index
-gr tw ///
-	(kdensity platform_indexz if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram platform_indexz if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity platform_indexz if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram platform_indexz if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity platform_indexz if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram platform_indexz if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Plateform index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Plateform index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=77 firms)" ///
-                     2 "Treatment group, absent (N=40 firms)" ///
-					 3 "Control group (N=119 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(platform_indexz_ml, replace)
-graph export platform_indexz_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image platform_indexz_ml.png
-putpdf pagebreak
-
-putpdf save "midline_index_statistics", replace
 
 
 ***********************************************************************
