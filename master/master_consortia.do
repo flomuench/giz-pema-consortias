@@ -195,7 +195,7 @@ if (1) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
 	PART 3.8: Test coherence between survey rounds
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_test.do"
+if (1) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

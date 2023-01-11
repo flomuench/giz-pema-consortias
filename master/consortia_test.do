@@ -21,13 +21,13 @@
 * 	PART 1:  Load data & generate check variables 		
 ***********************************************************************
 	 
-use "${master_final}/consortium_int", clear
+use "${master_final}/consortium_final", clear
 
 gen needs_check = 0
-lab var needs_check "logical test to be checked by ElAMouri"
+lab var needs_check "logical test to be checked by ElAmouri"
 
 gen questions_need_check  = 0
-lab var questions_need_check "questions to be checked by ElAMouri"
+lab var questions_need_check "questions to be checked by ElAmouri"
 ***********************************************************************
 * 	PART 2:  Define logical tests
 ***********************************************************************
@@ -35,13 +35,13 @@ lab var questions_need_check "questions to be checked by ElAMouri"
 	PART 2.1: Networking Questions
 ----------------------------------------------------------------------*/	
 
-replace check_again =2 if net_nb_m<0 & net_nb_m >1000
+replace check_again =2 if net_nb_m<0 & net_nb_m >500
 replace questions_needing_checks = questions_needing_checks + "nombre de contact mâle est négatif ou trop grand" ///
 if if net_nb_m<0 & net_nb_m >1000
 
-replace check_again =2 if net_nb_f<0 & net_nb_f>1000
+replace check_again =2 if net_nb_f<0 & net_nb_f>500
 replace questions_needing_checks = questions_needing_checks + "nombre de contact femmes est négatif ou trop grand" ///
-if if net_nb_f<0 & net_nb_f >1000
+if if net_nb_f<0 & net_nb_f >500
 
 
 /* --------------------------------------------------------------------
@@ -219,7 +219,7 @@ split questions_needing_checks, parse(/) generate(questions)
 drop questions_needing_checks 
 reshape long questions, i(id_plateforme)
 drop if questions==""
-by id_plateforme: gene nombre_questions=_n
+by id_plateforme: gen nombre_questions=_n
 drop _j
 gen commentaires_ElAmouri = .
 gen correction_propose=.
