@@ -64,13 +64,13 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Rename the variables as needed
 ***********************************************************************
-
+/*
 rename ca ca_2022
-rename ca_exp ca_exp2022
+rename ca_exp ca_exp_2022
 rename profit profit_2022
 rename ca_2021 ca_2021_check
 rename ca_exp2021 ca_exp2021_check
-*rename empl fte
+rename empl fte*/
 
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
@@ -93,27 +93,21 @@ lab var ident_base_respondent "identification base respondent"
 lab var ident_repondent_position "identification of respondent position"
 
 		* Section exchange of ideas and innovation
-lab var inno_types  "modifications in 2022 questions"
-
 lab var inno_produit "innovation product modification"
 lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
 lab var inno_aucune "no innovation"
 
-lab var inno_mot "innovation motivation questions"
-
 lab var inno_mot_idee "personal idea"
 lab var inno_mot_cons "exchange ideas with a consultant"
 lab var inno_mot_cont "exchange ideas with business network"
 lab var inno_mot_eve "exchange ideas in an event"
 lab var inno_mot_emp "exchange ideas with employees"
-lab var inno_mot_test "test"
+lab var inno_mot_test "Norms"
 lab var inno_mot_autre "other source for innovation"
 
 		* Section networking size/business contacts
-lab var net "networking questions"
-
 lab var net_nb_ceo "number of meetings with other CEOs"
 lab var net_nb_m "number of male CEOs met"
 lab var net_nb_f "number of female CEOs met"
@@ -123,8 +117,6 @@ lab var net_nb_qualite "quality advice of the business network"
 lab var net_coop "perception of interaction between the enterprises"
 
 		* Section management practices
-lab var man "management practices questions"
-
 lab var man_hr_obj "performance indicators for employees"
 
 lab var man_ent_per "number of performance indicators tracked for the company"
@@ -136,12 +128,9 @@ lab var man_ind_awa "employees goal awareness"
 lab var man_source "source of new strategies knowledge"
 
 		* Section export management/readiness and export outcomes
-lab var exp "export questions"
-
 lab var exp_kno_ft_CO "COMESA knowledge"
 lab var exp_kno_ft_ZE "ZECLAF knowledge"
 
-lab var exp_prac "export practices"
 lab var exp_pra_foire "participate in international trade exhibitions/fairs"
 lab var exp_pra_sci "engage or work with an international trading company"
 lab var exp_pra_rexp "designate an employee in charge of export-related activities"
@@ -154,14 +143,12 @@ lab var exprep_inv "investment in export activities"
 lab var exprep_couts "costs of export activities"
 
 		* Section characteristics of the company
-lab var car "companys characteristics questions"
 
 lab var car_efi "efficiency questions"
 lab var car_efi_fin1 "participant have the skills to access new sources of funding"
 lab var car_efi_nego "participant negotiate the affairs of my company well"
 lab var car_efi_conv "participant manage to convince employees and partners to agree with me"
 
-lab var loc "loc questions"
 lab var car_loc_succ "participant is well able to determine the success of her business"
 lab var car_loc_env "participant know how to determine what is happening in the internal and external environment of the company"
 lab var car_loc_exp "participant knows how to deal with exports requisities"
@@ -175,12 +162,12 @@ lab var info_compt "indicate your accountant contact info"
 lab var comptable_numero "accountant phone number"
 lab var comptable_email "accountant email"
 
-lab var ca_2022 "turnover in 2022"
-lab var ca_exp2022 "export turnover in 2022"
-lab var profit_2022 "profit in 2022"
+lab var ca "turnover in 2022"
+lab var ca_exp "export turnover in 2022"
+lab var profit "profit in 2022"
 
-lab var ca_2021_check "double check CA with baseline&regis data"
-lab var ca_exp2021_check "double check export CA with baseline&regis data"
+lab var ca_2021 "double check CA with baseline&regis data"
+lab var ca_exp2021 "double check export CA with baseline&regis data"
 
 lab var id_admin "matricule fiscale"
 
@@ -215,11 +202,9 @@ label variable heurefin "finish hour"
 * 	PART 6: 	Label the variables values	  			
 ***********************************************************************
 		*yes/no variables loop:
-local yesnovariables Id_ident  formation exp_kno_ft_CO info_neces info_compt1 attestexp_kno_ft_ZE ///
-inno_produit inno_process inno_lieu inno_commerce inno_aucune inno_mot_idee inno_mot_cons inno_mot_cont ///
-inno_mot_eve inno_mot_emp inno_mot_test inno_mot_autre  exp_pra_foire exp_pra_sci exp_pra_rexp ///
-exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan ssa_action1 ssa_action2 ssa_action3 ///
-ssa_action4 ssa_action5
+local yesnovariables Id_ident formation exp_kno_ft_CO info_neces info_compt1 attestexp_kno_ft_ZE ///
+exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan ///
+ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5
 
 label define yesno 1 "Yes" 0 "No"
 foreach var of local yesnovariables {
@@ -242,32 +227,41 @@ foreach var of local agreenotvar {
 	label values `var' agreenot
 }
 		*yes/no/other variable:
-label define ident2 0 "Yes" 1 "No" 3 "Firm name changed"
+label define label_yesno 0 "Yes" 1 "No" 3 "Firm name changed"
+label values ident2 label_yesno
 
 		*time frequency variable:
-label define man_fin_per 0 "Never" 0.25 "Annually" 0.5 "Monthly" 0.75 "Weekly" 1 "Daily"
+label define label_freq 0 "Never" 0.25 "Annually" 0.5 "Monthly" 0.75 "Weekly" 1 "Daily"
+label values man_fin_per label_freq
 
 		*company function  variable:
-label define ident_respondent_position 1 "CEO" 2 "PDG" 3 "CEO and PDG" 4 "Refuse to answer" 5 "None"
+label define label_func 1 "CEO" 2 "PDG" 3 "CEO and PDG" 4 "Refuse to answer" 5 "None"
+label values ident_respondent_position label_func
 
-label define net_coop 1 "Win" 2 "Communication" 3 "Trust" 4 "Know down" 5 "Power" 6 "Distant" ///
-7 "Partner" 8 "Opponent" 9 "Connected" 10 "Domination"
- 
-label define man_hr_obj 0.25 "No promotion" 0.5 "Promotion on other factors than performance" /// 
+label define label_net 1 "Win" 2 "Communicate" 3 "Trust" 4 "Beat" 5 "Power" 6 "Retreat" ///
+7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
+label values net_coop label_net
+
+label define label_hr 0.25 "No promotion" 0.5 "Promotion on other factors than performance" /// 
 0.75 "Promotion partially based on performance and other factors" 1 "Promotion based on performance"
+label values man_hr_obj label_hr
 
-label define man_ent_per 1 "0.33" 2 "0.66" 3 "1" 4 "0"
+label define label_ent 0 "Aucun indicateur" 0.33 "1-2 indicateurs" 0.66 "3-9 indicateurs " 1 "10 ou plus indicateurs"
+label values man_ent_per label_ent
 
-label define man_ind_awa 0.25 "seniors" 0.5 "most of seniors and some employees" ///
+label define label_ind 0.25 "seniors" 0.5 "most of seniors and some employees" ///
 0.75 "most of seniors and employees" 1 "all seniors and employees"
+label values man_ind_awa label_ind
 
-label define man_source 1 "Consultant" 2 "Network" 3 "Employees" 4 "Family" 5 "Event" 6 "None" 7 "Other"
+label define label_source 1 "Consultant" 2 "Network" 3 "Employees" 4 "Family" 5 "Event" 6 "None" 7 "Other"
+label values man_source label_source
 
 label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 
 
 
-label define attest 1 "Yes" 
+label define label_attest  1 "Yes"
+label values attest label_attest
 
 ***********************************************************************
 * 	Part 7: Save the changes made to the data		  			

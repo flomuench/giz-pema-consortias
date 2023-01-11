@@ -45,6 +45,7 @@ ssc install coefplot, replace
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
+{
 	* set first level globals for code and data
 
 	
@@ -57,7 +58,7 @@ ssc install coefplot, replace
 	} 
 	
 	else {
-	global person = "G:/Meine Ablage/" 
+	global person = "G:/Meine Ablage" 
 }
 
 
@@ -112,6 +113,8 @@ global master_final = "${master_gdrive}/final"
 global master_checks = "${master_gdrive}/checks"
 global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_raw = "${master_gdrive}/raw"
+global implementation = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/7-implementation"
+
 
 global ml_raw = "${ml_gdrive}/raw"
 global ml_intermediate "${ml_gdrive}/intermediate"
@@ -155,7 +158,7 @@ global master_figures = "${master_figures}/figures"
 set seed 8413195
 set sortseed 8413195
 		
-
+}
 ***********************************************************************
 * 	PART 3: 	Run consortium do-files			  	 				  *
 ***********************************************************************
@@ -167,32 +170,32 @@ if (1) do "${master_github}/consortia_merge.do"
 	PART 3.2: Baseline power
 ----------------------------------------------------------------------*/		
 if (0) do "${master_github}/consortia_power.do"
-/* --------------------------------------------------------------------
-	PART 3.3: clean final raw registration + baseline 
-----------------------------------------------------------------------*/		
-if (1) do "${master_github}/consortia_clean.do"
+/*--------------------------------------------------------------------
+	PART 3.3: List experiment randomization for midline + endline
+	Creates: consortia_pii_inter
+----------------------------------------------------------------------*/
+if (1) do "${master_github}/consortia_list_experiment.do"
 /* --------------------------------------------------------------------
 	PART 3.4: Clean intermediate data
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_clean.do"
+if (1) do "${master_github}/consortia_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Correct intermediate data
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_correct.do"
+if (1) do "${master_github}/consortia_correct.do"
 /*--------------------------------------------------------------------
 	PART 3.6: Generate variables
-	Cretes: Final analysis data set
+	Creates: Final analysis & pii data set
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_generate.do"
+if (1) do "${master_github}/consortia_generate.do"
 /*--------------------------------------------------------------------
 	PART 3.7: Exports a list of participants with most important info (for survey institute or political partners)
-	Cretes: Final analysis data set
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_export.do"
+if (1) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
-	PART 3.6: Test coherence between survey rounds
+	PART 3.8: Test coherence between survey rounds
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_test.do"
+if (1) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

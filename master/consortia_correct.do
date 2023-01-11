@@ -21,7 +21,7 @@
 ***********************************************************************
 * 	PART 1:    correct leading & trailing spaces	  
 ***********************************************************************
-use "${master_gdrive}/contact_info_master", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 *remove leading and trailing white space
 {
@@ -40,7 +40,6 @@ replace firmname="zone art najet omri" if id_plateforme==1133
 replace nom_rep="najet omri" if id_plateforme==1133
 replace firmname="flav'or" if id_plateforme==1150
 replace firmname="Al chatti Agro" if id_plateforme== 1041
-drop NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position
 
 replace matricule_fiscale = upper(matricule_fiscale)
 export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
@@ -152,9 +151,10 @@ replace email_pdg = "contact@nakawabio.com" if id_plateforme == 1074
 replace email_pdg = "maouia.belkhodja.alia@gmail.com" if id_plateforme == 1010
 replace email_pdg = "bso.productrice@gmail.com" if id_plateforme == 1108
 
-replace tel_pdg = 98945250 if id_plateforme == 1117
-replace tel_pdg = 29891161 if id_plateforme == 1045
-replace tel_pdg = 33613306178 if id_plateforme == 1170
+
+replace tel_pdg = "98945250" if id_plateforme == 1117
+replace tel_pdg = "29891161" if id_plateforme == 1045
+replace tel_pdg = "33613306178" if id_plateforme == 1170
 
 
 replace nom_rep = "Fathiya bin Abdul Mawla" if id_plateforme == 1159
@@ -167,11 +167,10 @@ replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
-<<<<<<< Updated upstream
+
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect ///
 using  "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 save "${master_gdrive}/contact_info_master", replace
-=======
 
 
 ***********************************************************************
@@ -181,8 +180,9 @@ replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
 
-
-
+***********************************************************************
+* 	PART 5:  export matricule fiscal for admin data from CEPEX
+***********************************************************************
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
 "${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
 
@@ -193,19 +193,20 @@ export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect u
 ***********************************************************************
 save "${master_intermediate}/consortium_pii_inter", replace
 
->>>>>>> Stashed changes
-
 
 ***********************************************************************
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
+use "${master_intermediate}/consortium_inter", clear
 
+***********************************************************************
+* 	PART 1:  change pole information
+***********************************************************************
+replace pole = 4 if id_plateforme == 1001
+replace pole = 4 if id_plateforme == 1134
+replace pole = 4 if id_plateforme == 1163
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
-***********************************************************************
-<<<<<<< Updated upstream
-save "${master_intermediate}/consortium_int", replace
-=======
+*********************************************************************
 save "${master_intermediate}/consortium_inter", replace
->>>>>>> Stashed changes

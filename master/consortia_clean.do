@@ -19,13 +19,21 @@
 ***********************************************************************
 * 	PART 1:    clean consortium pii data
 ***********************************************************************
-use "${master_gdrive}/contact_info_master", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 	* put key variables first
 order id_plateforme, first
 
 	* format id_plateforme
 destring id_plateforme, replace
+
+	* 
+rename Numero1 tel_sup1_bl
+rename Numero2 tel_sup2_bl
+
+
+save "${master_intermediate}/consortium_pii_inter", replace
+
 
 
 
@@ -40,10 +48,21 @@ use "${master_raw}/consortium_raw", clear
 	* remove unnecessary variables
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
+	* clean take_up variables
+local take_up_vars "Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise"
+
+		* clean values
+foreach x of local take_up_vars {
+replace `x'= lower(`x')
+replace `x' = stritrim(strtrim(`x'))
+}
+		* clean var names
+rename `take_up_vars', lower
+
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
-save "${master_intermediate}/consortium_int", replace
+save "${master_intermediate}/consortium_inter", replace
 
 

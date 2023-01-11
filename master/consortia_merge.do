@@ -25,18 +25,43 @@
 * 	PART 1: merge & append to create master data set (pii)
 ***********************************************************************
 	* merge registration with baseline data
-use "${regis_final}/consortia_regis_pii", clear
+use "${regis_final}/consortia_regis_pii", clear // 263 firms
 				
 		* merge 1:1 based on project id_plateforme
-merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii"
+merge 1:1 id_plateforme using "${bl_raw}/consortia_bl_pii" // 169 firms
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            94
+        from master                        94  (_merge==1)
+        from using                          0  (_merge==2)
 
+    Matched                               169  (_merge==3)
+    -----------------------------------------
+*/
 			*drop unselected firms from registration
-drop if _merge<3
+* check: id_plateforme. 
+	* baseline but no info:  1008 1079 1097 1109 1124 1234 1244 1247
+	* registration but not randomized after baseline: 1095
+drop if id_plateforme == 1095 // firm not eligible
+drop if _merge<3 & !inlist(id_plateforme, 1008, 1079, 1097, 1109, 1124, 1234, 1244, 1247)  /* ineligible firms */
+drop _merge
 
+		* add treatment status after bl randomization
+merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             1
+        from master                         1  (_merge==1)
+        from using                          0  (_merge==2)
 
-
+    Matched                               176  (_merge==3)
+    -----------------------------------------
+*/
+drop _merge
 		* merge 1:1  with midline
-merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
+*merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
 
 /*
 		* merge 1:1 with endline
@@ -45,7 +70,7 @@ merge 1:1 id_plateforme using "${el_raw}/consortia_el_pii"
 */
 
 	* save as Consortium_contact_info_master
-save "${master_gdrive}/contact_info_master", replace
+save "${master_raw}/consortium_pii_raw", replace
 
 /*
 ***********************************************************************
@@ -72,8 +97,6 @@ save "${master_gdrive}/contact_info_master", replace
 * 	PART 3: merge to create analysis data set (analysis data)
 ***********************************************************************
 	* merge registration with baseline data
-clear 
-
 use "${regis_final}/regis_final", clear
 drop treatment /* as it's just missing values in the registration data & in case we keep it then it will replace the data in the using file when merged*/
 
@@ -84,6 +107,8 @@ drop _merge
 
     * create panel ID
 gen surveyround=1
+lab def round  1 "baseline" 2 "midline" 3 "endline"
+lab val surveyround round
  
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace
@@ -94,7 +119,7 @@ save "${master_raw}/consortium_raw", replace
 
 
 	* append registration +  baseline data with midline
-append using "${midline_final/ml_final}
+*append using "${midline_final/ml_final}
 
 /*	* append with endline
 append using "${endline_final/el_final}"
@@ -106,18 +131,33 @@ append using "${endline_final/el_final}"
 ***********************************************************************
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 		*  import participation data
-import excel "${master_gdrive}/presence_ateliers.xlsx", firstrow clear
+preserve
+import excel "${implementation}/presence_ateliers.xlsx", firstrow clear
 
 		* remove blank lines
 drop if id_plateforme==.
 
 		* select take-up variables
-keep id_plateforme Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise
+
+		* save
+save "${implementation}/take_up", replace
+restore
 
 		* merge to analysis data
-merge 1:1 id_plateforme using "${master_raw}/consortium_raw", force
+merge 1:1 id_plateforme using "${implementation}/take_up", force
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                            91
+        from master                        91  (_merge==1)
+        from using                          0  (_merge==2)
+
+    Matched                                85  (_merge==3)
+    -----------------------------------------
+*/
 drop _merge
-order Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2, last
+order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise, last
 
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace

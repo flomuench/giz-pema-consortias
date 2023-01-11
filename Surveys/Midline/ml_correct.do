@@ -77,7 +77,7 @@ drop if dup>1
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
  
-local numvars ca ca_exp Profit ca_2021 ca_exp2021 
+local numvars ca_2022 ca_exp2022 Profit ca_2021 ca_exp2021 profit_2022 
 
 
 foreach var of local numvars {

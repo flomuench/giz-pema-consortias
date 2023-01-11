@@ -55,7 +55,7 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
+	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
@@ -72,7 +72,6 @@ if c(os) == "Windows" {
 else if c(os) == "MacOSX" {
 	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Midline"
-	global ml_backup = "/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 }
 
@@ -114,5 +113,5 @@ if (1) do "${ml_github}/ml_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (1) do "${ml_github}/ml_statistics.do"
+if (0) do "${ml_github}/ml_statistics.do"
 

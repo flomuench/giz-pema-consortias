@@ -18,65 +18,63 @@
 ********************* 	I: PII data ***********************************
 ***********************************************************************	
 ***********************************************************************
-* 	PART 1:    clean & correct consortium contact_info	  
+* 	PART 1:    import data  
 ***********************************************************************
-use "${master_gdrive}/contact_info_master", clear
+use "${master_intermediate}/consortium_pii_inter", clear
 
 ***********************************************************************
-* 	PART II.1:  generate dummy account contact information missing
+* 	PART 2:  generate dummy account contact information missing
 ***********************************************************************
+gen comptable_missing = 0, a(comptable_email)
+	replace comptable_missing = 1 if comptable_numero == . & comptable_email == ""
+	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "nsp@nsp.com"
+	replace comptable_missing = 1 if comptable_numero == 88888888 & comptable_email == "refus@refus.com"
+	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
+
+
+
+***********************************************************************
+* 	PART 3:  save
+***********************************************************************
+save "${master_final}/consortium_pii_final", replace
+
+
 
 
 ***********************************************************************
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
-use "${master_raw}/consortium_raw", clear
+use "${master_intermediate}/consortium_inter", clear
 
 ***********************************************************************
-* 	PART II.1:  generate take-up variable
+* 	PART 1:  generate take-up variable
 ***********************************************************************
 	*  label variables from participation "presence_ateliers"
-gen launching_event =.
-replace launching_event= 1 if Webinaire_de_lancement == "Présente " & treatment == 1
-replace launching_event= 1 if Webinaire_de_lancement == "présente" & treatment == 1
-replace launching_event= 0 if Webinaire_de_lancement == "absente" & treatment == 1
-
-gen workshop1_1 =.
-replace workshop1_1= 1 if Rencontre1_Atelier1 == "Présente " & treatment == 1
-replace workshop1_1= 1 if Rencontre1_Atelier1 == "présente" & treatment == 1
-replace workshop1_1= 0 if Rencontre1_Atelier1 == "absente" & treatment == 1
-
-gen workshop1_2 =.
-replace workshop1_2= 1 if Rencontre1_Atelier2 == "Présente " & treatment == 1
-replace workshop1_2= 1 if Rencontre1_Atelier2 == "présente" & treatment == 1
-replace workshop1_2= 0 if Rencontre1_Atelier2 == "absente" & treatment == 1
-
-gen workshop2_1 =.
-replace workshop2_1= 1 if Rencontre2_Atelier1 == "Présente " & treatment == 1
-replace workshop2_1= 1 if Rencontre2_Atelier1 == "présente" & treatment == 1
-replace workshop2_1= 0 if Rencontre2_Atelier1 == "absente" & treatment == 1
-
-gen workshop2_2 =.
-replace workshop2_2= 1 if Rencontre2_Atelier2 == "Présente " & treatment == 1
-replace workshop2_2= 1 if Rencontre2_Atelier2 == "présente" & treatment == 1
-replace workshop2_2= 0 if Rencontre2_Atelier2 == "absente" & treatment == 1
-
-gen workshop3_1 =.
-replace workshop3_1= 1 if Rencontre3_Atelier1 == "Présente " & treatment == 1
-replace workshop3_1= 1 if Rencontre3_Atelier1 == "présente" & treatment == 1
-replace workshop3_1= 0 if Rencontre3_Atelier1 == "absente" & treatment == 1
-
-gen workshop3_2 =.
-replace workshop3_2= 1 if Rencontre3_Atelier2 == "Présente " & treatment == 1
-replace workshop3_2= 1 if Rencontre3_Atelier2 == "présente" & treatment == 1
-replace workshop3_2= 0 if Rencontre3_Atelier2 == "absente" & treatment == 1
+local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
 
 lab def presence_status 0 "Absent" 1 "Present" 
-lab values launching_event workshop1_1 workshop1_2 workshop2_1 workshop2_2 workshop3_1 workshop3_2 presence_status
 
-drop Webinaire_de_lancement Rencontre1_Atelier1 Rencontre1_Atelier2 Rencontre2_Atelier1 Rencontre2_Atelier2 Rencontre3_Atelier1 Rencontre3_Atelier2
+foreach var of local take_up_vars {
+	gen `var'1 = `var'
+	replace `var'1 = "1" if `var' == "présente"
+	replace `var'1 = "0" if `var' == "absente" | `var' == "désistement"
+	drop `var'
+	destring `var'1, replace
+	rename `var'1 `var'
+	lab values `var' presence_status
+}
+	
 
-* Create take-up percentage per firm
+
+
+	* Create take-up percentage per firm
+egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
+replace take_up_per = take_up_per/10
+
+	* create a take_up
+
+	* create a status variable for surveys
+gen status = (take_up_per > 0 & take_up_per < .)
 
 ***********************************************************************
 * 	PART II.2:    Create missing variables for accounting number			  
@@ -95,6 +93,7 @@ replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 ***********************************************************************
 * 	PART III:   Create the indices 			  
 ***********************************************************************
+/* uncomment this part once we started collecting midline data
 *Definition of all variables that are being used in index calculation*
 local allvars man_source man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_rd inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 inno_pers num_inno
 
@@ -123,7 +122,7 @@ end
 
 	* calculate z score for all variables that are part of the index
 	// removed dig_marketing_respons, dig_service_responsable and expprepres_per bcs we don't have fte data without matching (& abs value doesn't make sense)
-
+local exportprep temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
 local innovars1 temp_inno_produit temp_inno_process temp_inno_lieu temp_inno_commerce temp_inno_rd temp_inno_mot1 temp_inno_mot2 temp_inno_mot3 temp_inno_mot4 temp_inno_mot5 temp_inno_mot6 temp_inno_mot7 temp_inno_mot8 temp_inno_pers temp_num_inno
 local markvars1 temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
 local gendervars1 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
@@ -192,8 +191,9 @@ label var exportmngt_points "Export management"
 	
 * 	PART 4: drop temporary vars		  										  
 drop temp_*
+*/
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
-save "${master_final}/consortia_master_final", replace
+save "${master_final}/consortium_final", replace

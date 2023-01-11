@@ -15,15 +15,21 @@
 ***********************************************************************
 * 	PART 1:    link analysis with pii data	  
 ***********************************************************************
-* variables required from analysis data
-	* take-up
+	* variable required in pii data from analysis: take-up
+use "${master_final}/consortium_pii_final", clear
+merge 1:1 id_plateforme using "${master_final}/consortium_final", keepusing(status ca_2021 ca_exp_2021 profit_2021_missing ca_2021_missing ca_exp_2021_missing)
+
 
 ***********************************************************************
 * 	PART 2: select variables for export
 ***********************************************************************
-local list_vars "id_plateforme surveyround "
+	* export for baseline survey
+local baseline_vars "id_plateforme firmname id_admin_correct matricule_fiscale nom_rep position_rep email_pdg email_rep tel_pdg tel_rep list_group ca_check ca_2018 ca_exp2018 ca_2019 ca_exp2019 ca_2020 ca_exp2020"
+
+	* export for midline survey
+local midline_vars "id_plateforme firmname treatment status matricule_fiscale matricule_fisc_incorrect nom_rep position_rep email_pdg email_rep tel_pdg tel_rep tel_sup1_bl tel_sup2_bl list_group comptable_numero comptable_email comptable_missing profit_2021_missing ca_2021_missing ca_exp_2021_missing"
 
 ***********************************************************************
 * 	PART 3: export file
 ***********************************************************************
-export excel `list_vars' using "${master_output}/consortia_list.xlsx", firstrow(var) replace keepcellfmt
+export excel `midline_vars' using "${ml_output}/midline_sample_info", firstrow(var) replace 
