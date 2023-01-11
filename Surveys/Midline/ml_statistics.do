@@ -34,15 +34,17 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 
 
 ***********************************************************************
-* 	PART 2:  Survey progress		  			
+* 	PART 2:  Generate the visualisations		  			
 ***********************************************************************
 putpdf paragraph, halign(center) 
 putpdf text ("consortias : midline survey progress")
 
 {
+	
+*** Section 1: Survey progress
 	* Share of firms that started the survey
 count if survey_started==1
-gen share= (`r(N)'/181)*100
+gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries")
@@ -51,7 +53,8 @@ putpdf paragraph, halign(center)
 putpdf image ml_responserate.png
 putpdf pagebreak
 drop share
-	
+
+	* Number of firms that started survey on specific date
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
 		tlabel(09janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
@@ -62,10 +65,9 @@ putpdf paragraph, halign(center)
 putpdf image ml_survey_response_byday.png
 putpdf pagebreak
 		
-	
 	* firms with complete entries
 count if survey_completed==1
-gen share= (`r(N)'/181)*100
+gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses complète") 
 gr export complete_responses.png, replace
@@ -76,7 +78,7 @@ drop share
 */
 	* firms with validated entries
 count if validation==1
-gen share= (`r(N)'/181)*100
+gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses validés")
 gr export ml_validated_responses.png, replace
@@ -85,22 +87,9 @@ putpdf ml_image validated_responses.png
 putpdf pagebreak
 drop share
 
-*Quality of advice*
 
-sum net_nb_qualite,d
-histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
-	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
-	ytitle("No. of firms") ///
-	xtitle("Quality of advice of the business network") ///
-	ylabel(0(5)50 , nogrid) ///
-	text(100 `r(mean)' "Mean", size(small) place(e)) ///
-	text(100 `r(p50)' "Median", size(small) place(e))
-gr export ml_quality_advice.png, replace
-putpdf paragraph, halign(center) 
-putpdf ml_quality_advice.png
-putpdf pagebreak	
-
-	*Number of female and male CEO met*
+*** Section 2: Networks
+	* Number of female and male CEO met
 graph bar net_nb_m net_nb_f, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) over(treatment)stack ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
@@ -134,6 +123,21 @@ gr export ml_network_density.png, replace
 putpdf paragraph, halign(center) 
 putpdf ml_network_density.png
 putpdf pagebreak	
+
+	* Quality of advice 
+sum net_nb_qualite,d
+histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("Quality of advice of the business network") ///
+	ylabel(0(5)50 , nogrid) ///
+	text(100 `r(mean)' "Mean", size(small) place(e)) ///
+	text(100 `r(p50)' "Median", size(small) place(e))
+gr export ml_quality_advice.png, replace
+putpdf paragraph, halign(center) 
+putpdf ml_quality_advice.png
+putpdf pagebreak	
+
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive option incl.")) ///

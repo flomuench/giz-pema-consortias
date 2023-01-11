@@ -17,7 +17,7 @@
 ***********************************************************************
 * 	PART 1: Paths
 ***********************************************************************
-use "${master_final}/consortia_master_final", clear
+use "${master_final}/consortia_final", clear
 		
 		* change directory to regis folder for merge with regis_final
 cd "${master_output}/figures"
