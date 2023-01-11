@@ -25,7 +25,7 @@ cd "${master_gdrive}/output/ML regressions"
 ***********************************************************************
 * 	Part 1: 	Midline analysis			  
 ***********************************************************************
-/*
+
 ***********************************************************************
 * 	PART 1.2: Management index		
 ***********************************************************************
@@ -277,20 +277,7 @@ esttab `regressions' using "ml_exportmngt.tex", replace ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
-*/	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 /*
 ***********************************************************************
