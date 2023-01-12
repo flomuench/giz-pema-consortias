@@ -54,8 +54,8 @@ gen questions_needing_checks = ""
 ***********************************************************************
 * 	PART 1.2:  Identify and remove duplicates 
 ***********************************************************************
-sort id_plateforme heuredébut
-quietly by id_plateforme heuredébut:  gen dup = cond(_N==1,0,_n)
+sort id_plateforme heure
+quietly by id_plateforme heure:  gen dup = cond(_N==1,0,_n)
 drop if dup>1
 
 /*duplicates report id_plateforme heuredébut
@@ -76,8 +76,14 @@ drop if dup>1
 * 	PART 3:  Automatic corrections
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
- 
-local numvars ca_2022 ca_exp2022 Profit ca_2021 ca_exp2021 profit_2022 
+
+ * 8.1 Destring remaining numerical vars
+local destrvar ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
+foreach x of local destrvar { 
+destring `x', replace
+format `x' %25.0fc
+}
+local numvars ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
 
 
 foreach var of local numvars {
@@ -188,11 +194,7 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 5:  Convert data types to the appropriate format
 ***********************************************************************
 
-* 8.1 Destring remaining numerical vars
-local destrvar ca ca_exp Profit ca_2021 ca_exp2021
-foreach x of local destrvar { 
-destring `x', replace
-format `x' %25.0fc
+
 }
 
 ***********************************************************************

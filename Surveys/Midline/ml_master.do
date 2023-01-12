@@ -66,7 +66,6 @@ set scheme plotplain
 if c(os) == "Windows" {
 	global ml_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Midline"
-	global ml_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
 }
 else if c(os) == "MacOSX" {
@@ -96,6 +95,8 @@ set sortseed 1231234
 ***********************************************************************
 /* --------------------------------------------------------------------
 	PART 3.0: Import & raw data
+	creates: ml_intermediate 
+	requires: ml_raw.xlsx
 ----------------------------------------------------------------------*/		
 if (1) do "${ml_github}/ml_import.do"
 /* --------------------------------------------------------------------
