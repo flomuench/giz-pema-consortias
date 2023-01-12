@@ -8,10 +8,17 @@
 *	OUTLINE:														  
 *	1)		Load data & generate check variables
 * 	2) 		Define logical tests
-*	2.1) 	Tests for accounting
-*	2.1) 	Tests for indices	
-*   3) Check missing values
-*   4) Export excel sheet 								  															      
+*	2.1) 	Networking Questions
+*	2.2) 	Export Investment Questions
+*	2.3)	Comptabilité / accounting questions	
+*	2.4)	Phone Numbers & emails check
+*	2.5)	Number of Employees
+*   3) 		Additional logical test cross-checking answers from registration & baseline	
+*	3.1)	CA export	
+*   4) 		large Outliers
+*	5)		Check for missing values	
+*	6)		Export an excel sheet with needs_check variables 
+*						  															      
 *	Author:  	Ayoub Chamakhi
 *	ID variable: 	id_plateforme (example: f101)			  					  
 *	Requires: consortium_int.dta 	  								  
@@ -31,9 +38,9 @@ lab var questions_need_check "questions to be checked by El Amouri"
 
 
 /* Categorisation of checks
-1: 
-2: 
-3: 
+1: Low Prioritiy Errors: 
+2: High Prioritiy Errors: 
+3: Highest Prioritiy Errors: Accountibility
 
 */
 
@@ -56,7 +63,7 @@ if net_nb_f<0 & net_nb_f >500
 
 
 /* --------------------------------------------------------------------
-	PART 2.2: Export Invest
+	PART 2.2: Export Investment Questions
 ----------------------------------------------------------------------*/	
 
 replace needs_check =3 if exprep_inv<0 & ​​exprep_inv >900000
@@ -113,7 +120,7 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 if Profit<100 & Profit>0 
 
 /* --------------------------------------------------------------------
-	PART 2.4: Phone Numbers & emails
+	PART 2.4: Phone Numbers & emails check
 ----------------------------------------------------------------------*/	
 
 *check email format through regex
@@ -209,7 +216,7 @@ questions_needing_checks if ca_2021> 9000000 & ca_2021<. & surveyround==2
 
 
 ***********************************************************************
-* 	PART 3:  Check for missing values
+* 	PART 5:  Check for missing values
 ***********************************************************************
 
 	* employee data
@@ -222,7 +229,7 @@ foreach var of local closed_vars {
 }
 
 ***********************************************************************
-* 	Export an excel sheet with needs_check variables  			
+* 	PART 6:  Export an excel sheet with needs_check variables  			
 ***********************************************************************
 *re-merge additional contact information to dataset
 *merge 1:1 id_plateforme using "${consortia_master}/add_contact_data", generate(_merge_cd)
