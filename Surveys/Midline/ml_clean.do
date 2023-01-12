@@ -83,43 +83,23 @@ notes _dta : January 2023
 notes _dta : Consortium Project
 
 
-		* Section identification
-lab var Id_ident "identification of the respondent"
-lab var ident2 "identification of the company"
-lab var firmname_change "new name of the company, if existant"
-lab var formation "company participated in latest GIZ meetings"
-lab var ident_nouveau_personne "identification new person"
-lab var ident_base_respondent "identification base respondent"
-lab var ident_repondent_position "identification of respondent position"
-
 		* Section exchange of ideas and innovation
 lab var inno_produit "innovation product modification"
 lab var inno_process "innovation process modification"
 lab var inno_lieu "innovation place"
 lab var inno_commerce "innovation commerce"
-lab var inno_aucune "no innovation"
 
-lab var inno_mot_idee "personal idea"
-lab var inno_mot_cons "exchange ideas with a consultant"
-lab var inno_mot_cont "exchange ideas with business network"
-lab var inno_mot_eve "exchange ideas in an event"
-lab var inno_mot_emp "exchange ideas with employees"
-lab var inno_mot_test "Norms"
-lab var inno_mot_autre "other source for innovation"
 
 		* Section networking size/business contacts
-lab var net_nb_ceo "number of meetings with other CEOs"
 lab var net_nb_m "number of male CEOs met"
 lab var net_nb_f "number of female CEOs met"
-
 lab var net_nb_qualite "quality advice of the business network"
-
 lab var net_coop "perception of interaction between the enterprises"
 
 		* Section management practices
 lab var man_hr_obj "performance indicators for employees"
 
-lab var man_ent_per "number of performance indicators tracked for the company"
+lab var man_fin_per_fre "number of performance indicators tracked for the company"
 
 lab var man_fin_per "frequency of examining financial performance"
 
@@ -128,8 +108,8 @@ lab var man_ind_awa "employees goal awareness"
 lab var man_source "source of new strategies knowledge"
 
 		* Section export management/readiness and export outcomes
-lab var exp_kno_ft_CO "COMESA knowledge"
-lab var exp_kno_ft_ZE "ZECLAF knowledge"
+lab var exp_kno_ft_co "COMESA knowledge"
+lab var exp_kno_ft_ze "ZECLAF knowledge"
 
 lab var exp_pra_foire "participate in international trade exhibitions/fairs"
 lab var exp_pra_sci "engage or work with an international trading company"
@@ -144,7 +124,6 @@ lab var exprep_couts "costs of export activities"
 
 		* Section characteristics of the company
 
-lab var car_efi "efficiency questions"
 lab var car_efi_fin1 "participant have the skills to access new sources of funding"
 lab var car_efi_nego "participant negotiate the affairs of my company well"
 lab var car_efi_conv "participant manage to convince employees and partners to agree with me"
@@ -159,8 +138,6 @@ lab var listexp "list experiment"
 lab var info_neces "obtaining necessary information"
 lab var info_compt1 "willing to share accountant contact info"
 lab var info_compt "indicate your accountant contact info"
-lab var comptable_numero "accountant phone number"
-lab var comptable_email "accountant email"
 
 lab var ca "turnover in 2022"
 lab var ca_exp "export turnover in 2022"
@@ -186,15 +163,14 @@ lab var ssa_action4 "investment in the sales structure in a target market in Sub
 lab var ssa_action5 "introduction of a trade facilitation system, digital innovation"
 
 		* Section contact & validation
-lab var tel_supl "extra phone number for 2023 survey"
+*lab var tel_supl "extra phone number for 2023 survey"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
 
 		* other:
 label variable list_group "treatment or control Group"
-label variable heuredébut "beginning hour"
+label variable heure "beginning hour"
 label variable date "date"
-label variable heurefin "finish hour"
 
 }
 
@@ -202,7 +178,7 @@ label variable heurefin "finish hour"
 * 	PART 6: 	Label the variables values	  			
 ***********************************************************************
 		*yes/no variables loop:
-local yesnovariables Id_ident formation exp_kno_ft_CO info_neces info_compt1 attestexp_kno_ft_ZE ///
+local yesnovariables formation exp_kno_ft_co info_neces info_compt1 attest exp_kno_ft_ze ///
 exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan ///
 ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5
 
@@ -226,35 +202,27 @@ label define agreenot 1 "strongly disagree" 5 "strongly agree"
 foreach var of local agreenotvar {
 	label values `var' agreenot
 }
-		*yes/no/other variable:
-label define label_yesno 0 "Yes" 1 "No" 3 "Firm name changed"
-label values ident2 label_yesno
 
 		*time frequency variable:
-label define label_freq 0 "Never" 0.25 "Annually" 0.5 "Monthly" 0.75 "Weekly" 1 "Daily"
-label values man_fin_per label_freq
+*label define label_freq Never "0" Anually "0.25" Monthly "0.5" Weekly "0.75" Daily "1"
+*label values man_fin_per_freq label_freq
 
 		*company function  variable:
-label define label_func 1 "CEO" 2 "PDG" 3 "CEO and PDG" 4 "Refuse to answer" 5 "None"
-label values ident_respondent_position label_func
 
-label define label_net 1 "Win" 2 "Communicate" 3 "Trust" 4 "Beat" 5 "Power" 6 "Retreat" ///
-7 "Partnership" 8 "Opponent" 9 "Connect" 10 "Dominate"
-label values net_coop label_net
 
-label define label_hr 0.25 "No promotion" 0.5 "Promotion on other factors than performance" /// 
-0.75 "Promotion partially based on performance and other factors" 1 "Promotion based on performance"
-label values man_hr_obj label_hr
+*label define label_hr 0.25 "No promotion" 0.5 "Promotion on other factors than performance" /// 
+*0.75 "Promotion partially based on performance and other factors" 1 "Promotion based on performance"
+*label values man_hr_obj label_hr
 
-label define label_ent 0 "Aucun indicateur" 0.33 "1-2 indicateurs" 0.66 "3-9 indicateurs " 1 "10 ou plus indicateurs"
-label values man_ent_per label_ent
+*label define label_ent 0 "Aucun indicateur" 0.33 "1-2 indicateurs" 0.66 "3-9 indicateurs " 1 "10 ou plus indicateurs"
+*label values man_ent_per label_ent
 
-label define label_ind 0.25 "seniors" 0.5 "most of seniors and some employees" ///
-0.75 "most of seniors and employees" 1 "all seniors and employees"
-label values man_ind_awa label_ind
+*label define label_ind 0.25 "seniors" 0.5 "most of seniors and some employees" ///
+*0.75 "most of seniors and employees" 1 "all seniors and employees"
+*label values man_ind_awa label_ind
 
-label define label_source 1 "Consultant" 2 "Network" 3 "Employees" 4 "Family" 5 "Event" 6 "None" 7 "Other"
-label values man_source label_source
+*label define label_source 1 "Consultant" 2 "Network" 3 "Employees" 4 "Family" 5 "Event" 6 "None" 7 "Other"
+*label values man_source label_source
 
 label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 

@@ -21,20 +21,20 @@
 ************************************************************************
 import excel "${ml_raw}/ml_raw.xlsx", firstrow clear
 
+     *rename variables in line with codebook 
+rename Id id_plateforme 
+
 ***********************************************************************
 * 	PART 2:  create + save bl_pii file	  			
 ***********************************************************************
-	* put all pii variamles into a local
-local pii id_plateforme nom_rep NOM_ENTREPRISE nom_entr2 ident_base_respondent ident_nouveau_personne ident_base_respondent2 ident_respondent_position comptamle_email comptamle_numero Numero1 Numero2 List_group_ml
+	* put all pii variables into a local
+local pii id_plateforme ident_base_respondent ident_nouveau_personne id_ident id_ident2 firmname_change ident_repondent_position comptable_email comptable_numero Numero1 Numero2 List_group
 
 	* save as stata master data
 preserve
 keep `pii'
 
-    * transform byte variamle of nom_rep into string to match the baseline data
-tostring nom_rep, gen(nom_rep2) format(%15.0f)
-        drop nom_rep
-        ren nom_rep2 nom_rep
+   
 		
 	* rename list_group to specify surveyround
 rename List_group List_group_ml
@@ -51,7 +51,7 @@ restore
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
 	* drop all pii
-drop Id_ident ident2 firmname_change ident_nouveau_personne ident_base_respondent ident_respondent_position comptable_numero comptable_email id_admin Numero1 Numero2
+drop ident_base_respondent ident_nouveau_personne id_ident id_ident2 firmname_change ident_repondent_position comptable_email comptable_numero Numero1 Numero2 
 
 
 save "${ml_intermediate}/ml_intermediate", replace
