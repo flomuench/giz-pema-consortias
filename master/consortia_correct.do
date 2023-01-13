@@ -184,14 +184,14 @@ save "${master_intermediate}/consortium_pii_inter", replace
 ***********************************************************************	
 use "${master_intermediate}/consortium_inter", clear
 
-/*
+
 ***********************************************************************
 * 	PART 1:  change pole information
 ***********************************************************************
 replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
-*/
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
