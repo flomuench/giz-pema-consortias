@@ -190,11 +190,11 @@ if (1) do "${master_github}/consortia_generate.do"
 /*--------------------------------------------------------------------
 	PART 3.7: Exports a list of participants with most important info (for survey institute or political partners)
 ----------------------------------------------------------------------*/
-if (1) do "${master_github}/consortia_export.do"
+if (0) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
 	PART 3.8: Test coherence between survey rounds
 ----------------------------------------------------------------------*/
-if (1) do "${master_github}/consortia_test.do"
+if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************
@@ -203,7 +203,7 @@ if (1) do "${master_github}/consortia_test.do"
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
 ----------------------------------------------------------------------*/		
-if (0) do "${master_github}/consortia_visualisations.do"
+if (1) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions
 ----------------------------------------------------------------------*/

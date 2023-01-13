@@ -29,6 +29,7 @@ correlate ca_2021 ca_exp_2021  profit_2021   exprep_inv
 ***********************************************************************
 * 	PART 2: Basline statistics
 ***********************************************************************
+/*
 * create word document
 set scheme s1color
 putpdf clear
@@ -74,6 +75,9 @@ gr hbar (sum) support2 support6 support3 support4 support5 support1, blabel(tota
 	note("{it:N = 176}", size(small)) ///
 	name(support_options, replace)
 gr export support_options.png, replace
+putpdf paragraph, halign(center) 
+putpdf image support_options.png
+putpdf pagebreak
 
 
 gr bar (mean) age, over(support5) blabel(total, format(%9.1fc)) /* firms needing support with childcare are 2 years younger */
@@ -107,7 +111,6 @@ graph hbar (sum) attstrat, over(_j, label relabel(2 "les deux stratégies doit �
                            legend(off) blabel(total,format(%9.2fc) pos(outside)) yla(0(20)100) ///
                            graphregion(margin(55 2 2 2)) ylabel(, angle(forty_five) valuelabel) ///
                            title("Rôle du consortium dans l'établissement de la stratégie d'exportation", position(middle) size(small))
-
 restore
 gr export att_strat.png, replace
 putpdf paragraph, halign(center) 
@@ -129,7 +132,10 @@ graph bar age, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Ser
 	ylabel(0(1)9 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
-	gr export "$bl_output/donor/age.png", replace
+gr export age.png, replace
+putpdf paragraph, halign(center) 
+putpdf image age.png
+putpdf pagebreak
 
 sum employes,d
 graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
@@ -138,7 +144,10 @@ graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 
 	ylabel(0(2)22 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
-	gr export "$bl_output/donor/employees.png", replace
+gr export employees.png, replace
+putpdf paragraph, halign(center) 
+putpdf image employees.png
+putpdf pagebreak
 	
 sum exp_pays,d
 graph bar exp_pays, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
@@ -147,8 +156,11 @@ graph bar exp_pays, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 
 	ylabel(0(1)2.5 , nogrid) ///
 	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
-	gr export "$bl_output/donor/export_countries2.png", replace
-
+gr export export_countries2.png, replace
+putpdf paragraph, halign(center) 
+putpdf image export_countries2.png
+putpdf pagebreak
+		
 sum exp_pays,d
 histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8, nogrid) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
@@ -157,20 +169,31 @@ histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8, n
 	ylabel(0(20)100 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
 	text(100 `r(p50)' "Median", size(vsmall) place(e))
-	gr export "$bl_output/donor/export_countries.png", replace
+gr export export_countries.png, replace
+putpdf paragraph, halign(center) 
+putpdf image export_countries.png
+putpdf pagebreak
+
 
 	*Family vs non-family contact*
 graph bar net_nb_dehors net_nb_fam, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT"))stack ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Non-family contacts" 2 "Family contacts") pos(6))
-	gr export "$bl_output/donor/network.png", replace
+gr export network.png, replace
+putpdf paragraph, halign(center) 
+putpdf image network.png
+putpdf pagebreak
+
 
 graph bar (mean) net_nb_dehors net_nb_fam , blabel(total, format(%9.2fc) gap(-0.2))  ///
 	title("Number of family vs non-family contacts") ///
 	ylabel(0(1)11, nogrid) /// 
 	legend(order(1 "Non-family contacts" 2 "Family contacts") pos(6))
-	gr export "$bl_output/donor/famcont.png", replace	
+gr export famcont.png, replace
+putpdf paragraph, halign(center) 
+putpdf image famcont.png
+putpdf pagebreak
 	
 tw ///
 	(kdensity net_nb_dehors if net_nb_dehors < 40, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
@@ -183,16 +206,21 @@ tw ///
 	legend(symxsize(small) order(1 "Non-Family contacts" 2 "Family contacts")  pos(6) row(1)) ///
 	xlabel(0(5)35, nogrid format(%9.0f)) ///
 	name(network_density, replace)
-gr export "$bl_output/donor/network_density.png", replace
+gr export network_density.png, replace
+putpdf paragraph, halign(center) 
+putpdf image network_density.png
+putpdf pagebreak
 
 
-	
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive option incl.")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 ytitle("No. of affirmations") ///
 ylabel(0(1)3.2, nogrid) 
-gr export "$bl_output/donor/bar_listexp.png", replace
+gr export bar_listexp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bar_listexp.png
+putpdf pagebreak
 
 	
 *locus of control and initiative	
@@ -201,7 +229,10 @@ graph hbar (mean) car_loc_insp car_loc_succ car_loc_env, blabel(total, format(%9
 	label  (3 "Control over the internal and external environment of the firm") ) ///
 	title("Locus of control for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid) 
-	gr export "$bl_output/donor/locuscontrol.png", replace
+gr export locuscontrol.png, replace
+putpdf paragraph, halign(center) 
+putpdf image locuscontrol.png
+putpdf pagebreak
 	
 graph hbar (mean) car_init_init car_init_prob car_init_opp, blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Taking initiatives when others do not") label (2 "Proactive problem confrontations") ///
@@ -209,7 +240,11 @@ graph hbar (mean) car_init_init car_init_prob car_init_opp, blabel(total, format
 	title("Locus of initiative for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid) 
 	gr export "$bl_output/donor/initiative.png", replace
-	
+gr export initiative.png, replace
+putpdf paragraph, halign(center) 
+putpdf image initiative.png
+putpdf pagebreak
+
 	
 	
 graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -218,6 +253,10 @@ graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%
 	title("Locus of entrepreuneurhsip for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid)    
 	gr export "$bl_output/donor/locus_efi.png", replace
+gr export locus_efi.png, replace
+putpdf paragraph, halign(center) 
+putpdf image locus_efi.png
+putpdf pagebreak
 	
 	
 	
@@ -227,6 +266,10 @@ graph bar (mean) net_coop_pos net_coop_neg, blabel(total, format(%9.1fc) gap(-0.
 	title("Perception of interactions between CEOs") ///
 	ylabel(0(1)3, nogrid) 
 	gr export "$bl_output/donor/perceptions_interactions.png", replace
+gr export perceptions_interactions.png, replace
+putpdf paragraph, halign(center) 
+putpdf image perceptions_interactions.png
+putpdf pagebreak
 	
 graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, blabel(total, format(%9.2fc) gap(-0.2))  ///
 	legend (pos(6) row(6) label (1 "Power") label(2 "Partnership") ///
@@ -235,8 +278,10 @@ graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoo
 	label(9 "Beat") label(10 "Retreat")) ///
 	title("Perception of interactions between CEOs") ///
 	ylabel(0(0.5)0.7, nogrid) 
-	gr export "$bl_output/donor/perceptions_interactions_details.png", replace
-
+gr export perceptions_interactions_details.png, replace
+putpdf paragraph, halign(center) 
+putpdf image perceptions_interactions_details.png
+putpdf pagebreak
 
 *Number of CEO met*
 
@@ -248,8 +293,10 @@ histogram net_time if net_time<35, width(5) frequency addlabels xlabel(0(5)35, n
 	ylabel(0(10)80 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(small) place(e)) ///
 	text(100 `r(p50)' "Median", size(small) place(e))
-	gr export "$bl_output/donor/CEO_network.png", replace
-	
+gr export CEO_network.png, replace
+putpdf paragraph, halign(center) 
+putpdf image CEO_network.png
+putpdf pagebreak	
 
 *Quality of advice*
 sum net_nb_qualite,d
@@ -260,8 +307,10 @@ histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid for
 	ylabel(0(5)50 , nogrid) ///
 	text(100 `r(mean)' "Mean", size(small) place(e)) ///
 	text(100 `r(p50)' "Median", size(small) place(e))
-	gr export "$bl_output/donor/quality_advice.png", replace
-	
+gr export quality_advice.png, replace
+putpdf paragraph, halign(center) 
+putpdf image quality_advice.png
+putpdf pagebreak		
 	
 *Management & Marketing practices
 graph hbar (mean) man_pro_ano man_hr_feed man_fin_enr man_fin_per man_hr_obj, blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -269,7 +318,10 @@ graph hbar (mean) man_pro_ano man_hr_feed man_fin_enr man_fin_per man_hr_obj, bl
 	label(3 "Registration of sales and purchases") label(4 "Frequency of examining financial performance") label(5 "Performance indicators for employees")) ///
 	title("Management Practices") ///
 	ylabel(0(1)4, nogrid) 
-	gr export "$bl_output/donor/managementpractices.png", replace
+gr export managementpractices.png, replace
+putpdf paragraph, halign(center) 
+putpdf image managementpractices.png
+putpdf pagebreak
 
 graph hbar (mean) man_mark_offre man_mark_div man_fin_profit man_mark_prix man_mark_pub man_mark_clients, blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Attract customers with a special offer") label(2 "Ask customers what other products they would like to be produced") label(3 "Knowing the profit per product/service") ///
@@ -277,7 +329,10 @@ graph hbar (mean) man_mark_offre man_mark_div man_fin_profit man_mark_prix man_m
 	label(6 "Investigate why past customers have stopped buying from the company")) ///
 	title("Management & Marketing Practices") ///
 	ylabel(0(0.5)1, nogrid) 
-	gr export "$bl_output/donor/mgntmktpractices.png", replace
+gr export mgntmktpractices.png, replace
+putpdf paragraph, halign(center) 
+putpdf image mgntmktpractices.png
+putpdf pagebreak
 
 *Export management/readiness
 graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -414,7 +469,7 @@ putpdf pagebreak
 
 putpdf save "baseline_statistics", replace
 
-
+*/
 ***********************************************************************
 * 	PART 2: Midline statistics
 ***********************************************************************
@@ -438,7 +493,7 @@ graph bar share, blabel(total, format(%9.2fc)) ///
 	ytitle("Number of entries")
 graph export ml_responserate.png, replace
 putpdf paragraph, halign(center)
-putpdf image responserate.png
+putpdf image ml_responserate.png
 putpdf pagebreak
 drop share
 	
@@ -447,7 +502,7 @@ count if survey_completed==1
 gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses complète") 
-gr export complete_responses.png, replace
+gr export ml_complete_responses.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_complete_responses.png
 putpdf pagebreak
@@ -501,11 +556,11 @@ graph hbar (sum) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, ov
 	putpdf pagebreak
 
 **** Section 2: Networking*****
-
+/*
 *Network advice quality
 *Quality of advice*
 sum net_nb_qualite,d
-histogram net_nb_qualite if surveyround == 2, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
+histogram net_nb_qualite if surveyround == 2, frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of firms") ///
 	xtitle("Midline: Quality of advice of the business network") ///
@@ -516,7 +571,8 @@ histogram net_nb_qualite if surveyround == 2, width(1) frequency addlabels xlabe
 	putpdf paragraph, halign(center) 
 	putpdf image ml_quality_advice.png
 	putpdf pagebreak
-	
+*/
+
 *Interactions between CEO	
 graph bar (mean) net_coop_pos net_coop_neg, over(surveyround, label(labs(small))) over(take_up, label(labs(small))) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
@@ -715,7 +771,7 @@ putpdf save "midline_statistics", replace
 ***********************************************************************
 * 	PART 4:  Mdiline Indexes
 ***********************************************************************
-
+/*
 putpdf clear
 putpdf begin 
 putpdf paragraph

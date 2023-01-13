@@ -64,8 +64,11 @@ gen share3= (`r(N)'/176)*100
 
 * Share of firms that started the survey
 graph bar share*, blabel(total, format(%9.2fc)) ///
+	legend (pos(6) row(6) label(1 "Started answering") label (2 "Answers completed") ///
+	label  (3 "Answers validated")) ///
 	title("Started, Completed, Validated") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries")
+	ytitle("Number of entries") ///
+	ylabel(0(10)100, nogrid) 
 graph export ml_responserate.png, replace
 putpdf paragraph, halign(center)
 putpdf image ml_responserate.png
@@ -73,10 +76,71 @@ putpdf pagebreak
 
 drop share1 share2 share3
 
+* Number of missing answers per section
+graph hbar (count) miss_accounting miss_eri miss_gender miss_inno miss_management miss_network, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Accounting section") label (2 "Export readiness section") ///
+	label  (3 "Gender section") label  (4 "Innovation section") ///
+	label  (5 "Management section") label  (5 "Network section")) ///
+	title("Number of missing answer per section") ///
+	ylabel(0(5)50, nogrid) 
+gr export ml_missing_asnwers.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_missing_asnwers.png
+putpdf pagebreak	
 
-*** Section 2: Networks
+****** Section 2: innovation ******
+*Type of innovation*
+graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
+	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
+	label  (5 "No innovation")) ///
+	title("Type of innovation") ///
+	ylabel(0(1)5, nogrid) 
+gr export ml_typeinnovation_share.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_typeinnovation_share.png
+putpdf pagebreak	
+
+graph hbar (sum) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
+	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
+	label  (5 "No innovation")) ///
+	title("Type of innovation") ///
+	ylabel(0(1)5, nogrid) 
+gr export ml_typeinnovation.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_typeinnovation.png
+putpdf pagebreak	
+
+
+*Source of the innovation	
+graph hbar (mean) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
+	label  (3 "Business contact") label  (4 "Event") ///
+	label  (5 "Employee") label  (6 "Standards and norms")) ///
+	title("Source of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_source_inno_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_source_inno_share.png
+	putpdf pagebreak
+
+graph hbar (sum) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
+	label  (3 "Business contact") label  (4 "Event") ///
+	label  (5 "Employee") label  (6 "Standards and norms")) ///
+	title("Source of innovation") ///
+	ylabel(0(1)5, nogrid) 
+	gr export ml_source_inno.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_source_inno.png
+	putpdf pagebreak
+	
+	
+****** Section 3: Networks ****** 
 	* Number of female and male CEO met
 graph bar net_nb_m net_nb_f, over(treatment)stack ///
+	title("Number of female and male CEO met") ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
@@ -124,19 +188,8 @@ putpdf paragraph, halign(center)
 putpdf image ml_quality_advice.png
 putpdf pagebreak	
 
-
-*graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive option incl.")) ///
-	blabel(total, format(%9.2fc) gap(-0.2)) ///
-ytitle("No. of affirmations") ///
-ylabel(0(1)3.2, nogrid) 
-gr export ml_bar_listexp.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_bar_listexp.png
-putpdf pagebreak
-
 *Interactions between CEO	
-graph bar (mean) net_coop_pos net_coop_neg, blabel(total, format(%9.1fc) gap(-0.2)) ///
+graph bar (mean) net_coop_pos net_coop_neg, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
 	title("Perception of interactions between CEOs") ///
 	ylabel(0(1)3, nogrid) 
@@ -145,7 +198,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_perceptions_interactions.png
 putpdf pagebreak
 	
-graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, blabel(total, format(%9.2fc) gap(-0.2))  ///
+graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
 	legend (pos(6) row(6) label (1 "Power") label(2 "Partnership") ///
 	label(3 "Communicate") label(4 "Win") label(5 "Trust") ///
 	label(6 "Connect") label(7 "Opponent") label(8 "Dominate") ///
@@ -156,21 +209,64 @@ gr export ml_perceptions_interactions_details.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_perceptions_interactions_details.png
 putpdf pagebreak
-	
-*Locus of control
-graph hbar (mean)  car_loc_succ car_loc_exp car_loc_env, blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Able to determine the success of her business") label (2 "Master export administrative and logistic procedures") ///
-	label  (3 "Control over the internal and external environment of the firm") ) ///
-	title("Locus of control for female entrepreuneurs") ///
-	ylabel(0(1)5, nogrid) 
-gr export ml_locuscontrol.png, replace
+
+****** Section 3: Management practices ****** 
+
+
+
+****** Section 4: Export management and readiness ****** 
+*Knowledge questions
+graph hbar (mean) exp_kno_ft_co exp_kno_ft_ze, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(1) label (1 "COMESA") label(2 "ZECLAF") size(vsmall)) ///
+	title("Export Knowledge") ///
+	ylabel(0(0.2)1, nogrid)    
+gr export ml_ex_k.png, replace
 putpdf paragraph, halign(center) 
-putpdf image ml_locuscontrol.png
-putpdf pagebreak
+putpdf image ml_ex_k.png
+putpdf pagebreak	
 	
+*Export management/readiness
+graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(7) label (1 "Undertake an analysis of target export markets") label(2 "Maintain or develop an export plan") ///
+	label(3 "Undertake a trade mission/travel to one of target markets") label(4 "Access the customs website") label(5 "Participate in international trade exhibitions/fairs") ///
+	label(6 "Designate an employee in charge of export-related activities") label(7 "Engage or work with an international trading company")size(vsmall)) ///
+	title("Export Readiness Practices") ///
+	ylabel(0(0.2)1, nogrid)    
+gr export ml_erp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_erp.png
+putpdf pagebreak	
+	
+* Export preparation investment	
+egen exprep_inv_95p = pctile(exprep_inv), p(95)
+graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Investment in export readiness")
+gr export ml_bar_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_bar_exprep_inv.png
+putpdf pagebreak
+
+stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) vertical ///
+	title("Investment in export readiness")
+gr export ml_strip_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_strip_exprep_inv.png
+putpdf pagebreak	
+
+*Export costs perception	
+graph hbar (mean) exprep_couts, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	title("Export preparation costs") ///
+	ylabel(0(1)10, nogrid)    
+gr export ml_exprep_couts.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_exprep_couts.png
+putpdf pagebreak	
+
+
+****** Section 5: Characteristics of the company****** 
 *Locus of efficience
-graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(9) label(1 "Manage to convince employees and partners to agree") label(2 "Negotiate the affairs of the company well") ///
+graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(9) label(1 "Able to motivate the employees in my company") label(2 "Able to attract customers for my business") ///
 	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
 	title("Locus of efficience for female entrepreuneurs") ///
 	ylabel(0(1)5, nogrid)    
@@ -178,17 +274,45 @@ gr export ml_locusefi.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_locusefi.png
 putpdf pagebreak	
+
+*Locus of control
+graph hbar (mean)  car_loc_succ car_loc_exp car_loc_env, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Able to introduce my company & product internationally") label (2 "Master export administrative and logistic procedures") ///
+	label  (3 "Comfortable making new business contacts") ) ///
+	title("Locus of control for female entrepreuneurs") ///
+	ylabel(0(1)5, nogrid) 
+gr export ml_locuscontrol.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_locuscontrol.png
+putpdf pagebreak
+	
+
+*graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
+graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+	title("List experiment question") ///
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
+gr export ml_bar_listexp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_bar_listexp.png
+putpdf pagebreak
+
+
+****** Section 6: Accounting section ****** 
 	
 *bar chart and boxplots of accounting variable by treatment
      * variable ca_2022:
 egen ca_95p = pctile(ca), p(95)
-graph bar ca if ca<ca_95p, blabel(total, format(%9.2fc))
+graph bar ca if ca<ca_95p, blabel(total, format(%9.2fc)) ///
+	title("Turnover in 2022")
 gr export ml_bar_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_2022.png
 putpdf pagebreak
 
-stripplot ca if ca<ca_95p, over(treatment) vertical
+stripplot ca if ca<ca_95p, over(treatment) vertical ///
+	title("Turnover in 2022")
 gr export ml_strip_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_2022.png
@@ -196,13 +320,15 @@ putpdf pagebreak
 
      * variable ca_exp_2022:
 egen ca_exp_95p = pctile(ca_exp), p(95)
-graph bar ca_exp if ca_exp<ca_exp_95p, over(treatment) blabel(total, format(%9.2fc))
+graph bar ca_exp if ca_exp<ca_exp_95p, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Export turnover in 2022")
 gr export ml_bar_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_exp_2022.png
 putpdf pagebreak
 
-stripplot ca_exp if ca_exp<ca_exp_95p , over(treatment) vertical
+stripplot ca_exp if ca_exp<ca_exp_95p , over(treatment) vertical ///
+	title("Export turnover in 2022")
 gr export ml_strip_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_exp_2022.png
@@ -210,30 +336,18 @@ putpdf pagebreak
 
      * variable profit_2022:
 egen profit_95p = pctile(profit), p(95)
-graph bar profit if profit<profit_95p, over(treatment) blabel(total, format(%9.2fc))
+graph bar profit if profit<profit_95p, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Profit in 2022")
 gr export ml_bar_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_profit_2022.png
 putpdf pagebreak
 
-stripplot profit if profit<profit_95p, over(treatment) vertical
+stripplot profit if profit<profit_95p, over(treatment) vertical ///
+	title("Profit in 2022")
 gr export ml_strip_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_profit_2022.png
-putpdf pagebreak
-
-     * variable exprep_inv:
-egen exprep_inv_95p = pctile(exprep_inv), p(95)
-graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) blabel(total, format(%9.2fc))
-gr export ml_bar_exprep_inv.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_bar_exprep_inv.png
-putpdf pagebreak
-
-stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) vertical
-gr export ml_strip_exprep_inv.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_strip_exprep_inv.png
 putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
@@ -250,7 +364,106 @@ putpdf paragraph, halign(center)
 putpdf image ml_scatter_exprep.png
 putpdf pagebreak
 
-** section 1: innovation
+
+
+****** Section 7: Employees & ASS activities ****** 
+
+**** Africa-related actions********************
+graph bar (sum) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///
+	blabel(total, format(%9.2fc) size(vsmall)) ///
+	title ("ASS activities") ///
+	ytitle("Sum of affirmative firms") ///
+	legend(pos (6) label(1 "Interest from a potential client in SSA") label(2 "Identification of a commercial partner in SSA") label(3 "Obtained external finance to cover preliminary export costs") label(4 "Investment in sales structure in an SSA target market") label(5 "Introduction of a digital innovation or communication system") size(vsmall))
+gr export ml_ssa_action.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_ssa_action.png
+putpdf pagebreak
+
+graph bar (mean) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///
+	blabel(total, format(%9.2fc) size(vsmall)) ///
+	title ("ASS activities") ///
+	ytitle("Share of affirmative firms") ///
+	legend(pos (6) label(1 "Interest from a potential client in SSA") label(2 "Identification of a commercial partner in SSA") label(3 "Obtained external finance to cover preliminary export costs") label(4 "Investment in sales structure in an SSA target market") label(5 "Introduction of a digital innovation or communication system") size(vsmall))
+gr export ml_ssa_action_share.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_ssa_action_share.png
+putpdf pagebreak
+
+**** Employment********************
+
+ * Generate graphs to see difference of employment between baseline & midline
+*Bart chart: sum
+graph bar (sum) empl if empl >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Sum of full time employees") 
+gr export fte_details_sum_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_details_sum_bar.png
+putpdf pagebreak
+
+graph bar (sum) car_empl1 if car_empl1 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+		title("Sum of female employees")  
+gr export fte_femmes_details_sum_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_femmes_details_sum_bar.png
+putpdf pagebreak
+
+graph bar (sum) car_empl4 if car_empl4 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Sum of part time employees")  
+gr export pte_details_sum_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image pte_details_sum_bar.png
+putpdf pagebreak
+
+graph bar (sum) car_empl2 if car_empl2 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Sum of young employees") 
+gr export young_employees_details_sum_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image young_employees_details_sum_bar.png
+putpdf pagebreak
+
+*Bart chart: mean
+graph bar (mean) empl if empl >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Mean of full time employees") 
+gr export fte_details_mean_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_details_mean_bar.png
+putpdf pagebreak
+
+graph bar (mean) car_empl1 if car_empl1 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Mean of female employees") 
+gr export fte_femmes_details_mean_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_femmes_details_mean_bar.png
+putpdf pagebreak
+
+graph bar (mean) car_empl4 if car_empl4 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Mean of part time employees")
+gr export pte_details_mean_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image pte_details_mean_bar.png
+putpdf pagebreak
+
+graph bar (mean) car_empl2 if car_empl2 >= 0, over(treatment, label(labs(small))) ///
+	blabel(total, format(%9.0fc) size(vsmall)) ///
+	title("Mean of young employees")  
+gr export young_employees_details_mean_bar.png, replace
+putpdf paragraph, halign(center) 
+putpdf image young_employees_details_mean_bar.png
+putpdf pagebreak
+
+
+
+
+
+
+
 *local inno_vars 
 *missingplot `inno_vars', labels mlabcolor(blue)
 
@@ -261,17 +474,7 @@ putpdf pagebreak
 * Add visualisation for missing values per section	
 
 
-*Export management/readiness
-graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(7) label (1 "Undertake an analysis of target export markets") label(2 "Maintain or develop an export plan") ///
-	label(3 "Undertake a trade mission/travel to one of target markets") label(4 "Access the customs website") label(5 "Participate in international trade exhibitions/fairs") ///
-	label(6 "Designate an employee in charge of export-related activities") label(7 "Engage or work with an international trading company")size(vsmall)) ///
-	title("Export Readiness Practices") ///
-	ylabel(0(0.2)1, nogrid)    
-gr export ml_erp.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_erp.png
-putpdf pagebreak	
+
 
 
 	
