@@ -65,6 +65,7 @@ ssc install missingplot, replace
 
 	* dynamic folder path for gdrive(data,output), github(code)
 
+
 	if c(os) == "Windows" {
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
@@ -76,6 +77,17 @@ else if c(os) == "MacOSX" {
 	global master_consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 
+		* registration folder
+if c(os) == "Windows" {
+	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
+	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
+}
+else if c(os) == "MacOSX" {
+	global regis_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
+	global regis_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
+}
+
+		* baseline folder
 if c(os) == "Windows" {
 	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
@@ -86,16 +98,7 @@ else if c(os) == "MacOSX" {
 	global bl_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
-
-if c(os) == "Windows" {
-	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
-	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
-}
-else if c(os) == "MacOSX" {
-	global regis_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
-	global regis_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
-}
-
+		* midline folder
 if c(os) == "Windows" {
 	global ml_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
@@ -109,30 +112,28 @@ else if c(os) == "MacOSX" {
 		
 * paths within gdrive
 			* data
+				* master
 global master_intermediate "${master_gdrive}/intermediate"
 global master_final = "${master_gdrive}/final"
 global master_checks = "${master_gdrive}/checks"
-global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_raw = "${master_gdrive}/raw"
 global implementation = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/7-implementation"
-
-
+				* midline
 global ml_raw = "${ml_gdrive}/raw"
 global ml_intermediate "${ml_gdrive}/intermediate"
 global ml_final = "${ml_gdrive}/final"
 global ml_checks = "${ml_gdrive}/checks"
-global ml_output = "${ml_gdrive}/output"
-
-global regis_raw = "${regis_gdrive}/raw"
-global regis_intermediate "${regis_gdrive}/intermediate"
-global regis_final = "${regis_gdrive}/final"
-global regis_checks = "${regis_gdrive}/checks"
-
+				* baseline
 global bl_raw = "${bl_gdrive}/raw"
 global bl_intermediate "${bl_gdrive}/intermediate"
 global bl_final = "${bl_gdrive}/final"
 global bl_checks = "${bl_gdrive}/checks"
 
+				* registration
+global regis_raw = "${regis_gdrive}/raw"
+global regis_intermediate "${regis_gdrive}/intermediate"
+global regis_final = "${regis_gdrive}/final"
+global regis_checks = "${regis_gdrive}/checks"
 
 			* output (regression tables, figures)
 				* baseline
@@ -146,6 +147,7 @@ global ml_figures = "${ml_output}/descriptive-statistics-figures"
 global ml_progress = "${ml_output}/progress-eligibility-characteristics"
 
 				* master
+global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_power = "${master_output}/power"
 global master_regressiontables = "${master_output}/regression_tables"
 global master_figures = "${master_figures}/figures"
