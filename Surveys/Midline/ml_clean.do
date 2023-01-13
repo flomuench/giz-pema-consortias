@@ -224,6 +224,12 @@ label values list_group label_list_group
 label define label_attest  1 "Yes"
 label values attest label_attest
 
+
+***********************************************************************
+* 	PART 7: Change variable format for merger with baseline
+***********************************************************************
+tostring id_admin, replace
+
 ***********************************************************************
 * 	Part 7: Save the changes made to the data		  			
 ***********************************************************************

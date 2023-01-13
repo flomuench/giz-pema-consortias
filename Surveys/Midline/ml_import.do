@@ -21,14 +21,31 @@
 ************************************************************************
 import excel "${ml_raw}/ml_raw.xlsx", firstrow clear
 
-     *rename variables in line with codebook 
+	* keep only lines with observations (deletes further unintended lines)
+sum Id
+keep in 1/`r(N)'
+
+    *rename variables in line with codebook 
 rename Id id_plateforme 
 
 ***********************************************************************
 * 	PART 2:  create + save bl_pii file	  			
 ***********************************************************************
+	* remove variables that already existin in pii
+drop ident_base_respondent
+
+	* rename variables to indicate ml as origin
+local ml_changes ident_nouveau_personne firmname_change Numero1 Numero2 ident_repondent_position
+foreach var of local ml_changes {
+	rename `var' `var'_ml
+}
+
 	* put all pii variables into a local
-local pii id_plateforme ident_base_respondent ident_nouveau_personne id_ident id_ident2 firmname_change ident_repondent_position comptable_email comptable_numero Numero1 Numero2 List_group
+local pii id_plateforme ident_nouveau_personne_ml id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml List_group
+
+	* change format of accountant email to text for merge with master_pii
+tostring comptable_email, replace
+
 
 	* save as stata master data
 preserve
@@ -51,7 +68,7 @@ restore
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
 	* drop all pii
-drop ident_base_respondent ident_nouveau_personne id_ident id_ident2 firmname_change ident_repondent_position comptable_email comptable_numero Numero1 Numero2 
+drop ident_nouveau_personne id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml 
 
 
 save "${ml_intermediate}/ml_intermediate", replace
