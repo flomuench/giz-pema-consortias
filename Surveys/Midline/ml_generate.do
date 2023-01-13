@@ -30,17 +30,13 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 ***********************************************************************
 										  
 	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor, att_strat, att_cont using regex
-	
-generate inno_type1 = regexm(inno_types, "inno_produit")
-generate inno_type2 = regexm(inno_types, "inno_process")
-generate inno_type3 = regexm(inno_types, "inno_lieu")
-generate inno_type4 = regexm(inno_types, "inno_commerce")
-generate inno_type0 = regexm(inno_types, "inno_aucune")
-label var inno_type0 "product change"
-label var inno_type1 "process change"
-label var inno_type2 "place change"
-label var inno_type3 "commerce change"
-label var inno_type4 "no change"
+generate inno_aucune = 0
+replace inno_aucune = 1 if ((inno_produit == 0) | (inno_process  == 0) | (inno_lieu  == 0 )| (inno_commerce  == 0))
+label var inno_produit "product change"
+label var inno_process "process change"
+label var inno_lieu "place change"
+label var inno_commerce "commerce change"
+label var inno_aucune "no change"
 
 generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
 generate inno_mot2 = regexm(inno_mot, "inno_mot_cons")
@@ -58,8 +54,7 @@ label var inno_mot6 "Norms"
 label var inno_mot7 "other source for innovation"
 
 		*yes/no variables loop after the clean:
-local yesnovariables1 inno_produit inno_process inno_lieu inno_commerce inno_aucune inno_mot_idee inno_mot_cons inno_mot_cont ///
-inno_mot_eve inno_mot_emp inno_mot_test inno_mot_autre     
+local yesnovariables1  inno_produit inno_process inno_lieu inno_commerce inno_aucune inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6      
 
 label define yesno1 1 "Yes" 0 "No"
 foreach var of local yesnovariables1 {
@@ -86,7 +81,7 @@ label var netcoop7 "Partnership"
 label var netcoop8 "Opponent"
 label var netcoop9 "Connect" 
 label var netcoop10 "Dominate"
-
+/*
 generate listexp1 = regexm(listexp, "Je soutiens et encourage toujours mon équipe.")
 generate listexp2 = regexm(listexp, "Je rêvais d'être une femme qui réussit quand j'étais enfant.")
 generate listexp3 = regexm(listexp, "J'essaie de faire de mon mieux dans mon travail.")
@@ -95,7 +90,7 @@ lab var listexp1 "support and encourage my team"
 lab var listexp2 "I dreamed of being a successful woman when I was a child."
 lab var listexp3 "I try to do my best in my work"
 lab var listexp4 "I feel compelled to consult with my husband (or another man in my family) before making decisions for the company."
-
+*/
     *Convert the below variables in numeric (non float variables)
 local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
 foreach x of local destrvar {
@@ -128,9 +123,10 @@ replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
 label values survey_started yesno
 
+/*
 * Create a dummy that gives the percentage of women that ask their husbands for advice for strategic business decision-making
 generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3 + listexp4)
-
+*/
 
 //2.3 time used to fill survey
 /*{
