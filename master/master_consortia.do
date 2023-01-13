@@ -63,8 +63,9 @@ ssc install missingplot, replace
 }
 
 
-	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
-		* master folder
+	* dynamic folder path for gdrive(data,output), github(code)
+
+
 	if c(os) == "Windows" {
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
@@ -193,7 +194,7 @@ if (1) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
 	PART 3.8: Test coherence between survey rounds
 ----------------------------------------------------------------------*/
-if (1) do "${master_github}/consortia_test.do"
+if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

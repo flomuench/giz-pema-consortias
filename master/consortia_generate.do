@@ -72,6 +72,16 @@ egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1at
 replace take_up_per = take_up_per/10
 
 	* create a take_up
+egen take_up = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
+re^place take_up = (present>2 & present<.), a(present)
+
+
+
+
+replace take_up  = ("present">5 & "present"<.), a(present)
+lab var take_up "1 if company was present in half of trainings"
+label define treated 0 "not present" 1 "present"
+label value take_up treated
 
 	* create a status variable for surveys
 gen status = (take_up_per > 0 & take_up_per < .)
@@ -79,7 +89,7 @@ gen status = (take_up_per > 0 & take_up_per < .)
 ***********************************************************************
 * 	PART II.2:    Create missing variables for accounting number			  
 ***********************************************************************
-gen profit_2021_missing=0
+/*gen profit_2021_missing=0
 replace profit_2021_missing= 1 if profit_2021==.
 replace profit_2021_missing= 1 if profit_2021==0
 
@@ -89,7 +99,7 @@ replace ca_2021_missing= 1 if ca_2021==0
 
 gen ca_exp_2021_missing=0
 replace ca_exp_2021_missing= 1 if ca_exp_2021==.
-
+*/
 ***********************************************************************
 * 	PART III:   Create the indices 			  
 ***********************************************************************

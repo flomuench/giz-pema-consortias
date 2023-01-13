@@ -24,7 +24,7 @@ cd "${master_output}/figures"
 
 		 
 *correlation matrix of selected variables
-correlate compexp_2020 comp_ca2020 exp_pays_avg exporter2020 dig_revenues_ecom comp_benefice2020 knowledge  expprep
+correlate ca_2021 ca_exp_2021  profit_2021   exprep_inv
 
 ***********************************************************************
 * 	PART 2: Basline statistics

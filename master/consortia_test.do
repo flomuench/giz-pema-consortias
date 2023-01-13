@@ -33,8 +33,8 @@ use "${master_final}/consortium_final", clear
 gen needs_check = 0
 lab var needs_check "logical test to be checked by El Amouri"
 
-gen questions_need_check  = 0
-lab var questions_need_check "questions to be checked by El Amouri"
+gen questions_needing_checks  = 0
+lab var questions_needing_checks "questions to be checked by El Amouri"
 
 
 /* Categorisation of checks

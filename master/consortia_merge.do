@@ -112,6 +112,7 @@ lab val surveyround round
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace
 
+
 ***********************************************************************
 * 	PART 4: append analysis data set with midline & endline
 ***********************************************************************
@@ -128,7 +129,7 @@ append using "${endline_final/el_final}"
 
 
 ***********************************************************************
-* 	PART 5: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
+* 	PART 4: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
 ***********************************************************************
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 		*  import participation data
@@ -139,10 +140,11 @@ import excel "${implementation}/presence_ateliers.xlsx", firstrow clear
 drop if id_plateforme==.
 
 		* select take-up variables
-keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise
+keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise pole
 
 		* save
 save "${implementation}/take_up", replace
+drop if id_plateforme==.
 restore
 
 		* merge to analysis data
@@ -159,6 +161,27 @@ merge m:1 id_plateforme using "${implementation}/take_up", force
 */
 drop _merge
 order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise, last
+
+
+***********************************************************************
+* 	PART 5: append analysis data set with midline & endline
+***********************************************************************
+
+	* append registration +  baseline data with midline
+*assure variables are lower case
+rename *, lower
+append using "${ml_final}/ml_final", force
+sort id_plateforme, stable
+
+sort id_plateforme, stable
+order id_plateforme 
+save "${master_intermediate}/consortium_inter", replace
+
+/*	* append with endline
+append using "${endline_final/el_final}"
+*/
+
+
 
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace
