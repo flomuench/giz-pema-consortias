@@ -33,7 +33,7 @@ use "${master_final}/consortium_final", clear
 gen needs_check = 0
 lab var needs_check "logical test to be checked by El Amouri"
 
-gen questions_needing_checks  = 0
+gen questions_needing_checks  = ""
 lab var questions_needing_checks "questions to be checked by El Amouri"
 
 
@@ -66,16 +66,16 @@ if net_nb_f<0 & net_nb_f >500
 	PART 2.2: Export Investment Questions
 ----------------------------------------------------------------------*/	
 
-replace needs_check =3 if exprep_inv<0 & ​​exprep_inv >900000
+replace needs_check =3 if exprep_inv <0 & exprep_inv >900000
 replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif ou trop grand" ///
-if if exprep_inv<0 & ​​exprep_inv >900000
+if exprep_inv <0 & exprep_inv >900000
 
 /* --------------------------------------------------------------------
 	PART 2.3: Comptabilité / accounting questions
 ----------------------------------------------------------------------*/		
 
 * If any of the accounting vars has missing value or zero, create 
-local accountvars ca ca_exp Profit
+local accountvars ca ca_exp profit
 
 foreach var of local accountvars {
 	replace needs_check = 3 if `var' == 0 
@@ -95,8 +95,8 @@ foreach var of local vars_checked {
 }
 
 * If profits are larger than 'chiffres d'affaires' need to check: 
-replace needs_check = 3 if Profit>ca & ca!=. & Profit!=. 
-replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if Profit>ca & ca!=. & Profit!=.
+replace needs_check = 3 if profit>ca & ca!=. & profit!=. 
+replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit>ca & ca!=. & profit!=.
 
 
 * Check if export values are larger than total revenues 
@@ -115,9 +115,9 @@ replace needs_check = 3 if ca<1000 & ca>0
 replace questions_needing_checks = questions_needing_checks + "CA moins que 1000 TND/ " ///
 if ca<500 & ca>0
 
-replace needs_check = 3 if Profit<100 & Profit>0 
+replace needs_check = 3 if profit<100 & profit>0 
 replace questions_needing_checks = questions_needing_checks + "benefice moins que 100 TND/ " ///
-if Profit<100 & Profit>0 
+if profit<100 & profit>0 
 
 /* --------------------------------------------------------------------
 	PART 2.4: Phone Numbers & emails check
@@ -252,7 +252,7 @@ order id_plateforme date heuredébut miss needs_check questions nombre_questions
 cd "$master_checks"
 sort id_plateforme nombre_questions
 export excel id_plateforme miss validation needs_check nombre_questions comptable_numero comptable_email Numero1 Numero2 questions commentaires_ElAmouri ///
-commentsmsb correction_propose correction_valide ca ca_exp Profit ca_2021 ca_exp_2021 using "fiche_de_correction.xlsx" if needs_check>=1, firstrow(variables) replace
+commentsmsb correction_propose correction_valide ca ca_exp profit ca_2021 ca_exp_2021 using "fiche_de_correction.xlsx" if needs_check>=1, firstrow(variables) replace
 restore
 
 

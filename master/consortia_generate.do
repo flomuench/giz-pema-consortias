@@ -52,12 +52,13 @@ use "${master_intermediate}/consortium_inter", clear
 	*  label variables from participation "presence_ateliers"
 local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
 
-lab def presence_status 0 "Absent" 1 "Present" 
+lab def presence_status 0 "Absent" 1 "Present" 3 "Désistement"
 
 foreach var of local take_up_vars {
 	gen `var'1 = `var'
 	replace `var'1 = "1" if `var' == "présente"
-	replace `var'1 = "0" if `var' == "absente" | `var' == "désistement"
+	replace `var'1 = "0" if `var' == "absente"
+	replace `var'1 = "3" if `var' == "désistement"
 	drop `var'
 	destring `var'1, replace
 	rename `var'1 `var'
@@ -72,16 +73,9 @@ egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1at
 replace take_up_per = take_up_per/10
 
 	* create a take_up
-egen take_up = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
-re^place take_up = (present>2 & present<.), a(present)
-
-
-
-
-replace take_up  = ("present">5 & "present"<.), a(present)
-lab var take_up "1 if company was present in half of trainings"
-label define treated 0 "not present" 1 "present"
-label value take_up treated
+gen take_up = 0
+replace take_up= 1 if atelierconsititutionjuridique != 3 &  treatment == 1
+lab var take_up "The company was present for the consortia formation"
 
 	* create a status variable for surveys
 gen status = (take_up_per > 0 & take_up_per < .)
