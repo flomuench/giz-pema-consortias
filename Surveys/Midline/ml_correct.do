@@ -83,10 +83,13 @@ foreach x of local destrvar {
 destring `x', replace
 format `x' %25.0fc
 }
-local numvars ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
 
-
-foreach var of local numvars {
+	* automized cleaning of accounting variables
+		* check first whether account variable has string value/is string
+ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
+		* loop over all accounting variables with string
+local numvars_with_strings "`r(varlist)'"
+foreach var of local numvars_with_strings {
 replace `var' = ustrregexra( `var',"dinars","")
 replace `var' = ustrregexra( `var',"dinar","")
 replace `var' = ustrregexra( `var',"milles","000")
@@ -126,7 +129,6 @@ replace `var' = subinstr(`var', ".", "",.)
 replace `var' = subinstr(`var', ",", ".",.)
 replace `var' = "`not_know'" if `var' =="je ne sais pas"
 replace `var' = "`not_know'" if `var' =="لا أعرف"
-
 }
 
 ***********************************************************************
@@ -194,8 +196,6 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 5:  Convert data types to the appropriate format
 ***********************************************************************
 
-
-}
 
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments

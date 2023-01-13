@@ -44,6 +44,7 @@ ssc install labutil
 ssc install asdoc
 ssc install psmatch2
 ssc install winsor
+ssc install missingplot, replace
 */
 *net from https://www.sealedenvelope.com/
 *net install time.pkg
@@ -60,7 +61,7 @@ set scheme plotplain
 	} 
 	
 	else {
-	global person = "C:/Users/`c(username)'/Google Drive" 
+	global person = "G:/Meine Ablage" 
 }
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
@@ -114,5 +115,5 @@ if (1) do "${ml_github}/ml_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (0) do "${ml_github}/ml_statistics.do"
+if (1) do "${ml_github}/ml_statistics.do"
 
