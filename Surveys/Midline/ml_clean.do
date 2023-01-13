@@ -35,7 +35,7 @@ ds, has(type string)
 local strvars "`r(varlist)'"
 foreach x of local strvars {
 replace `x' = stritrim(strtrim(`x'))
-}
+	}
 }
 
 	*string
@@ -64,19 +64,13 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Rename the variables as needed
 ***********************************************************************
-/*
-rename ca ca_2022
-rename ca_exp ca_exp_2022
-rename profit profit_2022
-rename ca_2021 ca_2021_check
-rename ca_exp2021 ca_exp2021_check
-rename empl fte*/
+forvalues x = 1(1)4 {
+	rename car_carempl`x' car_empl`x'
+}
 
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
 ***********************************************************************
-
-{
         * label the dataset
 label data "Midline Survey"
 notes _dta : January 2023
@@ -151,10 +145,10 @@ lab var id_admin "matricule fiscale"
 
 		* Section GIZ/ASS activitiy
 lab var empl "number of full time employees"
-lab var car_carempl1 "number of women employees"
-lab var car_carempl2 "number of youth employees"
-lab var car_carempl3 "number of full-time employees"
-lab var car_carempl4 "number of part-time employees"
+lab var car_empl1 "number of women employees"
+lab var car_empl2 "number of youth employees"
+lab var car_empl3 "number of full-time employees"
+lab var car_empl4 "number of part-time employees"
 
 lab var ssa_action1 "interest of a sub saharan africa client"
 lab var ssa_action2 "identification of a business partner likely to promote my product/services in Sub-Saharan Africa"
@@ -172,7 +166,6 @@ label variable list_group "treatment or control Group"
 label variable heure "beginning hour"
 label variable date "date"
 
-}
 
 ***********************************************************************
 * 	PART 6: 	Label the variables values	  			
