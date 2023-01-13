@@ -34,6 +34,15 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
 label var num_inno "Number of different types innovation introduced by a firm"
 
+generate inno_aucune = 0
+replace inno_aucune = 1 if ((inno_produit == 0) | (inno_process  == 0) | (inno_lieu  == 0 )| (inno_commerce  == 0))
+
+label var inno_produit "product change"
+label var inno_process "process change"
+label var inno_lieu "place change"
+label var inno_commerce "commerce change"
+label var inno_aucune "no change"
+
 ***********************************************************************
 * 	PART 4:  inno_mot
 ***********************************************************************
@@ -90,7 +99,7 @@ label var netcoop8 "Opponent"
 label var netcoop9 "Connect" 
 label var netcoop10 "Dominate"
 
-	* generate a count of positive & negative cooperative words
+	* Creation of positive and negative network cooperation variables
 generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
 label var net_coop_pos "Positive answers for the the perception of interactions between CEOs" 
 generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
@@ -134,7 +143,7 @@ drop etime etime_positive eheuredébut eheurefin shours sminutes minutes ssecond
 */
 
 ***********************************************************************
-* 	PART 4: Generate variable to assess number of missing values per firm			  										  
+* 	PART 7: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 	* section 1: innovation
 egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_mot)
@@ -173,7 +182,7 @@ local
 missingplot, variablenames labels mlabcolor(blue ..)
 
 ***********************************************************************
-* 	PART 5: Generate variable to assess completed answers		  										  
+* 	PART 8: Generate variable to assess completed answers		  										  
 ***********************************************************************
 
 generate survey_completed= 0

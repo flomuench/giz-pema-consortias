@@ -90,45 +90,45 @@ ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string)
 		* loop over all accounting variables with string
 local numvars_with_strings "`r(varlist)'"
 foreach var of local numvars_with_strings {
-replace `var' = ustrregexra( `var',"dinars","")
-replace `var' = ustrregexra( `var',"dinar","")
-replace `var' = ustrregexra( `var',"milles","000")
-replace `var' = ustrregexra( `var',"mille","000")
-replace `var' = ustrregexra( `var',"million","000")
-replace `var' = ustrregexra( `var',"dt","")
-replace `var' = ustrregexra( `var',"k","000")
-replace `var' = ustrregexra( `var',"dt","")
-replace `var' = ustrregexra( `var',"tnd","")
-replace `var' = ustrregexra( `var',"TND","")
-replace `var' = ustrregexra( `var',"zéro","0")
-replace `var' = ustrregexra( `var',"zero","0")
-replace `var' = ustrregexra( `var'," ","")
-replace `var' = ustrregexra( `var',"un","1")
-replace `var' = ustrregexra( `var',"deux","2")
-replace `var' = ustrregexra( `var',"trois","3")
-replace `var' = ustrregexra( `var',"quatre","4")
-replace `var' = ustrregexra( `var',"cinq","5")
-replace `var' = ustrregexra( `var',"six","6")
-replace `var' = ustrregexra( `var',"sept","7")
-replace `var' = ustrregexra( `var',"huit","8")
-replace `var' = ustrregexra( `var',"neuf","9")
-replace `var' = ustrregexra( `var',"dix","10")
-replace `var' = ustrregexra( `var',"O","0")
-replace `var' = ustrregexra( `var',"o","0")
-replace `var' = ustrregexra( `var',"دينار تونسي","")
-replace `var' = ustrregexra( `var',"دينار","")
-replace `var' = ustrregexra( `var',"تونسي","")
-replace `var' = ustrregexra( `var',"د","")
-replace `var' = ustrregexra( `var',"d","")
-replace `var' = ustrregexra( `var',"na","")
-replace `var' = ustrregexra( `var',"r","")
-replace `var' = ustrregexra( `var',"m","000")
-replace `var' = ustrregexra( `var',"مليون","000")
-replace `var' = "1000" if `var' == "000"
-replace `var' = subinstr(`var', ".", "",.)
-replace `var' = subinstr(`var', ",", ".",.)
-replace `var' = "`not_know'" if `var' =="je ne sais pas"
-replace `var' = "`not_know'" if `var' =="لا أعرف"
+    replace `var' = ustrregexra( `var',"dinars","")
+    replace `var' = ustrregexra( `var',"dinar","")
+    replace `var' = ustrregexra( `var',"milles","000")
+    replace `var' = ustrregexra( `var',"mille","000")
+    replace `var' = ustrregexra( `var',"million","000")
+    replace `var' = ustrregexra( `var',"dt","")
+    replace `var' = ustrregexra( `var',"k","000")
+    replace `var' = ustrregexra( `var',"dt","")
+    replace `var' = ustrregexra( `var',"tnd","")
+    replace `var' = ustrregexra( `var',"TND","")
+    replace `var' = ustrregexra( `var',"zéro","0")
+    replace `var' = ustrregexra( `var',"zero","0")
+    replace `var' = ustrregexra( `var'," ","")
+    replace `var' = ustrregexra( `var',"un","1")
+    replace `var' = ustrregexra( `var',"deux","2")
+    replace `var' = ustrregexra( `var',"trois","3")
+    replace `var' = ustrregexra( `var',"quatre","4")
+    replace `var' = ustrregexra( `var',"cinq","5")
+    replace `var' = ustrregexra( `var',"six","6")
+    replace `var' = ustrregexra( `var',"sept","7")
+    replace `var' = ustrregexra( `var',"huit","8")
+    replace `var' = ustrregexra( `var',"neuf","9")
+    replace `var' = ustrregexra( `var',"dix","10")
+    replace `var' = ustrregexra( `var',"O","0")
+    replace `var' = ustrregexra( `var',"o","0")
+    replace `var' = ustrregexra( `var',"دينار تونسي","")
+    replace `var' = ustrregexra( `var',"دينار","")
+    replace `var' = ustrregexra( `var',"تونسي","")
+    replace `var' = ustrregexra( `var',"د","")
+    replace `var' = ustrregexra( `var',"d","")
+    replace `var' = ustrregexra( `var',"na","")
+    replace `var' = ustrregexra( `var',"r","")
+    replace `var' = ustrregexra( `var',"m","000")
+    replace `var' = ustrregexra( `var',"مليون","000")
+    replace `var' = "1000" if `var' == "000"
+    replace `var' = subinstr(`var', ".", "",.)
+    replace `var' = subinstr(`var', ",", ".",.)
+    replace `var' = "`not_know'" if `var' =="je ne sais pas"
+    replace `var' = "`not_know'" if `var' =="لا أعرف"
 }
 
 ***********************************************************************
@@ -195,7 +195,6 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 ***********************************************************************
 * 	PART 5:  Convert data types to the appropriate format
 ***********************************************************************
-
 
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments
