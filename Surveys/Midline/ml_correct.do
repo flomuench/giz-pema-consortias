@@ -85,7 +85,7 @@ format `x' %25.0fc
 }
 local numvars ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
 
-
+/*
 foreach var of local numvars {
 replace `var' = ustrregexra( `var',"dinars","")
 replace `var' = ustrregexra( `var',"dinar","")
@@ -128,6 +128,7 @@ replace `var' = "`not_know'" if `var' =="je ne sais pas"
 replace `var' = "`not_know'" if `var' =="لا أعرف"
 
 }
+*/
 
 ***********************************************************************
 * 	PART 4:  Manual correction (by variable not by row)
@@ -193,9 +194,6 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 ***********************************************************************
 * 	PART 5:  Convert data types to the appropriate format
 ***********************************************************************
-
-
-}
 
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments
