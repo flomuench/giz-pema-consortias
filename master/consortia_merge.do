@@ -52,16 +52,16 @@ merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
 /*
     Result                      Number of obs
     -----------------------------------------
-    Not matched                             1
-        from master                         1  (_merge==1)
-        from using                          0  (_merge==2)
-
+    Not matched                             0
     Matched                               176  (_merge==3)
     -----------------------------------------
 */
 drop _merge
+
 		* merge 1:1  with midline
-*merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
+merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii"
+drop _merge
+
 
 /*
 		* merge 1:1 with endline
@@ -97,11 +97,10 @@ save "${master_gdrive}/contact_info_master", replace
 * 	PART 3: merge to create analysis data set (analysis data)
 ***********************************************************************
 	* merge registration with baseline data
-use "${regis_final}/regis_final", clear
+use "${regis_final}/regis_final", clear						// N = 263
 drop treatment /* as it's just missing values in the registration data & in case we keep it then it will replace the data in the using file when merged*/
 
-merge 1:1 id_plateforme using "${bl_final}/bl_final"
-
+merge 1:1 id_plateforme using "${bl_final}/bl_final"		// N = 176
 keep if _merge==3 /* companies that were eligible and answered on the registration + baseline surveys */
 drop _merge
 
@@ -119,7 +118,9 @@ save "${master_raw}/consortium_raw", replace
 
 
 	* append registration +  baseline data with midline
-*append using "${midline_final/ml_final}
+append using "${ml_final}/ml_final"
+order id_plateforme surveyround, first
+sort id_plateforme surveyround
 
 /*	* append with endline
 append using "${endline_final/el_final}"
@@ -145,7 +146,7 @@ save "${implementation}/take_up", replace
 restore
 
 		* merge to analysis data
-merge 1:1 id_plateforme using "${implementation}/take_up", force
+merge m:1 id_plateforme using "${implementation}/take_up", force
 /*
     Result                      Number of obs
     -----------------------------------------

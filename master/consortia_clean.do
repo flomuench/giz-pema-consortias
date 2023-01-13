@@ -41,14 +41,24 @@ save "${master_intermediate}/consortium_pii_inter", replace
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
 ***********************************************************************
-* 	PART 3:     clean & correct analysis data set
+* 	PART 1:    import analysis data
 ***********************************************************************
 use "${master_raw}/consortium_raw", clear
 
-	* remove unnecessary variables
+***********************************************************************
+* 	PART 2:     order panel identifiers first
+***********************************************************************
+order id_plateforme surveyround, first
+
+***********************************************************************
+* 	PART 3:     remove unnecessary variables
+***********************************************************************
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
-	* clean take_up variables
+***********************************************************************
+* 	PART 4:     clean administrative implementation variables
+***********************************************************************
+		* put all admin-impl variables into a list
 local take_up_vars "Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise"
 
 		* clean values
