@@ -39,80 +39,59 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 putpdf text ("consortias : midline survey progress")
 
-{
 	
 *** Section 1: Survey progress
-	* Share of firms that started the survey
-sum id_plateform
-gen share= (`r(N)'/176)*100
-graph bar share, blabel(total, format(%9.2fc)) ///
-	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries")
-graph export ml_responserate.png, replace
-putpdf paragraph, halign(center)
-putpdf image ml_responserate.png
-putpdf pagebreak
-drop share
-
-	/* Number of firms that started survey on specific date
+	*Number of firms that started survey on specific date
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
-		tlabel(12janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
+		tlabel(11jan2023(1)20feb2023, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Midline survey: number of responses}") 
 gr export ml_survey_response_byday.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_survey_response_byday.png
-putpdf pagebreak
-	*/	
-	* firms with complete entries
+putpdf pagebreak	
+
+*Genarte shre of answers
+sum id_plateforme 
+gen share1= (`r(N)'/176)*100
+
 count if survey_completed==1
-gen share= (`r(N)'/176)*100
-graph bar share, blabel(total, format(%9.2fc)) ///
-	title("La part des entreprises avec reponses complète") 
-gr export ml_complete_responses.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_complete_responses.png
-putpdf pagebreak
-drop share
+gen share2= (`r(N)'/176)*100
 
-	* firms with validated entries
 count if validation==1
-gen share= (`r(N)'/176)*100
-graph bar share, blabel(total, format(%9.2fc)) ///
-	title("La part des entreprises avec reponses validés")
-gr export ml_validated_responses.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_validated_responses.png
+gen share3= (`r(N)'/176)*100
+
+* Share of firms that started the survey
+graph bar share*, blabel(total, format(%9.2fc)) ///
+	title("Started, Completed, Validated") note("Date: `c(current_date)'") ///
+	ytitle("Number of entries")
+graph export ml_responserate.png, replace
+putpdf paragraph, halign(center)
+putpdf image ml_responserate.png
 putpdf pagebreak
-drop share
 
-/** section 1: innovation
-local inno_vars 
-missingplot, variablenames labels mlabcolor(blue ..)
+drop share1 share2 share3
 
-	* network vars
-local 
-missingplot, variablenames labels mlabcolor(blue ..)
-*/
+
 *** Section 2: Networks
 	* Number of female and male CEO met
 graph bar net_nb_m net_nb_f, over(treatment)stack ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
-gr export ml_CEO_met, replace
+gr export ml_CEO_met.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_CEO_met.png
+putpdf image ml_CEO_met.png
 putpdf pagebreak	
 
 graph bar (mean) net_nb_m net_nb_f , over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
 	title("Number of female vs male CEO met") ///
 	ylabel(0(1)11, nogrid) /// 
 	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
-	gr export ml_mean_CEO_met, replace	
+ gr export ml_mean_CEO_met.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_mean_CEO_met.png
+putpdf image ml_mean_CEO_met.png
 putpdf pagebreak	
 	
 tw ///
@@ -128,7 +107,7 @@ tw ///
 	name(network_density, replace)
 gr export ml_network_density.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_network_density.png
+putpdf image ml_network_density.png
 putpdf pagebreak	
 
 	* Quality of advice 
@@ -142,7 +121,7 @@ histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid for
 	text(100 `r(p50)' "Median", size(small) place(e))
 gr export ml_quality_advice.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_quality_advice.png
+putpdf image ml_quality_advice.png
 putpdf pagebreak	
 
 
@@ -153,7 +132,7 @@ ytitle("No. of affirmations") ///
 ylabel(0(1)3.2, nogrid) 
 gr export ml_bar_listexp.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_bar_listexp.png
+putpdf image ml_bar_listexp.png
 putpdf pagebreak
 
 *Interactions between CEO	
@@ -163,7 +142,7 @@ graph bar (mean) net_coop_pos net_coop_neg, blabel(total, format(%9.1fc) gap(-0.
 	ylabel(0(1)3, nogrid) 
 gr export ml_perceptions_interactions.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_perceptions_interactions.png
+putpdf image ml_perceptions_interactions.png
 putpdf pagebreak
 	
 graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6, blabel(total, format(%9.2fc) gap(-0.2))  ///
@@ -175,7 +154,7 @@ graph hbar netcoop5 netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoo
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_interactions_details.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_perceptions_interactions_details.png
+putpdf image ml_perceptions_interactions_details.png
 putpdf pagebreak
 	
 *Locus of control
@@ -186,7 +165,7 @@ graph hbar (mean)  car_loc_succ car_loc_exp car_loc_env, blabel(total, format(%9
 	ylabel(0(1)5, nogrid) 
 gr export ml_locuscontrol.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_locuscontrol.png
+putpdf image ml_locuscontrol.png
 putpdf pagebreak
 	
 *Locus of efficience
@@ -197,7 +176,7 @@ graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, blabel(total, format(%
 	ylabel(0(1)5, nogrid)    
 gr export ml_locusefi.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_locusefi.png
+putpdf image ml_locusefi.png
 putpdf pagebreak	
 	
 *bar chart and boxplots of accounting variable by treatment
@@ -268,11 +247,19 @@ putpdf pagebreak
 scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation",size(small))
 gr export ml_scatter_exprep.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_image scatter_exprep.png
+putpdf image ml_scatter_exprep.png
 putpdf pagebreak
 
+** section 1: innovation
+*local inno_vars 
+*missingplot `inno_vars', labels mlabcolor(blue)
 
-}
+	* network vars
+*local 
+*missingplot, variablenames labels mlabcolor(blue)
+
+* Add visualisation for missing values per section	
+
 
 *Export management/readiness
 graph hbar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -285,7 +272,7 @@ gr export ml_erp.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_erp.png
 putpdf pagebreak	
-	
+
 
 	
 *Statistics with average time per survey
@@ -299,7 +286,6 @@ putpdf paragraph
 putpdf text ("Survey time statistics"), linebreak bold
 putpdf text ("min. `: display %9.0g `r(min)'' minutes, max. `: display %9.0g `r(max)'' minutes & median `: display %9.0g `r(p50)'' minutes."), linebreak
 putpdf pagebreak*/
-}
 /*
 		* CA, CA export
 gen w_ca2021_usd=w_ca2021/3

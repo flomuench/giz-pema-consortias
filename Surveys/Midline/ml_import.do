@@ -75,6 +75,7 @@ drop ident_nouveau_personne id_ident id_ident2 firmname_change_ml ident_reponden
 * 	PART 4:  Add treatment status	
 ***********************************************************************
 merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
-drop _merge
+drop if _merge == 2
+drop _merge 
 
 save "${ml_intermediate}/ml_intermediate", replace
