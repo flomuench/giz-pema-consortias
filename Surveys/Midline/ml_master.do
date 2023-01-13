@@ -65,17 +65,22 @@ set scheme plotplain
 }
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
+	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global ml_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Midline"
 	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
 }
 else if c(os) == "MacOSX" {
+	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
 	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Midline"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
 }
 
 		* paths within gdrive
+		*baseline path
+global bl_final = "${bl_gdrive}/final"
+
 			* data
 global ml_raw = "${ml_gdrive}/raw"
 global ml_intermediate "${ml_gdrive}/intermediate"

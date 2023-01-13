@@ -16,7 +16,7 @@
 * 	PART 1:  set environment + create pdf file for export		  			
 ***********************************************************************
 	* import file
-use "$ml_final/ml_final", clear
+use "${ml_final}/ml_final", clear
 
 	* set directory to checks folder
 cd "$ml_output"

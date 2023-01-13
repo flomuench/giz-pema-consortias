@@ -71,4 +71,10 @@ restore
 drop ident_nouveau_personne id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml 
 
 
+***********************************************************************
+* 	PART 4:  Add treatment status	
+***********************************************************************
+merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
+drop _merge
+
 save "${ml_intermediate}/ml_intermediate", replace
