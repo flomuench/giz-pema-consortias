@@ -34,6 +34,10 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
 label var num_inno "Number of different types innovation introduced by a firm"
 
+generate inno_aucune = 0
+replace inno_aucune = 1 if inno_produit == 0 & inno_process == 0 & inno_lieu == 0 & inno_commerce == 0
+label var inno_aucune "No innovation done"
+
 ***********************************************************************
 * 	PART 4:  inno_mot
 ***********************************************************************

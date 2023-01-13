@@ -140,7 +140,7 @@ import excel "${implementation}/presence_ateliers.xlsx", firstrow clear
 drop if id_plateforme==.
 
 		* select take-up variables
-keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise pole
+keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium pole
 
 		* save
 save "${implementation}/take_up", replace
@@ -160,7 +160,7 @@ merge m:1 id_plateforme using "${implementation}/take_up", force
     -----------------------------------------
 */
 drop _merge
-order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise, last
+order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium, last
 
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace

@@ -52,13 +52,12 @@ use "${master_intermediate}/consortium_inter", clear
 	*  label variables from participation "presence_ateliers"
 local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
 
-lab def presence_status 0 "Absent" 1 "Present" 3 "Désistement"
+lab def presence_status 0 "Absent" 1 "Present"
 
 foreach var of local take_up_vars {
 	gen `var'1 = `var'
-	replace `var'1 = "1" if `var' == "présente"
+	replace `var'1 = "1" if `var' == "présente"  | `var' == "désistement"
 	replace `var'1 = "0" if `var' == "absente"
-	replace `var'1 = "3" if `var' == "désistement"
 	drop `var'
 	destring `var'1, replace
 	rename `var'1 `var'
@@ -66,15 +65,13 @@ foreach var of local take_up_vars {
 }
 	
 
-
-
 	* Create take-up percentage per firm
 egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
 replace take_up_per = take_up_per/10
 
 	* create a take_up
 gen take_up = 0
-replace take_up= 1 if atelierconsititutionjuridique != 3 &  treatment == 1
+replace take_up= 1 if desistement_consortium != 1 &  treatment == 1  &  surveyround == 1
 lab var take_up "The company was present for the consortia formation"
 
 	* create a status variable for surveys
