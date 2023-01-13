@@ -20,7 +20,7 @@ use "$ml_final/ml_final", clear
 
 	* set directory to checks folder
 cd "$ml_output"
-set graphics off
+set graphics on
 set scheme s1color
 
 	* create pdf document
@@ -43,7 +43,7 @@ putpdf text ("consortias : midline survey progress")
 	
 *** Section 1: Survey progress
 	* Share of firms that started the survey
-count if survey_started==1
+sum id_plateform
 gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises qui au moins ont commence à remplir") note("Date: `c(current_date)'") ///
@@ -54,28 +54,28 @@ putpdf image ml_responserate.png
 putpdf pagebreak
 drop share
 
-	* Number of firms that started survey on specific date
+	/* Number of firms that started survey on specific date
 format %-td date 
 graph twoway histogram date, frequency width(1) ///
-		tlabel(09janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
+		tlabel(12janvier2023(1)20feb2022, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Midline survey: number of responses}") 
 gr export ml_survey_response_byday.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_survey_response_byday.png
 putpdf pagebreak
-		
+	*/	
 	* firms with complete entries
 count if survey_completed==1
 gen share= (`r(N)'/176)*100
 graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses complète") 
-gr export complete_responses.png, replace
+gr export ml_complete_responses.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_complete_responses.png
 putpdf pagebreak
 drop share
-*/
+
 	* firms with validated entries
 count if validation==1
 gen share= (`r(N)'/176)*100
@@ -83,14 +83,21 @@ graph bar share, blabel(total, format(%9.2fc)) ///
 	title("La part des entreprises avec reponses validés")
 gr export ml_validated_responses.png, replace
 putpdf paragraph, halign(center) 
-putpdf ml_image validated_responses.png
+putpdf image ml_validated_responses.png
 putpdf pagebreak
 drop share
 
+/** section 1: innovation
+local inno_vars 
+missingplot, variablenames labels mlabcolor(blue ..)
 
+	* network vars
+local 
+missingplot, variablenames labels mlabcolor(blue ..)
+*/
 *** Section 2: Networks
 	* Number of female and male CEO met
-graph bar net_nb_m net_nb_f, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) over(treatment)stack ///
+graph bar net_nb_m net_nb_f, over(treatment)stack ///
 	ytitle("Person") ///
 	ylabel(0(2)16, nogrid) ///
 	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
@@ -193,16 +200,16 @@ putpdf paragraph, halign(center)
 putpdf ml_locusefi.png
 putpdf pagebreak	
 	
-*bar chart and boxplots of accounting variable by poles
+*bar chart and boxplots of accounting variable by treatment
      * variable ca_2022:
 egen ca_95p = pctile(ca), p(95)
-graph bar ca if ca<ca_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+graph bar ca if ca<ca_95p, blabel(total, format(%9.2fc))
 gr export ml_bar_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_2022.png
 putpdf pagebreak
 
-stripplot ca if ca<ca_95p, over(pole) vertical
+stripplot ca if ca<ca_95p, over(treatment) vertical
 gr export ml_strip_ca_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_2022.png
@@ -210,13 +217,13 @@ putpdf pagebreak
 
      * variable ca_exp_2022:
 egen ca_exp_95p = pctile(ca_exp), p(95)
-graph bar ca_exp if ca_exp<ca_exp_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+graph bar ca_exp if ca_exp<ca_exp_95p, over(treatment) blabel(total, format(%9.2fc))
 gr export ml_bar_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_ca_exp_2022.png
 putpdf pagebreak
 
-stripplot ca_exp if ca_exp<ca_exp_95p , over(pole) vertical
+stripplot ca_exp if ca_exp<ca_exp_95p , over(treatment) vertical
 gr export ml_strip_ca_exp_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_ca_exp_2022.png
@@ -224,13 +231,13 @@ putpdf pagebreak
 
      * variable profit_2022:
 egen profit_95p = pctile(profit), p(95)
-graph bar profit if profit<profit_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+graph bar profit if profit<profit_95p, over(treatment) blabel(total, format(%9.2fc))
 gr export ml_bar_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_profit_2022.png
 putpdf pagebreak
 
-stripplot profit if profit<profit_95p, over(pole) vertical
+stripplot profit if profit<profit_95p, over(treatment) vertical
 gr export ml_strip_profit_2022.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_profit_2022.png
@@ -238,41 +245,33 @@ putpdf pagebreak
 
      * variable exprep_inv:
 egen exprep_inv_95p = pctile(exprep_inv), p(95)
-graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(pole, sort(1)) blabel(total, format(%9.2fc))
+graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) blabel(total, format(%9.2fc))
 gr export ml_bar_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_exprep_inv.png
 putpdf pagebreak
 
-stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(pole) vertical
+stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) vertical
 gr export ml_strip_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_exprep_inv.png
 putpdf pagebreak
 
 *scatter plots between CA and CA_Exp
-scatter ca_exp ca if ca<ca_95p & ca_exp<ca_exp_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total")
+scatter ca_exp ca if ca<ca_95p & ca_exp<ca_exp_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total",size(medium))
 gr export ml_scatter_ca.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_scatter_ca.png
 putpdf pagebreak
 
 *scatter plots between CA_Exp and exprep_inv
-scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation")
+scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation",size(small))
 gr export ml_scatter_exprep.png, replace
 putpdf paragraph, halign(center) 
 putpdf ml_image scatter_exprep.png
 putpdf pagebreak
 
-*scatter plots by pole
-forvalues x = 1(1)4 {
-		* between CA and CA_Exp
-twoway (scatter ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x' , title("Proportion de CA exp par rapport au CA- pole`x'")) || ///
-(lfit ca ca_exp if ca<ca_95p & ca_exp<ca_exp_95p & pole == `x', lcol(blue))
-gr export ml_scatter_capole.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_scatter_capole.png
-putpdf pagebreak
+
 }
 
 *Export management/readiness

@@ -50,7 +50,7 @@ replace `x'= lower(`x')
 
 
 	*fix date
-format Date %td
+format Date %tc
 
 *drop empty rows
 drop if id_plateforme ==.

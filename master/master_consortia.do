@@ -63,7 +63,7 @@ ssc install missingplot, replace
 }
 
 
-	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
+	* dynamic folder path for gdrive(data,output), github(code)
 
 	if c(os) == "Windows" {
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
@@ -133,10 +133,6 @@ global bl_intermediate "${bl_gdrive}/intermediate"
 global bl_final = "${bl_gdrive}/final"
 global bl_checks = "${bl_gdrive}/checks"
 
-global ml_raw = "${gdrive}/3-midline/raw"
-global ml_intermediate = "${gdrive}/3-midline/intermediate"
-global ml_final = "${gdrive}/3-midline/final"
-global ml_checks = "${gdrive}/3-midline/checks"
 
 			* output (regression tables, figures)
 				* baseline
@@ -196,7 +192,7 @@ if (1) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
 	PART 3.8: Test coherence between survey rounds
 ----------------------------------------------------------------------*/
-if (1) do "${master_github}/consortia_test.do"
+if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

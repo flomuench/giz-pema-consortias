@@ -28,27 +28,27 @@ capture program drop zscore /* drops the program programname */
 qui cap log c
 
 	* install packages
-	/*
-ssc install ietoolkit /* for iebaltab */
+/*	
+ssc install ietoolkit, replace /* for iebaltab */
 ssc install randtreat, replace /* for randtreat --> random allocation */
 ssc install blindschemes, replace /* for plotplain --> scheme for graphic2al visualisations */
 net install http://www.stata.com/users/kcrow/tab2docx
-ssc install betterbar
-ssc install mdesc 
-ssc install reclink
-ssc install matchit
-ssc install strgroup
-ssc install stripplot
+ssc install betterbar, replace
+ssc install mdesc , replace
+ssc install reclink, replace
+ssc install matchit, replace
+ssc install strgroup, replace
+ssc install stripplot, replace
 net install http://www.stata.com/users/kcrow/tab2docx
-ssc install labutil
-ssc install asdoc
-ssc install psmatch2
-ssc install winsor
+ssc install labutil, replace
+ssc install asdoc, replace
+ssc install psmatch2, replace
+ssc install winsor, replace
 ssc install missingplot, replace
-*/
+
 *net from https://www.sealedenvelope.com/
 *net install time.pkg
-
+*/
 	* define graph scheme for visual outputs
 set scheme plotplain
 
