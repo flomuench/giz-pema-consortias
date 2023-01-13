@@ -34,15 +34,6 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
 label var num_inno "Number of different types innovation introduced by a firm"
 
-generate inno_aucune = 0
-replace inno_aucune = 1 if ((inno_produit == 0) | (inno_process  == 0) | (inno_lieu  == 0 )| (inno_commerce  == 0))
-
-label var inno_produit "product change"
-label var inno_process "process change"
-label var inno_lieu "place change"
-label var inno_commerce "commerce change"
-label var inno_aucune "no change"
-
 ***********************************************************************
 * 	PART 4:  inno_mot
 ***********************************************************************
@@ -99,7 +90,7 @@ label var netcoop8 "Opponent"
 label var netcoop9 "Connect" 
 label var netcoop10 "Dominate"
 
-	* Creation of positive and negative network cooperation variables
+	* generate a count of positive & negative cooperative words
 generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
 label var net_coop_pos "Positive answers for the the perception of interactions between CEOs" 
 generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
@@ -152,46 +143,32 @@ egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_
 egen miss_network = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
 	
 	* section 3: management practices
-	
+egen miss_management = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
+
 	* section 4: export readiness
+egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
 	
 	* section 5: gender empowerment
+egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env list_group listexp)
 	
 	* section 6: accounting/KPI
-
-egen miss0 = rowmiss(entr_idee - produit1)
-egen miss1 = rowmiss(inno_produit - inno_mot)
-egen miss2 = rowmiss (inno_rd - profit_2021)
-egen miss3 = rowmiss (car_efi_fin1 - att_adh5)
-egen miss4 = rowmiss (att_strat)
-egen miss5 = rowmiss (att_cont)
-egen miss6 = rowmiss (att_jour - support1)
-
+egen miss_accounting = rowmiss(empl car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
 
 	* create the sum of missing values per company
-	
-gen miss = miss0 + miss1 + miss2 +miss3 +miss4+miss5+miss6
+gen missing_values = miss_inno + miss_network + miss_management + miss_eri + miss_gender + miss_accounting
+lab var missing_values "missing values per company"
 
-
-	* section 1: innovation
-local inno_vars 
-missingplot, variablenames labels mlabcolor(blue ..)
-
-	* network vars
-local 
-missingplot, variablenames labels mlabcolor(blue ..)
 
 ***********************************************************************
 * 	PART 8: Generate variable to assess completed answers		  										  
 ***********************************************************************
-
 generate survey_completed= 0
-replace survey_completed= 1 if miss == 0
+replace survey_completed= 1 if missing_values == 0
 label var survey_completed "Number of firms which fully completed the survey"
 label values survey_completed yesno
 
 
-
-
-	* save dta file
-save "${ml_fina}/ml_final", replace
+***********************************************************************
+* 	PART 9: save dta file  										  
+***********************************************************************
+save "${ml_final}/ml_final", replace
