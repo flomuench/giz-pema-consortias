@@ -22,22 +22,31 @@
 
 use "${ml_intermediate}/ml_intermediate", clear
 
+***********************************************************************
+* 	PART 2:  Generate survey round dummy
+***********************************************************************
 gen surveyround = 2
 lab var surveyround "1-baseline 2-midline 3-endline"
 
 ***********************************************************************
-* 	PART 2:  Additional calculated variables
-***********************************************************************
-										  
-	* 2.1 create and label variable for each answer of net_coop, inno_mot & att_jour, att_hor, att_strat, att_cont using regex
+* 	PART 3:  Create continuous variable for number of innovation
+*********************************************************************** 
+generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
+label var num_inno "Number of different types innovation introduced by a firm"
+
 generate inno_aucune = 0
 replace inno_aucune = 1 if ((inno_produit == 0) | (inno_process  == 0) | (inno_lieu  == 0 )| (inno_commerce  == 0))
+
 label var inno_produit "product change"
 label var inno_process "process change"
 label var inno_lieu "place change"
 label var inno_commerce "commerce change"
 label var inno_aucune "no change"
 
+***********************************************************************
+* 	PART 4:  inno_mot
+***********************************************************************
+	* gen dummies for each innovation motivation category
 generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
 generate inno_mot2 = regexm(inno_mot, "inno_mot_cons")
 generate inno_mot3 = regexm(inno_mot, "inno_mot_cont")
@@ -45,6 +54,8 @@ generate inno_mot4 = regexm(inno_mot, "inno_mot_eve")
 generate inno_mot5 = regexm(inno_mot, "inno_mot_emp")
 generate inno_mot6 = regexm(inno_mot, "inno_mot_test")
 generate inno_mot7 = regexm(inno_mot, "inno_mot_autre")
+
+	* lab each dummy/motivation category
 label var inno_mot1 "personal idea"
 label var inno_mot2 "exchange ideas with a consultant"
 label var inno_mot3 "exchange ideas with business network"
@@ -53,14 +64,18 @@ label var inno_mot5 "exchange ideas with employees"
 label var inno_mot6 "Norms"
 label var inno_mot7 "other source for innovation"
 
-		*yes/no variables loop after the clean:
-local yesnovariables1  inno_produit inno_process inno_lieu inno_commerce inno_aucune inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6      
-
-label define yesno1 1 "Yes" 0 "No"
-foreach var of local yesnovariables1 {
-	label values `var' yesno
+	* label the values of each dummy/motivation category + numeric format 
+local inno_vars inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
+foreach x of local inno_vars {
+	lab val `x' yesno
+	destring `x', replace
+	format `x' %25.0fc
 }
-	
+
+***********************************************************************
+* 	PART 5: net_coop
+***********************************************************************
+	* generate dummies for each cooperative word
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
 generate netcoop3 = regexm(net_coop, "3")
@@ -71,6 +86,8 @@ generate netcoop7 = regexm(net_coop, "7")
 generate netcoop8 = regexm(net_coop, "8")
 generate netcoop9 = regexm(net_coop, "9")
 generate netcoop10 = regexm(net_coop, "10")
+
+	* lab each cooperate word dummy
 label var netcoop1 "Win"
 label var netcoop2 "Communicate"
 label var netcoop3 "Trust"
@@ -81,24 +98,6 @@ label var netcoop7 "Partnership"
 label var netcoop8 "Opponent"
 label var netcoop9 "Connect" 
 label var netcoop10 "Dominate"
-/*
-generate listexp1 = regexm(listexp, "Je soutiens et encourage toujours mon équipe.")
-generate listexp2 = regexm(listexp, "Je rêvais d'être une femme qui réussit quand j'étais enfant.")
-generate listexp3 = regexm(listexp, "J'essaie de faire de mon mieux dans mon travail.")
-generate listexp4 = regexm(listexp, "Je me sens obligée à consulter mon mari (ou un autre homme dans ma famille) avant de prendre des décisions pour l'entreprise.")
-lab var listexp1 "support and encourage my team"
-lab var listexp2 "I dreamed of being a successful woman when I was a child."
-lab var listexp3 "I try to do my best in my work"
-lab var listexp4 "I feel compelled to consult with my husband (or another man in my family) before making decisions for the company."
-*/
-    *Convert the below variables in numeric (non float variables)
-local destrvar inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
-foreach x of local destrvar {
-destring `x', replace
-format `x' %25.0fc
-}
-	
-	* 2.2 Create calculated variables
 
 	* Creation of positive and negative network cooperation variables
 generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
@@ -106,30 +105,11 @@ label var net_coop_pos "Positive answers for the the perception of interactions 
 generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
-	* Create variable to know if personal idea or not
-generate inno_pers = 0
-replace inno_pers = 1 if inno_mot1 == 1 
-replace inno_pers = 1 if inno_mot5 == 1 
-replace inno_pers = 1 if inno_mot6 == 1
-label var inno_pers "Innovation coming from a personal/ employee inniative "
 
-	* Create continuous variable for number of innovation: 
-generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
-label var num_inno "Number of different types innovation introduced by a firm"
-
-* create a new variable for survey start: 
-generate survey_started= 0
-replace survey_started= 1 if _merge == 3
-label var survey_started "Number of firms which started the survey"
-label values survey_started yesno
-
+***********************************************************************
+* 	PART 6: Time to complete survey (limited insight given we only see most recent attempt)
+***********************************************************************
 /*
-* Create a dummy that gives the percentage of women that ask their husbands for advice for strategic business decision-making
-generate listexp_perc_husband = listexp4 / (listexp1 + listexp2 + listexp3 + listexp4)
-*/
-
-//2.3 time used to fill survey
-/*{
 format date %td
 replace heuredébut = ustrregexra( heuredébut ,"h",":")
 replace heuredébut = ustrregexra( heuredébut ,"`",":")
@@ -160,12 +140,25 @@ label var time_secs "Durée du questionnaire par entreprise en secondes"
 label var time_mins "Durée du questionnaire par entreprise en minutes"
 
 drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
-}*/
+*/
 
 ***********************************************************************
-* 	PART 4: Generate variable to assess number of missing values per firm			  										  
+* 	PART 7: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
-/*
+	* section 1: innovation
+egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_mot)
+	
+	* section 2: network
+egen miss_network = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
+	
+	* section 3: management practices
+	
+	* section 4: export readiness
+	
+	* section 5: gender empowerment
+	
+	* section 6: accounting/KPI
+
 egen miss0 = rowmiss(entr_idee - produit1)
 egen miss1 = rowmiss(inno_produit - inno_mot)
 egen miss2 = rowmiss (inno_rd - profit_2021)
@@ -173,13 +166,23 @@ egen miss3 = rowmiss (car_efi_fin1 - att_adh5)
 egen miss4 = rowmiss (att_strat)
 egen miss5 = rowmiss (att_cont)
 egen miss6 = rowmiss (att_jour - support1)
+
+
+	* create the sum of missing values per company
+	
 gen miss = miss0 + miss1 + miss2 +miss3 +miss4+miss5+miss6
-*egen nomiss1 = rownonmiss(entr_idee - profit_2021)
-*egen nomiss2 = rownonmiss (car_efi_fin1 - support7)
-*gen nomiss= nomiss1 + nomiss2
-*/
- ***********************************************************************
-* 	PART 5: Generate variable to assess completed answers			  										  
+
+
+	* section 1: innovation
+local inno_vars 
+missingplot, variablenames labels mlabcolor(blue ..)
+
+	* network vars
+local 
+missingplot, variablenames labels mlabcolor(blue ..)
+
+***********************************************************************
+* 	PART 8: Generate variable to assess completed answers		  										  
 ***********************************************************************
 
 generate survey_completed= 0

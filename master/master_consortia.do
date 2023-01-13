@@ -40,6 +40,7 @@ net install cleanplots, from("https://tdmize.github.io/data/cleanplots")
 ssc install ivreg2, replace
 ssc install estout, replace
 ssc install coefplot, replace
+ssc install missingplot, replace
 */
 
 ***********************************************************************
