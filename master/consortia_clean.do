@@ -53,7 +53,7 @@ order id_plateforme surveyround, first
 ***********************************************************************
 * 	PART 3:     remove unnecessary variables
 ***********************************************************************
-drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again ca_check random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
+drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
 ***********************************************************************
 * 	PART 4:     clean administrative implementation variables

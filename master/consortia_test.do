@@ -11,8 +11,7 @@
 *	2.1) 	Networking Questions
 *	2.2) 	Export Investment Questions
 *	2.3)	Comptabilité / accounting questions	
-*	2.4)	Phone Numbers & emails check
-*	2.5)	Number of Employees
+*	2.4)	Number of Employees
 *   3) 		Additional logical test cross-checking answers from registration & baseline	
 *	3.1)	CA export	
 *   4) 		large Outliers
@@ -86,7 +85,7 @@ foreach var of local accountvars {
 	
 }
 *check whether the companies that had to re-fill accounting data actually corrected it
-local vars_checked ca_2021 ca_exp2021
+local vars_checked ca_2021_missing ca_exp_2021_missing	profit_2021_missing	ca_2021	ca_exp2021	profit_2021	
 
 foreach var of local vars_checked {
 	replace needs_check = 3 if `var' == . & ca_check==1
@@ -120,23 +119,7 @@ replace questions_needing_checks = questions_needing_checks + "benefice moins qu
 if profit<100 & profit>0 
 
 /* --------------------------------------------------------------------
-	PART 2.4: Phone Numbers & emails check
-----------------------------------------------------------------------*/	
-
-*check email format through regex
-replace needs_check = 2 if eregexm comptable_email, regex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}") == 0
-replace questions_needing_checks = questions_need_checks + "format email erroné"
-
-*check phone format through regex
-local phones comptable_numero Numero1 Numero2
-
-foreach var of local phones{
-replace needs_check = 2 if eregexm `var', regex("^\+216[0-9]{8}$") == 0
-replace questions_needing_checks = questions_need_checks + "téléphone invalide"
-
-}
-/* --------------------------------------------------------------------
-	PART 2.5: Number of Employees
+	PART 2.4: Number of Employees
 ----------------------------------------------------------------------*/
 
 local nbempl car_carempl1 car_carempl2 car_carempl3 car_carempl4
@@ -235,24 +218,23 @@ foreach var of local closed_vars {
 *merge 1:1 id_plateforme using "${consortia_master}/add_contact_data", generate(_merge_cd)
 
 *Split questions needing check and move it from wide to long
+gen commentaires_elamouri = ""
+sort id_plateforme, stable
+cd "$ml_checks"
+
 preserve
-split questions_needing_checks, parse(/) generate(questions)
-drop questions_needing_checks 
-reshape long questions, i(id_plateforme)
-drop if questions==""
-by id_plateforme: gen nombre_questions=_n
-drop _j
-gen commentaires_ElAmouri = .
-gen correction_propose=.
-gen correction_valide=.
-cd "$master_checks"
-order id_plateforme date heuredébut miss needs_check questions nombre_questions commentaires_ElAmouri commentsmsb correction_propose correction_valide
+bysort id_plateforme (surveyround): gen checked= needs_check + needs_check[_n+1]
+replace checked=0 if checked==.
+*keep both baseline and midline value for observations that need checking
+keep if needs_check > 0 | checked >0
 
-*Export the fiche de correction with additional contact information
-cd "$master_checks"
-sort id_plateforme nombre_questions
-export excel id_plateforme miss validation needs_check nombre_questions comptable_numero comptable_email Numero1 Numero2 questions commentaires_ElAmouri ///
-commentsmsb correction_propose correction_valide ca ca_exp profit ca_2021 ca_exp_2021 using "fiche_de_correction.xlsx" if needs_check>=1, firstrow(variables) replace
+
+merge m:1 id_plateforme using  "${ml_raw}/consortia_ml_pii" 
+keep if _merge==3 & surveyround == 2
+export excel id_plateforme heure surveyround id_ident ident_nouveau_personne_ml needs_check commentaires_elamouri /// 
+questions_needing_checks ca ca_exp profit exprep_inv net_nb_f net_nb_m ca_2021_missing ca_exp_2021_missing	///
+profit_2021_missing	ca_2021	ca_exp2021	profit_2021 car_empl1 car_empl2 car_empl3 car_empl4 car_empl5 exp_pays email ///
+ using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var)
+
+
 restore
-
-
