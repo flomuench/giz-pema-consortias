@@ -13,7 +13,8 @@
 *	4)   	Replace string with numeric values						  
 *	5)  	Convert data types to the appropriate format	  				  
 *	6)  	autres / miscellaneous adjustments		  
-*	7)		Save the changes made to the data
+*	7)		Destring remaining numerical vars
+*	8)		Save the changes made to the data
 *
 *																	  															      
 *	Author:  	Ayoub Chamakhi, Kais Jomaa, Amina Bousnina		 														  
@@ -77,12 +78,7 @@ drop if dup>1
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
 
- * 8.1 Destring remaining numerical vars
-local destrvar ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
-foreach x of local destrvar { 
-destring `x', replace
-format `x' %25.0fc
-}
+
 
 	* automized cleaning of accounting variables
 		* check first whether account variable has string value/is string
@@ -100,6 +96,8 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dt","")
     replace `var' = ustrregexra( `var',"tnd","")
     replace `var' = ustrregexra( `var',"TND","")
+	replace `var' = ustrregexra( `var',"DT","")
+	replace `var' = ustrregexra( `var',"D","")
     replace `var' = ustrregexra( `var',"zéro","0")
     replace `var' = ustrregexra( `var',"zero","0")
     replace `var' = ustrregexra( `var'," ","")
@@ -129,7 +127,9 @@ foreach var of local numvars_with_strings {
     replace `var' = subinstr(`var', ",", ".",.)
     replace `var' = "`not_know'" if `var' =="je ne sais pas"
     replace `var' = "`not_know'" if `var' =="لا أعرف"
+
 }
+
 
 ***********************************************************************
 * 	PART 4:  Manual correction (by variable not by row)
@@ -138,6 +138,8 @@ foreach var of local numvars_with_strings {
 *4.1 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca ca_exp Profit ca_2021 ca_exp2021 
  
+replace profit = "2200" if profit == "10%uca"
+
 
 
 *4.2 Comparison of newly provided accounting data for firms with needs_check=1
@@ -200,8 +202,17 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 6:  autres / miscellaneous adjustments
 ***********************************************************************
 
+***********************************************************************
+* 	PART 7:  Destring remaining numerical vars
+***********************************************************************
+
+local destrvar ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
+foreach x of local destrvar { 
+destring `x', replace
+format `x' %25.0fc
+}
 
 ***********************************************************************
-* 	Part 7: Save the changes made to the data		  			
+* 	Part 8: Save the changes made to the data		  			
 ***********************************************************************
 save "${ml_intermediate}/ml_intermediate", replace
