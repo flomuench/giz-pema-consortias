@@ -69,7 +69,7 @@ foreach x of local inno_vars {
 
 
 ***********************************************************************
-* 	PART 4:  man_source
+* 	PART 5:  man_source
 ***********************************************************************
 	* gen dummies for each new management strategy source
 generate man_source1 = regexm(man_source, "1")
@@ -98,7 +98,7 @@ foreach x of local man_vars {
 }
 
 ***********************************************************************
-* 	PART 5: net_coop
+* 	PART 6: net_coop
 ***********************************************************************
 	* generate dummies for each cooperative word
 generate netcoop1 = regexm(net_coop, "1")
@@ -132,7 +132,7 @@ label var net_coop_neg "Negative answers for the the perception of interactions 
 
 
 ***********************************************************************
-* 	PART 6: Time to complete survey (limited insight given we only see most recent attempt)
+* 	PART 7: Time to complete survey (limited insight given we only see most recent attempt)
 ***********************************************************************
 /*
 format date %td
@@ -168,7 +168,7 @@ drop etime etime_positive eheuredébut eheurefin shours sminutes minutes ssecond
 */
 
 ***********************************************************************
-* 	PART 7: Generate variable to assess number of missing values per firm			  										  
+* 	PART 8: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 	* section 1: innovation
 egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_mot)
@@ -194,7 +194,7 @@ lab var missing_values "missing values per company"
 
 
 ***********************************************************************
-* 	PART 8: Generate variable to assess completed answers		  										  
+* 	PART 9: Generate variable to assess completed answers		  										  
 ***********************************************************************
 generate survey_completed= 0
 replace survey_completed= 1 if missing_values == 0
