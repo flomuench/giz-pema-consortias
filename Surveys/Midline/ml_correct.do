@@ -83,6 +83,12 @@ drop if dup>1
 	* automized cleaning of accounting variables
 		* check first whether account variable has string value/is string
 ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
+replace ca="2600000" if ca=="deux milliards 600dt" 
+replace profit="2200" if id_plateforme==1005
+  *80% of total turnover
+replace profit="1600" if id_plateforme==1133 
+  *10% of total turnover
+replace profit="25000" if id_plateforme==1188
 		* loop over all accounting variables with string
 local numvars_with_strings "`r(varlist)'"
 foreach var of local numvars_with_strings {

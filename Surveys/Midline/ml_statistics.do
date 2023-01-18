@@ -336,7 +336,6 @@ putpdf pagebreak
 
 ****** Section 5: Characteristics of the company****** 
 *Locus of efficience
-/*
 graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(9) label(1 "Able to motivate the employees in my company") label(2 "Able to attract customers for my business") ///
 	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
@@ -346,7 +345,7 @@ gr export ml_locusefi.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_locusefi.png
 putpdf pagebreak
-*/
+
 
 *Locus of control
 graph hbar (mean)  car_loc_succ car_loc_exp car_loc_env, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
