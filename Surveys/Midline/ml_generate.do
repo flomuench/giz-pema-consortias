@@ -67,6 +67,36 @@ foreach x of local inno_vars {
 	format `x' %25.0fc
 }
 
+
+***********************************************************************
+* 	PART 4:  man_source
+***********************************************************************
+	* gen dummies for each new management strategy source
+generate man_source1 = regexm(man_source, "1")
+generate man_source2=  regexm(man_source, "2")
+generate man_source3 = regexm(man_source, "3")
+generate man_source4 = regexm(man_source, "4")
+generate man_source5 = regexm(man_source, "5")
+generate man_source6 = regexm(man_source, "6")
+generate man_source7 = regexm(man_source, "7")
+
+	* lab each dummy/motivation category
+label var man_source1 "Consultant"
+label var man_source2 "Business contact"
+label var man_source3 "Employees"
+label var man_source4 "Family"
+label var man_source5 "Event"
+label var man_source6 "No new strategy"
+label var man_source7 "Other sources"
+
+	* label the values of each dummy/motivation category + numeric format 
+local man_vars man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7 
+foreach x of local man_vars {
+	lab val `x' yesno
+	destring `x', replace
+	format `x' %25.0fc
+}
+
 ***********************************************************************
 * 	PART 5: net_coop
 ***********************************************************************
