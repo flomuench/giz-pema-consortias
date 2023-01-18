@@ -189,7 +189,7 @@ foreach var of local lowhighvar {
 }
 
 		*agree or not variables
-local agreenotvar car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env car_loc_exp
+local agreenotvar car_efi_nego car_efi_conv car_loc_succ car_loc_env car_loc_exp // car_efi_fin1 --> add again to list once Mohamed corrects
 
 label define agreenot 1 "strongly disagree" 5 "strongly agree"
 foreach var of local agreenotvar {
