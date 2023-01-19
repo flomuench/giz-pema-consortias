@@ -91,11 +91,13 @@ lab var net_nb_qualite "quality advice of the business network"
 lab var net_coop "perception of interaction between the enterprises"
 
 		* Section management practices
-lab var man_hr_obj "performance indicators for employees"
+lab var man_hr_obj "employees motivation"
 
-lab var man_fin_per_fre "number of performance indicators tracked for the company"
+lab var man_hr_ind "frequency of examining employees performance"
 
-lab var man_fin_per "frequency of examining financial performance"
+lab var man_fin_per_fre "frequency of examining financial performance"
+
+lab var man_fin_per "number of performance indicators tracked for the company"
 
 lab var man_ind_awa "employees goal awareness"
 
