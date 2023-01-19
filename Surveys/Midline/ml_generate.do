@@ -203,6 +203,58 @@ label values survey_completed yesno
 
 
 ***********************************************************************
+* 	PART 10:  Generate variables for companies who answered on phone	
+***********************************************************************
+gen survey_phone = 0
+lab var survey_phone "Comapnies who answered the survey on phone (with enumerators)" 
+replace survey_phone = 1 if id_plateforme == 1005
+replace survey_phone = 1 if id_plateforme == 1007
+replace survey_phone = 1 if id_plateforme == 1027
+replace survey_phone = 1 if id_plateforme == 1030
+replace survey_phone = 1 if id_plateforme == 1041
+replace survey_phone = 1 if id_plateforme == 1054
+replace survey_phone = 1 if id_plateforme == 1065
+replace survey_phone = 1 if id_plateforme == 1083
+replace survey_phone = 1 if id_plateforme == 1116
+replace survey_phone = 1 if id_plateforme == 1133
+replace survey_phone = 1 if id_plateforme == 1151
+replace survey_phone = 1 if id_plateforme == 1157
+replace survey_phone = 1 if id_plateforme == 1185
+replace survey_phone = 1 if id_plateforme == 1195
+replace survey_phone = 1 if id_plateforme == 1197
+replace survey_phone = 1 if id_plateforme == 1215
+replace survey_phone = 1 if id_plateforme == 1224
+replace survey_phone = 1 if id_plateforme == 1239
+replace survey_phone = 1 if id_plateforme == 51
+replace survey_phone = 1 if id_plateforme == 1132 
+replace survey_phone = 1 if id_plateforme == 1094 
+replace survey_phone = 1 if id_plateforme == 1025
+replace survey_phone = 1 if id_plateforme == 1090 
+replace survey_phone = 1 if id_plateforme == 1044
+replace survey_phone = 1 if id_plateforme == 1140
+replace survey_phone = 1 if id_plateforme == 1147
+replace survey_phone = 1 if id_plateforme == 1188
+replace survey_phone = 1 if id_plateforme == 48
+replace survey_phone = 1 if id_plateforme == 1245 
+replace survey_phone = 1 if id_plateforme == 1061 
+replace survey_phone = 1 if id_plateforme == 1079
+
+label define Surveytype 1 "Phone" 0 "Online"
+label values survey_phone Surveytype
+
+***********************************************************************
+* 	PART 11:  Generate rejection variable	
+***********************************************************************
+gen refus = 0
+lab var refus "Comapnies who refused to answer the survey" 
+replace refus = 1 if id_plateforme == 1132 
+replace refus = 1 if id_plateforme == 1094  
+replace refus = 1 if id_plateforme == 1025  
+replace refus = 1 if id_plateforme == 1090   
+replace refus = 1 if id_plateforme == 1245   
+replace refus = 1 if id_plateforme == 1061   
+replace refus = 1 if id_plateforme == 1079   
+***********************************************************************
 * 	PART 9: save dta file  										  
 ***********************************************************************
 save "${ml_final}/ml_final", replace
