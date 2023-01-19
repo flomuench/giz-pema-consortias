@@ -191,38 +191,44 @@ foreach var of local lowhighvar {
 }
 
 		*agree or not variables
-local agreenotvar car_efi_nego car_efi_conv car_loc_succ car_loc_env car_loc_exp // car_efi_fin1 --> add again to list once Mohamed corrects
+local agreenotvar car_efi_nego  car_efi_fin1 car_efi_conv car_loc_succ car_loc_env car_loc_exp //
 
 label define agreenot 1 "strongly disagree" 5 "strongly agree"
 foreach var of local agreenotvar {
 	label values `var' agreenot
 }
 
-		*time frequency variable:
-*label define label_freq Never "0" Anually "0.25" Monthly "0.5" Weekly "0.75" Daily "1"
-*label values man_fin_per_freq label_freq
 
-		*company function  variable:
+		* management practices
+/* unfortunately, it is not possible to attach value labels to decimals in Stata.
+				* number of kpi's
+label define kpi 0 "Aucun indicateur" 0.33 "1-2 indicateurs" 0.66 "3-9 indicateurs " 1 "10 ou plus indicateurs"
+label values man_fin_per kpi
 
+			* monitoring (frequency)
+				* financial performance
+label define label_freq_kpi 0 "Never" 0.25 "Annually" 0.5 "Monthy" 0.75 "Weekly" 1 "Daily"
+label values man_fin_per_fre label_freq_kpi
+			
+				* employee performance
+label define label_freq_empl 0 "Never" 0.25 "Annually" 0.5 "Quarterly" 0.75 "Monthly" 1 "Weekly or more"
+label values man_hr_ind label_freq_empl
+				
 
-*label define label_hr 0.25 "No promotion" 0.5 "Promotion on other factors than performance" /// 
-*0.75 "Promotion partially based on performance and other factors" 1 "Promotion based on performance"
-*label values man_hr_obj label_hr
+				* promotion
+label define label_promo 0 "No promotion" 0.5 "Promotion on other factors than performance" 0.75 "Promotion based on employee performance" 1 "Promotion based on employee & firm performance"
+* note: as we wrongly coded associated value, the label attachment to variable is done in ml_correct
 
-*label define label_ent 0 "Aucun indicateur" 0.33 "1-2 indicateurs" 0.66 "3-9 indicateurs " 1 "10 ou plus indicateurs"
-*label values man_ent_per label_ent
+				* who is aware about kpi's of company
+label define kpi_empl 0.25 "senior managers" 0.5 "most managers and some employees" 0.75 "majority of managers and employees" 1 "all managers and employees"
+label values man_ind_awa kpi_empl
+*/
 
-*label define label_ind 0.25 "seniors" 0.5 "most of seniors and some employees" ///
-*0.75 "most of seniors and employees" 1 "all seniors and employees"
-*label values man_ind_awa label_ind
-
-*label define label_source 1 "Consultant" 2 "Network" 3 "Employees" 4 "Family" 5 "Event" 6 "None" 7 "Other"
-*label values man_source label_source
-
+		* list experiment
 label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 
 
-
+		* declaration of honour
 label define label_attest  1 "Yes"
 label values attest label_attest
 

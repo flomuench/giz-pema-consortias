@@ -36,10 +36,9 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 ***********************************************************************
 * 	PART 2:  Generate the visualisations		  			
 ***********************************************************************
-putpdf paragraph, halign(center) 
-putpdf text ("consortias : midline survey progress")
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 1: Survey Progress Overview"), bold
 
-	
 *** Section 1: Survey progress
 	*Number of firms that started survey on specific date
 format %-td date 
@@ -67,7 +66,7 @@ graph bar share*, blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(6) label(1 "Started answering") label (2 "Answers completed") ///
 	label  (3 "Answers validated")) ///
 	title("Started, Completed, Validated") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries") ///
+	ytitle("share of total sample") ///
 	ylabel(0(10)100, nogrid) 
 graph export ml_responserate.png, replace
 putpdf paragraph, halign(center)
@@ -75,6 +74,41 @@ putpdf image ml_responserate.png
 putpdf pagebreak
 
 drop share1 share2 share3
+
+
+	* response rate by treatment status
+graph bar (sum) survey_completed validation, over(treatment) blabel(total, format(%9.2fc)) ///
+	legend (pos(6) row(1) label(1 "Answers completed") ///
+	label(2 "Answers validated")) ///
+	title("Completed & validated by treatment status") note("Date: `c(current_date)'") ///
+	ytitle("Number of entries") ///
+	ylabel(0(10)100, nogrid) 
+graph export ml_responserate_tstatus.png, replace
+putpdf paragraph, halign(center)
+putpdf image ml_responserate_tstatus.png
+putpdf pagebreak
+
+	* Number of missing answers per section - all
+graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
+	label(3 "Management") label(4 "Export readiness") ///
+	label(5 "Gender ") label(6 "Accounting ")) ///
+	title("Sum of missing answers per section") ///
+	subtitle("sample: all initiated surveys") ///
+	ylabel(0(5)100, nogrid) 
+gr export ml_missing_asnwers_all.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_missing_asnwers_all.png
+putpdf pagebreak
+
+* Number of missing answers per section
+
+graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting if validation == 1, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
+	label(3 "Management") label(4 "Export readiness") ///
+	label(5 "Gender ") label(6 "Accounting ")) ///
+	title("Sum of missing answers per section") ///
+	subtitle("sample: all completed surveys") ///
 
 * Number of missing answers per section
 graph hbar (count) miss_accounting miss_eri miss_gender miss_inno miss_management miss_network, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -89,7 +123,10 @@ putpdf image ml_missing_asnwers.png
 putpdf pagebreak	
 
 ****** Section 2: innovation ******
-*Type of innovation*
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 2: Innovation"), bold
+
+	* Type of innovation
 graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
 	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
@@ -137,7 +174,9 @@ graph hbar (sum) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6, ov
 	putpdf pagebreak
 	
 	
-****** Section 3: Networks ****** 
+****** Section 3: Networks ******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 3: Networks"), bold
 	* Number of female and male CEO met
 graph bar net_nb_m net_nb_f, over(treatment)stack ///
 	title("Number of female and male CEO met") ///
@@ -177,7 +216,7 @@ putpdf pagebreak
 	* Quality of advice 
 sum net_nb_qualite,d
 histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
-	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
 	ytitle("No. of firms") ///
 	xtitle("Quality of advice of the business network") ///
 	ylabel(0(5)50 , nogrid) ///
@@ -211,35 +250,42 @@ putpdf image ml_perceptions_interactions_details.png
 putpdf pagebreak
 
 ****** Section 3: Management practices ****** 
-*Performance indicators
-graph hbar (mean) man_fin_per, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Performance Indicators") ///
-	ylabel (0(0.33)1, nogrid)
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 3: Management practices"), bold
+
+		* Key Performance indicators (KPIs)
+graph hbar (percent), over(man_fin_per, relabel(1 "aucun" 2 "1-2" 3 "3-9" 4 "10+")) over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+    title("Number of KPIs") ///
+	ylabel(0(5)50, nogrid)
 gr export ml_performance.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_performance.png
 putpdf pagebreak
 
-*Frequency of examining performance indicators
+		* KPIs frequency
 graph hbar (mean) man_fin_per_fre, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(2) row(3) size(vsmall)) ///
-    title ("Frequency to Examine Performance Indicators") ///
+    title ("Frequency KPIs") ///
 	ylabel (0(0.25)1, nogrid)
 gr export ml_performance_frequency.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_performance_frequency.png
 putpdf pagebreak
 
-*Frequency to examine employees performance
+		* Frequency employees performance
 graph hbar (mean) man_hr_ind, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(2) row(3) size(vsmall)) ///
-    title ("Frequency to Examine Employees Performance") ///
+    title ("Frequency Employees Performance") ///
 	ylabel (0(0.25)1, nogrid)
 gr export ml_performance_employees.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_performance_employees.png
 putpdf pagebreak
+
+		* Employees Incentives
+graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+    legend (pos(2) row(3) size(vsmall)) ///
+    title ("Employees Incentives") ///
 
 *Employees motivation
 graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -251,17 +297,17 @@ putpdf paragraph, halign(center)
 putpdf image ml_motivation_employees.png
 putpdf pagebreak
 
-*Employees goal awareness
+		* Employees goal awareness
 graph hbar (mean) man_ind_awa, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(2) row(3) size(vsmall)) ///
-    title ("Firm Goals Awareness") ///
-	ylabel (0(0.25)1, nogrid)
+    title ("Employmees Awareness of Firms' Goals") ///
+	  ylabel (0(0.25)1, nogrid)
 gr export ml_goal_awa.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_goal_awa.png
 putpdf pagebreak
 
-*Source of new management strategies
+		* Source of new management strategies
 graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
 	label  (3 "Employees") label  (4 "Family") ///
@@ -272,6 +318,7 @@ graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man
 	putpdf paragraph, halign(center) 
 	putpdf image ml_source_share_strategy.png
 	putpdf pagebreak
+
 
 graph bar (sum) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
@@ -284,9 +331,11 @@ graph bar (sum) man_source1 man_source2 man_source3 man_source4 man_source5 man_
 	putpdf image ml_source_strategy.png
 	putpdf pagebreak
 
+****** Section 4: Export management and readiness ******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 4: Export readiness"), bold
 
-****** Section 4: Export management and readiness ****** 
-*Knowledge questions
+	* Export Knowledge questions
 graph hbar (mean) exp_kno_ft_co exp_kno_ft_ze, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(1) label (1 "COMESA") label(2 "ZECLAF") size(vsmall)) ///
 	title("Export Knowledge") ///
@@ -333,10 +382,12 @@ putpdf paragraph, halign(center)
 putpdf image ml_exprep_couts.png
 putpdf pagebreak	
 
-
 ****** Section 5: Characteristics of the company****** 
-*Locus of efficience
-graph hbar (mean) car_efi_conv car_efi_nego car_efi_fin1, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 5: Entrepreneurial empowerment"), bold
+ 
+	* Locus of efficience
+graph hbar (mean) car_efi_conv car_efi_fin1 car_efi_nego, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) /// 
 	legend (pos(6) row(9) label(1 "Able to motivate the employees in my company") label(2 "Able to attract customers for my business") ///
 	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
 	title("Locus of efficience for female entrepreuneurs") ///
@@ -372,7 +423,9 @@ putpdf pagebreak
 
 
 ****** Section 6: Accounting section ****** 
-	
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 6: Accounting indicators"), bold
+
 *bar chart and boxplots of accounting variable by treatment
      * variable ca_2022:
 egen ca_95p = pctile(ca), p(95)
@@ -438,7 +491,9 @@ putpdf pagebreak
 
 
 
-****** Section 7: Employees & ASS activities ****** 
+****** Section 7: Employees & ASS activities ******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 7: Employment & SSA activities"), bold
 
 **** Africa-related actions********************
 graph bar (sum) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///

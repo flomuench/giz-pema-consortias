@@ -80,16 +80,17 @@ drop if dup>1
 
 
 
-	* automized cleaning of accounting variables
-		* check first whether account variable has string value/is string
-ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
+	* make manual changes
+		* ca
 replace ca="2600000" if ca=="deux milliards 600dt" 
+
+		* profit
 replace profit="2200" if id_plateforme==1005
-  *80% of total turnover
-replace profit="1600" if id_plateforme==1133 
-  *10% of total turnover
-replace profit="25000" if id_plateforme==1188
-		* loop over all accounting variables with string
+replace profit="1600" if id_plateforme==1133 	//   80% of total turnover 
+replace profit="25000" if id_plateforme==1188 	//	 10% of total turnover
+
+	* loop over all accounting variables with string
+ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
 local numvars_with_strings "`r(varlist)'"
 foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dinars","")
@@ -102,8 +103,8 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dt","")
     replace `var' = ustrregexra( `var',"tnd","")
     replace `var' = ustrregexra( `var',"TND","")
-	replace `var' = ustrregexra( `var',"DT","")
-	replace `var' = ustrregexra( `var',"D","")
+	  replace `var' = ustrregexra( `var',"DT","")
+	  replace `var' = ustrregexra( `var',"D","")
     replace `var' = ustrregexra( `var',"zéro","0")
     replace `var' = ustrregexra( `var',"zero","0")
     replace `var' = ustrregexra( `var'," ","")
@@ -207,6 +208,10 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments
 ***********************************************************************
+	* correct wrongly coded values for man_hr_obj
+replace man_hr_obj = 0 if man_hr_obj == 0.25
+replace man_hr_obj = 0.25 if man_hr_obj == 0.5
+label values man_hr_obj label_promo
 
 ***********************************************************************
 * 	PART 7:  Destring remaining numerical vars
