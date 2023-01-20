@@ -36,101 +36,93 @@ gen questions_needing_checks  = ""
 lab var questions_needing_checks "questions to be checked by El Amouri"
 
 
-/* Categorisation of checks
-1: Low Prioritiy Errors: 
-2: High Prioritiy Errors: 
-3: Highest Prioritiy Errors: Accountibility
-
-*/
-
-
-
 ***********************************************************************
 * 	PART 2:  Define logical tests
 ***********************************************************************
 /* --------------------------------------------------------------------
 	PART 2.1: Networking Questions
 ----------------------------------------------------------------------*/	
+replace needs_check = 1 if net_nb_m < 0 | net_nb_m > 50
+replace questions_needing_checks = "nombre de contact mâle est négatif ou excessivement grand" if net_nb_m<0 & net_nb_m >50
 
-replace needs_check =2 if net_nb_m<0 & net_nb_m >500
-replace questions_needing_checks = questions_needing_checks + "nombre de contact mâle est négatif ou trop grand" ///
-if net_nb_m<0 & net_nb_m >500
-
-replace needs_check =2 if net_nb_f<0 & net_nb_f>500
-replace questions_needing_checks = questions_needing_checks + "nombre de contact femmes est négatif ou trop grand" ///
-if net_nb_f<0 & net_nb_f >500
+replace needs_check = 1 if net_nb_f < 0 | net_nb_f > 50
+replace questions_needing_checks = questions_needing_checks "nofbre de contact féminie est négatif ou excessivement grand" if net_nb_f<0 & net_nb_f >50
 
 
 /* --------------------------------------------------------------------
 	PART 2.2: Export Investment Questions
 ----------------------------------------------------------------------*/	
-
-replace needs_check =3 if exprep_inv <0 & exprep_inv >900000
-replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif ou trop grand" ///
-if exprep_inv <0 & exprep_inv >900000
+replace needs_check = 1 if surveyround == 2 & exprep_inv < 0 | exprep_inv > 100000
+replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif ou trop grand" if surveyround == 2 & exprep_inv < 0 | exprep_inv >100000
 
 /* --------------------------------------------------------------------
 	PART 2.3: Comptabilité / accounting questions
 ----------------------------------------------------------------------*/		
 
-* If any of the accounting vars has missing value or zero, create 
-local accountvars ca ca_exp profit
-
+	* Sales or profit is zero or missing
+local accountvars ca profit
 foreach var of local accountvars {
-	replace needs_check = 3 if `var' == 0 
-	replace questions_needing_checks = questions_needing_checks + "`var' zero/ " if `var' == 0 
-	replace needs_check = 3 if `var' == . 
+		* = 0
+	replace needs_check = 1 if surveyround == 2 & `var' == 0 
+	replace questions_needing_checks = questions_needing_checks + "`var' zero/ " if surveyround == 2 & `var' == 0 
+	
+		* = .
+	replace needs_check = 1 if `var' == . 
 	replace questions_needing_checks = questions_needing_checks + "`var' manque/ " if `var' == . 	
 	
 	
 }
-*check whether the companies that had to re-fill accounting data actually corrected it
-local vars_checked ca_2021_missing ca_exp_2021_missing	profit_2021_missing	ca_2021	ca_exp2021	profit_2021	
 
+	*  companies that had to re-fill accounting data actually corrected it
+local vars_checked ca_2021_missing ca_exp_2021_missing	profit_2021_missing	ca_2021	ca_exp2021	profit_2021	
 foreach var of local vars_checked {
-	replace needs_check = 3 if `var' == . & ca_check==1
+	replace needs_check = 1 if `var' == . & ca_check==1
 	replace questions_needing_checks = questions_needing_checks + "`var' manque, entreprise dans la liste pour re-fournier donnés 2021 /" if `var' ==. & ca_check==1 
 	
 }
 
-* If profits are larger than 'chiffres d'affaires' need to check: 
-replace needs_check = 3 if profit>ca & ca!=. & profit!=. 
-replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if profit>ca & ca!=. & profit!=.
+	* Profits > sales
+replace needs_check = 1 if surveyround == 2 & profit!=. & profit > ca 
+replace questions_needing_checks = questions_needing_checks + "Benefices sont plus élevés que CA / " if surveyround == 2 & profit!=. & profit > ca 
 
 
-* Check if export values are larger than total revenues 
-
-replace needs_check = 3 if ca_exp>ca & ca!=. & ca!=. 
-replace questions_needing_checks = questions_needing_checks + "Exports plus élevés que CA/ " ///
-if ca_exp>ca & ca!=. & ca_exp!=. 
+	* Export > sales 
+replace needs_check = 1 if surveyround == 2 & ca_exp!=. & ca_exp > ca 
+replace questions_needing_checks = questions_needing_checks + "Exports plus élevés que CA/ " if surveyround == 2 & ca_exp!=. & ca_exp > ca
 
 
-*Very low values
-replace needs_check = 3 if ca_exp<500 & ca_exp>0
-replace questions_needing_checks = questions_needing_checks + "export moins que 500 TND/ " ///
-if ca_exp<500 & ca_exp>0
+	* Outliers/extreme values: Very low values
+		* ca_exp
+replace needs_check = 1 if surveyround == 2 & ca_exp < 50000 & ca_exp > 0
+replace questions_needing_checks = questions_needing_checks + "export moins que 50000 TND, demander comment possible/ " if surveyround == 2 & ca_exp < 50000 & ca_exp>0
 
-replace needs_check = 3 if ca<1000 & ca>0
-replace questions_needing_checks = questions_needing_checks + "CA moins que 1000 TND/ " ///
-if ca<500 & ca>0
+		* ca
+replace needs_check = 1 if surveyround == 2 & ca < 5000 & ca>0
+replace questions_needing_checks = questions_needing_checks + "CA moins que 5000 TND, vérifier/ " if surveyround == 2 & ca < 5000 & ca > 0
 
-replace needs_check = 3 if profit<100 & profit>0 
-replace questions_needing_checks = questions_needing_checks + "benefice moins que 100 TND/ " ///
-if profit<100 & profit>0 
+		* profit
+				* just above zero
+replace needs_check = 1 if surveyround == 2 & profit<2500 & profit>0 
+replace questions_needing_checks = questions_needing_checks + "benefice moins que 100 TND/ " if surveyround == 2 & profit<2500 & profit>0 
+				* just below zero
+replace needs_check = 1 if surveyround == 2 & profit>-2500 & profit<0 
+replace questions_needing_checks = questions_needing_checks + "benefice + que -2500 TND mais - que zero/ " if surveyround == 2 & profit<2500 & profit>0 
 
 /* --------------------------------------------------------------------
 	PART 2.4: Number of Employees
 ----------------------------------------------------------------------*/
-
+	* employees > 200 (SME upper limit)
 local nbempl car_carempl1 car_carempl2 car_carempl3 car_carempl4
  	
-foreach var of local nb_employees {
-	
-replace needs_check = 3 if `var'>200 & `var'<0 & surveyround==2
-replace questions_needing_check = " | ceci n'est pas une PME, verifier le nombre d'employées " + ///
-questions_needing_check if `var'>200 & `var'<0 & surveyround==2
-
+foreach var of local nb_empl {	
+	replace needs_check = 1 if `var'>200 | `var'<0 & surveyround==2
+	replace questions_needing_check = questions_needing_checks + "ceci n'est pas une PME, verifier le nombre d'employées/" if `var'>200 & `var'<0 & surveyround==2
 }
+
+	* employees = zero or missing
+replace needs_check = 1 if employes = 0 & surveyround==2
+replace questions_needing_check = questions_needing_checks + "zero employés ou manquantes" if employes = 0 & surveyround==2
+	
 ***********************************************************************
 * 	Part 3: Additional logical test cross-checking answers from registration & baseline		
 ***********************************************************************
@@ -139,7 +131,7 @@ questions_needing_check if `var'>200 & `var'<0 & surveyround==2
 ----------------------------------------------------------------------*/
 *firms that reported to be exporters according to registration & baseline datas
 
-replace needs_check=2 if ca_exp>0 & ca_exp!=.  & exp_pays==. 
+replace needs_check = 1 if ca_exp > 0 & ca_exp!=. & exp_pays== . 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour entreprise avec ca_exp>0/ " if ca_exp>0 & ca_exp!=.  & exp_pays==. 
 
 replace needs_check=2 if ca_exp>0 & ca_exp!=. & exp_pays==0 
