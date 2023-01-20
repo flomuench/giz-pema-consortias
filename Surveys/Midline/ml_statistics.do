@@ -269,20 +269,20 @@ putpdf image ml_performance.png
 putpdf pagebreak
 
 		* KPIs frequency
-graph hbar (mean) man_fin_per_fre, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Frequency KPIs") ///
-	ylabel (0(0.25)1, nogrid)
+graph hbar (percent), over(man_fin_per_fre, relabel(1 "jamais" 2 "annuellement" 3 "mensuellement" 4 "hebdomadaire" 5 "quotidiennement")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
+    legend(pos(2) row(3) size(vsmall)) ///
+    title("Frequency KPIs") ///
+	ylabel(0(0.25)1, nogrid)
 gr export ml_performance_frequency.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_performance_frequency.png
 putpdf pagebreak
 
 		* Frequency employees performance
-graph hbar (mean) man_hr_ind, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Frequency Employees Performance") ///
-	ylabel (0(0.25)1, nogrid)
+graph hbar (percent), over(man_hr_ind, relabel(1 "never" 2 "annually" 3 "quartely" 4 "monthly" 5 "weekly+")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+    legend(pos(2) row(3) size(vsmall)) ///
+    title("Frequency Employees Performance") ///
+	ylabel(0(0.25)1, nogrid)
 gr export ml_performance_employees.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_performance_employees.png
@@ -295,20 +295,20 @@ graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-
 */ 
 
 *Employees motivation
-graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Employees Motivation") ///
-	ylabel (0(0.25)1, nogrid)
+graph hbar (percent), over(man_hr_obj, relabel(1 "individual performance + firm" 2 "individual performance" 3 "other factors" 4 "None")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+    legend(pos(2) row(3) size(vsmall)) ///
+    title("Employees Motivation") ///
+	ylabel(0(0.25)1, nogrid)
 gr export ml_motivation_employees.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_motivation_employees.png
 putpdf pagebreak
 
 		* Employees goal awareness
-graph hbar (mean) man_ind_awa, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Employmees Awareness of Firms' Goals") ///
-	  ylabel (0(0.25)1, nogrid)
+graph hbar (percent), over(man_ind_awa, relabel(1 "seniors" 2 "most seniors + few employees" 3 "most seniors + most employees" 4 "all seniors + all employees")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+    legend(pos(2) row(3) size(vsmall)) ///
+    title("Employmees Awareness of Firms' Goals") ///
+	ylabel(0(0.25)1, nogrid)
 gr export ml_goal_awa.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_goal_awa.png
