@@ -288,10 +288,11 @@ putpdf paragraph, halign(center)
 putpdf image ml_performance_employees.png
 putpdf pagebreak
 
-		* Employees Incentives
+	/*	* Employees Incentives
 graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
     legend (pos(2) row(3) size(vsmall)) ///
     title ("Employees Incentives") ///
+*/ 
 
 *Employees motivation
 graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
