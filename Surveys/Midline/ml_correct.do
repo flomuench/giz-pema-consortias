@@ -79,10 +79,16 @@ drop if dup>1
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
 
 
+	* amouri frogot to mention that 999 needs to have a - before in case of don't know
+local 999vars ca ca_exp profit
+foreach var of local 999vars {
+	replace `var' = "-999" if `var' == "999"
+}
 
 	* make manual changes
 		* ca
 replace ca="2600000" if ca=="deux milliards 600dt" 
+replace ca = "1000000" if id_plateforme ==1033
 
 		* profit
 replace profit="2200" if id_plateforme==1005
@@ -145,7 +151,8 @@ foreach var of local numvars_with_strings {
 *4.1 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca ca_exp Profit ca_2021 ca_exp2021 
  
-replace profit = "2200" if profit == "10%uca"
+
+
 
 
 
