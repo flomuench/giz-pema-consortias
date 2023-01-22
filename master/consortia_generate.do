@@ -199,9 +199,9 @@ drop temp_*
 * 	PART IV:   generate survey-to-survey growth rates
 ***********************************************************************
 	* accounting variables
-local acccounting_vars "ca ca_exp profit"
+local acccounting_vars "ca ca_exp profit employes"
 foreach var of local acccounting_vars {
-		bys id: g `var'_growth = D.`var'/L.`var'
+		bys id_plateforme: g `var'_growth = D.`var'/L.`var'
 }
 
 /*
