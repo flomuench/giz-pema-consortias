@@ -186,7 +186,7 @@ egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp
 egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env list_group listexp)
 	
 	* section 6: accounting/KPI
-egen miss_accounting = rowmiss(empl car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
+egen miss_accounting = rowmiss(employes car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
 
 	* create the sum of missing values per company
 gen missing_values = miss_inno + miss_network + miss_management + miss_eri + miss_gender + miss_accounting

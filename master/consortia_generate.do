@@ -194,6 +194,23 @@ label var exportmngt_points "Export management"
 drop temp_*
 */
 
+
+***********************************************************************
+* 	PART IV:   generate survey-to-survey growth rates
+***********************************************************************
+	* accounting variables
+local acccounting_vars "ca ca_exp profit employes"
+foreach var of local acccounting_vars {
+		bys id_plateforme: g `var'_growth = D.`var'/L.`var'
+}
+
+/*
+use links to understand the code syntax for creating the accounting variables' growth rates:
+- https://www.stata.com/statalist/archive/2008-10/msg00661.html
+- https://www.stata.com/support/faqs/statistics/time-series-operators/
+
+*/
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

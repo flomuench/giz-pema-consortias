@@ -43,11 +43,11 @@ lab var questions_needing_checks "questions to be checked by El Amouri"
 /* --------------------------------------------------------------------
 	PART 2.1: Networking Questions
 ----------------------------------------------------------------------*/	
-replace needs_check = 1 if net_nb_m < 0 | net_nb_m > 50
-replace questions_needing_checks = "nombre de contact mâle est négatif ou excessivement grand / " if net_nb_m<0 & net_nb_m >50
+replace needs_check = 1 if surveyround == 2 & net_nb_m < . &  net_nb_m < 0 | net_nb_m > 50
+replace questions_needing_checks = "nombre de contact mâle est négatif ou excessivement grand / " if net_nb_m < 0 & net_nb_m > 50
 
-replace needs_check = 1 if net_nb_f < 0 | net_nb_f > 50
-replace questions_needing_checks = questions_needing_checks + "nombre de contact féminie est négatif ou excessivement grand / " if net_nb_f<0 & net_nb_f >50
+replace needs_check = 1 if net_nb_f != . & net_nb_f < 0 | net_nb_f > 50
+replace questions_needing_checks = questions_needing_checks + "nombre de contact féminie est négatif ou excessivement grand / " if net_nb_f < 0 & net_nb_f > 50
 
 
 /* --------------------------------------------------------------------
@@ -138,19 +138,43 @@ replace needs_check = 1 if employes == 0 & surveyround==2
 replace questions_needing_check = questions_needing_checks + "zero employés ou manquantes / " if employes == 0 & surveyround==2
 
 ***********************************************************************
-* 	Part 3: Additional logical test cross-checking answers from registration & baseline		
+* 	Part 3: large Outliers	(absolute, cross-sectional values)		
+***********************************************************************
+local acccounting_vars "ca ca_exp profit employes exprep_inv"
+foreach var of local acccounting_vars {
+	sum `var', d
+	replace needs_check = 1 if `var' != .& surveyround == 2 & `var' > r(p95)
+	replace questions_needing_checks = questions_needing_checks + "`var' très grand, vérifier" if `var' != .& surveyround == 2 & `var' > r(p95)
+}
+
+***********************************************************************
+* 	Part 4: Additional logical test cross-checking answers from registration & baseline		
 ***********************************************************************
 /* --------------------------------------------------------------------
-	PART 3.1.: CA export
+	PART 4.1.: CA export
 ----------------------------------------------------------------------*/
 *firms that reported to be exporters according to registration & baseline datas
 
+		 * CA exp & pays d'export
 replace needs_check = 1 if ca_exp > 0 & ca_exp!=. & exp_pays== . 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=.  & exp_pays==. 
 
-replace needs_check=2 if ca_exp>0 & ca_exp!=. & exp_pays==0 
+replace needs_check = 1 if ca_exp>0 & ca_exp!=. & exp_pays==0 
 replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=. & exp_pays==0 
 
+/* --------------------------------------------------------------------
+	PART 4.2.: Growth rate in accounting variables
+----------------------------------------------------------------------*/
+local acccounting_vars "ca ca_exp profit employes"
+foreach var of local acccounting_vars {
+	sum `var'_growth, d
+	replace needs_check = 1 if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
+	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier" if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
+}
+		
+
+/*
+baseline code:
 replace needs_check=2 if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)|(ca_exp2021>0 & ca_exp2021!=.)) & ca_exp==0 
 replace questions_needing_checks = questions_needing_checks + " ca_exp_2021 zéro mais export rapporté dans le passé / " if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)|(ca_exp2021>0 & ca_exp2021!=.)) & ca_exp==0 
 
@@ -161,44 +185,7 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays manquen
 * If number of export countries is higher than 50 – needs check 
 replace needs_check=1 if exp_pays>49 & exp_pays!=.
 replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé / " if exp_pays>49 & exp_pays!=.
-
-
-***********************************************************************
-* 	Part 4: large Outliers			
-***********************************************************************
-
-sum ca, d
-scalar ca_95p = r(p95)
-replace needs_check=2 if ca> ca_95p & ca!=.
-replace questions_needing_checks = questions_needing_checks + "ca_2022 très grand / " if ca> ca_95p & ca!=.
-
-sum ca_exp, d
-scalar ca_exp95p = r(p95)
-replace needs_check=2 if ca_exp> ca_exp95p & ca_exp!=.
-replace questions_needing_checks = questions_needing_checks + "ca_exp_2022 très grand / " if ca_exp> ca_exp95p & ca_exp!=.
-
-sum profit, d
-scalar profit_95p = r(p95)
-replace needs_check=2 if profit> profit_95p & profit!=.
-replace questions_needing_checks = questions_needing_checks + "profit très grand / " if profit> profit_95p & profit!=.
-
-sum ca_exp_2021, d
-scalar profit_95p = r(p95)
-replace needs_check=2 if ca_exp2021> profit_95p & ca_exp2021!=.
-replace questions_needing_checks = questions_needing_checks + "export 2021 très grand / " if ca_exp2021> profit_95p & ca_exp2021!=.
-
-sum ca_2021, d
-scalar profit_95p = r(p95)
-replace needs_check=2 if ca_2021> profit_95p & ca_2021!=.
-replace questions_needing_checks = questions_needing_checks + "profit 2021 très grand / " if ca_2021> profit_95p & ca_2021!=.
-
-* check if ca_2022 too big
-replace needs_check = 3 if ca> 9000000 & ca<. & surveyround==2
-replace questions_needing_checks = " | chiffre d'affaire 2022 très grand / " + questions_needing_checks if ca> 9000000 & ca<. & surveyround==2
-
-* check if ca_2021_check too big
-replace needs_check = 3 if ca_2021> 9000000 & ca_2021<. & surveyround==2
-replace questions_needing_checks = " | chiffre d'affaire 2021 très grand / " + questions_needing_checks if ca_2021> 9000000 & ca_2021<. & surveyround==2
+*/
 
 
 ***********************************************************************
@@ -222,27 +209,39 @@ foreach var of local closed_vars {
 ***********************************************************************
 * 	PART 7:  Export an excel sheet with needs_check variables  			
 ***********************************************************************
-*re-merge additional contact information to dataset
-*merge 1:1 id_plateforme using "${consortia_master}/add_contact_data", generate(_merge_cd)
-
-*Split questions needing check and move it from wide to long
-gen commentaires_elamouri = ""
-sort id_plateforme, stable
-cd "$ml_checks"
+*re-merge additional contact information to dataset (?)
+/*
+consortia: merge m:1 id_plateforme using  "${ml_raw}/consortia_ml_pii" 
+keep if _merge==3 & surveyround == 2
+e-commerce: merge 1:1 id_plateforme using "${consortia_master}/add_contact_data", generate(_merge_cd)
+*/
 
 preserve
-bysort id_plateforme (surveyround): gen checked= needs_check + needs_check[_n+1]
-replace checked=0 if checked==.
-*keep both baseline and midline value for observations that need checking
-keep if needs_check > 0 | checked >0
+			* generate empty variable for survey institute comments/corrections
+gen commentaires_elamouri = ""
 
+			* keep order stable
+sort id_plateforme, stable
 
-merge m:1 id_plateforme using  "${ml_raw}/consortia_ml_pii" 
-keep if _merge==3 & surveyround == 2
-export excel id_plateforme heure surveyround id_ident ident_nouveau_personne_ml needs_check commentaires_elamouri /// 
-questions_needing_checks ca ca_exp profit exprep_inv net_nb_f net_nb_m ca_2021_missing ca_exp_2021_missing	///
-profit_2021_missing	ca_2021	ca_exp2021	profit_2021 car_empl1 car_empl2 car_empl3 car_empl4 car_empl5 exp_pays email ///
- using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var)
+			* adjust needs check to panel structure (same value for each surveyround)
+				* such that when all values for each firms are kepts dropping those firms
+					* that do not need checking
+egen keep_check = max(needs_check), by(id_plateforme)
+drop needs_check
+rename keep_check needs_check
+keep if needs_check > 0
+			
+			* export excel file. manually add variables listed in questions_needing_check
+				* group variables into lists (locals) to facilitate overview
+local order_vars "id_plateforme heure surveyround needs_check commentaires_elamouri questions_needing_checks"
+local acounting_vars "ca ca_exp profit  ca_2021_missing ca_exp_2021_missing profit_2021_missing"
+local export_vars "exprep_inv exp_pays"
+local network_vars "net_nb_f net_nb_m"
+local employee_vars "employes car_empl1 car_empl2 car_empl3 car_empl4 car_empl5 "
+					
+				* export
+export excel `order_vars' `accounting_vars' `network_vars' `employee_vars' ///
+   using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var)
 
 
 restore
