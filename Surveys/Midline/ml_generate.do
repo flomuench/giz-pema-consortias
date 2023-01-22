@@ -248,7 +248,7 @@ label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
 
 ***********************************************************************
-* 	PART 11:  Generate rejection variable	
+* 	PART 11:  Generate rejection variable/ To not be contacted	
 ***********************************************************************
 gen refus = 0
 lab var refus "Comapnies who refused to answer the survey" 
@@ -259,6 +259,8 @@ replace refus = 1 if id_plateforme == 1090
 replace refus = 1 if id_plateforme == 1245   
 replace refus = 1 if id_plateforme == 1061   
 replace refus = 1 if id_plateforme == 1079   
+replace refus = 1 if id_plateforme == 1247    
+replace refus = 1 if id_plateforme == 998  
 ***********************************************************************
 * 	PART 9: save dta file  										  
 ***********************************************************************
