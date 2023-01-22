@@ -104,6 +104,15 @@ merge 1:1 id_plateforme using "${bl_final}/bl_final"		// N = 176
 keep if _merge==3 /* companies that were eligible and answered on the registration + baseline surveys */
 drop _merge
 
+	* make necessary changes in variable [...] for merger with midline & endline
+			* names
+				* accounting variables 2021 (remove 2021 for panel)
+local bl_acccounting_vars "ca ca_exp profit"
+foreach var of local bl_acccounting_vars {
+	rename `var'_2021 `var'
+}
+			* format
+
     * create panel ID
 gen surveyround=1
 lab def round  1 "baseline" 2 "midline" 3 "endline"

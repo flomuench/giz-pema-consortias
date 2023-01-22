@@ -145,12 +145,26 @@ replace questions_needing_check = questions_needing_checks + "zero employés ou 
 ----------------------------------------------------------------------*/
 *firms that reported to be exporters according to registration & baseline datas
 
+		 * CA exp & pays d'export
 replace needs_check = 1 if ca_exp > 0 & ca_exp!=. & exp_pays== . 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=.  & exp_pays==. 
 
-replace needs_check=2 if ca_exp>0 & ca_exp!=. & exp_pays==0 
+replace needs_check = 1 if ca_exp>0 & ca_exp!=. & exp_pays==0 
 replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=. & exp_pays==0 
 
+/* --------------------------------------------------------------------
+	PART 3.2.: Growth rate in accounting variables
+----------------------------------------------------------------------*/
+local acccounting_vars "ca ca_exp profit"
+foreach var of local acccounting_vars {
+	sum `var'
+	replace needs_check = 1 if `var' != . & `var' > r(p95) | `var' < r(p5)
+	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier"
+}
+		
+
+/*
+baseline code:
 replace needs_check=2 if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)|(ca_exp2021>0 & ca_exp2021!=.)) & ca_exp==0 
 replace questions_needing_checks = questions_needing_checks + " ca_exp_2021 zéro mais export rapporté dans le passé / " if ((ca_exp2020>0 & ca_exp2020!=.) |(ca_exp2019>0 & ca_exp2019!=.)|(ca_exp2018>0 & ca_exp2018!=.)|(ca_exp2021>0 & ca_exp2021!=.)) & ca_exp==0 
 
@@ -161,7 +175,7 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays manquen
 * If number of export countries is higher than 50 – needs check 
 replace needs_check=1 if exp_pays>49 & exp_pays!=.
 replace questions_needing_checks = questions_needing_checks + " exp_pays très elevé / " if exp_pays>49 & exp_pays!=.
-
+*/
 
 ***********************************************************************
 * 	Part 4: large Outliers			

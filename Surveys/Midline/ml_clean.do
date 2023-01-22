@@ -64,9 +64,13 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Rename the variables as needed
 ***********************************************************************
+		* rename to correct survey coding typos
 forvalues x = 1(1)4 {
 	rename car_carempl`x' car_empl`x'
 }
+
+		* rename for coherence with baseline
+rename empl employes
 
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			

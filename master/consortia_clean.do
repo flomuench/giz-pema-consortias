@@ -46,9 +46,11 @@ save "${master_intermediate}/consortium_pii_inter", replace
 use "${master_raw}/consortium_raw", clear
 
 ***********************************************************************
-* 	PART 2:     order panel identifiers first
+* 	PART 2:     declare panel data set to stata
 ***********************************************************************
+	* order panel identifier first
 order id_plateforme surveyround, first
+xtset id_plateforme surveyround, delta(1)
 
 ***********************************************************************
 * 	PART 3:     remove unnecessary variables
@@ -69,6 +71,13 @@ replace `x' = stritrim(strtrim(`x'))
 		* clean var names
 rename `take_up_vars', lower
 
+
+***********************************************************************
+* 	PART 5:     document year of collection in label of accounting variables
+***********************************************************************
+lab var ca "sales in TND in bl = 2021, ml = 2022, el = 2023"
+lab var ca_exp "export sales in TND in bl = 2021, ml = 2022, el = 2023"
+lab var profit "profit in TND in bl = 2021, ml = 2022, el = 2023"
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database

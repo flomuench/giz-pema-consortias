@@ -526,7 +526,7 @@ putpdf pagebreak
 
  * Generate graphs to see difference of employment between baseline & midline
 *Bart chart: sum
-graph bar (sum) empl if empl >= 0, over(treatment, label(labs(small))) ///
+graph bar (sum) employes if employes >= 0, over(treatment, label(labs(small))) ///
 	blabel(total, format(%9.0fc) size(vsmall)) ///
 	title("Sum of full time employees") 
 gr export fte_details_sum_bar.png, replace
@@ -559,7 +559,7 @@ putpdf image young_employees_details_sum_bar.png
 putpdf pagebreak
 
 *Bart chart: mean
-graph bar (mean) empl if empl >= 0, over(treatment, label(labs(small))) ///
+graph bar (mean) employes if employes >= 0, over(treatment, label(labs(small))) ///
 	blabel(total, format(%9.0fc) size(vsmall)) ///
 	title("Mean of full time employees") 
 gr export fte_details_mean_bar.png, replace
