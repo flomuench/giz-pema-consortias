@@ -58,22 +58,14 @@ replace needs_check = 1 if surveyround == 2 & exprep_inv < 0 | exprep_inv > 1000
 replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif ou trop grand / " if surveyround == 2 & exprep_inv < 0 | exprep_inv >100000
 
 	* did not invest in export but did export activities
+local exp_vars exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission ///
+ exp_pra_plan exp_pra_foire ssa_action4 ssa_action5	
+ 
+foreach var of local exp_vars {
+	replace needs_check = 1 if `var' == 1 & exprep_inv==0
+	replace questions_needing_checks = questions_needing_checks + "pas d'investissement dans l'export alors qu'il y'a activités d'export (`var' = 1) / " if `var' == 1 & exprep_inv==0
 	
-local expvars exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission ///
-exp_pra_plan exp_pra_foire ssa_action4 ssa_action5
-
-// check if any of the variables in the expvars local is equal to 1
-if (exp_pra_sci == 1 | exp_pra_rexp == 1 | exp_pra_cible == 1 | exp_pra_mission == 1 | exp_pra_plan == 1 | exp_pra_foire == 1 | ssa_action4 == 1 | ssa_action5 == 1) {
-    gen check = 0 // initialize the check variable
-    // only execute the loop if at least one of the variables is equal to 1
-    foreach var of local expvars {
-        replace needs_check = 1 if surveyround == 2 & `var' == 1 & exprep_inv == 0
-        if (check == 0) { // check if it's the first variable
-            replace questions_needing_checks = "entrain de faire desactivités d'export alors qu'il n'investit pas dans l'export / "
-            local check = 1
-        }
-    }
-}
+}	
 
 /* --------------------------------------------------------------------
 	PART 2.3: Comptabilité / accounting questions
