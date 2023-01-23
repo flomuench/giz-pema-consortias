@@ -94,7 +94,7 @@ graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender mis
 	label(3 "Management") label(4 "Export readiness") ///
 	label(5 "Gender ") label(6 "Accounting ")) ///
 	title("Sum of missing answers per section") ///
-	subtitle("sample: all initiated surveys") ///
+	subtitle("sample: all initiated surveys") 
 gr export ml_missing_asnwers_all.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_missing_asnwers_all.png
@@ -114,7 +114,7 @@ graph hbar (count) miss_accounting miss_eri miss_gender miss_inno miss_managemen
 	legend (pos(6) row(6) label(1 "Accounting section") label (2 "Export readiness section") ///
 	label  (3 "Gender section") label  (4 "Innovation section") ///
 	label  (5 "Management section") label  (5 "Network section")) ///
-	title("Number of missing answer per section") ///
+	title("Number of missing answer per section") 
 gr export ml_missing_asnwers.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_missing_asnwers.png
