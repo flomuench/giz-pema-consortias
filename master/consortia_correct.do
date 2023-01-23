@@ -171,7 +171,7 @@ replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==
 * 	PART 5:  export matricule fiscal for admin data from CEPEX
 ***********************************************************************
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
-"${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
+"${master_gdrive}/matricule_consortium_cepex", replace firstrow(var)
 
 
 ***********************************************************************
