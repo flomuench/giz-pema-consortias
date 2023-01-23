@@ -94,9 +94,10 @@ replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 ***********************************************************************
 * 	PART III:   Create the indices 			  
 ***********************************************************************
-/* uncomment this part once we started collecting midline data
+/*
 *Definition of all variables that are being used in index calculation*
-local allvars man_source man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_rd inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 inno_mot8 inno_pers num_inno
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_pers num_inno
+ds `allvars', has(type string) 
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
 *Temporary variable creation turning missing into zeros
@@ -117,47 +118,92 @@ foreach var of local allvars {
 	* capture program drop zscore
 	
 program define zscore /* opens a program called zscore */
-	sum `1' if treatment == 0
+	sum `1' if treatment == 0 & surveyround == `2'
 	gen `1'z = (`1' - r(mean))/r(sd)   /* new variable gen is called --> varnamez */
 end
 
 	* calculate z score for all variables that are part of the index
 	// removed dig_marketing_respons, dig_service_responsable and expprepres_per bcs we don't have fte data without matching (& abs value doesn't make sense)
-local exportprep temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan 
-local innovars1 temp_inno_produit temp_inno_process temp_inno_lieu temp_inno_commerce temp_inno_rd temp_inno_mot1 temp_inno_mot2 temp_inno_mot3 temp_inno_mot4 temp_inno_mot5 temp_inno_mot6 temp_inno_mot7 temp_inno_mot8 temp_inno_pers temp_num_inno
-local markvars1 temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
-local gendervars1 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
-local exportmngt1 temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
+		* baseline 
+			* export readiness
+local eri_vars temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_exprep_norme
+foreach var of local eri_vars {
+	zscore `var' 1
+}
+
+			* marketing practices
+local mark_vars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
+foreach var of local mark_vars {
+	zscore `var' 1
+}
+			* female empowerment
+local female_efficacy temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv 
+local female_initiative temp_car_init_prob temp_car_init_init temp_car_init_opp 
+local femle_loc temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
+foreach var of local female_efficacy female_initiative female_loc {
+	zscore `var' 1
+}	
+		
+		
+		* midline
+				* export readiness --> same variables --> no need to redefine list
+local eri_vars temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
+foreach var of local eri_vars {
+	zscore `var' 2
+}
+				* marketing practices --> not asked at midline
+
+				* female empowerment  --> initiative questions not asked; 
+local female_efficacy temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv 
+local femle_loc temp_car_loc_succ temp_car_loc_env temp_car_loc_exp // temp_car_loc_insp chanted to temp_car_loc_exp
+foreach var of local female_efficacy female_initiative female_loc {
+	zscore `var' 2
+}	
+
+				* export management
+
+
 local mngtvars1 temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per 
 
-local gendervars2 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_loc_succ temp_car_loc_env temp_car_loc_exp 
-local innovars2 temp_inno_produit temp_inno_process temp_inno_lieu temp_inno_commerce temp_inno_mot1 temp_inno_mot2 temp_inno_mot3 temp_inno_mot4 temp_inno_mot5 temp_inno_mot6 temp_inno_mot7 
-local exportmngt2 temp_exprep_inv temp_exprep_couts
+
+ 
+
+
 local mngtvars2 temp_man_hr_obj temp_man_source temp_man_ind_awa temp_man_fin_per_fre temp_man_fin_per
  
-forvalues s =1(1)2 {
-foreach z in markvars`s'  innovars`s' gendervars`s' mngtvars`s' exportprep exportmngt`s' {
+forvalues s = 1(1)2 {
+foreach z in markvars`s' gendervars`s' mngtvars`s' exportprep exportmngt`s' {
 	foreach x of local `z'  {
 			zscore `x' 
 		}
 }	
 
 		* calculate the index value: average of zscores 
+				* index with changes between baseline and midline
+egen mngtvars`s' = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz) if surveyround == `s' 
 
-egen mngtvars = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz) if surveyround == `s' 
-egen markvars = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz ) if surveyround == `s'
-egen exportprep = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
-egen gendervars = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz) if surveyround == `s'
-egen innovars = rowmean(temp_inno_produitz temp_inno_processz temp_inno_lieuz temp_inno_commercez temp_inno_rdz temp_inno_mot1z temp_inno_mot2z temp_inno_mot3z temp_inno_mot4z temp_inno_mot5z temp_inno_mot6z temp_inno_mot7z temp_inno_mot8z temp_inno_persz temp_num_innoz) if surveyround == `s'
-egen exportmngt = rowmean(temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz temp_exp_afriquez) if surveyround == `s'
+egen markvars`s' = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz ) if surveyround == `s'
+
+egen gendervars`s' = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz) if surveyround == `s'
+
+egen exportmngt`s' = rowmean(temp_exprep_normez temp_exprep_invz temp_exprep_coutsz temp_exp_paysz temp_exp_afriquez) if surveyround == `s'
+
 }
 
-label var mngtvars "Management practices index-Z Score"
-label var exportprep "Export readiness index -Z Score"
-label var markvars "Marketing practices index -Z Score"
-label var gendervars "Gender index -Z Score"
-label var innovars "Innovation index -Z Score"
-label var exportmngt "Export management index -Z Score"
+gen mpi = mngtvars1 + mngtvars2
+gen marki = markvars1 + markvars2
+gen emi = exportmngt1 + exportmngt2
+gen genderi = gendervars1 + gendervars2
+
+				* indexes without changes between baseline and midline
+egen eri = rowmean(temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz)
+
+
+				* labeling
+label var mpi "Management practices index-Z Score"
+label var eri "Export readiness index -Z Score"
+label var marki "Marketing practices index -Z Score"
+label var genderi "Gender index -Z Score"
 
 * 	PART 2: Create indexes as total points (not zscores)		  										  
 	* find out max. points
@@ -165,35 +211,57 @@ sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
 sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
 sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
-sum temp_inno_produit temp_inno_process temp_inno_lieu temp_inno_commerce temp_inno_rd temp_inno_mot1 temp_inno_mot2 temp_inno_mot3 temp_inno_mot4 temp_inno_mot5 temp_inno_mot6 temp_inno_mot7 temp_inno_mot8 temp_inno_pers temp_num_inno
 sum temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
-	* create total points per index dimension
 	
-egen mngtvars_points = rowtotal(`mngtvars'), missing
+	* create total points per index dimension
+		* export readiness points
+local exportprep temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
+egen er_points1 = rowtotal(`exportprep') if surveyround == 1, missing
+egen er_points2 = rowtotal(`exportprep') if surveyround == 2, missing
+gen er_points = er_points1 + er_points2
 
-egen markvars_points = rowtotal(`markvars'), missing
+		* export management points
+local exportmngt1 temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
+local exportmngt2 temp_exprep_inv temp_exprep_couts
 
-egen exportprep_points = rowtotal(`exportprep'), missing
+egen em_points1 = rowtotal(`exportmngt1'), missing
+egen em_points2 = rowtotal(`exportmngt2'), missing
+gen em_points = em_points1 + em_points2
 
-egen innovars_points = rowtotal(`innovars'), missing
+		* management points
+local mngtvars1 temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
+egen mp_points1 = rowtotal(`mngtvars1') if surveyround == 1, missing
 
-egen gendervars_points = rowtotal(`gendervars'), missing
+local mngtvars2 temp_man_hr_obj temp_man_source temp_man_ind_awa temp_man_fin_per_fre temp_man_fin_per
+egen mp_points2 = rowtotal(`mngtvars2') if surveyround == 2, missing
 
-egen exportmngt_points = rowtotal(`exportmngt'), missing
+gen mp_points = mp_points1 + mp_points2
+
+		* marketing pints
+local markvars temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub 
+egen mark_points = rowtotal(`markvars'), missing
+
+		* gender points
+local gendervars1 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
+egen gender_points1 = rowtotal(`gendervars1'), missing
+
+local gendervars2 temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_loc_succ temp_car_loc_env temp_car_loc_exp
+egen gender_points2 = rowtotal(`gendervars1'), missing
+
+gen gender_points = gender_points1 + gender_points2
+
 
 	* label variables
-
-label var mngtvars_points "Management practices points"
-label var markvars_points "Marketing practices points"
-label var exportprep_points "Export readiness points"
-label var innovars_points "Innovation points"
-label var gendervars_points "Gender points"
-label var exportmngt_points "Export management"
+label var mp_points "Management practices points"
+label var mark_points "Marketing practices points"
+label var er_points "Export readiness points"
+label var gender_points "Gender points"
+label var em_points "Export management"
 	
 * 	PART 4: drop temporary vars		  										  
 drop temp_*
-*/
 
+*/
 
 ***********************************************************************
 * 	PART IV:   generate survey-to-survey growth rates

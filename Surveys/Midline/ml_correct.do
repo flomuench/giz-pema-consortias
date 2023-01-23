@@ -88,12 +88,14 @@ foreach var of local 999vars {
 	* make manual changes
 		* ca
 replace ca="2600000" if ca=="deux milliards 600dt" 
-replace ca = "1000000" if id_plateforme ==1033
+replace ca = "1000000" if id_plateforme == 1033  	//	"plus d'un milliards de dinar"
 
 		* profit
-replace profit="2200" if id_plateforme==1005
-replace profit="1600" if id_plateforme==1133 	//   80% of total turnover 
-replace profit="25000" if id_plateforme==1188 	//	 10% of total turnover
+replace profit="2200" if id_plateforme == 1005		//
+replace profit="1600" if id_plateforme == 1133 		//   80% of total turnover 
+replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
+
+		* ca_exp
 
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
@@ -103,14 +105,14 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dinar","")
     replace `var' = ustrregexra( `var',"milles","000")
     replace `var' = ustrregexra( `var',"mille","000")
-    replace `var' = ustrregexra( `var',"million","000")
+    replace `var' = ustrregexra( `var',"million","000000")
     replace `var' = ustrregexra( `var',"dt","")
     replace `var' = ustrregexra( `var',"k","000")
     replace `var' = ustrregexra( `var',"dt","")
     replace `var' = ustrregexra( `var',"tnd","")
     replace `var' = ustrregexra( `var',"TND","")
-	  replace `var' = ustrregexra( `var',"DT","")
-	  replace `var' = ustrregexra( `var',"D","")
+	replace `var' = ustrregexra( `var',"DT","")
+	replace `var' = ustrregexra( `var',"D","")
     replace `var' = ustrregexra( `var',"zéro","0")
     replace `var' = ustrregexra( `var',"zero","0")
     replace `var' = ustrregexra( `var'," ","")
@@ -134,8 +136,7 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"na","")
     replace `var' = ustrregexra( `var',"r","")
     replace `var' = ustrregexra( `var',"m","000")
-    replace `var' = ustrregexra( `var',"مليون","000")
-    replace `var' = "1000" if `var' == "000"
+    replace `var' = ustrregexra( `var',"مليون","000000")
     replace `var' = subinstr(`var', ".", "",.)
     replace `var' = subinstr(`var', ",", ".",.)
     replace `var' = "`not_know'" if `var' =="je ne sais pas"
@@ -181,11 +182,6 @@ lab val id_adminrect correct
 
 */
 /*
-* Correction des variables investissement
-replace investcom_2021 = ustrregexra( investcom_2021,"k","000")
-//replace investcom_futur = ustrregexra( investcom_futur,"dinars","")
-//replace investcom_futur = ustrregexra( investcom_futur,"dt","")
-//replace investcom_futur = ustrregexra( investcom_futur,"k","000")
 
 replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
 */

@@ -42,8 +42,7 @@ replace firmname="flav'or" if id_plateforme==1150
 replace firmname="Al chatti Agro" if id_plateforme== 1041
 
 replace matricule_fiscale = upper(matricule_fiscale)
-export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web ///
-using "${master_gdrive}/matricule_consortium", firstrow(var) sheetreplace
+export excel id_plateforme firmname date_created matricule_fiscale nom_rep rg_adresse codepostal site_web using "${master_gdrive}/matricule_consortium", firstrow(var) replace
 
 *dummies whether matricule is correct or where it is a matricule of a physical person rather than company
 gen matricule_fisc_incorrect=0
@@ -170,8 +169,7 @@ replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==
 ***********************************************************************
 * 	PART 5:  export matricule fiscal for admin data from CEPEX
 ***********************************************************************
-export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using ///
-"${master_gdrive}/matricule_consortium_cepex", sheetreplace firstrow(var)
+export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using"${master_gdrive}/matricule_consortium_cepex", replace firstrow(var)
 
 
 ***********************************************************************
