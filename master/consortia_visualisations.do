@@ -24,7 +24,7 @@ cd "${master_output}/figures"
 
 		 
 *correlation matrix of selected variables
-correlate ca_2021 ca_exp_2021 profit_2021 exprep_inv
+*correlate ca_2021 ca_exp_2021 profit_2021 exprep_inv
 
 ***********************************************************************
 * 	PART 2: Basline statistics
@@ -482,7 +482,7 @@ putpdf clear
 putpdf begin 
 putpdf paragraph
 
-putpdf text ("Consortia: Midline Statistics"), bold linebreak
+putpdf text ("Consortia: Midline vs Baseline Statistics"), bold linebreak
 
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
@@ -493,33 +493,9 @@ putpdf text ("Section 1: Survey Progress Overview"), bold
 
 *** Section 1: Survey progress*** 
 
-*Genarate shre of answers
-sum id_plateforme if surveyround == 2 
-gen share1= (`r(N)'/176)*100 if surveyround == 2
-
-count if survey_completed==1 & surveyround == 2
-gen share2= (`r(N)'/176)*100 if surveyround == 2
-
-count if validation==1 & surveyround == 2
-gen share3= (`r(N)'/176)*100 if surveyround == 2
-
-* Share of firms that started the survey
-graph bar share* if surveyround == 2, blabel(total, format(%9.2fc)) ///
-	legend (pos(6) row(6) label(1 "Started answering") label (2 "Answers completed") ///
-	label  (3 "Answers validated")) ///
-	title("Started, Completed, Validated") note("Date: `c(current_date)'") ///
-	ytitle("share of total sample") ///
-	ylabel(0(10)100, nogrid) 
-graph export ml_responserate.png, replace
-putpdf paragraph, halign(center)
-putpdf image ml_responserate.png
-putpdf pagebreak
-
-drop share1 share2 share3
-
 
 	* response rate by treatment status
-graph bar (sum) survey_completed validation if surveyround == 2, over(treatment) blabel(total, format(%9.2fc)) ///
+graph bar (sum) survey_completed validation, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(1) label(1 "Answers completed") ///
 	label(2 "Answers validated")) ///
 	title("Completed & validated by treatment status") note("Date: `c(current_date)'") ///
@@ -529,39 +505,6 @@ graph export ml_responserate_tstatus.png, replace
 putpdf paragraph, halign(center)
 putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
-
-	* Number of missing answers per section - all
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting if surveyround == 2, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
-	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ")) ///
-	title("Sum of missing answers per section") ///
-	subtitle("sample: all initiated surveys") 
-gr export ml_missing_asnwers_all.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_missing_asnwers_all.png
-putpdf pagebreak
-
-* Number of missing answers per section
-
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting if validation == 1 & surveyround == 2, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
-	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ")) ///
-	title("Sum of missing answers per section") ///
-	subtitle("sample: all completed surveys") ///
-
-* Number of missing answers per section
-graph hbar (count) miss_accounting miss_eri miss_gender miss_inno miss_management miss_network if surveyround == 2, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Accounting section") label (2 "Export readiness section") ///
-	label  (3 "Gender section") label  (4 "Innovation section") ///
-	label  (5 "Management section") label  (5 "Network section")) ///
-	title("Number of missing answer per section") 
-gr export ml_missing_asnwers.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_missing_asnwers.png
-putpdf pagebreak	
-
 
 **** Section 2: Innovation*****
 putpdf paragraph,  font("Courier", 20)
@@ -849,7 +792,17 @@ gr export ml_strip_exprep_inv_treatment.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_strip_exprep_inv_treatment.png
 putpdf pagebreak	
+
+	* Distrubtion of exprep_inv
+graph box exprep_inv if exprep_inv<exprep_inv_95p & exprep_inv>0 , over(treatment) over(surveyround) ///
+	title("Investment in export readiness (without outliers)") 
+gr export ml_dis_exprep_inv.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_dis_exprep_inv.png
+putpdf pagebreak
+
 drop exprep_inv_95p
+
 
 *Export costs perception	
 graph bar (mean) exprep_couts, over(surveyround) over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -918,7 +871,7 @@ putpdf text ("Section 7: Accounting indicators"), bold
 *bar chart and boxplots of accounting variable by treatment
      * variable ca_2022:
 egen ca_95p = pctile(ca), p(95)
-graph bar ca if ca<ca_95p, blabel(total, format(%9.2fc)) over(treatment) over (surveyround) ///
+graph bar ca if ca<ca_95p & ca>0, blabel(total, format(%9.2fc)) over(treatment) over (surveyround) ///
 	title("Turnover in 2022") ///
 	ytitle( "Mean 2022 turnover")
 gr export ml_bar_ca_2022.png, replace
@@ -927,16 +880,24 @@ putpdf image ml_bar_ca_2022.png
 putpdf pagebreak
 
 sum ca, d
-stripplot ca if ca <ca_95p , by(treatment surveyround) jitter(4) vertical ///
+stripplot ca if ca <ca_95p & ca>0 , by(treatment surveyround) jitter(4) vertical ///
 	ytitle("Turnover in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n)) ///
 name(turnover_ml, replace)
 gr export turnover_ml.png, replace
 
+	* Distrubtion of ca
+graph box ca if ca<ca_95p & ca>0 , over(treatment) over(surveyround) ///
+	title("Turnover in 2022 (without outliers)") 
+gr export ml_dis_ca_2022.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_dis_ca_2022.png
+putpdf pagebreak
+
      * variable ca_exp_2022:
 egen ca_exp_95p = pctile(ca_exp), p(95)
-graph bar ca_exp if ca_exp<ca_exp_95p, over(treatment) over (surveyround) blabel(total, format(%9.2fc)) ///
+graph bar ca_exp if ca_exp<ca_exp_95p & ca_exp>0, over(treatment) over (surveyround) blabel(total, format(%9.2fc)) ///
 	title("Export turnover in 2022") ///
 	ytitle( "Mean 2022 export turnover")
 gr export ml_bar_ca_exp_2022.png, replace
@@ -945,16 +906,24 @@ putpdf image ml_bar_ca_exp_2022.png
 putpdf pagebreak
 
 sum ca_exp, d
-stripplot ca_exp if ca_exp <ca_exp_95p , by(treatment surveyround) jitter(4) vertical ///
+stripplot ca_exp if ca_exp <ca_exp_95p & ca_exp>0, by(treatment surveyround) jitter(4) vertical ///
 	ytitle("Export turnover in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n)) ///
 	name(export_turnover_ml, replace)
 gr export export_turnover_ml.png, replace
 
+* Distrubtion of ca_export
+graph box ca_exp if ca_exp<ca_exp_95p & ca_exp>0, over(treatment) over(surveyround) ///
+	title("Export Turnover in 2022 (without outliers)") 
+gr export ml_dis_ca_exp_2022.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_dis_ca_exp_2022.png
+putpdf pagebreak
+
      * variable profit_2022:
-egen profit_95p = pctile(profit), p(95)
-graph bar profit if profit<profit_95p, over(treatment) over (surveyround) blabel(total, format(%9.2fc)) ///
+egen profit_95p = pctile(profit), p(95) 
+graph bar profit if profit<profit_95p & profit > -500000, over(treatment) over (surveyround) blabel(total, format(%9.2fc)) ///
 	title("Profit in 2022") ///
 	ytitle( "Mean 2022 profit") 
 gr export ml_bar_profit_2022.png, replace
@@ -963,13 +932,20 @@ putpdf image ml_bar_profit_2022.png
 putpdf pagebreak
 
 sum profit, d
-stripplot profit if profit <profit_95p , by(treatment surveyround) jitter(4) vertical ///
+stripplot profit if profit <profit_95p & profit > -500000, by(treatment surveyround) jitter(4) vertical ///
 	ytitle("Profit in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)' 0 "Median", size(vsmall) place(n)) ///
 name(profit_ml, replace)
 gr export profit_ml.png, replace
 
+* Distrubtion of profit
+graph box profit if profit <profit_95p & profit > -100000, over(treatment) over(surveyround) ///
+	title("Profit (without outliers)") 
+gr export ml_dis_profit.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_dis_profit.png
+putpdf pagebreak
 drop profit_95p ca_exp_95p ca_95p
 
 
@@ -1103,7 +1079,46 @@ putpdf paragraph, halign(center)
 putpdf image young_employees_details_mean_bar.png
 putpdf pagebreak
 
+* Distribution of employees
+egen employes_98p = pctile(employes), p(98) 
+graph box employes if employes >= 0 & employes <employes_98p, over(treatment) over(surveyround) ///
+	title("Total employees") 
+gr export fte_dis.png, replace
+putpdf paragraph, halign(center) 
+putpdf image fte_dis.png
+putpdf pagebreak
 
+egen car_empl1_98p = pctile(car_empl1), p(98) 
+graph box car_empl1 if car_empl1 >= 0 & car_empl1 <150, over(treatment) over(surveyround) ///
+	title("Female employees") 
+gr export female_dis.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_dis.png
+putpdf pagebreak
+
+egen car_empl2_98p = pctile(car_empl2), p(98)  
+graph box car_empl2 if car_empl2 >= 0 & car_empl2 <car_empl2_98p, over(treatment) over(surveyround) ///
+	title("Young employees") 
+gr export youngemploye_dis.png, replace
+putpdf paragraph, halign(center) 
+putpdf image youngemploye_dis.png
+putpdf pagebreak
+
+egen car_empl4_98p = pctile(car_empl4), p(98)  
+graph box car_empl4 if car_empl4 >= 0 & car_empl4 <car_empl4_98p, over(treatment) over(surveyround) ///
+	title("Part-time employees") 
+gr export pte_dis.png, replace
+putpdf paragraph, halign(center) 
+putpdf image pte_dis.png
+putpdf pagebreak
+
+egen car_empl5_98p = pctile(car_empl5), p(98)  
+graph box car_empl5 if car_empl5 >= 0 & car_empl5 <car_empl5_98p, over(treatment) over(surveyround) ///
+	title("Qaulified employees") 
+gr export pte_dis.png, replace
+putpdf paragraph, halign(center) 
+putpdf image pte_dis.png
+putpdf pagebreak
 
 
 /*
@@ -1227,7 +1242,7 @@ putpdf pagebreak
 */
 }
 
-putpdf save "midline_statistics", replace
+putpdf save "comparison_midline_baseline", replace
 
 ***********************************************************************
 * 	PART 4:  Mdiline Indexes
