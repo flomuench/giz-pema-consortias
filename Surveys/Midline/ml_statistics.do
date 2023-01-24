@@ -89,10 +89,10 @@ putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
 
 	* Number of missing answers per section - all
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
+graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting miss_eri_ssa, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(3) label(1 "Innovation ") label(2 "Network ") ///
 	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ")) ///
+	label(5 "Gender ") label(6 "Accounting ") label(7 "SSA Export readiness")) ///
 	title("Sum of missing answers per section") ///
 	subtitle("sample: all initiated surveys") 
 gr export ml_missing_asnwers_all.png, replace
@@ -100,25 +100,17 @@ putpdf paragraph, halign(center)
 putpdf image ml_missing_asnwers_all.png
 putpdf pagebreak
 
-* Number of missing answers per section
-
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting if validation == 1, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(2) label(1 "Innovation ") label(2 "Network ") ///
+	* Number of missing answers per section - validated
+graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting miss_eri_ssa if validation == 1, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(3) label(1 "Innovation ") label(2 "Network ") ///
 	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ")) ///
+	label(5 "Gender ") label(6 "Accounting ") label(7 "SSA Export readiness")) ///
 	title("Sum of missing answers per section") ///
-	subtitle("sample: all completed surveys") ///
-
-* Number of missing answers per section
-graph hbar (count) miss_accounting miss_eri miss_gender miss_inno miss_management miss_network, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Accounting section") label (2 "Export readiness section") ///
-	label  (3 "Gender section") label  (4 "Innovation section") ///
-	label  (5 "Management section") label  (5 "Network section")) ///
-	title("Number of missing answer per section") 
-gr export ml_missing_asnwers.png, replace
+	subtitle("sample: all validated surveys")
+gr export ml_missing_asnwers_validated.png, replace
 putpdf paragraph, halign(center) 
-putpdf image ml_missing_asnwers.png
-putpdf pagebreak	
+putpdf image ml_missing_asnwers_validated.png
+putpdf pagebreak
 
 	* How the company responded to the questionnaire
 graph bar (count), over(survey_phone) over(treatment) blabel(total) ///
@@ -183,17 +175,8 @@ graph hbar (sum) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6, ov
 ****** Section 3: Networks ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Networks"), bold
+	
 	* Number of female and male CEO met
-graph bar net_nb_m net_nb_f, over(treatment)stack ///
-	title("Number of female and male CEO met") ///
-	ytitle("Person") ///
-	ylabel(0(2)16, nogrid) ///
-	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
-gr export ml_CEO_met.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_CEO_met.png
-putpdf pagebreak	
-
 graph bar (mean) net_nb_m net_nb_f , over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
 	title("Number of female vs male CEO met") ///
 	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
@@ -202,22 +185,34 @@ putpdf paragraph, halign(center)
 putpdf image ml_mean_CEO_met.png
 putpdf pagebreak	
 	
+		* male
 tw ///
-	(kdensity net_nb_m, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_m, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity net_nb_f, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_f, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity net_nb_m if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_nb_m if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
 	, ///
-	xtitle("Distribution of female vs male CEO met", size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Male CEO" 2 "Female CEO")  pos(6) row(1)) ///
-	name(network_density, replace)
+	xtitle("Male CEOs met", size(vsmall)) ///
+	ytitle("Density", size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(network_density_m, replace)
+		
+		* female
+tw ///
+	(kdensity net_nb_f if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_nb_f if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
+	, ///
+	xtitle("Female CEOs met", size(vsmall)) ///
+	ytitle("Densitiy", size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(network_density_f, replace)
+	
+gr combine network_density_f network_density_m, name(ml_network_density, replace) ycommon
 gr export ml_network_density.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_network_density.png
 putpdf pagebreak	
 
 	* Quality of advice 
+		* distribution
 sum net_nb_qualite,d
 histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
@@ -229,9 +224,25 @@ histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid for
 gr export ml_quality_advice.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_quality_advice.png
-putpdf pagebreak	
+putpdf pagebreak
 
-*Interactions between CEO	
+		* distribution by treatment status
+tw ///
+	(kdensity net_nb_qualite if treatment == 1, lp(l) lc(maroon) yaxis(2) bw(0.5)) ///
+	(histogram net_nb_qualite if treatment == 1, freq w(.5) recast(scatter) msize(small) mc(green)) ///
+	(kdensity net_nb_qualite if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.5)) ///
+	(histogram net_nb_qualite if treatment == 0, freq w(.5) recast(scatter) msize(small) mc(green)) ///
+	, ///
+	xtitle("CEO network quality: treatment vs. control", size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(network_qualite_den, replace)
+gr export ml_quality_advice_treatment.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_quality_advice_treatment.png
+putpdf pagebreak
+
+	* Interactions between CEO	
 graph bar (mean) net_coop_pos net_coop_neg, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
 	title("Perception of interactions between CEOs") ///
@@ -349,7 +360,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_ex_k.png
 putpdf pagebreak	
 	
-*Export management/readiness
+	* Export management/readiness
 graph bar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(4) label (1 "Analysis of target markets") label(2 "Develop export plan") ///
 	label(3 "Trade mission to target market") label(4 "Access customs website") label(5 "Participate in international trade fairs") ///
@@ -361,7 +372,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_erp.png
 putpdf pagebreak	
 	
-* Export preparation investment	
+	* Export preparation investment	
 egen exprep_inv_95p = pctile(exprep_inv), p(95)
 graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) blabel(total, format(%9.2fc)) ///
 	title("Investment in export readiness")
@@ -377,10 +388,10 @@ putpdf paragraph, halign(center)
 putpdf image ml_strip_exprep_inv.png
 putpdf pagebreak	
 
-*Export costs perception	
+	* Export costs perception	
 graph hbar (mean) exprep_couts, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	title("Export preparation costs") ///
-	ylabel(0(0.25)1, nogrid)    
+	ylabel(0(1)10, nogrid)    
 gr export ml_exprep_couts.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_exprep_couts.png
@@ -415,7 +426,7 @@ putpdf pagebreak
 	
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+graph bar listexp, over(list_group_ml, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///
@@ -433,7 +444,7 @@ putpdf text ("Section 6: Accounting indicators"), bold
 *bar chart and boxplots of accounting variable by treatment
      * variable ca_2022:
 egen ca_95p = pctile(ca), p(95)
-graph bar ca if ca<ca_95p, blabel(total, format(%9.2fc)) ///
+graph bar ca if ca<ca_95p, over(treatment) blabel(total, format(%9.2fc)) ///
 	title("Turnover in 2022")
 gr export ml_bar_ca_2022.png, replace
 putpdf paragraph, halign(center) 
@@ -500,16 +511,6 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 7: Employment & SSA activities"), bold
 
 **** Africa-related actions********************
-graph bar (sum) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///
-	blabel(total, format(%9.2fc) size(vsmall)) ///
-	title ("ASS activities") ///
-	ytitle("Sum of affirmative firms") ///
-	legend(pos (6) col(2) label(1 "Potential client in SSA") label(2 "Commercial partner in SSA") label(3 "External finance for export costs") label(4 "Investment in sales structure") label(5 "Digital innovation or communication system") size(small))
-gr export ml_ssa_action.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_ssa_action.png
-putpdf pagebreak
-
 graph bar (mean) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///
 	blabel(total, format(%9.2fc) size(vsmall)) ///
 	title ("ASS activities") ///

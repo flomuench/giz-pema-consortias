@@ -9,7 +9,7 @@
 *				PART 2: clean bl_final	  
 *				PART 3:                         											  
 *																	  
-*	Author:  	Fabian Scheifele & Siwar Hakim							    
+*	Author:  	Florian Münch, Fabian Scheifele & Siwar Hakim							    
 *	ID variable: id_email		  					  
 *	Requires:  	 regis_final.dta bl_final.dta 										  
 *	Creates:     regis_final.dta bl_final.dta
@@ -56,6 +56,8 @@ xtset id_plateforme surveyround, delta(1)
 * 	PART 3:     remove unnecessary variables
 ***********************************************************************
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
+
+drop ca_2021 profit_2021 // utiliser au niveau de la midline re-demander des infos manquantes. ca_exp_2021 has no response yet.
 
 ***********************************************************************
 * 	PART 4:     clean administrative implementation variables

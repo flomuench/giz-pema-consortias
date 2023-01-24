@@ -23,6 +23,7 @@ clear all
 graph drop _all
 scalar drop _all
 set more off
+set varabbrev off // stops stata from referring to variables if only one part is the same
 set graphics on /* switch off to on to display graphs */
 capture program drop zscore /* drops the program programname */
 qui cap log c

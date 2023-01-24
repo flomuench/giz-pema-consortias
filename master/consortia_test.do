@@ -19,7 +19,7 @@
 *	6)		Manual corrections of needs_check after Amouri Feedback 
 *	7)		Export an excel sheet with needs_check variables 
 *						  															      
-*	Author:  	Ayoub Chamakhi
+*	Author:  	Florian Münch, Ayoub Chamakhi
 *	ID variable: 	id_plateforme (example: f101)			  					  
 *	Requires: consortium_int.dta 	  								  
 *	Creates:  fiche_correction.xls			                          
@@ -27,7 +27,6 @@
 ***********************************************************************
 * 	PART 1:  Load data & generate check variables 		
 ***********************************************************************
-	 
 use "${master_final}/consortium_final", clear
 
 gen needs_check = 0
@@ -86,10 +85,20 @@ foreach var of local accountvars {
 }
 
 	*  companies that had to re-fill accounting data actually corrected it
-local vars_checked ca_2021_missing ca_exp_2021_missing	profit_2021_missing	ca_2021	ca_exp2021	profit_2021	
-foreach var of local vars_checked {
-	replace needs_check = 1 if `var' == . & ca_check==1
-	replace questions_needing_checks = questions_needing_checks + "`var' manque même que l'entreprise dans la liste pour re-fournier donnés 2021 /" if `var' ==. & ca_check==1 
+/*
+local agrp "cat dog cow pig"
+local bgrp "meow woof moo oinkoink"  
+foreach a of local agrp {    
+    gettoken b bgrp : bgrp      
+    di "`a' says `b'"
+}
+*/
+local accounting_vars "ca_2021 ca_exp2021 profit_2021"
+local missing_2021 "ca_2021_missing ca_exp_2021_missing	profit_2021_missing"
+foreach var of local acccounting_vars {
+	gettoken cond missing_2021 : missing_2021
+	replace needs_check = 1 if `var' == . & `cond' == 1
+	replace questions_needing_checks = questions_needing_checks + "`var' manque même que l'entreprise dans la liste pour re-fournier donnés 2021 /" if `var' == . & `cond' == 1995
 	
 }
 
@@ -115,7 +124,7 @@ replace questions_needing_checks = questions_needing_checks + "CA moins que 5000
 		* profit
 				* just above zero
 replace needs_check = 1 if surveyround == 2 & profit<2500 & profit>0 
-replace questions_needing_checks = questions_needing_checks + "benefice moins que 100 TND / " if surveyround == 2 & profit<2500 & profit>0 
+replace questions_needing_checks = questions_needing_checks + "benefice moins que 2500 TND / " if surveyround == 2 & profit<2500 & profit>0 
 				* just below zero
 					*not sure what to do if profit is -999 as don't know
 replace needs_check = 1 if surveyround == 2 & profit>-2500 & profit<0 & profit !=-999
@@ -130,17 +139,17 @@ local nbempl car_carempl1 car_carempl2 car_carempl3 car_carempl4
  	
 foreach var of local nb_empl {	
 	replace needs_check = 1 if `var'>200 & surveyround==2
-	replace questions_needing_check = questions_needing_checks + "ceci n'est pas une PME, verifier le nombre d'employées / " if `var'>200 & surveyround==2
+	replace questions_needing_checks = questions_needing_checks + "ceci n'est pas une PME, verifier le nombre d'employées / " if `var'>200 & surveyround==2
 }
 
 	* employees = zero or missing
 			* zero
 replace needs_check = 1 if employes == 0 & surveyround==2
-replace questions_needing_check = questions_needing_checks + "zero employés / " if employes == 0 & surveyround==2
+replace questions_needing_checks = questions_needing_checks + "zero employés / " if employes == 0 & surveyround==2
 
 			* manquantes
 replace needs_check = 1 if employes == . & surveyround==2
-replace questions_needing_check = questions_needing_checks + "nombre d'employés manque / " if employes == . & surveyround==2
+replace questions_needing_checks = questions_needing_checks + "nombre d'employés manque / " if employes == . & surveyround==2
 
 ***********************************************************************
 * 	Part 3: large Outliers	(absolute, cross-sectional values)		
@@ -158,14 +167,18 @@ foreach var of local acccounting_vars {
 /* --------------------------------------------------------------------
 	PART 4.1.: CA export
 ----------------------------------------------------------------------*/
-*firms that reported to be exporters according to registration & baseline datas
+* firms that reported to be exporters according to registration & baseline datas
 
 		 * CA exp & pays d'export
-replace needs_check = 1 if ca_exp > 0 & ca_exp!=. & exp_pays== . 
+/* does not apply to midline, recover at endline
+
+replace needs_check = 1 if ca_exp > 0 & ca_exp!=. & exp_pays[_n-1] == . 
 replace questions_needing_checks = questions_needing_checks + " exp_pays manquent pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=.  & exp_pays==. 
 
-replace needs_check = 1 if ca_exp>0 & ca_exp!=. & exp_pays==0 
+replace needs_check = 1 if ca_exp>0 & ca_exp!=. & exp_pays ==0 
 replace questions_needing_checks = questions_needing_checks + " exp_pays zero pour entreprise avec ca_exp>0 / " if ca_exp>0 & ca_exp!=. & exp_pays==0 
+*/
+
 
 /* --------------------------------------------------------------------
 	PART 4.2.: Growth rate in accounting variables
@@ -177,19 +190,6 @@ foreach var of local acccounting_vars {
 	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier / " if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
 }
 		
-***********************************************************************
-* 	PART 5:  Check for missing values
-***********************************************************************
-
-	* employee data
-
-local fte car_carempl1 car_carempl2 car_carempl3 car_carempl4 car_carempl5
-
-foreach var of local closed_vars {
-	capture replace needs_check = 1 if `var' == 201 & surveyround==2
-	capture replace questions_needing_checks = questions_needing_checks + ///
-	" | `var' ne sais pas (donnée d'emploi) / " if `var' == . & surveyround==2
-}
 
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		

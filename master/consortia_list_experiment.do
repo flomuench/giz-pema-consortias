@@ -32,7 +32,7 @@ isid id_plateforme, sort
 
 		* rank the random number
 bysort treatment: gen random_number_ml = uniform()
-egen rank = rank(random_number), by(treatment) unique
+egen rank = rank(random_number_ml), by(treatment) unique
 
 		* identify the observation that divides ranked firms into half
 sum rank if treatment == 1, d
@@ -57,7 +57,7 @@ order List_group, a(list_group_ml)
 *iebaltab ca_mean ca_expmean rg_fte rg_capital rg_oper_exp age presence_enligne, grpvar(list_group) save("${ml_output}/baltab_list_experiment_ml") replace ///
 *			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 *			 format(%12.2fc)
-tab list_group treatment		
+tab list_group_ml treatment		
 
 ***********************************************************************
 * 	PART 4: assess replicability			
