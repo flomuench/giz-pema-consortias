@@ -145,11 +145,11 @@ if (0) do "${bl_github}/bl_open_question_checks.do"
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_test.do"
 /* --------------------------------------------------------------------
-	PART 3.8: Export pdf with descriptive statistics on responses
+	PART 3.7: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_statistics.do"
 /* --------------------------------------------------------------------
-	PART 3.9: Diagnostic
+	PART 3.8: Diagnostic
 ----------------------------------------------------------------------*/	
 if (0) do "${bl_github}/bl_diagnostic.do"
 

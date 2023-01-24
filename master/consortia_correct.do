@@ -10,7 +10,7 @@
 *				PART II: Analysis data
 *					PART 3: 
 *																	  
-*	Author:  	Fabian Scheifele & Siwar Hakim							    
+*	Author:  	Florian Münch, Fabian Scheifele & Siwar Hakim							    
 *	ID variable: id_email		  					  
 *	Requires:  	 regis_final.dta bl_final.dta 										  
 *	Creates:     regis_final.dta bl_final.dta
@@ -190,6 +190,11 @@ use "${master_intermediate}/consortium_inter", clear
 replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
+
+***********************************************************************
+* 	PART 2:  mettre refus "refusal" to zero for baseline (as randomization only among respondents)
+***********************************************************************
+replace refus = 0 if surveyround == 1
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database

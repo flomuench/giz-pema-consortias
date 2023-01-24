@@ -137,6 +137,7 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"دينار","")
     replace `var' = ustrregexra( `var',"تونسي","")
     replace `var' = ustrregexra( `var',"د","")
+    replace `var' = ustrregexra( `var',"de","")
     replace `var' = ustrregexra( `var',"d","")
     replace `var' = ustrregexra( `var',"na","")
     replace `var' = ustrregexra( `var',"r","")

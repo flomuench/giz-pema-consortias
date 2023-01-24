@@ -35,13 +35,16 @@ rename Id id_plateforme
 drop ident_base_respondent
 
 	* rename variables to indicate ml as origin
-local ml_changes ident_nouveau_personne firmname_change Numero1 Numero2 ident_repondent_position
+local ml_changes ident_nouveau_personne firmname_change email Numero1 Numero2 ident_repondent_position
 foreach var of local ml_changes {
 	rename `var' `var'_ml
 }
 
+	* rename list_group to specify surveyround
+rename List_group List_group_ml
+
 	* put all pii variables into a local
-local pii id_plateforme ident_nouveau_personne_ml id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml List_group
+local pii id_plateforme ident_nouveau_personne_ml id_admin id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml List_group_ml
 
 	* change format of accountant email to text for merge with master_pii
 tostring comptable_email, replace
@@ -51,15 +54,12 @@ tostring comptable_email, replace
 preserve
 keep `pii'
 
-   
-		
-	* rename list_group to specify surveyround
-rename List_group List_group_ml
-		
-save "${ml_raw}/consortia_ml_pii", replace
-
 	* export the pii data as new consortia_master_data 
 export excel `pii' using "${ml_raw}/consortia_ml_pii", firstrow(var) replace
+		
+
+		
+save "${ml_raw}/consortia_ml_pii", replace
 
 restore
 
@@ -68,7 +68,7 @@ restore
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
 	* drop all pii
-drop ident_nouveau_personne id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml 
+drop ident_nouveau_personne_ml id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml 
 
 
 ***********************************************************************

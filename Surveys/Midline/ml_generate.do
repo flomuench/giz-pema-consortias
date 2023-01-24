@@ -180,13 +180,16 @@ egen miss_network = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
 egen miss_management = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
 
 	* section 4: export readiness
-egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
+egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts)
 	
 	* section 5: gender empowerment
-egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env list_group listexp)
+egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env list_group_ml listexp)
 	
 	* section 6: accounting/KPI
 egen miss_accounting = rowmiss(employes car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
+
+	* section 7: SSA export readiness
+egen miss_eri_ssa = rowmiss(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
 
 	* create the sum of missing values per company
 gen missing_values = miss_inno + miss_network + miss_management + miss_eri + miss_gender + miss_accounting

@@ -137,7 +137,6 @@ lab var listexp "list experiment"
 		* Section accounting
 lab var info_neces "obtaining necessary information"
 lab var info_compt1 "willing to share accountant contact info"
-lab var info_compt "indicate your accountant contact info"
 
 lab var ca "turnover in 2022"
 lab var ca_exp "export turnover in 2022"
@@ -150,7 +149,7 @@ lab var id_admin "matricule fiscale"
 
 
 		* Section GIZ/ASS activitiy
-lab var empl "number of full time employees"
+lab var employes "number of full time employees"
 lab var car_empl1 "number of women employees"
 lab var car_empl2 "number of youth employees"
 lab var car_empl3 "number of full-time employees"
@@ -168,7 +167,7 @@ lab var attest "respondents attest that his/her responses correspond to truth"
 
 
 		* other:
-label variable list_group "treatment or control Group"
+label variable list_group_ml "treatment or control Group"
 label variable heure "beginning hour"
 label variable date "date"
 
@@ -230,7 +229,7 @@ label values man_ind_awa kpi_empl
 
 		* list experiment
 label define label_list_group 1 "treatment_group" 0 "control_group"
-label values list_group label_list_group 
+label values list_group_ml label_list_group 
 
 		* declaration of honour
 label define label_attest  1 "Yes"
