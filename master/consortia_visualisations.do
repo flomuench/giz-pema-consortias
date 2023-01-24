@@ -619,6 +619,11 @@ twoway (histogram net_nb_qualite if treatment == 0 & surveyround == 2, fcolor(no
 			xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
 			text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
 			text(0.45  `r(p50)' "Median", size(small) place(e))
+gr export quality_advice_treatment.png, replace
+putpdf paragraph, halign(center) 
+putpdf image quality_advice_treatment.png
+putpdf pagebreak	
+
 
 	   sum net_nb_qualite,d
 twoway (histogram net_nb_qualite if surveyround == 1, fcolor(none) lcolor(navy)lpattern(solid)) ///                
@@ -629,7 +634,11 @@ twoway (histogram net_nb_qualite if surveyround == 1, fcolor(none) lcolor(navy)l
 			xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
 			text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
 			text(0.45  `r(p50)' "Median", size(small) place(e))
-			
+gr export quality_advice_surveyround.png, replace
+putpdf paragraph, halign(center) 
+putpdf image quality_advice_surveyround.png
+putpdf pagebreak	
+
 
 *Interactions between CEO	
 graph bar (mean) net_coop_pos net_coop_neg, over(treatment) over(surveyround) blabel(total, format(%9.1fc) gap(-0.2)) ///
