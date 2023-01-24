@@ -97,6 +97,7 @@ replace ca="40000" if ca=="entre 30000 et 50000" // "moyenne"
 replace profit="2200" if id_plateforme == 1005		//
 replace profit="1600" if id_plateforme == 1133 		//   80% of total turnover 
 replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
+replace profit="-24000" if id_plateforme == 1035    //   -60% of total turnover
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
