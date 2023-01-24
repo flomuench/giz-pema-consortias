@@ -93,7 +93,7 @@ foreach a of local agrp {
     di "`a' says `b'"
 }
 */
-local accounting_vars "ca_2021 ca_exp2021 profit_2021"
+local accounting_vars "ca_2021 ca_exp_2021 profit_2021"
 local missing_2021 "ca_2021_missing ca_exp_2021_missing	profit_2021_missing"
 foreach var of local acccounting_vars {
 	gettoken cond missing_2021 : missing_2021
@@ -234,7 +234,7 @@ drop occurence
 			* export excel file. manually add variables listed in questions_needing_check
 				* group variables into lists (locals) to facilitate overview
 local order_vars "id_plateforme heure surveyround needs_check commentaires_elamouri questions_needing_checks"
-local accounting_vars "`order_vars' ca ca_exp profit ca_2021_missing ca_exp_2021_missing profit_2021_missing"
+local accounting_vars "`order_vars' ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 ca_2021_missing ca_exp_2021_missing profit_2021_missing"
 local export_vars "`accounting_vars' exprep_inv exp_pays"
 local network_vars "`export_vars' net_nb_f net_nb_m"
 local employee_vars "`network_vars' employes car_empl1 car_empl2 car_empl3 car_empl4 car_empl5"

@@ -103,7 +103,7 @@ replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
 replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
 
 	* loop over all accounting variables with string
-ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
+ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
 local numvars_with_strings "`r(varlist)'"
 foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dinars","")
@@ -222,29 +222,11 @@ replace man_hr_obj = 0 if man_hr_obj == 0.25
 replace man_hr_obj = 0.25 if man_hr_obj == 0.5
 label values man_hr_obj label_promo
 
-	* making sure new matricule fiscale is correct matricule_fisc_incorrect id_admin id_plateforme
-// matricule fiscale of duelle checked on rne
-replace matricule_fisc_incorrect = 0 if id_plateforme == 1013
-* matricule fiscale of hajer gharsalli checked on rne 
-replace matricule_fisc_incorrect = 0 if id_plateforme == 1081
-// matricule fiscale id_plateforme 1083 still wrong
-// matricule fiscale id_plateforme 1128 still wrong
-// matricule fiscale id_plateforme 1146 still wrong
-// matricule fiscale id_plateforme 1150 still wrong
-* matricule fiscale of yosra tahri checked on rne
-replace matricule_fisc_incorrect = 0 if id_plateforme == 1182
-// matricule fiscale id_plateforme 1185 still wrong
-// matricule fiscale id_plateforme 1190 still wrong
-// matricule fiscale id_plateforme 1197 is correct, but owner is a men, is it her husband perhaps?
-// matricule fiscale id_plateforme 1205 still wrong
-*correct on rne (TINEST)
-replace matricule_fisc_incorrect = 0 if id_plateforme == 1214
-
 ***********************************************************************
 * 	PART 7:  Destring remaining numerical vars
 ***********************************************************************
 
-local destrvar ca ca_exp profit ca_2021 ca_exp2021 profit_2021 
+local destrvar ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 
 foreach x of local destrvar { 
 destring `x', replace
 format `x' %25.0fc

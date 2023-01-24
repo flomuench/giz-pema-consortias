@@ -72,6 +72,9 @@ forvalues x = 1(1)4 {
 		* rename for coherence with baseline
 rename empl employes
 
+		* rename for coherence
+rename ca_exp2021 ca_exp_2021
+
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
 ***********************************************************************
@@ -143,7 +146,7 @@ lab var ca_exp "export turnover in 2022"
 lab var profit "profit in 2022"
 
 lab var ca_2021 "double check CA with baseline&regis data"
-lab var ca_exp2021 "double check export CA with baseline&regis data"
+lab var ca_exp_2021 "double check export CA with baseline&regis data"
 
 lab var id_admin "matricule fiscale"
 

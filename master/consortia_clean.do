@@ -57,7 +57,8 @@ xtset id_plateforme surveyround, delta(1)
 ***********************************************************************
 drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector date heuredébut heurefin
 
-drop ca_2021 profit_2021 // utiliser au niveau de la midline re-demander des infos manquantes. ca_exp_2021 has no response yet.
+
+* activate after midline: drop ca_2021 ca_exp_2021 profit_2021 // utiliser au niveau de la midline re-demander des infos manquantes.
 
 ***********************************************************************
 * 	PART 4:     clean administrative implementation variables
