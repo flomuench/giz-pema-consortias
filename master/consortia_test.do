@@ -194,8 +194,23 @@ foreach var of local acccounting_vars {
 ***********************************************************************
 * 	Part 5: Add erroneous matricule fiscales
 ***********************************************************************
-*replace needs_check = 1 if id_plateforme == X 
-*replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == X 
+*use regex to check that matricule fiscale starts with 7 numbers followed by a letter
+gen check_matricule = 1
+replace check_matricule = 0 if ustrregexm(id_admin, "^[0-9]{7}[a-zA-Z]$") == 1
+replace needs_check = 1 if check_matricule == 1 & surveyround ==2 & matricule_fisc_incorrect ==1
+replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if check_matricule == 1 & surveyround ==2 & matricule_fisc_incorrect ==1
+
+*manually adding matricules that conform with regex but are wrong anyways
+
+replace needs_check = 1 if id_plateforme == 1083
+replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == 1083 & surveyround == 2
+ 
+replace needs_check = 1 if id_plateforme == 1150
+replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == 1150 & surveyround == 2
+
+replace needs_check = 1 if id_plateforme == 1197
+replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == 1197 & surveyround == 2
+
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		
 ***********************************************************************
