@@ -189,8 +189,13 @@ foreach var of local acccounting_vars {
 	replace needs_check = 1 if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
 	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier / " if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
 }
-		
 
+
+***********************************************************************
+* 	Part 5: Add erroneous matricule fiscales
+***********************************************************************
+*replace needs_check = 1 if id_plateforme == X 
+*replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == X 
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		
 ***********************************************************************
