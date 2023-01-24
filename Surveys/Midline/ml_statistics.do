@@ -504,6 +504,12 @@ putpdf paragraph, halign(center)
 putpdf image ml_scatter_exprep.png
 putpdf pagebreak
 
+*scatter plots expprep_couts and exprep_inv
+scatter  exprep_inv exprep_couts if exprep_inv<exprep_inv_95p, title("Scatter plot between perception of export costs and amount invested in exports",size(small))
+gr export ml_scatter_exprep_couts.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_scatter_exprep_couts.png
+putpdf pagebreak
 
 
 ****** Section 7: Employees & ASS activities ******
