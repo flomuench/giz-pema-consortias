@@ -88,7 +88,10 @@ foreach var of local 999vars {
 	* make manual changes
 		* ca
 replace ca="2600000" if ca=="deux milliards 600dt" 
-replace ca = "1000000" if id_plateforme == 1033  	//	"plus d'un milliards de dinar"
+replace ca="1000000" if id_plateforme == 1033  	//	"plus d'un milliards de dinar"
+replace ca="1000000" if id_plateforme == 1001   //	"un million de dinars"
+replace ca="15000" if ca=="15milles dt"
+replace ca="40000" if ca=="entre 30000 et 50000" // "moyenne"
 
 		* profit
 replace profit="2200" if id_plateforme == 1005		//
@@ -96,6 +99,8 @@ replace profit="1600" if id_plateforme == 1133 		//   80% of total turnover
 replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
 
 		* ca_exp
+replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
+replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
 
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp2021 profit_2021, has(type string) 
