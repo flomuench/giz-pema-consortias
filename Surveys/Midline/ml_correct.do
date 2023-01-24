@@ -221,6 +221,24 @@ replace man_hr_obj = 0 if man_hr_obj == 0.25
 replace man_hr_obj = 0.25 if man_hr_obj == 0.5
 label values man_hr_obj label_promo
 
+	* making sure new matricule fiscale is correct matricule_fisc_incorrect id_admin id_plateforme
+// matricule fiscale of duelle checked on rne
+replace matricule_fisc_incorrect = 0 if id_plateforme == 1013
+* matricule fiscale of hajer gharsalli checked on rne 
+replace matricule_fisc_incorrect = 0 if id_plateforme == 1081
+// matricule fiscale id_plateforme 1083 still wrong
+// matricule fiscale id_plateforme 1128 still wrong
+// matricule fiscale id_plateforme 1146 still wrong
+// matricule fiscale id_plateforme 1150 still wrong
+* matricule fiscale of yosra tahri checked on rne
+replace matricule_fisc_incorrect = 0 if id_plateforme == 1182
+// matricule fiscale id_plateforme 1185 still wrong
+// matricule fiscale id_plateforme 1190 still wrong
+// matricule fiscale id_plateforme 1197 is correct, but owner is a men, is it her husband perhaps?
+// matricule fiscale id_plateforme 1205 still wrong
+*correct on rne (TINEST)
+replace matricule_fisc_incorrect = 0 if id_plateforme == 1214
+
 ***********************************************************************
 * 	PART 7:  Destring remaining numerical vars
 ***********************************************************************
