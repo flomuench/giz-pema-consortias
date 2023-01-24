@@ -246,6 +246,26 @@ replace survey_phone = 1 if id_plateforme == 1176
 replace survey_phone = 1 if id_plateforme == 1067
 replace survey_phone = 1 if id_plateforme == 1033
 replace survey_phone = 1 if id_plateforme == 1205
+replace survey_phone = 1 if id_plateforme == 1244
+replace survey_phone = 1 if id_plateforme == 1037
+replace survey_phone = 1 if id_plateforme == 1045
+replace survey_phone = 1 if id_plateforme == 1081
+replace survey_phone = 1 if id_plateforme == 1117
+replace survey_phone = 1 if id_plateforme == 1125
+replace survey_phone = 1 if id_plateforme == 1135
+replace survey_phone = 1 if id_plateforme == 1150
+replace survey_phone = 1 if id_plateforme == 983
+replace survey_phone = 1 if id_plateforme == 985
+replace survey_phone = 1 if id_plateforme == 1001
+replace survey_phone = 1 if id_plateforme == 1017
+replace survey_phone = 1 if id_plateforme == 1019
+replace survey_phone = 1 if id_plateforme == 1167
+replace survey_phone = 1 if id_plateforme == 1182
+replace survey_phone = 1 if id_plateforme == 1084
+replace survey_phone = 1 if id_plateforme == 1125
+replace survey_phone = 1 if id_plateforme == 989
+replace survey_phone = 1 if id_plateforme == 988
+replace survey_phone = 1 if id_plateforme == 1035
 
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
@@ -264,6 +284,13 @@ replace refus = 1 if id_plateforme == 1061
 replace refus = 1 if id_plateforme == 1079   
 replace refus = 1 if id_plateforme == 1247    
 replace refus = 1 if id_plateforme == 998  
+replace refus = 1 if id_plateforme == 1202  
+replace refus = 1 if id_plateforme == 1074  
+replace refus = 1 if id_plateforme == 1162  
+replace refus = 1 if id_plateforme == 1166  
+replace refus = 1 if id_plateforme == 1112  
+
+
 ***********************************************************************
 * 	PART 9: save dta file  										  
 ***********************************************************************
