@@ -240,7 +240,7 @@ drop occurence
 			
 			* export excel file. manually add variables listed in questions_needing_check
 				* group variables into lists (locals) to facilitate overview
-local order_vars "id_plateforme surveyround needs_check refus validation date heure commentaires_elamouri questions_needing_checks"
+local order_vars "id_plateforme surveyround needs_check refus validation date heure survey_phone  survey_completed commentaires_elamouri questions_needing_checks"
 local accounting_vars "`order_vars' id_admin ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 ca_2021_missing ca_exp_2021_missing profit_2021_missing"
 local export_vars "`accounting_vars' exprep_inv exp_pays"
 local network_vars "`export_vars' net_nb_f net_nb_m"
