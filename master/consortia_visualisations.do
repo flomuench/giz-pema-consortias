@@ -1256,7 +1256,7 @@ putpdf save "comparison_midline_baseline", replace
 ***********************************************************************
 * 	PART 4:  Mdiline Indexes
 ***********************************************************************
-/*
+
 putpdf clear
 putpdf begin 
 putpdf paragraph
@@ -1266,14 +1266,14 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 
 {
-* Midline Knowledge Index
+* Midline Management Index
 gr tw ///
-	(kdensity mngtvars if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mngtvars if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mngtvars if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram mngtvars if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity mngtvars if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mngtvars if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity mpi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity mpi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Management Index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1291,18 +1291,18 @@ putpdf paragraph, halign(center)
 putpdf image mngtvars_ml.png
 putpdf pagebreak
 
-* Midline Export preparation index	
+* Midline Export readiness index	
 gr tw ///
-	(kdensity exportprep if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram exportprep if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity exportprep if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram exportprep if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity exportprep if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram exportprep if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
-	title("{bf:Midline Distribution of Export preparation index}") ///
+	title("{bf:Midline Distribution of Export readiness index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export preparation index") ///
+	xtitle("Export readiness index") ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Densitiy", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
@@ -1319,12 +1319,12 @@ putpdf pagebreak
 
 * Midline Gender index	
 gr tw ///
-	(kdensity gendervars if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram gendervars if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity gendervars if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram gendervars if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity gendervars if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram gendervars if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity genderi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Gender index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1342,6 +1342,37 @@ putpdf paragraph, halign(center)
 putpdf image gendervars_ml.png
 putpdf pagebreak
 
+* Export readiness SSA index -Z Score
+gr tw ///
+	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri_ssa if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Export readiness SSA index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export readiness SSA index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(exportmngt_ml, replace)
+graph export exportmngt_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image exportmngt_ml.png
+putpdf pagebreak
+}
+putpdf save "midline_index_statistics", replace
+
+
+
+
+/*
 
 * Midline Innovation index	
 gr tw ///
@@ -1368,37 +1399,6 @@ putpdf paragraph, halign(center)
 putpdf image innovars_ml.png
 putpdf pagebreak
 
-* Export Management index
-gr tw ///
-	(kdensity exportmngt if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram exportmngt if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity exportmngt if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram exportmngt if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity exportmngt if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram exportmngt if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Export Management index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export Management index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=*** firms)" ///
-                     2 "Treatment group, absent (N=*** firms)" ///
-					 3 "Control group (N= *** firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(exportmngt_ml, replace)
-graph export exportmngt_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image exportmngt_ml.png
-putpdf pagebreak
-}
-putpdf save "midline_index_statistics", replace
-
-
-
-
-/*
 	* Export preparation Z-scores
 hist expprep, ///
 	title("Zscores of export preparation questions") ///
