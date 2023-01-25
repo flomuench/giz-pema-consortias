@@ -248,7 +248,7 @@ local employee_vars "`network_vars' employes car_empl1 car_empl2 car_empl3 car_e
 					
 				* export
 export excel `employee_vars' ///
-   using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var) keepcellfmt
+   using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var) datestring("%-td")
 
 
 restore
