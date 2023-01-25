@@ -85,20 +85,12 @@ foreach var of local accountvars {
 }
 
 	*  companies that had to re-fill accounting data actually corrected it
-/*
-local agrp "cat dog cow pig"
-local bgrp "meow woof moo oinkoink"  
-foreach a of local agrp {    
-    gettoken b bgrp : bgrp      
-    di "`a' says `b'"
-}
-*/
 local accounting_vars "ca_2021 ca_exp_2021 profit_2021"
 local missing_2021 "ca_2021_missing ca_exp_2021_missing	profit_2021_missing"
 foreach var of local acccounting_vars {
 	gettoken cond missing_2021 : missing_2021
 	replace needs_check = 1 if `var' == . & `cond' == 1
-	replace questions_needing_checks = questions_needing_checks + "`var' manque même que l'entreprise dans la liste pour re-fournier donnés 2021 /" if `var' == . & `cond' == 1995
+	replace questions_needing_checks = questions_needing_checks + "`var' manque même que l'entreprise dans la liste pour re-fournier donnés 2021 /" if `var' == . & `cond' == 1
 	
 }
 
@@ -185,9 +177,9 @@ replace questions_needing_checks = questions_needing_checks + " exp_pays zero po
 ----------------------------------------------------------------------*/
 local acccounting_vars "ca ca_exp profit employes"
 foreach var of local acccounting_vars {
-	sum `var'_growth, d
-	replace needs_check = 1 if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
-	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier / " if `var'_growth != . & `var'_growth > r(p95) | `var'_growth < r(p5)
+	sum `var'_abs_growth, d
+	replace needs_check = 1 if `var'_abs_growth != . & `var'_abs_growth > r(p95) | `var'_abs_growth < r(p5)
+	replace questions_needing_checks = questions_needing_checks + "différence extrême entre midline et baseline pour `var', vérifier / " if `var'_abs_growth != . & `var'_abs_growth > r(p95) | `var'_abs_growth < r(p5)
 }
 
 
@@ -248,15 +240,15 @@ drop occurence
 			
 			* export excel file. manually add variables listed in questions_needing_check
 				* group variables into lists (locals) to facilitate overview
-local order_vars "id_plateforme heure surveyround needs_check commentaires_elamouri questions_needing_checks"
-local accounting_vars "`order_vars' ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 ca_2021_missing ca_exp_2021_missing profit_2021_missing"
+local order_vars "id_plateforme surveyround needs_check refus validation date heure commentaires_elamouri questions_needing_checks"
+local accounting_vars "`order_vars' id_admin ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 ca_2021_missing ca_exp_2021_missing profit_2021_missing"
 local export_vars "`accounting_vars' exprep_inv exp_pays"
 local network_vars "`export_vars' net_nb_f net_nb_m"
 local employee_vars "`network_vars' employes car_empl1 car_empl2 car_empl3 car_empl4 car_empl5"
 					
 				* export
 export excel `employee_vars' ///
-   using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var)
+   using "${ml_checks}/fiche_correction.xlsx", sheetreplace firstrow(var) keepcellfmt
 
 
 restore

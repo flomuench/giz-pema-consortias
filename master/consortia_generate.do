@@ -17,6 +17,7 @@
 ***********************************************************************
 ********************* 	I: PII data ***********************************
 ***********************************************************************	
+
 ***********************************************************************
 * 	PART 1:    import data  
 ***********************************************************************
@@ -81,8 +82,35 @@ gen status = (take_up_per > 0 & take_up_per < .)
 
 * PHASE 2 of the treatment: "consortia export promotion"
 
+
+
 ***********************************************************************
-* 	PART II.2:    Create missing variables for accounting number			  
+* 	PART 2:  survey attrition (refusal to respond to survey)	
+***********************************************************************
+gen refus = 0 // zero for baseline as randomization only among respondents
+lab var refus "Comapnies who refused to answer the survey" 
+
+		* midline
+replace refus = 1 if id_plateforme == 1132 & surveyround == 2
+replace refus = 1 if id_plateforme == 1094 & surveyround == 2
+replace refus = 1 if id_plateforme == 1025 & surveyround == 2
+replace refus = 1 if id_plateforme == 1090 & surveyround == 2
+replace refus = 1 if id_plateforme == 1245 & surveyround == 2
+replace refus = 1 if id_plateforme == 1061 & surveyround == 2
+replace refus = 1 if id_plateforme == 1079 & surveyround == 2  
+replace refus = 1 if id_plateforme == 1247 & surveyround == 2
+replace refus = 1 if id_plateforme == 998  & surveyround == 2
+replace refus = 1 if id_plateforme == 1202 & surveyround == 2
+replace refus = 1 if id_plateforme == 1074 & surveyround == 2
+replace refus = 1 if id_plateforme == 1162 & surveyround == 2
+replace refus = 1 if id_plateforme == 1166 & surveyround == 2
+replace refus = 1 if id_plateforme == 1112 & surveyround == 2
+
+		* endline
+
+
+***********************************************************************
+* 	PART II.2:    Create missing variables for accounting number --> delete after midline		  
 ***********************************************************************
 /*gen profit_2021_missing=0
 replace profit_2021_missing= 1 if profit_2021==.
@@ -217,7 +245,11 @@ drop temp_*
 	* accounting variables
 local acccounting_vars "ca ca_exp profit employes"
 foreach var of local acccounting_vars {
-		bys id_plateforme: g `var'_growth = D.`var'/L.`var'
+		bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
+			bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
+		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
+			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
+
 }
 
 /*
