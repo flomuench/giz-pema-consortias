@@ -106,8 +106,8 @@ replace questions_needing_checks = questions_needing_checks + "Exports plus éle
 
 	* Outliers/extreme values: Very low values
 		* ca_exp
-replace needs_check = 1 if surveyround == 2 & ca_exp < 50000 & ca_exp > 0
-replace questions_needing_checks = questions_needing_checks + "export moins que 50000 TND, demander comment possible / " if surveyround == 2 & ca_exp < 50000 & ca_exp>0
+replace needs_check = 1 if surveyround == 2 & ca_exp < 100 & ca_exp > 0
+replace questions_needing_checks = questions_needing_checks + "export moins que 100 TND, demander comment possible / " if surveyround == 2 & ca_exp < 100 & ca_exp>0
 
 		* ca
 replace needs_check = 1 if surveyround == 2 & ca < 5000 & ca>0
