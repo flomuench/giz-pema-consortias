@@ -119,8 +119,8 @@ replace needs_check = 1 if surveyround == 2 & profit<2500 & profit>0
 replace questions_needing_checks = questions_needing_checks + "benefice moins que 2500 TND / " if surveyround == 2 & profit<2500 & profit>0 
 				* just below zero
 					*not sure what to do if profit is -999 as don't know
-replace needs_check = 1 if surveyround == 2 & profit>-2500 & profit<0 & profit !=-999
-replace questions_needing_checks = questions_needing_checks + "benefice + que -2500 TND mais - que zero / " if surveyround == 2 & profit<2500 & profit>0 & profit !=-999
+replace needs_check = 1 if surveyround == 2 & profit>-2500 & profit<0 & profit !=-999 & profit !=-888
+replace questions_needing_checks = questions_needing_checks + "benefice + que -2500 TND mais - que zero / " if surveyround == 2 & profit>-2500 & profit<0 & profit !=-999 & profit !=-888
 
 /* --------------------------------------------------------------------
 	PART 2.4: Number of Employees
