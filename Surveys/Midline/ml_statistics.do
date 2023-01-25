@@ -88,6 +88,16 @@ putpdf paragraph, halign(center)
 putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
 
+	* How the company responded to the questionnaire
+graph bar (count), over(survey_phone) over(treatment) blabel(total) ///
+	name(formation, replace) ///
+	ytitle("Number of companies") ///
+	title("How the company responded to the questionnaire")
+graph export ml_type_of_surveyanswer.png, replace
+putpdf paragraph, halign(center)
+putpdf image ml_type_of_surveyanswer.png
+putpdf pagebreak
+
 	* Number of missing answers per section - all
 graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting miss_eri_ssa, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(3) label(1 "Innovation ") label(2 "Network ") ///
@@ -110,16 +120,6 @@ graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender mis
 gr export ml_missing_asnwers_validated.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_missing_asnwers_validated.png
-putpdf pagebreak
-
-	* How the company responded to the questionnaire
-graph bar (count), over(survey_phone) over(treatment) blabel(total) ///
-	name(formation, replace) ///
-	ytitle("Number of companies") ///
-	title("How the company responded to the questionnaire")
-graph export ml_type_of_surveyanswer.png, replace
-putpdf paragraph, halign(center)
-putpdf image ml_type_of_surveyanswer.png
 putpdf pagebreak
 
 ****** Section 2: innovation ******

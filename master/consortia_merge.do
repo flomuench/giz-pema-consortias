@@ -57,7 +57,7 @@ merge 1:1 id_plateforme using "${bl_final}/bl_final", keepusing(treatment)
     -----------------------------------------
 */
 drop _merge
-
+	
 		* merge 1:1  with midline
 merge 1:1 id_plateforme using "${ml_raw}/consortia_ml_pii", update
 drop _merge
@@ -111,6 +111,9 @@ local bl_acccounting_vars "ca ca_exp profit"
 foreach var of local bl_acccounting_vars {
 	rename `var'_2021 `var'
 }
+			* survey software variables
+rename heuredébut heure
+
 			* format
 
     * create panel ID
@@ -125,8 +128,6 @@ save "${master_raw}/consortium_raw", replace
 ***********************************************************************
 * 	PART 4: append analysis data set with midline & endline
 ***********************************************************************
-
-
 	* append registration +  baseline data with midline
 append using "${ml_final}/ml_final"
 order id_plateforme surveyround, first
@@ -136,9 +137,12 @@ sort id_plateforme surveyround
 append using "${endline_final/el_final}"
 */
 
+	* declare panel data set
+xtset id_plateforme surveyround, delta(1)
+tsfill, full
 
 ***********************************************************************
-* 	PART 4: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
+* 	PART 5: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
 ***********************************************************************
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 		*  import participation data
@@ -171,5 +175,9 @@ merge m:1 id_plateforme using "${implementation}/take_up", force
 drop _merge
 order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium, last
 
+
+***********************************************************************
+* 	PART 6: save finale analysis data set as raw
+***********************************************************************
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace

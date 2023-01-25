@@ -116,6 +116,7 @@ if (1) do "${ml_github}/ml_clean.do"
 if (1) do "${ml_github}/ml_correct.do"
 /* --------------------------------------------------------------------
 	PART 3.3: Generate variables for analysis or implementation
+	Creates: ml_final.dta
 ----------------------------------------------------------------------*/	
 if (1) do "${ml_github}/ml_generate.do"
 /* --------------------------------------------------------------------
