@@ -21,6 +21,7 @@
 ***********************************************************************
 * 	PART 1: 	Import data				  			
 ***********************************************************************   
+                             
 use "${ml_intermediate}/ml_intermediate", clear
 
 ***********************************************************************
@@ -73,9 +74,6 @@ rename empl employes
 
 		* rename for coherence
 rename ca_exp2021 ca_exp_2021
-
-		* rename for distinction with baeline
-rename date date
 
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
