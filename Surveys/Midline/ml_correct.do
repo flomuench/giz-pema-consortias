@@ -80,9 +80,10 @@ drop if dup>1
 
 
 	* amouri frogot to mention that 999 needs to have a - before in case of don't know
-local 999vars ca ca_exp profit
+local 999vars ca ca_exp profit 
 foreach var of local 999vars {
 	replace `var' = "-999" if `var' == "999"
+	replace `var' = "-888" if `var' == "888"
 }
 
 	* make manual changes
@@ -93,19 +94,34 @@ replace ca="1000000" if id_plateforme == 1001   //	"un million de dinars"
 replace ca="15000" if ca=="15milles dt"
 replace ca="40000" if ca=="entre 30000 et 50000" // "moyenne"
 
+
 		* profit
 replace profit="2200" if id_plateforme == 1005		//
 replace profit="-1600" if id_plateforme == 1133 		//   -80% of total turnover 
 replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
 replace profit="-24000" if id_plateforme == 1035    //   -60% of total turnover
+replace profit="375000" if id_plateforme == 1170    //    25% of total turnover
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
 replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
+replace ca_exp="30000" if id_plateforme == 1248    // "moyenne"
 
         *exprep_inv
-replace exprep_inv="-999" if exprep_inv=="999" 
-replace exprep_inv="-888" if exprep_inv=="888" 
+replace exprep_inv= -999 if exprep_inv== 999 
+replace exprep_inv= -888 if exprep_inv== 888 
+
+     *ca_2021
+replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
+/*
+replace exprep_inv="-999" if id_plateforme == 984
+replace exprep_inv="-999" if id_plateforme == 1005
+replace exprep_inv="-999" if id_plateforme == 1204
+replace exprep_inv="-999" if id_plateforme == 1248
+replace exprep_inv="-999" if id_plateforme == 1231
+replace exprep_inv="-888" if id_plateforme == 1161
+*/
+
 
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
@@ -115,7 +131,8 @@ foreach var of local numvars_with_strings {
     replace `var' = ustrregexra( `var',"dinar","")
     replace `var' = ustrregexra( `var',"milles","000")
     replace `var' = ustrregexra( `var',"mille","000")
-    replace `var' = ustrregexra( `var',"million","000000")
+	replace `var' = ustrregexra( `var',"millions","000000")
+    replace `var' = ustrregexra( `var',"million","000000") 
     replace `var' = ustrregexra( `var',"dt","")
     replace `var' = ustrregexra( `var',"k","000")
     replace `var' = ustrregexra( `var',"dt","")
