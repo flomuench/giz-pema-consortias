@@ -103,6 +103,10 @@ replace profit="-24000" if id_plateforme == 1035    //   -60% of total turnover
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
 replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
 
+        *exprep_inv
+replace exprep_inv="-999" if exprep_inv=="999" 
+replace exprep_inv="-888" if exprep_inv=="888" 
+
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
 local numvars_with_strings "`r(varlist)'"
