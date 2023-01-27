@@ -266,6 +266,22 @@ replace survey_phone = 1 if id_plateforme == 1125
 replace survey_phone = 1 if id_plateforme == 989
 replace survey_phone = 1 if id_plateforme == 988
 replace survey_phone = 1 if id_plateforme == 1035
+replace survey_phone = 1 if id_plateforme == 1231
+replace survey_phone = 1 if id_plateforme == 1046
+replace survey_phone = 1 if id_plateforme == 1050
+replace survey_phone = 1 if id_plateforme == 1069
+replace survey_phone = 1 if id_plateforme == 1008
+replace survey_phone = 1 if id_plateforme == 1159
+replace survey_phone = 1 if id_plateforme == 1204
+replace survey_phone = 1 if id_plateforme == 1028
+replace survey_phone = 1 if id_plateforme == 1161
+replace survey_phone = 1 if id_plateforme == 1248
+replace survey_phone = 1 if id_plateforme == 1203
+replace survey_phone = 1 if id_plateforme == 1225
+replace survey_phone = 1 if id_plateforme == 1230
+replace survey_phone = 1 if id_plateforme == 1071
+replace survey_phone = 1 if id_plateforme == 1170
+replace survey_phone = 1 if id_plateforme == 1186
 
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
