@@ -29,7 +29,7 @@ capture program drop zscore /* drops the program programname */
 qui cap log c
 
 	* install packages
-/*	
+/*
 ssc install ietoolkit, replace /* for iebaltab */
 ssc install randtreat, replace /* for randtreat --> random allocation */
 ssc install blindschemes, replace /* for plotplain --> scheme for graphic2al visualisations */
@@ -47,8 +47,8 @@ ssc install psmatch2, replace
 ssc install winsor, replace
 ssc install missingplot, replace
 
-*net from https://www.sealedenvelope.com/
-*net install time.pkg
+net from https://www.sealedenvelope.com/
+net install time.pkg
 */
 	* define graph scheme for visual outputs
 set scheme plotplain
@@ -57,7 +57,7 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
+	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
