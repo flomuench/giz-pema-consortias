@@ -1366,6 +1366,84 @@ graph export exportmngt_ml.png, replace
 putpdf paragraph, halign(center) 
 putpdf image exportmngt_ml.png
 putpdf pagebreak
+
+
+*Women's entrepreneurial effifacy - z score
+gr tw ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_efficacy if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Women's entrepreneurial effifacy index}", size (small)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Women's entrepreneurial effifacy index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_efficacy_ml, replace)
+graph export female_efficacy_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_efficacy_ml.png
+putpdf pagebreak
+
+*Women's entrepreneurial initiaitve - z score
+gr tw ///
+	(kdensity female_initiative if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_initiative if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_initiative if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_initiative if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_initiative if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_initiative if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Women's entrepreneurial initiaitve index}", size (small)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Women's entrepreneurial initiaitve index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_initiative_ml, replace)
+graph export female_initiative_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_initiative_ml.png
+putpdf pagebreak
+
+
+*Women's locus of control index
+gr tw ///
+	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_loc if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Women's locus of control index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Women's locus of control index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_loc_ml, replace)
+graph export female_loc_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_loc_ml.png
+putpdf pagebreak
+
 }
 putpdf save "midline_index_statistics", replace
 
