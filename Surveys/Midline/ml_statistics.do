@@ -75,10 +75,10 @@ putpdf pagebreak
 
 drop share1 share2 share3
 
-   *Attrition rate 
-   /*
+/*   *Attrition rate 
+   
 graph bar (sum) refus, over(treatment) blabel(total, format(%9.2fc)) ///
-	legend (pos(6) row(1)  ///
+	legend pos(6) row(1)  ///
 	title("Midline Attrition Rate") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries") ///
 	ylabel(0(10)100, nogrid) 
@@ -309,7 +309,25 @@ putpdf paragraph, halign(center)
 putpdf image ml_performance_employees.png
 putpdf pagebreak
 
-  /*     *Management practices index
+/*    *Management practices index
+tw ///
+	(kdensity mpi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Management Practices Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	graph export mpi_ml.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image mpi_ml.png
+	putpdf pagebreak
+
+     *Management practices index take_up
 gr tw ///
 	(kdensity mpi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -324,9 +342,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N= firms)" ///
-                     2 "Treatment group, absent (N= firms)" ///
-					 3 "Control group (N= firms)") ///
+               order(1 "Treatment group, participated (N=83 firms)" ///
+                     2 "Treatment group, absent (N=4 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(man_practices_index_ml, replace)
 graph export man_practices_index_ml.png, replace
@@ -410,7 +428,25 @@ putpdf paragraph, halign(center)
 putpdf image ml_erp.png
 putpdf pagebreak	
 
-/*    *Export readiness index (eri)
+ /*   *Export readiness index (eri)
+tw ///
+	(kdensity eri if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Export Readiness Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	graph export export_readiness_ml.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image export_readiness_ml.png
+	putpdf pagebreak
+
+    *Export readiness index (eri) take_up
 gr tw ///
 	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -425,9 +461,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N= firms)" ///
-                     2 "Treatment group, absent (N= firms)" ///
-					 3 "Control group (N= firms)") ///
+               order(1 "Treatment group, participated (N=83 firms)" ///
+                     2 "Treatment group, absent (N=4 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(export_readiness_index_ml, replace)
 graph export export_readiness_index_ml.png, replace
@@ -436,6 +472,24 @@ putpdf image export_readiness_index_ml.png
 putpdf pagebreak
 
     * export readiness SSA index (eri_ssa)
+tw ///
+	(kdensity eri_ssa if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_ssa if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Export Readiness Index SSA", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	graph export export_readiness_ssa_ml.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image export_readiness_ssa_ml.png
+	putpdf pagebreak
+
+    * export readiness SSA index (eri_ssa) take_up
 gr tw ///
 	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -450,9 +504,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N= firms)" ///
-                     2 "Treatment group, absent (N= firms)" ///
-					 3 "Control group (N= firms)") ///
+               order(1 "Treatment group, participated (N=83 firms)" ///
+                     2 "Treatment group, absent (N=4 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(export_readiness_ssa_index_ml, replace)
 graph export export_readiness_ssa_index_ml.png, replace
@@ -512,8 +566,26 @@ gr export ml_locuscontrol.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_locuscontrol.png
 putpdf pagebreak
-
-/*   *Female empowerment index (genderi)
+        
+        *Female empowerment index (genderi)
+tw ///
+	(kdensity genderi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Female Empowerment Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	graph export female_empowerment_ml.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image female_empowerment_ml.png
+	putpdf pagebreak
+		
+        *Female empowerment index (genderi) take_up
 gr tw ///
 	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -528,16 +600,16 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N= firms)" ///
-                     2 "Treatment group, absent (N= firms)" ///
-					 3 "Control group (N= firms)") ///
+               order(1 "Treatment group, participated (N=83 firms)" ///
+                     2 "Treatment group, absent (N=4 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(female_empowerment_index_ml, replace)
 graph export female_empowerment_index_ml.png, replace
 putpdf paragraph, halign(center) 
 putpdf image female_empowerment_index_ml.png
 putpdf pagebreak
-*/	
+	
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group_ml, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
