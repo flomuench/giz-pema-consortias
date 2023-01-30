@@ -130,7 +130,7 @@ replace questions_needing_checks = questions_needing_checks + "benefice + que -2
 local nbempl car_carempl1 car_carempl2 car_carempl3 car_carempl4
  	
 foreach var of local nb_empl {	
-	replace needs_check = 1 if `var'>200 & surveyround==2
+	replace needs_check = 1 if `var'>200 & surveyround==2 & id_plateforme != 1092 
 	replace questions_needing_checks = questions_needing_checks + "ceci n'est pas une PME, verifier le nombre d'employées / " if `var'>200 & surveyround==2
 }
 
@@ -149,7 +149,7 @@ replace questions_needing_checks = questions_needing_checks + "nombre d'employé
 local acccounting_vars "ca ca_exp profit employes exprep_inv"
 foreach var of local acccounting_vars {
 	sum `var', d
-	replace needs_check = 1 if `var' != .& surveyround == 2 & `var' > r(p95)
+	replace needs_check = 1 if `var' != .& surveyround == 2 & `var' > r(p95) & id_plateforme != 1092 
 	replace questions_needing_checks = questions_needing_checks + "`var' très grand, vérifier / " if `var' != .& surveyround == 2 & `var' > r(p95)
 }
 
@@ -206,6 +206,8 @@ replace questions_needing_checks = questions_needing_checks + "matricule fiscale
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		
 ***********************************************************************
+replace employes == 600 & surveyround==2 if id_plateforme == 1092 
+
 
 ***********************************************************************
 * 	PART 7:  Export an excel sheet with needs_check variables  			
