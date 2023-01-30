@@ -101,6 +101,7 @@ replace profit="-1600" if id_plateforme == 1133 		//   -80% of total turnover
 replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
 replace profit="-24000" if id_plateforme == 1035    //   -60% of total turnover
 replace profit="375000" if id_plateforme == 1170    //    25% of total turnover
+replace profit="135000" if id_plateforme == 1163    //    45% of total turnover
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
