@@ -240,7 +240,7 @@ drop temp_*
 
 
 ***********************************************************************
-* 	PART IV:   generate survey-to-survey growth rates
+* 	PART V:   generate survey-to-survey growth rates
 ***********************************************************************
 	* accounting variables
 local acccounting_vars "ca ca_exp profit employes"
@@ -259,6 +259,45 @@ use links to understand the code syntax for creating the accounting variables' g
 
 */
 
+***********************************************************************
+*	PART VI. Financial indicators
+***********************************************************************	
+
+
+	*generate winsors
+winsor ca, gen(w99_ca) p(0.01) highonly
+winsor ca_exp, gen(w99_ca_exp) p(0.01) highonly
+winsor profit, gen(w99_profit) p(0.01) highonly
+winsor exprep_inv, gen(w99_exprep_inv) p(0.01) highonly
+*winsor ca_2021, gen(w99_ca_2021) p(0.01) highonly
+*winsor ca_exp_2021, gen(w99_ca_exp_2021) p(0.01) highonly
+*winsor profit_2021, gen(w99_profit_2021) p(0.01) highonly
+
+	*generate ihs & label it
+gen ihs_ca99 = log(w99_ca + sqrt((w99_ca*w99_ca)+1))
+lab var ihs_ca99 "IHS of turnover in 2022, wins.99th"
+
+gen ihs_ca_exp99 = log(w99_ca_exp + sqrt((w99_ca_exp*w99_ca_exp)+1))
+lab var ihs_ca_exp99 "IHS of exports in 2022, wins.99th"
+
+gen ihs_profit99 = log(w99_profit + sqrt((w99_profit*w99_profit)+1))
+lab var ihs_profit99 "IHS of profit in 2022, wins.99th"
+
+gen ihs_exprep_inv = log(w99_exprep_inv + sqrt((w99_exprep_inv*w99_exprep_inv)+1))
+lab var ihs_exprep_inv "IHS of export investement in 2022, wins.99th"
+
+	*no values in these variables, winsor not working
+*gen ihs_ca_2021 = log(w99_ca_2021 + sqrt((w99_ca_2021*w99_ca_2021)+1))
+*lab var ihs_ca_2021 "IHS of trunover in 2021, wins.99th"
+
+*gen ihs_ca_exp_2021 = log(w99_ca_exp_2021 + sqrt((w99_ca_exp_2021*w99_ca_exp_2021)+1))
+*lab var ihs_ca_exp_2021 "IHS of exports in 2021, wins.99th"
+
+*gen ihs_profit_2021 = log(w99_profit_2021 + sqrt((w99_profit_2021*w99_profit_2021)+1))
+*lab var ihs_profit_2021 "IHS of profit in 2021, wins.99th"
+
+	*drop baseline winsorized
+*drop w_ca2021 w_caexp2021 w_profit2021 w_nonfamilynetwork w_exprep_inv
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
