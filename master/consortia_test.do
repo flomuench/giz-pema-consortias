@@ -206,7 +206,7 @@ replace questions_needing_checks = questions_needing_checks + "matricule fiscale
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		
 ***********************************************************************
-replace employes == 600 & surveyround==2 if id_plateforme == 1092 
+replace employes =600 & surveyround == 2 if id_plateforme == 1092 
 
 
 ***********************************************************************
