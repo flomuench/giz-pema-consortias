@@ -823,9 +823,9 @@ putpdf paragraph, halign(center)
 putpdf image ml_exprep_couts.png
 putpdf pagebreak		
 				
-****** Section 6: Characteristics of the company****** 
+****** Section 6: Gender - Entrepreneurial Empowerment ****** 
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 6: Entrepreneurial empowerment"), bold
+putpdf text ("Section 6: Gender - Entrepreneurial empowerment"), bold
 /*
 *Locus of efficiency	
 graph hbar (mean) car_efi_fin1 car_efi_nego car_efi_conv, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -860,6 +860,49 @@ graph hbar (mean)car_loc_succ car_loc_env,  over(surveyround, label(labs(small))
 	putpdf image ml_locuscontrol_share.png
 	putpdf pagebreak
 */
+
+        *Female empowerment index (genderi)
+tw ///
+	(kdensity genderi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Female Empowerment Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	graph export female_empowerment_ml.png, replace 
+	putpdf paragraph, halign(center) 
+	putpdf image female_empowerment_ml.png
+	putpdf pagebreak
+		
+        *Female empowerment index (genderi) take_up
+gr tw ///
+	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity genderi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Female Empowerment Index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Female Empowerment Index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Density", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=83 firms)" ///
+                     2 "Treatment group, absent (N=4 firms)" ///
+					 3 "Control group (N=89 firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_empowerment_index_ml, replace)
+graph export female_empowerment_index_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_empowerment_index_ml.png
+putpdf pagebreak
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(surveyround) over(treatment) ///

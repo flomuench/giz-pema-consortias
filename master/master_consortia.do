@@ -194,6 +194,7 @@ if (1) do "${master_github}/consortia_generate.do"
 if (0) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
 	PART 3.8: Test coherence between survey rounds
+	Creates: fiche_de_correction
 ----------------------------------------------------------------------*/
 if (1) do "${master_github}/consortia_test.do"
 
