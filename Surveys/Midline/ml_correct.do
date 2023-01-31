@@ -26,7 +26,6 @@
 ***********************************************************************
 * 	PART 1:  Import data 			
 ***********************************************************************
-
 use "${ml_intermediate}/ml_intermediate", clear
 
 ***********************************************************************
@@ -116,16 +115,12 @@ replace ca_exp="160000" if id_plateforme ==1087    //     10% of total turnover
 replace exprep_inv= -999 if exprep_inv== 999 
 replace exprep_inv= -888 if exprep_inv== 888 
 
-     *ca_2021
+		*ca_2021
 replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
-/*
-replace exprep_inv="-999" if id_plateforme == 984
-replace exprep_inv="-999" if id_plateforme == 1005
-replace exprep_inv="-999" if id_plateforme == 1204
-replace exprep_inv="-999" if id_plateforme == 1248
-replace exprep_inv="-999" if id_plateforme == 1231
-replace exprep_inv="-888" if id_plateforme == 1161
-*/
+
+
+		* employes
+replace employes = 600 if id_plateforme == 1092
 
 
 	* loop over all accounting variables with string
