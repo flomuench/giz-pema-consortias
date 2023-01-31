@@ -93,20 +93,24 @@ replace ca="1000000" if id_plateforme == 1033  	//	"plus d'un milliards de dinar
 replace ca="1000000" if id_plateforme == 1001   //	"un million de dinars"
 replace ca="15000" if ca=="15milles dt"
 replace ca="40000" if ca=="entre 30000 et 50000" // "moyenne"
+replace ca="397358" if id_plateforme == 1049    // "120000 euros converti en dinars selon le cours du 31.01.2023"
 
 
 		* profit
-replace profit="2200" if id_plateforme == 1005		// 10% of total turnover
-replace profit="-1600" if id_plateforme == 1133 		//   -80% of total turnover 
-replace profit="25000" if id_plateforme == 1188 	//	 10% of total turnover
-replace profit="-24000" if id_plateforme == 1035    //   -60% of total turnover
-replace profit="375000" if id_plateforme == 1170    //    25% of total turnover
-replace profit="135000" if id_plateforme == 1163    //    45% of total turnover
+replace profit="2200" if id_plateforme == 1005		//    10% of total turnover
+replace profit="-1600" if id_plateforme == 1133 	//   -80% of total turnover 
+replace profit="25000" if id_plateforme == 1188 	 //	   10% of total turnover
+replace profit="-24000" if id_plateforme == 1035     //   -60% of total turnover
+replace profit="375000" if id_plateforme == 1170     //    25% of total turnover
+replace profit="135000" if id_plateforme == 1163     //    45% of total turnover
+replace profit="238414.8" if id_plateforme == 1049   //    30% of total turnover
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
 replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
-replace ca_exp="30000" if id_plateforme == 1248    // "moyenne"
+replace ca_exp="30000" if id_plateforme == 1248    //    "moyenne"
+replace ca_exp="397358" if id_plateforme == 1049   //    "120000 euros converti en dinars selon le cours du 31.01.2023"
+replace ca_exp="160000" if id_plateforme ==1087    //     10% of total turnover
 
         *exprep_inv
 replace exprep_inv= -999 if exprep_inv== 999 
