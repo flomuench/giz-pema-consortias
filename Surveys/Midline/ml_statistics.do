@@ -75,18 +75,6 @@ putpdf pagebreak
 
 drop share1 share2 share3
 
-/*   *Attrition rate 
-   
-graph bar (sum) refus, over(treatment) blabel(total, format(%9.2fc)) ///
-	legend pos(6) row(1)  ///
-	title("Midline Attrition Rate") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries") ///
-	ylabel(0(10)100, nogrid) 
-graph export ml_attritionrate.png, replace
-putpdf paragraph, halign(center)
-putpdf image ml_attritionrate.png
-putpdf pagebreak
-*/
 
 	* response rate by treatment status
 graph bar (sum) survey_completed validation, over(treatment) blabel(total, format(%9.2fc)) ///
@@ -309,49 +297,6 @@ putpdf paragraph, halign(center)
 putpdf image ml_performance_employees.png
 putpdf pagebreak
 
-/*    *Management practices index
-tw ///
-	(kdensity mpi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mpi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mpi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Full sample}") ///
-	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
-	xtitle("Management Practices Index", size(vsmall)) ///
-	ytitle("Number of observations", axis(1) size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
-	graph export mpi_ml.png, replace 
-	putpdf paragraph, halign(center) 
-	putpdf image mpi_ml.png
-	putpdf pagebreak
-
-     *Management practices index take_up
-gr tw ///
-	(kdensity mpi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mpi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity mpi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Management Practices Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Management Practices Index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Density", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
-					 3 "Control group (N=89 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(man_practices_index_ml, replace)
-graph export man_practices_index_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image man_practices_index_ml.png
-putpdf pagebreak
-*/
 
 	/*	* Employees Incentives
 graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -428,92 +373,6 @@ putpdf paragraph, halign(center)
 putpdf image ml_erp.png
 putpdf pagebreak	
 
- /*   *Export readiness index (eri)
-tw ///
-	(kdensity eri if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Full sample}") ///
-	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
-	xtitle("Export Readiness Index", size(vsmall)) ///
-	ytitle("Number of observations", axis(1) size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
-	graph export export_readiness_ml.png, replace 
-	putpdf paragraph, halign(center) 
-	putpdf image export_readiness_ml.png
-	putpdf pagebreak
-
-    *Export readiness index (eri) take_up
-gr tw ///
-	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Export Readiness Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export Readiness index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Density", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
-					 3 "Control group (N=89 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(export_readiness_index_ml, replace)
-graph export export_readiness_index_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image export_readiness_index_ml.png
-putpdf pagebreak
-
-    * export readiness SSA index (eri_ssa)
-tw ///
-	(kdensity eri_ssa if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Full sample}") ///
-	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
-	xtitle("Export Readiness Index SSA", size(vsmall)) ///
-	ytitle("Number of observations", axis(1) size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
-	graph export export_readiness_ssa_ml.png, replace 
-	putpdf paragraph, halign(center) 
-	putpdf image export_readiness_ssa_ml.png
-	putpdf pagebreak
-
-    * export readiness SSA index (eri_ssa) take_up
-gr tw ///
-	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri_ssa if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Export Readiness Index SSA}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export Readiness index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Density", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
-					 3 "Control group (N=89 firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(export_readiness_ssa_index_ml, replace)
-graph export export_readiness_ssa_index_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image export_readiness_ssa_index_ml.png
-putpdf pagebreak
-*/
 
 	* Export preparation investment	
 egen exprep_inv_95p = pctile(exprep_inv), p(95)
