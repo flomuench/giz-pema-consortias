@@ -105,6 +105,8 @@ replace refus = 1 if id_plateforme == 1074 & surveyround == 2
 replace refus = 1 if id_plateforme == 1162 & surveyround == 2
 replace refus = 1 if id_plateforme == 1166 & surveyround == 2
 replace refus = 1 if id_plateforme == 1112 & surveyround == 2
+replace refus = 1 if id_plateforme == 1235 & surveyround == 2
+
 
 		* endline
 
