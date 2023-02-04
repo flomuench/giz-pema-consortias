@@ -53,7 +53,7 @@ ssc install missingplot, replace
 	
 		* define user
 		
-	if "`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
+	if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
 
 
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
