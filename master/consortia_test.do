@@ -53,8 +53,8 @@ replace questions_needing_checks = "nombre de contact féminin est excessivement
 	PART 2.2: Export Questions
 ----------------------------------------------------------------------*/	
 	* negative exports
-replace needs_check = 1 if surveyround == 2 & exprep_inv < 0
-replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif / " if surveyround == 2 & exprep_inv < 0
+replace needs_check = 1 if surveyround == 2 & exprep_inv < 0 & exprep_inv != -999 & exprep_inv != -888
+replace questions_needing_checks = questions_needing_checks + "chiffre investi dans l'export est négatif / " if surveyround == 2 & exprep_inv < 0 & exprep_inv != -999 & exprep_inv != -888
 
 	* did not invest in export but did export activities
 local exp_vars exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission ///
