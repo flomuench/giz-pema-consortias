@@ -103,6 +103,8 @@ replace profit="-24000" if id_plateforme == 1035     //   -60% of total turnover
 replace profit="375000" if id_plateforme == 1170     //    25% of total turnover
 replace profit="135000" if id_plateforme == 1163     //    45% of total turnover
 replace profit="238414.8" if id_plateforme == 1049   //    30% of total turnover
+replace profit="330000" if id_plateforme == 1001   //    30% of total turnover
+
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
@@ -113,7 +115,9 @@ replace ca_exp="160000" if id_plateforme ==1087    //     10% of total turnover
 
         *exprep_inv
 replace exprep_inv= -999 if exprep_inv== 999 
-replace exprep_inv= -888 if exprep_inv== 888 
+replace exprep_inv= -888 if exprep_inv== 888
+replace exprep_inv= 70000 if id_plateforme== 983
+
 
 		*ca_2021
 replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
@@ -122,7 +126,14 @@ replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
 		* employes
 replace employes = 600 if id_plateforme == 1092
 
-
+		* ssa activites
+	
+	*export practices plan.
+replace exp_pra_plan=1 if id_plateforme == 983 
+replace exp_pra_mission = 0 if id_plateforme == 983
+replace exp_pra_cible = 0 if id_plateforme == 983
+replace exp_pra_mission = 0 if id_plateforme == 989
+	
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
 local numvars_with_strings "`r(varlist)'"
