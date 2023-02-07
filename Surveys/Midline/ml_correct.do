@@ -93,7 +93,9 @@ replace ca="1000000" if id_plateforme == 1001   //	"un million de dinars"
 replace ca="15000" if ca=="15milles dt"
 replace ca="40000" if ca=="entre 30000 et 50000" // "moyenne"
 replace ca="397358" if id_plateforme == 1049    // "120000 euros converti en dinars selon le cours du 31.01.2023"
-
+replace ca="0" if id_plateforme == 1036   
+replace ca="4000" if id_plateforme == 1190   
+replace ca="15000" if id_plateforme == 1201
 
 		* profit
 replace profit="2200" if id_plateforme == 1005		//    10% of total turnover
@@ -103,8 +105,15 @@ replace profit="-24000" if id_plateforme == 1035     //   -60% of total turnover
 replace profit="375000" if id_plateforme == 1170     //    25% of total turnover
 replace profit="135000" if id_plateforme == 1163     //    45% of total turnover
 replace profit="238414.8" if id_plateforme == 1049   //    30% of total turnover
-replace profit="330000" if id_plateforme == 1001   //    30% of total turnover
-
+replace profit="540000" if id_plateforme == 1008     //    25% of total turnover
+replace profit="-4450" if id_plateforme == 1031     //     -50% of total turnover
+replace profit="-60000" if id_plateforme == 1041
+replace profit="4700" if id_plateforme == 1055		//    5% of total turnover
+replace profit="-17000" if id_plateforme == 1054		
+replace profit="201600" if id_plateforme == 1117    //    32% of total turnover
+replace profit="27000" if id_plateforme == 1135		//    30% of total turnover
+replace profit="2500" if id_plateforme == 1190
+replace profit= -999 if id_plateforme == 1201     
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
@@ -112,11 +121,18 @@ replace ca_exp="100000" if id_plateforme == 1001   //    10% of total turnover
 replace ca_exp="30000" if id_plateforme == 1248    //    "moyenne"
 replace ca_exp="397358" if id_plateforme == 1049   //    "120000 euros converti en dinars selon le cours du 31.01.2023"
 replace ca_exp="160000" if id_plateforme ==1087    //     10% of total turnover
+replace ca_exp="960000" if id_plateforme == 1008   //     80% of total turnover
+replace ca_exp="50000" if id_plateforme == 1239
+replace ca_exp="0" if id_plateforme == 1201
 
         *exprep_inv
 replace exprep_inv= -999 if exprep_inv== 999 
 replace exprep_inv= -888 if exprep_inv== 888
 replace exprep_inv= 70000 if id_plateforme== 983
+replace exprep_inv= 5000 if id_plateforme== 1013
+replace exprep_inv= 0 if id_plateforme== 1020
+replace exprep_inv= 0 if id_plateforme== 1055 
+
 
 
 		*ca_2021
@@ -125,14 +141,38 @@ replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
 
 		* employes
 replace employes = 600 if id_plateforme == 1092
+replace employes = 1 if id_plateforme == 1036
+
 
 		* ssa activites
-	
+replace ssa_action5 = 0 if id_plateforme == 1017
+replace ssa_action4 = 0 if id_plateforme == 1054
+replace ssa_action5 = 0 if id_plateforme == 1054
+
+
 	*export practices plan.
 replace exp_pra_plan=1 if id_plateforme == 983 
 replace exp_pra_mission = 0 if id_plateforme == 983
 replace exp_pra_cible = 0 if id_plateforme == 983
 replace exp_pra_mission = 0 if id_plateforme == 989
+replace exp_pra_foire = 0 if id_plateforme == 1020 
+replace exp_pra_sci = 0 if id_plateforme == 1020 
+replace exp_pra_rexp = 0 if id_plateforme == 1020 
+replace exp_pra_cible = 0 if id_plateforme == 1020 
+replace exp_pra_mission = 0 if id_plateforme == 1020 
+replace exp_pra_douane = 0 if id_plateforme == 1020 
+replace exp_pra_plan = 0 if id_plateforme == 1020 
+replace exp_pra_cible = 0 if id_plateforme == 1036
+replace exp_pra_mission = 0 if id_plateforme == 1036
+replace exp_pra_foire = 0 if id_plateforme == 1036 
+replace exp_pra_cible = 0 if id_plateforme == 1055
+replace exp_pra_mission = 0 if id_plateforme == 1054
+replace exp_pra_foire = 0 if id_plateforme == 1054 
+
+
+
+
+
 	
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
