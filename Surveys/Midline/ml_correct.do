@@ -103,17 +103,17 @@ replace profit="-1600" if id_plateforme == 1133 	//   -80% of total turnover
 replace profit="25000" if id_plateforme == 1188 	 //	   10% of total turnover
 replace profit="-24000" if id_plateforme == 1035     //   -60% of total turnover
 replace profit="375000" if id_plateforme == 1170     //    25% of total turnover
-replace profit="135000" if id_plateforme == 1163     //    45% of total turnover
-replace profit="238414.8" if id_plateforme == 1049   //    30% of total turnover
-replace profit="540000" if id_plateforme == 1008     //    25% of total turnover
+replace profit="108000" if id_plateforme == 1163     //    45% of total turnover
+replace profit="119207" if id_plateforme == 1049   //    30% of total turnover
+replace profit="300000" if id_plateforme == 1008     //    25% of total turnover
 replace profit="-4450" if id_plateforme == 1031     //     -50% of total turnover
 replace profit="-60000" if id_plateforme == 1041
+replace profit="-17000" if id_plateforme == 1054
 replace profit="4700" if id_plateforme == 1055		//    5% of total turnover
-replace profit="-17000" if id_plateforme == 1054		
-replace profit="201600" if id_plateforme == 1117    //    32% of total turnover
+replace profit="192000" if id_plateforme == 1117    //    32% of total turnover
 replace profit="27000" if id_plateforme == 1135		//    30% of total turnover
 replace profit="2500" if id_plateforme == 1190
-replace profit= -999 if id_plateforme == 1201     
+replace profit= "-999" if id_plateforme == 1201     
 
 		* ca_exp
 replace ca_exp="12800" if id_plateforme == 1045    //    40% of total turnover
