@@ -506,10 +506,9 @@ putpdf paragraph, halign(center)
 putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
 
-/*   *Attrition rate 
+   *Attrition rate 
    
 graph bar (sum) refus, over(treatment) blabel(total, format(%9.2fc)) ///
-	legend pos(6) row(1)  ///
 	title("Midline Attrition Rate") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries") ///
 	ylabel(0(10)100, nogrid) 
@@ -517,7 +516,7 @@ graph export ml_attritionrate.png, replace
 putpdf paragraph, halign(center)
 putpdf image ml_attritionrate.png
 putpdf pagebreak
-*/
+
 
 **** Section 2: Innovation*****
 putpdf paragraph,  font("Courier", 20)
