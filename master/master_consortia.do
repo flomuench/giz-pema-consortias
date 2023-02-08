@@ -9,14 +9,11 @@
 *				PART 2: Prepare dynamic folder paths & globals		  
 *				PART 3: Run all do-files                          											  
 *																	  
-*	Author:  	Fabian Scheifele							    
-*	ID variable: id_email		  					  
-*	Requires:  	  										  
-*	Creates:  master-data-consortias; 
+*	Author:  	Florian Münch, Fabian Scheifele							    
+*	ID variable: id_plateforme (id for firms), surveyround (panel time id)
 ***********************************************************************
 * 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
-
 	* set standard settings
 version 15
 clear all

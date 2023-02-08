@@ -30,8 +30,7 @@ cd "${master_gdrive}/output/ML regressions"
 * 	PART 1.2: Management index		
 ***********************************************************************
 	* ATE, ancova
-	
-			* no significant baseline differences
+			* test no significant baseline differences
 reg mngtvars i.treatment if surveyround == 1, vce(hc3)
 
 			* pure mean comparison at midline
@@ -49,18 +48,18 @@ eststo mi3, r: reg mngtvars i.treatment l.mngtvars i.strata, cluster(id_platefor
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
-			* DiD
+	* DiD
 eststo mi4, r: xtreg mngtvars i.treatment##i.surveyround i.strata, cluster(id_plateforme)
 estadd local bl_control "Yes"
 estadd local strata "Yes"			
 
-			* ATT, IV (with 1 session counting as taken up)
+	* ATT, IV (with 1 session counting as taken up)
 eststo mi5, r:ivreg2 mngtvars l.mngtvars i.strata (take_up2 = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 estimates store iv_mi4
 
-			* ATT, IV (with 1 session counting as taken up)
+	* ATT, IV (with 1 session counting as taken up)
 eststo mi6, r:ivreg2 mngtvars l.mngtvars i.strata (take_up = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
