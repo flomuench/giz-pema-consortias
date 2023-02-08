@@ -208,6 +208,8 @@ replace questions_needing_checks = questions_needing_checks + "matricule fiscale
 ***********************************************************************
 replace needs_check = 0 if id_plateforme == 985
 replace needs_check = 0 if id_plateforme == 989
+replace needs_check = 0 if id_plateforme == 991 // ca_exp +30%
+replace needs_check = 0 if id_plateforme == 995 // injoingables
 replace needs_check = 0 if id_plateforme == 997
 replace needs_check = 0 if id_plateforme == 1005
 replace needs_check = 0 if id_plateforme == 1007
