@@ -121,5 +121,5 @@ if (1) do "${ml_github}/ml_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
-if (1) do "${ml_github}/ml_statistics.do"
+if (0) do "${ml_github}/ml_statistics.do"
 
