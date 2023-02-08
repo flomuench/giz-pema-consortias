@@ -106,6 +106,10 @@ replace refus = 1 if id_plateforme == 1162 & surveyround == 2
 replace refus = 1 if id_plateforme == 1166 & surveyround == 2
 replace refus = 1 if id_plateforme == 1112 & surveyround == 2
 replace refus = 1 if id_plateforme == 1235 & surveyround == 2
+replace refus = 1 if id_plateforme == 1044 & surveyround == 2
+replace refus = 1 if id_plateforme == 1067 & surveyround == 2 //Demande d'enlever tous ses informations de la base de contact
+replace refus = 1 if id_plateforme == 1071 & surveyround == 2 //Refus de répondre aux informations comptables
+replace refus = 1 if id_plateforme == 1193 & surveyround == 2 //Refus de répondre aux informations comptables
 
 
 		* endline

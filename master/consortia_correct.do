@@ -95,15 +95,11 @@ replace matricule_fisc_incorrect=1 if id_plateforme == 1083
 replace matricule_fisc_incorrect=1 if id_plateforme == 1094
 replace matricule_fisc_incorrect=1 if id_plateforme == 1095
 replace matricule_fisc_incorrect=1 if id_plateforme == 1128
-replace matricule_fisc_incorrect=1 if id_plateforme == 1146
-replace matricule_fisc_incorrect=1 if id_plateforme == 1150
 replace matricule_fisc_incorrect=1 if id_plateforme == 1182
-replace matricule_fisc_incorrect=1 if id_plateforme == 1185
 replace matricule_fisc_incorrect=1 if id_plateforme == 1190
 replace matricule_fisc_incorrect=1 if id_plateforme == 1191
 replace matricule_fisc_incorrect=1 if id_plateforme == 1193
 replace matricule_fisc_incorrect=1 if id_plateforme == 1197
-replace matricule_fisc_incorrect=1 if id_plateforme == 1205
 replace matricule_fisc_incorrect=1 if id_plateforme == 1214
 replace matricule_fisc_incorrect=1 if id_plateforme == 1245
 
@@ -123,10 +119,14 @@ replace matricule_fiscale = "1225272C" if id_plateforme == 994
 replace matricule_fiscale = "1677629Z" if id_plateforme == 997
 replace matricule_fiscale = "1721782L" if id_plateforme == 1036
 replace matricule_fiscale = "1219150E?" if id_plateforme == 1095
+replace matricule_fiscale = "854949V" if id_plateforme == 1128
 replace matricule_fiscale = "1463126T" if id_plateforme == 1134
+replace matricule_fiscale = "1795325T" if id_plateforme == 1146
 replace matricule_fiscale = "1748667A" if id_plateforme == 1191
-replace matricule_fiscale = "1179494D?" if id_plateforme == 1205
+replace matricule_fiscale = "1610602Z" if id_plateforme == 1205
 replace matricule_fiscale = "0111519V" if id_plateforme == 1248
+replace matricule_fiscale = "1542155Q" if id_plateforme == 1150
+replace matricule_fiscale = "1755985E" if id_plateforme == 1185
 
 
 ***********************************************************************
