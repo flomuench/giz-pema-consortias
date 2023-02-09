@@ -108,7 +108,7 @@ replace ca="32000" if id_plateforme == 1155
 replace ca="-999" if id_plateforme == 1161
 replace ca="-999" if id_plateforme == 1179
 replace ca="150000" if id_plateforme == 1184
-replace ca="14000" if id_plateforme == 1185                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+replace ca="14000" if id_plateforme == 1185
 replace ca="4000" if id_plateforme == 1190
 replace ca="1285000" if id_plateforme == 1195   
 replace ca="15000" if id_plateforme == 1201
@@ -145,9 +145,9 @@ replace profit="2000" if id_plateforme == 1154
 replace profit="17000" if id_plateforme == 1155    
 replace profit="-999" if id_plateforme == 1161
 replace profit="-999" if id_plateforme == 1179
-replace profit="30000" if id_plateforme == 1184                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+replace profit="30000" if id_plateforme == 1184
 replace profit="2500" if id_plateforme == 1190
-replace profit="0" if id_plateforme == 1195                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+replace profit="0" if id_plateforme == 1195                                                                            
 replace profit= "-999" if id_plateforme == 1201     
 replace profit="48000" if id_plateforme == 1239
 replace profit="6250" if id_plateforme == 1242
@@ -173,7 +173,7 @@ replace ca_exp="-999" if id_plateforme == 1161
 replace ca_exp="-999" if id_plateforme == 1179
 replace ca_exp="0" if id_plateforme == 1184
 replace ca_exp="7000" if id_plateforme == 1185 
-replace ca_exp="1285000" if id_plateforme == 1195                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+replace ca_exp="1285000" if id_plateforme == 1195                                                                             
 replace ca_exp="0" if id_plateforme == 1201
 replace ca_exp="134000" if id_plateforme == 1239
 replace ca_exp="160000" if id_plateforme == 1243
@@ -200,16 +200,13 @@ replace exprep_inv= 30000 if id_plateforme == 1147
 replace exprep_inv= 0 if id_plateforme== 1150 
 replace exprep_inv= 3000 if id_plateforme== 1151
 replace exprep_inv=-888 if id_plateforme == 1161
-replace exprep_inv= 0 if id_plateforme == 1184                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+replace exprep_inv= 0 if id_plateforme == 1184
 replace exprep_inv= 0 if id_plateforme== 1224 
 replace exprep_inv= 100000 if exprep_inv== 1231 
 replace exprep_inv= 150000 if exprep_inv== 1243 
 
-
-
 		*ca_2021
 replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
-
 
 		* employes
 replace employes = 3 if id_plateforme == 996
@@ -226,7 +223,6 @@ replace car_empl1 = 35 if id_plateforme == 1027
 replace car_empl1 = 37 if id_plateforme == 1033
 replace car_empl1 = 13 if id_plateforme == 1147
 replace car_empl1 = 20 if id_plateforme == 1231
-
 replace car_empl2 = 2 if id_plateforme == 996
 replace car_empl2 = 27 if id_plateforme == 1027
 replace car_empl2 = 20 if id_plateforme == 1033
@@ -245,27 +241,75 @@ replace car_empl4 = 0 if id_plateforme == 1033
 replace car_empl4 = 0 if id_plateforme == 1147
 replace car_empl4 = 0 if id_plateforme == 1231
 
+	
+	* loop over all accounting variables with string
+ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
+local numvars_with_strings "`r(varlist)'"
+foreach var of local numvars_with_strings {
+    replace `var' = ustrregexra( `var',"dinars","")
+    replace `var' = ustrregexra( `var',"dinar","")
+    replace `var' = ustrregexra( `var',"milles","000")
+    replace `var' = ustrregexra( `var',"mille","000")
+	replace `var' = ustrregexra( `var',"millions","000000")
+    replace `var' = ustrregexra( `var',"million","000000") 
+    replace `var' = ustrregexra( `var',"dt","")
+    replace `var' = ustrregexra( `var',"k","000")
+    replace `var' = ustrregexra( `var',"dt","")
+    replace `var' = ustrregexra( `var',"tnd","")
+    replace `var' = ustrregexra( `var',"TND","")
+	replace `var' = ustrregexra( `var',"DT","")
+	replace `var' = ustrregexra( `var',"D","")
+    replace `var' = ustrregexra( `var',"zéro","0")
+    replace `var' = ustrregexra( `var',"zero","0")
+    replace `var' = ustrregexra( `var'," ","")
+    replace `var' = ustrregexra( `var',"un","1")
+    replace `var' = ustrregexra( `var',"deux","2")
+    replace `var' = ustrregexra( `var',"trois","3")
+    replace `var' = ustrregexra( `var',"quatre","4")
+    replace `var' = ustrregexra( `var',"cinq","5")
+    replace `var' = ustrregexra( `var',"six","6")
+    replace `var' = ustrregexra( `var',"sept","7")
+    replace `var' = ustrregexra( `var',"huit","8")
+    replace `var' = ustrregexra( `var',"neuf","9")
+    replace `var' = ustrregexra( `var',"dix","10")
+    replace `var' = ustrregexra( `var',"O","0")
+    replace `var' = ustrregexra( `var',"o","0")
+    replace `var' = ustrregexra( `var',"دينار تونسي","")
+    replace `var' = ustrregexra( `var',"دينار","")
+    replace `var' = ustrregexra( `var',"تونسي","")
+    replace `var' = ustrregexra( `var',"د","")
+    replace `var' = ustrregexra( `var',"de","")
+    replace `var' = ustrregexra( `var',"d","")
+    replace `var' = ustrregexra( `var',"na","")
+    replace `var' = ustrregexra( `var',"r","")
+    replace `var' = ustrregexra( `var',"m","000")
+    replace `var' = ustrregexra( `var',"مليون","000000")
+    replace `var' = subinstr(`var', ".", "",.)
+    replace `var' = subinstr(`var', ",", ".",.)
+    replace `var' = "`not_know'" if `var' =="je ne sais pas"
+    replace `var' = "`not_know'" if `var' =="لا أعرف"
 
-		* ssa activites
-replace ssa_action5 = 0 if id_plateforme == 985
+}
 
-replace ssa_action5 = 0 if id_plateforme == 1017
 
-replace ssa_action5 = 1 if id_plateforme == 1019
+***********************************************************************
+* 	PART 4:  Manual correction
+***********************************************************************
 
-replace ssa_action5 = 0 if id_plateforme == 1030
-
+* ssa activites
 replace ssa_action1 = 1 if id_plateforme == 1033
 
 replace ssa_action4 = 0 if id_plateforme == 1054
+
+
+replace ssa_action5 = 0 if id_plateforme == 985
+replace ssa_action5 = 0 if id_plateforme == 1017
+replace ssa_action5 = 1 if id_plateforme == 1019
+replace ssa_action5 = 0 if id_plateforme == 1030
 replace ssa_action5 = 0 if id_plateforme == 1054
-
 replace ssa_action5 = 1 if id_plateforme == 1130
-
 replace ssa_action5 = 1 if id_plateforme == 1151
-
 replace ssa_action5 = 0 if id_plateforme == 1184
-
 replace ssa_action5 = 0 if id_plateforme == 1224
 
 
@@ -338,119 +382,7 @@ replace exp_pra_plan= 0 if id_plateforme == 1224
  
 replace exp_pra_foire = 0 if id_plateforme == 1225 
 replace exp_pra_sci = 0 if id_plateforme == 1225 
-	
-	* loop over all accounting variables with string
-ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
-local numvars_with_strings "`r(varlist)'"
-foreach var of local numvars_with_strings {
-    replace `var' = ustrregexra( `var',"dinars","")
-    replace `var' = ustrregexra( `var',"dinar","")
-    replace `var' = ustrregexra( `var',"milles","000")
-    replace `var' = ustrregexra( `var',"mille","000")
-	replace `var' = ustrregexra( `var',"millions","000000")
-    replace `var' = ustrregexra( `var',"million","000000") 
-    replace `var' = ustrregexra( `var',"dt","")
-    replace `var' = ustrregexra( `var',"k","000")
-    replace `var' = ustrregexra( `var',"dt","")
-    replace `var' = ustrregexra( `var',"tnd","")
-    replace `var' = ustrregexra( `var',"TND","")
-	replace `var' = ustrregexra( `var',"DT","")
-	replace `var' = ustrregexra( `var',"D","")
-    replace `var' = ustrregexra( `var',"zéro","0")
-    replace `var' = ustrregexra( `var',"zero","0")
-    replace `var' = ustrregexra( `var'," ","")
-    replace `var' = ustrregexra( `var',"un","1")
-    replace `var' = ustrregexra( `var',"deux","2")
-    replace `var' = ustrregexra( `var',"trois","3")
-    replace `var' = ustrregexra( `var',"quatre","4")
-    replace `var' = ustrregexra( `var',"cinq","5")
-    replace `var' = ustrregexra( `var',"six","6")
-    replace `var' = ustrregexra( `var',"sept","7")
-    replace `var' = ustrregexra( `var',"huit","8")
-    replace `var' = ustrregexra( `var',"neuf","9")
-    replace `var' = ustrregexra( `var',"dix","10")
-    replace `var' = ustrregexra( `var',"O","0")
-    replace `var' = ustrregexra( `var',"o","0")
-    replace `var' = ustrregexra( `var',"دينار تونسي","")
-    replace `var' = ustrregexra( `var',"دينار","")
-    replace `var' = ustrregexra( `var',"تونسي","")
-    replace `var' = ustrregexra( `var',"د","")
-    replace `var' = ustrregexra( `var',"de","")
-    replace `var' = ustrregexra( `var',"d","")
-    replace `var' = ustrregexra( `var',"na","")
-    replace `var' = ustrregexra( `var',"r","")
-    replace `var' = ustrregexra( `var',"m","000")
-    replace `var' = ustrregexra( `var',"مليون","000000")
-    replace `var' = subinstr(`var', ".", "",.)
-    replace `var' = subinstr(`var', ",", ".",.)
-    replace `var' = "`not_know'" if `var' =="je ne sais pas"
-    replace `var' = "`not_know'" if `var' =="لا أعرف"
 
-}
-
-
-***********************************************************************
-* 	PART 4:  Manual correction (by variable not by row)
-***********************************************************************
-
-*4.1 Manually Transform any remaining "word numerics" to actual numerics 
-* browse id_plateforme ca ca_exp Profit ca_2021 ca_exp2021 
- 
-
-
-
-
-
-*4.2 Comparison of newly provided accounting data for firms with needs_check=1
-*Please compare new and old and decide whether to replace the value. 
-*If new value continues to be strange, then check_again plus comment
-
-
-
-*4.3 Manual corrections that were in correction but not automatically update in raw data
-
-
-
-
-
-***********************************************************************
-* 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
-***********************************************************************
-/* for reference and guidance, regularly these commands are used in this section
-gen XXX = ustrregexra(XXX, "^216", "")
-gen id_adminrect = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
-
-*replace id_adminrige = $check_again if id_adminrect == 1
-lab def correct 1 "correct" 0 "incorrect"
-lab val id_adminrect correct
-
-*/
-/*
-
-replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
-*/
-
-***********************************************************************
-* 	EXAMPLE CODE:  Replace string with numeric values		  			
-***********************************************************************
-/*
-{
-*Remplacer les textes de la variable investcom_2021
-replace investcom_2021 = "100000" if investcom_2021== "100000dt"
-replace investcom_2021 = "18000" if investcom_2021== "huit mille dinars"
-replace investcom_2021 = "0" if investcom_2021== "zéro"
-
-
-replace investcom_2021 = "`refused'" if investcom_2021 == "-888"
-replace investcom_2021 = "`not_know'" if investcom_2021 == "-999"
-replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
-
-}
-
-*/
-***********************************************************************
-* 	PART 5:  Convert data types to the appropriate format
-***********************************************************************
 
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments

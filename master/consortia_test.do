@@ -213,9 +213,13 @@ replace needs_check = 0 if id_plateforme == 995 // injoingables
 replace needs_check = 0 if id_plateforme == 997
 replace needs_check = 0 if id_plateforme == 1005
 replace needs_check = 0 if id_plateforme == 1007
+replace needs_check = 0 if id_plateforme == 1008
 replace needs_check = 0 if id_plateforme == 1019
 replace needs_check = 0 if id_plateforme == 1022
+replace needs_check = 0 if id_plateforme == 1027
 replace needs_check = 0 if id_plateforme == 1028
+replace needs_check = 0 if id_plateforme == 1033
+replace needs_check = 0 if id_plateforme == 1036
 replace needs_check = 0 if id_plateforme == 1037
 replace needs_check = 0 if id_plateforme == 1044
 replace needs_check = 0 if id_plateforme == 1054
@@ -227,14 +231,21 @@ replace needs_check = 0 if id_plateforme == 1102
 replace needs_check = 0 if id_plateforme == 1128
 replace needs_check = 0 if id_plateforme == 1130
 replace needs_check = 0 if id_plateforme == 1133
+replace needs_check = 0 if id_plateforme == 1147
 replace needs_check = 0 if id_plateforme == 1161
+replace needs_check = 0 if id_plateforme == 1150
+replace needs_check = 0 if id_plateforme == 1154
 replace needs_check = 0 if id_plateforme == 1170
 replace needs_check = 0 if id_plateforme == 1175
 replace needs_check = 0 if id_plateforme == 1179
 replace needs_check = 0 if id_plateforme == 1184
 replace needs_check = 0 if id_plateforme == 1193
+replace needs_check = 0 if id_plateforme == 1185
+replace needs_check = 0 if id_plateforme == 1190
 replace needs_check = 0 if id_plateforme == 1195
 replace needs_check = 0 if id_plateforme == 1204
+replace needs_check = 0 if id_plateforme == 1205
+replace needs_check = 0 if id_plateforme == 1243
 replace needs_check = 0 if id_plateforme == 1248
 
 ***********************************************************************
