@@ -75,6 +75,10 @@ rename empl employes
 		* rename for coherence
 rename ca_exp2021 ca_exp_2021
 
+		* rename to differentiate bl & ml to simplify index calculation
+rename man_hr_obj man_hr_pro
+rename man_fin_per man_fin_num
+
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
 ***********************************************************************
@@ -98,13 +102,13 @@ lab var net_nb_qualite "quality advice of the business network"
 lab var net_coop "perception of interaction between the enterprises"
 
 		* Section management practices
-lab var man_hr_obj "employees motivation"
+lab var man_hr_pro "employees promotion"
 
 lab var man_hr_ind "frequency of examining employees performance"
 
 lab var man_fin_per_fre "frequency of examining financial performance"
 
-lab var man_fin_per "number of performance indicators tracked for the company"
+lab var man_fin_num "number of performance indicators tracked for the company"
 
 lab var man_ind_awa "employees goal awareness"
 
@@ -170,7 +174,7 @@ lab var attest "respondents attest that his/her responses correspond to truth"
 
 
 		* other:
-label variable list_group_ml "treatment or control Group"
+label variable list_group "list treatment or control Group"
 label variable heure "beginning hour"
 label variable date "date"
 
@@ -232,7 +236,7 @@ label values man_ind_awa kpi_empl
 
 		* list experiment
 label define label_list_group 1 "treatment_group" 0 "control_group"
-label values list_group_ml label_list_group 
+label values list_group label_list_group 
 
 		* declaration of honour
 label define label_attest  1 "Yes"

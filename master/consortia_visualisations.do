@@ -505,11 +505,10 @@ putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
 
    *Attrition rate 
-   
-graph bar (sum) refus, over(treatment) blabel(total, format(%9.2fc)) ///
-	title("Midline Attrition Rate") note("Date: `c(current_date)'") ///
+graph bar (sum) refus, over(treatment) blabel(total, format(%9.0fc)) ///
+	title("Midline Attrition") note("Date: `c(current_date)'") ///
 	ytitle("Number of entries") ///
-	ylabel(0(10)100, nogrid) 
+	ylabel(0(5)20, nogrid) 
 graph export ml_attritionrate.png, replace
 putpdf paragraph, halign(center)
 putpdf image ml_attritionrate.png
@@ -519,7 +518,8 @@ putpdf pagebreak
 **** Section 2: Innovation*****
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
-*Innovation	
+
+	*Innovation	
 graph bar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
 	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
@@ -531,18 +531,8 @@ graph bar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, 
 	putpdf image ml_innovation_share.png
 	putpdf pagebreak
 
-graph bar (sum) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.0fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
-	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
-	label  (5 "No innovation")) ///
-	title("Type of innovation") ///
-	ylabel(0(10)70, nogrid) 
-	gr export ml_innovation.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ml_innovation.png
-	putpdf pagebreak
 	
-*Source of the innovation	
+	*Source of the innovation	
 graph bar (mean) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
 	label  (3 "Business contact") label  (4 "Evenement") ///
@@ -554,26 +544,17 @@ graph bar (mean) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, ov
 	putpdf image ml_source_innovation_share.png
 	putpdf pagebreak
 
-graph bar (sum) inno_mot1 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.0fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
-	label  (3 "Business contact") label  (4 "Evenement") ///
-	label  (5 "Employee") label  (6 "Standards and norms")) ///
-	title("Source of innovation")
-	gr export ml_source_innovation.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ml_source_innovation.png
-	putpdf pagebreak
 
 ****** Section 3: Networks ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Networks"), bold
 
- *Number of female and male CEO met
-graph bar net_nb_m net_nb_f, over(treatment)stack ///
+	*Number of female and male CEO met
+graph bar net_nb_m net_nb_f, over(treatment)  blabel(total, format(%9.2fc)) stack ///
 	title("Number of female and male CEO met") ///
-	ytitle("Person") ///
-	ylabel(0(2)16, nogrid) ///
-	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
+	ytitle("CEOs") ///
+	ylabel(0(2)12, nogrid) ///
+	legend(order(1 "Male CEO" 2 "Female CEO") pos(6) rows(1))
 gr export ml_CEO_met.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_CEO_met.png
@@ -587,40 +568,38 @@ putpdf paragraph, halign(center)
 putpdf image ml_mean_CEO_met.png
 putpdf pagebreak	
 
-*Plotting distribution of CEO met for the treament group	
+	*Plotting distribution of CEO met for the treament group
+		* Female CEOs met
 tw ///
-	(kdensity net_nb_m if treatment == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_m if treatment == 1, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity net_nb_f if treatment == 1, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_f if treatment == 1, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity net_nb_f if treatment == 1, lp(l) lc(maroon) bw(5)) ///
+	(kdensity net_nb_f if treatment == 0, lp(l) lc(navy) bw(5)) ///
 	, ///
-	xtitle("Distribution of female vs male CEO met for the treatment group", size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Male CEO" 2 "Female CEO")  pos(6) row(1)) ///
-	name(network_density, replace)
-gr export ml_network_density_treatment.png, replace
+	xtitle("number of CEOs", size(small)) ///
+	ytitle("density", size(small)) ///
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(ml_network_composition_f, replace)
+gr export ml_network_composition_f.png, replace
 putpdf paragraph, halign(center) 
-putpdf image ml_network_density_treatment.png
+putpdf image ml_network_composition_f.png
 putpdf pagebreak	
+	
+		* Male CEOs met
+tw ///
+	(kdensity net_nb_m if treatment == 1, lp(l) lc(maroon) bw(5)) ///
+	(kdensity net_nb_m if treatment == 0, lp(l) lc(navy) bw(5)) ///
+	, ///
+	xtitle("number of CEOs", size(small)) ///
+	ytitle("density") ///
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(ml_network_composition_m, replace)
+gr export ml_network_composition_m.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_network_composition_m.png
+putpdf pagebreak
 
-*Plotting distribution of CEO met for the control group	
-tw ///
-	(kdensity net_nb_m if treatment == 0, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_m if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity net_nb_f if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram net_nb_f if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	, ///
-	xtitle("Distribution of female vs male CEO met for the control group", size(small)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Male CEO" 2 "Female CEO")  pos(6) row(1)) ///
-	name(network_density, replace)
-gr export ml_network_density_control.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_network_density_control.png
-putpdf pagebreak	
 
 	* Quality of advice 
-	   sum net_nb_qualite,d
+sum net_nb_qualite,d
 twoway (histogram net_nb_qualite if treatment == 0 & surveyround == 2, fcolor(none) lcolor(navy)lpattern(solid)) ///                
 	   (histogram net_nb_qualite if treatment == 1 & surveyround == 2, fcolor(navy) lcolor(black) lpattern(solid)), ///
 			ytitle("No. of firms")   ///
@@ -635,22 +614,7 @@ putpdf image quality_advice_treatment.png
 putpdf pagebreak	
 
 
-	   sum net_nb_qualite,d
-twoway (histogram net_nb_qualite if surveyround == 1, fcolor(none) lcolor(navy)lpattern(solid)) ///                
-	   (histogram net_nb_qualite if surveyround == 2, fcolor(navy) lcolor(black) lpattern(solid)), ///
-			ytitle("No. of firms")   ///
-            title("Quality of advice of the business network: Baseline vs. Midline", size(medium)) legend(order(1 "Basline" 2 "Midline" )) ///     
-            ylabel(0(0.1)0.5 , nogrid) ///
-			xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
-			text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
-			text(0.45  `r(p50)' "Median", size(small) place(e))
-gr export quality_advice_surveyround.png, replace
-putpdf paragraph, halign(center) 
-putpdf image quality_advice_surveyround.png
-putpdf pagebreak	
-
-
-*Interactions between CEO	
+		*Interactions between CEO	
 graph bar (mean) net_coop_pos net_coop_neg, over(treatment) over(surveyround) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
 	title("Perception of interactions between CEOs") ///
@@ -660,7 +624,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_perceptions_interactions.png
 putpdf pagebreak
 	
-*Positive interaction terms	
+		*Positive interaction terms	
 graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
 	label(3 "Communicate") label(4 "Win")  ///
@@ -672,7 +636,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_perceptions_positive_interactions_details.png
 putpdf pagebreak
 
-*Negative interaction terms	
+	*Negative interaction terms	
 graph bar  netcoop9 netcoop10 netcoop4 netcoop6 netcoop5, over(treatment)over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) bargap(0) ///
 	legend (pos(6) row(3) col(2) label(1 "Power") ///
 	label(2 "Opponent") label(3 "Dominate") ///
@@ -689,26 +653,6 @@ putpdf pagebreak
 ****** Section 4: Management practices ****** 
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 4: Management practices"), bold
-
-
-		* Key Performance indicators (KPIs)
-graph bar (percent), over(man_fin_per, relabel(1 "none" 2 "1-2" 3 "3-9" 4 "10+")) over(treatment)  over(surveyround) blabel(total, format(%9.1fc) gap(-0.2)) ///
-    title("Number of KPIs (in %)") ///
-	ylabel(0(5)30, nogrid)
-gr export ml_performance.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_performance.png
-putpdf pagebreak
-
-		* KPIs frequency
-graph bar (percent), over(man_fin_per_fre, relabel(1 "Never" 2 "Annually" 3 "Monthly" 4 "Weekly" 5 "Daily")) over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2))  ///
-    legend(pos(6) row(3) size(vsmall)) ///
-    title("Frequency KPIs (in %)") ///
-	ylabel(0(5)35, nogrid)
-gr export ml_performance_frequency.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_performance_frequency.png
-putpdf pagebreak
 
     *Management practices index
 tw ///
@@ -734,8 +678,8 @@ gr tw ///
 	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity mpi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram mpi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity mpi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity mpi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Management Practices Index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -743,46 +687,14 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
+               order(1 "Treatment group, consortium member (N=57 firms)" ///
+                     2 "Treatment group, drop-out (N=30 firms)" ///
 					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(man_practices_index_ml, replace)
 graph export man_practices_index_ml.png, replace
 putpdf paragraph, halign(center) 
 putpdf image man_practices_index_ml.png
-putpdf pagebreak
-
-
-		* Frequency employees performance
-graph bar (percent), over(man_hr_ind, relabel(1 "Never" 2 "Annually" 3 "Quartely" 4 "Monthly" 5 "Weekly+")) over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(6) row(3) size(vsmall)) ///
-    title("Frequency Employees Performance(in %)") ///
-	ylabel(0(5)35, nogrid)
-gr export ml_performance_employees.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_performance_employees.png
-putpdf pagebreak
-
-
-*Employees motivation
-graph bar (percent), over(man_hr_obj, relabel(1 "Individual performance + firm" 2 "Individual performance" 3 "Other factors" 4 "None")) over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(6) row(3) size(vsmall)) ///
-    title("Employees Motivation (in %)") ///
-	ylabel(0(5)20, nogrid)
-gr export ml_motivation_employees.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_motivation_employees.png
-putpdf pagebreak
-
-		* Employees goal awareness
-graph hbar (percent), over(man_ind_awa, relabel(1 "seniors" 2 "most seniors + few employees" 3 "most seniors + most employees" 4 "all seniors + all employees")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(6) row(3) size(vsmall)) ///
-    title("Employmees Awareness of Firms' Goals (in %)") ///
-	ylabel(0(10)60, nogrid)
-gr export ml_goal_awa.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_goal_awa.png
 putpdf pagebreak
 
 		* Source of new management strategies
@@ -798,16 +710,6 @@ graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man
 	putpdf pagebreak
 
 
-graph bar (sum) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
-	label  (3 "Employees") label  (4 "Family") ///
-	label  (5 "Event") label  (6 "No new strategy") label (7 "Other sources")) ///
-	title("Source of New Management Strategies") 
-	gr export ml_source_strategy.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image ml_source_strategy.png
-	putpdf pagebreak
-
 ****** Section 5: Export management and readiness ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Export readiness"), bold
@@ -822,7 +724,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_ex_k.png
 putpdf pagebreak	
 
-*Export management/readiness
+	*Export management/readiness
 graph bar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	legend (pos(6) row(4) label (1 "Analysis of target export markets") label(2 "Develop an export plan") ///
 	label(3 "Trade mission to one target markets") label(4 "Access the customs website") label(5 "International trade fairs") ///
@@ -882,9 +784,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participants (N=56 firms)" ///
-                     2 "Treatment group, drop-outs (N=17 firms)" ///
-					 3 "Control group (N=71 firms)") ///
+               order(1 "Treatment group, participants (N=57 firms)" ///
+                     2 "Treatment group, drop-outs (N=30 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(eri_ml_tup, replace)
 gr tw ///
@@ -901,9 +803,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participants (N=56 firms)" ///
-                     2 "Treatment group, drop-outs (N=17 firms)" ///
-					 3 "Control group (N=71 firms)") ///
+               order(1 "Treatment group, participants (N=57 firms)" ///
+                     2 "Treatment group, drop-outs (N=30 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(eri_bl_tup, replace)
 gr combine eri_ml_tup eri_bl_tup, name(eri_tup, replace) ycommon xcommon
@@ -914,9 +816,9 @@ putpdf pagebreak
 
     * export readiness SSA index (eri_ssa)
 tw ///
-	(kdensity eri_ssa if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(kdensity eri_ssa if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.75)) ///
 	(histogram eri_ssa if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(kdensity eri_ssa if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.75)) ///
 	(histogram eri_ssa if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Full sample}") ///
@@ -1583,7 +1485,7 @@ putpdf image exportprep_ml.png
 putpdf pagebreak
 
 
-* Midline Gender index	
+	* Midline Gender index	
 gr tw ///
 	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -1608,7 +1510,7 @@ putpdf paragraph, halign(center)
 putpdf image gendervars_ml.png
 putpdf pagebreak
 
-* Export readiness SSA index -Z Score
+	* Export readiness SSA index -Z Score
 gr tw ///
 	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -1634,7 +1536,7 @@ putpdf image exportmngt_ml.png
 putpdf pagebreak
 
 
-*Women's entrepreneurial effifacy - z score
+	* Women's entrepreneurial effifacy - z score
 gr tw ///
 	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -1659,7 +1561,7 @@ putpdf paragraph, halign(center)
 putpdf image female_efficacy_ml.png
 putpdf pagebreak
 
-*Women's entrepreneurial initiaitve - z score
+	* Women's entrepreneurial initiaitve - z score
 gr tw ///
 	(kdensity female_initiative if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram female_initiative if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -1685,7 +1587,7 @@ putpdf image female_initiative_ml.png
 putpdf pagebreak
 
 
-*Women's locus of control index
+	*Women's locus of control index
 gr tw ///
 	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
@@ -1700,9 +1602,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Densitiy", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=*** firms)" ///
-                     2 "Treatment group, absent (N=*** firms)" ///
-					 3 "Control group (N= *** firms)") ///
+               order(1 "Treatment group, participated (N=57 firms)" /// 56 did actually respond to midline
+                     2 "Treatment group, absent (N=30 firms)" /// 24 firms did actually respond to midline
+					 3 "Control group (N= 89 firms)") /// 77 responded to midline
                c(1) pos(6) ring(6)) ///
 	name(female_loc_ml, replace)
 graph export female_loc_ml.png, replace
