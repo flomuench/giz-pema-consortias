@@ -166,13 +166,13 @@ foreach var of local allvars {
 
 	* calculate the index value: average of zscores 
 			* export readiness index (eri)
-egen eri = rowmean(temp_exprep_normez temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_exprep_norme)			
+egen eri = rowmean(temp_exprep_normez temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exprep_normez)			
 			
 			* export readiness SSA index (eri_ssa)
 egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z temp_ssa_action4z temp_ssa_action5z)
 
 			* management practices (mpi)
-egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awa temp_man_fin_per_fre) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed
+egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed
 			
 			* marketing practices index (marki)
 egen marki = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz)
@@ -231,14 +231,14 @@ egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_
 egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp), missing
 
 		* labeling
-label var eri "Export readiness index points"
-label var eri_ssa "Export readiness SSA index points"
-label var mpi "Management practices index points"
-label var marki "Marketing practices index points"
-label var female_efficacy "Women's entrepreneurial effifacy points"
-label var female_initiative "Women's entrepreneurial initiaitve points"
-label var female_loc "Women's locus of control points"
-label var genderi "Gender index points"
+label var eri_points "Export readiness index points"
+label var eri_ssa_points "Export readiness SSA index points"
+label var mpi_points "Management practices index points"
+label var marki_points "Marketing practices index points"
+label var female_efficacy_points "Women's entrepreneurial effifacy points"
+label var female_initiative_points "Women's entrepreneurial initiaitve points"
+label var female_loc_points "Women's locus of control points"
+label var genderi_points "Gender index points"
 
 	* drop temporary vars		  										  
 drop temp_*

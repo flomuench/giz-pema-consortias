@@ -130,7 +130,7 @@ save "${master_raw}/consortium_raw", replace
 ***********************************************************************
 	* append registration +  baseline data with midline
 append using "${ml_final}/ml_final"
-order id_plateforme surveyround, first
+order id_plateforme surveyround treatment, first
 sort id_plateforme surveyround
 
 /*	* append with endline
@@ -139,7 +139,24 @@ append using "${endline_final/el_final}"
 
 	* declare panel data set
 xtset id_plateforme surveyround, delta(1)
+
+* dealing with attrition
+	* create missing values for attrited firms (not in midline or endline data)
 tsfill, full
+
+	* replace missing valeus for attrited firms in ml or el for constant variables with their baseline value
+local cst_vars_num "treatment eligible gouvernorat id_admin_correct year_created subsector_corrige"
+foreach var of local cst_vars_num {
+	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == .
+}
+
+
+local cst_vars_str "legalstatus subsector"
+foreach var of local cst_vars_num {
+	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == ""
+}
+
+
 
 ***********************************************************************
 * 	PART 5: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
@@ -175,9 +192,14 @@ merge m:1 id_plateforme using "${implementation}/take_up", force
 drop _merge
 order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium, last
 
+***********************************************************************
+* 	PART 6: information from pii data that is missing in analysis data
+***********************************************************************
+* list_group allocation for firms that attrited
+
 
 ***********************************************************************
-* 	PART 6: save finale analysis data set as raw
+* 	PART 7: save finale analysis data set as raw
 ***********************************************************************
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace
