@@ -152,7 +152,7 @@ foreach var of local cst_vars_num {
 
 
 local cst_vars_str "legalstatus subsector"
-foreach var of local cst_vars_num {
+foreach var of local cst_vars_str {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == ""
 }
 
