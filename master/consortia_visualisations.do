@@ -1563,8 +1563,8 @@ gr tw ///
 	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity eri if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Export readiness index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1589,8 +1589,8 @@ gr tw ///
 	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity genderi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram genderi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity genderi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Gender index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1614,8 +1614,8 @@ gr tw ///
 	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram eri_ssa if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri_ssa if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity eri_ssa if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Export readiness SSA index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1640,8 +1640,8 @@ gr tw ///
 	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_efficacy if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity female_efficacy if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Women's entrepreneurial effifacy index}", size (small)) ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1665,8 +1665,8 @@ gr tw ///
 	(histogram female_initiative if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity female_initiative if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram female_initiative if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_initiative if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_initiative if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity female_initiative if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_initiative if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Women's entrepreneurial initiaitve index}", size (small)) ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1691,8 +1691,8 @@ gr tw ///
 	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
 	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_loc if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity female_loc if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Women's locus of control index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///

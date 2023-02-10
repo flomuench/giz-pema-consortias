@@ -293,5 +293,3 @@ export excel `employee_vars' ///
 
 
 restore
-
-drop needs_check questions_needing_check
