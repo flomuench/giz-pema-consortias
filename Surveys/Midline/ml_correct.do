@@ -389,10 +389,10 @@ replace exp_pra_sci = 0 if id_plateforme == 1225
 ***********************************************************************
 * 	PART 6:  autres / miscellaneous adjustments
 ***********************************************************************
-	* correct wrongly coded values for man_hr_obj
-replace man_hr_obj = 0 if man_hr_obj == 0.25
-replace man_hr_obj = 0.25 if man_hr_obj == 0.5
-label values man_hr_obj label_promo
+	* correct wrongly coded values for man_hr_pro
+replace man_hr_pro = 0 if man_hr_pro == 0.25
+replace man_hr_pro = 0.25 if man_hr_pro == 0.5
+label values man_hr_pro label_promo
 
 ***********************************************************************
 * 	PART 7:  Destring remaining numerical vars

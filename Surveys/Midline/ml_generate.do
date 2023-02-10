@@ -183,7 +183,7 @@ egen miss_management = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
 egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts)
 	
 	* section 5: gender empowerment
-egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env list_group_ml listexp)
+egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env listexp)
 	
 	* section 6: accounting/KPI
 egen miss_accounting = rowmiss(employes car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
