@@ -491,9 +491,7 @@ putpdf paragraph, halign(center)
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
 
-*** Section 1: Survey progress*** 
-
-
+*** Section 1: Survey status
 	* response rate by treatment status
 graph bar (sum) survey_completed validation, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(1) label(1 "Answers completed") ///
@@ -663,11 +661,11 @@ putpdf image ml_perceptions_interactions.png
 putpdf pagebreak
 	
 *Positive interaction terms	
-graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8, over(treatment)over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
 	label(3 "Communicate") label(4 "Win")  ///
 	label(5 "Connect")) ///
-	title("Perception of positive interactions between CEOs") ///
+	title("Positive views of communication between CEOs") ///
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_positive_interactions_details.png, replace
 putpdf paragraph, halign(center) 
@@ -679,12 +677,14 @@ graph bar  netcoop9 netcoop10 netcoop4 netcoop6 netcoop5, over(treatment)over(su
 	legend (pos(6) row(3) col(2) label(1 "Power") ///
 	label(2 "Opponent") label(3 "Dominate") ///
 	label(4 "Beat") label(5 "Retreat")) ///
-	title("Perception of negative interactions between CEOs") ///
+	title("Negative views of interactions between CEOs") ///
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_negative_interactions_details.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_perceptions_negative_interactions_details.png
 putpdf pagebreak
+
+
 
 ****** Section 4: Management practices ****** 
 putpdf paragraph,  font("Courier", 20)
@@ -712,10 +712,10 @@ putpdf pagebreak
 
     *Management practices index
 tw ///
-	(kdensity mpi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mpi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mpi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity mpi if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Full sample}") ///
 	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
@@ -836,20 +836,35 @@ putpdf pagebreak
 
    *Export readiness index (eri)
 tw ///
-	(kdensity eri if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity eri if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
-	title("{bf:Full sample}") ///
+	title("{bf:Midline}") ///
 	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
 	xtitle("Export Readiness Index", size(vsmall)) ///
 	ytitle("Number of observations", axis(1) size(vsmall)) ///
 	ytitle("Densitiy", axis(2) size(vsmall)) ///	
-	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
-	graph export export_readiness_ml.png, replace 
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) ///
+	name(eri_ml, replace)
+tw ///
+	(kdensity eri if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Baseline}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Export Readiness Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group"))  ///
+	name(eri_bl, replace)
+gr combine eri_ml eri_bl, name(export_readiness_bl_ml, replace)
+	graph export export_readiness_bl_ml.png, replace 
 	putpdf paragraph, halign(center) 
-	putpdf image export_readiness_ml.png
+	putpdf image export_readiness_bl_ml.png
 	putpdf pagebreak
 
     *Export readiness index (eri) take_up
@@ -861,28 +876,48 @@ gr tw ///
 	(kdensity eri if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
 	(histogram eri if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
-	title("{bf:Midline Distribution of Export Readiness Index}") ///
+	title("{bf:Midline Export Readiness Index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
 	xtitle("Export Readiness index") ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
-					 3 "Control group (N=89 firms)") ///
+               order(1 "Treatment group, participants (N=56 firms)" ///
+                     2 "Treatment group, drop-outs (N=17 firms)" ///
+					 3 "Control group (N=71 firms)") ///
                c(1) pos(6) ring(6)) ///
-	name(export_readiness_index_ml, replace)
-graph export export_readiness_index_ml.png, replace
+	name(eri_ml_tup, replace)
+gr tw ///
+	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 1, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Baseline Export Readiness Index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export Readiness index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Density", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participants (N=56 firms)" ///
+                     2 "Treatment group, drop-outs (N=17 firms)" ///
+					 3 "Control group (N=71 firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(eri_bl_tup, replace)
+gr combine eri_ml_tup eri_bl_tup, name(eri_tup, replace) ycommon xcommon
+graph export export_readiness_index_bl_ml.png, replace
 putpdf paragraph, halign(center) 
-putpdf image export_readiness_index_ml.png
+putpdf image export_readiness_index_bl_ml.png
 putpdf pagebreak
 
     * export readiness SSA index (eri_ssa)
 tw ///
-	(kdensity eri_ssa if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity eri_ssa if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_ssa if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Full sample}") ///
 	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
@@ -923,7 +958,7 @@ putpdf pagebreak
 
 * Export preparation investment	
 egen exprep_inv_95p = pctile(exprep_inv), p(95)
-graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
+graph bar exprep_inv if exprep_inv<exprep_inv_95p & exprep_inv > 0, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
 	title("Investment in export readiness") ///
 	 ytitle( "Mean of Investment in export readiness")
 gr export ml_bar_exprep_inv.png, replace
@@ -1005,31 +1040,76 @@ graph hbar (mean)car_loc_succ car_loc_env,  over(surveyround, label(labs(small))
 */
 
         *Female empowerment index (genderi)
+			* Points
 tw ///
-	(kdensity genderi if formation == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram genderi if formation == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity genderi if formation == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram genderi if formation == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity genderi_points if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
+	(histogram genderi_points if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi_points if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(1.5)) ///
+	(histogram genderi_points if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
-	title("{bf:Full sample}") ///
-	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	title("{bf:Women's Entrepreneurial Empowerment}") ///
+	subtitle("{it:midline - points}", size(vsmall)) ///
 	xtitle("Female Empowerment Index", size(vsmall)) ///
 	ytitle("Number of observations", axis(1) size(vsmall)) ///
 	ytitle("Densitiy", axis(2) size(vsmall)) ///	
 	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
-	graph export female_empowerment_ml.png, replace 
-	putpdf paragraph, halign(center) 
-	putpdf image female_empowerment_ml.png
-	putpdf pagebreak
+graph export female_empowerment_ml_points.png, replace 
+putpdf paragraph, halign(center) 
+putpdf image female_empowerment_ml_points.png
+putpdf pagebreak
+	
+			* z-score
+tw ///
+	(kdensity genderi if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
+	(histogram genderi if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(1.5)) ///
+	(histogram genderi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Women's Entrepreneurial Empowerment}") ///
+	subtitle("{it:midline - z-score}", size(vsmall)) ///
+	xtitle("Female Empowerment Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+graph export female_empowerment_ml.png, replace 
+putpdf paragraph, halign(center) 
+putpdf image female_empowerment_ml.png
+putpdf pagebreak		
 		
         *Female empowerment index (genderi) take_up
+			* points
 gr tw ///
-	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(kdensity genderi_points if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
+	(histogram genderi_points if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi_points if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(1.5)) ///
+	(histogram genderi_points if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity genderi_points if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi_points if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Female Empowerment Index}") ///
+	subtitle("{it: points}") ///
+	xtitle("Female Empowerment Index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Density", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=56 firms)" ///
+                     2 "Treatment group, absent (N=17 firms)" ///
+					 3 "Control group (N=71 firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_empowerment_index_ml, replace)
+graph export female_empowerment_index_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_empowerment_index_ml.png
+putpdf pagebreak
+			
+			* z-score
+gr tw ///
+	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.3)) ///
 	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.3)) ///
 	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity genderi if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram genderi if treatment == 0, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	(kdensity genderi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
 	, ///
 	title("{bf:Midline Distribution of Female Empowerment Index}") ///
 	subtitle("{it:Index calculated based on z-score method}") ///
@@ -1037,9 +1117,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
-					 3 "Control group (N=89 firms)") ///
+               order(1 "Treatment group, participated (N=56 firms)" ///
+                     2 "Treatment group, absent (N=17 firms)" ///
+					 3 "Control group (N=71 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(female_empowerment_index_ml, replace)
 graph export female_empowerment_index_ml.png, replace

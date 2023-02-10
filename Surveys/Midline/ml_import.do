@@ -40,7 +40,7 @@ foreach var of local ml_changes {
 	rename `var' `var'_ml
 }
 
-	* rename list_group to specify surveyround
+	* rename list_group to specify surveyround for pii data
 rename List_group List_group_ml
 
 	* put all pii variables into a local
@@ -63,12 +63,14 @@ save "${ml_raw}/consortia_ml_pii", replace
 
 restore
 
+	* rename list_group for analysis data
+rename List_group_ml list_group
 
 ***********************************************************************
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
 	* drop all pii
-drop ident_nouveau_personne_ml id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml 
+drop ident_nouveau_personne_ml id_ident id_ident2 firmname_change_ml ident_repondent_position_ml comptable_email comptable_numero Numero1_ml Numero2_ml email_ml
 
 
 ***********************************************************************
