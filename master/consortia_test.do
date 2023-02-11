@@ -247,7 +247,21 @@ replace needs_check = 0 if id_plateforme == 1204
 replace needs_check = 0 if id_plateforme == 1205
 replace needs_check = 0 if id_plateforme == 1243
 replace needs_check = 0 if id_plateforme == 1248
-
+replace needs_check = 0 if id_plateforme == 1000
+replace needs_check = 0 if id_plateforme == 1015 // does not want to answer comptability questions
+replace needs_check = 0 if id_plateforme == 1017
+replace needs_check = 0 if id_plateforme == 1020
+replace needs_check = 0 if id_plateforme == 1041
+replace needs_check = 0 if id_plateforme == 1043
+replace needs_check = 0 if id_plateforme == 1049 // full export company
+replace needs_check = 0 if id_plateforme == 1068 // does not want to answer comptability questions
+replace needs_check = 0 if id_plateforme == 1083 // entreprise closed 
+replace needs_check = 0 if id_plateforme == 1087
+replace needs_check = 0 if id_plateforme == 1123 // no activity in 2022
+replace needs_check = 0 if id_plateforme == 1201
+replace needs_check = 0 if id_plateforme == 1210
+replace needs_check = 0 if id_plateforme == 1222
+replace needs_check = 0 if id_plateforme == 1240
 ***********************************************************************
 * 	PART 7:  Export an excel sheet with needs_check variables  			
 ***********************************************************************

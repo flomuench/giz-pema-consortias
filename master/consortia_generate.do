@@ -115,9 +115,15 @@ replace refus = 1 if id_plateforme == 1168 & surveyround == 2
 
 		* endline
 
-
 ***********************************************************************
-* 	PART II.2:    Create missing variables for accounting number --> delete after midline		  
+* 	PART 2.2:  entreprise no longer in operations	
+***********************************************************************		
+gen closed = 0 
+lab var closed "Companies that are no longer operating"
+
+replace closed = 1 if id_plateforme == 1083
+***********************************************************************
+* 	PART II.3:    Create missing variables for accounting number --> delete after midline		  
 ***********************************************************************
 /*gen profit_2021_missing=0
 replace profit_2021_missing= 1 if profit_2021==.

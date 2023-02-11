@@ -95,6 +95,7 @@ replace ca="90000" if id_plateforme == 1000
 replace ca="1000000" if id_plateforme == 1001   //	"un million de dinars"
 replace ca="60000" if id_plateforme == 1010   
 replace ca="95659" if id_plateforme == 1013
+replace ca="700000" if id_plateforme == 1017
 replace ca="3300000" if id_plateforme == 1027   
 replace ca= "491233" if id_plateforme == 1028                                               
 replace ca="1000000" if id_plateforme == 1033  	//	"plus d'un milliards de dinar"
@@ -115,6 +116,8 @@ replace ca="15000" if id_plateforme == 1201
 replace ca="182000" if id_plateforme == 1239
 replace ca="25000" if id_plateforme == 1242
 replace ca="2000000" if id_plateforme == 1243
+replace ca="300000" if id_plateforme == 1043
+replace ca="1400000" if id_plateforme == 1240
 
 		* profit
 replace profit="27000" if id_plateforme == 1000		//    30% of total turnover
@@ -145,7 +148,12 @@ replace profit="2000" if id_plateforme == 1154
 replace profit="17000" if id_plateforme == 1155    
 replace profit="-999" if id_plateforme == 1161
 replace profit="-999" if id_plateforme == 1179
-replace profit="-20000" if id_plateforme == 1183                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+replace profit="-20000" if id_plateforme == 1183
+replace profit="60000" if id_plateforme == 1043
+replace profit="150000" if id_plateforme == 1087
+replace profit="7500" if id_plateforme == 1210		// 30% of total turnover
+replace profit="420000" if id_plateforme == 1240 	// 30% of total turnover
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 replace profit="30000" if id_plateforme == 1184                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 replace profit="2500" if id_plateforme == 1190
 replace profit="0" if id_plateforme == 1195                                                                            
@@ -183,9 +191,9 @@ replace ca_exp="30000" if id_plateforme == 1248    //    "moyenne"
         *exprep_inv
 replace exprep_inv= -888 if exprep_inv== 888
 replace exprep_inv= 70000 if id_plateforme== 983
-replace exprep_inv= 10000 if exprep_inv== 985 
+replace exprep_inv= 10000 if id_plateforme== 985 
 replace exprep_inv= -999 if exprep_inv== 999 
-replace exprep_inv= 0 if id_plateforme== 1000 
+replace exprep_inv= 1000 if id_plateforme== 1000 
 replace exprep_inv= 5000 if id_plateforme== 1013
 replace exprep_inv= 0 if id_plateforme== 1019
 replace exprep_inv= 0 if id_plateforme== 1020
@@ -203,8 +211,9 @@ replace exprep_inv= 3000 if id_plateforme== 1151
 replace exprep_inv=-888 if id_plateforme == 1161
 replace exprep_inv= 0 if id_plateforme == 1184
 replace exprep_inv= 0 if id_plateforme== 1224 
-replace exprep_inv= 100000 if exprep_inv== 1231 
-replace exprep_inv= 150000 if exprep_inv== 1243 
+replace exprep_inv= 100000 if id_plateforme== 1231 
+replace exprep_inv= 150000 if id_plateforme== 1243 
+replace exprep_inv = 3000 if id_plateforme == 1043
 
 		*ca_2021
 replace ca_2021="40000" if id_plateforme == 1159  // "moyenne"
@@ -218,29 +227,40 @@ replace employes = 40 if id_plateforme == 1033
 replace employes = 1 if id_plateforme == 1036
 replace employes = 15 if id_plateforme == 1147
 replace employes = 25 if id_plateforme == 1231
+replace employes = 34 if id_plateforme == 1020
+replace employes = 0 if id_plateforme == 1081 // seasonal employees
+
 
 replace car_empl1 = 2 if id_plateforme == 996
 replace car_empl1 = 35 if id_plateforme == 1027
 replace car_empl1 = 37 if id_plateforme == 1033
 replace car_empl1 = 13 if id_plateforme == 1147
 replace car_empl1 = 20 if id_plateforme == 1231
+replace car_empl1 =34 if id_plateforme == 1020
+replace car_empl1 = 0 if id_plateforme == 1081 // seasonal employees
+
 replace car_empl2 = 2 if id_plateforme == 996
 replace car_empl2 = 27 if id_plateforme == 1027
 replace car_empl2 = 20 if id_plateforme == 1033
 replace car_empl2 = 13 if id_plateforme == 1147
 replace car_empl2 = 21 if id_plateforme == 1231
+replace car_empl2 =25 if id_plateforme == 1020
+
 
 replace car_empl3 = 3 if id_plateforme == 996
 replace car_empl3 = 38 if id_plateforme == 1027
 replace car_empl3 = 40 if id_plateforme == 1033
 replace car_empl3 = 15 if id_plateforme == 1147
 replace car_empl3 = 25 if id_plateforme == 1231
+replace car_empl3 =30 if id_plateforme == 1020
+
 
 replace car_empl4 = 0 if id_plateforme == 996
 replace car_empl4 = 0 if id_plateforme == 1027
 replace car_empl4 = 0 if id_plateforme == 1033
 replace car_empl4 = 0 if id_plateforme == 1147
 replace car_empl4 = 0 if id_plateforme == 1231
+replace car_empl4 = 0 if id_plateforme == 1081 // seasonal employees
 
 	
 	* loop over all accounting variables with string
@@ -383,7 +403,21 @@ replace exp_pra_foire = 0 if id_plateforme == 1224
 replace exp_pra_plan= 0 if id_plateforme == 1224
  
 replace exp_pra_foire = 0 if id_plateforme == 1225 
-replace exp_pra_sci = 0 if id_plateforme == 1225 
+replace exp_pra_sci = 0 if id_plateforme == 1225
+
+replace exp_pra_sci = 0 if id_plateforme == 1000
+replace exp_pra_mission = 0 if id_plateforme == 1000
+replace exp_pra_foire = 0 if id_plateforme == 1000
+
+replace exp_pra_mission = 0 if id_plateforme == 1020
+
+replace exp_pra_plan = 0 if id_plateforme == 1201
+
+replace exp_pra_cible = 0 if id_plateforme == 1240
+replace exp_pra_plan = 0 if id_plateforme == 1240
+replace exp_pra_foire = 0 if id_plateforme == 1240
+
+
 
 
 ***********************************************************************
