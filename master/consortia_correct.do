@@ -165,8 +165,6 @@ gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
 
-
-***********************************************************************
 * 	PART 5:  export matricule fiscal for admin data from CEPEX
 ***********************************************************************
 export excel id_plateforme matricule_fiscale firmname matricule_fisc_incorrect using"${master_gdrive}/matricule_consortium_cepex", replace firstrow(var)
@@ -191,7 +189,11 @@ replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
 
-
+***********************************************************************
+* 	PART 2:   	Manually correct baseline with new midline data
+***********************************************************************
+replace  ca =150000 if id_plateforme == 1222 & surveyround == 1
+***********************************************************************
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
