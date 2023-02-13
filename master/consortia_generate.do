@@ -70,6 +70,8 @@ foreach var of local take_up_vars {
 	* Create take-up percentage per firm
 egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
 replace take_up_per = take_up_per/10
+replace take_up_per = 0 if surveyround == 1
+replace take_up_per = 0 if surveyround == 2 & treatment == 0 
 
 	* create a take_up
 gen take_up = 0, a(take_up_per)
