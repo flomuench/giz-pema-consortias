@@ -204,6 +204,10 @@ if (1) do "${master_github}/consortia_test.do"
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
-	PART 4.2: Regressions
+	PART 4.2: Regressions midline
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_regressions.do"
+if (1) do "${master_github}/consortia_regressions_ml.do"
+/* --------------------------------------------------------------------
+	PART 4.3: Regressions endline
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_regressions_el.do"
