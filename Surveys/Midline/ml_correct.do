@@ -156,6 +156,7 @@ replace exprep_inv= 0 if id_plateforme== 1020
 replace exprep_inv= 0 if id_plateforme== 1055 
 replace exprep_inv= 1000 if id_plateforme== 1000
 replace exprep_inv= 3000 if id_plateforme== 1043
+replace exprep_inv= -999 if id_plateforme== 1140
 replace exprep_inv= 1300 if id_plateforme== 1159
 replace exprep_inv= 10000 if id_plateforme== 1240
 
@@ -173,10 +174,10 @@ replace employes = 7 if id_plateforme == 1041
 replace employes = 7 if id_plateforme == 1081
 
     *car employes
-replace car_carempl1 = 34 if id_plateforme == 1020
-replace car_carempl2 = 25 if id_plateforme == 1020
-replace car_carempl3 = 30 if id_plateforme == 1020
-replace car_carempl4 = 4 if id_plateforme == 1020
+replace car_empl1 = 34 if id_plateforme == 1020
+replace car_empl1 = 25 if id_plateforme == 1020
+replace car_empl1 = 30 if id_plateforme == 1020
+replace car_empl1 = 4 if id_plateforme == 1020
 
 
 		* ssa activites
@@ -224,6 +225,8 @@ replace exp_pra_cible = 0 if id_plateforme == 1240
 replace exp_pra_mission = 1 if id_plateforme == 1240
 replace exp_pra_plan = 0 if id_plateforme == 1240
 replace exp_pra_foire = 0 if id_plateforme == 1240
+
+replace exp_pra_cible = 0 if id_plateforme == 1140
 
 
 	* loop over all accounting variables with string
@@ -343,9 +346,9 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 6:  autres / miscellaneous adjustments
 ***********************************************************************
 	* correct wrongly coded values for man_hr_obj
-replace man_hr_obj = 0 if man_hr_obj == 0.25
-replace man_hr_obj = 0.25 if man_hr_obj == 0.5
-label values man_hr_obj label_promo
+replace man_hr_pro = 0 if man_hr_pro == 0.25
+replace man_hr_pro = 0.25 if man_hr_pro == 0.5
+label values man_hr_pro label_promo
 
 ***********************************************************************
 * 	PART 7:  Destring remaining numerical vars

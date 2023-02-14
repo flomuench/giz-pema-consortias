@@ -262,6 +262,13 @@ replace needs_check = 0 if id_plateforme == 1201
 replace needs_check = 0 if id_plateforme == 1210
 replace needs_check = 0 if id_plateforme == 1222
 replace needs_check = 0 if id_plateforme == 1240
+replace needs_check = 0 if id_plateforme == 1026
+
+replace needs_check = 0 if id_plateforme == 1119
+replace needs_check = 0 if id_plateforme == 1137
+replace needs_check = 0 if id_plateforme == 1153
+replace needs_check = 0 if id_plateforme == 1214
+
 ***********************************************************************
 * 	PART 7:  Export an excel sheet with needs_check variables  			
 ***********************************************************************

@@ -27,11 +27,12 @@ qui cap log c
 
 
 	* install packages
-/* 
+/*
 ssc install blindschemes, replace
 ssc install groups, replace
 ssc install ihstrans, replace
 ssc install winsor2, replace
+ssc install ietoolkit, replace
 ssc install scheme-burd, replace
 ssc install ranktest
 net install cleanplots, from("https://tdmize.github.io/data/cleanplots")
@@ -147,7 +148,7 @@ global ml_progress = "${ml_output}/progress-eligibility-characteristics"
 				* master
 global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_power = "${master_output}/power"
-global master_regressiontables = "${master_output}/regression_tables"
+global master_regressiontables = "${master_output}/tables"
 global master_figures = "${master_figures}/figures"
 
 		
@@ -202,7 +203,7 @@ if (1) do "${master_github}/consortia_test.do"
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/consortia_visualisations.do"
+if (0) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions midline
 ----------------------------------------------------------------------*/
