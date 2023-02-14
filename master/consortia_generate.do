@@ -143,7 +143,7 @@ replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 ***********************************************************************
 
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_pers num_inno ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
 ds `allvars', has(type string)
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -282,13 +282,13 @@ local wins_vars "ca ca_exp profit exprep_inv"
 foreach var of local wins_vars {
 	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
 	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
-	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 /// replace survey missings as missing
+	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
 }
 
-lab var ihs_ca99 "IHS of turnover, wins.99th"
-lab var ihs_ca_exp99 "IHS of exports, wins.99th"
-lab var ihs_profit99 "IHS of profit, wins.99th"
-lab var ihs_exprep_inv "IHS of export investement, wins.99th"
+lab var ihs_ca_w99 "IHS of turnover, wins.99th"
+lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
+lab var ihs_profit_w99 "IHS of profit, wins.99th"
+lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 
 
 ***********************************************************************
