@@ -175,9 +175,9 @@ replace employes = 7 if id_plateforme == 1081
 
     *car employes
 replace car_empl1 = 34 if id_plateforme == 1020
-replace car_empl1 = 25 if id_plateforme == 1020
-replace car_empl1 = 30 if id_plateforme == 1020
-replace car_empl1 = 4 if id_plateforme == 1020
+replace car_empl2 = 25 if id_plateforme == 1020
+replace car_empl3 = 30 if id_plateforme == 1020
+replace car_empl4 = 4 if id_plateforme == 1020
 
 
 		* ssa activites
