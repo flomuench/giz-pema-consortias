@@ -16,7 +16,7 @@
 * 	Part 0: 	set the stage		  
 ***********************************************************************
 
-use "${master_final}/consortia_master_final", clear
+use "${master_final}/consortium_final", clear
 		
 		* change directory
 cd "${master_regressiontables}/midline"
@@ -57,14 +57,12 @@ esttab `regressions' using "ml_attrition.tex", replace ///
 	
 * balance after attrition
 	* with outliers (Gourmandise)
-iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0, grpvar(treatment) ftest save(baltab_midline_all) replace ///
-			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
-			 format(%12.2fc)
-			 
+iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0, grpvar(treatment) ftest  vce(robust) format(%12.2fc) savexlsx(baltab_midline_all) replace
+						 
 	* w/o outliers
-iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0 & id_plateforme != 1092, grpvar(treatment) ftest save(baltab_midline_wo_outlier) replace ///
-			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
-			 format(%12.2fc)
+iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0 & id_plateforme != 1092, grpvar(treatment) ftest vce(robust) format(%12.2fc) savexlsx(baltab_midline_wo_outlier) replace 
+			 
+			
 	
 ***********************************************************************
 * 	PART 1.2: Management practices index		
@@ -211,11 +209,12 @@ esttab `regressions' using "ml_genderi.tex", replace ///
 	label ///
 	b(3) ///
 	se(3) ///
-	drop(*.strata) ///
+	drop(*.strata_final) ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+
 	
 	
 ***********************************************************************
@@ -262,13 +261,13 @@ esttab `regressions' using "ml_eri.tex", replace ///
 	label ///
 	b(3) ///
 	se(3) ///
-	drop(*.strata) ///
+	drop(*.strata_final) ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
-	
+
 ***********************************************************************
 * 	PART 1.5: Innovations index		
 ***********************************************************************
@@ -314,11 +313,12 @@ esttab `regressions' using "ml_innovations.tex", replace ///
 	label ///
 	b(3) ///
 	se(3) ///
-	drop(*.strata) ///
+	drop(*.strata_final) ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
 	
 	
 * innovated
@@ -363,17 +363,213 @@ esttab `logitressions' using "ml_innovated.tex", replace ///
 	label ///
 	b(3) ///
 	se(3) ///
-	drop(*.strata) ///
+	drop(*.strata_final) ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Columns (1) - (4) present estimates based on logit models." "Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
 
+***********************************************************************
+* 	PART 1.6: Network regression (total size)	
+***********************************************************************
+	* ATE, ancova
 	
+			* no significant baseline differences
+reg net_size i.treatment if surveyround == 1, vce(hc3)
+
+			* pure mean comparison at midline 
+eststo ns1, r: reg net_size i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+		
+			* ancova without stratification dummies 
+eststo ns2, r: reg net_size i.treatment l.net_size, cluster(id_plateforme) /*lagged value (l): include the value of the variable in previous survey_round*/
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies 
+eststo ns3, r: reg net_size i.treatment l.net_size i.strata_final, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD 
+eststo ns4, r: xtreg net_size i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+	* ATT, IV (participation in phase 1 meetings) 
+eststo ns5, r:ivreg2 net_size l.net_size i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_ns5
+
+	* ATT, IV (participation in consortium)
+eststo ns6, r:ivreg2 net_size l.net_size i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions ns1 ns2 ns3 ns4 ns5 ns6
+esttab `regressions' using "ml_net_size.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+
+***********************************************************************
+* 	PART 1.7: Network regression (female network)	
+***********************************************************************
+	* ATE, ancova
+	
+			* pure mean comparison at midline 
+eststo nf1, r: reg net_nb_f i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+		
+			* ancova without stratification dummies 
+eststo nf2, r: reg net_nb_f i.treatment, cluster(id_plateforme) 
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies 
+eststo nf3, r: reg net_nb_f i.treatment i.strata_final, cluster(id_plateforme) 
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			/* DiD (create an aggreate variable for network size)
+eststo ep4, r: xtreg net_nb_f i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+*/
+	* ATT, IV (participation in phase 1 meetings) 
+eststo nf4, r:ivreg2 net_nb_f i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_nf4
+
+	* ATT, IV (participation in consortium)
+eststo nf5, r:ivreg2 net_nb_f i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions nf1 nf2 nf3 nf4 nf5
+esttab `regressions' using "ml_net_nb_f.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+
+	
+***********************************************************************
+* 	PART 1.8: Network regression (male network)	
+***********************************************************************
+	* ATE, ancova
+	
+			* pure mean comparison at midline (create an aggreate variable for network size)
+eststo nm1, r: reg net_nb_m i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+		
+			* ancova without stratification dummies 
+eststo nm2, r: reg net_nb_m i.treatment, cluster(id_plateforme) 
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies 
+eststo nm3, r: reg net_nb_m i.treatment i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			/* DiD 
+eststo ep4, r: xtreg eri i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+*/
+	* ATT, IV (participation in phase 1 meetings) 
+eststo nm4, r:ivreg2 net_nb_m i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_nm4
+
+	* ATT, IV (participation in consortium)
+eststo nm5, r:ivreg2 net_nb_m i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions nm1 nm2 nm3 nm4 nm5 
+esttab `regressions' using "ml_net_nb_m.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+
+
+***********************************************************************
+* 	PART 1.8: Network regression (Quality of adivce)	
+***********************************************************************
+* ATE, ancova
+			* no significant baseline differences
+reg net_nb_qualite i.treatment if surveyround == 1, vce(hc3)
+
+			* pure mean comparison at midline
+eststo nq1, r: reg net_nb_qualite i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+
+			* ancova without stratification dummies
+eststo nq2, r: reg net_nb_qualite i.treatment l.net_nb_qualite, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo nq3, r: reg net_nb_qualite i.treatment l.net_nb_qualite i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD
+eststo nq4, r: xtreg net_nb_qualite i.treatment##i.surveyround i.strata_final, vce(cluster id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+	* ATT, IV (with 1 session counting as taken up)
+eststo nq5, r:ivreg2 net_nb_qualite l.net_nb_qualite i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_in4
+
+	* ATT, IV (with 1 session counting as taken up)
+eststo nq6, r:ivreg2 net_nb_qualite l.net_nb_qualite i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions nq1 nq2 nq3 nq4 nq5 nq6
+esttab `regressions' using "ml_net_nb_qualite.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Columns (1) - (4) present estimates based on logit models." "Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+
 /*
-
-
 preserve
 keep if surveyround==1
 

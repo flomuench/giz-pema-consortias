@@ -33,8 +33,7 @@ gen comptable_missing = 0, a(comptable_email)
 	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
 
 
-* PART 3: Ne veulent plus etre contactee 
- 
+
 ***********************************************************************
 * 	PART 3:  save
 ***********************************************************************
@@ -109,15 +108,15 @@ replace refus = 1 if id_plateforme == 1162 & surveyround == 2
 replace refus = 1 if id_plateforme == 1166 & surveyround == 2
 replace refus = 1 if id_plateforme == 1112 & surveyround == 2
 replace refus = 1 if id_plateforme == 1235 & surveyround == 2
-replace refus = 1 if id_plateforme == 1083 & surveyround == 2
-replace refus = 1 if id_plateforme == 1137 & surveyround == 2
 replace refus = 1 if id_plateforme == 1044 & surveyround == 2
 replace refus = 1 if id_plateforme == 1067 & surveyround == 2 //Demande d'enlever tous ses informations de la base de contact
 replace refus = 1 if id_plateforme == 1071 & surveyround == 2 //Refus de répondre aux informations comptables
 replace refus = 1 if id_plateforme == 1193 & surveyround == 2 //Refus de répondre aux informations comptables
 replace refus = 1 if id_plateforme == 1136 & surveyround == 2
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2
-
+replace refus = 1 if id_plateforme == 1083 & surveyround == 2
+replace refus = 1 if id_plateforme == 1137 & surveyround == 2
+replace refus = 1 if id_plateforme == 1026 & surveyround == 2
 
 		* endline
 
@@ -305,7 +304,13 @@ br id_plateforme surveyround innovations innovated
 lab var innovations "total innovations, max. 4"
 lab var innovated "innovated"
 
-
+***********************************************************************
+*	PART VII. Innovation
+***********************************************************************	
+gen net_size =.
+replace net_size = net_nb_f + net_nb_m if surveyround ==2
+replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
+lab var net_size "Size of the female entrepreuneur network"
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
