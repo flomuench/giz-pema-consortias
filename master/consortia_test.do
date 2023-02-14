@@ -222,6 +222,12 @@ replace needs_check = 0 if id_plateforme == 1170
 replace needs_check = 0 if id_plateforme == 1193
 replace needs_check = 0 if id_plateforme == 1193
 replace needs_check = 0 if id_plateforme == 1175
+replace needs_check = 0 if id_plateforme == 1049
+replace needs_check = 0 if id_plateforme == 1068
+replace needs_check = 0 if id_plateforme == 1123
+replace needs_check = 0 if id_plateforme == 1222
+
+
 
 
 ***********************************************************************
