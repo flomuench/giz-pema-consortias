@@ -9,14 +9,11 @@
 *				PART 2: Prepare dynamic folder paths & globals		  
 *				PART 3: Run all do-files                          											  
 *																	  
-*	Author:  	Fabian Scheifele							    
-*	ID variable: id_email		  					  
-*	Requires:  	  										  
-*	Creates:  master-data-consortias; 
+*	Author:  	Florian Münch, Fabian Scheifele							    
+*	ID variable: id_plateforme (id for firms), surveyround (panel time id)
 ***********************************************************************
 * 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
-
 	* set standard settings
 version 15
 clear all
@@ -207,6 +204,10 @@ if (1) do "${master_github}/consortia_test.do"
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
-	PART 4.2: Regressions
+	PART 4.2: Regressions midline
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_regressions.do"
+if (1) do "${master_github}/consortia_regressions_ml.do"
+/* --------------------------------------------------------------------
+	PART 4.3: Regressions endline
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_regressions_el.do"

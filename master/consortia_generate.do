@@ -71,6 +71,8 @@ foreach var of local take_up_vars {
 	* Create take-up percentage per firm
 egen take_up_per = rowtotal(webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique), missing
 replace take_up_per = take_up_per/10
+replace take_up_per = 0 if surveyround == 1
+replace take_up_per = 0 if surveyround == 2 & treatment == 0 
 
 	* create a take_up
 gen take_up = 0, a(take_up_per)
@@ -109,13 +111,25 @@ replace refus = 1 if id_plateforme == 1112 & surveyround == 2
 replace refus = 1 if id_plateforme == 1235 & surveyround == 2
 replace refus = 1 if id_plateforme == 1083 & surveyround == 2
 replace refus = 1 if id_plateforme == 1137 & surveyround == 2
+replace refus = 1 if id_plateforme == 1044 & surveyround == 2
+replace refus = 1 if id_plateforme == 1067 & surveyround == 2 //Demande d'enlever tous ses informations de la base de contact
+replace refus = 1 if id_plateforme == 1071 & surveyround == 2 //Refus de répondre aux informations comptables
+replace refus = 1 if id_plateforme == 1193 & surveyround == 2 //Refus de répondre aux informations comptables
+replace refus = 1 if id_plateforme == 1136 & surveyround == 2
+replace refus = 1 if id_plateforme == 1168 & surveyround == 2
 
 
 		* endline
 
-
 ***********************************************************************
-* 	PART II.2:    Create missing variables for accounting number --> delete after midline		  
+* 	PART 2.2:  entreprise no longer in operations	
+***********************************************************************		
+gen closed = 0 
+lab var closed "Companies that are no longer operating"
+
+replace closed = 1 if id_plateforme == 1083
+***********************************************************************
+* 	PART II.3:    Create missing variables for accounting number --> delete after midline		  
 ***********************************************************************
 /*gen profit_2021_missing=0
 replace profit_2021_missing= 1 if profit_2021==.
@@ -133,7 +147,7 @@ replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 ***********************************************************************
 
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp inno_produit inno_process inno_lieu inno_commerce inno_pers num_inno ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
 ds `allvars', has(type string)
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -165,13 +179,13 @@ foreach var of local allvars {
 
 	* calculate the index value: average of zscores 
 			* export readiness index (eri)
-egen eri = rowmean(temp_exprep_normez temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_exprep_norme)			
+egen eri = rowmean(temp_exprep_normez temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exprep_normez)			
 			
 			* export readiness SSA index (eri_ssa)
 egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z temp_ssa_action4z temp_ssa_action5z)
 
 			* management practices (mpi)
-egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awa temp_man_fin_per_fre) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed
+egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez temp_man_hr_proz temp_man_fin_numz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
 			
 			* marketing practices index (marki)
 egen marki = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz)
@@ -214,7 +228,7 @@ egen eri_points = rowtotal(exprep_norme exp_pra_foire exp_pra_sci exp_pra_rexp e
 egen eri_ssa_points = rowtotal(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5), missing
 
 			* management practices (mpi)
-egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_ind_awa man_fin_per_fre), missing
+egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_ind_awa man_fin_per_fre man_fin_num), missing
 			
 			* marketing practices index (marki)
 egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub), missing
@@ -230,14 +244,14 @@ egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_
 egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp), missing
 
 		* labeling
-label var eri "Export readiness index points"
-label var eri_ssa "Export readiness SSA index points"
-label var mpi "Management practices index points"
-label var marki "Marketing practices index points"
-label var female_efficacy "Women's entrepreneurial effifacy points"
-label var female_initiative "Women's entrepreneurial initiaitve points"
-label var female_loc "Women's locus of control points"
-label var genderi "Gender index points"
+label var eri_points "Export readiness index points"
+label var eri_ssa_points "Export readiness SSA index points"
+label var mpi_points "Management practices index points"
+label var marki_points "Marketing practices index points"
+label var female_efficacy_points "Women's entrepreneurial effifacy points"
+label var female_initiative_points "Women's entrepreneurial initiaitve points"
+label var female_loc_points "Women's locus of control points"
+label var genderi_points "Gender index points"
 
 	* drop temporary vars		  										  
 drop temp_*
@@ -266,43 +280,32 @@ use links to understand the code syntax for creating the accounting variables' g
 
 ***********************************************************************
 *	PART VI. Financial indicators
+***********************************************************************
+	* winsorize & ihs-transform
+local wins_vars "ca ca_exp profit exprep_inv"
+foreach var of local wins_vars {
+	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
+	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
+	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
+}
+
+lab var ihs_ca_w99 "IHS of turnover, wins.99th"
+lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
+lab var ihs_profit_w99 "IHS of profit, wins.99th"
+lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
+
+
+***********************************************************************
+*	PART VII. Innovation
 ***********************************************************************	
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
+bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+br id_plateforme surveyround innovations innovated
+
+lab var innovations "total innovations, max. 4"
+lab var innovated "innovated"
 
 
-	*generate winsors
-winsor ca, gen(w99_ca) p(0.01) highonly
-winsor ca_exp, gen(w99_ca_exp) p(0.01) highonly
-winsor profit, gen(w99_profit) p(0.01) highonly
-winsor exprep_inv, gen(w99_exprep_inv) p(0.01) highonly
-*winsor ca_2021, gen(w99_ca_2021) p(0.01) highonly
-*winsor ca_exp_2021, gen(w99_ca_exp_2021) p(0.01) highonly
-*winsor profit_2021, gen(w99_profit_2021) p(0.01) highonly
-
-	*generate ihs & label it
-gen ihs_ca99 = log(w99_ca + sqrt((w99_ca*w99_ca)+1))
-lab var ihs_ca99 "IHS of turnover in 2022, wins.99th"
-
-gen ihs_ca_exp99 = log(w99_ca_exp + sqrt((w99_ca_exp*w99_ca_exp)+1))
-lab var ihs_ca_exp99 "IHS of exports in 2022, wins.99th"
-
-gen ihs_profit99 = log(w99_profit + sqrt((w99_profit*w99_profit)+1))
-lab var ihs_profit99 "IHS of profit in 2022, wins.99th"
-
-gen ihs_exprep_inv = log(w99_exprep_inv + sqrt((w99_exprep_inv*w99_exprep_inv)+1))
-lab var ihs_exprep_inv "IHS of export investement in 2022, wins.99th"
-
-	*no values in these variables, winsor not working
-*gen ihs_ca_2021 = log(w99_ca_2021 + sqrt((w99_ca_2021*w99_ca_2021)+1))
-*lab var ihs_ca_2021 "IHS of trunover in 2021, wins.99th"
-
-*gen ihs_ca_exp_2021 = log(w99_ca_exp_2021 + sqrt((w99_ca_exp_2021*w99_ca_exp_2021)+1))
-*lab var ihs_ca_exp_2021 "IHS of exports in 2021, wins.99th"
-
-*gen ihs_profit_2021 = log(w99_profit_2021 + sqrt((w99_profit_2021*w99_profit_2021)+1))
-*lab var ihs_profit_2021 "IHS of profit in 2021, wins.99th"
-
-	*drop baseline winsorized
-*drop w_ca2021 w_caexp2021 w_profit2021 w_nonfamilynetwork w_exprep_inv
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

@@ -9,14 +9,13 @@
 *				PART 2: Prepare dynamic folder paths & globals		  
 *				PART 3: Run all do-files                          											  
 *																	  
-*	Author:  	Ayoub Chamakhi, Kais Jomaa, Amina Bousnina							    
+*	Author:  	Florian Münch, Ayoub Chamakhi, Kais Jomaa, Amina Bousnina							    
 *	ID variable: 		  					  
 *	Requires:  	  										  
 *	Creates:  
 ***********************************************************************
 * 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
-
 	* set standard settings
 version 15
 clear all

@@ -55,7 +55,7 @@ xtset id_plateforme surveyround, delta(1)
 ***********************************************************************
 * 	PART 3:     remove unnecessary variables
 ***********************************************************************
-drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector heurefin
+drop eligible programme needs_check questions_needing_check eligibilité dup_emailpdg dup_firmname question_unclear_regis _merge_ab check_again random_number rank ident2 questions_needing_checks commentsmsb dup dateinscription date_creation_string subsector_var subsector heurefin exp_labor_productivity labor_productivity ca_mean ca_expmean ca_check question_unclear_regis qadmin_correct qadmin_correct2 questions_needing_checks commentsmsb waiting_list reasons mngtvars markvars exportprep gendervars exportmngt mngtvars_points markvars_points innovars_points gendervars_points innovars num_inno inno_aucune
 
 
 * activate after midline: drop ca_2021 ca_exp_2021 profit_2021 // utiliser au niveau de la midline re-demander des infos manquantes.

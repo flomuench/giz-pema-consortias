@@ -269,7 +269,7 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Management practices"), bold
 
 		* Key Performance indicators (KPIs)
-graph hbar (percent), over(man_fin_per, relabel(1 "aucun" 2 "1-2" 3 "3-9" 4 "10+")) over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+graph hbar (percent), over(man_fin_num, relabel(1 "aucun" 2 "1-2" 3 "3-9" 4 "10+")) over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
     title("Number of KPIs") ///
 	ylabel(0(5)50, nogrid)
 gr export ml_performance.png, replace
@@ -305,7 +305,7 @@ graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-
 */ 
 
 *Employees motivation
-graph hbar (percent), over(man_hr_obj, relabel(1 "individual performance + firm" 2 "individual performance" 3 "other factors" 4 "None")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph hbar (percent), over(man_hr_pro, relabel(1 "individual performance + firm" 2 "individual performance" 3 "other factors" 4 "None")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
     legend(pos(2) row(3) size(vsmall)) ///
     title("Employees Motivation") ///
 	ylabel(0(10)100, nogrid)
@@ -429,7 +429,7 @@ putpdf pagebreak
 	
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group_ml, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
+graph bar listexp, over(list_group, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///

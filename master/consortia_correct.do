@@ -95,15 +95,11 @@ replace matricule_fisc_incorrect=1 if id_plateforme == 1083
 replace matricule_fisc_incorrect=1 if id_plateforme == 1094
 replace matricule_fisc_incorrect=1 if id_plateforme == 1095
 replace matricule_fisc_incorrect=1 if id_plateforme == 1128
-replace matricule_fisc_incorrect=1 if id_plateforme == 1146
-replace matricule_fisc_incorrect=1 if id_plateforme == 1150
 replace matricule_fisc_incorrect=1 if id_plateforme == 1182
-replace matricule_fisc_incorrect=1 if id_plateforme == 1185
 replace matricule_fisc_incorrect=1 if id_plateforme == 1190
 replace matricule_fisc_incorrect=1 if id_plateforme == 1191
 replace matricule_fisc_incorrect=1 if id_plateforme == 1193
 replace matricule_fisc_incorrect=1 if id_plateforme == 1197
-replace matricule_fisc_incorrect=1 if id_plateforme == 1205
 replace matricule_fisc_incorrect=1 if id_plateforme == 1214
 replace matricule_fisc_incorrect=1 if id_plateforme == 1245
 
@@ -123,10 +119,14 @@ replace matricule_fiscale = "1225272C" if id_plateforme == 994
 replace matricule_fiscale = "1677629Z" if id_plateforme == 997
 replace matricule_fiscale = "1721782L" if id_plateforme == 1036
 replace matricule_fiscale = "1219150E?" if id_plateforme == 1095
+replace matricule_fiscale = "854949V" if id_plateforme == 1128
 replace matricule_fiscale = "1463126T" if id_plateforme == 1134
+replace matricule_fiscale = "1795325T" if id_plateforme == 1146
 replace matricule_fiscale = "1748667A" if id_plateforme == 1191
-replace matricule_fiscale = "1179494D?" if id_plateforme == 1205
+replace matricule_fiscale = "1610602Z" if id_plateforme == 1205
 replace matricule_fiscale = "0111519V" if id_plateforme == 1248
+replace matricule_fiscale = "1542155Q" if id_plateforme == 1150
+replace matricule_fiscale = "1755985E" if id_plateforme == 1185
 
 
 ***********************************************************************
@@ -187,10 +187,228 @@ use "${master_intermediate}/consortium_inter", clear
 ***********************************************************************
 * 	PART 1:  change pole information
 ***********************************************************************
+*Adding pole information for the midline
+
+foreach var in pole{
+bysort id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == .
+}
+
 replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
 
+***********************************************************************
+* 	PART 2:  Correct old accounting values
+***********************************************************************
+		* Correcting ca
+replace ca_2018 = 800000 if id_plateforme == 991
+replace ca_2019 = 1400000 if id_plateforme == 991
+
+replace ca_2019 = 1700000 if id_plateforme == 995
+
+replace ca_2018 = 33000 if id_plateforme == 1013
+replace ca_2019 = 45000 if id_plateforme == 1013
+replace ca_2020 = 123000 if id_plateforme == 1013
+
+replace ca_2020 = 10000 if id_plateforme == 1019
+
+replace ca_2020 = 3000 if id_plateforme == 1020
+
+replace ca_2020 = 2420209 if id_plateforme == 1027
+replace ca_2019 = 138826 if id_plateforme == 1027
+
+replace ca_2020 = 60000 if id_plateforme == 1030
+replace ca_2019 = 25000 if id_plateforme == 1030
+
+replace ca_2018 = 100000 if id_plateforme == 1035
+replace ca_2019 = 80000 if id_plateforme == 1035
+replace ca_2020 = 6000 if id_plateforme == 1035
+
+replace ca_2018 = 40000 if id_plateforme == 1041
+replace ca_2019 = 150000 if id_plateforme == 1041
+replace ca_2020 = 250000 if id_plateforme == 1041
+
+replace ca_2020 = 1000000 if id_plateforme == 1042
+replace ca_2019 = 1000000 if id_plateforme == 1042
+
+replace ca_2018 = 295000 if id_plateforme == 1043
+replace ca_2019 = 550000 if id_plateforme == 1043
+replace ca_2020 = 300000 if id_plateforme == 1043
+
+replace ca_2019 = 20000 if id_plateforme == 1044
+replace ca_2020 = 25000 if id_plateforme == 1044
+
+replace ca_2018 = 150000 if id_plateforme == 1074
+replace ca_2019 = 250000 if id_plateforme == 1074
+replace ca_2020 = 200000 if id_plateforme == 1074
+
+replace ca_2020 = 300000 if id_plateforme == 1087
+
+replace ca_2019 = 113280 if id_plateforme == 1088
+replace ca_2020 = 75831 if id_plateforme == 1088
+
+replace ca_2018 = 26423000 if id_plateforme == 1092
+replace ca_2019 = 29749000 if id_plateforme == 1092
+replace ca_2020 = 25864000 if id_plateforme == 1092
+
+replace ca_2020 = 147000 if id_plateforme == 1096
+
+replace ca_2020 = 5000 if id_plateforme == 1108
+
+replace ca_2019 = 100000 if id_plateforme == 1110
+replace ca_2020 = 37000 if id_plateforme == 1110
+
+replace ca_2018 = 256000 if id_plateforme == 1117
+replace ca_2019 = 376000 if id_plateforme == 1117
+replace ca_2020 = 176000 if id_plateforme == 1117
+
+replace ca_2018 = 2847421 if id_plateforme == 1119
+replace ca_2019 = 3792943 if id_plateforme == 1119
+replace ca_2020 = 3904562 if id_plateforme == 1119
+
+replace ca_2019 = 15000 if id_plateforme == 1123
+
+replace ca_2019 = 150000 if id_plateforme == 1154
+replace ca_2020 = 20000 if id_plateforme == 1154
+
+replace ca_2019 = 21100 if id_plateforme == 1157
+replace ca_2020 = 38500 if id_plateforme == 1157
+
+replace ca_2020 = 4500 if id_plateforme == 1245
+
+replace ca_2018 = 189869 if id_plateforme == 1242
+replace ca_2019 = 103050 if id_plateforme == 1242
+replace ca_2020 = 86627 if id_plateforme == 1242
+
+replace ca_2018 = 2663000 if id_plateforme == 1240
+replace ca_2019 = 1502130 if id_plateforme == 1240
+replace ca_2020 = 82630 if id_plateforme == 1240
+
+replace ca_2018 = 0 if id_plateforme == 1231
+replace ca_2019 = 50000 if id_plateforme == 1231
+replace ca_2020 = 100000 if id_plateforme == 1231
+
+replace ca_2018 = 5000 if id_plateforme == 1210
+replace ca_2019 = 20000 if id_plateforme == 1210
+replace ca_2020 = 20000 if id_plateforme == 1210
+
+replace ca_2018 = 70000 if id_plateforme == 1197
+replace ca_2019 = 25000 if id_plateforme == 1197
+replace ca_2020 = 55000 if id_plateforme == 1197
+
+replace ca_2018 = 20000 if id_plateforme == 1193
+replace ca_2019 = 10000 if id_plateforme == 1193
+replace ca_2020 = 20000 if id_plateforme == 1193
+
+replace ca_2018 = 8000 if id_plateforme == 1192
+replace ca_2019 = 4000 if id_plateforme == 1192
+replace ca_2020 = 3000 if id_plateforme == 1192
+
+replace ca_2018 = 4500 if id_plateforme == 1186
+replace ca_2019 = 2000 if id_plateforme == 1186
+replace ca_2020 = 1000 if id_plateforme == 1186
+
+
+replace ca_2019 = 20000 if id_plateforme == 1182
+replace ca_2020 = 45000 if id_plateforme == 1182
+
+replace ca_2019 = 89056 if id_plateforme == 1178
+replace ca_2020 = 250670 if id_plateforme == 1178
+
+replace ca_2018 = . if id_plateforme == 1168 // verify after midline response
+replace ca_2019 = . if id_plateforme == 1168
+replace ca_2020 = . if id_plateforme == 1168
+
+replace ca_2018 = 10000 if id_plateforme == 1162
+replace ca_2019 = 20000 if id_plateforme == 1162
+replace ca_2020 = 5500 if id_plateforme == 1162
+
+replace ca_2018 = 120000 if id_plateforme == 1159
+replace ca_2019 = 50000 if id_plateforme == 1159
+
+replace ca_2019 = 150000 if id_plateforme == 1154
+replace ca_2020 = 20000 if id_plateforme == 1154
+
+		* Correcting ca_exp
+replace ca_exp2020 = 1500000 if id_plateforme == 995
+
+replace ca_exp2020 = 15960 if id_plateforme == 1027
+
+replace ca_exp2019 = 80000  if id_plateforme == 1041
+replace ca_exp2020 = 220000  if id_plateforme == 1041
+
+replace ca_exp2019 = 7000  if id_plateforme == 1042
+replace ca_exp2020 = 8000  if id_plateforme == 1042
+
+replace ca_exp2019 = 20000  if id_plateforme == 1044
+replace ca_exp2020 = 25000  if id_plateforme == 1044
+
+replace ca_exp2018 = 75000  if id_plateforme == 1074
+replace ca_exp2019 = 100000  if id_plateforme == 1074
+replace ca_exp2020 = 50000  if id_plateforme == 1074
+
+replace ca_exp2020 = 147000 if id_plateforme == 1096
+
+replace ca_exp2019 = 0  if id_plateforme == 1110
+replace ca_exp2020 = 100000  if id_plateforme == 1110
+
+replace ca_exp2018 = 13000  if id_plateforme == 1117
+replace ca_exp2019 = 26000  if id_plateforme == 1117
+replace ca_exp2020 = 5000  if id_plateforme == 1117
+
+replace ca_exp2018 = 2649925  if id_plateforme == 1119
+replace ca_exp2019 = 3441390  if id_plateforme == 1119
+replace ca_exp2020 = 3380415  if id_plateforme == 1119
+
+replace ca_exp2018 = 497078  if id_plateforme == 1137
+replace ca_exp2019 = 265972  if id_plateforme == 1137
+replace ca_exp2020 = 42790  if id_plateforme == 1137
+
+replace ca_exp2019 = 150000  if id_plateforme == 1154
+
+replace ca_exp2018 = 300000  if id_plateforme == 1158
+replace ca_exp2019 = 400000  if id_plateforme == 1158
+
+replace ca_exp2018 = 80000  if id_plateforme == 1159
+
+replace ca_exp2019 = 5000  if id_plateforme == 1162
+
+replace ca_exp2020 = 800000  if id_plateforme == 1170
+
+replace ca_exp2018 = 2100  if id_plateforme == 1186
+
+replace ca_exp2018 = 0  if id_plateforme == 1197
+replace ca_exp2019 = 800  if id_plateforme == 1197
+replace ca_exp2020 = 4000  if id_plateforme == 1197
+
+replace ca_exp2019 = 1329000  if id_plateforme == 1219
+replace ca_exp2020 = 480000  if id_plateforme == 1219
+
+replace ca_exp2019 = 25000  if id_plateforme == 1222
+replace ca_exp2020 = 25000  if id_plateforme == 1222
+
+replace ca_exp2020 = 2000  if id_plateforme == 1231
+
+replace ca_exp2020 = 3000  if id_plateforme == 1245
+
+		* correct baseline responses
+replace profit = 5000 if id_plateforme == 986 & surveyround == 1
+replace profit = 35000 if id_plateforme == 1084 & surveyround == 1
+replace profit = 50000 if id_plateforme == 1098 & surveyround == 1
+
+replace ca = 16000 if id_plateforme == 1054 & surveyround == 1
+
+replace ca = 1000000 if id_plateforme == 1008 & surveyround == 1
+
+replace ca = 150000 if id_plateforme == 1244 & surveyround == 1
+replace profit = 50000 if id_plateforme == 1244 & surveyround == 1
+
+replace ca = 40000 if id_plateforme == 1259 & surveyround == 1
+replace profit = 9000 if id_plateforme == 1259 & surveyround == 1
+
+replace ca = 62000 if id_plateforme == 1097 & surveyround == 1
+replace ca_exp = 30000 if id_plateforme == 1097 & surveyround == 1
+replace profit = 21000 if id_plateforme == 1097 & surveyround == 1
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
