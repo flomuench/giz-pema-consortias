@@ -276,43 +276,32 @@ use links to understand the code syntax for creating the accounting variables' g
 
 ***********************************************************************
 *	PART VI. Financial indicators
+***********************************************************************
+	* winsorize & ihs-transform
+local wins_vars "ca ca_exp profit exprep_inv"
+foreach var of local wins_vars {
+	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
+	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
+	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 /// replace survey missings as missing
+}
+
+lab var ihs_ca99 "IHS of turnover, wins.99th"
+lab var ihs_ca_exp99 "IHS of exports, wins.99th"
+lab var ihs_profit99 "IHS of profit, wins.99th"
+lab var ihs_exprep_inv "IHS of export investement, wins.99th"
+
+
+***********************************************************************
+*	PART VII. Innovation
 ***********************************************************************	
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
+bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+br id_plateforme surveyround innovations innovated
+
+lab var innovations "total innovations, max. 4"
+lab var innovated "innovated"
 
 
-	*generate winsors
-winsor ca, gen(w99_ca) p(0.01) highonly
-winsor ca_exp, gen(w99_ca_exp) p(0.01) highonly
-winsor profit, gen(w99_profit) p(0.01) highonly
-winsor exprep_inv, gen(w99_exprep_inv) p(0.01) highonly
-*winsor ca_2021, gen(w99_ca_2021) p(0.01) highonly
-*winsor ca_exp_2021, gen(w99_ca_exp_2021) p(0.01) highonly
-*winsor profit_2021, gen(w99_profit_2021) p(0.01) highonly
-
-	*generate ihs & label it
-gen ihs_ca99 = log(w99_ca + sqrt((w99_ca*w99_ca)+1))
-lab var ihs_ca99 "IHS of turnover in 2022, wins.99th"
-
-gen ihs_ca_exp99 = log(w99_ca_exp + sqrt((w99_ca_exp*w99_ca_exp)+1))
-lab var ihs_ca_exp99 "IHS of exports in 2022, wins.99th"
-
-gen ihs_profit99 = log(w99_profit + sqrt((w99_profit*w99_profit)+1))
-lab var ihs_profit99 "IHS of profit in 2022, wins.99th"
-
-gen ihs_exprep_inv = log(w99_exprep_inv + sqrt((w99_exprep_inv*w99_exprep_inv)+1))
-lab var ihs_exprep_inv "IHS of export investement in 2022, wins.99th"
-
-	*no values in these variables, winsor not working
-*gen ihs_ca_2021 = log(w99_ca_2021 + sqrt((w99_ca_2021*w99_ca_2021)+1))
-*lab var ihs_ca_2021 "IHS of trunover in 2021, wins.99th"
-
-*gen ihs_ca_exp_2021 = log(w99_ca_exp_2021 + sqrt((w99_ca_exp_2021*w99_ca_exp_2021)+1))
-*lab var ihs_ca_exp_2021 "IHS of exports in 2021, wins.99th"
-
-*gen ihs_profit_2021 = log(w99_profit_2021 + sqrt((w99_profit_2021*w99_profit_2021)+1))
-*lab var ihs_profit_2021 "IHS of profit in 2021, wins.99th"
-
-	*drop baseline winsorized
-*drop w_ca2021 w_caexp2021 w_profit2021 w_nonfamilynetwork w_exprep_inv
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

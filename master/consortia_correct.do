@@ -336,6 +336,88 @@ replace ca_exp2020 = 2000  if id_plateforme == 1231
 
 replace ca_exp2020 = 3000  if id_plateforme == 1245
 
+
+
+
+		* correct turnover 2018-2020
+replace ca_2020 = 4500 if id_plateforme == 1245
+
+replace ca_2018 = 189869 if id_plateforme == 1242
+replace ca_2019 = 103050 if id_plateforme == 1242
+replace ca_2020 = 86627 if id_plateforme == 1242
+
+replace ca_2018 = 2663000 if id_plateforme == 1240
+replace ca_2019 = 1502130 if id_plateforme == 1240
+replace ca_2020 = 82630 if id_plateforme == 1240
+
+replace ca_2018 = 0 if id_plateforme == 1231
+replace ca_2019 = 50000 if id_plateforme == 1231
+replace ca_2020 = 100000 if id_plateforme == 1231
+
+replace ca_2018 = 5000 if id_plateforme == 1210
+replace ca_2019 = 20000 if id_plateforme == 1210
+replace ca_2020 = 20000 if id_plateforme == 1210
+
+replace ca_2018 = 70000 if id_plateforme == 1197
+replace ca_2019 = 25000 if id_plateforme == 1197
+replace ca_2020 = 55000 if id_plateforme == 1197
+
+replace ca_2018 = 20000 if id_plateforme == 1193
+replace ca_2019 = 10000 if id_plateforme == 1193
+replace ca_2020 = 20000 if id_plateforme == 1193
+
+replace ca_2018 = 8000 if id_plateforme == 1192
+replace ca_2019 = 4000 if id_plateforme == 1192
+replace ca_2020 = 3000 if id_plateforme == 1192
+
+replace ca_2018 = 4500 if id_plateforme == 1186
+replace ca_2019 = 2000 if id_plateforme == 1186
+replace ca_2020 = 1000 if id_plateforme == 1186
+
+
+replace ca_2019 = 20000 if id_plateforme == 1182
+replace ca_2020 = 45000 if id_plateforme == 1182
+
+replace ca_2019 = 89056 if id_plateforme == 1178
+replace ca_2020 = 250670 if id_plateforme == 1178
+
+replace ca_2018 = . if id_plateforme == 1168 /// verify after midline response
+replace ca_2019 = . if id_plateforme == 1168
+replace ca_2020 = . if id_plateforme == 1168
+
+replace ca_2018 = 10000 if id_plateforme == 1162
+replace ca_2019 = 20000 if id_plateforme == 1162
+replace ca_2020 = 5500 if id_plateforme == 1162
+
+replace ca_2018 = 120000 if id_plateforme == 1159
+replace ca_2019 = 50000 if id_plateforme == 1159
+
+replace ca_2019 = 150000 if id_plateforme == 1154
+replace ca_2020 = 20000 if id_plateforme == 1154
+
+		* correct baseline responses
+replace profit = 5000 if id_plateforme == 986 & surveyround == 1
+replace profit = 35000 if id_plateforme == 1084 & surveyround == 1
+replace profit = 50000 if id_plateforme == 1098 & surveyround == 1
+
+
+
+replace ca = 16000 if id_plateforme == 1054 & surveyround == 1
+
+replace ca = 1000000 if id_plateforme == 1008 & surveyround == 1
+
+
+replace ca = 150000 if id_plateforme == 1244 & surveyround == 1
+replace profit = 50000 if id_plateforme == 1244 & surveyround == 1
+
+replace ca = 40000 if id_plateforme == 1259 & surveyround == 1
+replace profit = 9000 if id_plateforme == 1259 & surveyround == 1
+
+
+replace ca = 62000 if id_plateforme == 1097 & surveyround == 1
+replace ca_exp = 30000 if id_plateforme == 1097 & surveyround == 1
+replace profit = 21000 if id_plateforme == 1097 & surveyround == 1
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
