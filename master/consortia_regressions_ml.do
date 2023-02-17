@@ -267,57 +267,6 @@ esttab `regressions' using "ml_eri.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
-	
-***********************************************************************
-* 	PART 1.5: SSA Export Readiness index		
-***********************************************************************
-	* ATE, ancova
-			* no significant baseline differences
-reg eri_ssa i.treatment if surveyround == 1, vce(hc3)
-
-			* pure mean comparison at midline
-eststo em1, r: reg eri_ssa i.treatment if surveyround == 2, vce(hc3)
-estadd local bl_control "No"
-estadd local strata "No"
-
-			* ancova without stratification dummies
-eststo em2, r: reg eri_ssa i.treatment l.eri_ssa, cluster(id_plateforme)
-estadd local bl_control "Yes"
-estadd local strata "No"
-
-			* ancova with stratification dummies
-eststo em3, r: reg eri_ssa i.treatment l.eri_ssa i.strata_final, cluster(id_plateforme)
-estadd local bl_control "Yes"
-estadd local strata "Yes"
-
-			* DiD
-eststo em4, r: xtreg eri_ssa i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
-estadd local bl_control "Yes"
-estadd local strata "Yes"			
-
-			* ATT, IV (with 1 session counting as taken up)
-eststo em5, r:ivreg2 eri_ssa l.eri_ssa i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
-estadd local bl_control "Yes"
-estadd local strata "Yes"
-estimates store iv_em4
-
-			* ATT, IV (with 1 session counting as taken up)
-eststo em6, r:ivreg2 eri_ssa l.eri_ssa i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
-estadd local bl_control "Yes"
-estadd local strata "Yes"
-
-local regressions em1 em2 em3 em4 em5 em6
-esttab `regressions' using "ml_eri_ssa.tex", replace ///
-	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
-	label ///
-	b(3) ///
-	se(3) ///
-	drop(*.strata_final) ///
-	star(* 0.1 ** 0.05 *** 0.01) ///
-	nobaselevels ///
-	scalars("strata Strata controls" "bl_control Y0 control") ///
-	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
-	
 
 ***********************************************************************
 * 	PART 1.5: Innovations index		
@@ -510,7 +459,7 @@ estadd local strata "Yes"
 
 local regressions nf1 nf2 nf3 nf4 nf5
 esttab `regressions' using "ml_net_nb_f.tex", replace ///
-	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "ATT" "ATT") ///
 	label ///
 	b(3) ///
 	se(3) ///
@@ -518,7 +467,7 @@ esttab `regressions' using "ml_net_nb_f.tex", replace ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
-	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
 	
 ***********************************************************************
@@ -559,7 +508,7 @@ estadd local strata "Yes"
 
 local regressions nm1 nm2 nm3 nm4 nm5 
 esttab `regressions' using "ml_net_nb_m.tex", replace ///
-	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "ATT" "ATT") ///
 	label ///
 	b(3) ///
 	se(3) ///
@@ -567,7 +516,7 @@ esttab `regressions' using "ml_net_nb_m.tex", replace ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
-	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
 
 ***********************************************************************
@@ -620,6 +569,50 @@ esttab `regressions' using "ml_net_nb_qualite.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Columns (1) - (4) present estimates based on logit models." "Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
+	
+	
+***********************************************************************
+* 	PART 1.9: SSA Export Readiness index		
+***********************************************************************
+	* ATE, ancova
+			* pure mean comparison at midline
+eststo esa1, r: reg eri_ssa i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+
+			* ancova without stratification dummies
+eststo esa2, r: reg eri_ssa i.treatment l.eri, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo esa3, r: reg eri_ssa i.treatment l.eri i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo esa4, r:ivreg2 eri_ssa l.eri i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_esa4
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo esa5, r:ivreg2 eri_ssa l.eri i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions esa1 esa2 esa3 esa4 esa5
+esttab `regressions' using "ml_eri_ssa.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
 /*
 preserve
 keep if surveyround==1
