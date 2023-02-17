@@ -89,6 +89,7 @@ putexcel A28 = "One-and two-year autocorrelation come frome self-reported regist
 ***********************************************************************
 * 	PART 2:    estimate power for export at all
 ***********************************************************************
+{
 ***********************************************************************
 * 	PART 2.1:     get all the relevant baseline parameters
 ***********************************************************************
@@ -176,11 +177,13 @@ sampsi 0.49 0.585, n1(80) n2(80) sd1(`operation_export_ressd') sd2(`operation_ex
 local power = r(power)
 putexcel B23 = 0.095, hcenter nformat(number_d2) border(bottom)
 
+}
+
 
 ***********************************************************************
 * 	PART 3:    estimate power for export sales
 ***********************************************************************
-
+{
 ***********************************************************************
 * 	PART 3.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -273,11 +276,12 @@ sampsi 4.34 5.44, n1(80) n2(80) sd1(`ihs_ca_exp2020_ressd') sd2(`ihs_ca_exp2020_
 local power = r(power)
 putexcel C23 = 1, hcenter nformat(number_d2) border(bottom)
 
+}
 
 ***********************************************************************
 * 	PART 4:    estimate power for countries exported
 ***********************************************************************
-
+{
 ***********************************************************************
 * 	PART 4.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -351,10 +355,13 @@ sampsi 1.13 1.63, n1(80) n2(80) sd1(`exp_pays_ressd') sd2(`exp_pays_ressd') pre(
 local power = r(power)
 putexcel D22 = 0.50, hcenter nformat(number_d2)
 
+}
 
 ***********************************************************************
 * 	PART 5:    estimate power for log employees
 ***********************************************************************
+{
+
 gen log_employees= log(employes)
 
 ***********************************************************************
@@ -429,10 +436,13 @@ sampsi 1.58 1.75, n1(80) n2(80) sd1(`log_employees_ressd') sd2(`log_employees_re
 local power = r(power)
 putexcel E22 = 0.17, hcenter nformat(number_d2)
 
+}
 
 ***********************************************************************
 * 	PART 6:    estimate power for Export preparation
 ***********************************************************************
+{
+
 ***********************************************************************
 * 	PART 6.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -505,10 +515,12 @@ sampsi -0.0000000308 0.114, n1(80) n2(80) sd1(`exportprep_ressd') sd2(`exportpre
 local power = r(power)
 putexcel F22 = 0.115, hcenter nformat(number_d2)
 
+}
 
 ***********************************************************************
 * 	PART 7:    estimate power for Management practices index
 ***********************************************************************
+{
 ***********************************************************************
 * 	PART 7.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -581,10 +593,12 @@ sampsi -0.0000000593 0.129, n1(80) n2(80) sd1(`mngtvars_ressd') sd2(`mngtvars_re
 local power = r(power)
 putexcel G22 = 0.13, hcenter nformat(number_d2)
 
-
+}
 ***********************************************************************
 * 	PART 8:    estimate power for Marketing practices index
 ***********************************************************************
+{
+
 ***********************************************************************
 * 	PART 8.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -656,10 +670,12 @@ sampsi -0.0000000419 0.134, n1(80) n2(80) sd1(`markvars_ressd') sd2(`markvars_re
 local power = r(power)
 putexcel H22 = 0.135, hcenter nformat(number_d2)
 
+}
 
 ***********************************************************************
 * 	PART 9:    estimate power for Innovation index
 ***********************************************************************
+{
 ***********************************************************************
 * 	PART 9.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -733,10 +749,13 @@ sampsi 0.0000000132 0.0950000132, n1(80) n2(80) sd1(`innovars_ressd') sd2(`innov
 local power = r(power)
 putexcel I22 = 0.095, hcenter nformat(number_d2)
 
+}
 
 ***********************************************************************
 * 	PART 10:    estimate power for Gender index
 ***********************************************************************
+{
+
 ***********************************************************************
 * 	PART 10.1:     get all the relevant baseline parameters
 ***********************************************************************		
@@ -810,3 +829,4 @@ sampsi 0.0000000379 0.1750000379, n1(80) n2(80) sd1(`gendervars_ressd') sd2(`gen
 local power = r(power)
 putexcel J22 = 0.175, hcenter nformat(number_d2)
 
+}
