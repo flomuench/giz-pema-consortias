@@ -613,6 +613,205 @@ esttab `regressions' using "ml_eri_ssa.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
+***********************************************************************
+* 	PART 1.10: Sales 	
+***********************************************************************
+	* ATE, ancova
+			* no significant baseline differences
+reg ihs_ca_w99 i.treatment if surveyround == 1, vce(hc3)
+
+			* pure mean comparison at midline
+eststo sa1, r: reg ihs_ca_w99 i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+
+			* ancova without stratification dummies
+eststo sa2, r: reg ihs_ca_w99 i.treatment l.ihs_ca_w99, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo sa3, r: reg ihs_ca_w99 i.treatment l.ihs_ca_w99 i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD
+eststo sa4, r: xtreg ihs_ca_w99 i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo sa5, r:ivreg2 ihs_ca_w99 l.ihs_ca_w99 i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_sa4
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo sa6, r:ivreg2 ihs_ca_w99 l.ihs_ca_w99 i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions sa1 sa2 sa3 sa4 sa5 sa6
+esttab `regressions' using "ml_sales.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
+
+***********************************************************************
+* 	PART 1.8: Export sales 		
+***********************************************************************
+	* ATE, ancova
+			* no significant baseline differences
+reg ihs_ca_exp_w99 i.treatment if surveyround == 1, vce(hc3)
+
+			* pure mean comparison at midline
+eststo esa1, r: reg ihs_ca_exp_w99 i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+
+			* ancova without stratification dummies
+eststo esa2, r: reg ihs_ca_exp_w99 i.treatment l.ihs_ca_exp_w99, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo esa3, r: reg ihs_ca_exp_w99 i.treatment l.ihs_ca_exp_w99 i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD
+eststo esa4, r: xtreg ihs_ca_exp_w99 i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo esa5, r:ivreg2 ihs_ca_exp_w99 l.ihs_ca_exp_w99 i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_esa4
+
+			* ATT, IV (with 1 session counting as taken up)
+eststo esa6, r:ivreg2 ihs_ca_exp_w99 l.ihs_ca_exp_w99 i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions esa1 esa2 esa3 esa4 esa5 esa6
+esttab `regressions' using "ml_exports_sales.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
+***********************************************************************
+* 	PART 1.9: Profits	
+***********************************************************************
+
+			* pure mean comparison at midline
+eststo pr1, r: reg ihs_profit_w99 i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+		
+			* ancova without stratification dummies
+eststo pr2, r: reg ihs_profit_w99 i.treatment l.ihs_profit_w99, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo pr3, r: reg ihs_profit_w99 i.treatment l.ihs_profit_w99 i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD
+eststo pr4, r: xtreg ihs_profit_w99 i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+	* ATT, IV (participation in phase 1 meetings)
+eststo pr5, r:ivreg2 ihs_profit_w99 l.ihs_profit_w99 i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_pr4
+
+	* ATT, IV (participation in consortium)
+eststo pr6, r:ivreg2 ihs_profit_w99 l.ihs_profit_w99 i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions pr1 pr2 pr3 pr4 pr5 pr6
+esttab `regressions' using "ml_profits.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")	
+	
+***********************************************************************
+* 	PART 1.10: Number of employees	
+***********************************************************************
+	* ATE, ancova
+	
+			* no significant baseline differences
+reg ihs_employes_w99 i.treatment if surveyround == 1, vce(hc3)
+
+			* pure mean comparison at midline
+eststo em1, r: reg ihs_employes_w99 i.treatment if surveyround == 2, vce(hc3)
+estadd local bl_control "No"
+estadd local strata "No"
+		
+			* ancova without stratification dummies
+eststo em2, r: reg ihs_employes_w99 i.treatment l.ihs_employes_w99, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "No"
+
+			* ancova with stratification dummies
+eststo em3, r: reg ihs_employes_w99 i.treatment l.ihs_employes_w99 i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+			* DiD
+eststo em4, r: xtreg ihs_employes_w99 i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+estadd local bl_control "Yes"
+estadd local strata "Yes"			
+
+	* ATT, IV (participation in phase 1 meetings)
+eststo em5, r:ivreg2 ihs_employes_w99 l.ihs_employes_w99 i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+estimates store iv_em4
+
+	* ATT, IV (participation in consortium)
+eststo em6, r:ivreg2 ihs_employes_w99 l.ihs_employes_w99 i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+estadd local bl_control "Yes"
+estadd local strata "Yes"
+
+local regressions em1 em2 em3 em4 em5 em6
+esttab `regressions' using "ml_employees.tex", replace ///
+	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
 /*
 preserve
 keep if surveyround==1
