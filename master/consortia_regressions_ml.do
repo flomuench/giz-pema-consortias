@@ -652,7 +652,7 @@ estadd local bl_control "Yes"
 estadd local strata "Yes"
 
 local regressions sa1 sa2 sa3 sa4 sa5 sa6
-esttab `regressions' using "ml_sales.tex", replace ///
+esttab `regressions' using "ml_ca.tex", replace ///
 	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
 	label ///
 	b(3) ///
