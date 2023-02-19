@@ -492,6 +492,25 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
 
 *** Section 1: Survey status
+*Genarte shre of answers
+sum validation if surveyround == 1
+gen share_bl= (`r(N)'/181)*100 if surveyround == 1
+
+sum validation if surveyround == 2
+gen share_ml= (`r(N)'/176)*100 if surveyround == 2
+
+* Share of firms that started the survey
+graph bar share*, blabel(total, format(%9.2fc)) ///
+	legend (pos(6) row(6) label(1 "Baseline survey") label (2 "Midline survey")) ///
+	title("Response rate") ///
+	ytitle("share of total sample") ///
+	ylabel(0(10)100, nogrid) 
+graph export responserate_share.png, replace
+putpdf paragraph, halign(center)
+putpdf image responserate_share.png
+putpdf pagebreak
+
+drop share_bl share_ml
 	* response rate by treatment status
 graph bar (sum) survey_completed validation, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(1) label(1 "Answers completed") ///
@@ -529,9 +548,16 @@ putpdf pagebreak
 **** Section 2: Innovation*****
 putpdf paragraph, font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
+	*Innovated or not ?
+graph bar (mean) innovated, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	ylabel(0(0.25)1, nogrid) 
+	gr export ml_innovated_share.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image ml_innovated_share.png
+	putpdf pagebreak
 
 	*Innovation	
-graph bar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) inno_produit inno_process inno_lieu inno_commerce, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
 	label  (3 "Innovation place of work") label (4 "Innovation marketing") label (5 "No innovation")) ///
 	title("Type of innovation") ///
@@ -541,7 +567,7 @@ graph bar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, 
 	putpdf image ml_innovation_share.png
 	putpdf pagebreak
 
-graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune if surveyround == 2, over(pole, label(labs(vsmall))) over(treatment, label(labs(vsmall)) gap(400)) blabel(total, format(%9.2fc) size(tiny) gap(0.2)) ///
+graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce if surveyround == 2, over(pole, label(labs(vsmall))) over(treatment, label(labs(vsmall)) gap(400)) blabel(total, format(%9.2fc) size(tiny) gap(0.2)) ///
 	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
 	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
 	label  (5 "No innovation")) ///
@@ -1171,6 +1197,56 @@ putpdf paragraph, halign(center)
 putpdf image female_empowerment_index_ml.png
 putpdf pagebreak
 
+*Women's locus of control index
+gr tw ///
+	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_loc if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Women's locus of control index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Women's locus of control index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=57 firms)" /// 56 did actually respond to midline
+                     2 "Treatment group, absent (N=30 firms)" /// 24 firms did actually respond to midline
+					 3 "Control group (N= 89 firms)") /// 77 responded to midline
+               c(1) pos(6) ring(6)) ///
+	name(female_loc_ml, replace)
+graph export female_loc_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_loc_ml.png
+putpdf pagebreak
+
+	* Women's entrepreneurial effifacy - z score
+gr tw ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_efficacy if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Midline Distribution of Women's entrepreneurial effifacy index}", size (small)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Women's entrepreneurial effifacy index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated (N=*** firms)" ///
+                     2 "Treatment group, absent (N=*** firms)" ///
+					 3 "Control group (N= *** firms)") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_efficacy_ml, replace)
+graph export female_efficacy_ml.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_efficacy_ml.png
+putpdf pagebreak
+
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(surveyround) over(treatment) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -1647,30 +1723,6 @@ putpdf image exportmngt_ml.png
 putpdf pagebreak
 
 
-	* Women's entrepreneurial effifacy - z score
-gr tw ///
-	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_efficacy if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Women's entrepreneurial effifacy index}", size (small)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Women's entrepreneurial effifacy index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=*** firms)" ///
-                     2 "Treatment group, absent (N=*** firms)" ///
-					 3 "Control group (N= *** firms)") ///
-               c(1) pos(6) ring(6)) ///
-	name(female_efficacy_ml, replace)
-graph export female_efficacy_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_efficacy_ml.png
-putpdf pagebreak
 
 	* Women's entrepreneurial initiaitve - z score
 gr tw ///
@@ -1698,31 +1750,7 @@ putpdf image female_initiative_ml.png
 putpdf pagebreak
 
 
-	*Women's locus of control index
-gr tw ///
-	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 2, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_loc if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 0 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Midline Distribution of Women's locus of control index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Women's locus of control index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=57 firms)" /// 56 did actually respond to midline
-                     2 "Treatment group, absent (N=30 firms)" /// 24 firms did actually respond to midline
-					 3 "Control group (N= 89 firms)") /// 77 responded to midline
-               c(1) pos(6) ring(6)) ///
-	name(female_loc_ml, replace)
-graph export female_loc_ml.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_loc_ml.png
-putpdf pagebreak
-
+	
 }
 putpdf save "midline_index_statistics", replace
 
