@@ -281,13 +281,15 @@ use links to understand the code syntax for creating the accounting variables' g
 *	PART VI. Financial indicators
 ***********************************************************************
 	* winsorize & ihs-transform
-local wins_vars "ca ca_exp profit exprep_inv"
+local wins_vars "ca ca_exp profit exprep_inv employes"
 foreach var of local wins_vars {
 	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
 	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
 	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
 }
 
+
+lab var ihs_employes_w99 "IHS of employees, wins.99th"
 lab var ihs_ca_w99 "IHS of turnover, wins.99th"
 lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
 lab var ihs_profit_w99 "IHS of profit, wins.99th"
