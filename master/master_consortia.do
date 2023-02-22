@@ -165,27 +165,27 @@ set sortseed 8413195
 ----------------------------------------------------------------------*/		
 if (1) do "${master_github}/consortia_merge.do"
 /*--------------------------------------------------------------------
-	PART 3.2: Baseline power
-----------------------------------------------------------------------*/		
-if (0) do "${master_github}/consortia_power.do"
-/*--------------------------------------------------------------------
-	PART 3.3: List experiment randomization for midline + endline
+	PART 3.2: List experiment randomization for midline + endline
 	Creates: consortia_pii_inter
 ----------------------------------------------------------------------*/
 if (1) do "${master_github}/consortia_list_experiment.do"
 /* --------------------------------------------------------------------
-	PART 3.4: Clean intermediate data
+	PART 3.3: Clean intermediate data
 ----------------------------------------------------------------------*/
 if (1) do "${master_github}/consortia_clean.do"
 /* --------------------------------------------------------------------
-	PART 3.5: Correct intermediate data
+	PART 3.4: Correct intermediate data
 ----------------------------------------------------------------------*/
 if (1) do "${master_github}/consortia_correct.do"
 /*--------------------------------------------------------------------
-	PART 3.6: Generate variables
+	PART 3.5: Generate variables
 	Creates: Final analysis & pii data set
 ----------------------------------------------------------------------*/
 if (1) do "${master_github}/consortia_generate.do"
+/*--------------------------------------------------------------------
+	PART 3.6: Baseline power
+----------------------------------------------------------------------*/		
+if (1) do "${master_github}/consortia_power.do"
 /*--------------------------------------------------------------------
 	PART 3.7: Exports a list of participants with most important info (for survey institute or political partners)
 ----------------------------------------------------------------------*/
