@@ -121,14 +121,15 @@ replace refus = 1 if id_plateforme == 1026 & surveyround == 2
 		* endline
 
 ***********************************************************************
-* 	PART 2.2:  entreprise no longer in operations	
+* 	PART 3:  entreprise no longer in operations	
 ***********************************************************************		
 gen closed = 0 
 lab var closed "Companies that are no longer operating"
 
 replace closed = 1 if id_plateforme == 1083
+
 ***********************************************************************
-* 	PART II.3:    Create missing variables for accounting number --> delete after midline		  
+* 	PART 4:    Create missing variables for accounting number --> delete after midline		  
 ***********************************************************************
 /*gen profit_2021_missing=0
 replace profit_2021_missing= 1 if profit_2021==.
@@ -141,8 +142,9 @@ replace ca_2021_missing= 1 if ca_2021==0
 gen ca_exp_2021_missing=0
 replace ca_exp_2021_missing= 1 if ca_exp_2021==.
 */
+
 ***********************************************************************
-* 	PART III:   Create the indices based on a z-score			  
+* 	PART 5:   Create the indices based on a z-score			  
 ***********************************************************************
 
 	*Definition of all variables that are being used in index calculation
@@ -210,7 +212,7 @@ label var female_loc "Women's locus of control - z score"
 label var genderi "Gender index -Z Score"
 
 ***********************************************************************
-* 	PART IV:   Create the indices as total points		  
+* 	PART 6:   Create the indices as total points		  
 ***********************************************************************
 	* find out max. points
 sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
@@ -258,7 +260,7 @@ drop temp_*
 
 
 ***********************************************************************
-* 	PART V:   generate survey-to-survey growth rates
+* 	PART 7:   generate survey-to-survey growth rates
 ***********************************************************************
 	* accounting variables
 local acccounting_vars "ca ca_exp profit employes"
@@ -278,9 +280,10 @@ use links to understand the code syntax for creating the accounting variables' g
 */
 
 ***********************************************************************
-*	PART VI. Financial indicators
+*	PART 8: Financial indicators
 ***********************************************************************
 	* winsorize & ihs-transform
+			* survey periods
 local wins_vars "ca ca_exp profit exprep_inv employes"
 foreach var of local wins_vars {
 	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
@@ -295,9 +298,25 @@ lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
 lab var ihs_profit_w99 "IHS of profit, wins.99th"
 lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 
+			* years before surveys
+	forvalues year = 2018(1) 2020 {
+		winsor ca_exp`year', gen(ca_exp`year'_w99) p(0.01) highonly
+		ihstrans ca_exp`year'_w99, prefix(ihs_)
+		replace ihs_ca_exp`year'_w99 = . if ca_exp == -999 | ca_exp == -888 | ca_exp == -777
+		gen exported_`year' = (ca_exp`year' > 0 & ca_exp`year'!= .)
+}
+
 
 ***********************************************************************
-*	PART VII. Innovation
+*	PART 9: Exported dummy
+***********************************************************************
+gen exported = ca_exp > 0
+replace exported = . if ca_exp == . & exp_pays == . & surveyround == 1
+replace exported = 0 if ca_exp == . & exp_pays == 0 & surveyround == 1
+
+
+***********************************************************************
+*	PART 10: Innovation
 ***********************************************************************	
 egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
 bys id_plateforme (surveyround): gen innovated = (innovations > 0)
@@ -307,12 +326,17 @@ lab var innovations "total innovations, max. 4"
 lab var innovated "innovated"
 
 ***********************************************************************
-*	PART VII. Innovation
+*	PART 11: network
 ***********************************************************************	
+	* create total network size
 gen net_size =.
+		* combination of female and male CEOs at midline
 replace net_size = net_nb_f + net_nb_m if surveyround ==2
+		* combination of within family and outside family at baseline
 replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
+
 lab var net_size "Size of the female entrepreuneur network"
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
