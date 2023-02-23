@@ -259,6 +259,7 @@ replace needs_check = 0 if id_plateforme == 1168 //NRP
 replace needs_check = 0 if id_plateforme == 1169 //NRP
 replace needs_check = 0 if id_plateforme == 1150
 replace needs_check = 0 if id_plateforme == 1154
+replace needs_check = 0 if id_plateforme == 1165 // Liste de rejet
 replace needs_check = 0 if id_plateforme == 1170
 replace needs_check = 0 if id_plateforme == 1172 // En voyage, retour en Tunisie en fin Mars
 replace needs_check = 0 if id_plateforme == 1175
