@@ -206,45 +206,78 @@ replace questions_needing_checks = questions_needing_checks + "matricule fiscale
 ***********************************************************************
 * 	PART 6:  Remove firms from needs_check in case calling them again did not solve the issue		
 ***********************************************************************
+replace needs_check = 0 if id_plateforme == 984 // NRP
 replace needs_check = 0 if id_plateforme == 985
+replace needs_check = 0 if id_plateforme == 986 // NRP
 replace needs_check = 0 if id_plateforme == 989
+replace needs_check = 0 if id_plateforme == 990
 replace needs_check = 0 if id_plateforme == 991 // ca_exp +30%
+replace needs_check = 0 if id_plateforme == 994 // does not want to answer comptability questions
 replace needs_check = 0 if id_plateforme == 995 // injoingables
+replace needs_check = 0 if id_plateforme == 996
 replace needs_check = 0 if id_plateforme == 997
+replace needs_check = 0 if id_plateforme == 1001
 replace needs_check = 0 if id_plateforme == 1005
 replace needs_check = 0 if id_plateforme == 1007
 replace needs_check = 0 if id_plateforme == 1008
+replace needs_check = 0 if id_plateforme == 1009
+replace needs_check = 0 if id_plateforme == 1010
+replace needs_check = 0 if id_plateforme == 1014
 replace needs_check = 0 if id_plateforme == 1019
 replace needs_check = 0 if id_plateforme == 1022
+replace needs_check = 0 if id_plateforme == 1026 // NRP
 replace needs_check = 0 if id_plateforme == 1027
 replace needs_check = 0 if id_plateforme == 1028
+replace needs_check = 0 if id_plateforme == 1030
 replace needs_check = 0 if id_plateforme == 1033
 replace needs_check = 0 if id_plateforme == 1036
 replace needs_check = 0 if id_plateforme == 1037
+replace needs_check = 0 if id_plateforme == 1042  // NRP
 replace needs_check = 0 if id_plateforme == 1044
+replace needs_check = 0 if id_plateforme == 1051 // Comptable en voyage retour fin mars
 replace needs_check = 0 if id_plateforme == 1054
+replace needs_check = 0 if id_plateforme == 1058 // NRP
 replace needs_check = 0 if id_plateforme == 1065
 replace needs_check = 0 if id_plateforme == 1067 
 replace needs_check = 0 if id_plateforme == 1071
+replace needs_check = 0 if id_plateforme == 1079 //Liste de rejet
+replace needs_check = 0 if id_plateforme == 1089 //NRP
 replace needs_check = 0 if id_plateforme == 1092
+replace needs_check = 0 if id_plateforme == 1096 //NRP
 replace needs_check = 0 if id_plateforme == 1102
+replace needs_check = 0 if id_plateforme == 1109 //NRP
+replace needs_check = 0 if id_plateforme == 1118 //NRP
+replace needs_check = 0 if id_plateforme == 1122 //NRP
+replace needs_check = 0 if id_plateforme == 1124 //NRP
 replace needs_check = 0 if id_plateforme == 1128
 replace needs_check = 0 if id_plateforme == 1130
 replace needs_check = 0 if id_plateforme == 1133
+replace needs_check = 0 if id_plateforme == 1140 // Liste de rejet 
 replace needs_check = 0 if id_plateforme == 1147
 replace needs_check = 0 if id_plateforme == 1161
+replace needs_check = 0 if id_plateforme == 1168 //NRP
+replace needs_check = 0 if id_plateforme == 1169 //NRP
 replace needs_check = 0 if id_plateforme == 1150
 replace needs_check = 0 if id_plateforme == 1154
 replace needs_check = 0 if id_plateforme == 1170
+replace needs_check = 0 if id_plateforme == 1172 // En voyage, retour en Tunisie en fin Mars
 replace needs_check = 0 if id_plateforme == 1175
-replace needs_check = 0 if id_plateforme == 1179
+replace needs_check = 0 if id_plateforme == 1178 // NRP
+replace needs_check = 0 if id_plateforme == 1179 // Liste de rejet
 replace needs_check = 0 if id_plateforme == 1184
+replace needs_check = 0 if id_plateforme == 1188 // NRP
+replace needs_check = 0 if id_plateforme == 1189 // Injoignable
 replace needs_check = 0 if id_plateforme == 1193
+replace needs_check = 0 if id_plateforme == 1194 // Injoignable
+replace needs_check = 0 if id_plateforme == 1197 // NRP
+replace needs_check = 0 if id_plateforme == 1199 // Le comptable n'a pas répondu
 replace needs_check = 0 if id_plateforme == 1185
 replace needs_check = 0 if id_plateforme == 1190
 replace needs_check = 0 if id_plateforme == 1195
 replace needs_check = 0 if id_plateforme == 1204
 replace needs_check = 0 if id_plateforme == 1205
+replace needs_check = 0 if id_plateforme == 1230 // NRP
+replace needs_check = 0 if id_plateforme == 1237 // Liste de rejet
 replace needs_check = 0 if id_plateforme == 1243
 replace needs_check = 0 if id_plateforme == 1248
 replace needs_check = 0 if id_plateforme == 1000
@@ -255,19 +288,54 @@ replace needs_check = 0 if id_plateforme == 1041
 replace needs_check = 0 if id_plateforme == 1043
 replace needs_check = 0 if id_plateforme == 1049 // full export company
 replace needs_check = 0 if id_plateforme == 1068 // does not want to answer comptability questions
-replace needs_check = 0 if id_plateforme == 1083 // entreprise closed 
+replace needs_check = 0 if id_plateforme == 1083 
 replace needs_check = 0 if id_plateforme == 1087
 replace needs_check = 0 if id_plateforme == 1123 // no activity in 2022
 replace needs_check = 0 if id_plateforme == 1201
 replace needs_check = 0 if id_plateforme == 1210
 replace needs_check = 0 if id_plateforme == 1222
+replace needs_check = 0 if id_plateforme == 1224
+replace needs_check = 0 if id_plateforme == 1225
+replace needs_check = 0 if id_plateforme == 1231
+replace needs_check = 0 if id_plateforme == 1239
 replace needs_check = 0 if id_plateforme == 1240
 replace needs_check = 0 if id_plateforme == 1026
-
 replace needs_check = 0 if id_plateforme == 1119
 replace needs_check = 0 if id_plateforme == 1137
+replace needs_check = 0 if id_plateforme == 1143
+replace needs_check = 0 if id_plateforme == 1146
+replace needs_check = 0 if id_plateforme == 1151
 replace needs_check = 0 if id_plateforme == 1153
+replace needs_check = 0 if id_plateforme == 1155
+replace needs_check = 0 if id_plateforme == 1196
 replace needs_check = 0 if id_plateforme == 1214
+replace needs_check = 0 if id_plateforme == 1218
+replace needs_check = 0 if id_plateforme == 1233 // no activity in 2022
+replace needs_check = 0 if id_plateforme == 1045
+replace needs_check = 0 if id_plateforme == 1241
+
+replace needs_check = 0 if id_plateforme == 994  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1014 //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1025  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1040  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1056  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1057  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1059  // Enterprise closed
+replace needs_check = 0 if id_plateforme == 1061  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1074  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1090  // entreprise closed 
+replace needs_check = 0 if id_plateforme == 1094  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1110  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1112  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1132  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1136  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1158  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1162  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1166 //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1202  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1219  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1235  //Refus de répondre aux informations comptables & employés
+replace needs_check = 0 if id_plateforme == 1245  //Refus de répondre aux informations comptables & employés
 
 ***********************************************************************
 * 	PART 7:  Export an excel sheet with needs_check variables  			

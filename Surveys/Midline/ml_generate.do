@@ -302,6 +302,10 @@ replace survey_phone = 1 if id_plateforme == 1218
 replace survey_phone = 1 if id_plateforme == 1138 
 replace survey_phone = 1 if id_plateforme == 986 
 replace survey_phone = 1 if id_plateforme == 1233  
+replace survey_phone = 1 if id_plateforme == 1138  
+replace survey_phone = 1 if id_plateforme == 1196  
+replace survey_phone = 1 if id_plateforme == 1233  
+replace survey_phone = 1 if id_plateforme == 1241  
 
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
