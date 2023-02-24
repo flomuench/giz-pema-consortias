@@ -180,13 +180,9 @@ ds `allvars', has(type string)
 *Temporary variable creation turning missing into zeros
 foreach var of local allvars {
 	g temp_`var' = `var'
-	replace temp_`var' = 0 if `var' == .		// missing values transformed to zeros
 	replace temp_`var' = 0 if `var' == -999		// dont know transformed to zeros
 	replace temp_`var' = 0 if `var' == -888
 	replace temp_`var' = 0 if `var' == -777
-	replace temp_`var' = 0 if `var' == -1998
-	replace temp_`var' = 0 if `var' == -1776 
-	replace temp_`var' = 0 if `var' == -1554
 	
 }
 
@@ -195,7 +191,7 @@ foreach var of local allvars {
 			* if you re-run the code, execture before: capture program drop zscore
 program define zscore /* opens a program called zscore */
 	sum `1' if treatment == 0
-	gen `1'z = (`1' - r(mean))/r(sd)   /* new variable gen is called --> varnamez */
+	gen `1'z = (`1' - r(mean))/r(sd) /* new variable gen is called --> varnamez */
 end
 
 		* calcuate the z-score for each variable
@@ -335,9 +331,9 @@ lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 ***********************************************************************
 *	PART 9: Exported dummy
 ***********************************************************************
-gen exported = ca_exp > 0
-replace exported = . if ca_exp == . & exp_pays == . & surveyround == 1
-replace exported = 0 if ca_exp == . & exp_pays == 0 & surveyround == 1
+bys id_plateforme (surveyround): gen exported = (ca_exp > 0)
+bys id_plateforme (surveyround): replace exported = . if ca_exp == .
+
 
 
 ***********************************************************************
@@ -361,6 +357,8 @@ replace net_size = net_nb_f + net_nb_m if surveyround ==2
 replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
 
 lab var net_size "Size of the female entrepreuneur network"
+
+
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database

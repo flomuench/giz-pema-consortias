@@ -177,7 +177,7 @@ egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_
 egen miss_network = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
 	
 	* section 3: management practices
-egen miss_management = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
+egen miss_management = rowmiss(man_fin_num man_fin_per man_hr_ind man_hr_pro man_ind_awa man_source)
 
 	* section 4: export readiness
 egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts)
