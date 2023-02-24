@@ -511,6 +511,16 @@ putpdf image responserate_share.png
 putpdf pagebreak
 
 drop share_bl share_ml
+
+	* Take-up rate per pole
+graph bar (count) if surveyround == 2 & treatment == 1,blabel(total, format(%9.0fc)) over(take_up) by(pole) ///
+	legend (pos(1) row(1) label(1 "Absent") label(2 "Present")) ///
+	ytitle("Number")
+graph export takeup_pole.png, replace
+putpdf paragraph, halign(center)
+putpdf image takeup_pole.png
+putpdf pagebreak
+
 	* response rate by treatment status
 graph bar (sum) survey_completed validation, over(surveyround) over(treatment) blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(1) label(1 "Answers completed") ///
@@ -793,8 +803,8 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, consortium member (N=57 firms)" ///
-                     2 "Treatment group, drop-out (N=30 firms)" ///
+               order(1 "Treatment group, consortium member (N=55 firms)" ///
+                     2 "Treatment group, drop-out (N=32 firms)" ///
 					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(man_practices_index_ml, replace)
@@ -920,8 +930,8 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participants (N=57 firms)" ///
-                     2 "Treatment group, drop-outs (N=30 firms)" ///
+               order(1 "Treatment group, participants (N=55 firms)" ///
+                     2 "Treatment group, drop-outs (N=32 firms)" ///
 					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(eri_ml_tup, replace)
@@ -939,8 +949,8 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participants (N=57 firms)" ///
-                     2 "Treatment group, drop-outs (N=30 firms)" ///
+               order(1 "Treatment group, participants (N=55 firms)" ///
+                     2 "Treatment group, drop-outs (N=32 firms)" ///
 					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(eri_bl_tup, replace)
@@ -983,8 +993,8 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=83 firms)" ///
-                     2 "Treatment group, absent (N=4 firms)" ///
+               order(1 "Treatment group, participated (N=55 firms)" ///
+                     2 "Treatment group, absent (N=32 firms)" ///
 					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(export_readiness_ssa_index_ml, replace)
@@ -1162,9 +1172,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=56 firms)" ///
-                     2 "Treatment group, absent (N=17 firms)" ///
-					 3 "Control group (N=71 firms)") ///
+               order(1 "Treatment group, participated (N=55 firms)" ///
+                     2 "Treatment group, absent (N=32 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(female_empowerment_index_ml, replace)
 graph export female_empowerment_index_ml.png, replace
@@ -1187,9 +1197,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Density", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=56 firms)" ///
-                     2 "Treatment group, absent (N=17 firms)" ///
-					 3 "Control group (N=71 firms)") ///
+               order(1 "Treatment group, participated (N=55 firms)" ///
+                     2 "Treatment group, absent (N=32 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(female_empowerment_index_ml, replace)
 graph export female_empowerment_index_ml.png, replace
@@ -1212,8 +1222,8 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Densitiy", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=57 firms)" /// 56 did actually respond to midline
-                     2 "Treatment group, absent (N=30 firms)" /// 24 firms did actually respond to midline
+               order(1 "Treatment group, participated (N=55 firms)" /// 56 did actually respond to midline
+                     2 "Treatment group, absent (N=32 firms)" /// 24 firms did actually respond to midline
 					 3 "Control group (N= 89 firms)") /// 77 responded to midline
                c(1) pos(6) ring(6)) ///
 	name(female_loc_ml, replace)
@@ -1237,9 +1247,9 @@ gr tw ///
 	ytitle("Number of observations", axis(1)) ///
 	ytitle("Densitiy", axis(2)) ///
 	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated (N=*** firms)" ///
-                     2 "Treatment group, absent (N=*** firms)" ///
-					 3 "Control group (N= *** firms)") ///
+               order(1 "Treatment group, participated (N=55 firms)" ///
+                     2 "Treatment group, absent (N=32 firms)" ///
+					 3 "Control group (N=89 firms)") ///
                c(1) pos(6) ring(6)) ///
 	name(female_efficacy_ml, replace)
 graph export female_efficacy_ml.png, replace
