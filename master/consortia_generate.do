@@ -93,52 +93,48 @@ gen refus = 0 // zero for baseline as randomization only among respondents
 lab var refus "Comapnies who refused to answer the survey" 
 
 		* midline
-replace refus = 1 if id_plateforme == 1132 & surveyround == 2
-replace refus = 1 if id_plateforme == 1094 & surveyround == 2
-replace refus = 1 if id_plateforme == 1025 & surveyround == 2
-replace refus = 1 if id_plateforme == 1090 & surveyround == 2
-replace refus = 1 if id_plateforme == 1245 & surveyround == 2
-replace refus = 1 if id_plateforme == 1061 & surveyround == 2
-replace refus = 1 if id_plateforme == 1079 & surveyround == 2  
-replace refus = 1 if id_plateforme == 1247 & surveyround == 2
-replace refus = 1 if id_plateforme == 998  & surveyround == 2
-replace refus = 1 if id_plateforme == 1202 & surveyround == 2
-replace refus = 1 if id_plateforme == 1074 & surveyround == 2
-replace refus = 1 if id_plateforme == 1162 & surveyround == 2
-replace refus = 1 if id_plateforme == 1166 & surveyround == 2
-replace refus = 1 if id_plateforme == 1112 & surveyround == 2
-replace refus = 1 if id_plateforme == 1235 & surveyround == 2
-replace refus = 1 if id_plateforme == 1044 & surveyround == 2
+replace refus = 1 if id_plateforme == 994 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1014 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1132 & surveyround == 2 // refusé de répondre et ne souhaitent ne plus être contactées
+replace refus = 1 if id_plateforme == 1094 & surveyround == 2 // refusé de répondre et ne souhaitent ne plus être contactées
+replace refus = 1 if id_plateforme == 1025 & surveyround == 2 // refusé de répondre et ne souhaitent ne plus être contactées
+replace refus = 1 if id_plateforme == 1061 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1079 & surveyround == 2 // refus de répondre (baseline & midline) 
+replace refus = 1 if id_plateforme == 1247 & surveyround == 2 // Demande de Eya de ne plus les contacter
+replace refus = 1 if id_plateforme == 998  & surveyround == 2 // Demande de Eya de ne plus les contacter
 replace refus = 1 if id_plateforme == 1067 & surveyround == 2 //Demande d'enlever tous ses informations de la base de contact
-replace refus = 1 if id_plateforme == 1071 & surveyround == 2 //Refus de répondre aux informations comptables
-replace refus = 1 if id_plateforme == 1193 & surveyround == 2 //Refus de répondre aux informations comptables
-replace refus = 1 if id_plateforme == 1136 & surveyround == 2
-replace refus = 1 if id_plateforme == 1168 & surveyround == 2
-replace refus = 1 if id_plateforme == 1083 & surveyround == 2 // entreprise closed 
-replace refus = 1 if id_plateforme == 1137 & surveyround == 2
-replace refus = 1 if id_plateforme == 1026 & surveyround == 2
-replace refus = 1 if id_plateforme == 994 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1014 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1025 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1040 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1056 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1057 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1059 & surveyround == 2  // Enterprise closed
-replace refus = 1 if id_plateforme == 1061 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1074 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1090 & surveyround == 2 // entreprise closed 
-replace refus = 1 if id_plateforme == 1094 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1110 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1112 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1132 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1136 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1158 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1162 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1166 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1202 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1219 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1235 & surveyround == 2 //Refus de répondre aux informations comptables & employés
-replace refus = 1 if id_plateforme == 1245 & surveyround == 2 //Refus de répondre aux informations comptables & employés
+replace refus = 1 if id_plateforme == 1136 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1026 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1089 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1109 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1144 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1169 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1172 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1194 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1234 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1237 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1056 & surveyround == 2 // refus de répondre
+replace refus = 1 if id_plateforme == 1074 & surveyround == 2 //refus de répondre
+replace refus = 1 if id_plateforme == 1110 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1137 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1158 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1162 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1166 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1202 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1235 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1245 & surveyround == 2 //Refus de répondre 
+replace refus = 1 if id_plateforme == 1112 & surveyround == 2 //Refus de répondre 
+
+
+replace refus = 0 if id_plateforme == 1193 & surveyround == 2 //Refus de répondre aux informations comptables (survey not completed)
+replace refus = 0 if id_plateforme == 1040 & surveyround == 2 //Refus de répondre aux informations comptables & employés (survey not completed)
+replace refus = 0 if id_plateforme == 1057 & surveyround == 2 //Refus de répondre aux informations comptables & employés
+replace refus = 0 if id_plateforme == 1219 & surveyround == 2 //Refus de répondre aux informations comptables & employés (survey not completed)
+replace refus = 0 if id_plateforme == 1071 & surveyround == 2 //Refus de répondre aux corrections comptables
+replace refus = 0 if id_plateforme == 1022 & surveyround == 2 //Refus de répondre aux informations comptables & employés
+replace refus = 0 if id_plateforme == 1015 & surveyround == 2 //Refus de répondre aux informations comptables & employés
+replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répondre aux informations comptables
+replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
 
@@ -149,6 +145,9 @@ gen closed = 0
 lab var closed "Companies that are no longer operating"
 
 replace closed = 1 if id_plateforme == 1083
+replace closed = 1 if id_plateforme == 1059 
+replace closed = 1 if id_plateforme == 1090
+replace closed = 1 if id_plateforme == 1044
 
 ***********************************************************************
 * 	PART 4:    Create missing variables for accounting number --> delete after midline		  
