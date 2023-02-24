@@ -672,17 +672,17 @@ esttab `regressions' using "ml_exprep_inv.tex", replace ///
 reg listexp i.treatment if surveyround == 1, vce(hc3)
 
 			* pure mean comparison at midline 
-eststo lexp1, r: reg listexp i.treatment if surveyround == 2, vce(hc3)
+eststo lexp1, r: reg listexp i.treatment##i.list_group if surveyround == 2, vce(hc3)
 estadd local bl_control "No"
 estadd local strata "No"
 		
 			* ancova without stratification dummies 
-eststo lexp2, r: reg listexp i.treatment l.listexp, cluster(id_plateforme) /*lagged value (l): include the value of the variable in previous survey_round*/
+eststo lexp2, r: reg listexp i.treatment##i.list_group l.listexp, cluster(id_plateforme) /*lagged value (l): include the value of the variable in previous survey_round*/
 estadd local bl_control "Yes"
 estadd local strata "No"
 
 			* ancova with stratification dummies 
-eststo lexp3, r: reg listexp i.treatment l.listexp i.strata_final, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
+eststo lexp3, r: reg listexp i.treatment##i.list_group l.listexp i.strata_final, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
