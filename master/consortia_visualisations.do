@@ -686,10 +686,10 @@ putpdf pagebreak
 
 	* Quality of advice 
 sum net_nb_qualite,d
-twoway (histogram net_nb_qualite if treatment == 0 & surveyround == 2, fcolor(none) lcolor(navy)lpattern(solid)) ///                
-	   (histogram net_nb_qualite if treatment == 1 & surveyround == 2, fcolor(navy) lcolor(black) lpattern(solid)), ///
+twoway (histogram net_nb_qualite if treatment == 0 & surveyround == 2, fcolor(brown%30) lcolor(brown%30)lpattern(solid)) ///                
+	   (histogram net_nb_qualite if treatment == 1 & take_up==1 & surveyround == 2 , fcolor(navy%30) lcolor(navy%30) lpattern(solid)), ///
 			ytitle("No. of firms")   ///
-            title("Quality of advice of the business network: Control vs. Treatment in midline", size(medium)) legend(order(1 "Control" 2 "Treatment" )) ///     
+            title("Quality of advice of the business network: Control vs. Treatment (Take-up) in midline", size(small)) legend(order(1 "Control" 2 "Treatment" )) ///     
             ylabel(0(0.1)0.5 , nogrid) ///
 			xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
 			text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
@@ -729,6 +729,16 @@ graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8, over(treatment) over(sur
 gr export ml_perceptions_positive_interactions_details.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_perceptions_positive_interactions_details.png
+putpdf pagebreak
+
+graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8 if take_up== 1| treatment == 0,  over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
+	label(3 "Communicate") label(4 "Win") label(5 "Connect")) ///
+	title("Positive views of communication between CEOs") ///
+	ylabel(0(0.5)0.7, nogrid) 
+gr export ml_perceptions_positive_interactions_details_takeup.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_perceptions_positive_interactions_details_takeup.png
 putpdf pagebreak
 
 graph hbar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8 if surveyround == 2, over(pole) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -1266,6 +1276,26 @@ ylabel(0(1)3.2, nogrid)
 gr export ml_bar_listexp.png, replace
 putpdf paragraph, halign(center) 
 putpdf image ml_bar_listexp.png
+putpdf pagebreak
+
+graph bar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+	title("List experiment question in midline") ///
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
+gr export ml_bar_listexp_1.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_bar_listexp_1.png
+putpdf pagebreak
+
+graph bar listexp if surveyround == 2 & take_up== 1| treatment ==0 & surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+	title("List experiment question in midline") ///
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
+gr export ml_bar_listexp_2.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_bar_listexp_2.png
 putpdf pagebreak
 
 graph hbar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole) ///
