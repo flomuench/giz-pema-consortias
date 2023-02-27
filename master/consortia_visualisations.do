@@ -1648,7 +1648,7 @@ putpdf pagebreak
 * Generate graphs to see difference of profit between baseline & midline
 preserve
 collapse (mean) ihs_profit_w99, by(surveyround treatment take_up)
-twoway (connected ihs_profit_w99 surveyround if treatment== 0 & take_up==0) (connected ihs_profit_w99 surveyround if treatment== 1 & take_up==0) (connected ihs_profit_w99 surveyround if treatment== 1 & take_up ==1), xline(1.5) xlabel (1(1)2) ytitle("Mean of profit") xtitle("1- Baseline 2- Midline ") legend(label(1 Control) label(2 Absent) label(3 Present)) 
+twoway (connected ihs_profit_w99 surveyround if treatment== 0 & take_up==0) (connected ihs_profit_w99 surveyround if treatment== 1 & take_up==0) (connected ihs_profit_w99 surveyround if treatment== 1 & take_up ==1), xline(1.5) xlabel (1(1)2) ytitle("Mean of profit") xtitle("1- Baseline 2- Midline ") legend(label(1 Control) label(2 Absent) label(3 Present)) ///
 ylabel(0(1)8, nogrid) 
 graph export ihs_profit_w99_plot2_details.png, replace
 putpdf paragraph, halign(center) 
