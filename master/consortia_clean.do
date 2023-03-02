@@ -74,6 +74,11 @@ replace `x' = stritrim(strtrim(`x'))
 		* clean var names
 rename `take_up_vars', lower
 
+	*CHANGE IN THE EXCEL FILE DESISTEMENT WITH 1 and change it as a numerical variable
+destring desistement_consortium, replace
+format desistement_consortium %25.0fc
+recast int desistement_consortium
+
 
 ***********************************************************************
 * 	PART 5:     document year of collection in label of accounting variables

@@ -196,6 +196,8 @@ bysort id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == .
 replace pole = 4 if id_plateforme == 1001
 replace pole = 4 if id_plateforme == 1134
 replace pole = 4 if id_plateforme == 1163
+replace pole = 1 if id_plateforme == 1230
+replace pole = 3 if id_plateforme == 998
 
 ***********************************************************************
 * 	PART 2:  Correct old accounting values

@@ -1268,9 +1268,19 @@ putpdf image female_efficacy_ml.png
 putpdf pagebreak
 
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(surveyround) over(treatment) ///
+graph bar listexp if surveyround==1, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
-	title("List experiment question") ///
+	title("List experiment (baseline)") ///
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
+gr export bl_bar_listexp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bl_bar_listexp.png
+putpdf pagebreak
+
+graph bar listexp if surveyround==2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+	title("List experiment (midline)") ///
 ytitle("No. of affirmations") ///
 ylabel(0(1)3.2, nogrid) 
 gr export ml_bar_listexp.png, replace
@@ -1278,27 +1288,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_listexp.png
 putpdf pagebreak
 
-graph bar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
-	blabel(total, format(%9.2fc) gap(-0.2)) ///
-	title("List experiment question in midline") ///
-ytitle("No. of affirmations") ///
-ylabel(0(1)3.2, nogrid) 
-gr export ml_bar_listexp_1.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_bar_listexp_1.png
-putpdf pagebreak
-
-graph bar listexp if surveyround == 2 & take_up== 1| treatment ==0 & surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
-	blabel(total, format(%9.2fc) gap(-0.2)) ///
-	title("List experiment question in midline") ///
-ytitle("No. of affirmations") ///
-ylabel(0(1)3.2, nogrid) 
-gr export ml_bar_listexp_2.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ml_bar_listexp_2.png
-putpdf pagebreak
-
-graph hbar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole) ///
+graph hbar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) by(pole) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///
