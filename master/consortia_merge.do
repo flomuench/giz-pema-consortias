@@ -170,27 +170,34 @@ import excel "${implementation}/presence_ateliers.xlsx", firstrow clear
 drop if id_plateforme==.
 
 		* select take-up variables
-keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium pole
+keep id_plateforme Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium 
 
+		
 		* save
 save "${implementation}/take_up", replace
 drop if id_plateforme==.
 restore
 
 		* merge to analysis data
-merge m:1 id_plateforme using "${implementation}/take_up", force
+merge m:1 id_plateforme using "${implementation}/take_up"
 /*
-    Result                      Number of obs
+    Result                           # of obs.
     -----------------------------------------
-    Not matched                            91
-        from master                        91  (_merge==1)
+    not matched                           182
+        from master                       182  (_merge==1)
         from using                          0  (_merge==2)
 
-    Matched                                85  (_merge==3)
-    -----------------------------------------
+    matched                               170  (_merge==3)
+    -----------------------------------------* id 1040 & 1192 se sont desistés le 19 et 26 avril après la randomisation du 7 avril (post Eya 4 avril)
 */
 drop _merge
 order Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise desistement_consortium, last
+
+* Replace observations for id_plateforme 1040 & 1192
+local take_upvars Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Rencontre2Atelier1 Rencontre2Atelier2 Rencontre3Atelier1 Rencontre3Atelier2 EventCOMESA Rencontre456 Atelierconsititutionjuridique Situationdelentreprise 
+foreach var of local take_upvars {
+	replace `var'="absente" if id_plateforme == 1040 | id_plateforme == 1192
+}
 
 ***********************************************************************
 * 	PART 6: information from pii data that is missing in analysis data
