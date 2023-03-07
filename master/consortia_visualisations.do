@@ -513,7 +513,7 @@ putpdf pagebreak
 drop share_bl share_ml
 
 	* Take-up rate per pole
-graph bar (count) if surveyround == 2 & treatment == 1,blabel(total, format(%9.0fc)) over(take_up) by(pole) ///
+graph bar (count) if surveyround == 2 & treatment == 1,blabel(total, format(%9.0fc)) over(take_up) by(pole, note("")) ///
 	legend (pos(1) row(1) label(1 "Absent") label(2 "Present")) ///
 	ytitle("Number")
 graph export takeup_pole.png, replace
@@ -851,7 +851,7 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Export readiness"), bold
 
 	* Export Knowledge questions
-graph hbar (mean) exp_kno_ft_co exp_kno_ft_ze, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) exp_kno_ft_co exp_kno_ft_ze, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(1) label (1 "COMESA") label(2 "ZECLAF") size(vsmall)) ///
 	title("Export Knowledge") ///
 	ylabel(0(0.2)1, nogrid) 
@@ -860,7 +860,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_ex_k.png
 putpdf pagebreak	
 
-graph hbar (mean) exp_kno_ft_co exp_kno_ft_ze, over(pole, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) exp_kno_ft_co exp_kno_ft_ze, over(pole, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(1) label (1 "COMESA") label(2 "ZECLAF") size(vsmall)) ///
 	title("Export Knowledge") ///
 	ylabel(0(0.2)1, nogrid) 
@@ -942,7 +942,8 @@ gr tw ///
 	legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participants (N=55 firms)" ///
                      2 "Treatment group, drop-outs (N=32 firms)" ///
-					 3 "Control group (N=89 firms)") ///
+					 3 "Control group (N=89 firms)") nobox ///
+			   region(lstyle(none)) ///
                c(1) pos(6) ring(6)) ///
 	name(eri_ml_tup, replace)
 gr tw ///
@@ -961,7 +962,8 @@ gr tw ///
 	legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participants (N=55 firms)" ///
                      2 "Treatment group, drop-outs (N=32 firms)" ///
-					 3 "Control group (N=89 firms)") ///
+					 3 "Control group (N=89 firms)") nobox ///
+			   region(lstyle(none)) ///
                c(1) pos(6) ring(6)) ///
 	name(eri_bl_tup, replace)
 gr combine eri_ml_tup eri_bl_tup, name(eri_tup, replace) ycommon xcommon
@@ -1032,7 +1034,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_exprep_inv_pole.png
 putpdf pagebreak
 
-stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(surveyround) by (treatment) vertical ///
+stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(surveyround) by (treatment, note("")) vertical ///
 	title("Investment in export readiness")
 gr export ml_strip_exprep_inv.png, replace
 putpdf paragraph, halign(center) 
@@ -1046,7 +1048,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_strip_exprep_inv_treatment.png
 putpdf pagebreak	
 
-stripplot exprep_inv if exprep_inv<exprep_inv_95p & treatment == 1, over(surveyround) by (pole) vertical ///
+stripplot exprep_inv if exprep_inv<exprep_inv_95p & treatment == 1, over(surveyround) by (pole, note("")) vertical ///
 	title("Investment in export readiness (treatment)", size (small)) ///
 	ytitle("Mean", size (small)) ///
 	ylabel(, nogrid labsize (small))
@@ -1082,7 +1084,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_exprep_couts.png
 putpdf pagebreak
 
-graph bar (mean) exprep_couts, over(surveyround) over (treatment) by(pole) blabel(total, format(%9.1fc) gap(-0.2)) ///
+graph bar (mean) exprep_couts, over(surveyround) over (treatment) by(pole, note("")) blabel(total, format(%9.1fc) gap(-0.2)) ///
 	title("Export preparation costs") ///
 	ylabel(0(1)10, nogrid) ///
     ytitle( "Mean of Export costs perception")
@@ -1288,7 +1290,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_listexp.png
 putpdf pagebreak
 
-graph hbar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) by(pole) ///
+graph hbar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) by(pole, note("")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///
@@ -1313,7 +1315,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_ca_2022.png
 putpdf pagebreak
 
-graph hbar ca if ca<ca_95p & ca>0, blabel(total, format(%9.2fc)) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole) ///
+graph hbar ca if ca<ca_95p & ca>0, blabel(total, format(%9.2fc)) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole, note("")) ///
 	title("Turnover in 2022") ///
 	ytitle( "Mean 2022 turnover") ///
 	ylabel(, nogrid labsize(vsmall)) 
@@ -1323,7 +1325,7 @@ putpdf image ml_bar_ca_2022_pole.png
 putpdf pagebreak
 
 sum ca, d
-stripplot ca if ca <ca_95p & ca>0 , by(treatment surveyround) jitter(4) vertical ///
+stripplot ca if ca <ca_95p & ca>0 , by(treatment surveyround, note("")) jitter(4) vertical ///
 	ytitle("Turnover in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n)) ///
@@ -1356,7 +1358,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_ca_exp_2022.png
 putpdf pagebreak
 
-graph hbar ca_exp if ca_exp<ca_exp_95p & ca_exp>0, blabel(total, format(%9.2fc)) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole) ///
+graph hbar ca_exp if ca_exp<ca_exp_95p & ca_exp>0, blabel(total, format(%9.2fc)) over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole, note("")) ///
 	title("Export turnover in 2022") ///
 	ytitle( "Mean 2022 export turnover") ///
 	ylabel(, nogrid labsize(vsmall)) 
@@ -1366,7 +1368,7 @@ putpdf image ml_bar_ca_exp_2022_pole.png
 putpdf pagebreak
 
 sum ca_exp, d
-stripplot ca_exp if ca_exp <ca_exp_95p & ca_exp>0, by(treatment surveyround) jitter(4) vertical ///
+stripplot ca_exp if ca_exp <ca_exp_95p & ca_exp>0, by(treatment surveyround, note("")) jitter(4) vertical ///
 	ytitle("Export turnover in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n)) ///
@@ -1398,7 +1400,7 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_profit_2022.png
 putpdf pagebreak
 
-graph bar profit if profit<profit_95p & profit > -500000, over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole) blabel(total, format(%9.2fc)) ///
+graph bar profit if profit<profit_95p & profit > -500000, over(treatment, label(labsize(vsmall))) over(surveyround, label(labsize(small))) by(pole, note("")) blabel(total, format(%9.2fc)) ///
 	title("Profit in 2022") ///
 	ytitle( "Mean 2022 profit") ///
 	ylabel(, nogrid labsize(vsmall)) 
@@ -1408,7 +1410,7 @@ putpdf image ml_bar_profit_2022_pole.png
 putpdf pagebreak
 
 sum profit, d
-stripplot profit if profit <profit_95p & profit > -500000, by(treatment surveyround) jitter(4) vertical ///
+stripplot profit if profit <profit_95p & profit > -500000, by(treatment surveyround, note("")) jitter(4) vertical ///
 	ytitle("Profit in 2022") ///
 	yline(`r(p50)', lpattern(dash)) ///
 	text(`r(p50)' 0 "Median", size(vsmall) place(n)) ///
