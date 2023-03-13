@@ -126,7 +126,6 @@ replace matricule_fiscale = "1748667A" if id_plateforme == 1191
 replace matricule_fiscale = "1610602Z" if id_plateforme == 1205
 replace matricule_fiscale = "0111519V" if id_plateforme == 1248
 replace matricule_fiscale = "1542155Q" if id_plateforme == 1150
-replace matricule_fiscale = "1755985E" if id_plateforme == 1185
 
 
 ***********************************************************************
