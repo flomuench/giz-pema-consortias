@@ -359,6 +359,11 @@ replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
 lab var net_size "Size of the female entrepreuneur network"
 
 
+***********************************************************************
+*	PART 11: network
+***********************************************************************	
+
+
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
