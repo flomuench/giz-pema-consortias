@@ -514,7 +514,7 @@ drop share_bl share_ml
 
 	* Take-up rate per pole
 graph bar (count) if surveyround == 2 & treatment == 1,blabel(total, format(%9.0fc)) over(take_up) by(pole, note("")) ///
-	legend (pos(1) row(1) label(1 "Absent") label(2 "Present")) ///
+	legend (pos(1) row(1) label(1 "Drop-out") label(2 "Participate")) ///
 	ytitle("Number")
 graph export takeup_pole.png, replace
 putpdf paragraph, halign(center)

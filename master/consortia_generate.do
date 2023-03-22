@@ -54,7 +54,7 @@ use "${master_intermediate}/consortium_inter", clear
 	*  label variables from participation "presence_ateliers"
 local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
 
-lab def presence_status 0 "Absent" 1 "Present"
+lab def presence_status 0 "Drop-out" 1 "Participate"
 
 foreach var of local take_up_vars {
 	gen `var'1 = `var'
