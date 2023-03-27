@@ -720,10 +720,9 @@ putpdf image ml_perceptions_interactions_pole.png
 putpdf pagebreak
 
 		*Positive interaction terms	
-graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
-	label(3 "Communicate") label(4 "Win")  ///
-	label(5 "Connect")) ///
+graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop9, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Partnership") label(2 "Communicate") ///
+	label(3 "Win") label(4 "Trust") label(5 "Connect")) ///
 	title("Positive views of communication between CEOs") ///
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_positive_interactions_details.png, replace
@@ -731,9 +730,9 @@ putpdf paragraph, halign(center)
 putpdf image ml_perceptions_positive_interactions_details.png
 putpdf pagebreak
 
-graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8 if take_up== 1| treatment == 0,  over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
-	label(3 "Communicate") label(4 "Win") label(5 "Connect")) ///
+graph bar netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 if take_up== 1| treatment == 0,  over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) label (1 "Partnership") label(2 "Communicate") ///
+	label(3 "Win") label(4 "Trust") label(5 "Connect")) ///
 	title("Positive views of communication between CEOs") ///
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_positive_interactions_details_takeup.png, replace
@@ -742,9 +741,8 @@ putpdf image ml_perceptions_positive_interactions_details_takeup.png
 putpdf pagebreak
 
 graph hbar netcoop7 netcoop2 netcoop1 netcoop3 netcoop8 if surveyround == 2, over(pole) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
-	label(3 "Communicate") label(4 "Win")  ///
-	label(5 "Connect")) ///
+	legend (pos(6) row(6) label (1 "Partnership") label(2 "Communicate") ///
+	label(3 "Win") label(4 "Trust") label(5 "Connect")) ///
 	title("Positive views of communication between CEOs in the midline", size(small)) ///
 	ylabel(0(0.5)0.7, nogrid) 
 gr export ml_perceptions_positive_interactions_details_pole.png, replace
@@ -753,7 +751,7 @@ putpdf image ml_perceptions_positive_interactions_details_pole.png
 putpdf pagebreak
 
 	*Negative interaction terms	
-graph bar  netcoop9 netcoop10 netcoop4 netcoop6 netcoop5, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) bargap(0) ///
+graph bar netcoop5 netcoop8 netcoop10 netcoop4 netcoop6, over(treatment) over(surveyround) blabel(total, format(%9.2fc) gap(-0.2)) bargap(0) ///
 	legend (pos(6) row(3) col(2) label(1 "Power") ///
 	label(2 "Opponent") label(3 "Dominate") ///
 	label(4 "Beat") label(5 "Retreat")) ///
@@ -764,8 +762,8 @@ putpdf paragraph, halign(center)
 putpdf image ml_perceptions_negative_interactions_details.png
 putpdf pagebreak
 
-graph hbar  netcoop9 netcoop10 netcoop4 netcoop6 netcoop5 if surveyround == 2, over(pole) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) bargap(0) ///
-	legend (pos(6) row(3) col(2) label(1 "Power") ///
+graph hbar netcoop5 netcoop8 netcoop10 netcoop4 netcoop6 if surveyround == 2, over(pole) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) bargap(0) ///
+legend (pos(6) row(3) col(2) label(1 "Power") ///
 	label(2 "Opponent") label(3 "Dominate") ///
 	label(4 "Beat") label(5 "Retreat")) ///
 	title("Negative views of interactions between CEOs in the midline", size(small)) ///
