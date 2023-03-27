@@ -1430,6 +1430,32 @@ putpdf paragraph, halign(center)
 putpdf image ml_dis_profit_pole.png
 putpdf pagebreak
 
+tw ///
+	(kdensity ihs_profit_w99 if treatment == 1 & surveyround == 1 , lp(l) lc(maroon) bw(5)) ///
+	(kdensity ihs_profit_w99 if treatment == 0 & surveyround == 1 , lp(l) lc(navy) bw(5)) ///
+	, ///
+	xtitle("profit (ihs-transformed, winsorized)", size(small)) ///
+	ytitle("density", size(small)) ///
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) 
+	name(bl_profit_distribution, replace)
+graph export bl_profit_distribution.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bl_profit_distribution.png
+putpdf pagebreak
+
+tw ///
+	(kdensity ihs_profit_w99 if treatment == 1 & surveyround == 2 , lp(l) lc(maroon) bw(5)) ///
+	(kdensity ihs_profit_w99 if treatment == 0 & surveyround == 2 , lp(l) lc(navy) bw(5)) ///
+	, ///
+	xtitle("profit (ihs-transformed, winsorized)", size(small)) ///
+	ytitle("density", size(small)) ///
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) 
+	name(ml_profit_distribution, replace)
+graph export ml_profit_distribution.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_profit_distribution.png
+putpdf pagebreak
+
 *scatter plots by pole
 forvalues x = 1(1)4 {
 		* between CA and CA_Exp
