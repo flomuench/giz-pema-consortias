@@ -1391,6 +1391,19 @@ putpdf image ml_dis_ca_exp_2022_pole.png
 putpdf pagebreak
 
      * variable profit_2022:
+tw ///
+	(kdensity ihs_profit_w99 if treatment == 1, lp(l) lc(maroon) bw(5)) ///
+	(kdensity ihs_profit_w99 if treatment == 0, lp(l) lc(navy) bw(5)) ///
+	, ///
+	xtitle("profit (ihs-transformed, winsorized)", size(small)) ///
+	ytitle("density", size(small)) ///
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(ml_profit_distribution, replace)
+gr export ml_profit_distribution.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_profit_distribution.png
+putpdf pagebreak
+	 
 egen profit_95p = pctile(profit), p(95) 
 graph bar profit if profit<profit_95p & profit > -500000, over(treatment) over (surveyround) blabel(total, format(%9.2fc)) ///
 	title("Profit in 2022") ///
@@ -1441,6 +1454,8 @@ gr export scatter_capole.png, replace
 putpdf paragraph, halign(center) 
 putpdf image scatter_capole.png
 putpdf pagebreak
+
+
 }
 
 drop profit_95p ca_exp_95p ca_95p
