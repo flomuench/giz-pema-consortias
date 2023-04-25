@@ -26,13 +26,15 @@ cd "${master_output}/figures"
 *correlation matrix of selected variables
 *correlate ca_2021 ca_exp_2021 profit_2021 exprep_inv
 
+set scheme s1color
+
+
 ***********************************************************************
 * 	PART 2: Basline statistics
 ***********************************************************************
 {
 /*
 * create word document
-set scheme s1color
 putpdf clear
 putpdf begin 
 putpdf paragraph
@@ -780,6 +782,19 @@ putpdf text ("Section 4: Management practices"), bold
 
     *Management practices index
 tw ///
+	(kdensity mpi if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 0 & surveyround == 1, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Full sample}") ///
+	subtitle("{it:Index calculated based on z-score method}", size(vsmall)) ///
+	xtitle("Management Practices Index", size(vsmall)) ///
+	ytitle("Number of observations", axis(1) size(vsmall)) ///
+	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment group" 2 "Control group")) 
+	
+tw ///
 	(kdensity mpi if treatment == 1 & surveyround == 2, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
 	(histogram mpi if treatment == 1 & surveyround == 2, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
 	(kdensity mpi if treatment == 0 & surveyround == 2, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
@@ -843,7 +858,21 @@ graph hbar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 ma
 	putpdf paragraph, halign(center) 
 	putpdf image ml_source_share_strategy_pole.png
 	putpdf pagebreak
-
+	
+	
+		* What management practices did increase in treatment vs. control at midline?
+graph hbar (mean) man_fin_num man_fin_per_fre man_hr_ind man_hr_pro man_ind_awa if surveyround == 2, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(6) ///
+	label(1 "Nb. KPIs") label (2 "Frequency KPI evaluation") label(3 "Product profit") ///
+	label(4 "Employee KPIs") label  (5 "Employee promotion") label(6 "Employee-firm goal awareness"))  ///
+	title("Management practices (midline)", size (medium)) ///
+	ylabel(0(0.25)1, nogrid) 
+	gr export mp_all_ml.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image mp_all_ml.png
+	putpdf pagebreak
+	
+	
 ****** Section 5: Export management and readiness ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Export readiness"), bold

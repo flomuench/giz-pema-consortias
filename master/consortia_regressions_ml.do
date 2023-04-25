@@ -25,11 +25,7 @@ cd "${master_regressiontables}/midline"
 xtset id_plateforme surveyround, delta(1)
 
 ***********************************************************************
-* 	Part 1: 	Midline analysis			  
-***********************************************************************
-
-***********************************************************************
-* 	PART 1.1: survey attrition 		
+* 	PART 1: survey attrition 		
 ***********************************************************************
 *test for differential attrition using the PAP specification (cluster SE, strata)
 eststo a2, r:reg  refus treatment if surveyround==2, cluster(id_plateforme)
@@ -64,7 +60,7 @@ iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv ex
 
 	 
 ***********************************************************************
-* 	PART 1.2: Write a program that generates generic regression table
+* 	PART 2: Write a program that generates generic regression table
 ***********************************************************************	
 program rct_regression_table
 	version 15								// define Stata version 15 used
@@ -124,7 +120,7 @@ program rct_regression_table
 end
 
 ***********************************************************************
-* 	PART 1.3: Apply program to all outcome variables
+* 	PART 3: Apply program to all outcome variables
 ***********************************************************************		
 	* network 
 rct_regression_table net_size net_nb_qualite net_coop_pos // cannot apply due to missing baseline to: net_nb_f & m
@@ -146,8 +142,9 @@ rct_regression_table ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 ihs_employes_w99
 
 
 
+
 ***********************************************************************
-* 	PART 1.4: Network regression (female network)	
+* 	PART 4: Network regression (female network)	- not possible in program
 ***********************************************************************
 	* ATE, ancova
 			* pure mean comparison at midline 
@@ -195,7 +192,7 @@ esttab `regressions' using "ml_net_nb_f.tex", replace ///
 
 	
 ***********************************************************************
-* 	PART 1.5: Network regression (male network)	
+* 	PART 5: Network regression (male network)	- not possible in program
 ***********************************************************************
 	* ATE, ancova
 	
@@ -243,7 +240,7 @@ esttab `regressions' using "ml_net_nb_m.tex", replace ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
 ***********************************************************************
-* 	PART 1.6: SSA Export Readiness index		
+* 	PART 6: SSA Export Readiness index		- not possible in program
 ***********************************************************************
 	* ATE, ancova
 			* pure mean comparison at midline
@@ -285,7 +282,7 @@ esttab `regressions' using "ml_eri_ssa.tex", replace ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
 ***********************************************************************
-* 	PART 1.7: list experiment regression
+* 	PART 7: list experiment regression - not possibe in program
 ***********************************************************************
 	* ATE, ancova
 	
@@ -334,7 +331,42 @@ esttab `regressions' using "ml_listexp.tex", replace ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
 
+***********************************************************************
+* 	PART 3: Check consistency of profit regression to DV definition
+***********************************************************************
+foreach var of varlist profit profit_w99 ihs_profit_w99 {
+	
+				* ancova with stratification dummies
+			eststo `var'1, r: reg `var' i.treatment l.`var' i.strata_final, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_ate
+
+				* DiD
+			eststo `var'2, r: xtreg `var' i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"			
+
+				* ATT, IV (participation in phase 1 meetings)
+			eststo `var'3, r:ivreg2 `var' l.`var' i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_att
+			
+}
+
+esttab profit? profit_w99? ihs_profit_w99? using "profit_consistency.tex", replace ///
+	mtitles("Ancova" "DiD" "ATT" "Ancova" "DiD" "ATT" "Ancova" "DiD" "ATT") ///
+	label ///
+	b(3) ///
+	se(3) ///
+	drop(*.strata_final) ///
+	star(* 0.1 ** 0.05 *** 0.01) ///
+	nobaselevels ///
+	scalars("strata Strata controls" "bl_control Y0 control") ///
+	addnotes("")
 
 /*
 
