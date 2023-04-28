@@ -1418,6 +1418,10 @@ putpdf image ml_dis_ca_exp_2022_pole.png
 putpdf pagebreak
 
      * variable profit_2022:
+sum profit, d
+sum profit if profit == 0 & surveyround == 2 // 11 companies state to have exactly 0 profit
+sum profit if profit < 0 & surveyround == 2	& profit != -999 // 20 companies reported a loss at midline
+
 tw ///
 	(kdensity ihs_profit_w99 if treatment == 1, lp(l) lc(maroon) bw(5)) ///
 	(kdensity ihs_profit_w99 if treatment == 0, lp(l) lc(navy) bw(5)) ///

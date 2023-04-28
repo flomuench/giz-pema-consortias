@@ -303,6 +303,15 @@ use links to understand the code syntax for creating the accounting variables' g
 ***********************************************************************
 *	PART 8: Financial indicators
 ***********************************************************************
+	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
+gen profit_pct = .
+	egen profit_pct1 = rank(profit) if surveyround == 1		// use egen rank to get the rank of each value in the distribution of profits
+	replace profit_pct = profit_pct1/166					// divide by N + 1 to get a percentile for each observation
+	egen profit_pct2 = rank(profit) if surveyround == 2
+	replace profit_pct = profit_pct2/123 if profit_pct == .
+	drop profit_pct1 profit_pct2
+
+	
 	* winsorize & ihs-transform
 			* survey periods
 local wins_vars "ca ca_exp profit exprep_inv employes"

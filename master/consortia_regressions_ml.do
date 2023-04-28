@@ -138,7 +138,7 @@ rct_regression_table innovated innovations
 rct_regression_table eri exprep_inv // cannot apply due to missing baseline to: eri_ssa
 
 	* kpi
-rct_regression_table ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 ihs_employes_w99
+rct_regression_table ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99
 
 
 
