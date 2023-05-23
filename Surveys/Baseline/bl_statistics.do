@@ -21,6 +21,8 @@ use "$bl_final/bl_final", clear
 	* set directory to checks folder
 cd "$bl_output"
 set graphics off
+set scheme s1color
+
 	* create pdf document
 putpdf clear
 putpdf begin 
@@ -215,6 +217,19 @@ graph bar age, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Ser
 	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
 	gr export "$bl_output/donor/age.png", replace
 
+	
+*Size	
+sum employes,d
+histogram(employes) if employes>0 & employes<30, frequency  xlabel(, nogrid) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("No. of Employees") ///
+	ylabel(0(20)100 , nogrid) ///
+	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(100 `r(p50)' "Median", size(vsmall) place(e))
+	gr export "$bl_output/employees_general.png", replace
+
+	
 sum employes,d
 graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
 	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
@@ -243,6 +258,7 @@ histogram(exp_pays) if exp_pays<10, width(1) frequency addlabels xlabel(0(1)8, n
 	text(100 `r(p50)' "Median", size(vsmall) place(e))
 	gr export "$bl_output/donor/export_countries.png", replace
 
+		
 	*Family vs non-family contact*
 graph bar net_nb_dehors net_nb_fam, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT"))stack ///
 	ytitle("Person") ///
@@ -399,6 +415,19 @@ gr export strip_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image strip_ca2021.png
 putpdf pagebreak
+
+
+*Total turnover for all firms
+ graph box ca_2021 if ca_2021<ca_95p & ca_2021> 0 & ca_2021<50000 , blabel(total, format(%9.2fc)) ///
+	title("Total turnover in 2021", pos(12)) ///
+	note("{it:Outliers were removed}", size(small)) 
+gr export box_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image box_ca2021.png
+putpdf pagebreak
+
+
+
 
      * variable ca_exp_2021:
 egen ca_exp95p = pctile(ca_exp_2021), p(95)
