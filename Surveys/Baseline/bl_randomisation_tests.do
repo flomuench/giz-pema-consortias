@@ -107,7 +107,6 @@ foreach var of local tvars{
 display"`var'"
 iebaltab ca_2021 ca_exp_2021 profit_2021 exp_pays exprep_inv exprep_couts num_inno net_nb_dehors net_nb_fam, grpvar(`var') ftest save(baltab_`var') replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
-			 format(%12.2fc)
 
 	* Manully check the f-test for joint orthogonality using hc3:
 	
@@ -139,7 +138,6 @@ g strata_final = strata8
 
 *delete intermediary variables used for tests*
 drop strata2-strata10
-drop strata?_prep
 drop treatmentstrata?
 drop ca_sd_strata?
 drop exp_sd_strata?

@@ -27,7 +27,9 @@ use "${bl_intermediate}/bl_inter", clear
 cd "$bl_output/stratification"
 
 	* begin word file to export strata visualisations
-	
+version 15
+set varabbrev on // quick fix necessary due to bug in tab2docx reported here (otherwise necessary to change ado file): https://www.statalist.org/forums/forum/general-stata-discussion/general/1564330-reporting-a-tab2docx-syntax-error
+
 putdocx clear	
 putdocx begin
 putdocx paragraph, halign(center) 
@@ -57,7 +59,7 @@ replace miss_ca2021 =. if ca_2021==.
 mdesc miss_ca2021
 display "We miss some information on CA2021 for `r(miss)' (`r(percent)'%) out of `r(total)'."
 putdocx paragraph
-putdocx text ("We miss some information on CA2021 for `r(miss)' (`: display %9.2fc `r(percent)''%) out of `r(total)'.")	
+putdocx text ("We miss some information on CA2021 for `r(miss)' (`: display %9.2fc `r(percent)'% out of `r(total)').'")	
 
 	* Management practices
 	
@@ -73,7 +75,7 @@ foreach var of local  mgmt_prc_m {
 mdesc miss_mgmt_prc
 display "We miss some information on management practices variables for `r(miss)' (`r(percent)'%) out of `r(total)'."
 putdocx paragraph
-putdocx text ("We miss some information on management practices variables for `r(miss)' `: display %9.2fc`r(percent)'''%) out of `r(total)'.")	
+putdocx text ("We miss some information on management practices variables for `r(miss)' (`: display %9.2fc `r(percent)'% out of `r(total)').'")	
 
 
 *Use older figures for CA and exp if 2021 figures are missing (NOT GOOD IDEA
@@ -265,6 +267,12 @@ egen group3=cut(rank2), group(6)
 egen strata10= group(pole2 group3)
 replace strata10=29 if ca_all>1100000 & pole==1
 replace strata10=30 if ca_all>610000 & pole==3
+
+
+***********************************************************************
+* 	drop all strata prep variables
+***********************************************************************
+drop strata?_prep
 
 ***********************************************************************
 * 	PART 4: Compare Variance per approach
@@ -813,8 +821,7 @@ putdocx pagebreak
 	* Save doc
 	
 putdocx save stratification.docx, replace
-
-	* Pick one strata approach, delete others
+set varabbrev off
 
 cd "$bl_final"
 

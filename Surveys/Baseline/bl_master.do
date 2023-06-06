@@ -23,6 +23,7 @@ clear all
 graph drop _all
 scalar drop _all
 set more off
+set varabbrev on // stops stata from referring to variables if only one part is the same
 set graphics on /* switch off to on to display graphs */
 capture program drop zscore /* drops the program programname */
 qui cap log c
@@ -43,7 +44,7 @@ net install http://www.stata.com/users/kcrow/tab2docx
 ssc install labutil
 ssc install asdoc
 ssc install psmatch2
-ssc install winsor
+ssc install winsor2
 */
 *net from https://www.sealedenvelope.com/
 *net install time.pkg
@@ -64,8 +65,9 @@ set scheme plotplain
 }
 		* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
 if c(os) == "Windows" {
+	global github	 = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias"
 	global bl_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
-	global bl_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/baseline"
+	global bl_github = "${github}/surveys/baseline"
 	global bl_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
 }
@@ -79,7 +81,7 @@ else if c(os) == "MacOSX" {
 
 if c(os) == "Windows" {
 	global regis_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/1-registration"
-	global regis_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/registration"
+	global regis_github = "${github}/registration"
 	global regis_backup = "C:/Users/`c(username)'/Documents/consortia-back-up"
 }
 else if c(os) == "MacOSX" {
@@ -104,6 +106,9 @@ global regis_checks = "${regis_gdrive}/checks"
 global bl_output = "${bl_gdrive}/output"
 global bl_figures = "${bl_output}/descriptive-statistics-figures"
 global bl_progress = "${bl_output}/progress-eligibility-characteristics"
+
+		* install older version of iebaltab
+quietly do "${github}/ado_files/iebaltab.ado"
 
 
 			* set seeds for replication

@@ -149,7 +149,7 @@ lab var inno_mot "innovation motivation"
 *lab var inno_mot_eve "exchange ideas in an event"
 *lab var inno_mot_emp "exchange ideas with employees"
 *lab var inno_mot_test "test"
-lab var inno_mot_autre "other source for innovation"
+lab var inno_mot_autres "other source for innovation"
 lab var inno_rd "innovation research and development"
 
 		* Section networking size/business contacts

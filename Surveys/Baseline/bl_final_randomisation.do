@@ -59,9 +59,9 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(strata_final, lab(labs
 	title("Firms by trial arm within each strata") ///
 	blabel(bar, format(%4.0f) size(tiny)) ///
 	ylabel(, labsize(minuscule) format(%-100s))
-	graph export firms_per_treatmentgroup_strata.png, replace
-	putdocx paragraph, halign(center)
-	putdocx image firms_per_treatmentgroup_strata.png, width(4)
+graph export firms_per_treatmentgroup_strata.png, replace
+putdocx paragraph, halign(center)
+putdocx image firms_per_treatmentgroup_strata.png, width(4)
 	
 	
 ***********************************************************************
@@ -71,15 +71,14 @@ graph hbar (count), over(treatment, lab(labs(tiny))) over(strata_final, lab(labs
 		* balance for continuous and few units categorical variables
 set matsize 25
 
-iebaltab ca_2021 ca_exp_2021 profit_2021 capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest save(baltab_final) replace ///
-
+iebaltab ca_2021 ca_exp_2021 profit_2021 capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, grpvar(treatment) ftest save(baltab_final) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 			 
 		* balance for continuous and few units categorical variables tex formati
 set matsize 25
 
-iebaltab ca_2021 ca_exp_2021 profit_2021 capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite exportmngt exportprep mngtvars, grpvar(treatment) ftest savetex(baltab_final) replace ///
+iebaltab ca_2021 ca_exp_2021 profit_2021 capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam net_nb_qualite, grpvar(treatment) ftest savetex(baltab_final) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 			 

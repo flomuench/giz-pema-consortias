@@ -212,10 +212,10 @@ replace ca_2018_cor="26423000" if id_plateforme==1092
 
 *3.5 Translate and code entr_idee (Low priority, only at the end of the survey, when more time)
 
-replace inno_mot_autre = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autre =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
-replace inno_mot_autre = "ca depends la demande des clients/ son mari"  if inno_mot_autre =="7asb demande clients / son marie"
-replace inno_mot_autre = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
-replace inno_mot_autre = "idée de groupe sur le savoir faire" if inno_mot_autre =="fekra jama3eya ala savoir faire"
+replace inno_mot_autres = "après 16 ans d'expérience dans le domaine de la production pépinière et de la formation en..."  if inno_mot_autres =="بعد خبرة 16 سنة في مجال انتاج المشاتل والتكوين في"
+replace inno_mot_autres = "ca depends la demande des clients/ son mari"  if inno_mot_autres =="7asb demande clients / son marie"
+replace inno_mot_autres = "représentant de l'artisanat (utica)"  if id_plateforme ==1214
+replace inno_mot_autres = "idée de groupe sur le savoir faire" if inno_mot_autres =="fekra jama3eya ala savoir faire"
 
 replace support_autres = "certains jours, la charge de travail n'est pas énorme pour trouver du temps" if support_autres == "في ايام يكون فيها العمل شويا باش نجمو نلقو الوقت ل"
 replace support_autres = "valorisation des manifestations en réseaux sociaux"  if support_autres =="tathmin tadhahoraat fi reseaux sociaux"
@@ -552,9 +552,9 @@ destring `x', replace
 * 	PART 8:  autres / miscellaneous adjustments
 ***********************************************************************
 
-replace questions_needing_check = "toute la ligne doit être vérifiée /" if id_plateforme == 1237
+replace questions_needing_checks = "toute la ligne doit être vérifiée /" if id_plateforme == 1237
 replace needs_check = 1 if id_plateforme == 1237
-replace questions_needing_check = "Ttoute la ligne doit être vérifiée /" if id_plateforme == 1154
+replace questions_needing_checks = "Ttoute la ligne doit être vérifiée /" if id_plateforme == 1154
 replace needs_check = 1 if id_plateforme == 1154
 
 ***********************************************************************
