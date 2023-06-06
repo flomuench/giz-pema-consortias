@@ -142,11 +142,11 @@ label var inno_pers "Innovation coming from a personal/ employee inniative "
 generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
 label var num_inno "Number of different types innovation introduced by a firm"
 
-* create a new variable for survey start: 
+/* create a new variable for survey start: 
 generate survey_started= 0
 replace survey_started= 1 if _merge == 3
 label var survey_started "Number of firms which started the survey"
-label values survey_started yesno
+label values survey_started yesno */
 
 
 

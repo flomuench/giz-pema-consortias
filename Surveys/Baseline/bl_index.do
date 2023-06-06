@@ -415,44 +415,46 @@ putpdf pagebreak
 ***********************************************************************
 * 	PART 6:  Correlation of index variables with accounting data
 ***********************************************************************
-twoway (scatter ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p) || ///
-(lfit ca_exp_2021 exportmngt if ca_exp_2021<ca_exp95p, lcol(blue))
+winsor2 ca_exp_2021 ca_2021, suffix(_w95) cuts(0 95)
+
+twoway (scatter ca_exp_2021 exportmngt if ca_exp_2021<ca_exp_2021_w95) || ///
+(lfit ca_exp_2021 exportmngt if ca_exp_2021<ca_exp_2021_w95, lcol(blue))
 gr export cor_exportmanag_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_exportmanag_exp2021.png
 putpdf pagebreak
 
-twoway (scatter ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p) || ///
-(lfit ca_exp_2021 mngtvars if ca_exp_2021<ca_exp95p, lcol(blue))
+twoway (scatter ca_exp_2021 mngtvars if ca_exp_2021<ca_exp_2021_w95) || ///
+(lfit ca_exp_2021 mngtvars if ca_exp_2021<ca_exp_2021_w95, lcol(blue))
 gr export cor_manageprac_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_manageprac_exp2021.png
 putpdf pagebreak
 
-twoway (scatter ca_exp_2021 innovars if ca_exp_2021<ca_exp95p) || ///
-(lfit ca_exp_2021 innovars if ca_exp_2021<ca_exp95p, lcol(blue))
+twoway (scatter ca_exp_2021 innovars if ca_exp_2021<ca_exp_2021_w95) || ///
+(lfit ca_exp_2021 innovars if ca_exp_2021<ca_exp_2021_w95, lcol(blue))
 gr export cor_innovarsindex_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_innovarsindex_exp2021.png
 putpdf pagebreak
 
-twoway (scatter ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p) || ///
-(lfit ca_exp_2021 exportprep if ca_exp_2021<ca_exp95p, lcol(blue))
+twoway (scatter ca_exp_2021 exportprep if ca_exp_2021<ca_exp_2021_w95) || ///
+(lfit ca_exp_2021 exportprep if ca_exp_2021<ca_exp_2021_w95, lcol(blue))
 gr export cor_expprep_exp2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_expprep_exp2021.png
 putpdf pagebreak
 
-twoway (scatter ca_2021 exportmngt if ca_2021<ca_95p) || ///
-(lfit ca_2021 exportmngt if ca_2021<ca_95p, lcol(blue))
+twoway (scatter ca_2021 exportmngt if ca_2021<ca_2021_w95) || ///
+(lfit ca_2021 exportmngt if ca_2021<ca_2021_w95, lcol(blue))
 gr export cor_exportmanag_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_exportmanag_ca2021.png
 putpdf pagebreak
 
 
-twoway (scatter ca_2021 mngtvars if ca_2021<ca_95p) || ///
-(lfit ca_2021 mngtvars if ca_2021<ca_95p, lcol(blue))
+twoway (scatter ca_2021 mngtvars if ca_2021<ca_2021_w95) || ///
+(lfit ca_2021 mngtvars if ca_2021<ca_2021_w95, lcol(blue))
 gr export cor_manageprac_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image cor_manageprac_ca2021.png
