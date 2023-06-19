@@ -347,7 +347,7 @@ esttab `regressions' using "ml_listexp.tex", replace ///
 }
 
 ***********************************************************************
-* 	PART 3: Check consistency of profit regression to DV definition
+* 	PART 8: Check consistency of profit regression to DV definition
 ***********************************************************************
 {
 foreach var of varlist profit profit_w99 ihs_profit_w99 profit_pct {
@@ -385,7 +385,7 @@ esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency
 }
 	
 ***********************************************************************
-* 	PART 6: Endline results - regression table business performance outcomes
+* 	PART 9: Endline results - regression table business performance outcomes
 ***********************************************************************
 {
 capture program drop rct_regression_business // enables re-running
@@ -412,14 +412,14 @@ program rct_regression_business
 		tokenize `varlist'
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{tabular}{l*{5}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Impact on female entrepreneurs' business performance} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
 				fragment ///
 				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
 				label b(3) se(3) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
-				drop(*.strata_final ?.missing_bl_*) ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
 				
 				* Bottom panel: ITT
@@ -427,14 +427,13 @@ program rct_regression_business
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				b(3) ///
-				se(3) ///
-				drop(*.strata_final ?.missing_bl_*) ///
+				label b(3) se(3) ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \multicolumn{7}{l}{\footnotesize Robust Standard 		errors in parentheses} \\ \multicolumn{2}{l}{\footnotesize \sym{**} \(p<0.05\), \sym{*} \(p<0.1\)} \\ \end{tabular} \\ \end{table}")
+				postfoot("\hline\hline\hline \multicolumn{6}{l}{\footnotesize Robust Standard errors in parentheses.} \\ \multicolumn{6}{l}{\footnotesize Sales, profits, employees and female employees are winsorized at the 99th percentile and inverse hyperbolic sine transformed.} \\ \multicolumn{6}{l}{\footnotesize In column(3), profits are percentile transformed.} \\ \multicolumn{6}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
 			
 end
 
