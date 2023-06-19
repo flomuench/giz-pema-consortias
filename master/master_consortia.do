@@ -34,7 +34,7 @@ ssc install ihstrans, replace
 ssc install winsor2, replace
 ssc install ietoolkit, replace
 ssc install scheme-burd, replace
-ssc install ranktest
+ssc install ranktest, replace
 net install cleanplots, from("https://tdmize.github.io/data/cleanplots")
 ssc install ivreg2, replace
 ssc install estout, replace
@@ -47,10 +47,7 @@ ssc install missingplot, replace
 ***********************************************************************
 {
 	* set first level globals for code and data
-
-	
 		* define user
-		
 	if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "Amina" | "`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
 
 
@@ -63,18 +60,22 @@ ssc install missingplot, replace
 
 
 	* dynamic folder path for gdrive(data,output), github(code)
-
-
 	if c(os) == "Windows" {
+	global github 		 = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias"
 	global master_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
-	global master_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
+	global master_github = "${github}/master"
 	global master_consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
 else if c(os) == "MacOSX" {
+	global github 		 = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias"
 	global master_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/6-master"
-	global master_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
+	global master_github = "${github}/master"
 	global master_consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
+
+		* ado-files
+global ado_files = "${github}/ado_files"
+sysdir set PLUS "${ado_files}"					// changes system directory for ado-files to local folder with ado categories
 
 		* registration folder
 if c(os) == "Windows" {
@@ -185,7 +186,7 @@ if (1) do "${master_github}/consortia_generate.do"
 /*--------------------------------------------------------------------
 	PART 3.6: Baseline power
 ----------------------------------------------------------------------*/		
-if (1) do "${master_github}/consortia_power.do"
+if (0) do "${master_github}/consortia_power.do"
 /*--------------------------------------------------------------------
 	PART 3.7: Exports a list of participants with most important info (for survey institute or political partners)
 ----------------------------------------------------------------------*/
@@ -194,7 +195,7 @@ if (0) do "${master_github}/consortia_export.do"
 	PART 3.8: Test coherence between survey rounds
 	Creates: fiche_de_correction
 ----------------------------------------------------------------------*/
-if (1) do "${master_github}/consortia_test.do"
+if (0) do "${master_github}/consortia_test.do"
 
 
 ***********************************************************************

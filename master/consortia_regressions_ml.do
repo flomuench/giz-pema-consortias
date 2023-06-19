@@ -24,9 +24,11 @@ cd "${master_regressiontables}/midline"
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
 
+
 ***********************************************************************
 * 	PART 1: survey attrition 		
 ***********************************************************************
+{
 *test for differential attrition using the PAP specification (cluster SE, strata)
 eststo a2, r:reg  refus treatment if surveyround==2, cluster(id_plateforme)
 estadd local strata "No"
@@ -58,7 +60,8 @@ iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv ex
 	* w/o outliers
 iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0 & id_plateforme != 1092, grpvar(treatment) ftest fmissok vce(robust) format(%12.2fc) save(baltab_midline_wo_outlier) replace 
 
-	 
+}
+ 
 ***********************************************************************
 * 	PART 2: Write a program that generates generic regression table
 ***********************************************************************	
@@ -76,12 +79,12 @@ program rct_regression_table
 			estadd local strata "No"
 					
 						* ancova without stratification dummies
-			eststo `var'2, r: reg `var' i.treatment l.`var', cluster(id_plateforme)
+			eststo `var'2, r: reg `var' i.treatment l.`var' i.missing_bl_`var', cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "No"
 
 						* ancova with stratification dummies
-			eststo `var'3, r: reg `var' i.treatment l.`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'3, r: reg `var' i.treatment l.`var' i.strata_final i.missing_bl_`var', cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			estimates store `var'_ate
@@ -92,13 +95,13 @@ program rct_regression_table
 			estadd local strata "Yes"			
 
 				* ATT, IV (participation in phase 1 meetings)
-			eststo `var'5, r:ivreg2 `var' l.`var' i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+			eststo `var'5, r:ivreg2 `var' l.`var' i.strata_final i.missing_bl_`var' (take_up_per = i.treatment), cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			estimates store `var'_att
 
 				* ATT, IV (participation in consortia)
-			eststo `var'6, r:ivreg2 `var' l.`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'6, r:ivreg2 `var' l.`var' i.strata_final i.missing_bl_`var' (take_up = i.treatment), cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"		
 		
@@ -121,7 +124,8 @@ end
 
 ***********************************************************************
 * 	PART 3: Apply program to all outcome variables
-***********************************************************************		
+***********************************************************************
+{	
 	* network 
 rct_regression_table net_size net_nb_qualite net_coop_pos // cannot apply due to missing baseline to: net_nb_f & m
 
@@ -138,14 +142,15 @@ rct_regression_table innovated innovations
 rct_regression_table eri exprep_inv // cannot apply due to missing baseline to: eri_ssa
 
 	* kpi
-rct_regression_table ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99
+rct_regression_table ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99 car_empl2_w99
 
-
+}
 
 
 ***********************************************************************
 * 	PART 4: Network regression (female network)	- not possible in program
 ***********************************************************************
+{
 	* ATE, ancova
 			* pure mean comparison at midline 
 eststo nf1, r: reg net_nb_f i.treatment if surveyround == 2, vce(hc3)
@@ -153,12 +158,12 @@ estadd local bl_control "No"
 estadd local strata "No"
 		
 			* ancova without stratification dummies 
-eststo nf2, r: reg net_nb_f i.treatment, cluster(id_plateforme) 
+eststo nf2, r: reg net_nb_f i.treatment i.strata_final l.net_size i.missing_bl_net_size, cluster(id_plateforme) 
 estadd local bl_control "Yes"
 estadd local strata "No"
 
 			* ancova with stratification dummies 
-eststo nf3, r: reg net_nb_f i.treatment i.strata_final, cluster(id_plateforme) 
+eststo nf3, r: reg net_nb_f i.treatment i.strata_final l.net_size i.missing_bl_net_size, cluster(id_plateforme) 
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
@@ -168,13 +173,13 @@ estadd local bl_control "Yes"
 estadd local strata "Yes"			
 */
 	* ATT, IV (participation in phase 1 meetings) 
-eststo nf4, r:ivreg2 net_nb_f i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+eststo nf4, r:ivreg2 net_nb_f i.strata_final l.net_size i.missing_bl_net_size (take_up_per = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 estimates store iv_nf4
 
 	* ATT, IV (participation in consortium)
-eststo nf5, r:ivreg2 net_nb_f i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+eststo nf5, r:ivreg2 net_nb_f i.strata_final l.net_size i.missing_bl_net_size (take_up = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
@@ -190,10 +195,12 @@ esttab `regressions' using "ml_net_nb_f.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 
-	
+}
+
 ***********************************************************************
 * 	PART 5: Network regression (male network)	- not possible in program
 ***********************************************************************
+{
 	* ATE, ancova
 	
 			* pure mean comparison at midline (create an aggreate variable for network size)
@@ -239,9 +246,12 @@ esttab `regressions' using "ml_net_nb_m.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
+}	
+	
 ***********************************************************************
 * 	PART 6: SSA Export Readiness index		- not possible in program
 ***********************************************************************
+{
 	* ATE, ancova
 			* pure mean comparison at midline
 eststo esa1, r: reg eri_ssa i.treatment if surveyround == 2, vce(hc3)
@@ -249,23 +259,23 @@ estadd local bl_control "No"
 estadd local strata "No"
 
 			* ancova without stratification dummies
-eststo esa2, r: reg eri_ssa i.treatment l.eri, cluster(id_plateforme)
+eststo esa2, r: reg eri_ssa i.treatment l.eri missing_bl_eri, cluster(id_plateforme)
 estadd local bl_control "Yes"
 estadd local strata "No"
 
 			* ancova with stratification dummies
-eststo esa3, r: reg eri_ssa i.treatment l.eri i.strata_final, cluster(id_plateforme)
+eststo esa3, r: reg eri_ssa i.treatment l.eri missing_bl_eri i.strata_final, cluster(id_plateforme)
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
 			* ATT, IV (with 1 session counting as taken up)
-eststo esa4, r:ivreg2 eri_ssa l.eri i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
+eststo esa4, r:ivreg2 eri_ssa l.eri missing_bl_eri i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 estimates store iv_esa4
 
 			* ATT, IV (with 1 session counting as taken up)
-eststo esa5, r:ivreg2 eri_ssa l.eri i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+eststo esa5, r:ivreg2 eri_ssa l.eri missing_bl_eri i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
 estadd local bl_control "Yes"
 estadd local strata "Yes"
 
@@ -280,12 +290,14 @@ esttab `regressions' using "ml_eri_ssa.tex", replace ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	
+}
 
 ***********************************************************************
 * 	PART 7: list experiment regression - not possibe in program
 ***********************************************************************
-	* ATE, ancova
-	
+{
+	* ATE, ancova	
 			* no significant baseline differences
 reg listexp i.treatment if surveyround == 1, vce(hc3)
 
@@ -332,11 +344,13 @@ esttab `regressions' using "ml_listexp.tex", replace ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
+}
 
 ***********************************************************************
 * 	PART 3: Check consistency of profit regression to DV definition
 ***********************************************************************
-foreach var of varlist profit profit_w99 ihs_profit_w99 {
+{
+foreach var of varlist profit profit_w99 ihs_profit_w99 profit_pct {
 	
 				* ancova with stratification dummies
 			eststo `var'1, r: reg `var' i.treatment l.`var' i.strata_final, cluster(id_plateforme)
@@ -357,7 +371,7 @@ foreach var of varlist profit profit_w99 ihs_profit_w99 {
 			
 }
 
-esttab profit? profit_w99? ihs_profit_w99? using "profit_consistency.tex", replace ///
+esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency.tex", replace ///
 	mtitles("Ancova" "DiD" "ATT" "Ancova" "DiD" "ATT" "Ancova" "DiD" "ATT") ///
 	label ///
 	b(3) ///
@@ -367,6 +381,68 @@ esttab profit? profit_w99? ihs_profit_w99? using "profit_consistency.tex", repla
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
 	addnotes("")
+
+}
+	
+***********************************************************************
+* 	PART 6: Endline results - regression table business performance outcomes
+***********************************************************************
+{
+capture program drop rct_regression_business // enables re-running
+program rct_regression_business
+	version 15							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+			* ATE: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_ate
+			eststo dir
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_att
+			eststo dir
+		}
+		* Put all regressions into one table
+			* Top panel: ATE
+		tokenize `varlist'
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", replace ///
+				prehead("\begin{tabular}{l*{5}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
+				fragment ///
+				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
+				label b(3) se(3) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				drop(*.strata_final ?.missing_bl_*) ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				
+				* Bottom panel: ITT
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", append ///
+				fragment ///
+				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				b(3) ///
+				se(3) ///
+				drop(*.strata_final ?.missing_bl_*) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \multicolumn{7}{l}{\footnotesize Robust Standard 		errors in parentheses} \\ \multicolumn{2}{l}{\footnotesize \sym{**} \(p<0.05\), \sym{*} \(p<0.1\)} \\ \end{tabular} \\ \end{table}")
+			
+end
+
+	* apply program to business performance outcomes
+rct_regression_business ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99, gen(business_outcomes)
+
+}		
+	
 
 /*
 
