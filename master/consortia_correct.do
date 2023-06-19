@@ -411,6 +411,21 @@ replace ca = 62000 if id_plateforme == 1097 & surveyround == 1
 replace ca_exp = 30000 if id_plateforme == 1097 & surveyround == 1
 replace profit = 21000 if id_plateforme == 1097 & surveyround == 1
 
+
+***********************************************************************
+* 	PART 3:  	Replace all MV codes with real missing values for Y outcomes for later regression
+***********************************************************************
+local network "net_nb_f net_nb_m net_nb_fam net_nb_dehors net_nb_qualite net_coop_pos"
+local empowerment "car_loc_exp car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp" 
+local mp "man_ind_awa man_fin_per_fre man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub  man_hr_pro man_fin_num"
+local innovation "inno_commerce inno_lieu inno_process inno_produit"
+local export_readiness "exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5"
+local business_performance "ca_exp ca profit profit employes"
+local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
+foreach var of local ys {
+		replace `var' = . if inlist(`var', -777, -888, -999)
+}
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

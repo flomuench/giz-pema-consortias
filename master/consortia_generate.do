@@ -188,7 +188,8 @@ foreach var of local allvars {
 
 	* calculate z-score for each individual outcome
 		* write a program calculates the z-score
-			* if you re-run the code, execture before: capture program drop zscore
+			* if you re-run the code, execture before: 
+capture program drop zscore
 program define zscore /* opens a program called zscore */
 	sum `1' if treatment == 0
 	gen `1'z = (`1' - r(mean))/r(sd) /* new variable gen is called --> varnamez */
@@ -305,18 +306,21 @@ use links to understand the code syntax for creating the accounting variables' g
 ***********************************************************************
 	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
 gen profit_pct = .
-	egen profit_pct1 = rank(profit) if surveyround == 1		// use egen rank to get the rank of each value in the distribution of profits
-	replace profit_pct = profit_pct1/166					// divide by N + 1 to get a percentile for each observation
-	egen profit_pct2 = rank(profit) if surveyround == 2
-	replace profit_pct = profit_pct2/123 if profit_pct == .
+	egen profit_pct1 = rank(profit) if surveyround == 1	& !inlist(profit, -777, -888, -999, .)	// use egen rank to get the rank of each value in the distribution of profits
+	sum profit if surveyround == 1 & !inlist(profit, -777, -888, -999, .)
+	replace profit_pct = profit_pct1/(`r(N)' + 1) if surveyround == 1			// divide by N + 1 to get a percentile for each observation
+	
+	egen profit_pct2 = rank(profit) if surveyround == 2 & !inlist(profit, -777, -888, -999, .)
+	sum profit if surveyround == 2 & !inlist(profit, -777, -888, -999, .)
+	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 2
 	drop profit_pct1 profit_pct2
 
 	
 	* winsorize & ihs-transform
 			* survey periods
-local wins_vars "ca ca_exp profit exprep_inv employes"
+local wins_vars "ca ca_exp profit exprep_inv employes car_empl1 car_empl2"
 foreach var of local wins_vars {
-	winsor `var', gen(`var'_w99) p(0.01) highonly // winsorize
+	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
 	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
 }
@@ -330,7 +334,7 @@ lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 
 			* years before surveys
 	forvalues year = 2018(1) 2020 {
-		winsor ca_exp`year', gen(ca_exp`year'_w99) p(0.01) highonly
+		winsor2 ca_exp`year', suffix(_w99) cuts(0 99)
 		ihstrans ca_exp`year'_w99, prefix(ihs_)
 		replace ihs_ca_exp`year'_w99 = . if ca_exp == -999 | ca_exp == -888 | ca_exp == -777
 		gen exported_`year' = (ca_exp`year' > 0 & ca_exp`year'!= .)
@@ -350,7 +354,7 @@ bys id_plateforme (surveyround): replace exported = . if ca_exp == .
 ***********************************************************************	
 egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
 bys id_plateforme (surveyround): gen innovated = (innovations > 0)
-br id_plateforme surveyround innovations innovated
+*br id_plateforme surveyround innovations innovated
 
 lab var innovations "total innovations, max. 4"
 lab var innovated "innovated"
@@ -368,13 +372,53 @@ replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
 lab var net_size "Size of the female entrepreuneur network"
 
 
-***********************************************************************
-*	PART 11: network
-***********************************************************************	
 
+***********************************************************************
+* 	PART 12: (endline) generate YO + missing baseline dummies	
+***********************************************************************
+	* collect all ys in string
+local network "net_size net_nb_qualite net_coop_pos"
+local empowerment "genderi female_efficacy female_loc"
+local mp "mpi"
+local innovation "innovated innovations"
+local export_readiness "eri exprep_inv"
+local business_performance "ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99 car_empl2_w99"
+local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
+
+	* gen dummy + replace missings with zero at bl
+foreach var of local ys {
+	gen missing_bl_`var' = (`var' == . & surveyround == 1) 
+	replace `var' = 0 if `var' == . & surveyround == 1
+}
+
+/* code for endline: 
+foreach var of local ys {
+		* generate YO
+	bys id (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
+	egen `var'_y0 = min(`var'_first), by(id)								// create variable = bl value for all three surveyrounds by id
+	replace `var'_y0 = 0 if inlist(`var'_y0, ., -777, -888, -999)		// replace this variable = zero if missing
+	drop `var'_first														// clean up
+	lab var `var'_y0 "Y0 `var'"
+		* generate missing baseline dummy
+	gen miss_bl_`var' = 0 if surveyround == 1											// gen dummy for baseline
+	replace miss_bl_`var' = 1 if surveyround == 1 & inlist(`var',., -777, -888, -999)	// replace dummy 1 if variable missing at bl
+	egen missing_bl_`var' = min(miss_bl_`var'), by(id)									// expand dummy to ml, el
+	lab var missing_bl_`var' "YO missing, `var'"
+	drop miss_bl_`var'
+}
+*/
 
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
 save "${master_final}/consortium_final", replace
+
+
+* export lists for GIZ
+preserve 
+keep if surveyround == 1
+keep id_plateforme year_created pole subsector_corrige produit?
+merge 1:1 id_plateforme using "${master_final}/consortium_pii_final"
+export excel id_plateforme treatment nom_rep position_rep tel_pdg email_pdg year_created pole subsector_corrige produit? using "${master_final}/eya_list.xlsx", firstrow(var) replace
+restore
