@@ -24,7 +24,7 @@ cd "${master_regressiontables}/midline"
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
 
-
+/*
 ***********************************************************************
 * 	PART 1: survey attrition 		
 ***********************************************************************
@@ -383,9 +383,11 @@ esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency
 	addnotes("")
 
 }
+
+*/
 	
 ***********************************************************************
-* 	PART 9: Endline results - regression table business performance outcomes
+* 	PART 9: Midline results - regression table business performance outcomes
 ***********************************************************************
 {
 capture program drop rct_regression_business // enables re-running
@@ -443,6 +445,126 @@ rct_regression_business ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 ca
 }		
 	
 
+***********************************************************************
+* 	PART 10: Midline results - regression table export outcomes
+***********************************************************************
+
+{
+capture program drop rct_regression_export // enables re-running
+program rct_regression_export
+	version 15							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+			* ATE: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_ate
+			eststo dir
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_att
+			eststo dir
+		}
+		* Put all regressions into one table
+			* Top panel: ATE
+		tokenize `varlist'
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Impact on female entrepreneurs' export performance} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{9}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{10}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
+				fragment ///
+				mtitles("`1'" "`2'" "`3'" "`4'" "`5'" "`6'") ///
+				label b(3) se(3) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				
+				* Bottom panel: ITT
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", append ///
+				fragment ///
+				posthead("\hline \\ \multicolumn{10}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				label b(3) se(3) ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \multicolumn{7}{l}{\footnotesize Robust Standard errors in parentheses.} \\ \multicolumn{7}{l}{\footnotesize Export sales and export investment in column (5) and (9) are winsorized at the 99th percentile and inverse hyperbolic sine transformed.} \\ \multicolumn{7}{l}{\footnotesize Export readiness and export readiness Sub-Sahara Africa in column (1) and (2) are z-score indeces.} \\ \multicolumn{7}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+			
+end
+
+	* apply program to export outcomes
+rct_regression_export ca_exp ihs_ca_exp_w99 exported exprep_couts exprep_inv ihs_exprep_inv_w99, gen(export_outcomes)
+
+}	
+	
+
+***********************************************************************
+* 	PART 11: Midline results - regression table knowledge transfer
+***********************************************************************
+{
+capture program drop rct_regression_kt // enables re-running
+program rct_regression_kt
+	version 15							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+			* ATE: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_ate
+			eststo dir
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+			estimates store `var'_att
+			eststo dir
+		}
+		* Put all regressions into one table
+			* Top panel: ATE
+		tokenize `varlist'
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Impact on knowledge transfer: management practices, innovation, export readiness} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{6}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
+				fragment ///
+				mtitles("`1'" "`2'" "`3'" "`4'" "`5'" "`6'") ///
+				label b(3) se(3) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				
+				* Bottom panel: ITT
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", append ///
+				fragment ///
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				label b(3) se(3) ///
+				drop(*.strata_final ?.missing_bl_* L.*) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				scalars("strata Strata controls" "bl_control Y0 control") ///
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \multicolumn{7}{l}{\footnotesize Robust Standard errors in parentheses.} \\ \multicolumn{7}{l}{\footnotesize Management practices, export readiness and export readiness Sub-Sahara Africa in column (1), (4) and (5) are z-score indeces.} \\ \multicolumn{7}{l}{\footnotesize Innovated and having a potential client in Sub-Sahara Africa in column (3) and (6) are binary dummies.} \\\multicolumn{7}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+			
+end
+
+	* apply program to export outcomes
+rct_regression_kt mpi innovations innovated eri eri_ssa ssa_action1, gen(kt_outcomes)
+
+}	
+	
+	
+	
 /*
 
 	
