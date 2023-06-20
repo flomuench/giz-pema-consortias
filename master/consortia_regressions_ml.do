@@ -296,45 +296,33 @@ esttab `regressions' using "ml_eri_ssa.tex", replace ///
 ***********************************************************************
 * 	PART 7: list experiment regression - not possibe in program
 ***********************************************************************
+*/
+	
 {
 	* ATE, ancova	
-			* no significant baseline differences
-reg listexp i.treatment if surveyround == 1, vce(hc3)
+			* baseline differences amount
+eststo lexp1, r: reg listexp i.list_group i.strata_final if surveyround == 1, vce(hc3)
+estadd local strata "Yes"
 
 			* pure mean comparison at midline 
-eststo lexp1, r: reg listexp i.treatment##i.list_group if surveyround == 2, vce(hc3)
+eststo lexp2, r: reg listexp i.treatment##i.list_group if surveyround == 2, vce(hc3)
 estadd local bl_control "No"
 estadd local strata "No"
 		
 			* ancova without stratification dummies 
-eststo lexp2, r: reg listexp i.treatment##i.list_group l.listexp, cluster(id_plateforme) /*lagged value (l): include the value of the variable in previous survey_round*/
+eststo lexp3, r: reg listexp i.treatment##i.list_group l.listexp i.missing_bl_list_exp, cluster(id_plateforme) /*lagged value (l): include the value of the variable in previous survey_round*/
 estadd local bl_control "Yes"
 estadd local strata "No"
 
 			* ancova with stratification dummies 
-eststo lexp3, r: reg listexp i.treatment##i.list_group l.listexp i.strata_final, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
+eststo lexp4, r: reg listexp i.treatment##i.list_group l.listexp i.strata_final missing_bl_list_exp, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
 estadd local bl_control "Yes"
-estadd local strata "Yes"
+estadd local strata "Yes"		
 
-			* DiD 
-eststo lexp4, r: xtreg listexp i.treatment##i.surveyround i.strata_final, cluster(id_plateforme)
-estadd local bl_control "Yes"
-estadd local strata "Yes"			
 
-	* ATT, IV (participation in phase 1 meetings) 
-eststo lexp5, r:ivreg2 listexp l.listexp i.strata_final (take_up_per = i.treatment), cluster(id_plateforme) first
-estadd local bl_control "Yes"
-estadd local strata "Yes"
-estimates store iv_lexp5
-
-	* ATT, IV (participation in consortium)
-eststo lexp6, r:ivreg2 listexp l.listexp i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
-estadd local bl_control "Yes"
-estadd local strata "Yes"
-
-local regressions lexp1 lexp2 lexp3 lexp4 lexp5 lexp6
+local regressions lexp1 lexp2 lexp3 lexp4
 esttab `regressions' using "ml_listexp.tex", replace ///
-	mtitles("Mean comparison" "Ancova" "Ancova" "DiD" "ATT" "ATT") ///
+	mtitles("BL comparison" "ML mean comparison" "ML Ancova" "ML Ancova") ///
 	label ///
 	b(3) ///
 	se(3) ///
@@ -342,7 +330,7 @@ esttab `regressions' using "ml_listexp.tex", replace ///
 	star(* 0.1 ** 0.05 *** 0.01) ///
 	nobaselevels ///
 	scalars("strata Strata controls" "bl_control Y0 control") ///
-	addnotes("Column (1) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (2) presents an ANCOVA specification without strata controls." "Column (3) presents an ANCOVA specification with strata controls." "Column (4) provides estimates from a difference-in-difference specification." "Column (5) estimates are based on 2SLS instrumental variable estimation where treatment assignment is the instrument for treatment participation." "(1) uses robust standard errors. In (2)-(5) standard errors are clustered at the firm level to account for multiple observations per firm")
+	addnotes("Column (1) presents baseline results with strata controls." "Column (2) presents estimates for a simple mean comparison between treatment and control group at midline."  "Column (3) presents an ANCOVA specification without strata controls." "Column (4) presents an ANCOVA specification with strata controls." "(1) uses robust standard errors. In (2)-(4) standard errors are clustered at the firm level to account for multiple observations per firm")
 	
 }
 
@@ -384,8 +372,7 @@ esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency
 
 }
 
-*/
-	
+
 ***********************************************************************
 * 	PART 9: Midline results - regression table business performance outcomes
 ***********************************************************************
