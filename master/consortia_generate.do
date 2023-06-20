@@ -379,7 +379,7 @@ lab var net_size "Size of the female entrepreuneur network"
 ***********************************************************************
 	* collect all ys in string
 local network "net_size net_nb_qualite net_coop_pos"
-local empowerment "genderi female_efficacy female_loc"
+local empowerment "genderi female_efficacy female_loc list_experiment"
 local mp "mpi"
 local innovation "innovated innovations"
 local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99 exported ihs_exp_pays_w99 ca_exp ihs_ca_exp_w99 exprep_couts ssa_action1"
