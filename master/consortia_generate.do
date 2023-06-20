@@ -79,7 +79,7 @@ replace desistement_consortium = 1 if id_plateforme == 1192
 
 gen take_up = 0, a(take_up_per)
 replace take_up= 1 if treatment == 1 & desistement_consortium != 1
-lab var take_up "consortium participant"
+lab var take_up "Consortium participant"
 lab values take_up presence_status
 
 	* create a status variable for surveys
@@ -318,7 +318,7 @@ gen profit_pct = .
 	
 	* winsorize & ihs-transform
 			* survey periods
-local wins_vars "ca ca_exp profit exprep_inv employes car_empl1 car_empl2"
+local wins_vars "ca ca_exp profit exprep_inv employes car_empl1 car_empl2 exp_pays"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
@@ -331,6 +331,7 @@ lab var ihs_ca_w99 "IHS of turnover, wins.99th"
 lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
 lab var ihs_profit_w99 "IHS of profit, wins.99th"
 lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
+lab var exp_pays "IHS of export countries, wins. 99th"
 
 			* years before surveys
 	forvalues year = 2018(1) 2020 {
@@ -344,9 +345,9 @@ lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 ***********************************************************************
 *	PART 9: Exported dummy
 ***********************************************************************
-bys id_plateforme (surveyround): gen exported = (ca_exp > 0)
-bys id_plateforme (surveyround): replace exported = . if ca_exp == .
-
+gen exported = (ca_exp > 0)
+replace exported = . if ca_exp == .
+lab var exported "export sales > 0"
 
 
 ***********************************************************************
@@ -381,8 +382,8 @@ local network "net_size net_nb_qualite net_coop_pos"
 local empowerment "genderi female_efficacy female_loc"
 local mp "mpi"
 local innovation "innovated innovations"
-local export_readiness "eri exprep_inv"
-local business_performance "ihs_ca_exp_w99 ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99 car_empl2_w99"
+local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99 exported ihs_exp_pays_w99 ca_exp ihs_ca_exp_w99 exprep_couts ssa_action1"
+local business_performance "ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99 car_empl2_w99"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
