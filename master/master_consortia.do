@@ -42,6 +42,10 @@ ssc install coefplot, replace
 ssc install missingplot, replace
 */
 
+	* set scheme for visualisations
+set scheme burd 			// for presentation, coloured
+* set scheme plotplain 		// for publication/paper, black/white
+
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
@@ -150,7 +154,7 @@ global ml_progress = "${ml_output}/progress-eligibility-characteristics"
 global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
 global master_power = "${master_output}/power"
 global master_regressiontables = "${master_output}/tables"
-global master_figures = "${master_figures}/figures"
+global master_figures = "${master_output}/figures"
 
 		
 			* set seeds for replication
@@ -203,7 +207,7 @@ if (0) do "${master_github}/consortia_test.do"
 ***********************************************************************
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
-----------------------------------------------------------------------*/		
+----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_visualisations.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions midline

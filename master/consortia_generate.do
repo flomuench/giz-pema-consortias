@@ -154,24 +154,14 @@ replace closed = 1 if id_plateforme == 1090
 replace closed = 1 if id_plateforme == 1044
 
 ***********************************************************************
-* 	PART 4:    Create missing variables for accounting number --> delete after midline		  
+* 	PART 4:   Create total sales	  
 ***********************************************************************
-/*gen profit_2021_missing=0
-replace profit_2021_missing= 1 if profit_2021==.
-replace profit_2021_missing= 1 if profit_2021==0
-
-gen ca_2021_missing =0
-replace ca_2021_missing= 1 if ca_2021==.
-replace ca_2021_missing= 1 if ca_2021==0
-
-gen ca_exp_2021_missing=0
-replace ca_exp_2021_missing= 1 if ca_exp_2021==.
-*/
-
+gen sales = ca + ca_exp
+lab var sales "total sales in TND"
 ***********************************************************************
 * 	PART 5:   Create the indices based on a z-score			  
 ***********************************************************************
-
+{
 	*Definition of all variables that are being used in index calculation
 local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
 ds `allvars', has(type string)
@@ -233,9 +223,12 @@ label var female_initiative "Women's entrepreneurial initiaitve - z score"
 label var female_loc "Women's locus of control - z score"
 label var genderi "Gender index -Z Score"
 
+}
+
 ***********************************************************************
 * 	PART 6:   Create the indices as total points		  
 ***********************************************************************
+{
 	* find out max. points
 sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
@@ -279,7 +272,7 @@ label var genderi_points "Gender index points"
 	* drop temporary vars		  										  
 drop temp_*
 
-
+}
 
 ***********************************************************************
 * 	PART 7:   generate survey-to-survey growth rates
@@ -315,23 +308,187 @@ gen profit_pct = .
 	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 2
 	drop profit_pct1 profit_pct2
 
-	
+/* old code	
 	* winsorize & ihs-transform
-			* survey periods
 local wins_vars "ca ca_exp profit exprep_inv employes car_empl1 car_empl2 exp_pays"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
 	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
 }
+*/
 
+	* winsorize
+local wins_vars "ca ca_exp sales profit exprep_inv employes car_empl1 car_empl2 exp_pays"
+foreach var of local wins_vars {
+	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
+}
 
+	* find optimal k before ihs-transformation
+		* see Aihounton & Henningsen 2021 for methodological approach
+
+		* put all ihs-transformed outcomes in a list
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exprep_inv_w99"
+
+		* check how many zeros
+foreach var of local ys {
+		sum `var' if surveyround == 2 & !inlist(`var', -777, -888, -999,.)
+		local N = `r(N)'
+		sum `var' if `var' == 0 & surveyround == 2
+		local zeros = `r(N)'
+		scalar perc = `zeros'/`N'
+		if perc > 0.05 {
+			display "`var' has `zeros' zeros out of `N' non-missing observations ("perc "%)."
+			}
+	scalar drop perc
+}
+
+		* generate re-scaled outcome variables
+foreach var of local ys {
+				* k = 1, 10^3-10^6
+	if !inlist(`var', employes_w99, car_empl1_w99, car_empl2_w99) {
+		gen `var'_k1   = `var'
+		forvalues k = 3(1)6 {
+			local i = `k' - 1
+			gen `var'_k`i' = `var' / 10^`k' if !inlist(`var', ., -777, -888, -999)
+			lab var `var'_k`i' "`var' wins., scaled by 10^`k'" 
+			}
+	}
+				* k = 1, 10^1-10^3
+	else {
+		gen `var'_k1   = `var'
+		forvalues k = 1(1)3 {
+			local i = 1 +`k'
+			gen `var'_k`i' = `var' / 10^`k' if !inlist(`var', ., -777, -888, -999)
+			lab var `var'_k`i' "`var' wins., scaled by 10^`k'" 
+			}
+		}
+	}
+
+		* ihs-transform all rescaled numerical variables
+foreach var of local ys {
+		ihstrans `var'_k?, prefix(ihs_) 
+}
+
+		* visualize distribution of ihs-transformed, rescaled variables
+foreach var of local ys {
+	if !inlist(`var', employes_w99, car_empl1_w99, car_empl2_w99) {
+		local powers "1 10^3 10^4 10^5 10^6"
+		forvalues i = 1(1)5 {
+			gettoken power powers : powers
+				if `var' == profit_w99 {
+				histogram ihs_`var'_k`i', start(-16) width(1)  ///
+					name(`var'`i', replace) ///
+					title("IHS-Tranformed `var': K = `power'")
+					}
+				else {
+				histogram ihs_`var'_k`i', start(0) width(1)  ///
+					name(`var'`i', replace) ///
+					title("IHS-Tranformed `var': K = `power'")
+					}					
+				}
+	gr combine `var'1 `var'2 `var'3 `var'4 `var'5, row(2)
+	gr export "${master_figures}/scale_`var'.png", replace
+				}
+	else {
+		local powers "1 10^1 10^2 10^3"
+		forvalues i = 1(1)4 {
+			gettoken power powers : powers
+			histogram ihs_`var'_k`i', start(0) width(1)  ///
+				name(`var'`i', replace) ///
+				title("IHS-Tranformed `var': K = `power'")
+				}
+	gr combine `var'1 `var'2 `var'3 `var'4, row(2)
+	gr export "${master_figures}/scale_`var'.png", replace
+	}
+}
+		
+		* generate Y0 + missing baseline to be able to run final regression
+foreach var of local ys {
+/* at endline, enable this code:
+			* generate YO
+	bys id (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
+	egen `var'_y0 = min(`var'_first), by(id)								// create variable = bl value for all three surveyrounds by id
+	replace `var'_y0 = 0 if inlist(`var'_y0, ., -777, -888, -999)		// replace this variable = zero if missing
+	drop `var'_first														// clean up
+	lab var `var'_y0 "Y0 `var'"
+*/
+		* generate missing baseline dummy
+	gen miss_bl_`var' = 0 if surveyround == 1											// gen dummy for baseline
+	replace miss_bl_`var' = 1 if surveyround == 1 & inlist(`var',., -777, -888, -999)	// replace dummy 1 if variable missing at bl
+	egen missing_bl_`var' = min(miss_bl_`var'), by(id_plateforme)									// expand dummy to ml, el
+	lab var missing_bl_`var' "YO missing, `var'"
+	drop miss_bl_`var'
+}
+
+		* run final regression & collect r-square in Excel file
+				* create excel document
+putexcel set "${master_figures}/scale_k.xlsx", replace
+
+				* define table title
+putexcel A1 = "Selection of optimal K", bold border(bottom) left
+	
+				* create top border for variable names
+putexcel A2:H2 = "", border(top)
+	
+				* define column headings
+putexcel A2 = "", border(bottom) hcenter
+putexcel B2 = "employees", border(bottom) hcenter
+putexcel C2 = "female employees", border(bottom) hcenter
+putexcel D2 = "young employees", border(bottom) hcenter
+putexcel E2 = "domestic sales", border(bottom) hcenter
+putexcel F2 = "export sales", border(bottom) hcenter
+putexcel G2 = "total sales", border(bottom) hcenter
+putexcel H2 = "profit", border(bottom) hcenter
+putexcel I2 = "Export invt.", border(bottom) hcenter
+	
+				* define rows
+putexcel A3 = "k = 1", border(bottom) hcenter
+putexcel A4 = "k = 10^2", border(bottom) hcenter
+putexcel A5 = "k = 10^3", border(bottom) hcenter
+putexcel A6 = "k = 10^4", border(bottom) hcenter
+putexcel A7 = "k = 10^5", border(bottom) hcenter
+putexcel A7 = "k = 10^6", border(bottom) hcenter
+
+				* run the main specification regression looping over all values of k
+xtset id_plateforme surveyround, delta(1)
+local columns "B C D"
+foreach var of varlist employes_w99 car_empl1_w99 car_empl2_w99 {
+	local row = 3
+	gettoken column columns : columns
+	forvalues i = 1(1)4 {
+		reg ihs_`var'_k`i' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+		local r2 = e(r2)
+		putexcel `column'`row' = `r2', hcenter nformat(0.000)  // `++row'
+			local row = `row' + 1
+	}
+}
+
+local columns "E F G H I"
+foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exprep_inv_w99 sales_w99 {
+	local row = 3
+	gettoken column columns : columns
+	forvalues i = 1(1)5 {
+			reg ihs_`var'_k`i' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			local r2 = e(r2)
+			putexcel `column'`row' = `r2', hcenter nformat(0.000)  // `++row'
+			local row = `row' + 1
+	}
+}
+
+		* drop all the created variables
+drop *_k? missing_bl_*
+		
+/*
+	* ihs-transform with optimal k
+	
+		
 lab var ihs_employes_w99 "IHS of employees, wins.99th"
 lab var ihs_ca_w99 "IHS of turnover, wins.99th"
 lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
 lab var ihs_profit_w99 "IHS of profit, wins.99th"
 lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
-lab var exp_pays "IHS of export countries, wins. 99th"
+lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 
 			* years before surveys
 	forvalues year = 2018(1) 2020 {
@@ -378,8 +535,8 @@ lab var net_size "Size of the female entrepreuneur network"
 * 	PART 12: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
 	* collect all ys in string
-local network "net_size net_nb_qualite net_coop_pos"
-local empowerment "genderi female_efficacy female_loc list_experiment"
+local network "net_size net_nb_qualite net_coop_pos net_nb_f net_nb_m"
+local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations"
 local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99 exported ihs_exp_pays_w99 ca_exp ihs_ca_exp_w99 exprep_couts ssa_action1"
@@ -415,7 +572,7 @@ foreach var of local ys {
 ***********************************************************************
 save "${master_final}/consortium_final", replace
 
-
+/*
 * export lists for GIZ
 preserve 
 keep if surveyround == 1
