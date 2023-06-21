@@ -42,6 +42,10 @@ ssc install coefplot, replace
 ssc install missingplot, replace
 */
 
+	* set scheme for visualisations
+set scheme burd 			// for presentation, coloured
+* set scheme plotplain 		// for publication/paper, black/white
+
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
