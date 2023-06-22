@@ -432,7 +432,7 @@ putpdf pagebreak
 	xtitle ("Amount of total turnover in 2021")
 gr export k_dens_ca2021.png, replace
 putpdf paragraph, halign(center) 
-putpdf image box_ca2021.png
+putpdf image k_dens_ca2021.png
 putpdf pagebreak
 
 

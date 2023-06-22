@@ -470,10 +470,25 @@ putpdf pagebreak
 
 }
 
+egen ca_95p = pctile(ca_2021), p(95)
+kdensity ca if ca<ca_95p & ca> 0 & surveyround == 1,  ///
+	title("", pos(12)) ///
+	note("{it:Note: Total turnover in 20221 is winsorized at 95th percentile for visualisation.}", size(small)) ///
+	xtitle ("Amount of total turnover in 2021") ///
+	xlabel(0(300000)900000) ///
+	ylabel(0(0.000002)0.000006)
+gr export k_dens_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image k_dens_ca2021.png
+putpdf pagebreak
+
 putpdf save "baseline_statistics", replace
 
 */
 }
+
+
+
 ***********************************************************************
 * 	PART 3: Midline statistics
 ***********************************************************************
