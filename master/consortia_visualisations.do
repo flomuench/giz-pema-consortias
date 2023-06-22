@@ -689,13 +689,14 @@ putpdf pagebreak
 	* Quality of advice 
 sum net_nb_qualite,d
 twoway (histogram net_nb_qualite if treatment == 0 & surveyround == 2, fcolor(brown%30) lcolor(brown%30)lpattern(solid)) ///                
-	   (histogram net_nb_qualite if treatment == 1 & take_up==1 & surveyround == 2 , fcolor(navy%30) lcolor(navy%30) lpattern(solid)), ///
-			ytitle("No. of firms")   ///
-            title("Quality of advice of the business network: Control vs. Treatment (Take-up) in midline", size(small)) legend(order(1 "Control" 2 "Treatment" )) ///     
-            ylabel(0(0.1)0.5 , nogrid) ///
-			xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
-			text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
-			text(0.45  `r(p50)' "Median", size(small) place(e))
+	   (histogram net_nb_qualite if treatment == 1 & take_up==1 & surveyround == 2 , fcolor(navy%30) lcolor(navy%30) lpattern(solid)) ///
+   	   (histogram net_nb_qualite if treatment == 1 & take_up==0 & surveyround == 2 , fcolor(gold%40) lcolor(gold%40) lpattern(solid)), ///
+	ytitle("No. of firms")   ///
+	legend( row(3) order(1 "Control group (N=89 firms)" 2 "Treatment group, participants (N=55 firms)" 3 "Treatment group, drop-outs (N=32 firms)")) ///     
+    ylabel(0(0.1)0.5 , nogrid) ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
+	text(0.4 `r(mean)' "Mean", size(small) place(e)) ///
+	text(0.45  `r(p50)' "Median", size(small) place(e))
 gr export quality_advice_treatment.png, replace
 putpdf paragraph, halign(center) 
 putpdf image quality_advice_treatment.png
@@ -837,11 +838,11 @@ putpdf image man_practices_index_ml.png
 putpdf pagebreak
 
 		* Source of new management strategies
-graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7, yvaroptions(sort(1) descending) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
 	label  (3 "Employees") label  (4 "Family") ///
 	label  (5 "Event") label  (6 "No new strategy") label (7 "Other sources")) ///
-	title("Source of New Management Strategies") ///
+	title("Source of New Management Strategies", pos(12)) ///
 	ylabel(0(0.25)1, nogrid) 
 	gr export ml_source_share_strategy.png, replace
 	putpdf paragraph, halign(center) 

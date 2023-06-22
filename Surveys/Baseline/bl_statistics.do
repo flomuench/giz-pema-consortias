@@ -224,9 +224,9 @@ histogram(employes) if employes>0 & employes<30, frequency  xlabel(, nogrid) dis
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
 	ytitle("No. of firms") ///
 	xtitle("No. of Employees") ///
-	ylabel(0(20)100 , nogrid) ///
-	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
-	text(100 `r(p50)' "Median", size(vsmall) place(e))
+	ylabel(0(5)50 , nogrid) ///
+	text(10 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(50 `r(p50)' "Median", size(vsmall) place(e))
 	gr export "$bl_output/employees_general.png", replace
 
 	
@@ -418,10 +418,19 @@ putpdf pagebreak
 
 
 *Total turnover for all firms
- graph box ca_2021 if ca_2021<ca_95p & ca_2021> 0 & ca_2021<50000 , blabel(total, format(%9.2fc)) ///
+ graph box ca_2021 if ca_2021<ca_95p & ca_2021> 0 , blabel(total, format(%9.2fc)) ///
 	title("Total turnover in 2021", pos(12)) ///
-	note("{it:Outliers were removed}", size(small)) 
+	note("{it:Outliers were removed, winsoriszd at 5%}", size(small)) 
 gr export box_ca2021.png, replace
+putpdf paragraph, halign(center) 
+putpdf image box_ca2021.png
+putpdf pagebreak
+
+ kdensity ca_2021 if ca_2021<ca_95p & ca_2021> 0 , ///
+	title("Total turnover in 2021", pos(12)) ///
+	note("{it:Note: Number of employees is winsorized at 95th percentile for visualisation.}", size(small)) ///
+	xtitle ("Amount of total turnover in 2021")
+gr export k_dens_ca2021.png, replace
 putpdf paragraph, halign(center) 
 putpdf image box_ca2021.png
 putpdf pagebreak
