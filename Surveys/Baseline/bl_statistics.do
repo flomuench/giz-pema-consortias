@@ -427,8 +427,8 @@ putpdf image box_ca2021.png
 putpdf pagebreak
 
  kdensity ca_2021 if ca_2021<ca_95p & ca_2021> 0 , ///
-	title("Total turnover in 2021", pos(12)) ///
-	note("{it:Note: Number of employees is winsorized at 95th percentile for visualisation.}", size(small)) ///
+	title("", pos(12)) ///
+	note("{it:Note: Total turnover in 20221 is winsorized at 95th percentile for visualisation.}", size(small)) ///
 	xtitle ("Amount of total turnover in 2021")
 gr export k_dens_ca2021.png, replace
 putpdf paragraph, halign(center) 
