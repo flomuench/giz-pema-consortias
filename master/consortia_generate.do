@@ -328,7 +328,7 @@ foreach var of local wins_vars {
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exprep_inv_w99"
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exprep_inv_w99" // add at endline: exp_pays_w99
 
 		* check how many zeros
 foreach var of local ys {
@@ -476,12 +476,21 @@ foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exprep_inv_w99 sales_w99 {
 	}
 }
 
+
 		* drop all the created variables
-drop *_k? missing_bl_*
-		
-/*
+drop missing_bl_* // *_k?
+
+/*		
 	* ihs-transform with optimal k
-	
+		* k = 10^3 --> employees, female employees, young employees
+		* k = 10^4 --> domestic sales, export sales, total sales, profit, export investment
+local y1 "employes_w99 car_empl1_w99 car_empl2_w99"
+local y2 "ca_w99 ca_exp_w99 sales_w99 profit_w99"
+foreach var of local y1 {
+	ihstrans `var'_k?, prefix(ihs_) 
+}
+		
+		
 		
 lab var ihs_employes_w99 "IHS of employees, wins.99th"
 lab var ihs_ca_w99 "IHS of turnover, wins.99th"
@@ -489,6 +498,7 @@ lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
 lab var ihs_profit_w99 "IHS of profit, wins.99th"
 lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
 lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
+
 
 			* years before surveys
 	forvalues year = 2018(1) 2020 {
@@ -498,7 +508,7 @@ lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 		gen exported_`year' = (ca_exp`year' > 0 & ca_exp`year'!= .)
 }
 
-
+*/
 ***********************************************************************
 *	PART 9: Exported dummy
 ***********************************************************************
@@ -534,13 +544,16 @@ lab var net_size "Size of the female entrepreuneur network"
 ***********************************************************************
 * 	PART 12: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
+	* results for optimal k
+		* k = 10^3 --> employees, female employees, young employees
+		* k = 10^4 --> domestic sales, export sales, total sales, exprep_inv
 	* collect all ys in string
 local network "net_size net_nb_qualite net_coop_pos net_nb_f net_nb_m"
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations"
-local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99 exported ihs_exp_pays_w99 ca_exp ihs_ca_exp_w99 exprep_couts ssa_action1"
-local business_performance "ihs_ca_w99 ihs_profit_w99 profit_pct ihs_employes_w99 car_empl1_w99 car_empl2_w99"
+local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99_k1 ihs_exprep_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
+local business_performance "ihs_ca_w99_k1 ihs_ca_w99_k4 ihs_profit_w99_k1 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
