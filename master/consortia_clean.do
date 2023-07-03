@@ -89,6 +89,11 @@ lab var profit "profit in TND in bl = 2021, ml = 2022, el = 2023"
 
 
 ***********************************************************************
+* 	PART 6:    change gouvernorat label
+***********************************************************************
+lab def gov 10 "Tunis" 11 "Tunis South-West" 20 "Tunis North", modify
+
+***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
 save "${master_intermediate}/consortium_inter", replace

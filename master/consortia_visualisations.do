@@ -32,6 +32,13 @@ set scheme s1color
 ***********************************************************************
 * 	PART 2: Basline statistics
 ***********************************************************************
+
+		* location of consortia members
+graph hbar (count) if treatment == 1 & take_up == 1, over(gouvernorat, label(labs(vsmall))) by(pole, note("")) blabel(bar, format(%9.0fc)) ytitle("number of firms")
+gr export location.png, replace
+
+
+
 {
 /*
 * create word document
