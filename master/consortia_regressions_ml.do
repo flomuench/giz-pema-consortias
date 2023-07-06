@@ -410,7 +410,7 @@ program rct_regression_network
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
 				fragment ///
 				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
-				cells((b se)) label ///
+				cells(b se p q) label ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				drop(*.strata_final ?.missing_bl_* L.*) ///
@@ -421,7 +421,7 @@ program rct_regression_network
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				label b(3) se(3) ///
+				cells(b se p q) label ///
 				drop(*.strata_final ?.missing_bl_* L.*) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
