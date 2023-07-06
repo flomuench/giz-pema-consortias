@@ -489,7 +489,7 @@ frame change pvalues
 		* transform matrix into variable/data set with one variable pvals
 svmat double pvalues
 
-		* apply q-values program to pvalues
+		* apply q-values program to variable pvalues
 qvalues pval
 
 		* transform variables into matrix/column to add q-values to regression table
