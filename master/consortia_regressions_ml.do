@@ -487,39 +487,19 @@ mat colnames p = "pvalues"
 frame copy default pvalues, replace
 frame change pvalues
 drop _all	
+		
 		* transform matrix into variable/data set with one variable pvals
 svmat double p, names(col)
-
 
 		* apply q-values program to variable pvalues
 qvalues pvalues
 
-		* transform variables into matrix/column to add q-values to regression table
-mkmat pvalues bky06_qval, matrix(qvalues)
-*estadd mat qvalues, replace : _all
-	* want to add a single number hence better use scalar
-local row "1 3 5 7 9"
-forvalues q = 1(1)5 {
-	gettoken row rows : rows
-	scalar q`model'1 = qvalues[`row', 2] // rows 1, 3,...
-	local i = `row' + 1
-	scalar q`model'2 = qvalues[`i', 2] // rows 2, 4,...
-}
-
-/*
-forvalues model = 1(1)5 {
-	gettoken row rows : rows
-	scalar q`model'`row' = qvalues[`row', 2]
-	estadd scalar qvalue = q`model'`row', replace : ``model''1
-	local row = `row' + 1
-	scalar q`model'`row' = qvalues[`row', 2]
-	estadd scalar qvalue = q`model'`row', replace : ``model''2
-}
-*/
+		* transform variables into matrix/column
+mkmat pvalues bky06_qval, matrix(qs)
 
 		* switch to initial frame & import qvalues
 frame change default
-		
+	
 	* Put all regressions into one table
 		* Top panel: ATE
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
@@ -528,8 +508,7 @@ frame change default
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
 				fragment ///
 				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
-				cells(b(fmt(3)) se(par fmt(3)) p(fmt(3)) qvalues(fmt(3))) label ///
-				star(* 0.1 ** 0.05 *** 0.01) ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label ///
 				nobaselevels ///
 				drop(*.strata_final ?.missing_bl_* L.*) ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
@@ -539,9 +518,8 @@ frame change default
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(fmt(3)) se(par fmt(3)) p(fmt(3)) qvalues(fmt(3))) label ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label /// qvalues(fmt(3))
 				drop(*.strata_final ?.missing_bl_* L.*) ///
-				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
 				prefoot("\hline") ///
@@ -581,6 +559,72 @@ gr export ml_network_cfplot.png, replace
 
 */
 
+
+/* archive:
+*estadd mat qvalues, replace : _all
+	* want to add a single number hence better use scalar
+
+	* upper panel q-values
+forvalues m = 1(2)9 {
+	matrix uq`m' = qs[`m', 2]
+	mat rownames uq`m' = Treatment
+	estadd matrix uq`m', replace : _all
+}
+forvalues m = 2(2)10 {
+	matrix lq`m' = qs[`m', 2]
+	mat rownames lq`m' = Take_Up
+	estadd matrix lq`m', replace : _all
+}
+	
+matrix upper_qs = uq1, uq3, uq5, uq7, uq9
+mat rownames upper_qs = treatment
+*mat colnames upper_qs = `1' `2' `3' `4' `5'
+matrix lower_qs = lq2, lq4, lq6, lq8, lq10
+mat rownames lower_qs = take_up
+*mat colnames lower_qs = `1' `2' `3' `4' `5'
+
+
+estadd matrix upper_qs, replace 
+estadd matrix lower_qs, replace
+
+
+
+forvalues m = 1(1)5 {
+	estadd matrix upper_qs[1,`m'], replace : `"`m'"'
+	estadd matrix lower_qs[1,`m'], replace : `"`m'"'
+	
+forvalues 
+estadd matrix q, replace : `'
+
+estadd matrix upper_qs, replace : `"`1'"'
+estadd matrix lower_qs, replace : _all
+
+local models = net_size1 net_nb_f1 net_nb_m1 net_nb_qualite1 net_coop_pos1
+local counter = 1
+forvalues m = 1(2)9 {
+matrix q = qs[`m', 2]
+	mat rownames q = treatment
+	local model : word `counter' of `models'
+	ereturn display `model'
+	estadd matrix q, replace : `model' // estadd matrix q = ``model''1
+	mat list e(q)
+	local counter = `counter' + 1
+}
+
+local models = net_size2 net_nb_f2 net_nb_m2 net_nb_qualite2 net_coop_pos2
+local counter = 1
+forvalues m = 2(2)10 {
+	matrix q = qs[`m', 2]
+	mat rownames q = take_up
+	local model : word `counter' of `models'
+	ereturn display `model'
+	estadd matrix q, replace : `model' // estadd matrix q = ``model''2
+	local counter = `counter' + 1
+}
+
+
+
+*/
 
 
 ***********************************************************************
