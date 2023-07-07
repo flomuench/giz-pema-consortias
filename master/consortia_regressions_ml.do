@@ -470,7 +470,7 @@ program rct_regression_network
 			estimates store `var'_att
 			quietly ereturn display // provides same table but with r(table)
 			matrix b = r(table)
-			scalar `var'p2 = b[4,2]
+			scalar `var'p2 = b[4,1]
 
 		}
 	
@@ -486,16 +486,36 @@ mat colnames p = "pvalues"
 		* create & go to frame as following command will clear data set
 frame copy default pvalues, replace
 frame change pvalues
-		
+drop _all	
 		* transform matrix into variable/data set with one variable pvals
-svmat double p
+svmat double p, names(col)
+
 
 		* apply q-values program to variable pvalues
 qvalues pvalues
 
 		* transform variables into matrix/column to add q-values to regression table
-mkmat pval bky06_qval, matrix(qvalues)
-estadd mat qvalues, : _all
+mkmat pvalues bky06_qval, matrix(qvalues)
+*estadd mat qvalues, replace : _all
+	* want to add a single number hence better use scalar
+local row "1 3 5 7 9"
+forvalues q = 1(1)5 {
+	gettoken row rows : rows
+	scalar q`model'1 = qvalues[`row', 2] // rows 1, 3,...
+	local i = `row' + 1
+	scalar q`model'2 = qvalues[`i', 2] // rows 2, 4,...
+}
+
+/*
+forvalues model = 1(1)5 {
+	gettoken row rows : rows
+	scalar q`model'`row' = qvalues[`row', 2]
+	estadd scalar qvalue = q`model'`row', replace : ``model''1
+	local row = `row' + 1
+	scalar q`model'`row' = qvalues[`row', 2]
+	estadd scalar qvalue = q`model'`row', replace : ``model''2
+}
+*/
 
 		* switch to initial frame & import qvalues
 frame change default
@@ -508,7 +528,7 @@ frame change default
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Average Treatment Effect (ATE)}} \\\\[-1ex]") ///
 				fragment ///
 				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
-				cells(b(fmt(2)) se(fmt(2)) p(fmt(2)) qvalues(fmt(2))) label ///
+				cells(b(fmt(3)) se(par fmt(3)) p(fmt(3)) qvalues(fmt(3))) label ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				drop(*.strata_final ?.missing_bl_* L.*) ///
@@ -519,7 +539,7 @@ frame change default
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(fmt(2)) se(fmt(2)) p(fmt(2)) qvalues(fmt(2))) label ///
+				cells(b(fmt(3)) se(par fmt(3)) p(fmt(3)) qvalues(fmt(3))) label ///
 				drop(*.strata_final ?.missing_bl_* L.*) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
@@ -532,6 +552,9 @@ end
 	* apply program to business performance outcomes
 rct_regression_network net_size net_nb_f net_nb_m net_nb_qualite net_coop_pos, gen(network_outcomes)
 
+}
+
+/*
 	* export ate + att in coefplot
 			* network size
 coefplot net_size_ate net_size_att net_nb_f_ate net_nb_f_att net_nb_m_ate net_nb_m_att, ///
@@ -556,13 +579,14 @@ gr combine ml_network_size ml_network_car, ///
 	xsize(6)
 gr export ml_network_cfplot.png, replace
 
+*/
 
-}
 
 
 ***********************************************************************
 * 	PART 9: Midline results - regression table network outcomes
 ***********************************************************************
+/*
 {
 capture program drop rct_regression_network // enables re-running
 program rct_regression_network
