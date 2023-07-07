@@ -94,10 +94,12 @@ program qvalues
 	end  
 
 }
-/*
+
 ***********************************************************************
 * 	PART 1: survey attrition 		
 ***********************************************************************
+/*
+
 {
 *test for differential attrition using the PAP specification (cluster SE, strata)
 eststo a2, r:reg  refus treatment if surveyround==2, cluster(id_plateforme)
@@ -456,8 +458,8 @@ program rct_regression_network
 			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
-			estimates store `var'_ate
-			eststo dir
+			estimates store `var'_ate	// use eststo dir to see
+			quietly ereturn display
 			matrix b = r(table)			// access p-values for mht
 			scalar `var'p1 = b[4,2]
 
@@ -466,7 +468,6 @@ program rct_regression_network
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			estimates store `var'_att
-			eststo dir
 			quietly ereturn display // provides same table but with r(table)
 			matrix b = r(table)
 			scalar `var'p2 = b[4,2]
@@ -480,17 +481,17 @@ tokenize `varlist'
 	* Generate Anderson/Hochberg sharpened q-values to control for MH testing/false discovery rate
 		* put all p-values into matrix/column vector
 mat p = (`1'p1 \ `1'p2 \ `2'p1 \ `2'p2 \ `3'p1 \ `3'p2 \ `4'p1 \ `4'p2 \ `5'p1 \ `5'p2)
-mat colnames p = "pval"
+mat colnames p = "pvalues"
 
 		* create & go to frame as following command will clear data set
-frame create pvalues, replace
+frame copy default pvalues, replace
 frame change pvalues
 		
 		* transform matrix into variable/data set with one variable pvals
-svmat double pvalues
+svmat double p
 
 		* apply q-values program to variable pvalues
-qvalues pval
+qvalues pvalues
 
 		* transform variables into matrix/column to add q-values to regression table
 mkmat pval bky06_qval, matrix(qvalues)
@@ -540,6 +541,7 @@ coefplot net_size_ate net_size_att net_nb_f_ate net_nb_f_att net_nb_m_ate net_nb
 	leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
  	title("Network size", pos(12)) ///
 	name(ml_network_size, replace)
+	
 			* network characteristics
 coefplot net_nb_qualite_ate net_nb_qualite_att net_coop_pos_ate net_coop_pos_att, ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
