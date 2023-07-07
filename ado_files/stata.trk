@@ -1,4 +1,4 @@
-* 00000011
+* 00000015
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -467,4 +467,105 @@ f i\iematch.ado
 f i\iematch.sthlp
 f i\iesave.ado
 f i\iesave.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/m
+N mhtexp.pkg
+D  6 Jul 2023
+U 12
+d 'MHTEXP': module to perform multiple hypothesis testing correction procedure
+d 
+d  mhtexp can be used to perform the MHT correction procedure
+d explained in List, Shaikh, Xu (2016) -
+d https://ideas.repec.org/p/feb/natura/00402.html
+d 
+d KW: experiments
+d KW: multiple hypothesis testing
+d KW: multiple treatments
+d KW: multiple outcomes
+d KW: multiple subgroups
+d KW: randomized control trial
+d KW: bootstrap
+d KW: balance
+d KW: software
+d 
+d Requires: Stata version 12
+d 
+d Distribution-Date: 20160313
+d 
+d Author: Joseph Seidel
+d Support: email seidel.jp@@gmail.com
+d 
+d Author: Yang Xu
+d Support: email yangxu.econ@@gmail.com
+d 
+f m\mhtexp.ado
+f m\mhtexp.sthlp
+f l\lmhtexp.mlib
+e
+S http://fmwww.bc.edu/repec/bocode/m
+N mhtreg.pkg
+D  6 Jul 2023
+U 13
+d 'MHTREG': module for multiple hypothesis testing controlling for FWER
+d 
+d  mhtreg is a module for multiple hypothesis testing that
+d asymptotically controls familywise error rate and is
+d asymptotically balanced. It is based on List et al. (Experimental
+d Economics, 2019) but modified to be used in a multivariate
+d regression setting.
+d 
+d KW:  hypothesis testing
+d KW: regression
+d KW: family-wise error rate
+d 
+d Requires: Stata version 14 and moremata from SSC (q.v.)
+d 
+d Distribution-Date: 20201019
+d 
+d Author: Andreas Steinmayr, LMU Munich
+d Support: email Andreas.Steinmayr@@uibk.ac.at
+d 
+f m\mhtreg.ado
+f m\mhtreg.sthlp
+f l\lmhtreg.mlib
+e
+S https://raw.githubusercontent.com/reifjulian/wyoung/master
+N wyoung.pkg
+D  6 Jul 2023
+U 14
+d regsave. Extract and store regression results.
+d Julian Reif, University of Illinois (jreif@illinois.edu)
+f w\wyoung.ado
+f w\wyoung.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/r
+N rwolf2.pkg
+D  6 Jul 2023
+U 15
+d 'RWOLF2': module to calculate Romano-Wolf stepdown p-values for multiple hypothesis testing
+d 
+d  rwolf2 calculates Romano and Wolf's (2005a,b) step-down adjusted
+d p-values robust to multiple hypothesis testing.  It provides a
+d more general syntax than that provided in the rwolf command,
+d although the underlying algorithm is the same.  This program
+d follows the resampling algorithm described in Romano and Wolf
+d (2016), and provides a p-value corresponding to the significance
+d of a hypothesis test where S tests have been implemented,
+d providing strong control of the family-wise error rate (the
+d probability of committing any Type I error among all of the S
+d hypotheses tested).
+d 
+d KW: p-values
+d KW: Romano-Wolf
+d KW: multiple hypothesis testing
+d 
+d Requires: Stata version 11
+d 
+d Distribution-Date: 20210709
+d 
+d Author: Damian Clarke, Universidad de Santiago de Chile
+d Support: email dclarke@@fen.uchile.cl
+d 
+f r\rwolf2.ado
+f r\rwolf2.sthlp
 e

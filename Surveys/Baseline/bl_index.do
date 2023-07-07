@@ -52,8 +52,7 @@ foreach var of local allvars {
 
 	* calculate z-score for each individual outcome
 	* write a program calculates the z-score
-	* capture program drop zscore
-	
+capture program drop zscore
 program define zscore /* opens a program called zscore */
 	sum `1' if treatment == 0
 	gen `1'z = (`1' - r(mean))/r(sd)   /* new variable gen is called --> varnamez */
