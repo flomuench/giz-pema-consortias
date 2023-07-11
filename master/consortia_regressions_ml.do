@@ -444,6 +444,29 @@ esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency
 }
 
 */
+
+***********************************************************************
+* 	PART 9: Correct for Multiple Hypotheses Testing - FWER - Network
+***********************************************************************
+
+rwolf2 ///
+	(reg net_size treatment l.net_size i.missing_bl_net_size i.strata_final, cluster(id_plateforme)) /// ITT first variable
+	(ivreg2 net_size l.net_size i.missing_bl_net_size i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
+	 (reg net_nb_f treatment l.net_nb_f i.missing_bl_net_nb_f i.strata_final, cluster(id_plateforme)) /// ITT second variable
+	 (ivreg2 net_nb_f l.net_nb_f i.missing_bl_net_nb_f i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
+	 (reg net_nb_m treatment l.net_nb_m i.missing_bl_net_nb_m i.strata_final, cluster(id_plateforme)) /// ITT third variable
+	 (ivreg2 net_nb_m l.net_nb_m i.missing_bl_net_nb_m i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT third variable
+	 (reg net_nb_qualite treatment l.net_nb_qualite i.missing_bl_net_nb_qualite i.strata_final, cluster(id_plateforme)) /// ITT 4th variable
+	 (ivreg2 net_nb_qualite l.net_nb_qualite i.missing_bl_net_nb_qualite i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT 4th variable
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	   seed(110723) reps(999) usevalid strata(strata_final)
+
+
+	   
+	   
+	  	 (reg net_coop_pos treatment l.net_coop_pos i.missing_bl_net_coop_pos i.strata_final, cluster(id_plateforme)) /// ITT 5th variable
+	 (ivreg2 net_coop_pos l.net_coop_pos i.missing_bl_net_coop_pos i.strata_final (take_up = treatment), cluster(id_plateforme) partial), /// TOT 5th variable	
+	   
 ***********************************************************************
 * 	PART 9: Midline results - regression table network outcomes - test adding q-values
 ***********************************************************************
