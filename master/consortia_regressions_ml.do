@@ -18,10 +18,17 @@
 
 use "${master_final}/consortium_final", clear
 
-		* export dta file for Michael Anderson
+/*	* export dta file for Michael Anderson
 preserve
 keep id_plateforme surveyround treatment take_up *net_size *net_nb_f *net_nb_m *net_nb_qualite *net_coop_pos strata_final
 save "${master_final}/sample.dta", replace
+restore
+*/
+
+* export dta file for Michael Anderson
+preserve
+keep id_plateforme surveyround treatment take_up *genderi *female_efficacy *female_loc strata_final
+save "${master_final}/sample_clarke.dta", replace
 restore
 		
 		* change directory
@@ -758,6 +765,30 @@ gr export ml_empowerment_cfplot.png, replace
 
 
 }
+
+***********************************************************************
+* 	PART 10: Correct for MHT - FWER - Entrepreneurial Confidence
+***********************************************************************
+
+rwolf2 ///
+	(reg genderi treatment l.genderi i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
+	(ivreg2 genderi l.genderi i.missing_bl_genderi i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
+	 (reg female_efficacy treatment l.female_efficacy i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
+	 (ivreg2 female_efficacy l.female_efficacy i.missing_bl_female_efficacy i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
+	 (reg female_loc treatment l.female_loc i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)) /// ITT third variable
+	 (ivreg2 female_loc l.female_loc i.missing_bl_female_loc i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT third variable
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
+	   seed(110723) reps(999) usevalid strata(strata_final)
+
+	   
+rwolf2 ///
+	(reg genderi treatment l.genderi i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
+	 (reg female_efficacy treatment l.female_efficacy i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
+	 (reg female_loc treatment l.female_loc i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)), /// ITT third variable
+	indepvars(treatment, treatment, treatment) ///
+	   seed(110723) reps(999) usevalid strata(strata_final) verbose
+
+
 
 /*
 
