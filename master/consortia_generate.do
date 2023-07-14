@@ -158,8 +158,40 @@ replace closed = 1 if id_plateforme == 1044
 ***********************************************************************
 gen sales = ca + ca_exp
 lab var sales "total sales in TND"
+
+
 ***********************************************************************
-* 	PART 5:   Create the indices based on a z-score			  
+*	PART 5: Exported dummy
+***********************************************************************
+gen exported = (ca_exp > 0)
+replace exported = . if ca_exp == .
+lab var exported "export sales > 0"
+
+
+***********************************************************************
+*	PART 6: Innovation
+***********************************************************************	
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
+bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+*br id_plateforme surveyround innovations innovated
+
+lab var innovations "total innovations, max. 4"
+lab var innovated "innovated"
+
+***********************************************************************
+*	PART 7: network
+***********************************************************************	
+	* create total network size
+gen net_size =.
+		* combination of female and male CEOs at midline
+replace net_size = net_nb_f + net_nb_m if surveyround ==2
+		* combination of within family and outside family at baseline
+replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
+
+lab var net_size "Size of the female entrepreuneur network"
+
+***********************************************************************
+* 	PART 8:   Create the indices based on a z-score			  
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
@@ -226,7 +258,7 @@ label var genderi "Gender index -Z Score"
 }
 
 ***********************************************************************
-* 	PART 6:   Create the indices as total points		  
+* 	PART 9:   Create the indices as total points		  
 ***********************************************************************
 {
 	* find out max. points
@@ -275,7 +307,7 @@ drop temp_*
 }
 
 ***********************************************************************
-* 	PART 7:   generate survey-to-survey growth rates
+* 	PART 10:   generate survey-to-survey growth rates
 ***********************************************************************
 	* accounting variables
 local acccounting_vars "ca ca_exp profit employes"
@@ -295,7 +327,7 @@ use links to understand the code syntax for creating the accounting variables' g
 */
 
 ***********************************************************************
-*	PART 8: Financial indicators
+*	PART 11: Financial indicators
 ***********************************************************************
 	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
 gen profit_pct = .
@@ -308,18 +340,9 @@ gen profit_pct = .
 	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 2
 	drop profit_pct1 profit_pct2
 
-/* old code	
-	* winsorize & ihs-transform
-local wins_vars "ca ca_exp profit exprep_inv employes car_empl1 car_empl2 exp_pays"
-foreach var of local wins_vars {
-	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
-	ihstrans `var'_w99, prefix(ihs_) 			  // ihs transform
-	replace ihs_`var'_w99 = . if `var' == -999 | `var' == -888 | `var' == -777 // replace survey missings as missing
-}
-*/
 
 	* winsorize
-local wins_vars "ca ca_exp sales profit exprep_inv employes car_empl1 car_empl2 exp_pays"
+local wins_vars "ca ca_exp sales profit exprep_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 }
@@ -404,15 +427,15 @@ foreach var of local ys {
 }
 		
 		* generate Y0 + missing baseline to be able to run final regression
+			* at midline use only for mht
 foreach var of local ys {
-/* at endline, enable this code:
 			* generate YO
-	bys id (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
-	egen `var'_y0 = min(`var'_first), by(id)								// create variable = bl value for all three surveyrounds by id
+	bys id_plateforme (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
+	egen `var'_y0 = min(`var'_first), by(id_plateforme)								// create variable = bl value for all three surveyrounds by id
 	replace `var'_y0 = 0 if inlist(`var'_y0, ., -777, -888, -999)		// replace this variable = zero if missing
 	drop `var'_first														// clean up
 	lab var `var'_y0 "Y0 `var'"
-*/
+	
 		* generate missing baseline dummy
 	gen miss_bl_`var' = 0 if surveyround == 1											// gen dummy for baseline
 	replace miss_bl_`var' = 1 if surveyround == 1 & inlist(`var',., -777, -888, -999)	// replace dummy 1 if variable missing at bl
@@ -509,36 +532,6 @@ lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 }
 
 */
-***********************************************************************
-*	PART 9: Exported dummy
-***********************************************************************
-gen exported = (ca_exp > 0)
-replace exported = . if ca_exp == .
-lab var exported "export sales > 0"
-
-
-***********************************************************************
-*	PART 10: Innovation
-***********************************************************************	
-egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
-bys id_plateforme (surveyround): gen innovated = (innovations > 0)
-*br id_plateforme surveyround innovations innovated
-
-lab var innovations "total innovations, max. 4"
-lab var innovated "innovated"
-
-***********************************************************************
-*	PART 11: network
-***********************************************************************	
-	* create total network size
-gen net_size =.
-		* combination of female and male CEOs at midline
-replace net_size = net_nb_f + net_nb_m if surveyround ==2
-		* combination of within family and outside family at baseline
-replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
-
-lab var net_size "Size of the female entrepreuneur network"
-
 
 
 ***********************************************************************
@@ -562,22 +555,15 @@ foreach var of local ys {
 	replace `var' = 0 if `var' == . & surveyround == 1
 }
 
-/* code for endline: 
+	* generate Y0 --> baseline value for ancova & mht
 foreach var of local ys {
 		* generate YO
-	bys id (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
-	egen `var'_y0 = min(`var'_first), by(id)								// create variable = bl value for all three surveyrounds by id
+	bys id_plateforme (surveyround): gen `var'_first = `var'[_n == 1]					// filter out baseline value
+	egen `var'_y0 = min(`var'_first), by(id_plateforme)								// create variable = bl value for all three surveyrounds by id
 	replace `var'_y0 = 0 if inlist(`var'_y0, ., -777, -888, -999)		// replace this variable = zero if missing
 	drop `var'_first														// clean up
 	lab var `var'_y0 "Y0 `var'"
-		* generate missing baseline dummy
-	gen miss_bl_`var' = 0 if surveyround == 1											// gen dummy for baseline
-	replace miss_bl_`var' = 1 if surveyround == 1 & inlist(`var',., -777, -888, -999)	// replace dummy 1 if variable missing at bl
-	egen missing_bl_`var' = min(miss_bl_`var'), by(id)									// expand dummy to ml, el
-	lab var missing_bl_`var' "YO missing, `var'"
-	drop miss_bl_`var'
 }
-*/
 
 
 ***********************************************************************

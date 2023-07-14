@@ -96,7 +96,7 @@ restore
 	
 local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd num_inno net_nb_dehors net_nb_fam
 
-reg treatment `balancevarlist', vce(hc3)
+reg treatment `balancevarlist', vce(robust)
 testparm `balancevarlist'		
 			 
 		* visualizing balance for categorical variables with multiple categories
@@ -122,6 +122,9 @@ iebaltab w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts in
 log using pstesttables_final_winsorized.txt, text replace
 pstest w_ca2021 w_caexp2021 w_profit2021 exp_pays w_exprep_inv exprep_couts inno_rd num_inno w_nonfamilynetwork net_nb_fam net_nb_qualite, t(treatment) raw rubin label dist
 log close
+
+
+
 
 /*
 
