@@ -222,6 +222,20 @@ putpdf image network_density.png
 putpdf pagebreak
 
 
+sum net_size,d
+histogram(net_size) if net_size>0 & surveyround ==1 & net_size <60, width(5) frequency addlabels discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern(dash)) ///
+	ytitle("No. of firms") ///
+	xtitle("No. of CEO") ///
+	ylabel(0(10)70, nogrid format(%9.0f)) ///
+	xlabel(0(5)55, nogrid format(%9.0f)) ///
+	text(50 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(70 `r(p50)' "Median", size(vsmall) place(e))
+gr export netsize_bl.png, replace
+putpdf paragraph, halign(center) 
+putpdf image netsize_bl.png
+putpdf pagebreak
+
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
 graph bar listexp, over(list_group, sort(1) relabel(1"Non-sensitive" 2"Sensitive option incl.")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
@@ -707,6 +721,19 @@ putpdf paragraph, halign(center)
 putpdf image ml_network_composition_m.png
 putpdf pagebreak
 
+		* Male CEOs met
+tw ///
+	(kdensity net_nb_f if surveyround == 2, lp(l) lc(maroon) bw(5)) ///
+	(kdensity net_nb_m if surveyround == 2, lp(l) lc(navy) bw(5)) ///
+	, ///
+	xtitle("number of CEOs", size(small)) ///
+	ytitle("density") ///
+	legend(symxsize(small) order(1 "Female contacts" 2 "Male contacts")  pos(6) row(1)) ///
+	name(ml_network_composition_all, replace)
+gr export ml_network_composition_all.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_network_composition_all.png
+putpdf pagebreak
 
 	* Quality of advice 
 sum net_nb_qualite,d
