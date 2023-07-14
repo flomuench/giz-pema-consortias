@@ -38,6 +38,23 @@ graph hbar (count) if treatment == 1 & take_up == 1, over(gouvernorat, label(lab
 gr export location.png, replace
 
 
+		* firm characteristics: differences between consortia
+local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local empowerment_vars "genderi female_efficacy female_loc"
+local kt_vars "mpi innovations innovated"
+local business_vars "sales profit employes"
+local export_vars "eri exprep_couts exprep_inv exported ca_exp"
+
+				* all firms
+iebaltab `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars' if surveyround == 1 & id_plateforme != 1092, grpvar(pole) ftest savetex(baltab_consortia_bl) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+			 
+			 
+				* take-up: only firms that participate in consortium
+iebaltab `networks_var' `empowerment_vars' `kt_vars' `business_vars' `export_vars' if surveyround == 1 & id_plateforme != 1092 & take_up == 1, grpvar(pole) ftest savetex(baltab_consortia_take_up) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
 
 {
 /*

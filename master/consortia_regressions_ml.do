@@ -25,12 +25,13 @@ save "${master_final}/sample.dta", replace
 restore
 */
 
-* export dta file for Michael Anderson
+* export dta file for Damian Clarke
+/*
 preserve
 keep id_plateforme surveyround treatment take_up *genderi *female_efficacy *female_loc strata_final
 save "${master_final}/sample_clarke.dta", replace
 restore
-		
+*/	
 		* change directory
 cd "${master_regressiontables}/midline"
 
@@ -108,8 +109,45 @@ program qvalues
 
 }
 
+
 ***********************************************************************
-* 	PART 1: survey attrition 		
+* 	PART 1: baseline balance 		
+***********************************************************************
+		* concern: F-test significant at baseline
+				* major outcome variables, untransformed
+local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local empowerment_vars "genderi female_efficacy female_loc"
+local kt_vars "mpi innovations innovated inno_rd"
+local business_vars "ca profit employes"
+local export_vars "eri exprep_couts exprep_inv exported ca_exp"
+local vars_untransformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
+				
+					* F-test
+*local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd innovations age net_nb_dehors net_nb_fam net_nb_qualite
+reg treatment `vars_untransformed' if surveyround == 1, vce(robust)
+testparm `vars_untransformed'
+iebaltab `vars_untransformed' if surveyround == 1, ///
+	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
+	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	savetex(baltab_bl_unadj)
+
+				* major outcome variables, transformed
+local network_vars "net_size_w99 net_nb_qualite net_coop_pos net_coop_neg"
+local empowerment_vars "genderi female_efficacy female_loc"
+local kt_vars "mpi innovations innovated inno_rd_w99"
+local business_vars "age ihs_ca_w99_k4 profit employes"
+local export_vars "eri ihs_ca_exp_w99_k4 exp_pays_w99 ihs_exprep_inv_w99_k4 exprep_couts"
+local vars_transformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
+reg treatment `vars_transformed' if surveyround == 1, vce(robust)
+testparm `vars_transformed'
+iebaltab `vars_transformed' if surveyround == 1, ///
+	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
+	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	savetex(baltab_bl_adj)
+
+
+***********************************************************************
+* 	PART 2: survey attrition 		
 ***********************************************************************
 /*
 
@@ -771,12 +809,12 @@ gr export ml_empowerment_cfplot.png, replace
 ***********************************************************************
 
 rwolf2 ///
-	(reg genderi treatment l.genderi i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
-	(ivreg2 genderi l.genderi i.missing_bl_genderi i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
-	 (reg female_efficacy treatment l.female_efficacy i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
-	 (ivreg2 female_efficacy l.female_efficacy i.missing_bl_female_efficacy i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
-	 (reg female_loc treatment l.female_loc i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)) /// ITT third variable
-	 (ivreg2 female_loc l.female_loc i.missing_bl_female_loc i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT third variable
+	(reg genderi treatment genderi_y0 i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
+	(ivreg2 genderi genderi_y0 i.missing_bl_genderi i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
+	 (reg female_efficacy treatment female_efficacy_y0 i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
+	 (ivreg2 female_efficacy female_efficacy_y0 i.missing_bl_female_efficacy i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
+	 (reg female_loc treatment female_loc_y0 i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)) /// ITT third variable
+	 (ivreg2 female_loc female_loc_y0 i.missing_bl_female_loc i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT third variable
 	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
 	   seed(110723) reps(999) usevalid strata(strata_final)
 
