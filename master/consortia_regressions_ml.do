@@ -113,6 +113,7 @@ program qvalues
 ***********************************************************************
 * 	PART 1: baseline balance 		
 ***********************************************************************
+{
 		* concern: F-test significant at baseline
 				* major outcome variables, untransformed
 local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
@@ -145,12 +146,10 @@ iebaltab `vars_transformed' if surveyround == 1, ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	savetex(baltab_bl_adj)
 
-
+}
 ***********************************************************************
 * 	PART 2: survey attrition 		
 ***********************************************************************
-/*
-
 {
 *test for differential attrition using the PAP specification (cluster SE, strata)
 eststo a2, r:reg  refus treatment if surveyround==2, cluster(id_plateforme)
@@ -176,7 +175,7 @@ esttab `regressions' using "ml_attrition.tex", replace ///
 	scalars("strata Strata controls") ///
 	addnotes("All standard errors are clustered at firm level.")
 	
-* balance after attrition
+* baseline balance after attrition
 	* with outliers (Gourmandise)
 iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv exprep_couts inno_rd net_nb_dehors net_nb_fam net_nb_qualite mpi eri if surveyround == 1 & refus == 0, grpvar(treatment) ftest fmissok  vce(robust) format(%12.2fc) save(baltab_midline_all) replace
 						 
@@ -187,7 +186,8 @@ iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv ex
  
 ***********************************************************************
 * 	PART 2: Write a program that generates generic regression table
-***********************************************************************	
+***********************************************************************
+/*	
 program rct_regression_table
 	version 15								// define Stata version 15 used
 	syntax varlist(min=1 numeric), *		// input is variable list, minimum 1 numeric variable. * enables any options.
@@ -716,61 +716,44 @@ program rct_regression_empowerment
 			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
-			estimates store `var'_ate
-			quietly ereturn display
-			matrix b = r(table)			// access p-values for mht
-			scalar `var'p1 = b[4,2]
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
-			estimates store `var'_att
-			quietly ereturn display
-			matrix b = r(table)			// access p-values for mht
-			scalar `var'p2 = b[4,1]
 		}
 		
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
-	* Generate Anderson/Hochberg sharpened q-values to control for MH testing/false discovery rate
-		* put all p-values into matrix/column vector
-mat p = (`1'p1 \ `1'p2 \ `2'p1 \ `2'p2 \ `3'p1 \ `3'p2)
-mat colnames p = "pvalues"
-
-		* create & go to frame as following command will clear data set
-frame copy default pvalues, replace
-frame change pvalues
-drop _all	
+		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata(strata_final)
 		
-		* transform matrix into variable/data set with one variable pvals
-svmat double p, names(col)
-
-		* apply q-values program to variable pvalues
-qvalues pvalues
-
-		* transform variables into matrix/column
-mkmat pvalues bky06_qval, matrix(qs)
-
-		* switch to initial frame & import qvalues
-frame change default
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace
+	  
 	
-		
 		* Put all regressions into one table
 			* Top panel: ITT
-		tokenize `varlist'
+*		tokenize `varlist'
 		local regressions `1'1 `2'1 `3'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Impact on women's entrepreneurial empowerment} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
 				fragment ///
-				mtitles("`1'" "`2'" "`3'") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) label ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
-				drop(*.strata_final ?.missing_bl_* L.*) ///
+				drop(_cons *.strata_final ?.missing_bl_* L.*) ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
 				
 			* Bottom panel: ITT
@@ -778,53 +761,32 @@ frame change default
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label ///
-				drop(*.strata_final ?.missing_bl_* L.*) ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) label ///
+				drop(_cons *.strata_final ?.missing_bl_* L.*) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				scalars("strata Strata controls" "bl_control Y0 control") ///
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \multicolumn{4}{l}{\footnotesize Robust Standard errors in parentheses.} \\ \multicolumn{4}{l}{\footnotesize All outcomes are z-scores indeces.} \\ \multicolumn{4}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
-			
-end
-
-	* apply program to business performance outcomes
-rct_regression_empowerment genderi female_efficacy female_loc, gen(empowerment_outcomes)
-
-	* export ate + att in coefplot
-			* network size
-coefplot genderi_ate genderi_att female_efficacy_ate female_efficacy_att female_loc_ate female_loc_att, ///
+				postfoot("\hline\hline\hline \multicolumn{4}{l}{\footnotesize Robust Standard errors in parentheses.Below we report simple and Romano-Wolf-adjusted p-values.} \\ \multicolumn{4}{l}{\footnotesize All outcomes are z-scores indeces.} \\ \multicolumn{4}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+				
+			* coefplot
+coefplot `1'1 `1'2 `2'1 `2'2 `3'1 `3'2, ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 	asequation swapnames levels(95) ///
 	xtitle("Treatment coefficient", size(medium)) ///
 	leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-	name(ml_empowerment_cfplot, replace)
-gr export ml_empowerment_cfplot.png, replace
+	name(ml_`generate'_cfplot, replace)
+gr export ml_`generate'_cfplot.png, replace
+			
+end
 
+	* apply program to business performance outcomes
+rct_regression_empowerment genderi female_efficacy female_loc, gen(empowerment)
 
 }
 
-***********************************************************************
-* 	PART 10: Correct for MHT - FWER - Entrepreneurial Confidence
-***********************************************************************
 
-rwolf2 ///
-	(reg genderi treatment genderi_y0 i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
-	(ivreg2 genderi genderi_y0 i.missing_bl_genderi i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
-	 (reg female_efficacy treatment female_efficacy_y0 i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
-	 (ivreg2 female_efficacy female_efficacy_y0 i.missing_bl_female_efficacy i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
-	 (reg female_loc treatment female_loc_y0 i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)) /// ITT third variable
-	 (ivreg2 female_loc female_loc_y0 i.missing_bl_female_loc i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT third variable
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
-	   seed(110723) reps(999) usevalid strata(strata_final)
 
-	   
-rwolf2 ///
-	(reg genderi treatment l.genderi i.missing_bl_genderi i.strata_final, cluster(id_plateforme)) /// ITT first variable
-	 (reg female_efficacy treatment l.female_efficacy i.missing_bl_female_efficacy i.strata_final, cluster(id_plateforme)) /// ITT second variable
-	 (reg female_loc treatment l.female_loc i.missing_bl_female_loc i.strata_final, cluster(id_plateforme)), /// ITT third variable
-	indepvars(treatment, treatment, treatment) ///
-	   seed(110723) reps(999) usevalid strata(strata_final) verbose
 
 
 
@@ -1039,7 +1001,104 @@ coefplot mpi_ate mpi_att innovated_ate innovated_att eri_ate eri_att eri_ssa_ate
 	name(ml_kt_cfplot, replace)
 gr export ml_kt_cfplot.png, replace
 
-}	
-		 
-
+}
+*/	
 	
+***********************************************************************
+* 	Archive
+***********************************************************************
+		
+		* Attemps to automize integration of RW p-values in regression table
+/* 
+*ereturn list
+* estadd mat = e(RW)
+
+	* loop over models & variables simultaneously
+			* models : `1'1, `1'2
+/*			
+foreach var in `varlist' {
+	estadd scalar rw_itt = e(rw_`var'_treatment), replace : `var'1
+	*eststo `var'1, add(rw_`var'_treatment)
+	estadd scalar rw_tot = e(rw_`var'_take_up), replace : `var'2
+	*eststo `var'2, add(rw_`var'_take_up)
+
+}
+*/
+/*	
+mat rw = e(RW)
+	scalar rw_itt = rw[1,3]
+	estadd scalar rw_itt = rw_itt, replace : `1'1 /// get rw p-value for itt
+	scalar rw_tot = rw[2,3]
+	estadd scalar rw_tot = rw_tot, replace : `1'2 /// get rw p-value for tot
+	
+	scalar rw_itt = rw[3,3]
+	estadd scalar rw_itt = rw_itt, replace : `2'1 /// get rw p-value for itt
+	scalar rw_tot = rw[4,3]
+	estadd scalar rw_tot = rw_tot, replace : `2'2 /// get rw p-value for tot
+	
+	scalar rw_itt = rw[5,3]
+	estadd scalar rw_itt = rw_itt, replace : `3'1 /// get rw p-value for itt
+	scalar rw_tot = rw[6,3]
+	estadd scalar rw_tot = rw_tot, replace : `3'2 /// get rw p-value for tot
+*/
+
+/*	estadd scalar rw_itt = rw[3,3], replace : `2'1 /// get rw p-value for itt
+	estadd scalar rw_tot = rw[4,3], replace : `2'2 /// get rw p-value for tot
+	estadd scalar rw_itt = rw[5,3], replace : `3'1 /// get rw p-value for itt
+	estadd scalar rw_tot = rw[6,3], replace : `3'2 /// get rw p-value for tot
+*/
+/*
+foreach var in `varlist' {
+	scalar rw_itt`row' = rw[`row',3]
+	estadd scalar rw_itt = rw_itt`row', replace : `var'1 /// get rw p-value for itt
+	local row = `row' + 1
+	scalar rw_tot`row' = rw[`row',3]
+	estadd scalar rw_tot = rw_tot`row', replace : `var'2 /// get rw p-value for tot
+	local row = `row' + 1
+}
+*/
+/*
+estadd scalar = rw[3,3], : `2'1 /// get rw p-value for itt
+estadd scalar = rw[4,3], : `2'2 /// get rw p-value for tot
+
+
+mat rw5 = e(RW)
+mat rw4 = rw5[1..6, 3..3]
+mat rw_3 = rw4[1..2,1..1]
+mat rw_2 = rw4[3..4,1..1]
+mat rw_1 = rw4[5..6,1..1]
+mat rw = rw_3, rw_2
+mat rw = rw, rw_1
+mat rw_itt = rw[1..1, 1..3]
+mat rw_tot = rw[2..2, 1..3]
+
+
+foreach var in `varlist' {
+	estadd scalar rw_itt, `var'
+	estadd mat rw_tot
+}
+*/
+/*
+	* Generate Anderson/Hochberg sharpened q-values to control for MH testing/false discovery rate
+		* put all p-values into matrix/column vector
+mat p = (`1'p1 \ `1'p2 \ `2'p1 \ `2'p2 \ `3'p1 \ `3'p2)
+mat colnames p = "pvalues"
+
+		* create & go to frame as following command will clear data set
+frame copy default pvalues, replace
+frame change pvalues
+drop _all	
+		
+		* transform matrix into variable/data set with one variable pvals
+svmat double p, names(col)
+
+		* apply q-values program to variable pvalues
+qvalues pvalues
+
+		* transform variables into matrix/column
+mkmat pvalues bky06_qval, matrix(qs)
+
+		* switch to initial frame & import qvalues
+frame change default
+*/	
+*/
