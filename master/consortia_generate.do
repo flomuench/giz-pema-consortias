@@ -246,14 +246,14 @@ egen female_loc = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_insp
 egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)	
 
 		* labeling
-label var eri "Export readiness index -Z Score"
-label var eri_ssa "Export readiness SSA index -Z Score"
-label var mpi "Management practices index-Z Score"
-label var marki "Marketing practices index -Z Score"
-label var female_efficacy "Women's entrepreneurial effifacy - z score"
-label var female_initiative "Women's entrepreneurial initiaitve - z score"
-label var female_loc "Women's locus of control - z score"
-label var genderi "Gender index -Z Score"
+label var eri "Export readiness"
+label var eri_ssa "Export readiness SSA"
+label var mpi "Management practices"
+label var marki "Marketing practices"
+label var female_efficacy "Effifacy"
+label var female_initiative "Initiaitve"
+label var female_loc "Locus of control"
+label var genderi "Entrepreneurial empowerment"
 
 }
 
