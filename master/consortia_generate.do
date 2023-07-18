@@ -188,7 +188,8 @@ replace net_size = net_nb_f + net_nb_m if surveyround ==2
 		* combination of within family and outside family at baseline
 replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
 
-lab var net_size "Size of the female entrepreuneur network"
+lab var net_size "Network size"
+
 
 ***********************************************************************
 * 	PART 8:   Create the indices based on a z-score			  
@@ -246,14 +247,14 @@ egen female_loc = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_insp
 egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)	
 
 		* labeling
-label var eri "Export readiness index -Z Score"
-label var eri_ssa "Export readiness SSA index -Z Score"
-label var mpi "Management practices index-Z Score"
-label var marki "Marketing practices index -Z Score"
-label var female_efficacy "Women's entrepreneurial effifacy - z score"
-label var female_initiative "Women's entrepreneurial initiaitve - z score"
-label var female_loc "Women's locus of control - z score"
-label var genderi "Gender index -Z Score"
+label var eri "Export readiness"
+label var eri_ssa "Export readiness SSA"
+label var mpi "Management practices"
+label var marki "Marketing practices"
+label var female_efficacy "Effifacy"
+label var female_initiative "Initiaitve"
+label var female_loc "Locus of control"
+label var genderi "Entrepreneurial empowerment"
 
 }
 
@@ -541,7 +542,7 @@ lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exprep_inv
 	* collect all ys in string
-local network "net_size net_nb_qualite net_coop_pos net_nb_f net_nb_m"
+local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_nb_f_w99 net_nb_m_w99"
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations"
