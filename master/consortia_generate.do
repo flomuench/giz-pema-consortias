@@ -188,7 +188,8 @@ replace net_size = net_nb_f + net_nb_m if surveyround ==2
 		* combination of within family and outside family at baseline
 replace net_size = net_nb_fam + net_nb_dehors if surveyround ==1
 
-lab var net_size "Size of the female entrepreuneur network"
+lab var net_size "Network size"
+
 
 ***********************************************************************
 * 	PART 8:   Create the indices based on a z-score			  
@@ -541,7 +542,7 @@ lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exprep_inv
 	* collect all ys in string
-local network "net_size net_nb_qualite net_coop_pos net_nb_f net_nb_m"
+local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_nb_f_w99 net_nb_m_w99"
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations"

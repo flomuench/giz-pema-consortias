@@ -87,6 +87,10 @@ lab var ca "sales in TND in bl = 2021, ml = 2022, el = 2023"
 lab var ca_exp "export sales in TND in bl = 2021, ml = 2022, el = 2023"
 lab var profit "profit in TND in bl = 2021, ml = 2022, el = 2023" 
 
+lab var net_nb_f "Female CEOs met"
+lab var net_nb_m "Male CEOs met"
+lab var net_coop_pos "View CEO interaction"
+lab var net_nb_qualite "Network quality"
 
 ***********************************************************************
 * 	PART 6:    change gouvernorat label

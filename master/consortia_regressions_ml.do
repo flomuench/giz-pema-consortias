@@ -559,44 +559,71 @@ rwolf2 ///
 	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
 	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(30) usevalid strata(strata_final)
-		
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata(strata_final)
+
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-	
+			
 	* Put all regressions into one table
 		* Top panel: ATE
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Impact on female entrepreneurs' business network} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Impact on business networks} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{7}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
 				fragment ///
-				mtitles("`1'" "`2'" "`3'" "`4'" "`5'") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+				mlabels(, depvars) /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label ///
 				nobaselevels ///
-				drop(*.strata_final ?.missing_bl_* *L.*) ///
-				scalars("strata Strata controls" "bl_control Y0 control")
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_* L.* oL.*) ///
+				noobs
 				
 				* Bottom panel: ITT
 		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+				stats(control_mean control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "Y0 controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* L.* `2' `3') ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) label /// qvalues(fmt(3))
-				drop(*.strata_final ?.missing_bl_* *L.*) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
 				nobaselevels ///
-				scalars("strata Strata controls" "bl_control Y0 control") ///
+				label 		/// specifies EVs have label
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \multicolumn{6}{l}{\footnotesize Robust Standard errors in parentheses.} \\ \multicolumn{6}{l}{\footnotesize All outcomes are in absolute values.} \\ \multicolumn{6}{l}{\footnotesize \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+				postfoot("\hline\hline\hline \\ \multicolumn{6}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. The total of female, male and all other CEOs met are winsorized at the 99th percentile. Coefficients display absolute values of the outcomes. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				
+			* coefplot
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
+	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
+	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)), ///
+		keep(*treatment take_up) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Total network size (ITT)"' `1'2 = `"Total network size (TOT)"' `2'1 = `"Female CEOs met (ITT)"' `2'2 = `"Female CEOs met (TOT)"' `3'1 = `"Male CEOs met (ITT)"' `3'2 = `"Male CEOs met (TOT)"' `4'1 = `"Network quality (ITT)"' `4'2 = `"Network quality (TOT)"' `5'1 = `"View CEO interaction (ITT)"' `5'2 = `"View CEO interaction (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		name(ml_`generate'_cfplot, replace)
+	
+gr export ml_`generate'_cfplot.png, replace
 			
 end
 
 	* apply program to business performance outcomes
-rct_regression_network net_size net_nb_f net_nb_m net_nb_qualite net_coop_pos, gen(network_outcomes)
+rct_regression_network net_size_w99 net_nb_f_w99 net_nb_m_w99 net_nb_qualite net_coop_pos, gen(network_outcomes)
 
 }
 
