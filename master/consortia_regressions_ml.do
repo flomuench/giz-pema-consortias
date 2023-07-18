@@ -496,29 +496,6 @@ esttab profit? profit_w99? ihs_profit_w99? profit_pct? using "profit_consistency
 }
 
 */
-
-***********************************************************************
-* 	PART 9: Correct for Multiple Hypotheses Testing - FWER - Network
-***********************************************************************
-/*
-rwolf2 ///
-	(reg net_size treatment l.net_size i.missing_bl_net_size i.strata_final, cluster(id_plateforme)) /// ITT first variable
-	(ivreg2 net_size l.net_size i.missing_bl_net_size i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT first variable
-	 (reg net_nb_f treatment l.net_nb_f i.missing_bl_net_nb_f i.strata_final, cluster(id_plateforme)) /// ITT second variable
-	 (ivreg2 net_nb_f l.net_nb_f i.missing_bl_net_nb_f i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT second variable
-	 (reg net_nb_m treatment l.net_nb_m i.missing_bl_net_nb_m i.strata_final, cluster(id_plateforme)) /// ITT third variable
-	 (ivreg2 net_nb_m l.net_nb_m i.missing_bl_net_nb_m i.strata_final (take_up = treatment), cluster(id_plateforme)) /// TOT third variable
-	 (reg net_nb_qualite treatment l.net_nb_qualite i.missing_bl_net_nb_qualite i.strata_final, cluster(id_plateforme)) /// ITT 4th variable
-	 (ivreg2 net_nb_qualite l.net_nb_qualite i.missing_bl_net_nb_qualite i.strata_final (take_up = treatment), cluster(id_plateforme)), /// TOT 4th variable
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	   seed(110723) reps(999) usevalid strata(strata_final)
-
-
-	   
-	   
-	  	 (reg net_coop_pos treatment l.net_coop_pos i.missing_bl_net_coop_pos i.strata_final, cluster(id_plateforme)) /// ITT 5th variable
-	 (ivreg2 net_coop_pos l.net_coop_pos i.missing_bl_net_coop_pos i.strata_final (take_up = treatment), cluster(id_plateforme) partial), /// TOT 5th variable	
-*/
 	 
 ***********************************************************************
 * 	PART 9: Midline results - regression table network outcomes
@@ -627,99 +604,6 @@ rct_regression_network net_size_w99 net_nb_f_w99 net_nb_m_w99 net_nb_qualite net
 
 }
 
-/*
-	* export ate + att in coefplot
-			* network size
-coefplot net_size_ate net_size_att net_nb_f_ate net_nb_f_att net_nb_m_ate net_nb_m_att, ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-	asequation swapnames levels(95) ///
-	xtitle("Treatment coefficient", size(medium)) ///
-	leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
- 	title("Network size", pos(12)) ///
-	name(ml_network_size, replace)
-	
-			* network characteristics
-coefplot net_nb_qualite_ate net_nb_qualite_att net_coop_pos_ate net_coop_pos_att, ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-	asequation swapnames levels(95) ///
-	xtitle("Treatment coefficient", size(medium)) ///
-	leg(off) xsize(4.5) ///
-	title("Network characteristics", pos(12)) /// pos(12) centers title
-	name(ml_network_car, replace)	
-gr combine ml_network_size ml_network_car, ///
-	name(ml_network_cfplot, replace) ///
-	note("Note: Confidence intervals are at the 95% level.") ///
-	xsize(6)
-gr export ml_network_cfplot.png, replace
-
-*/
-
-
-/* archive:
-*estadd mat qvalues, replace : _all
-	* want to add a single number hence better use scalar
-
-	* upper panel q-values
-forvalues m = 1(2)9 {
-	matrix uq`m' = qs[`m', 2]
-	mat rownames uq`m' = Treatment
-	estadd matrix uq`m', replace : _all
-}
-forvalues m = 2(2)10 {
-	matrix lq`m' = qs[`m', 2]
-	mat rownames lq`m' = Take_Up
-	estadd matrix lq`m', replace : _all
-}
-	
-matrix upper_qs = uq1, uq3, uq5, uq7, uq9
-mat rownames upper_qs = treatment
-*mat colnames upper_qs = `1' `2' `3' `4' `5'
-matrix lower_qs = lq2, lq4, lq6, lq8, lq10
-mat rownames lower_qs = take_up
-*mat colnames lower_qs = `1' `2' `3' `4' `5'
-
-
-estadd matrix upper_qs, replace 
-estadd matrix lower_qs, replace
-
-
-
-forvalues m = 1(1)5 {
-	estadd matrix upper_qs[1,`m'], replace : `"`m'"'
-	estadd matrix lower_qs[1,`m'], replace : `"`m'"'
-	
-forvalues 
-estadd matrix q, replace : `'
-
-estadd matrix upper_qs, replace : `"`1'"'
-estadd matrix lower_qs, replace : _all
-
-local models = net_size1 net_nb_f1 net_nb_m1 net_nb_qualite1 net_coop_pos1
-local counter = 1
-forvalues m = 1(2)9 {
-matrix q = qs[`m', 2]
-	mat rownames q = treatment
-	local model : word `counter' of `models'
-	ereturn display `model'
-	estadd matrix q, replace : `model' // estadd matrix q = ``model''1
-	mat list e(q)
-	local counter = `counter' + 1
-}
-
-local models = net_size2 net_nb_f2 net_nb_m2 net_nb_qualite2 net_coop_pos2
-local counter = 1
-forvalues m = 2(2)10 {
-	matrix q = qs[`m', 2]
-	mat rownames q = take_up
-	local model : word `counter' of `models'
-	ereturn display `model'
-	estadd matrix q, replace : `model' // estadd matrix q = ``model''2
-	local counter = `counter' + 1
-}
-
-
-
-*/
 
 ***********************************************************************
 * 	PART 10: Midline results - regression empowerment outcomes
