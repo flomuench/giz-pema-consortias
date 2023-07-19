@@ -154,10 +154,14 @@ replace closed = 1 if id_plateforme == 1090
 replace closed = 1 if id_plateforme == 1044
 
 ***********************************************************************
-* 	PART 4:   Create total sales	  
+* 	PART 4:   Create total sales	+ positive profit  
 ***********************************************************************
 gen sales = ca + ca_exp
 lab var sales "total sales in TND"
+
+gen profit_pos = (profit > 0)
+replace profit_pos = . if profit == .
+lab var profit_pos "profit > 0"
 
 
 ***********************************************************************
@@ -168,6 +172,11 @@ replace exported = . if ca_exp == .
 lab var exported "export sales > 0"
 
 
+gen exp_invested = (exp_inv > 0)
+replace exp_invested = . if exp_inv == .
+lab var exp_invested "export investment > 0"
+
+
 ***********************************************************************
 *	PART 6: Innovation
 ***********************************************************************	
@@ -175,8 +184,8 @@ egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
 bys id_plateforme (surveyround): gen innovated = (innovations > 0)
 *br id_plateforme surveyround innovations innovated
 
-lab var innovations "total innovations, max. 4"
-lab var innovated "innovated"
+lab var innovations "Total innovations"
+lab var innovated "Innovated"
 
 ***********************************************************************
 *	PART 7: network
@@ -196,7 +205,7 @@ lab var net_size "Network size"
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exprep_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
 ds `allvars', has(type string)
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -267,7 +276,7 @@ sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
 sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
 sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
-sum temp_exprep_norme temp_exprep_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
+sum temp_exprep_norme temp_exp_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
 	
 	* create total points per index dimension
 			* export readiness index (eri)
@@ -343,7 +352,7 @@ gen profit_pct = .
 
 
 	* winsorize
-local wins_vars "ca ca_exp sales profit exprep_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
+local wins_vars "ca ca_exp sales profit exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 }
@@ -352,7 +361,7 @@ foreach var of local wins_vars {
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exprep_inv_w99" // add at endline: exp_pays_w99
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99" // add at endline: exp_pays_w99
 
 		* check how many zeros
 foreach var of local ys {
@@ -489,7 +498,7 @@ foreach var of varlist employes_w99 car_empl1_w99 car_empl2_w99 {
 }
 
 local columns "E F G H I"
-foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exprep_inv_w99 sales_w99 {
+foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exp_inv_w99 sales_w99 {
 	local row = 3
 	gettoken column columns : columns
 	forvalues i = 1(1)5 {
@@ -504,50 +513,40 @@ foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exprep_inv_w99 sales_w99 {
 		* drop all the created variables
 drop missing_bl_* // *_k?
 
-/*		
-	* ihs-transform with optimal k
-		* k = 10^3 --> employees, female employees, young employees
-		* k = 10^4 --> domestic sales, export sales, total sales, profit, export investment
-local y1 "employes_w99 car_empl1_w99 car_empl2_w99"
-local y2 "ca_w99 ca_exp_w99 sales_w99 profit_w99"
-foreach var of local y1 {
-	ihstrans `var'_k?, prefix(ihs_) 
-}
-		
-		
-		
-lab var ihs_employes_w99 "IHS of employees, wins.99th"
-lab var ihs_ca_w99 "IHS of turnover, wins.99th"
-lab var ihs_ca_exp_w99 "IHS of exports, wins.99th"
-lab var ihs_profit_w99 "IHS of profit, wins.99th"
-lab var ihs_exprep_inv_w99 "IHS of export investement, wins.99th"
-lab var ihs_exp_pays_w99 "IHS of export countries, wins. 99th"
 
-
-			* years before surveys
-	forvalues year = 2018(1) 2020 {
-		winsor2 ca_exp`year', suffix(_w99) cuts(0 99)
-		ihstrans ca_exp`year'_w99, prefix(ihs_)
-		replace ihs_ca_exp`year'_w99 = . if ca_exp == -999 | ca_exp == -888 | ca_exp == -777
-		gen exported_`year' = (ca_exp`year' > 0 & ca_exp`year'!= .)
-}
-
-*/
-
+		* label optimal k variables & k = 1 for consistency checks
+lab var ihs_exp_inv_w99_k1 "Export investment"
+lab var ihs_exp_inv_w99_k4 "Export investment"
+lab var ihs_ca_exp_w99_k1 "Export sales"
+lab var ihs_ca_exp_w99_k4 "Export sales"
+lab var ihs_sales_w99_k1  "Total sales"
+lab var ihs_sales_w99_k4  "Total sales" 
+lab var ihs_ca_w99_k1 "Domestic sales" 
+lab var ihs_ca_w99_k4 "Domestic sales" 
+lab var ihs_profit_w99_k1 "Profit" 
+lab var ihs_profit_w99_k2 "Profit"
+lab var ihs_profit_w99_k3 "Profit" 
+lab var ihs_profit_w99_k4 "Profit"
+lab var profit_pct "Profit"
+lab var ihs_employes_w99_k1 "Employees"
+lab var car_empl1_w99_k1 "Female employees"
+lab var car_empl2_w99_k1 "Young employees"
+lab var ihs_employes_w99_k3 "Employees" 
+lab var car_empl1_w99_k3 "Female employees"
 
 ***********************************************************************
 * 	PART 12: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
 	* results for optimal k
 		* k = 10^3 --> employees, female employees, young employees
-		* k = 10^4 --> domestic sales, export sales, total sales, exprep_inv
+		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
 local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_nb_f_w99 net_nb_m_w99"
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations"
-local export_readiness "eri eri_ssa exprep_inv ihs_exprep_inv_w99_k1 ihs_exprep_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "ihs_ca_w99_k1 ihs_ca_w99_k4 ihs_profit_w99_k1 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
+local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl

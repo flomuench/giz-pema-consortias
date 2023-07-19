@@ -81,7 +81,7 @@ recast int desistement_consortium
 
 
 ***********************************************************************
-* 	PART 5:     document year of collection in label of accounting variables
+* 	PART 5:     relabel outcome variables
 ***********************************************************************
 lab var ca "sales in TND in bl = 2021, ml = 2022, el = 2023"
 lab var ca_exp "export sales in TND in bl = 2021, ml = 2022, el = 2023"
@@ -92,10 +92,17 @@ lab var net_nb_m "Male CEOs met"
 lab var net_coop_pos "View CEO interaction"
 lab var net_nb_qualite "Network quality"
 
+lab var ssa_action1 "SSA client"
+
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************
 lab def gov 10 "Tunis" 11 "Tunis South-West" 20 "Tunis North", modify
+
+***********************************************************************
+* 	PART 7:    shorten variable names for regressions
+***********************************************************************
+rename exprep_inv exp_inv
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
