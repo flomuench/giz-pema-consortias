@@ -51,6 +51,17 @@ putpdf paragraph, halign(center)
 putpdf image ml_survey_response_byday.png
 putpdf pagebreak	
 
+	* response rate by treatment status
+graph bar (count) survey_completed, over(treatment) blabel(total, format(%9.0fc)) ///
+	legend(pos(6) row(1) label(1 "Answers completed")) ///
+	title("Endline completed", pos(12)) note("Date: `c(current_date)'") ///
+	ytitle("number of firms") ///
+	ylabel(0(10)100, nogrid)
+graph export ml_responserate_tstatus_abs.png, replace
+putpdf paragraph, halign(center)
+putpdf image ml_responserate_tstatus_abs.png
+putpdf pagebreak
+
 *Genarte shre of answers
 sum id_plateforme 
 gen share1= (`r(N)'/176)*100
