@@ -588,6 +588,28 @@ putpdf paragraph, halign(center)
 putpdf image ml_responserate_tstatus.png
 putpdf pagebreak
 
+graph bar (sum) validation, over(treatment) over(surveyround) blabel(total, format(%9.0fc)) ///
+	legend (pos(6) row(6) label(1 "Baseline survey") label (2 "Midline survey")) ///
+	title("Response rate") ///
+	ytitle("Number of responses") ///
+	ylabel(0(10)100, nogrid) 
+graph export responserate_abs.png, replace
+putpdf paragraph, halign(center)
+putpdf image responserate_abs.png
+putpdf pagebreak
+
+
+graph bar (sum) validation,over(surveyround) blabel(total, format(%9.2fc)) ///
+	bar(1, fcolor(green)) bar(2, fcolor(red)) ///
+	legend (pos(6) row(6) label(1 "Baseline survey") label (2 "Midline survey")) ///
+	title("Response rate") ///
+	ytitle("share of total sample") ///
+	ylabel(0(20)200, nogrid) 
+graph export responserate_abs.png, replace
+putpdf paragraph, halign(center)
+putpdf image responserate_abs.png
+putpdf pagebreak
+
 graph hbar (sum) survey_completed validation, over(pole) over(treatment) blabel(total, format(%9.2fc)) ///
 	legend (pos(6) row(2) label(1 "Answers completed") ///
 	label(2 "Answers validated")) ///
@@ -598,6 +620,7 @@ graph export ml_responserate_tstatus_pole.png, replace
 putpdf paragraph, halign(center)
 putpdf image ml_responserate_tstatus_pole.png
 putpdf pagebreak
+
 
    *Attrition rate 
 graph bar (sum) refus, over(treatment) blabel(total, format(%9.0fc)) ///
