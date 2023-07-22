@@ -207,7 +207,7 @@ lab var net_size "Network size"
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes
 ds `allvars', has(type string)
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -241,6 +241,14 @@ egen eri = rowmean(temp_exprep_normez temp_exp_pra_foirez temp_exp_pra_sciz temp
 			* export readiness SSA index (eri_ssa)
 egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z temp_ssa_action4z temp_ssa_action5z)
 
+			* export performance
+egen epp = rowmean(temp_exp_paysz temp_ca_expz)
+
+			* business size
+egen business_size = rowmean(temp_employesz temp_caz)
+lab var business_size "z-score sales + employees"
+
+
 			* management practices (mpi)
 egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez temp_man_hr_proz temp_man_fin_numz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
 			
@@ -261,6 +269,7 @@ egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz 
 		* labeling
 label var eri "Export readiness"
 label var eri_ssa "Export readiness SSA"
+label var epp "Export performance"
 label var mpi "Management practices"
 label var marki "Marketing practices"
 label var female_efficacy "Effifacy"
@@ -367,13 +376,6 @@ foreach var of local wins_vars {
 }
 
 
-	* business size z-score
-zscore employes_w99
-zscore ca_w99
-egen business_size = rowmean(employes_w99z ca_w99z)
-lab var business_size "z-score sales + employees"
-drop employes_w99z ca_w99z
-
 	* find optimal k before ihs-transformation
 		* see Aihounton & Henningsen 2021 for methodological approach
 
@@ -420,7 +422,7 @@ foreach var of local ys {
 		ihstrans `var'_k?, prefix(ihs_) 
 }
 
-		* visualize distribution of ihs-transformed, rescaled variables
+/*		* visualize distribution of ihs-transformed, rescaled variables
 foreach var of local ys {
 	if !inlist(`var', employes_w99, car_empl1_w99, car_empl2_w99) {
 		local powers "1 10^3 10^4 10^5 10^6"
@@ -452,7 +454,7 @@ foreach var of local ys {
 	gr export "${master_figures}/scale_`var'.png", replace
 	}
 }
-		
+*/		
 		* generate Y0 + missing baseline to be able to run final regression
 			* at midline use only for mht
 foreach var of local ys {
@@ -594,6 +596,31 @@ foreach var of local ys {
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
 
+
+***********************************************************************
+* 	PART 13: peer effects: baseline peer quality	
+***********************************************************************	
+	* loop over all peer quality baseline characteristics 
+local peer_vars "mpmarki genderi epp business_size profit"
+foreach var of local peer_vars {
+	gen peer_`var' = .
+
+	* loop over each observation
+gsort -treatment surveyround id_plateforme
+forvalues i = 1(1)87 {
+	sum pole in `i' 			// get consortium of the observation
+	local pole = r(mean)
+	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & treatment == 1	// get the mean of var for all other consortia invitees but i
+	replace peer_`var' = r(mean) in `i'				// 
+	}
+}
+	* revisit the result
+br treatment surveyround id_plateforme peer_*
+
+	* extend to panel
+foreach var of local peer_vars {
+	bysort id_plateforme (surveyround treatment): replace peer_`var' = peer_`var'[_n-1] if treatment == 1 & peer_`var' == .
+}
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
