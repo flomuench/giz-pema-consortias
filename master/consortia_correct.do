@@ -35,6 +35,8 @@ replace `x' = stritrim(strtrim(`x'))
 ***********************************************************************
 * 	PART 2:   	update matricule fiscale based on national registry
 ***********************************************************************
+{
+
 replace nom_rep="Nesrine dhahri" if id_plateforme==1040
 replace firmname="zone art najet omri" if id_plateforme==1133
 replace nom_rep="najet omri" if id_plateforme==1133
@@ -127,10 +129,12 @@ replace matricule_fiscale = "1610602Z" if id_plateforme == 1205
 replace matricule_fiscale = "0111519V" if id_plateforme == 1248
 replace matricule_fiscale = "1542155Q" if id_plateforme == 1150
 
+}
 
 ***********************************************************************
 * 	PART 3:   	Change of contact information
 ***********************************************************************
+{
 *change also firmname or representatives name if difference found in registry
 replace firmname = "el maarifaa ennasr" if id_plateforme == 1033
 replace firmname = "zayta" if id_plateforme == 994
@@ -163,7 +167,7 @@ replace mothercompany ="Cloudvisualart" if id_plateforme == 1057
 gen comment =""
 replace comment = "Matricule fiscale is from Ziyad ben Abbas" if id_plateforme==1169
 
-
+}
 
 ***********************************************************************
 * 	PART 5:  export matricule fiscal for admin data from CEPEX
@@ -201,6 +205,7 @@ replace pole = 3 if id_plateforme == 998
 ***********************************************************************
 * 	PART 2:  Correct old accounting values
 ***********************************************************************
+{
 		* Correcting ca
 replace ca_2018 = 800000 if id_plateforme == 991
 replace ca_2019 = 1400000 if id_plateforme == 991
@@ -412,6 +417,8 @@ replace ca_exp = 30000 if id_plateforme == 1097 & surveyround == 1
 replace profit = 21000 if id_plateforme == 1097 & surveyround == 1
 
 
+}
+
 ***********************************************************************
 * 	PART 3:  	Replace all MV codes with real missing values for Y outcomes for later regression
 ***********************************************************************
@@ -424,6 +431,13 @@ local business_performance "ca_exp ca profit profit employes"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 foreach var of local ys {
 		replace `var' = . if inlist(`var', -777, -888, -999)
+}
+
+***********************************************************************
+* 	PART 3: Filter caused replacements
+***********************************************************************
+foreach var of varlist support2-support6 {
+	replace `var' = 0 if support1 == 1
 }
 
 ***********************************************************************

@@ -105,6 +105,20 @@ lab def gov 10 "Tunis" 11 "Tunis South-West" 20 "Tunis North", modify
 rename exprep_inv exp_inv
 
 ***********************************************************************
+* 	PART 8:    Transform remaining string to factor variables
+***********************************************************************
+		* legal status
+lab def lstatus 1 "other" 2 "personne_physique" 3 "sa" 4 "sarl" 5 "suarl"
+encode legalstatus, generate(legstatus) label(lstatus)
+drop legalstatus
+rename legstatus legalstatus
+
+		* export countries
+replace exp_pays_principal = "" if exp_pays_principal == "corée du nord"
+encode exp_pays_principal, gen(pp)
+drop exp_pays_principal
+rename pp exp_pays_principal
+***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
 save "${master_intermediate}/consortium_inter", replace
