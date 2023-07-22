@@ -2,14 +2,14 @@
 * 			Master analysis/regressions				  
 ***********************************************************************
 *																	  
-*	PURPOSE: 	Undertake treatment effect analysis of primary and secondary
-*				outcomes as well as sub-group/heterogeneity analyses																	  
+*	PURPOSE: 	Undertake treatment effect analysis of
+*				outcomes & sub-group/heterogeneity analyses
 *
 *													
 *																	  
 *	Authors:  	Florian Münch, Kaïs Jomaa, Ayoub Chamakhi & Amina Bousnina						    
 *	ID variable: id_platforme		  					  
-*	Requires:  	ecommerce_master_final.dta
+*	Requires:  	consortium_final.dta
 *	Creates:
 
 ***********************************************************************
@@ -112,9 +112,10 @@ program qvalues
 
 
 ***********************************************************************
-* 	PART 1: baseline balance 		
+* 	PART 1: balance 		
 ***********************************************************************
 {
+	* baseline
 		* concern: F-test significant at baseline
 				* major outcome variables, untransformed
 local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
@@ -186,6 +187,7 @@ iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exprep_inv ex
 
 }
  
+
 ***********************************************************************
 * 	PART 2: Write a program that generates generic regression table
 ***********************************************************************

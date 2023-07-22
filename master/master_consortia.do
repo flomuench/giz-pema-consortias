@@ -40,6 +40,7 @@ ssc install ivreg2, replace
 ssc install estout, replace
 ssc install coefplot, replace
 ssc install missingplot, replace
+ssc install nmissing, replace
 */
 
 	* set scheme for visualisations

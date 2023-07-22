@@ -1,4 +1,4 @@
-* 00000015
+* 00000017
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -568,4 +568,91 @@ d Support: email dclarke@@fen.uchile.cl
 d 
 f r\rwolf2.ado
 f r\rwolf2.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/p
+N pdslasso.pkg
+D 22 Jul 2023
+U 16
+d 'PDSLASSO': module for post-selection and post-regularization OLS or IV estimation and inference
+d 
+d  pdslasso and ivlasso are routines for estimating structural
+d parameters in linear models with many controls and/or
+d instruments. The routines use methods for estimating sparse
+d high-dimensional models, specifically the lasso (Least Absolute
+d Shrinkage and Selection Operator, Tibshirani 1996) and the
+d square-root-lasso (Belloni et al. 2011, 2014). These estimators
+d are used to select controls (pdslasso) and/or instruments
+d (ivlasso) from a large set of variables (possibly numbering more
+d than the number of observations), in a setting where the
+d researcher is interested in estimating the causal impact of one
+d or more (possibly endogenous) causal variables of interest. Two
+d approaches are implemented in pdslasso and ivlasso: (1) The
+d "post-double-selection" (PDS) methodology of Belloni et al.
+d (2012, 2013, 2014, 2015, 2016). (2) The "post-regularization"
+d (CHS) methodology of Chernozhukov, Hansen and Spindler (2015).
+d For instrumental variable estimation, ivlasso implements
+d weak-identification-robust hypothesis tests and confidence sets
+d using the Chernozhukov et al. (2013) sup-score test. The
+d implemention of these methods in pdslasso and ivlasso require the
+d Stata program rlasso (available in the separate Stata module
+d lassopack), which provides lasso and square root-lasso estimation
+d with data-driven penalization.
+d 
+d KW: lasso
+d KW: causal inference
+d KW: high-dimensional models
+d KW: instrumental variables
+d KW: square-root lasso
+d KW: regularization
+d KW: penalization
+d KW: sparsity
+d KW: post-double-selection
+d KW: post-regularization
+d 
+d Requires: Stata version 13.1 and lassopack, ranktest from SSC (q.v.)
+d 
+d Distribution-Date: 20190124
+d 
+d Author: Achim Ahrens, Economic and Social Research Institute, Republic of Ireland
+d Support: email achim.ahrens@@esri.ie
+d 
+d Author: Christian B. Hansen, University of Chicago
+d Support: email Christian.Hansen@@chicagobooth.edu
+d 
+d Author: Mark E Schaffer, Heriot-Watt University
+d Support: email m.e.schaffer@@hw.ac.uk
+d 
+f p\pdslasso.ado
+f p\pdslasso.sthlp
+f i\ivlasso.ado
+f i\ivlasso_p.ado
+f i\ivlasso.sthlp
+f i\ivlasso.ihlp
+e
+S http://fmwww.bc.edu/repec/bocode/n
+N nmissing.pkg
+D 22 Jul 2023
+U 17
+d 'NMISSING': module to show numbers of missing or present values
+d 
+d nmissing lists the number of missing values in each  variable
+d specified (or optionally in each observation).  npresent lists
+d the number of present (non-missing)  values in each variable
+d specified (or optionally in  each observation). This version is
+d an update of that published in Stata Journal, 3(4).
+d 
+d KW:  missing values
+d KW: data management
+d 
+d Requires: Stata version 8.0
+d 
+d Distribution-Date: 20050921
+d 
+d Author: Nicholas J. Cox, Durham University
+d Support: email N.J.Cox@@durham.ac.uk
+d 
+f n\nmissing.ado
+f n\nmissing.hlp
+f n\npresent.ado
+f n\npresent.hlp
 e

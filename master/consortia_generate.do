@@ -50,6 +50,7 @@ use "${master_intermediate}/consortium_inter", clear
 ***********************************************************************
 * 	PART 1:  generate take-up variable
 ***********************************************************************
+{
 * PHASE 1 of the treatment: "consortia creation"
 	*  label variables from participation "presence_ateliers"
 local take_up_vars "webinairedelancement rencontre1atelier1 rencontre1atelier2 rencontre2atelier1 rencontre2atelier2 rencontre3atelier1 rencontre3atelier2 eventcomesa rencontre456 atelierconsititutionjuridique"
@@ -88,11 +89,12 @@ gen status = (take_up_per > 0 & take_up_per < .)
 
 * PHASE 2 of the treatment: "consortia export promotion"
 
-
+}
 
 ***********************************************************************
 * 	PART 2:  survey attrition (refusal to respond to survey)	
 ***********************************************************************
+{
 gen refus = 0 // zero for baseline as randomization only among respondents
 lab var refus "Comapnies who refused to answer the survey" 
 
@@ -141,7 +143,7 @@ replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répond
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
-
+}
 ***********************************************************************
 * 	PART 3:  entreprise no longer in operations	
 ***********************************************************************		
@@ -244,6 +246,7 @@ egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man
 			
 			* marketing practices index (marki)
 egen marki = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz)
+egen mpmarki = rowmean(mpi marki)
 			
 			* female empowerment index (genderi)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
@@ -339,6 +342,12 @@ use links to understand the code syntax for creating the accounting variables' g
 ***********************************************************************
 *	PART 11: Financial indicators
 ***********************************************************************
+{
+	* log-transform capital invested
+foreach var of varlist capital ca employes {
+	gen l`var' = log(`var')	
+}
+	
 	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
 gen profit_pct = .
 	egen profit_pct1 = rank(profit) if surveyround == 1	& !inlist(profit, -777, -888, -999, .)	// use egen rank to get the rank of each value in the distribution of profits
@@ -352,10 +361,18 @@ gen profit_pct = .
 
 
 	* winsorize
-local wins_vars "ca ca_exp sales profit exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
+local wins_vars "capital ca ca_exp sales profit exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 }
+
+
+	* business size z-score
+zscore employes_w99
+zscore ca_w99
+egen business_size = rowmean(employes_w99z ca_w99z)
+lab var business_size "z-score sales + employees"
+drop employes_w99z ca_w99z
 
 	* find optimal k before ihs-transformation
 		* see Aihounton & Henningsen 2021 for methodological approach
@@ -534,9 +551,12 @@ lab var car_empl2_w99_k1 "Young employees"
 lab var ihs_employes_w99_k3 "Employees" 
 lab var car_empl1_w99_k3 "Female employees"
 
+}
+
 ***********************************************************************
 * 	PART 12: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
+{
 	* results for optimal k
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
@@ -563,7 +583,16 @@ foreach var of local ys {
 	replace `var'_y0 = 0 if inlist(`var'_y0, ., -777, -888, -999)		// replace this variable = zero if missing
 	drop `var'_first														// clean up
 	lab var `var'_y0 "Y0 `var'"
+	}
+
 }
+
+
+***********************************************************************
+* 	PART 13: Tunis dummy	
+***********************************************************************
+gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
+gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
 
 
 ***********************************************************************
