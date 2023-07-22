@@ -15,21 +15,7 @@
 * 	Part 0: 	set the stage		  
 ***********************************************************************
 use "${master_final}/consortium_final", clear
-
-/*	* export dta file for Michael Anderson
-preserve
-keep id_plateforme surveyround treatment take_up *net_size *net_nb_f *net_nb_m *net_nb_qualite *net_coop_pos strata_final
-save "${master_final}/sample.dta", replace
-restore
-*/
-
-* export dta file for Damian Clarke
-/*
-preserve
-keep id_plateforme surveyround treatment take_up *genderi *female_efficacy *female_loc strata_final
-save "${master_final}/sample_clarke.dta", replace
-restore
-*/	
+	
 		* change directory
 cd "${master_regressiontables}/midline"
 
