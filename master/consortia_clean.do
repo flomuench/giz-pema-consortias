@@ -89,11 +89,15 @@ lab var profit "profit in TND in bl = 2021, ml = 2022, el = 2023"
 
 lab var net_nb_f "Female CEOs met"
 lab var net_nb_m "Male CEOs met"
-lab var net_coop_pos "View CEO interaction"
+lab var net_coop_pos "Pos. view CEO interaction"
+lab var net_coop_neg "Neg. view CEO interaction"
+
 lab var net_nb_qualite "Network quality"
 
 lab var ssa_action1 "SSA client"
 
+lab var list_group "Sensitive option"
+lab var listexp "Item count"
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************

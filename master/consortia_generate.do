@@ -182,10 +182,10 @@ lab var exp_invested "export investment > 0"
 ***********************************************************************
 *	PART 6: Innovation
 ***********************************************************************	
-egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit)
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit), missing
 bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+	replace innovated = . if innovations == .
 *br id_plateforme surveyround innovations innovated
-
 lab var innovations "Total innovations"
 lab var innovated "Innovated"
 
@@ -563,10 +563,10 @@ lab var car_empl1_w99_k3 "Female employees"
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_nb_f_w99 net_nb_m_w99"
+local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2"
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
-local innovation "innovated innovations"
+local innovation "innovated innovations inno_produit inno_process inno_lieu inno_commerce"
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
 local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
