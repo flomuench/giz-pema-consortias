@@ -98,6 +98,11 @@ lab var ssa_action1 "SSA client"
 
 lab var list_group "Sensitive option"
 lab var listexp "Item count"
+
+lab var inno_produit "Product innovation"
+lab var inno_process "Process innovation"
+lab var inno_lieu "Organizational innovation"
+lab var inno_commerce "Marketing innovation"
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************

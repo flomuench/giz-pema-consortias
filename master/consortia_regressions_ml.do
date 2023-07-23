@@ -1185,7 +1185,7 @@ rwolf2 ///
 	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
 	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(30) usevalid strata(strata_final)
+	seed(110723) reps(999) usevalid strata(strata_final)
 	
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace  
@@ -1213,7 +1213,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				fragment ///
 				posthead("\hline \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-				stats(control_median control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "Strata controls" "Y0 controls")) ///
+				stats(control_mean control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "Y0 controls")) ///
 				drop(_cons *.strata_final ?.missing_bl_* L.*) ///
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
@@ -1221,7 +1221,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				label ///
 				nobaselevels ///
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{5}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. All outcomes are z-scores calculated following Kling et al. (2007). Coefficients display effects in standard deviation units of the outcome. Entrepreneurial empowerment combines all indicators used for locus of control and efficacy. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				postfoot("\hline\hline\hline \\ \multicolumn{5}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. All outcomes dummy variables, coded equal to 1 if the firm does a type of innovation and zero otherwise. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
 coefplot (`1'1, pstyle(p1)) (`1'2, pstyle(p1)) (`2'1, pstyle(p2)) (`2'2, pstyle(p2)) (`3'1, pstyle(p3)) (`3'2, pstyle(p3)) (`4'1, pstyle(p4)) (`4'2, pstyle(p4)), ///
