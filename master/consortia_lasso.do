@@ -29,6 +29,17 @@ set graphics on
 keep if surveyround == 1
 
 
+/*
+Option 1: In-built Stata command "lasso"
+--> https://blog.stata.com/2019/09/09/an-introduction-to-the-lasso-in-stata/
+Option 2: Dr. Giovanni Cerulli wrapper: r_ml_stata_cv c_ml_stata_cv
+--> https://sites.google.com/view/giovannicerulli/machine-learning-in-stata
+Option 3: Zou and Schonlau, rforest algorithm
+--> https://journals.sagepub.com/doi/full/10.1177/1536867X20909688
+--> https://www.stata.com/meeting/canada18/slides/canada18_Zou.pdf
+Option 4 (for inference, not variable/model selection): pdslasso (most used in econ)
+*/
+
 ***********************************************************************
 * 	PART 1: take-up & balance 		
 ***********************************************************************

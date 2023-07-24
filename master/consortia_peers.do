@@ -30,7 +30,7 @@ set graphics on
 keep if treatment == 1
 
 ***********************************************************************
-* 	Part 1: peer effect on entrepreneurial confidence	  
+* 	Part 1: peer effect on entrepreneurial confidence: does confidence boost depends on other consortia members?	  
 ***********************************************************************
 
 {

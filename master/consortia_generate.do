@@ -171,12 +171,12 @@ lab var profit_pos "profit > 0"
 ***********************************************************************
 gen exported = (ca_exp > 0)
 replace exported = . if ca_exp == .
-lab var exported "export sales > 0"
+lab var exported "Export sales > 0"
 
 
 gen exp_invested = (exp_inv > 0)
 replace exp_invested = . if exp_inv == .
-lab var exp_invested "export investment > 0"
+lab var exp_invested "Export investment > 0"
 
 
 ***********************************************************************
@@ -603,16 +603,50 @@ gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouverno
 	* loop over all peer quality baseline characteristics 
 local peer_vars "mpmarki genderi epp business_size profit"
 foreach var of local peer_vars {
-	gen peer_`var' = .
+	gen peer_avg1_`var' = .
+	gen peer_avg2_`var' = .
+	gen peer_top3_`var' = .
+	
+	* generate rank for top3 within each consortium
+		* among all firms being offered treatment (for take-up prediction)
+egen rank_`var' = rank() if surveyround == 1 & treatment == 1, by(pole)
+gen  top3`var' = .
 
+		* among all treated firms (for peer effect estimation)
+  
+	
 	* loop over each observation
 gsort -treatment surveyround id_plateforme
 forvalues i = 1(1)87 {
 	sum pole in `i' 			// get consortium of the observation
 	local pole = r(mean)
-	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & treatment == 1	// get the mean of var for all other consortia invitees but i
-	replace peer_`var' = r(mean) in `i'				// 
+		* average for all invited to treatment (for take-up predictions), but i
+	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & treatment == 1
+	replace peer_`var' = r(mean) in `i'	 
+		* average for all that took-up treatment (for peer-effect estimation), but i
+	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & take_up == 1
+	replace peer_`var' = r(mean) in `i'
+		* top three
+	
+	
 	}
+	* gen distance
+	gen peer_dist_avg1 = peer_avg1_`var' - `var'
+	gen peer_dist_avg2 = peer_avg2_`var' - `var'
+	gen peer_dist_top3 = peer_top3_`var' - `var'
+}
+
+	* manually calculate above to verify correct
+{
+gen test_peer_m = .
+		* ex 1: id = 994, pole = 1, var = mpmarki
+sum profit if id_plateforme != 994 & pole == 2 & surveyround == 1 & treatment == 1
+replace test_peer_profit = r(mean) if id_plateforme == 994
+
+		* ex 2: id = 1040, pole 
+sum mpmarki if id_plateforme != 1040 & pole == 1 & surveyround == 1 & treatment == 1
+replace test_peer_mpmarki = r(mean) if id_plateforme == 1040
+drop test_*
 }
 	* revisit the result
 br treatment surveyround id_plateforme peer_*

@@ -81,7 +81,7 @@ recast int desistement_consortium
 
 
 ***********************************************************************
-* 	PART 5:     relabel outcome variables
+* 	PART 5:     relabel outcome variables for regression tables
 ***********************************************************************
 lab var ca "sales in TND in bl = 2021, ml = 2022, el = 2023"
 lab var ca_exp "export sales in TND in bl = 2021, ml = 2022, el = 2023"
@@ -103,6 +103,8 @@ lab var inno_produit "Product innovation"
 lab var inno_process "Process innovation"
 lab var inno_lieu "Organizational innovation"
 lab var inno_commerce "Marketing innovation"
+
+lab var exprep_couts "Export costs"
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************
