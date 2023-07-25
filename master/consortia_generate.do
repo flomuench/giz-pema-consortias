@@ -352,6 +352,7 @@ use links to understand the code syntax for creating the accounting variables' g
 *	PART 11: Financial indicators
 ***********************************************************************
 {
+{
 	* log-transform capital invested
 foreach var of varlist capital ca employes {
 	gen l`var' = log(`var')	
@@ -555,6 +556,8 @@ lab var car_empl1_w99_k3 "Female employees"
 
 }
 
+}
+
 ***********************************************************************
 * 	PART 12: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
@@ -600,64 +603,73 @@ gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouverno
 ***********************************************************************
 * 	PART 13: peer effects: baseline peer quality	
 ***********************************************************************	
-	* loop over all peer quality baseline characteristics 
+	* loop over all peer quality baseline characteristics
+local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
 local peer_vars "mpmarki genderi epp business_size profit"
 foreach var of local peer_vars {
-	gen peer_avg1_`var' = .
-	gen peer_avg2_`var' = .
-	gen peer_top3_`var' = .
+	* get labels for new variables
+	gettoken label labels : labels
 	
-	* generate rank for top3 within each consortium
-		* among all firms being offered treatment (for take-up prediction)
-egen rank_`var' = rank() if surveyround == 1 & treatment == 1, by(pole)
-gen  top3`var' = .
+			* generate rank for top3 within each consortium
+				* top1: among all firms being offered treatment (for take-up prediction)
+		gsort pole treatment surveyround -`var'
+		by pole treatment surveyround: gen rank1_`var' = _n
+		egen peer_top1_`var' = mean(`var') if rank1_`var' < 4 & treatment == 1 & surveyround == 1, by(pole)
+		egen temp_peer_top1_`var' = min(peer_top1_`var') if treatment == 1, by(pole)
+		drop peer_top1_`var'
+		rename temp_peer_top1_`var' peer_top1_`var'
 
-		* among all treated firms (for peer effect estimation)
-  
-	
-	* loop over each observation
-gsort -treatment surveyround id_plateforme
-forvalues i = 1(1)87 {
-	sum pole in `i' 			// get consortium of the observation
-	local pole = r(mean)
-		* average for all invited to treatment (for take-up predictions), but i
-	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & treatment == 1
-	replace peer_`var' = r(mean) in `i'	 
-		* average for all that took-up treatment (for peer-effect estimation), but i
-	sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & take_up == 1
-	replace peer_`var' = r(mean) in `i'
-		* top three
-	
-	
+				* top2: among all treated firms (for peer effect estimation)
+		gsort pole take_up surveyround -`var'
+		by pole take_up surveyround: gen rank2_`var' = _n
+		egen peer_top2_`var' = mean(`var') if rank2_`var' < 4 & take_up == 1 & surveyround == 1, by(pole)
+		egen temp_peer_top2_`var' = min(peer_top2_`var') if take_up == 1, by(pole)
+		drop peer_top2_`var'
+		rename temp_peer_top2_`var' peer_top2_`var'
+
+		lab var peer_top1_`var' "Top-3 peer average bl `label'"
+		lab var peer_top2_`var' "Top-3 peer average bl `label'"
+
+			* generate 
+		gen peer_avg1_`var' = .
+		gen peer_avg2_`var' = .	
+		lab var peer_avg1_`var' "Peer average bl `label'"
+		lab var peer_avg2_`var' "Peer average bl `label'"
+			* loop over each observation
+		gsort -treatment surveyround id_plateforme
+		forvalues i = 1(1)87 {
+			sum pole in `i' 			// get consortium of the observation
+			local pole = r(mean)
+				* average for all invited to treatment (for take-up predictions), but i
+			sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & treatment == 1
+			replace peer_avg1_`var' = r(mean) in `i'	 
+				* average for all that took-up treatment (for peer-effect estimation), but i
+			sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & take_up == 1
+			replace peer_avg2_`var' = r(mean) in `i'	
 	}
-	* gen distance
-	gen peer_dist_avg1 = peer_avg1_`var' - `var'
-	gen peer_dist_avg2 = peer_avg2_`var' - `var'
-	gen peer_dist_top3 = peer_top3_`var' - `var'
+
+
 }
 
-	* manually calculate above to verify correct
-{
-gen test_peer_m = .
-		* ex 1: id = 994, pole = 1, var = mpmarki
-sum profit if id_plateforme != 994 & pole == 2 & surveyround == 1 & treatment == 1
-replace test_peer_profit = r(mean) if id_plateforme == 994
-
-		* ex 2: id = 1040, pole 
-sum mpmarki if id_plateforme != 1040 & pole == 1 & surveyround == 1 & treatment == 1
-replace test_peer_mpmarki = r(mean) if id_plateforme == 1040
-drop test_*
-}
 	* revisit the result
-br treatment surveyround id_plateforme peer_*
+sort treatment pole surveyround
+br id_plateforme treatment pole surveyround peer_*
+sort treatment surveyround id_plateforme, stable
 
-	* extend to panel
+	* extend to panel, gen distance
+local peer_vars "mpmarki genderi epp business_size profit"
 foreach var of local peer_vars {
-	bysort id_plateforme (surveyround treatment): replace peer_`var' = peer_`var'[_n-1] if treatment == 1 & peer_`var' == .
+	forvalues i = 1(1)2 {
+		* extend to panel
+	bysort id_plateforme (surveyround treatment): replace peer_avg`i'_`var' = peer_avg`i'_`var'[_n-1] if treatment == 1 & peer_avg`i'_`var' == .
+		* gen distance
+	gen peer_dist_avg`i'_`var' = peer_avg`i'_`var' - `var'
+	gen peer_dist_top`i'_`var' = peer_top`i'_`var' - `var'
+	}
 }
 
 ***********************************************************************
-* 	PART final save:    save as intermediate consortium_database
+* 	PART final save:    save as final consortium_database
 ***********************************************************************
 save "${master_final}/consortium_final", replace
 
