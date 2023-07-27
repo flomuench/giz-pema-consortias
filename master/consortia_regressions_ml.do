@@ -1140,7 +1140,7 @@ rct_regression_profit ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_
 
 
 ***********************************************************************
-* 	PART 10: Midline results - regression innovation outcomes
+* 	PART 15: Midline results - regression innovation outcomes
 ***********************************************************************
 {
 capture program drop rct_regression_innovation // enables re-running

@@ -43,6 +43,7 @@ Option 4 (for inference, not variable/model selection): pdslasso (most used in e
 ***********************************************************************
 * 	PART 1: take-up & balance 		
 ***********************************************************************
+/*
 {
 	* midline
 				* major outcome variables, untransformed
@@ -73,17 +74,17 @@ local obligations "famille1 famille2"
 local allvars3 `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations'
 				
 				* balance & take-up: untransformed
-iebaltab `vars_untransformed' if surveyround == 1, ///
+iebaltab `vars_untransformed' if surveyround == 1 & treatment == 1, ///
 	grpvar(take_up) vce(robust) format(%12.2fc) replace ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	save(take_up_baltab_unajd)
 
 				* balance & take-up: transformed
-iebaltab `vars_transformed' if surveyround == 1, ///
+iebaltab `vars_transformed' if surveyround == 1  & treatment == 1, ///
 	grpvar(take_up) vce(robust) format(%12.2fc) replace ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	save(take_up_baltab_ajd)
-	
+}	
 				* balance & take-up: transformed
 iebaltab `allvars3' if surveyround == 1, ///
 	grpvar(take_up) vce(robust) format(%12.2fc) replace ///
@@ -91,7 +92,7 @@ iebaltab `allvars3' if surveyround == 1, ///
 	save(take_up_baltab_allvars)
 
 }
-
+*/
 ***********************************************************************
 * 	PART 2: split the sample in training and evaluation sample
 ***********************************************************************
@@ -145,19 +146,19 @@ local allvars5 "net_nb_qualite net_coop_neg capital_w99 famille2 innovations net
 * 	PART 4: 
 ***********************************************************************
 	* OLS
-regress take_up `allvars5', robust
+regress take_up `allvars3', robust
 estimates store ols
 	
 	* CV selection
-lasso linear take_up `allvars5' if sample == 1, rseed(22072023) selection(cv)
+lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(cv)
 estimates store cv
 
 	* Adaptive selection
-lasso linear take_up `allvars5' if sample == 1, rseed(22072023) selection(adaptive)
+lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(adaptive)
 estimates store adaptive
 
 	* Plugin selection
-lasso linear take_up `allvars5' if sample == 1, rseed(22072023) selection(plugin)
+lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(plugin)
 estimates store plugin
 
 	* compare within vs. out of sample prediction performance

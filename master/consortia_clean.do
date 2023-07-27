@@ -83,9 +83,9 @@ recast int desistement_consortium
 ***********************************************************************
 * 	PART 5:     relabel outcome variables for regression tables
 ***********************************************************************
-lab var ca "sales in TND in bl = 2021, ml = 2022, el = 2023"
-lab var ca_exp "export sales in TND in bl = 2021, ml = 2022, el = 2023"
-lab var profit "profit in TND in bl = 2021, ml = 2022, el = 2023" 
+lab var ca "Sales"
+lab var ca_exp "Export sales"
+lab var profit "Profit" 
 
 lab var net_nb_f "Female CEOs met"
 lab var net_nb_m "Male CEOs met"
@@ -105,6 +105,8 @@ lab var inno_lieu "Organizational innovation"
 lab var inno_commerce "Marketing innovation"
 
 lab var exprep_couts "Export costs"
+
+lab var employes "Employees"
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************
