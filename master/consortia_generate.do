@@ -159,11 +159,11 @@ replace closed = 1 if id_plateforme == 1044
 * 	PART 4:   Create total sales	+ positive profit  
 ***********************************************************************
 gen sales = ca + ca_exp
-lab var sales "total sales in TND"
+lab var sales "Total sales"
 
 gen profit_pos = (profit > 0)
 replace profit_pos = . if profit == .
-lab var profit_pos "profit > 0"
+lab var profit_pos "Profit > 0"
 
 
 ***********************************************************************
@@ -245,8 +245,8 @@ egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z tem
 egen epp = rowmean(temp_exp_paysz temp_ca_expz)
 
 			* business size
-egen business_size = rowmean(temp_employesz temp_caz)
-lab var business_size "z-score sales + employees"
+egen size = rowmean(temp_employesz temp_caz)
+lab var size "z-score sales + employees"
 
 
 			* management practices (mpi)
@@ -349,7 +349,7 @@ use links to understand the code syntax for creating the accounting variables' g
 */
 
 ***********************************************************************
-*	PART 11: Financial indicators
+*	PART 11: Continuous outcomes (winsorization + ihs-transformation)
 ***********************************************************************
 {
 {
@@ -371,10 +371,13 @@ gen profit_pct = .
 
 
 	* winsorize
-local wins_vars "capital ca ca_exp sales profit exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
+		* all outcomes (but profit)
+local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 }
+		* profit
+winsor2 profit, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
 
 
 	* find optimal k before ihs-transformation
@@ -605,7 +608,7 @@ gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouverno
 ***********************************************************************	
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
-local peer_vars "mpmarki genderi epp business_size profit"
+local peer_vars "mpmarki genderi epp size profit"
 foreach var of local peer_vars {
 	* get labels for new variables
 	gettoken label labels : labels
@@ -657,14 +660,19 @@ br id_plateforme treatment pole surveyround peer_*
 sort treatment surveyround id_plateforme, stable
 
 	* extend to panel, gen distance
-local peer_vars "mpmarki genderi epp business_size profit"
+local peer_vars "mpmarki genderi epp size profit"
+local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
 foreach var of local peer_vars {
+	* get the labels
+	gettoken label labels : labels
 	forvalues i = 1(1)2 {
-		* extend to panel
+	* extend to panel
 	bysort id_plateforme (surveyround treatment): replace peer_avg`i'_`var' = peer_avg`i'_`var'[_n-1] if treatment == 1 & peer_avg`i'_`var' == .
 		* gen distance
-	gen peer_dist_avg`i'_`var' = peer_avg`i'_`var' - `var'
-	gen peer_dist_top`i'_`var' = peer_top`i'_`var' - `var'
+	gen peer_d_avg`i'_`var' = peer_avg`i'_`var' - `var'
+	gen peer_d_top`i'_`var' = peer_top`i'_`var' - `var'
+	lab var peer_d_avg`i'_`var' "distance to peer average `label'"
+	lab var peer_d_top`i'_`var' "distance to top-3 average `label'"
 	}
 }
 
