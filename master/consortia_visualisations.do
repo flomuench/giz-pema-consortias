@@ -43,7 +43,17 @@ local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
 local empowerment_vars "genderi female_efficacy female_loc"
 local kt_vars "mpi innovations innovated"
 local business_vars "sales profit employes"
-local export_vars "eri exprep_couts exprep_inv exported ca_exp"
+local export_vars "eri exprep_couts exp_inv exported ca_exp"
+
+{
+local exp_status "exported exp_invested exp_afrique"
+local financial "ca_w99 ca_exp_w99 profit_w99 profit_pos employes_w99"
+local basic "presence_enligne tunis age capital_w99"
+local innovation "inno_rd innovations innovated"
+local network "net_nb_fam_w99 net_nb_dehors_w99 net_nb_qualite net_time net_coop_neg" // ml vars: net_nb_f net_nb_m
+local obligations "famille1 famille2"
+local expectations "att_adh1 att_adh2 att_adh3 att_adh4 att_adh5 att_strat1 att_strat2 att_strat3 att_cont1 att_cont2 att_cont3 att_cont4"
+}
 
 				* all firms
 iebaltab `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars' if surveyround == 1 & id_plateforme != 1092, grpvar(pole) ftest savetex(baltab_consortia_bl) replace ///
@@ -52,10 +62,26 @@ iebaltab `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_var
 			 
 			 
 				* take-up: only firms that participate in consortium
-iebaltab `networks_var' `empowerment_vars' `kt_vars' `business_vars' `export_vars' if surveyround == 1 & id_plateforme != 1092 & take_up == 1, grpvar(pole) ftest savetex(baltab_consortia_take_up) replace ///
+					* list 1: `networks_var' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
+/*					* list 2: exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations'
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & take_up == 1, grpvar(pole) ftest save(baltab_consortia_take_up) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
-
+*/			 
+			 * drop-outs
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & take_up == 0 & treatment == 1, grpvar(pole) ftest save(baltab_consortia_drop_out) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+			 
+			 * digital consortium
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & cons_dig == 1 & treatment == 1, grpvar(take_up) ftest save(baltab_consortia_take_up_dig) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)
+			 
+			* all other consortia 
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & cons_dig == 0 & treatment == 1, grpvar(take_up) ftest save(baltab_consortia_take_up_row) replace ///
+			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+			 format(%12.2fc)	 
 {
 /*
 * create word document

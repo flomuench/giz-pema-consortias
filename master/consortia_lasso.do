@@ -43,7 +43,7 @@ Option 4 (for inference, not variable/model selection): pdslasso (most used in e
 ***********************************************************************
 * 	PART 1: take-up & balance 		
 ***********************************************************************
-/*
+
 {
 	* midline
 				* major outcome variables, untransformed
@@ -64,14 +64,15 @@ local vars_transformed `network_vars' `empowerment_vars' `kt_vars' `business_var
 
 {
 local exp_status "exported exp_invested exp_afrique"
-local financial "ca ca_exp profit profit_pos employes"
-local basic "pole presence_enligne tunis year_created age legalstatus lcapital"
+local financial "ca_w99 ca_exp_w99 profit_w99 profit_pos employes_w99"
+local basic "presence_enligne tunis age lcapital"
 local innovation "inno_rd innovations innovated"
-local network "net_nb_fam net_nb_dehors net_nb_qualite net_time net_coop_neg" // ml vars: net_nb_f net_nb_m
+local network "net_nb_fam_w99 net_nb_dehors_w99 net_nb_qualite net_time net_coop_neg" // ml vars: net_nb_f net_nb_m
 local obligations "famille1 famille2"
+local expectations "att_adh1 att_adh2 att_adh3 att_adh4 att_adh5 att_strat1 att_strat2 att_strat3 att_cont1 att_cont2 att_cont3 att_cont4"
 }
 
-local allvars3 `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations'
+local allvars3 `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations'
 				
 				* balance & take-up: untransformed
 iebaltab `vars_untransformed' if surveyround == 1 & treatment == 1, ///
@@ -84,15 +85,15 @@ iebaltab `vars_transformed' if surveyround == 1  & treatment == 1, ///
 	grpvar(take_up) vce(robust) format(%12.2fc) replace ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	save(take_up_baltab_ajd)
-}	
+	
 				* balance & take-up: transformed
-iebaltab `allvars3' if surveyround == 1, ///
+iebaltab `allvars3' if surveyround == 1 & treatment == 1 & id_plateforme != 1092, ///
 	grpvar(take_up) vce(robust) format(%12.2fc) replace ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	save(take_up_baltab_allvars)
 
 }
-*/
+
 ***********************************************************************
 * 	PART 2: split the sample in training and evaluation sample
 ***********************************************************************
