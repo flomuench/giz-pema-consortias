@@ -602,9 +602,14 @@ foreach var of local ys {
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
 
+***********************************************************************
+* 	PART 14: Digital consortia dummy	
+***********************************************************************
+gen cons_dig = (pole == 4)
+
 
 ***********************************************************************
-* 	PART 13: peer effects: baseline peer quality	
+* 	PART 5: peer effects: baseline peer quality	
 ***********************************************************************	
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
@@ -648,15 +653,16 @@ foreach var of local peer_vars {
 			replace peer_avg1_`var' = r(mean) in `i'	 
 				* average for all that took-up treatment (for peer-effect estimation), but i
 			sum `var' if `i' != _n & pole == `pole' & surveyround == 1 & take_up == 1
-			replace peer_avg2_`var' = r(mean) in `i'	
+			replace peer_avg2_`var' = r(mean) in `i'
 	}
+			replace peer_avg2_`var' = . if take_up == 0
 
 
 }
 
 	* revisit the result
 sort treatment pole surveyround
-br id_plateforme treatment pole surveyround peer_*
+br id_plateforme treatment take_up pole surveyround peer_*
 sort treatment surveyround id_plateforme, stable
 
 	* extend to panel, gen distance
@@ -675,6 +681,16 @@ foreach var of local peer_vars {
 	lab var peer_d_top`i'_`var' "distance to top-3 average `label'"
 	}
 }
+
+
+	* generate survey-to-survey growth rates
+local y_vars "genderi mpi ihs_profit_w99_k1"
+foreach var of local y_vars {
+		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
+			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
+}
+*bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
+*bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
 
 ***********************************************************************
 * 	PART final save:    save as final consortium_database
