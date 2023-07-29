@@ -28,6 +28,10 @@ set graphics on
 		* limit to baseline observations (pre-treatment)
 keep if surveyround == 1
 
+		* temporarily drop digital consortium due to reverse trend in data
+preserve 
+keep if pole < 4
+
 
 /*
 Option 1: In-built Stata command "lasso"
@@ -142,31 +146,34 @@ local allvars3 `exp_status' eri eri_ssa `financial' `basic' `network' `innovatio
 local allvars4 "net_nb_qualite net_coop_neg capital_w99 famille2 innovations net_nb_fam employes_w99 ca_w99 i.pole"
 local allvars5 "net_nb_qualite net_coop_neg capital_w99 famille2 innovations net_nb_fam business_size i.pole"
 
+local allvars7 "size innovations i.city i.cons_dig i.exp_invested age net_size"
+local allvars8 "size innovations i.city i.exp_invested age net_size"
+
 
 ***********************************************************************
 * 	PART 4: 
 ***********************************************************************
 	* OLS
-regress take_up `allvars3', robust
+regress take_up `allvars8' if sample == 1 & pole != 4, robust
 estimates store ols
 	
 	* CV selection
-lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(cv)
+lasso linear take_up `allvars8' if sample == 1 & pole != 4, rseed(22072023) selection(cv)
 estimates store cv
 
 	* Adaptive selection
-lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(adaptive)
+lasso linear take_up `allvars8' if sample == 1 & pole != 4, rseed(22072023) selection(adaptive)
 estimates store adaptive
 
 	* Plugin selection
-lasso linear take_up `allvars3' if sample == 1, rseed(22072023) selection(plugin)
+lasso linear take_up `allvars8' if sample == 1 & pole != 4, rseed(22072023) selection(plugin)
 estimates store plugin
 
 	* compare within vs. out of sample prediction performance
 lassogof ols cv adaptive plugin, over(sample) postselection
 
 	* check the sensitivity of the choice of lambda
-lassoknot 
+*lassoknot 
 
 	* check which variables where selected in the optimal model
 lassocoef cv adaptive plugin, ///
@@ -177,7 +184,7 @@ lassocoef cv adaptive plugin, ///
 ***********************************************************************
 * 	PART 5: Run simple OLS + logit regressions
 ***********************************************************************
-
+/*
 * selection via hit-and-drop
 		* first attempt
 {
@@ -255,4 +262,15 @@ estimates store logit
 	* selection via balance table
 local balvars4 "net_nb_qualite net_coop_neg capital_w99 famille2 innovations net_nb_fam employes_w99 ca_w99 i.pole"
 local balvars5 "net_nb_qualite net_coop_neg capital_w99 famille2 innovations net_nb_fam business_size i.pole"
+*/
+
+	* Logit
+local allvars7 "size innovations i.city i.exp_invested age net_size" // i.cons_dig
+regress take_up `allvars7' if pole != 4, robust
+
+	* do the same digitial consortium
+restore 
+local allvars7 "size innovations i.city i.exp_invested age net_size" // i.cons_dig
+regress take_up `allvars7' if pole == 4, robust
+
 
