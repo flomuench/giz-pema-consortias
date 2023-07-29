@@ -91,6 +91,8 @@ lab var net_nb_f "Female CEOs met"
 lab var net_nb_m "Male CEOs met"
 lab var net_coop_pos "Pos. view CEO interaction"
 lab var net_coop_neg "Neg. view CEO interaction"
+lab var net_nb_fam "Family business network"
+lab var net_nb_dehors "Outside family business network"
 
 lab var net_nb_qualite "Network quality"
 
@@ -107,6 +109,21 @@ lab var inno_commerce "Marketing innovation"
 lab var exprep_couts "Export costs"
 
 lab var employes "Employees"
+
+lab var age "Age"
+lab var presence_enligne "Online presence"
+
+lab var inno_rd "R&D expenditure"
+lab var famille1 "Family member is entrepreneur"
+lab var famille2 "Children below 18"
+
+lab var exp_afrique "Export to SSA"
+
+lab var capital "Capital"
+
+lab var net_time "Meetings with other CEOs, past 3 months"
+
+
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************

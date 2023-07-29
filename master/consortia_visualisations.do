@@ -74,12 +74,14 @@ iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki g
 			 format(%12.2fc)
 			 
 			 * digital consortium
-iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & cons_dig == 1 & treatment == 1, grpvar(take_up) ftest save(baltab_consortia_take_up_dig) replace ///
+				* `obligations' `expectations'
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi if surveyround == 1 & id_plateforme != 1092 & cons_dig == 1 & treatment == 1, grpvar(take_up) ftest savetex(baltab_consortia_take_up_dig) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)
 			 
 			* all other consortia 
-iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi `obligations' `expectations' if surveyround == 1 & id_plateforme != 1092 & cons_dig == 0 & treatment == 1, grpvar(take_up) ftest save(baltab_consortia_take_up_row) replace ///
+				* `obligations' `expectations'
+iebaltab `exp_status' eri `financial' `basic' `network' `innovation' mpi marki genderi if surveyround == 1 & id_plateforme != 1092 & cons_dig == 0 & treatment == 1, grpvar(take_up) ftest savetex(baltab_consortia_take_up_row) replace ///
 			 vce(robust) pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 			 format(%12.2fc)	 
 {

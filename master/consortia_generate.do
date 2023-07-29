@@ -207,7 +207,7 @@ lab var net_size "Network size"
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes sales profit
 ds `allvars', has(type string)
 
 *IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros*
@@ -245,8 +245,8 @@ egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z tem
 egen epp = rowmean(temp_exp_paysz temp_ca_expz)
 
 			* business size
-egen size = rowmean(temp_employesz temp_caz)
-lab var size "z-score sales + employees"
+egen size = rowmean(temp_employesz temp_salesz temp_profitz)
+lab var size "z-score sales + employees + profit"
 
 
 			* management practices (mpi)
@@ -601,6 +601,8 @@ foreach var of local ys {
 ***********************************************************************
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
+lab var tunis "HQ in Tunis"
+lab var city "HQ in Tunis, Sousse, Sfax"
 
 ***********************************************************************
 * 	PART 14: Digital consortia dummy	
@@ -662,7 +664,7 @@ foreach var of local peer_vars {
 
 	* revisit the result
 sort treatment pole surveyround
-br id_plateforme treatment take_up pole surveyround peer_*
+*br id_plateforme treatment take_up pole surveyround peer_*
 sort treatment surveyround id_plateforme, stable
 
 	* extend to panel, gen distance
