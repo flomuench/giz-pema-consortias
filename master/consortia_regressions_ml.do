@@ -120,8 +120,8 @@ program qvalues
 local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
 local empowerment_vars "genderi female_efficacy female_loc"
 local kt_vars "mpi innovations innovated inno_rd"
-local business_vars "ca profit employes"
-local export_vars "eri exprep_couts exp_inv exported ca_exp"
+local business_vars "age ca profit employes"
+local export_vars "eri exprep_couts exp_inv exported ca_exp exp_pays"
 local vars_untransformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
 				
 					* F-test
@@ -138,7 +138,7 @@ local network_vars "net_size_w99 net_nb_qualite net_coop_pos net_coop_neg"
 local empowerment_vars "genderi female_efficacy female_loc"
 local kt_vars "mpi innovations innovated inno_rd_w99"
 local business_vars "age ihs_ca_w99_k4 profit employes"
-local export_vars "eri ihs_ca_exp_w99_k4 exp_pays_w99 ihs_exp_inv_w99_k4 exprep_couts"
+local export_vars "eri ihs_ca_exp_w99_k4 exp_pays_w99 ihs_exp_inv_w99_k4 exprep_couts exported"
 local vars_transformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
 reg treatment `vars_transformed' if surveyround == 1, vce(robust)
 testparm `vars_transformed'

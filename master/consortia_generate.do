@@ -159,6 +159,9 @@ replace closed = 1 if id_plateforme == 1044
 * 	PART 4:   Create total sales	+ positive profit  
 ***********************************************************************
 gen sales = ca + ca_exp
+	replace sales = ca if ca_exp == . & ca != .
+	replace sales = ca_exp if ca == . & ca_exp != .
+
 lab var sales "Total sales"
 
 gen profit_pos = (profit > 0)
@@ -351,7 +354,7 @@ use links to understand the code syntax for creating the accounting variables' g
 ***********************************************************************
 *	PART 11: Continuous outcomes (winsorization + ihs-transformation)
 ***********************************************************************
-{
+*{
 {
 	* log-transform capital invested
 foreach var of varlist capital ca employes {
