@@ -562,7 +562,6 @@ lab var car_empl1_w99_k3 "Female employees"
 
 }
 
-}
 
 ***********************************************************************
 * 	PART 12: (endline) generate YO + missing baseline dummies	
