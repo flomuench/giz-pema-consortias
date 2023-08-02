@@ -199,6 +199,29 @@ foreach var of local take_upvars {
 	replace `var'="absente" if id_plateforme == 1040 | id_plateforme == 1192
 }
 
+*  import consortium coaching summary data
+import excel "${implementation}/consortium_coaching_summary.xlsx", firstrow clear
+drop if id_plateforme==.
+drop Nombredelentreprise
+drop consortium
+save "${implementation}/consortium_coaching_summary", replace
+
+merge m:m id_plateforme using "${implementation}/consortium_coaching_summary"
+/*
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                                64  (_merge==3)
+    -----------------------------------------
+*/
+drop _merge
+drop O P Q R S T U
+reshape wide subject_1 category_1 subject_2 category_2 subject_3 category_3 subject_4 category_4 subject_5 category_5, i(id_plateforme) j(session)
+
+		* save
+save "${implementation}/consortium_coaching_summary", replace
+drop if id_plateforme==.
+
 ***********************************************************************
 * 	PART 6: information from pii data that is missing in analysis data
 ***********************************************************************
