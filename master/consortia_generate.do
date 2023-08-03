@@ -176,7 +176,6 @@ gen exported = (ca_exp > 0)
 replace exported = . if ca_exp == .
 lab var exported "Export sales > 0"
 
-
 gen exp_invested = (exp_inv > 0)
 replace exp_invested = . if exp_inv == .
 lab var exp_invested "Export investment > 0"

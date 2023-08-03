@@ -198,7 +198,7 @@ local take_upvars Webinairedelancement Rencontre1Atelier1 Rencontre1Atelier2 Ren
 foreach var of local take_upvars {
 	replace `var'="absente" if id_plateforme == 1040 | id_plateforme == 1192
 }
-
+/*
 *  import consortium coaching summary data
 import excel "${implementation}/consortium_coaching_summary.xlsx", firstrow clear
 drop if id_plateforme==.
@@ -218,10 +218,15 @@ drop _merge
 drop O P Q R S T U
 reshape wide subject_1 category_1 subject_2 category_2 subject_3 category_3 subject_4 category_4 subject_5 category_5, i(id_plateforme) j(session)
 
+*generate variables per category for each column
+reshape long category, i(id_plateforme) j(cat_num) string
+
+graph hbar (count) ,blabel(total, format(%9.0fc)) over(category)
+	
 		* save
 save "${implementation}/consortium_coaching_summary", replace
 drop if id_plateforme==.
-
+*/
 ***********************************************************************
 * 	PART 6: information from pii data that is missing in analysis data
 ***********************************************************************
