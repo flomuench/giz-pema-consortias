@@ -221,7 +221,7 @@ reshape wide subject_1 category_1 subject_2 category_2 subject_3 category_3 subj
 *generate variables per category for each column
 reshape long category, i(id_plateforme) j(cat_num) string
 
-graph hbar (count) ,blabel(total, format(%9.0fc)) over(category)
+graph hbar (percent) ,blabel(total, format(%9.0fc)) over(category)
 	
 		* save
 save "${implementation}/consortium_coaching_summary", replace
