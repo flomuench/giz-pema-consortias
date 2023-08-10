@@ -1841,6 +1841,14 @@ restore
 
 putpdf save "comparison_midline_baseline", replace
 
+*blog post graph
+graph bar (mean) exp_kno_ft_co exp_kno_ft_ze ssa_action1 exp_invested if surveyround ==2, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
+	legend (pos(6) row(2) label (1 "COMESA") label(2 "ZECLAF") label(3 "Commercial partner in SSA") label(4 "Has invested in exports") size(vsmall)) ///
+	title("Export Knowledge") ///
+	ylabel(0(0.2)1, nogrid) 
+gr export ml_blog.png, replace
+
+
 ***********************************************************************
 * 	PART 4:  Mdiline Indexes
 ***********************************************************************
