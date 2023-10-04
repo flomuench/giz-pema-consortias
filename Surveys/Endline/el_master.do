@@ -56,10 +56,12 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "eyahanefi" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
+	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "Admin" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
-	
+	if  "`c(username)'" == "Admin" {
+	global person ="G:/.shortcut-targets-by-id/12xYjmTKrUaYi6eZ6g684X6a4FfqF7Y0R"
+	}
 	else {
 	global person = "G:/Meine Ablage" 
 }
@@ -71,6 +73,13 @@ if c(os) == "Windows" {
 	global el_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/Endline"
 	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
 }
+if c(os) == "Windows" {
+	global bl_gdrive = "${person}/1. Intervention III – Consortia/data/2-baseline"
+	global ml_gdrive = "${person}/1. Intervention III – Consortia/data/3-midline"
+	global el_gdrive = "${person}/1. Intervention III – Consortia/data/4-endline"
+	global el_github = "C:/Users/`c(username)'/OneDrive/Documents/GitHub/giz-pema-consortias/surveys/Endline"
+	global consortia_master ="${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data"
+	} 
 else if c(os) == "MacOSX" {
 	global bl_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/2-baseline"
 	global ml_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/3-midline"
@@ -108,7 +117,7 @@ set sortseed 1231234
 	creates: el_intermediate 
 	requires: el_raw.xlsx
 ----------------------------------------------------------------------*/		
-if (0) do "${el_github}/el_import.do"
+if (1) do "${el_github}/el_import.do"
 /* --------------------------------------------------------------------
 	PART 3.1: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
