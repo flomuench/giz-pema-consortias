@@ -1435,6 +1435,17 @@ putpdf paragraph, halign(center)
 putpdf image ml_bar_listexp.png
 putpdf pagebreak
 
+generate new_listexp = listexp - 2
+graph bar new_listexp if surveyround==2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment) ///
+	blabel(total, format(%9.2fc) gap(-0.2)) ///
+	title("List experiment (midline)") ///
+ytitle("No. of affirmations") ///
+ylabel(0(1)3.2, nogrid) 
+gr export ml_bar_new_listexp.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ml_bar_new_listexp.png
+putpdf pagebreak
+
 graph hbar listexp if surveyround == 2, over(list_group, relabel(1"Non-sensitive" 2"Sensitive  incl.")) over(treatment, label(labsize(vsmall))) by(pole, note("")) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
