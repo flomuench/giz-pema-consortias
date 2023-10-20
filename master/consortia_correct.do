@@ -205,6 +205,7 @@ replace pole = 3 if id_plateforme == 998
 ***********************************************************************
 * 	PART 2:  Correct old accounting values
 ***********************************************************************
+
 {
 		* Correcting ca
 replace ca_2018 = 800000 if id_plateforme == 991
