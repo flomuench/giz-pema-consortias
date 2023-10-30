@@ -2,7 +2,7 @@
 * 			consortias endline clean					 		  	  *	  
 ***********************************************************************
 *																	  
-*	PURPOSE: clean consortias midline intermediate data			  	  			
+*	PURPOSE: clean consortias endline intermediate data			  	  			
 *																	  
 *																	  
 *	OUTLINE:		
