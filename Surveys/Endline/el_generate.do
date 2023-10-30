@@ -25,7 +25,7 @@ use "${el_intermediate}/el_intermediate", clear
 ***********************************************************************
 * 	PART 2:  Generate survey round dummy
 ***********************************************************************
-gen surveyround = 2
+gen surveyround = 3
 lab var surveyround "1-baseline 2-midline 3-endline"
 
 ***********************************************************************
@@ -210,102 +210,7 @@ label values survey_completed yesno
 ***********************************************************************
 gen survey_phone = 0
 lab var survey_phone "Comapnies who answered the survey on phone (with enumerators)" 
-replace survey_phone = 1 if id_plateforme == 1005
-replace survey_phone = 1 if id_plateforme == 1007
-replace survey_phone = 1 if id_plateforme == 1027
-replace survey_phone = 1 if id_plateforme == 1030
-replace survey_phone = 1 if id_plateforme == 1041
-replace survey_phone = 1 if id_plateforme == 1054
-replace survey_phone = 1 if id_plateforme == 1065
-replace survey_phone = 1 if id_plateforme == 1083
-replace survey_phone = 1 if id_plateforme == 1116
-replace survey_phone = 1 if id_plateforme == 1133
-replace survey_phone = 1 if id_plateforme == 1151
-replace survey_phone = 1 if id_plateforme == 1157
-replace survey_phone = 1 if id_plateforme == 1185
-replace survey_phone = 1 if id_plateforme == 1195
-replace survey_phone = 1 if id_plateforme == 1197
-replace survey_phone = 1 if id_plateforme == 1215
-replace survey_phone = 1 if id_plateforme == 1224
-replace survey_phone = 1 if id_plateforme == 1239
-replace survey_phone = 1 if id_plateforme == 51
-replace survey_phone = 1 if id_plateforme == 1132 
-replace survey_phone = 1 if id_plateforme == 1094 
-replace survey_phone = 1 if id_plateforme == 1025
-replace survey_phone = 1 if id_plateforme == 1090 
-replace survey_phone = 1 if id_plateforme == 1044
-replace survey_phone = 1 if id_plateforme == 1140
-replace survey_phone = 1 if id_plateforme == 1147
-replace survey_phone = 1 if id_plateforme == 1188
-replace survey_phone = 1 if id_plateforme == 48
-replace survey_phone = 1 if id_plateforme == 1245 
-replace survey_phone = 1 if id_plateforme == 1061 
-replace survey_phone = 1 if id_plateforme == 1079
-replace survey_phone = 1 if id_plateforme == 997
-replace survey_phone = 1 if id_plateforme == 1176
-replace survey_phone = 1 if id_plateforme == 1067
-replace survey_phone = 1 if id_plateforme == 1033
-replace survey_phone = 1 if id_plateforme == 1205
-replace survey_phone = 1 if id_plateforme == 1244
-replace survey_phone = 1 if id_plateforme == 1037
-replace survey_phone = 1 if id_plateforme == 1045
-replace survey_phone = 1 if id_plateforme == 1081
-replace survey_phone = 1 if id_plateforme == 1117
-replace survey_phone = 1 if id_plateforme == 1125
-replace survey_phone = 1 if id_plateforme == 1135
-replace survey_phone = 1 if id_plateforme == 1150
-replace survey_phone = 1 if id_plateforme == 983
-replace survey_phone = 1 if id_plateforme == 985
-replace survey_phone = 1 if id_plateforme == 1001
-replace survey_phone = 1 if id_plateforme == 1017
-replace survey_phone = 1 if id_plateforme == 1019
-replace survey_phone = 1 if id_plateforme == 1167
-replace survey_phone = 1 if id_plateforme == 1182
-replace survey_phone = 1 if id_plateforme == 1084
-replace survey_phone = 1 if id_plateforme == 1125
-replace survey_phone = 1 if id_plateforme == 989
-replace survey_phone = 1 if id_plateforme == 988
-replace survey_phone = 1 if id_plateforme == 1035
-replace survey_phone = 1 if id_plateforme == 1231
-replace survey_phone = 1 if id_plateforme == 1046
-replace survey_phone = 1 if id_plateforme == 1050
-replace survey_phone = 1 if id_plateforme == 1069
-replace survey_phone = 1 if id_plateforme == 1008
-replace survey_phone = 1 if id_plateforme == 1159
-replace survey_phone = 1 if id_plateforme == 1204
-replace survey_phone = 1 if id_plateforme == 1028
-replace survey_phone = 1 if id_plateforme == 1161
-replace survey_phone = 1 if id_plateforme == 1248
-replace survey_phone = 1 if id_plateforme == 1203
-replace survey_phone = 1 if id_plateforme == 1225
-replace survey_phone = 1 if id_plateforme == 1230
-replace survey_phone = 1 if id_plateforme == 1071
-replace survey_phone = 1 if id_plateforme == 1170
-replace survey_phone = 1 if id_plateforme == 1186
-replace survey_phone = 1 if id_plateforme == 996
-replace survey_phone = 1 if id_plateforme == 1092
-replace survey_phone = 1 if id_plateforme == 1163
-replace survey_phone = 1 if id_plateforme == 1171
-replace survey_phone = 1 if id_plateforme == 1049
-replace survey_phone = 1 if id_plateforme == 1087
-replace survey_phone = 1 if id_plateforme == 1201
-replace survey_phone = 1 if id_plateforme == 1213
-replace survey_phone = 1 if id_plateforme == 1190
-replace survey_phone = 1 if id_plateforme == 1222
-replace survey_phone = 1 if id_plateforme == 1013
-replace survey_phone = 1 if id_plateforme == 1146
-replace survey_phone = 1 if id_plateforme == 1123
-replace survey_phone = 1 if id_plateforme == 1210
-replace survey_phone = 1 if id_plateforme == 1175
-replace survey_phone = 1 if id_plateforme == 1179
-replace survey_phone = 1 if id_plateforme == 1218
-replace survey_phone = 1 if id_plateforme == 1138 
-replace survey_phone = 1 if id_plateforme == 986 
-replace survey_phone = 1 if id_plateforme == 1233  
-replace survey_phone = 1 if id_plateforme == 1138  
-replace survey_phone = 1 if id_plateforme == 1196  
-replace survey_phone = 1 if id_plateforme == 1233  
-replace survey_phone = 1 if id_plateforme == 1241  
+
 
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
