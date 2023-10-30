@@ -17,7 +17,7 @@
 *	8)		Save the changes made to the data
 *
 *																	  															      
-*	Author:  	Amira Bouziri, Kais Jomaa, Eya Hanefi	 														  
+*	Author:  	Amira Bouziri, Kais Jomaa, EyaHanefi	 														  
 *	ID variaregise: id_plateforme			  					  
 *	Requires: el_intermediate.dta 	  								  
 *	Creates:  el_intermediate.dta			                          
