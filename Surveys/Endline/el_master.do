@@ -119,15 +119,15 @@ if (1) do "${el_github}/el_import.do"
 /* --------------------------------------------------------------------
 	PART 3.1: Clean raw data & save as intermediate data
 ----------------------------------------------------------------------*/	
-if (0) do "${el_github}/el_clean.do"
+if (1) do "${el_github}/el_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.2: Correct & save intermediate data
 ----------------------------------------------------------------------*/	
-if (0) do "${el_github}/el_correct.do"
+if (1) do "${el_github}/el_correct.do"
 /* --------------------------------------------------------------------
 	PART 3.3: Generate variables for analysis or implementation
 ----------------------------------------------------------------------*/	
-if (0) do "${el_github}/el_generate.do"
+if (1) do "${el_github}/el_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Export pdf with descriptive statistics on responses
 ----------------------------------------------------------------------*/	
