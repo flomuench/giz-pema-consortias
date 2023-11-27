@@ -46,9 +46,9 @@ graph twoway histogram date, frequency width(1) ///
 		tlabel(11jan2023(1)20feb2023, angle(60) labsize(vsmall)) ///
 		ytitle("responses") ///
 		title("{bf:Endline survey: number of responses}") 
-gr export ml_survey_response_byday.png, replace
+gr export el_survey_response_byday.png, replace
 putpdf paragraph, halign(center) 
-putpdf image ml_survey_response_byday.png
+putpdf image el_survey_response_byday.png
 putpdf pagebreak	
 
 	* response rate by treatment status
@@ -216,7 +216,7 @@ tw ///
 	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
 	name(network_density_f, replace)
 	
-gr combine network_density_f network_density_m, name(ml_network_density, replace) ycommon
+gr combine network_density_f network_density_m, name(el_network_density, replace) ycommon
 gr export el_network_density.png, replace
 putpdf paragraph, halign(center) 
 putpdf image el_network_density.png
@@ -646,23 +646,7 @@ putpdf pagebreak*/
 gen w_ca2021_usd=w_ca2021/3
 sum w_ca2021_usd,d
 graph bar w_ca2021_usd, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
-	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
-	ytitle("USD") ///
-	ylabel (0(100000)200000 , nogrid) ///
-	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
-	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
-	gr export "$bl_output/donor/ca_mean.png", replace
-	
-sum employes,d
-graph bar employes, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
-	yline(`r(mean)', lpattern(1)) yline(`r(p50)', lpattern(dash)) ///
-	ytitle("No. of Employees") ///
-	ylabel(0(2)22 , nogrid) ///
-	text(`r(mean)' 0.1 "Mean", size(vsmall) place(n)) ///
-	text(`r(p50)'  0.1 "Median", size(vsmall) place(n) )
-	gr export "$bl_output/donor/employees.png", replace
-*/
-***********************************************************************
+****************************************************************
 * 	PART 7:  save pdf
 ***********************************************************************
 	* pdf
