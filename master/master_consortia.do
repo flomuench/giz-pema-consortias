@@ -141,6 +141,9 @@ global regis_intermediate "${regis_gdrive}/intermediate"
 global regis_final = "${regis_gdrive}/final"
 global regis_checks = "${regis_gdrive}/checks"
 
+				* map
+global map_raw = "${map}/raw"
+
 			* output (regression tables, figures)
 				* baseline
 global bl_output = "${bl_gdrive}/output"
@@ -151,6 +154,9 @@ global bl_progress = "${bl_output}/progress-eligibility-characteristics"
 global ml_output = "${ml_gdrive}/output"
 global ml_figures = "${ml_output}/descriptive-statistics-figures"
 global ml_progress = "${ml_output}/progress-eligibility-characteristics"
+
+				* map
+global map_output = "${map}/output"
 
 				* master
 global master_output =  "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output"
