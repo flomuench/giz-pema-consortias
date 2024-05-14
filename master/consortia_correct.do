@@ -442,6 +442,18 @@ foreach var of varlist support2-support6 {
 }
 
 ***********************************************************************
+* 	Part : Homogenize products		  			
+***********************************************************************
+gen product_hom = ""  
+replace product_hom ="dates" if ustrregexm(produit1,"dates")
+replace product_hom ="formation" if ustrregexm(produit1,"formation")
+replace product_hom ="formation" if ustrregexm(produit1,"training")
+replace product_hom ="huiles essentielles" if ustrregexm(produit1,"huile")
+replace product_hom ="huiles essentielles" if ustrregexm(produit1,"huide")
+replace product_hom ="huiles essentielles" if ustrregexm(produit1,"huil")
+replace product_hom ="huile d'olive" if ustrregexm(produit1,"olive")
+
+***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
 save "${master_intermediate}/consortium_inter", replace
