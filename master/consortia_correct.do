@@ -446,12 +446,43 @@ foreach var of varlist support2-support6 {
 ***********************************************************************
 gen product_hom1 = ""  
 replace product_hom1 ="dates" if ustrregexm(produit1,"dates")
-replace product_hom1 ="formation" if ustrregexm(produit1,"formation")
-replace product_hom1 ="formation" if ustrregexm(produit1,"training")
+replace product_hom1 ="dates" if ustrregexm(produit1,"dattes")
 replace product_hom1 ="huiles essentielles" if ustrregexm(produit1,"huile")
 replace product_hom1 ="huiles essentielles" if ustrregexm(produit1,"huide")
 replace product_hom1 ="huiles essentielles" if ustrregexm(produit1,"huil")
 replace product_hom1 ="huile d'olive" if ustrregexm(produit1,"olive")
+replace product_hom1 ="tomate" if ustrregexm(produit1,"tomate")
+replace product_hom1 ="tomate" if ustrregexm(produit1,"tomate concentre")
+replace product_hom1 ="tomate" if ustrregexm(produit1,"tomate séchée")
+replace product_hom1 ="formation" if ustrregexm(produit1,"formation")
+replace product_hom1 ="formation" if ustrregexm(produit1,"training") 
+replace product_hom1 ="formation" if ustrregexm(produit1,"coaching talents")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil en organisation et politiques publiques")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil, etude & accompagnement entreprises")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil dans gestion si")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil aux entreprises")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"conseil et accompagnement aux entreprises")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"accompagnement projets excellence opérationnelle")
+replace product_hom1 ="conseil" if ustrregexm(produit1,"etudes") 
+replace product_hom1 ="conseil" if ustrregexm(produit1,"l'accempagnement entreprises")
+replace product_hom1 ="plante" if ustrregexm(produit1,"alliés plante") 
+replace product_hom1 ="plante" if ustrregexm(produit1,"extraits de plantes")
+replace product_hom1 ="plante" if ustrregexm(produit1,"fleur de capucine")
+replace product_hom1 ="fruits" if ustrregexm(produit1,"fruit")
+replace product_hom1 ="légumes" if ustrregexm(produit1,"légumes")
+replace product_hom1 ="légumes" if ustrregexm(produit1,"légumes séchés (ail séché, oignon séché..)")
+replace product_hom1 ="sac" if ustrregexm(produit1,"sac")
+replace product_hom1 ="sac" if ustrregexm(produit1,"sac pour ordinateurs")
+replace product_hom1 ="développement " if ustrregexm(produit1,"développement & intégration digital")
+replace product_hom1 ="développement " if ustrregexm(produit1,"développement web")
+replace product_hom1 ="développement " if ustrregexm(produit1,"développement logiciels")
+replace product_hom1 ="développement " if ustrregexm(produit1,"intégration et développements erps")
+replace product_hom1 ="parfum " if ustrregexm(produit1,"parfum")
+replace product_hom1 ="parfum " if ustrregexm(produit1,"diffuseurs de parfum")
+
+
+
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
