@@ -124,13 +124,6 @@ global master_checks = "${master_gdrive}/checks"
 global master_raw = "${master_gdrive}/raw"
 global implementation = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/7-implementation"
 global map = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/8-geolocation"
-
-                 *Endline
-global el_raw = "${el_gdrive}/raw"
-global el_intermediate "${el_gdrive}/intermediate"
-global el_final = "${el_gdrive}/final"
-global el_checks = "${el_gdrive}/checks"
-
 				* midline
 global ml_raw = "${ml_gdrive}/raw"
 global ml_intermediate "${ml_gdrive}/intermediate"
@@ -161,11 +154,6 @@ global bl_progress = "${bl_output}/progress-eligibility-characteristics"
 global ml_output = "${ml_gdrive}/output"
 global ml_figures = "${ml_output}/descriptive-statistics-figures"
 global ml_progress = "${ml_output}/progress-eligibility-characteristics"
-
-            	* endline
-global el_output = "${el_gdrive}/output"
-global el_figures = "${el_output}/descriptive-statistics-figures"
-global el_progress = "${el_output}/progress-eligibility-characteristics"
 
 				* map
 global map_output = "${map}/output"
