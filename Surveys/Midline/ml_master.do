@@ -56,7 +56,7 @@ set scheme plotplain
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 		* define user
-	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "SIWAR" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
+	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "Admin" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
@@ -93,7 +93,6 @@ global ml_output = "${ml_gdrive}/output"
 set seed 1231234
 set sortseed 1231234
 		
-
 ***********************************************************************
 
 * 	PART 3: 	Run do-files for data cleaning & survey progress

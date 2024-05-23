@@ -35,8 +35,6 @@ rename Numero2 tel_sup2_bl
 save "${master_intermediate}/consortium_pii_inter", replace
 
 
-
-
 ***********************************************************************
 ********************* 	II: Analysis data *****************************
 ***********************************************************************	
@@ -152,6 +150,7 @@ rename pp exp_pays_principal
 ***********************************************************************
 * 	PART 9:    Add Tunis to rg_adresse using PII data 
 ***********************************************************************
+/*
 use "${master_final}/consortium_pii_final", clear
 
 *gen dummy if tunis in variable
@@ -164,6 +163,7 @@ gen rg_adresse_modified = rg_adresse
 replace rg_adresse_modified = rg_adresse_modified + ", tunis" if !contains_tunis
 
 save "${master_final}/consortium_pii_final", replace
+*/
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

@@ -130,9 +130,50 @@ label var net_coop_pos "Positive answers for the the perception of interactions 
 generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
+***********************************************************************
+* 	PART 7: Export
+***********************************************************************
+gen export_1 =0
+replace export_1 =1 if ustrregexm(export, "1") 
+
+gen export_2 =0
+replace export_2 =1 if ustrregexm(export, "2") 
+
+gen export_3 =0
+replace export_3 =1 if ustrregexm(export, "3") 
+
+drop export
+
+label var export_1 "Direct export"
+label var export_2 "Indirect export"
+label var export_3 "No export"
+
+gen export_41 =0
+replace export_41 =1 if ustrregexm(export_4, "1") 
+
+gen export_42 =0
+replace export_42 =1 if ustrregexm(export_4, "2") 
+
+gen export_43 =0
+replace export_43 =1 if ustrregexm(export_4, "3") 
+
+gen export_44 =0
+replace export_44 =1 if ustrregexm(export_4, "4") 
+
+gen export_45 =0
+replace export_45 =1 if ustrregexm(export_4, "5") 
+
+drop export_4
+
+label var export_41 "Not profitable"
+label var export_42 "Did not find clients abroad"
+label var export_43 "Too complicated"
+label var export_44 "Requires too much investment"
+label var export_45 "Other"
+
 
 ***********************************************************************
-* 	PART 7: Time to complete survey (limited insight given we only see most recent attempt)
+* 	PART 8: Time to complete survey (limited insight given we only see most recent attempt)
 ***********************************************************************
 /*
 format date %td
