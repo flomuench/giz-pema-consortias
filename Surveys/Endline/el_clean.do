@@ -124,11 +124,9 @@ label var exp_pra_vent "Investment in sales structure"
 
 lab var ssa_action1 "Expression of interest from a potential client in Sub-Saharan Africa for your products/services."
 lab var ssa_action2 "Identification of a business partner capable of promoting products/services in Sub-Saharan Africa."
-lab var ssa_action3 ""
-lab var ssa_action4 "" 
-lab var ssa_action5 "" 
-
-
+lab var ssa_action3 "Securing external funding for initial export costs (grants, loans, guarantees, etc.)"
+lab var ssa_action4 "Investment in sales infrastructure targeting the Sub-Saharan African market" 
+lab var ssa_action5 "Implementing a digital trade facilitation system." 
 
 
 

@@ -18,7 +18,7 @@
 
 use "${master_final}/consortium_final", clear
 
-keep id_plateforme treatment pole entr_idee entr_bien produit1 produit2 produit3 take_up take_up_per refus closed desistement_consortium 
+keep id_plateforme treatment pole entr_idee entr_bien produit1 produit2 produit3 take_up   closed desistement_consortium 
 sort id_plateforme
 quietly by id_plateforme: gen dup = cond(_N==1,0,_n)
 drop if dup>1 
@@ -41,7 +41,7 @@ merge 1:1 id_plateforme using "${master_final}/consortium_pii_final", force
     -----------------------------------------
 
 */ 
-drop eligible date_created code_douane matricule_cnss codepostal _merge comment mothercompany random_number_ml NOM_ENTREPRISE  
-
+drop eligible date_created code_douane matricule_cnss codepostal _merge comment mothercompany random_number_ml NOM_ENTREPRISE  ident_repondent_position_ml ident_nouveau_personne_ml  list_group_ml List_group 
+matricule_fisc_incorrect  matricule_physique
 *Part3 Export the final excel 
 export excel "${master_final}/endline_contactlist.xlsx",firstrow(variables) replace
