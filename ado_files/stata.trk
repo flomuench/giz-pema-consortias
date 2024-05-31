@@ -1,4 +1,4 @@
-* 00000022
+* 00000025
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -871,4 +871,116 @@ f s\scheme-white_set3.scheme
 f s\scheme-white_tableau.scheme
 f s\scheme-white_viridis.scheme
 f s\scheme-white_w3d.scheme
+e
+S http://fmwww.bc.edu/repec/bocode/g
+N geonear.pkg
+D 20 May 2024
+U 23
+d 'GEONEAR': module to find nearest neighbors using geodetic distances
+d 
+d  geonear finds the nearest neighbors using geodetic distances,
+d i.e. the length of the shortest curve between two points along
+d the surface of a mathematical model of the earth. Both
+d great-circle and ellipsoid distances are available. geonear
+d returns a specific count of nearest neighbors and/or all
+d neighbors within a specified distance. geonear uses a divide and
+d conquer strategy to significantly reduce the number of distances
+d that must be computed. The approach involves splitting the
+d initial set of locations into progressively smaller geographic
+d regions while at the same time safely reducing the set of
+d potential neighbors for each region. Generally, geonear will
+d predictably find the nearest neighbors in a linear time even
+d though the size of the overall problem increases exponentially.
+d In other words doubling the size of both location sets simply
+d doubles the number of regions and thus doubles the run time.
+d 
+d KW: geodetic
+d KW: geodesic
+d KW: vincenty
+d KW: great-circle
+d KW: ellipsoid
+d KW: distance
+d KW: radius
+d KW: closest
+d KW: nearest
+d KW: neighbor
+d 
+d Requires: Stata version 9.2
+d 
+d Distribution-Date: 20190914
+d 
+d Author: Robert Picard
+d Support: email robertpicard@@gmail.com
+d 
+f g\geonear.ado
+f g\geonear.hlp
+e
+S http://fmwww.bc.edu/repec/bocode/g
+N geodist.pkg
+D 20 May 2024
+U 24
+d 'GEODIST': module to compute geographical distances
+d 
+d   geodist calculates geographical distances by measuring the
+d length of the shortest path between two points along the surface
+d of a mathematical model of the earth. By default, geodist
+d implements Vincenty's (1975) formula to calculate distances on a
+d reference ellipsoid. geodist can also calculate great-circle
+d distances using the haversine formula.
+d 
+d KW: geodetic
+d KW: geodesic,Vincenty,great-circle,ellipsoid,distance
+d 
+d Requires: Stata version 9.2
+d 
+d Distribution-Date: 20190624
+d 
+d Author: Robert Picard
+d Support: email robertpicard@@gmail.com
+d 
+f g\geodist.ado
+f g\geodist_run.ado
+f g\geodist.hlp
+e
+S http://fmwww.bc.edu/repec/bocode/o
+N outreg2.pkg
+D 20 May 2024
+U 25
+d 'OUTREG2': module to arrange regression outputs into an illustrative table
+d 
+d  outreg2 provides a fast and easy way to produce an illustrative
+d table  of regression outputs. The regression outputs are produced
+d piecemeal and are  difficult to compare without some type of
+d rearrangement. outreg2  automates this process by concatenating
+d the successive regression outputs in a  vertical format. The
+d resulting table is saved to the disk in ASCII  format, which can
+d be read by other programs. outreg2 thus facilitates  the
+d convertion of regression outputs to a standard format suitable
+d for  inclusion in a scholarly publication. The functionality of
+d outreg2 is based on the earlier package outreg,  by John Luke
+d Gallup. Unlike outreg, outreg2 is capable of writing LaTeX-format
+d tables, as well as ASCII, MS Word and MS Excel.
+d 
+d KW: regression
+d KW: output
+d KW: tables
+d KW: tab-delimited output
+d KW: LaTeX
+d KW: Word
+d KW: Excel
+d 
+d Requires: Stata version 7
+d 
+d Distribution-Date: 20140817
+d 
+d Author: Roy Wada
+d Support: email roywada@@hotmail.com
+d 
+f o\outreg2.ado
+f o\outreg2_prf.ado
+f o\outreg2.hlp
+f s\shellout.ado
+f s\shellout.hlp
+f s\seeout.ado
+f s\seeout.hlp
 e
