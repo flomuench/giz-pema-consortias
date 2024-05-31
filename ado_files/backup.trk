@@ -1,4 +1,4 @@
-* 00000021
+* 00000024
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -810,4 +810,135 @@ f c\colrspace_library_palettes.sthlp
 f c\colrspace_library_lsmaps.sthlp
 f c\colrspace_library_rgbmaps.sthlp
 f l\lcolrspace.mlib
+e
+S http://fmwww.bc.edu/repec/bocode/s
+N schemepack.pkg
+D 19 Jan 2024
+U 22
+d 'SCHEMEPACK': module providing ready-to-use graph schemes
+d 
+d  schemepack releases a suite of graph schemes as part of The
+d Stata Guide (https://medium.com/the-stata-guide) series. See the
+d help file (help schemepack) for details after installation.
+d 
+d KW: Stata
+d KW: scheme
+d KW: graphs
+d 
+d Requires: Stata version 15
+d 
+d Distribution-Date: 20221111
+d 
+d Author: Asjad Naqvi, WU Vienna
+d Support: email asjadnaqvi@@gmail.com
+d 
+f s\schemepack.sthlp
+f s\scheme-black_brbg.scheme
+f s\scheme-black_cividis.scheme
+f s\scheme-black_hue.scheme
+f s\scheme-black_jet.scheme
+f s\scheme-black_piyg.scheme
+f s\scheme-black_ptol.scheme
+f s\scheme-black_set3.scheme
+f s\scheme-black_tableau.scheme
+f s\scheme-black_viridis.scheme
+f s\scheme-black_w3d.scheme
+f s\scheme-cblind1.scheme
+f s\scheme-gg_brbg.scheme
+f s\scheme-gg_cividis.scheme
+f s\scheme-gg_hue.scheme
+f s\scheme-gg_jet.scheme
+f s\scheme-gg_piyg.scheme
+f s\scheme-gg_ptol.scheme
+f s\scheme-gg_set3.scheme
+f s\scheme-gg_tableau.scheme
+f s\scheme-gg_viridis.scheme
+f s\scheme-gg_w3d.scheme
+f s\scheme-neon.scheme
+f s\scheme-rainbow.scheme
+f s\scheme-swift_red.scheme
+f s\scheme-tab1.scheme
+f s\scheme-tab2.scheme
+f s\scheme-tab3.scheme
+f s\scheme-ukraine.scheme
+f s\scheme-white_brbg.scheme
+f s\scheme-white_cividis.scheme
+f s\scheme-white_hue.scheme
+f s\scheme-white_jet.scheme
+f s\scheme-white_piyg.scheme
+f s\scheme-white_ptol.scheme
+f s\scheme-white_set3.scheme
+f s\scheme-white_tableau.scheme
+f s\scheme-white_viridis.scheme
+f s\scheme-white_w3d.scheme
+e
+S http://fmwww.bc.edu/repec/bocode/g
+N geonear.pkg
+D 20 May 2024
+U 23
+d 'GEONEAR': module to find nearest neighbors using geodetic distances
+d 
+d  geonear finds the nearest neighbors using geodetic distances,
+d i.e. the length of the shortest curve between two points along
+d the surface of a mathematical model of the earth. Both
+d great-circle and ellipsoid distances are available. geonear
+d returns a specific count of nearest neighbors and/or all
+d neighbors within a specified distance. geonear uses a divide and
+d conquer strategy to significantly reduce the number of distances
+d that must be computed. The approach involves splitting the
+d initial set of locations into progressively smaller geographic
+d regions while at the same time safely reducing the set of
+d potential neighbors for each region. Generally, geonear will
+d predictably find the nearest neighbors in a linear time even
+d though the size of the overall problem increases exponentially.
+d In other words doubling the size of both location sets simply
+d doubles the number of regions and thus doubles the run time.
+d 
+d KW: geodetic
+d KW: geodesic
+d KW: vincenty
+d KW: great-circle
+d KW: ellipsoid
+d KW: distance
+d KW: radius
+d KW: closest
+d KW: nearest
+d KW: neighbor
+d 
+d Requires: Stata version 9.2
+d 
+d Distribution-Date: 20190914
+d 
+d Author: Robert Picard
+d Support: email robertpicard@@gmail.com
+d 
+f g\geonear.ado
+f g\geonear.hlp
+e
+S http://fmwww.bc.edu/repec/bocode/g
+N geodist.pkg
+D 20 May 2024
+U 24
+d 'GEODIST': module to compute geographical distances
+d 
+d   geodist calculates geographical distances by measuring the
+d length of the shortest path between two points along the surface
+d of a mathematical model of the earth. By default, geodist
+d implements Vincenty's (1975) formula to calculate distances on a
+d reference ellipsoid. geodist can also calculate great-circle
+d distances using the haversine formula.
+d 
+d KW: geodetic
+d KW: geodesic,Vincenty,great-circle,ellipsoid,distance
+d 
+d Requires: Stata version 9.2
+d 
+d Distribution-Date: 20190624
+d 
+d Author: Robert Picard
+d Support: email robertpicard@@gmail.com
+d 
+f g\geodist.ado
+f g\geodist_run.ado
+f g\geodist.hlp
 e

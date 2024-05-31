@@ -216,6 +216,19 @@ label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
 
 
+***********************************************************************
+* 	PART 11:  generate normalized financial data (per employee)
+***********************************************************************
+local varn investissement comp_ca2023 comp_ca2024 comp_exp2023 comp_exp2024 comp_benefice2023 comp_benefice2024
+
+foreach x of local varn { 
+gen n`x' = 0
+replace n`x' = . if `x' == 666
+replace n`x' = . if `x' == 777
+replace n`x' = . if `x' == 888
+replace n`x' = . if `x' == 999
+replace n`x' = `x'/empl if n`x'!= .
+}
 
 ***********************************************************************
 * 	PART 9: save dta file  										  

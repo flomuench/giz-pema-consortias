@@ -33,9 +33,21 @@ gen comptable_missing = 0, a(comptable_email)
 	replace comptable_missing = 1 if comptable_numero == 99999999 & comptable_email == "nsp@nsp.com"
 
 
+***********************************************************************
+* 	PART 3:    Add Tunis to rg_adresse using PII data 
+***********************************************************************
+
+*gen dummy if tunis in variable
+gen contains_tunis = strpos(rg_adresse, "tunis") > 0 | strpos(rg_adresse, "tunisia") > 0
+
+*gen new rg_adresse just in case
+gen rg_adresse_modified = rg_adresse
+
+*add tunis if it does not contain it or tunisia
+replace rg_adresse_modified = rg_adresse_modified + ", tunis" if !contains_tunis
 
 ***********************************************************************
-* 	PART 3:  save
+* 	PART 4:  save
 ***********************************************************************
 save "${master_final}/consortium_pii_final", replace
 
@@ -556,9 +568,16 @@ lab var car_empl1_w99_k3 "Female employees"
 
 }
 
-
 ***********************************************************************
-* 	PART 12: (endline) generate YO + missing baseline dummies	
+* 	PART 12: generate costs (profit - CA)
+***********************************************************************
+gen costs_w99 = ca_w99 - profit_w99
+lab var costs_w99 "costs wins. 99th"
+
+gen ihs_costs_w99_k4 = ihs_ca_w99_k4 - ihs_profit_w99_k4
+lab var ihs_costs_w99_k4 "costs ihs wins. 99th"
+***********************************************************************
+* 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
 {
 	* results for optimal k
@@ -570,11 +589,18 @@ local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations inno_produit inno_process inno_lieu inno_commerce"
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3"
+local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
 foreach var of local ys {
+	gen missing_bl_`var' = (`var' == . & surveyround == 1) 
+	replace `var' = 0 if `var' == . & surveyround == 1
+}
+
+*for ca & profit
+local costs "ca_w99 profit_w99 "
+foreach var of local costs {
 	gen missing_bl_`var' = (`var' == . & surveyround == 1) 
 	replace `var' = 0 if `var' == . & surveyround == 1
 }
@@ -593,7 +619,7 @@ foreach var of local ys {
 
 
 ***********************************************************************
-* 	PART 13: Tunis dummy	
+* 	PART 14: Tunis dummy	
 ***********************************************************************
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
@@ -601,13 +627,13 @@ lab var tunis "HQ in Tunis"
 lab var city "HQ in Tunis, Sousse, Sfax"
 
 ***********************************************************************
-* 	PART 14: Digital consortia dummy	
+* 	PART 15: Digital consortia dummy	
 ***********************************************************************
 gen cons_dig = (pole == 4)
 
 
 ***********************************************************************
-* 	PART 5: peer effects: baseline peer quality	
+* 	PART 16: peer effects: baseline peer quality	
 ***********************************************************************	
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'

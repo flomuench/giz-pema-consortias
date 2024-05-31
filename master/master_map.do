@@ -26,6 +26,10 @@ ssc install palettes, replace
 ssc install colrspace, replace
 
 ssc install schemepack, replace
+
+ssc install geodist, replace
+
+ssc install outreg2, replace
 */
 
 set graph on
@@ -41,9 +45,23 @@ destring latitude, generate(new_latitude)
 destring longitude, generate(new_longitude)
 
 *merge with master data to get treatment, takeup & sector
-merge 1:m id_plateforme using "${master_final}/consortium_final", keepusing(surveyround treatment take_up subsector_corrige gouvernorat)
+merge 1:m id_plateforme using "${master_final}/consortium_final", keepusing(surveyround treatment take_up subsector_corrige pole gouvernorat)
 keep if surveyround == 2
-drop _merge surveyround
+drop _merge
+
+*save .dta
+save "${map_output}/coordinates", replace
+clear
+
+*merge with harmonize data to get product category
+*import excel
+import excel "${harmonize}/cepex_produits.xlsx", firstrow clear
+save "${harmonize}/cepex_produits.dta", replace
+
+use "${map_output}/coordinates"
+
+merge 1:1 id_plateforme using "${harmonize}/cepex_produits.dta", keepusing(product_hom1_eng product_hom2_eng product_hom3_eng)
+drop _merge
 
 *save .dta
 save "${map_output}/coordinates", replace
@@ -61,6 +79,7 @@ use "${map_output}/tunisia", replace
 ***********************************************************************
 * 	PART 3: 	Draw map whole Tunisia
 ***********************************************************************
+{
 *initiate PDF
 putpdf clear
 putpdf begin, pagesize(A3)
@@ -70,7 +89,7 @@ putpdf text ("Consortia: Firms Distribution Map"), bold linebreak
 
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
-{
+
 	
 *draw the map whole tunis by treatment
 spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) legenda(on) legcount) ///
@@ -286,4 +305,188 @@ putpdf paragraph, halign(center)
 putpdf image map_consortiaKasserine_treatment.png
 
 putpdf save "consortia_firmsmap", replace
+
 }
+
+***********************************************************************
+* 	PART 5: 	Create graphs
+***********************************************************************
+{
+*initiate PDF
+putpdf clear
+putpdf begin, pagesize(A3)
+putpdf paragraph
+
+putpdf text ("Consortia: Firms Distribution Map 2"), bold linebreak
+
+putpdf text ("Date: `c(current_date)'"), bold linebreak
+putpdf paragraph, halign(center)
+
+*draw the map whole tunis by take-up
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisia_treat.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisia_treat.png
+putpdf pagebreak
+
+*draw the map whole tunis by pole
+	*pôle d'activités agri-agroalimentaire 2
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 2) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Agro consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaAggro_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaAggro_treatment.png
+putpdf pagebreak
+
+	*pôle d'activités artisanat 3
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 3) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Artisanat consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaArtisanat_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaArtisanat_treatment.png
+putpdf pagebreak
+
+	*pôle d'activités cosmétiques 4
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 4) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Cosmetics consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaCosmetics_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaCosmetics_treatment.png
+putpdf pagebreak
+
+	*pôle d'activités de service conseil, ed 6
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 6) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Service consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaService_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaService_treatment.png
+putpdf pagebreak
+
+	*pôle de l'énergie durable et développem 8
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 8) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("Energy consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaEnergy_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaEnergy_treatment.png
+putpdf pagebreak
+
+	*pôle d'activités technologies de l'info 9
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 9) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("TIC consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaInfo_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaInfo_treatment.png
+putpdf pagebreak
+
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(product_hom3_eng) select(keep if subsector_corrige == 9) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	title("TIC consorita firms by treatment", size(*1.2))
+graph export map_consortiaTunisiaInfo_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_consortiaTunisiaInfo_treatment.png
+putpdf pagebreak
+
+
+putpdf save "consortia_firmsmap2", replace
+
+}
+
+	*products
+
+***********************************************************************
+* 	PART 6: 	Calculate distance
+***********************************************************************
+*load data
+use "${map_output}/coordinates", replace
+
+*average pole agro
+preserve
+
+drop if pole != 1
+
+forvalues i = 1/`=_N' {
+    scalar lat0 = new_latitude[`i']
+    scalar lon0 = new_longitude[`i']
+    local id = id_plateforme[`i']
+    geodist lat0 lon0 new_latitude new_longitude, gen(d`id')
+
+}
+
+egen avgdist_agro = rowtotal(d*)
+replace avgdist_agro = avgdist_agro/(_N-1)  // no self distance
+replace avgdist_agro = avgdist_agro
+
+sum avgdist_agro
+
+restore
+
+
+*average pole artisanat
+preserve
+
+drop if pole != 2
+
+forvalues i = 1/`=_N' {
+    scalar lat0 = new_latitude[`i']
+    scalar lon0 = new_longitude[`i']
+    local id = id_plateforme[`i']
+    geodist lat0 lon0 new_latitude new_longitude, gen(d`id')
+
+}
+
+egen avgdist_artisanat = rowtotal(d*)
+replace avgdist_artisanat = avgdist_artisanat/(_N-1)  // no self distance
+replace avgdist_artisanat = avgdist_artisanat
+sum avgdist_artisanat
+
+restore
+
+*average pole service
+preserve
+
+drop if pole != 3
+
+forvalues i = 1/`=_N' {
+    scalar lat0 = new_latitude[`i']
+    scalar lon0 = new_longitude[`i']
+    local id = id_plateforme[`i']
+    geodist lat0 lon0 new_latitude new_longitude, gen(d`id')
+
+}
+
+egen avgdist_service = rowtotal(d*)
+replace avgdist_service = avgdist_service/(_N-1)  // no self distance
+replace avgdist_service = avgdist_service
+
+sum avgdist_service
+
+restore
+
+*average pole TIC
+preserve
+
+drop if pole != 4
+
+forvalues i = 1/`=_N' {
+    scalar lat0 = new_latitude[`i']
+    scalar lon0 = new_longitude[`i']
+    local id = id_plateforme[`i']
+    geodist lat0 lon0 new_latitude new_longitude, gen(d`id')
+
+}
+
+egen avgdist_TIC = rowtotal(d*)
+replace avgdist_TIC = avgdist_TIC/(_N-1)  // no self distance
+replace avgdist_TIC = avgdist_TIC
+
+sum avgdist_TIC
+
+restore

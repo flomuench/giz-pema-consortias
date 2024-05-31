@@ -124,6 +124,7 @@ global master_checks = "${master_gdrive}/checks"
 global master_raw = "${master_gdrive}/raw"
 global implementation = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/7-implementation"
 global map = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/8-geolocation"
+global harmonize = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/9-harmonize"
 				* midline
 global ml_raw = "${ml_gdrive}/raw"
 global ml_intermediate "${ml_gdrive}/intermediate"
@@ -140,9 +141,6 @@ global regis_raw = "${regis_gdrive}/raw"
 global regis_intermediate "${regis_gdrive}/intermediate"
 global regis_final = "${regis_gdrive}/final"
 global regis_checks = "${regis_gdrive}/checks"
-
-				* map
-global map_raw = "${map}/raw"
 
 			* output (regression tables, figures)
 				* baseline
@@ -204,10 +202,15 @@ if (0) do "${master_github}/consortia_power.do"
 ----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_export.do"
 /*--------------------------------------------------------------------
-	PART 3.8: Test coherence between survey rounds
+	PART 3.8: Test coherence between survey rounds for midline
 	Creates: fiche_de_correction
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_test.do"
+if (0) do "${master_github}/consortia_test_ml.do"
+/*--------------------------------------------------------------------
+	PART 3.8: Test coherence between survey rounds for endline
+	Creates: fiche_de_correction
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_test_el.do"
 
 
 ***********************************************************************
@@ -225,6 +228,14 @@ if (1) do "${master_github}/consortia_regressions_ml.do"
 	PART 4.3: Regressions endline
 ----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_regressions_el.do"
+/* --------------------------------------------------------------------
+	PART 4.2: Regressions midline
+----------------------------------------------------------------------*/
+if (1) do "${master_github}/consortia_heterogeneity_ml.do"
+/* --------------------------------------------------------------------
+	PART 4.3: Regressions endline
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_heterogeneity_el.do"
 ***********************************************************************
 * 	PART 5: 	Run master map
 ***********************************************************************
