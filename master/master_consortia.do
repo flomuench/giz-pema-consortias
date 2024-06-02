@@ -125,7 +125,6 @@ global master_raw = "${master_gdrive}/raw"
 global implementation = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/7-implementation"
 global map = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/8-geolocation"
 global harmonize = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/9-harmonize"
-=======
 
                  *Endline
 global el_raw = "${el_gdrive}/raw"
