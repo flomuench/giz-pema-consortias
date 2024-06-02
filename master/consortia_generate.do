@@ -588,8 +588,8 @@ local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg ne
 local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations inno_produit inno_process inno_lieu inno_commerce"
-local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1 epp" // add at endline: ihs_exp_pays_w99_k1
+local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4 marki"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
@@ -627,13 +627,38 @@ lab var tunis "HQ in Tunis"
 lab var city "HQ in Tunis, Sousse, Sfax"
 
 ***********************************************************************
-* 	PART 15: Digital consortia dummy	
+* 	PART 15: Entreprise Size
+***********************************************************************
+* Generate entrep_size variable and label it
+gen entrep_size = .
+lab var entrep_size "1- small, 2- large"
+
+* Replace entrep_size values based on conditions
+replace entrep_size = 1 if employes <= 5
+replace entrep_size = 2 if employes > 5
+replace entrep_size = . if employes ==.
+
+label define entrep_size_label 1 "Small" 2 "Large"
+label values entrep_size entrep_size_label
+
+* Generate entrep_size variable and label it
+gen entrep_size2 = .
+lab var entrep_size2 "1- small, 2- large"
+
+* Replace entrep_size values based on conditions
+replace entrep_size2 = 1 if employes <= 10
+replace entrep_size2 = 2 if employes > 10
+replace entrep_size2 = . if employes ==.
+
+label define entrep_size_label2 1 "Small" 2 "Large"
+label values entrep_size2 entrep_size_label2
+***********************************************************************
+* 	PART 16: Digital consortia dummy	
 ***********************************************************************
 gen cons_dig = (pole == 4)
 
-
 ***********************************************************************
-* 	PART 16: peer effects: baseline peer quality	
+* 	PART 17: peer effects: baseline peer quality	
 ***********************************************************************	
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
