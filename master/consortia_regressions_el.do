@@ -15,6 +15,7 @@
 ***********************************************************************
 * 	Part 0: 	set the stage		  
 ***********************************************************************
+{
 use "${master_final}/consortium_final", clear
 
 /*	* export dta file for Michael Anderson
@@ -39,6 +40,7 @@ xtset id_plateforme surveyround, delta(1)
 
 		* set graphics on for coefplot
 set graphics on
+}
 ***********************************************************************
 * 	Part 0: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -113,6 +115,7 @@ program qvalues
 * 	PART 0.1:  set the stage - generate export & business performance z-scores
 ***********************************************************************
 {
+{
 local indexes ///
 	 net_size net_gender man_fin_per man_fin_per_fre comp_ca2023 comp_ca2024 comp_exp2023 comp_exp2024 comp_benefice2023 comp_benefice2024 inno_produit inno_process man_mark_pra eai lai epi empl car_carempl_div1
 
@@ -135,6 +138,7 @@ foreach var of local indexes {
 ***********************************************************************
 * 	PART 1: survey attrition 		
 ***********************************************************************
+
 *test for differential total attrition
 {
 	* is there differential attrition between treatment and control group?
@@ -143,7 +147,7 @@ eststo att1, r: areg refus i.treatment if surveyround == 3, absorb(strata) clust
 estadd local strata "Yes"
 		
 		* column (2): at endline
-eststo att2, r: areg refus i.treatment if surveyround == 2, absorb(strata) cluster(id_plateforme)
+eststo att2, r: areg refus i.treatment if surveyround == 3, absorb(strata) cluster(id_plateforme)
 estadd local strata "Yes"
 
 		* column (3): at baseline
@@ -258,7 +262,7 @@ esttab `attritionkey' using "el_keyattrition.tex", replace ///
 	scalars("strata Strata controls") ///
 	addnotes("Notes: All Columns consider only endline response behaviour."  "All standard errors are Hubert-White robust standord errors clustered at the firm level." "Indexes are z-score as defined in Kling et al. 2007.")
 }	
-{
+
 /*	
 * baseline balance after attrition
 	* with outliers (Gourmandise)
@@ -269,7 +273,7 @@ iebaltab ca ca_exp profit capital employes fte_femmes age exp_pays exp_inv expre
 
 }
 */
-
+}
 ***********************************************************************
 * 	PART 2: list experiment regression
 ***********************************************************************
@@ -282,7 +286,7 @@ estadd local strata "Yes"
 
 		
 			* ancova with stratification dummies 
-eststo lexp2, r: reg listexp1 i.treatment##i.list_group l.listexp1 i.strata_final missing_bl_listexp1 if surveyround == 2, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
+eststo lexp2, r: reg listexp1 i.treatment##i.list_group l.listexp1 i.strata_final missing_bl_listexp1 if surveyround == 3, cluster(id_plateforme) /*include the control variables pour les différentes stratas+ lagged value*/
 estadd local bl_control "Yes"
 estadd local strata "Yes"		
 
@@ -329,7 +333,7 @@ program rct_regression_network
 			
 			* calculate control group mean
 				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 
@@ -440,7 +444,7 @@ program rct_regression_empowerment
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_median = r(p50)
 estadd scalar control_sd = r(sd)
 		}
@@ -538,7 +542,7 @@ program rct_regression_kt
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
@@ -649,7 +653,7 @@ program rct_regression_business
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
@@ -757,7 +761,7 @@ program rct_regression_export
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 
@@ -864,7 +868,7 @@ program rct_regression_profit
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 
@@ -975,7 +979,7 @@ program rct_regression_innovation
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
+sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
