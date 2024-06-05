@@ -823,14 +823,16 @@ program rct_regression_business
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
-			estadd local bl_control "Yes": `var'1
-			estadd local strata "Yes":`var'1
+
+      eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround==2 & profit!=., cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
-			estadd local bl_control "Yes" : `var'2
-			estadd local strata "Yes" : `var'2
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround==2 & profit!=., cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata "Yes"
+
 			
 			* calculate control group mean
 				* take mean over surveyrounds to control for time trend
@@ -860,7 +862,7 @@ rwolf2 ///
 	(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
 	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(999) usevalid strata(strata_final)
+	seed(110723) reps(30) usevalid strata(strata_final)
 		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
