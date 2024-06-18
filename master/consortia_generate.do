@@ -758,3 +758,4 @@ keep id_plateforme year_created pole subsector_corrige produit?
 merge 1:1 id_plateforme using "${master_final}/consortium_pii_final"
 export excel id_plateforme treatment nom_rep position_rep tel_pdg email_pdg year_created pole subsector_corrige produit? using "${master_final}/eya_list.xlsx", firstrow(var) replace
 restore
+*/
