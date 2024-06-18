@@ -121,6 +121,17 @@ else if c(os) == "MacOSX" {
 	global ml_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/midline"
 	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
 }
+		* endline folder
+if c(os) == "Windows" {
+	global el_gdrive = "${person}/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/4-endline"
+	global el_github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/master"
+	global consortia_master ="C:/Users/`c(username)'/Google Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
+}
+else if c(os) == "MacOSX" {
+	global el_gdrive = "/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/4-endline"
+	global el_github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/surveys/endline"
+	global consortia_master ="/Volumes/GoogleDrive/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/data/"
+}
 
 * paths within gdrive
 			* data

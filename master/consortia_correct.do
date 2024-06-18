@@ -89,20 +89,21 @@ replace matricule_physique = 1 if id_plateforme == 997
 replace matricule_physique = 1 if id_plateforme == 1134
 replace matricule_physique = 1 if id_plateforme == 1169
 replace matricule_physique = 1 if id_plateforme == 1248
+replace matricule_physique = 1 if id_plateforme == 1245
+replace matricule_physique = 1 if id_plateforme == 1128
+
+
 
 replace matricule_fisc_incorrect=1 if id_plateforme == 1013
 replace matricule_fisc_incorrect=1 if id_plateforme == 1081
 replace matricule_fisc_incorrect=1 if id_plateforme == 1083
 replace matricule_fisc_incorrect=1 if id_plateforme == 1094
 replace matricule_fisc_incorrect=1 if id_plateforme == 1095
-replace matricule_fisc_incorrect=1 if id_plateforme == 1128
 replace matricule_fisc_incorrect=1 if id_plateforme == 1182
 replace matricule_fisc_incorrect=1 if id_plateforme == 1190
-replace matricule_fisc_incorrect=1 if id_plateforme == 1191
 replace matricule_fisc_incorrect=1 if id_plateforme == 1193
 replace matricule_fisc_incorrect=1 if id_plateforme == 1197
 replace matricule_fisc_incorrect=1 if id_plateforme == 1214
-replace matricule_fisc_incorrect=1 if id_plateforme == 1245
 
 
 *now replace these two variables for the firms where the ID is not findable on registre-entreprise.tn 
