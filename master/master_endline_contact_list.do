@@ -41,7 +41,28 @@ merge 1:1 id_plateforme using "${master_final}/consortium_pii_final", force
     -----------------------------------------
 
 */ 
-drop eligible date_created code_douane matricule_cnss codepostal _merge comment mothercompany random_number_ml NOM_ENTREPRISE  ident_repondent_position_ml ident_nouveau_personne_ml  list_group_ml List_group matricule_physique contains_tunis rank_ml	random_number_el rank_el
+drop eligible date_created code_douane matricule_cnss codepostal _merge comment mothercompany random_number_ml NOM_ENTREPRISE  ident_repondent_position_ml ident_nouveau_personne_ml  list_group_ml List_group matricule_physique contains_tunis rank_ml	random_number_el rank_el produit1 produit2 produit3
+
+* Part3: Import harmonized prodcuts names
+
+*import excel
+preserve
+import excel "${harmonize}/cepex_produits.xlsx", firstrow clear
+save "${harmonize}/cepex_produits.dta", replace
+restore
+
+merge 1:1 id_plateforme using "${harmonize}/cepex_produits.dta", keepusing(produit1 produit2 produit3)
+drop _merge
+
+/*
+
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                             0
+    Matched                               176  (_merge==3)
+    -----------------------------------------
+
+*/
 
 *Part3 Export the final excel 
 export excel "${master_final}/endline_contactlist.xlsx",firstrow(variables) replace
