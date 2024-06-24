@@ -75,6 +75,8 @@ foreach var of "man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto 
 *network
 replace needs_check = 1 if surveyround==3 & net_association > 10
 replace questions_needing_checks = questions_needing_checks + "L'entreprise a plus de 10 contacts d'affaire, veuillez vérifier." if surveyround==3 & net_association > 10
+
+*is treatment but has 0 associations
 /* --------------------------------------------------------------------
 	PART 2.3: Comptabilité / accounting questions
 ----------------------------------------------------------------------*/		

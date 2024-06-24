@@ -39,9 +39,18 @@ rename Product el_products
 rename Autresأخرى products_other
 
 rename W inno_proc_other
+lab var inno_proc_other "Example of another innovation of process"
+
 rename Y inno_mot_other
+lab var inno_mot_other "Binary answer of other source of inspiration"
+
+// to check if not example
 rename AC export_other
+lab var export_other "Binary answer of other reasons to not export?"
+
 rename BQ man_sources_other
+lab var man_sources_other "Example of another source of new management strategy"
+
 rename DM profit_2023_category_gain
 rename DO profit_2024_category_gain
 rename DZ int_other
