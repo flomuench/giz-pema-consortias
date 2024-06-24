@@ -10,74 +10,89 @@
 *   2)  seperate PII data												  
 *	3)	save the contact list as dta file in intermediate folder
 *																	 					
-*	Author: Kais Jomaa , Amira Bouziri , Eya Hanefi	 														  
+*	Author: Kais Jomaa , Amira Bouziri , Eya Hanefi, Ayoub Chamakhi													  
 
 *	ID variable: id_plateforme			  									  
 *	Requires: el_raw.xlsx	
 *	Creates: el_intermediate.dta							  
 *																	  
 ***********************************************************************
-* 	PART 1: import the list of surveyed firms as Excel				  										  *
-************************************************************************
+* 	PART 1: import the answers from questionnaire as Excel				  										  *
+***********************************************************************
+
 import excel "${el_raw}/el_raw.xlsx", firstrow clear
+***********************************************************************
+* 	PART 2:  Rename variable for code	  			
+************************************************************************
+rename ID id_plateforme 
+rename Date date
+rename NOMESE firmname 
+rename NOMREP repondant_endline 
+rename Firmname same_firmname
+rename Prenom firstname_el
+rename Nom lastname_el
+rename ident_repondent_position new_respondent_pos
+rename Quelestvotrefonctionausein  new_respondent_otherpos
+rename Firmname_el new_firmname
 
-	* keep only lines with observations (deletes further unintended lines)
-sum Id
-keep in 1/`r(N)'
+rename Product el_products
+rename Autresأخرى products_other
 
-    *rename variables in line with codebook 
-rename Id id_plateforme 
+rename W inno_proc_other
+rename Y inno_mot_other
+rename AC export_other
+rename BQ man_sources_other
+rename DM profit_2023_category_gain
+rename DO profit_2024_category_gain
+rename DZ int_other
+
+rename Autres net_services_other
+rename Seriezvousenmesuredenousfo accord_q29
 
 ***********************************************************************
-* 	PART 2:  create + save bl_pii file	  			
+* 	PART 3:  create + save bl_pii file	  			
 ***********************************************************************
-	* remove variables that already existin in pii
-drop ident_base_respondent
-
+	* remove variables that already exist in pii
+drop firmname same_firmname accord_q29
 	* rename variables to indicate el as origin
-local el_changes ident_nouveau_personne firmname_change ident_repondent_position
+local el_changes id_ident new_firmname new_respondent_pos new_respondent_otherpos 
 foreach var of local el_changes {
 	rename `var' `var'_el
 }
 
-	* rename list_group to specify surveyround for pii data
-rename List_group List_group_el
-
 	* put all pii variables into a local
-local pii id_plateforme ident_nouveau_personne_el id_admin id_ident id_ident2 firmname_change_el ident_repondent_position_el comptable_email comptable_numero  List_group_el
-
-	* change format of accountant email to text for merge with master_pii
-tostring comptable_email, replace
-
+local pii id_plateforme repondant_endline id_ident_el firstname_el lastname_el new_firmname_el new_respondent_pos_el  new_respondent_otherpos_el
 
 	* save as stata master data
 preserve
 keep `pii'
 
 	* export the pii data as new consortia_master_data 
-export excel `pii' using "${el_raw}/consortia_el_pii", firstrow(var) replace
-		
-
-		
-save "${el_raw}/consortia_el_pii", replace
+export excel `pii' using "${el_raw}/ecommerce_el_pii", firstrow(var) replace
+save "${el_raw}/ecommerce_el_pii", replace
 
 restore
 
-	* rename list_group for analysis data
-rename List_group_el list_group
 
 ***********************************************************************
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
 	* drop all pii
-drop ident_nouveau_personne_el id_ident id_ident2 firmname_change_el ident_repondent_position_el comptable_email comptable_numero  
-
+drop repondant_endline id_ident_el firstname_el lastname_el new_firmname_el new_respondent_pos_el new_respondent_otherpos_el
 
 ***********************************************************************
 * 	PART 4:  Add treatment status	
 ***********************************************************************
-merge 1:1 id_plateforme using "${ml_final}/ml_final", keepusing(treatment)
+merge 1:1 id_plateforme using "${master_final}/endline_contactlist", keepusing(treatment)
 drop if _merge == 2
 drop _merge 
+
+label var treatment "Treatment status"
+label define treat 0 "Control" 1 "Treatment" 
+label values treatment treat 
+
+***********************************************************************
+* 	PART 5: save the answers as dta file in intermediate folder 			  						
+***********************************************************************
 
 save "${el_intermediate}/el_intermediate", replace

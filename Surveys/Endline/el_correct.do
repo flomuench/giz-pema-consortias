@@ -56,8 +56,8 @@ gen questions_needing_checks = ""
 ***********************************************************************
 * 	PART 1.2:  Identify and remove duplicates 
 ***********************************************************************
-sort id_plateforme heure
-quietly by id_plateforme heure:  gen dup = cond(_N==1,0,_n)
+sort id_plateforme date
+quietly by id_plateforme date:  gen dup = cond(_N==1,0,_n)
 drop if dup>1
 
 /*duplicates report id_plateforme heuredébut
@@ -81,18 +81,18 @@ drop if dup>1
 
 
 	* amouri frogot to mention that 999 needs to have a - before in case of don't know
-local 999vars ca ca_exp profit 
+local 999vars comp_ca2023 comp_ca2024 comp_benefice2023 comp_benefice2024 compexp_2023 compexp_2024 
 foreach var of local 999vars {
-	replace `var' = "-999" if `var' == "999"
-	replace `var' = "-888" if `var' == "888"
-	replace `var' = "-777" if `var' == "777"
+	replace `var' = -999 if `var' == 999
+	replace `var' = -888 if `var' == 888
+	replace `var' = -777 if `var' == 777
 }
 
 	* make manual changes
 		* ca
 
 
-
+/*
 	* loop over all accounting variables with string
 ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
 local numvars_with_strings "`r(varlist)'"
@@ -142,7 +142,7 @@ foreach var of local numvars_with_strings {
 
 }
 
-
+*/
 ***********************************************************************
 * 	PART 4:  Manual correction (by variable not by row)
 ***********************************************************************
@@ -216,7 +216,7 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 * 	PART 7:  Destring remaining numerical vars
 ***********************************************************************
 
-local destrvar ca ca_exp profit ca_2021 ca_exp_2021 profit_2021 
+local destrvar comp_ca2023 comp_ca2024 comp_benefice2023 comp_benefice2024 compexp_2023 compexp_2024
 foreach x of local destrvar { 
 destring `x', replace
 format `x' %25.0fc

@@ -120,7 +120,7 @@ program qvalues
 local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
 local empowerment_vars "genderi female_efficacy female_loc"
 local kt_vars "mpi innovations innovated inno_rd"
-local business_vars "age ca profit employes"
+local business_vars "age ca costs profit employes"
 local export_vars "eri exprep_couts exp_inv exported ca_exp exp_pays"
 local vars_untransformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
 				
@@ -137,7 +137,7 @@ iebaltab `vars_untransformed' if surveyround == 1, ///
 local network_vars "net_size_w99 net_nb_qualite net_coop_pos net_coop_neg"
 local empowerment_vars "genderi female_efficacy female_loc"
 local kt_vars "mpi innovations innovated inno_rd_w99"
-local business_vars "age ihs_ca_w99_k4 profit employes"
+local business_vars "age ihs_ca_w99_k4 ihs_costs_w99_k4 ihs_profit_w99_k1 ihs_employes_w99_k1"
 local export_vars "eri ihs_ca_exp_w99_k4 exp_pays_w99 ihs_exp_inv_w99_k4 exprep_couts exported"
 local vars_transformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
 reg treatment `vars_transformed' if surveyround == 1, vce(robust)
@@ -503,12 +503,12 @@ program rct_regression_network
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -557,7 +557,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_* L.* oL.*) ///
+				drop(_cons *.strata_final *y0 ?.missing_bl_*) /// L.*  oL.* 
 				noobs
 				
 				* Bottom panel: ITT
@@ -567,7 +567,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
 				stats(control_mean control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_* L.* `2' `3') ///
+				drop(_cons *.strata_final ?.missing_bl_* *y0) /// L.* `2'  `3'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -602,7 +602,6 @@ rct_regression_network net_size_w99 net_nb_f_w99 net_nb_m_w99 net_nb_qualite net
 
 }
 
-
 ***********************************************************************
 * 	PART 10: Midline results - regression empowerment outcomes
 ***********************************************************************
@@ -614,12 +613,12 @@ program rct_regression_empowerment
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -644,9 +643,9 @@ rwolf2 ///
 	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
 	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
 	seed(110723) reps(999) usevalid strata(strata_final)
-	
+
 		* save rw-p-values in a seperate table for manual insertion in latex document
-esttab e(RW) using rw_`generate'.tex, replace  
+esttab e(RW) using rw_`generate'.tex, replace
 	
 		* Put all regressions into one table
 			* Top panel: ITT
@@ -712,12 +711,12 @@ program rct_regression_kt
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -732,7 +731,7 @@ estadd scalar control_sd = r(sd)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
-/*		* Correct for MHT - FWER
+		* Correct for MHT - FWER
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -743,15 +742,13 @@ rwolf2 ///
 	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
 	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
 	seed(110723) reps(999) usevalid strata(strata_final)
 		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace	
-*/		
+		
 		
 		* Put all regressions into one table
 			* Top panel: ITT
@@ -811,7 +808,6 @@ rct_regression_kt mpi innovations innovated eri eri_ssa, gen(kt)
 
 }
 
-
 ***********************************************************************
 * 	PART 12: Midline results - regression table business performance outcomes
 ***********************************************************************
@@ -845,7 +841,7 @@ estadd scalar control_sd = r(sd): `var'2
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
-		/* Correct for MHT - FWER
+		 *Correct for MHT - FWER
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -862,11 +858,11 @@ rwolf2 ///
 	(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
 	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(30) usevalid strata(strata_final)
+	seed(110723) reps(999) usevalid strata(strata_final)
 		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-*/		
+		
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1  // adjust manually to number of variables 
@@ -902,7 +898,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p3)) (`2'2, pstyle(p3)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
 	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
 	(`5'1, pstyle(p4)) (`5'2, pstyle(p4)) ///
 	(`6'1, pstyle(p5)) (`6'2, pstyle(p5)) ///
@@ -925,7 +921,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename( `4'1 = `"Profit, ihs (ITT)"' `4'2 = `"Profit, ihs (TOT)"') ///
+		eqrename(`4'1 = `"Profit, ihs (ITT)"' `4'2 = `"Profit, ihs (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(ml_`generate'2_cfplot, replace)
@@ -949,12 +945,12 @@ program rct_regression_business
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes": `var'1
 			estadd local strata "Yes":`var'1
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes" : `var'2
 			estadd local strata "Yes" : `var'2
 			
@@ -969,7 +965,7 @@ estadd scalar control_sd = r(sd): `var'2
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
-		/* Correct for MHT - FWER
+		 *Correct for MHT - FWER
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -982,15 +978,13 @@ rwolf2 ///
 	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
 	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
-	(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
 	seed(110723) reps(999) usevalid strata(strata_final)
 		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-*/		
+		
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1  // adjust manually to number of variables 
@@ -1026,8 +1020,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p3)) (`2'2, pstyle(p3)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`4'1, pstyle(p3)) (`4'2, pstyle(p3)) ///
 	(`5'1, pstyle(p4)) (`5'2, pstyle(p4)) ///
 	(`6'1, pstyle(p5)) (`6'2, pstyle(p5)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
@@ -1043,12 +1037,12 @@ gr export ml_`generate'1_cfplot.png, replace
 
 
 coefplot ///
-	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)), ///
+	(`3'1, pstyle(p1)) (`3'2, pstyle(p1)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename( `4'1 = `"Profit, ihs (ITT)"' `4'2 = `"Profit, ihs (TOT)"') ///
+		eqrename( `3'1 = `"Profit, ihs (ITT)"' `3'2 = `"Profit, ihs (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(ml_`generate'2_cfplot, replace)
@@ -1059,7 +1053,7 @@ gr export ml_`generate'2_cfplot.png, replace
 end
 
 	* apply program to business performance outcomes
-rct_regression_business ihs_sales_w99_k1 ihs_costs_w99_k1 ihs_profit_w99_k1 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1, gen(business_outcomes)
+rct_regression_business ihs_sales_w99_k1 ihs_costs_w99_k1 ihs_profit_w99_k1 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1, gen(kbusiness_outcomes)
 
 }		
 	
@@ -1073,12 +1067,12 @@ program rct_regression_export
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -1094,7 +1088,7 @@ estadd scalar control_sd = r(sd)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
-/*		* Correct for MHT - FWER
+		* Correct for MHT - FWER
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -1111,7 +1105,7 @@ rwolf2 ///
 		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-*/		
+		
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
@@ -1180,12 +1174,12 @@ program rct_regression_profit
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -1289,12 +1283,12 @@ program rct_regression_sales
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 	* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -1309,7 +1303,7 @@ estadd scalar control_sd = r(sd)
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
-/*
+
 {
 		* Correct for MHT - FWER
 rwolf2 ///
@@ -1322,15 +1316,13 @@ rwolf2 ///
 	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
 	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(id_plateforme)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
 	seed(110723) reps(999) usevalid strata(strata_final)
 }		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-*/		
+		
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
@@ -1387,10 +1379,6 @@ rct_regression_sales ihs_sales_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sale
 
 }
 
-
-
-
-
 ***********************************************************************
 * 	PART 15: Midline results - regression innovation outcomes
 ***********************************************************************
@@ -1402,12 +1390,12 @@ program rct_regression_innovation
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -1437,7 +1425,7 @@ rwolf2 ///
 	
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace  
-/*	
+
 		* Put all regressions into one table
 			* Top panel: ITT
 *		tokenize `varlist'
@@ -1483,7 +1471,7 @@ coefplot (`1'1, pstyle(p1)) (`1'2, pstyle(p1)) (`2'1, pstyle(p2)) (`2'2, pstyle(
 	name(ml_`generate'_cfplot, replace)
 	
 gr export ml_`generate'_cfplot.png, replace
-*/
+
 	
 end
 
@@ -1503,12 +1491,12 @@ program rct_regression_cost
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final, cluster(id_plateforme)
+			eststo `var'1: reg `var' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment), cluster(id_plateforme) first
+			eststo `var'2: ivreg2 `var' l.`var' i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
 			estadd local bl_control "Yes"
 			estadd local strata "Yes"
 			
@@ -1598,7 +1586,7 @@ gr export ml_`generate'2_cfplot.png, replace
 end
 
 	* apply program to business performance outcomes
-rct_regression_cost costs_w99 ca_w99 profit_w99, gen(cost)
+rct_regression_cost ihs_costs_w99_k1 ihs_ca_w99_k1 ihs_profit_w99_k1, gen(cost)
 
 }
 	

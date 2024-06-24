@@ -9,7 +9,7 @@
 *				PART 2: Prepare dynamic folder paths & globals		  
 *				PART 3: Run all do-files                          											  
 *																	  
-*	Author:  	Kais Jomaa, Amira Bouziri, Eya Hanefi						    
+*	Author:  	Kais Jomaa, Amira Bouziri, Eya Hanefi, Ayoub Chamakhi						    
 *	ID variable: 		  					  
 *	Requires:  	  										  
 *	Creates:  
@@ -99,6 +99,8 @@ global el_final = "${el_gdrive}/final"
 global el_checks = "${el_gdrive}/checks"
 global el_output = "${el_gdrive}/output"
 
+			* master contactlist
+global master_final = "${consortia_master}/6-master/final"
 
 			* set seeds for replication
 set seed 1231234
