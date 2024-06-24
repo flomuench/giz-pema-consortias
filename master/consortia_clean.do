@@ -121,7 +121,6 @@ lab var capital "Capital"
 
 lab var net_time "Meetings with other CEOs, past 3 months"
 
-
 ***********************************************************************
 * 	PART 6:    change gouvernorat label
 ***********************************************************************

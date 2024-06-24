@@ -66,3 +66,4 @@ drop _merge
 
 *Part3 Export the final excel 
 export excel "${master_final}/endline_contactlist.xlsx",firstrow(variables) replace
+save "${master_final}/endline_contactlist.dta", replace

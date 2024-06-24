@@ -571,18 +571,25 @@ lab var car_empl1_w99_k3 "Female employees"
 ***********************************************************************
 * 	PART 12: generate costs (profit - CA)
 ***********************************************************************
+gen costs = ca - profit_pct
+lab var costs "Costs"
+
 gen costs_w99 = ca_w99 - profit_w99
-lab var costs_w99 "Costs"
+lab var costs_w99 "Costs wins. 99th"
 
 gen ihs_costs_w99_k4 = ihs_ca_w99_k4 - ihs_profit_w99_k4
-lab var ihs_costs_w99_k4 "Costs"
+lab var ihs_costs_w99_k4 "IHS Costs wins. 99th K^4"
 
 gen ihs_costs_w99_k1 = ihs_ca_w99_k1 - ihs_profit_w99_k1
-lab var ihs_costs_w99_k1 "Costs"
+lab var ihs_costs_w99_k1 "IHS Costs wins. 99th K^1"
 
 ***********************************************************************
 * 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
+*drop ca_w99 & profit y0 for further use
+drop ca_w99_y0
+drop profit_w99_y0
+
 {
 	* results for optimal k
 		* k = 10^3 --> employees, female employees, young employees
@@ -593,18 +600,11 @@ local empowerment "genderi female_efficacy female_loc listexp"
 local mp "mpi"
 local innovation "innovated innovations inno_produit inno_process inno_lieu inno_commerce"
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1 epp" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4 marki"
+local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
 foreach var of local ys {
-	gen missing_bl_`var' = (`var' == . & surveyround == 1) 
-	replace `var' = 0 if `var' == . & surveyround == 1
-}
-
-*for ca & profit
-local costs "ca_w99 profit_w99 "
-foreach var of local costs {
 	gen missing_bl_`var' = (`var' == . & surveyround == 1) 
 	replace `var' = 0 if `var' == . & surveyround == 1
 }

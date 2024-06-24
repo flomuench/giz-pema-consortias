@@ -29,17 +29,55 @@ gen surveyround = 3
 lab var surveyround "1-baseline 2-midline 3-endline"
 
 ***********************************************************************
-* 	PART 3:  Create continuous variable for number of innovation
-*********************************************************************** 
-generate num_inno = inno_produit +inno_process + inno_lieu + inno_commerce
-label var num_inno "Number of different types innovation introduced by a firm"
+* 	PART 3:  el_produits
+***********************************************************************
+generate el_produit1 = regexm(el_products, "el_produit1")
+lab var el_produit1 " Best selling product or service"
 
-generate inno_aucune = 0
-replace inno_aucune = 1 if inno_produit == 0 & inno_process == 0 & inno_lieu == 0 & inno_commerce == 0
-label var inno_aucune "No innovation done"
+generate el_produit2 = regexm(el_products, "2")
+lab var el_produit2 "Second best selling product or service"
+
+generate el_produit3 = regexm(el_products, "el_produit3")
+lab var el_produit3 "Third best selling product or service" 
+***********************************************************************
+* 	PART 4:  Create continuous variable for number of innovation
+*********************************************************************** 
+
+generate inno_none = regexm(inno_produit, "0")
+lab var inno_none "No innovation introduced"
+
+generate inno_improve = regexm(inno_produit, "1")
+lab var inno_improve "Improved existing products/services"
+
+generate inno_new = regexm(inno_produit, "2")
+lab var el_produit3 "Introduced new products/services" 
+
+generate inno_both = inno_improve + inno_new
+label var inno_both "Improved & introduced new products/services"
 
 ***********************************************************************
-* 	PART 4:  inno_mot
+* 	PART 5:  Create continuous variable for inspiration of innovation
+*********************************************************************** 
+
+generate inno_mot_cons = regexm(inno_mot, "1")
+lab var inno_mot_cons "Consultant"
+
+generate inno_mot_cont = regexm(inno_mot, "2")
+lab var inno_mot_cont "Other entrepreneurs"
+
+generate inno_mot_eve = regexm(inno_mot, "3")
+lab var inno_mot_eve "Event, international fair"
+
+generate inno_mot_client = regexm(inno_mot, "4")
+lab var inno_mot_client "Clients"
+
+lab var inno_mot_other "Other"
+
+generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_other
+lab var inno_mot_client "Total of innovation inspirations"
+
+***********************************************************************
+* 	PART 6:  inno_mot
 ***********************************************************************
 	* gen dummies for each innovation motivation category
 generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
@@ -69,36 +107,7 @@ foreach x of local inno_vars {
 
 
 ***********************************************************************
-* 	PART 5:  man_source
-***********************************************************************
-	* gen dummies for each new management strategy source
-generate man_source1 = regexm(man_source, "1")
-generate man_source2=  regexm(man_source, "2")
-generate man_source3 = regexm(man_source, "3")
-generate man_source4 = regexm(man_source, "4")
-generate man_source5 = regexm(man_source, "5")
-generate man_source6 = regexm(man_source, "6")
-generate man_source7 = regexm(man_source, "7")
-
-	* lab each dummy/motivation category
-label var man_source1 "Consultant"
-label var man_source2 "Business contact"
-label var man_source3 "Employees"
-label var man_source4 "Family"
-label var man_source5 "Event"
-label var man_source6 "No new strategy"
-label var man_source7 "Other sources"
-
-	* label the values of each dummy/motivation category + numeric format 
-local man_vars man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7 
-foreach x of local man_vars {
-	lab val `x' yesno
-	destring `x', replace
-	format `x' %25.0fc
-}
-
-***********************************************************************
-* 	PART 6: net_coop
+* 	PART 7: net_coop
 ***********************************************************************
 	* generate dummies for each cooperative word
 generate netcoop1 = regexm(net_coop, "1")
@@ -131,16 +140,14 @@ generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
 ***********************************************************************
-* 	PART 7: Export
+* 	PART 8: Export
 ***********************************************************************
-gen export_1 =0
-replace export_1 =1 if ustrregexm(export, "1") 
 
-gen export_2 =0
-replace export_2 =1 if ustrregexm(export, "2") 
+generate export_1 = regexm(export, 1)
 
-gen export_3 =0
-replace export_3 =1 if ustrregexm(export, "3") 
+generate export_2 = regexm(export, 2)
+
+generate export_3 = regexm(export, 3)
 
 drop export
 
@@ -148,20 +155,20 @@ label var export_1 "Direct export"
 label var export_2 "Indirect export"
 label var export_3 "No export"
 
-gen export_41 =0
-replace export_41 =1 if ustrregexm(export_4, "1") 
+generate export_41 = regexm(export_4, 1)
 
-gen export_42 =0
-replace export_42 =1 if ustrregexm(export_4, "2") 
 
-gen export_43 =0
-replace export_43 =1 if ustrregexm(export_4, "3") 
+generate export_42 = regexm(export_4, 2)
 
-gen export_44 =0
-replace export_44 =1 if ustrregexm(export_4, "4") 
 
-gen export_45 =0
-replace export_45 =1 if ustrregexm(export_4, "5") 
+generate export_43 = regexm(export_4, 3)
+
+
+generate export_44 = regexm(export_4, 4)
+
+
+generate export_45 = regexm(export_4, 5)
+
 
 drop export_4
 
@@ -172,45 +179,26 @@ label var export_44 "Requires too much investment"
 label var export_45 "Other"
 
 
+***********************************************************************
+* 	PART 10: Refusal to participate in consortium
+***********************************************************************
+generate refus_1 = regexm(int_refus, "1")
+lab var refus_1 "Other companies are either not economically beneficial or very different"
+
+generate refus_2 = regexm(int_refus, "2")
+lab var refus_2 "Other companies are direct competitors, collaboration is not possible"
+
+generate refus_3 = regexm(int_refus, "3")
+lab var refus_3 "Collaboration with other women entrepreneurs is challenging on a personal level"
+
+generate refus_4 = regexm(int_refus, "4")
+lab var refus_4 "Collaboration require time that they don't have due to other priority"
+
+generate refus_5 = regexm(int_refus, "5")
+lab var refus_5 "Others" 
 
 ***********************************************************************
-* 	PART 8: Time to complete survey (limited insight given we only see most recent attempt)
-***********************************************************************
-/*
-format date %td
-replace heuredébut = ustrregexra( heuredébut ,"h",":")
-replace heuredébut = ustrregexra( heuredébut ,"`",":")
-replace heuredébut = substr(heuredébut,1,length(heuredébut)-2)
-str2time heuredébut, generate(eheuredébut)
-
-replace heurefin = ustrregexra( heurefin ,"h",":")
-replace heurefin = ustrregexra( heurefin ,"`",":")
-replace heurefin = substr(heurefin,1,length(heurefin)-2)
-str2time heurefin, generate(eheurefin)
-
-* Creation of the time variable
-gen etime = eheurefin - eheuredébut
-gen etime_positive = abs(etime)
-time2str etime_positive, generate(time) seconds
-label var time "durée du questionnaire par entreprise"
-
-gen str8 stime = time
-gen shours = substr(stime, 1, 2) //takes the first two digits//
-gen hours = real(shour) //reads first two digits as number
-gen sminutes = substr(stime, 4, 2)
-gen minutes = real(sminutes)
-gen sseconds = substr(stime, 7, 2)
-gen seconds = real(sseconds)
-gen time_secs = 3600*hours + 60*minutes + seconds
-gen time_mins = time_secs/60
-label var time_secs "Durée du questionnaire par entreprise en secondes"
-label var time_mins "Durée du questionnaire par entreprise en minutes"
-
-drop etime etime_positive eheuredébut eheurefin shours sminutes minutes sseconds seconds stime
-*/
-
-***********************************************************************
-* 	PART 8: Generate variable to assess number of missing values per firm			  										  
+* 	PART 11: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 	* section 1: innovation
 egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_mot)
@@ -239,7 +227,7 @@ lab var missing_values "missing values per company"
 
 
 ***********************************************************************
-* 	PART 9: Generate variable to assess completed answers		  										  
+* 	PART 12: Generate variable to assess completed answers		  										  
 ***********************************************************************
 generate survey_completed= 0
 replace survey_completed= 1 if missing_values == 0
@@ -248,7 +236,7 @@ label values survey_completed yesno
 
 
 ***********************************************************************
-* 	PART 10:  Generate variables for companies who answered on phone	
+* 	PART 13:  Generate variables for companies who answered on phone	
 ***********************************************************************
 gen survey_phone = 0
 lab var survey_phone "Comapnies who answered the survey on phone (with enumerators)" 
@@ -259,7 +247,7 @@ label values survey_phone Surveytype
 
 
 ***********************************************************************
-* 	PART 11:  generate normalized financial data (per employee)
+* 	PART 14:  generate normalized financial data (per employee)
 ***********************************************************************
 local varn investissement comp_ca2023 comp_ca2024 comp_exp2023 comp_exp2024 comp_benefice2023 comp_benefice2024
 
@@ -273,6 +261,6 @@ replace n`x' = `x'/empl if n`x'!= .
 }
 
 ***********************************************************************
-* 	PART 9: save dta file  										  
+* 	PART 15: save dta file  										  
 ***********************************************************************
 save "${el_final}/el_final", replace

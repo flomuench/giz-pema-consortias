@@ -47,7 +47,7 @@ local export_vars "eri exprep_couts exp_inv exported ca_exp"
 
 {
 local exp_status "exported exp_invested exp_afrique"
-local financial "ca_w99 ca_exp_w99 profit_w99 profit_pos employes_w99"
+local financial "ca_w99 ca_exp_w99 costs_w99 profit_w99 profit_pos employes_w99"
 local basic "presence_enligne tunis age capital_w99"
 local innovation "inno_rd innovations innovated"
 local network "net_nb_fam_w99 net_nb_dehors_w99 net_nb_qualite net_time net_coop_neg" // ml vars: net_nb_f net_nb_m
