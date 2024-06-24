@@ -39,6 +39,8 @@ lab var el_produit2 "Second best selling product or service"
 
 generate el_produit3 = regexm(el_products, "el_produit3")
 lab var el_produit3 "Third best selling product or service" 
+
+drop el_products
 ***********************************************************************
 * 	PART 4:  Create continuous variable for number of innovation
 *********************************************************************** 
@@ -55,6 +57,7 @@ lab var el_produit3 "Introduced new products/services"
 generate inno_both = inno_improve + inno_new
 label var inno_both "Improved & introduced new products/services"
 
+drop inno_produit
 ***********************************************************************
 * 	PART 5:  Create continuous variable for inspiration of innovation
 *********************************************************************** 
@@ -71,40 +74,12 @@ lab var inno_mot_eve "Event, international fair"
 generate inno_mot_client = regexm(inno_mot, "4")
 lab var inno_mot_client "Clients"
 
-lab var inno_mot_other "Other"
+lab var inno_mot_other "Binary other source of inspiration"
 
 generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_other
 lab var inno_mot_client "Total of innovation inspirations"
 
-***********************************************************************
-* 	PART 6:  inno_mot
-***********************************************************************
-	* gen dummies for each innovation motivation category
-generate inno_mot1 = regexm(inno_mot, "inno_mot_idee")
-generate inno_mot2 = regexm(inno_mot, "inno_mot_cons")
-generate inno_mot3 = regexm(inno_mot, "inno_mot_cont")
-generate inno_mot4 = regexm(inno_mot, "inno_mot_eve")
-generate inno_mot5 = regexm(inno_mot, "inno_mot_emp")
-generate inno_mot6 = regexm(inno_mot, "inno_mot_test")
-generate inno_mot7 = regexm(inno_mot, "inno_mot_autre")
-
-	* lab each dummy/motivation category
-label var inno_mot1 "personal idea"
-label var inno_mot2 "exchange ideas with a consultant"
-label var inno_mot3 "exchange ideas with business network"
-label var inno_mot4 "exchange ideas in an event"
-label var inno_mot5 "exchange ideas with employees"
-label var inno_mot6 "Norms"
-label var inno_mot7 "other source for innovation"
-
-	* label the values of each dummy/motivation category + numeric format 
-local inno_vars inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
-foreach x of local inno_vars {
-	lab val `x' yesno
-	destring `x', replace
-	format `x' %25.0fc
-}
-
+drop inno_mot
 
 ***********************************************************************
 * 	PART 7: net_coop
@@ -139,15 +114,16 @@ label var net_coop_pos "Positive answers for the the perception of interactions 
 generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
+drop net_coop
 ***********************************************************************
 * 	PART 8: Export
 ***********************************************************************
 
-generate export_1 = regexm(export, 1)
+generate export_1 = regexm(export, "1")
 
-generate export_2 = regexm(export, 2)
+generate export_2 = regexm(export, "2")
 
-generate export_3 = regexm(export, 3)
+generate export_3 = regexm(export, "3")
 
 drop export
 
@@ -155,20 +131,16 @@ label var export_1 "Direct export"
 label var export_2 "Indirect export"
 label var export_3 "No export"
 
-generate export_41 = regexm(export_4, 1)
+/* 
+generate export_41 = regexm(export_4, "1")
 
+generate export_42 = regexm(export_4, "2")
 
-generate export_42 = regexm(export_4, 2)
+generate export_43 = regexm(export_4, "3")
 
+generate export_44 = regexm(export_4, "4")
 
-generate export_43 = regexm(export_4, 3)
-
-
-generate export_44 = regexm(export_4, 4)
-
-
-generate export_45 = regexm(export_4, 5)
-
+generate export_45 = regexm(export_4, "5")
 
 drop export_4
 
@@ -177,7 +149,7 @@ label var export_42 "Did not find clients abroad"
 label var export_43 "Too complicated"
 label var export_44 "Requires too much investment"
 label var export_45 "Other"
-
+*/
 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
@@ -201,28 +173,57 @@ lab var refus_5 "Others"
 * 	PART 11: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
 	* section 1: innovation
-egen miss_inno = rowmiss(inno_produit inno_process inno_lieu inno_commerce inno_mot)
-	
-	* section 2: network
-egen miss_network = rowmiss(net_nb_f net_nb_m net_nb_qualite net_coop)
-	
-	* section 3: management practices
-egen miss_management = rowmiss(man_fin_num man_fin_per_fre man_hr_ind man_hr_pro man_ind_awa man_source)
+egen miss_inno = rowmiss(inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres)
 
-	* section 4: export readiness
-egen miss_eri = rowmiss(exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_inv exprep_couts)
-	
-	* section 5: gender empowerment
-egen miss_gender = rowmiss(car_efi_fin1 car_efi_nego car_efi_conv car_loc_succ car_loc_env listexp)
-	
-	* section 6: accounting/KPI
-egen miss_accounting = rowmiss(employes car_empl1 car_empl2 car_empl3 car_empl4 ca ca_exp profit)
+	* section 2 export
+egen miss_export = rowmiss(exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes)
 
-	* section 7: SSA export readiness
-egen miss_eri_ssa = rowmiss(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
+	* section 3 export practices
+egen miss_exp_pracc = rowmiss(exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent)
+
+	* section 4: SSA export readiness
+egen miss_eri_ssa = rowmiss(ssa_action1 ssa_action2 ssa_action3 ssa_action4)
+
+	* section 5: employees
+egen miss_empl = rowmiss(employes car_empl1 car_empl2)
+
+	* section 6: management indicators
+egen miss_manindicators = rowmiss(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv)
+
+	* section 7: management practices
+egen miss_manprac = rowmiss(man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
+
+	* section 8: marketing management
+egen miss_mark = rowmiss(man_mark_prix man_mark_clients man_mark_pub man_mark_dig)
+
+	* section 9 marketing source
+egen miss_marksource = rowmiss(man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres)
+
+	* section 10: network size
+egen miss_network = rowmiss(net_association net_size1 net_size2 net_size3 net_size4 net_gender1 net_gender2 net_gender3 net_gender4 net_gender3_giz)
+
+	* section 11: network services
+egen miss_networkserv = rowmiss(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre)
+
+	*section 12: netcoop
+egen miss_netcoop = rowmiss (net_coop_pos net_coop_neg)
+
+	*section 13: car_efi
+egen miss_carefi = rowmiss(car_efi_conf car_efi_fin1 car_efi_man car_efi_motiv)
+	
+	*section 14: car_loc
+egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin car_loc_succ)
+
+	*section 15: extrovert & listexp
+egen miss_extlist = rowmiss(extrovert1 extrovert2 extrovert3 listexp1)
+	
+	* section 16: accounting/KPI
+egen miss_accounting = rowmiss(comp_benefice2023 comp_benefice2024 comp_ca2023 comp_ca2024 compexp_2023 compexp_2024)
+
+	
 
 	* create the sum of missing values per company
-gen missing_values = miss_inno + miss_network + miss_management + miss_eri + miss_gender + miss_accounting
+gen missing_values = miss_inno + miss_export + miss_exp_pracc + miss_eri_ssa + miss_empl + miss_manindicators + miss_manprac + miss_mark + miss_marksource + miss_network + miss_networkserv + miss_netcoop + miss_carefi + miss_carloc + miss_extlist + miss_accounting
 lab var missing_values "missing values per company"
 
 
@@ -249,7 +250,7 @@ label values survey_phone Surveytype
 ***********************************************************************
 * 	PART 14:  generate normalized financial data (per employee)
 ***********************************************************************
-local varn investissement comp_ca2023 comp_ca2024 comp_exp2023 comp_exp2024 comp_benefice2023 comp_benefice2024
+local varn comp_ca2023 comp_ca2024 compexp_2023 compexp_2024 comp_benefice2023 comp_benefice2024
 
 foreach x of local varn { 
 gen n`x' = 0
@@ -257,7 +258,7 @@ replace n`x' = . if `x' == 666
 replace n`x' = . if `x' == 777
 replace n`x' = . if `x' == 888
 replace n`x' = . if `x' == 999
-replace n`x' = `x'/empl if n`x'!= .
+replace n`x' = `x'/employes if n`x'!= .
 }
 
 ***********************************************************************

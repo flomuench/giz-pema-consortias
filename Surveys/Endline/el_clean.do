@@ -71,7 +71,10 @@ forvalues x = 1(1)2 {
 
 		* rename for coherence with baseline
 rename empl employes
+lab var employes "Number of employeess"
 
+lab var car_empl1 "Number of female employees"
+lab var car_empl2 "Number of youth less than 36 years old"
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
 ***********************************************************************
@@ -85,13 +88,15 @@ lab var id_plateforme "Unique identifier of the company"
 lab var date "Date of finished survey"
 
 lab var el_products "Most sold products/ services"
+lab var products_other "Other most sold product/ service"
+
 * Section Innovation
 lab var inno_produit "Product/ service innovation"
 lab var inno_exampl_produit1 "Example product innovation1"
 lab var inno_exampl_produit2 "Example product innovation2"
 
 
-lab var entreprise_model " Type of clients: B2B, B2C or both B2B and B2C" 
+lab var entreprise_model "Type of clients: B2B, B2C or both B2B and B2C" 
 
 
 * Section Export
@@ -126,17 +131,17 @@ lab var car_empl1 "Number of women employees"
 lab var car_empl2 "Number of young employees (less than 36 yo)"
 
 * Section Management
-lab var man_fin_per_ind " Financial and accounting indicators (sales, costs, profits, etc.)"
-lab var man_fin_per_pro " Production management/ service creation"
-lab var man_fin_per_qua " The quality of inputs"
-lab var man_fin_per_sto "stock"
+lab var man_fin_per_ind "Financial and accounting indicators (sales, costs, profits, etc.)"
+lab var man_fin_per_pro "Production management/ service creation"
+lab var man_fin_per_qua "The quality of inputs"
+lab var man_fin_per_sto "Stock"
 lab var man_fin_per_emp "Employee performance and absenteeism"
-lab var man_fin_per_liv " On time delivery" 
+lab var man_fin_per_liv "On time delivery" 
 lab var man_fin_per_fre "frequency of performance indicators examination" 
 
 lab var man_fin_pra_bud "Maintaining an up-to-date written or digital budget and a business plan"
 lab var man_fin_pra_pro "Calculating the costs, prices, and profits achieved on each product or service sold."
-lab var man_fin_pra_dis " Distunction between business accounts and personal accounts"
+lab var man_fin_pra_dis "Distunction between business accounts and personal accounts"
 
 lab var man_ind_awa "Providing performance incentives to employees"
 
@@ -147,32 +152,41 @@ lab var man_mark_dig "Establishing a digital presence for the company (website o
 
 lab var inno_proc_met "New methods or technologies for producing goods/services"
 lab var inno_proc_log "New logistical procedures, delivery, or distribution of goods/services"
-lab var inno_proc_sup " New suppliers or improved business terms (price, quality) with suppliers"
+lab var inno_proc_prix "Introduces new pricing methods"
+lab var inno_proc_sup "New suppliers or improved business terms (price, quality) with suppliers"
+lab var inno_proc_autres "Binary other process of innovation"
+lab var inno_proc_other "Example of other process of innovation" 
 
 lab var man_source_cons "Consultant"
 lab var man_source_pdg "Other entrepreneur"
 lab var man_source_fam "Family or friends"
 lab var man_source_even "Event,trade fair,conference" 
-lab var man_source_autres "Others"
+lab var man_source_autres "Binary question of other management strategy sources"
 
 
 
 * Section Network
 lab var net_association " Number of membership in associations"
-lab var net_size1 " Discuss company's business with suppliers"
+lab var net_size1 "Discuss company's business with suppliers"
 lab var net_size2 "Discuss company's business with clients"
 lab var net_size3 "Discuss company's business with other entrepreneurs"
-lab var net_size4 " Discuss company's business with friends or family" 
+lab var net_size4 "Discuss company's business with friends or family" 
 
 lab var net_services_pratiques "Sharing management practices and solutions for entrepreneurial challenges (e.g., management, finance, quality control, etc.)"
 lab var net_services_produits "Exchanging ideas on new products/services or technologies"
-lab var net_services_mark " Sharing experiences of penetrating foreign markets"
-lab var net_services_sup " Connecting with new or existing clients or suppliers"
-lab var net_services_contract " Collaboration for important tender bids"
+lab var net_services_mark "Sharing experiences of penetrating foreign markets"
+lab var net_services_sup "Connecting with new or existing clients or suppliers"
+lab var net_services_contract "Collaboration for important tender bids"
 lab var net_services_confiance "Encouragement to build self-confidence in the face of uncertainty and risks"
-lab var net_services_autre " others"
+lab var net_services_autre "Binary other situation of using entrepneurs network"
+lab var net_services_other "Example other situation of using entrepneurs network"
 
+lab var net_gender1 "Discuss company's business with female suppliers"
+lab var net_gender2 "Discuss company's business with female clients"
+lab var net_gender3 "Discuss company's business with other female entrepreneurs"
+lab var net_gender4 "Discuss company's business with female friends or family" 
 
+lab var net_gender3_giz "Female entrepreneurs met while in GIZ"
 
 * Section L'entrepreneuse
 lab var car_efi_fin1 "Having the necessary skills to access sources of funding"
@@ -218,18 +232,29 @@ label var profit_2023_category_gain "Company loss category in 2023 in dt"
 label var profit_2024_category_perte "Company loss category in 2024 in dt"
 label var profit_2024_category_gain "Company loss category in 2024 in dt"
 
+lab var comp_ca2023_intervalles "Intervals of total turnover in 2023 in dt"
+lab var comp_ca2024_intervalles "Intervals of total turnover in 2024 in dt"
+
+lab var profit_2023_category_perte "Intervals of loss in 2023 in dt"
+lab var profit_2024_category_perte "Intervals of loss in 2023 in dt"
+
+lab var profit_2023_category_gain "Intervals of profit in 2023 in dt"
+lab var profit_2024_category_gain "Intervals of profit in 2023 in dt"
+
 
 * Section Intervention-retour sur le CF
 
 lab var int_ben1 " Main benefits that the consortium provided to the company"
 lab var int_ben2 " Second benefits that the consortium provided to the company"
-lab var int_ben3 " Third benefits that the consortium provides company"
-lab var int_ben_autres "Others"
+lab var int_ben3 " Third benefits that the consortium provides to the company"
+lab var int_ben_autres "Example of other benefits that the consortium provides to the company"
 
 lab var int_incv1 "Main inconvenient of the consortium to the company"
 lab var int_incv2 "Second inconvenient of the consortium to the company"
 lab var int_incv3 " Third inconvenient of the consortium to the company"
-lab var int_incv_autres "Others" 
+lab var int_incv_autres "Example of other inconvenient that the consortium provides to the company" 
+
+lab var int_contact "Number of consortium members that were contacted outside of the activities"
 
 lab var car_loc_succ "participant is well able to determine the success of her business"
 lab var car_loc_env "participant know how to determine what is happening in the internal and external environment of the company"
@@ -241,12 +266,19 @@ lab var car_loc_exp "participant knows how to deal with exports requisities"
 *lab var tel_supl "extra phone number for 2023 survey"
 lab var attest "respondents attest that his/her responses correspond to truth"
 
+lab var expp_ben "likert scale of export adventages perception"
+lab var expp_cost "likert scale of export disadventages perception"
+
+lab var int_other "example of another refusal to participate in consortia activities"
 
 ***********************************************************************
 * 	PART 6: 	Label the variables values	  			
 ***********************************************************************
 		*yes/no variables loop:
-local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_mark_prix man_mark_clients man_mark_pub man_mark_dig man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre
+local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ///
+ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_mark_prix ///
+man_mark_clients man_mark_pub man_mark_dig man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres net_services_pratiques net_services_produits ///
+net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre
 
 label define yesno 1 "Yes" 0 "No"
 foreach var of local yesnovariables {
