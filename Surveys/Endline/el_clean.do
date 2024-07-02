@@ -50,7 +50,7 @@ replace `x'= lower(`x')
 
 
 	*fix date
-format date %-td
+*format date %-td
 
 *drop empty rows
 drop if id_plateforme ==.
@@ -85,7 +85,7 @@ notes _dta : Consortium Project
 
 
 lab var id_plateforme "Unique identifier of the company"
-lab var date "Date of finished survey"
+*lab var date "Date of finished survey"
 
 lab var el_products "Most sold products/ services"
 lab var products_other "Other most sold product/ service"
@@ -145,10 +145,12 @@ lab var man_fin_pra_dis "Distunction between business accounts and personal acco
 
 lab var man_ind_awa "Providing performance incentives to employees"
 
+/* REMOVED QUESTIONS
 lab var man_mark_prix "Studying competitors' prices and products in target local and international markets"
 lab var man_mark_clients "Collecting data on customer needs and satisfaction levels"
 lab var man_mark_pub "Advertising (paid) in any form"
 lab var man_mark_dig "Establishing a digital presence for the company (website or social media)"
+*/
 
 lab var inno_proc_met "New methods or technologies for producing goods/services"
 lab var inno_proc_log "New logistical procedures, delivery, or distribution of goods/services"
@@ -167,8 +169,8 @@ lab var man_source_autres "Binary question of other management strategy sources"
 
 * Section Network
 lab var net_association " Number of membership in associations"
-lab var net_size1 "Discuss company's business with suppliers"
-lab var net_size2 "Discuss company's business with clients"
+*lab var net_size1 "Discuss company's business with suppliers" REMOVED FROM QUESTIONS
+*lab var net_size2 "Discuss company's business with clients" REMOVED FROM QUESTIONS
 lab var net_size3 "Discuss company's business with other entrepreneurs"
 lab var net_size4 "Discuss company's business with friends or family" 
 
@@ -181,8 +183,8 @@ lab var net_services_confiance "Encouragement to build self-confidence in the fa
 lab var net_services_autre "Binary other situation of using entrepneurs network"
 lab var net_services_other "Example other situation of using entrepneurs network"
 
-lab var net_gender1 "Discuss company's business with female suppliers"
-lab var net_gender2 "Discuss company's business with female clients"
+*lab var net_gender1 "Discuss company's business with female suppliers" REMOVED FROM QUESTIONS
+*lab var net_gender2 "Discuss company's business with female clients" REMOVED FROM QUESTIONS
 lab var net_gender3 "Discuss company's business with other female entrepreneurs"
 lab var net_gender4 "Discuss company's business with female friends or family" 
 
@@ -192,16 +194,16 @@ lab var net_gender3_giz "Female entrepreneurs met while in GIZ"
 lab var car_efi_fin1 "Having the necessary skills to access sources of funding"
 lab var car_efi_man "Ability of managing the business"
 lab var car_efi_motiv "Ability of motivating employees"
-lab var car_efi_conf "Ability of managing conflicts"
+*lab var  "Ability of managing conflicts" REMOVED FROM QUESTIONS
 
-lab var car_loc_succ "Confidence in presenting the business and its product in public"
+*lab var car_loc_succ "Confidence in presenting the business and its product in public" REMOVED FROM QUESTIONS
 lab var car_loc_env "feeling comfortable in establishing new business contacts, including internationally"
 lab var car_loc_exp "proficiency in the administrative and logistical procedures surrounding exports"
 lab var car_loc_soin "Managing to balance personal and professional life"
 
-lab var extrovert1 "Easily establishing new relationships"
-lab var extrovert2 "Preference to work alone or with a small devoted team"
-lab var extrovert3 "Feeling exhausted after interacting with  employees, suppliers, and clients"
+*lab var extrovert1 "Easily establishing new relationships" REMOVED FROM QUESTIONS
+*lab var extrovert2 "Preference to work alone or with a small devoted team" REMOVED FROM QUESTIONS
+*lab var extrovert3 "Feeling exhausted after interacting with  employees, suppliers, and clients" REMOVED FROM QUESTIONS
 
 lab var listexp1 "List experiment"
 
@@ -256,7 +258,7 @@ lab var int_incv_autres "Example of other inconvenient that the consortium provi
 
 lab var int_contact "Number of consortium members that were contacted outside of the activities"
 
-lab var car_loc_succ "participant is well able to determine the success of her business"
+*lab var car_loc_succ "participant is well able to determine the success of her business"
 lab var car_loc_env "participant know how to determine what is happening in the internal and external environment of the company"
 lab var car_loc_exp "participant knows how to deal with exports requisities"
 
@@ -276,9 +278,8 @@ lab var int_other "example of another refusal to participate in consortia activi
 ***********************************************************************
 		*yes/no variables loop:
 local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ///
-ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_mark_prix ///
-man_mark_clients man_mark_pub man_mark_dig man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres net_services_pratiques net_services_produits ///
-net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre
+ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_per_pro man_fin_pra_dis man_ind_awa ///
+man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre
 
 label define yesno 1 "Yes" 0 "No"
 foreach var of local yesnovariables {
@@ -293,7 +294,7 @@ foreach var of local lowhighvar {
 	label values `var' lowhigh
 }
 		*agree or not variables
-local agreenotvar car_efi_fin1 car_efi_man car_efi_motiv car_efi_conf car_loc_succ car_loc_env car_loc_exp car_loc_soin extrovert1 extrovert2 extrovert3 //
+local agreenotvar car_efi_fin1 car_efi_man car_efi_motiv  car_loc_env car_loc_exp car_loc_soin //
 
 label define agreenot 1 "strongly disagree" 7 "strongly agree"
 foreach var of local agreenotvar {

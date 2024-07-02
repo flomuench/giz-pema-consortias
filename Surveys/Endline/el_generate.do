@@ -74,9 +74,12 @@ lab var inno_mot_eve "Event, international fair"
 generate inno_mot_client = regexm(inno_mot, "4")
 lab var inno_mot_client "Clients"
 
-lab var inno_mot_other "Binary other source of inspiration"
+generate inno_mot_dummyother = regexm(inno_mot, "5")
+lab var inno_mot_dummyother "Binary other source of inspiration"
 
-generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_other
+lab var inno_mot_other "Example of other source of inspiration"
+
+generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_dummyother
 lab var inno_mot_client "Total of innovation inspirations"
 
 drop inno_mot
@@ -131,7 +134,7 @@ label var export_1 "Direct export"
 label var export_2 "Indirect export"
 label var export_3 "No export"
 
-/* 
+
 generate export_41 = regexm(export_4, "1")
 
 generate export_42 = regexm(export_4, "2")
@@ -149,7 +152,7 @@ label var export_42 "Did not find clients abroad"
 label var export_43 "Too complicated"
 label var export_44 "Requires too much investment"
 label var export_45 "Other"
-*/
+
 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
@@ -193,37 +196,34 @@ egen miss_manindicators = rowmiss(man_fin_per_ind man_fin_per_pro man_fin_per_qu
 	* section 7: management practices
 egen miss_manprac = rowmiss(man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
 
-	* section 8: marketing management
-egen miss_mark = rowmiss(man_mark_prix man_mark_clients man_mark_pub man_mark_dig)
-
-	* section 9 marketing source
+	* section 8: marketing source
 egen miss_marksource = rowmiss(man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres)
 
-	* section 10: network size
-egen miss_network = rowmiss(net_association net_size1 net_size2 net_size3 net_size4 net_gender1 net_gender2 net_gender3 net_gender4 net_gender3_giz)
+	* section 8: network size
+egen miss_network = rowmiss(net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz)
 
-	* section 11: network services
+	* section 10: network services
 egen miss_networkserv = rowmiss(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre)
 
-	*section 12: netcoop
+	*section 11: netcoop
 egen miss_netcoop = rowmiss (net_coop_pos net_coop_neg)
 
-	*section 13: car_efi
-egen miss_carefi = rowmiss(car_efi_conf car_efi_fin1 car_efi_man car_efi_motiv)
+	*section 12: car_efi
+egen miss_carefi = rowmiss(car_efi_fin1 car_efi_man car_efi_motiv)
 	
-	*section 14: car_loc
-egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin car_loc_succ)
+	*section 13: car_loc
+egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin)
 
-	*section 15: extrovert & listexp
-egen miss_extlist = rowmiss(extrovert1 extrovert2 extrovert3 listexp1)
+	*section 14: listexp
+egen miss_extlist = rowmiss(listexp1)
 	
-	* section 16: accounting/KPI
+	* section 15: accounting/KPI
 egen miss_accounting = rowmiss(comp_benefice2023 comp_benefice2024 comp_ca2023 comp_ca2024 compexp_2023 compexp_2024)
 
 	
 
 	* create the sum of missing values per company
-gen missing_values = miss_inno + miss_export + miss_exp_pracc + miss_eri_ssa + miss_empl + miss_manindicators + miss_manprac + miss_mark + miss_marksource + miss_network + miss_networkserv + miss_netcoop + miss_carefi + miss_carloc + miss_extlist + miss_accounting
+gen missing_values = miss_inno + miss_export + miss_exp_pracc + miss_eri_ssa + miss_empl + miss_manindicators + miss_manprac + miss_marksource + miss_network + miss_networkserv + miss_netcoop + miss_carefi + miss_carloc + miss_extlist + miss_accounting
 lab var missing_values "missing values per company"
 
 
