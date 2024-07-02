@@ -56,9 +56,11 @@ gen questions_needing_checks = ""
 ***********************************************************************
 * 	PART 1.2:  Identify and remove duplicates 
 ***********************************************************************
+/*
 sort id_plateforme date
 quietly by id_plateforme date:  gen dup = cond(_N==1,0,_n)
 drop if dup>1
+*/
 
 /*duplicates report id_plateforme heuredébut
 duplicates tag id_plateforme heuredébut, gen(dup)
@@ -87,6 +89,33 @@ foreach var of local 999vars {
 	replace `var' = -888 if `var' == 888
 	replace `var' = -777 if `var' == 777
 }
+
+	*remove characters added by enumerators because of words limit filter
+local innov_vars inno_exampl_produit1 inno_exampl_produit2
+foreach var of local innov_vars {
+	replace `var' = usubinstr(`var', "*", "", .)
+	replace `var' = usubinstr(`var', "+", "", .)
+	replace `var' = usubinstr(`var', ".", "", .)
+
+
+}
+
+replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "badlet les types de produit aaaaaaaaaaaaaaaaaaaaaaaaaaa"
+replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+
+/*
+	*benefits
+local bene_vars int_ben1 int_ben2 int_ben3 int_ben_autres
+foreach var of local bene_vars {
+	replace `var' = "réseautage" if strpos(lower(`var'), "réseautage") | strpos(lower(`var'), "reseautage") | strpos(lower(`var'), "réseaux") | strpos(lower(`var'), "relation") | strpos(lower(`var'), "relations")
+	replace `var' = "apprentissage" if strpos(lower(`var'), "apprentissage") | strpos(lower(`var'), "learning")
+	replace `var' = "développement de l'entreprise" if strpos(lower(`var'), "développement de l'entreprise") | strpos(lower(`var'), "business development")
+	replace `var' = "échange d'expériences" if strpos(lower(`var'), "échange d'expériences") | strpos(lower(`var'), "exchange experiences" | strpos(lower(`var'), "exchange"))
+	replace `var' = "coopération" if strpos(lower(`var'), "coopération") | strpos(lower(`var'), "collaboration")
+	replace `var' = "ouverture sur des nouveaux marchés" if strpos(lower(`var'), "ouverture sur des nouveaux marchés") | strpos(lower(`var'), "new markets")
+}
+*/
+
 
 	* make manual changes
 		* ca

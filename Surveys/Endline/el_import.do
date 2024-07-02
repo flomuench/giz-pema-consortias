@@ -24,8 +24,8 @@ import excel "${el_raw}/el_raw.xlsx", firstrow clear
 ***********************************************************************
 * 	PART 2:  Rename variable for code	  			
 ************************************************************************
-rename ID id_plateforme 
-rename Date date
+rename Id id_plateforme 
+drop HeureDEBUT
 rename NOMESE firmname 
 rename NOMREP repondant_endline 
 rename Firmname same_firmname
@@ -38,25 +38,25 @@ rename Firmname_el new_firmname
 rename Product el_products
 rename Autresأخرى products_other
 
-rename W inno_proc_other
+rename V inno_proc_other
 lab var inno_proc_other "Example of another innovation of process"
 
-rename Y inno_mot_other
+rename X inno_mot_other
 lab var inno_mot_other "Binary answer of other source of inspiration"
 
 // to check if not example
-rename AC export_other
+rename AB export_other
 lab var export_other "Binary answer of other reasons to not export?"
 
-rename BQ man_sources_other
+rename BL man_sources_other
 lab var man_sources_other "Example of another source of new management strategy"
 
-rename DM profit_2023_category_gain
-rename DO profit_2024_category_gain
-rename DZ int_other
+rename CY profit_2023_category_gain
+rename DA profit_2024_category_gain
+rename DL int_other
 
-rename Autres net_services_other
-rename Seriezvousenmesuredenousfo accord_q29
+rename BZ net_services_other
+rename vousenmesuredenousfournirl accord_q29
 
 ***********************************************************************
 * 	PART 3:  create + save bl_pii file	  			
