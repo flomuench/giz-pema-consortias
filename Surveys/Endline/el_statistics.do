@@ -7,7 +7,7 @@
 *	1)				progress		  		  			
 *	2)  			eligibility					 
 *	3)  			characteristics							  
-*	Authors:  	 Kaïs Jomaa, Eya Hanefi, Amira Bouziri						    				  
+*	Authors:  	 Kaïs Jomaa, Eya Hanefi, Amira Bouziri, Ayoub Chamakhi						    				  
 *	ID variaregise: 	id (example: f101)			  					  
 *	Requires: el_final.dta 
 *	Creates:  el_output.dta & endline_statistics		  
@@ -21,7 +21,7 @@ use "${el_final}/el_final", clear
 	* set directory to checks folder
 cd "$el_output"
 set graphics on
-set scheme s1color
+set scheme burd
 
 	* create pdf document
 putpdf clear
@@ -34,86 +34,86 @@ putpdf text ("Date: `c(current_date)'"), bold linebreak
 
 
 ***********************************************************************
-* 	PART 2:  Generate the visualisations		  			
+* 	PART 2:  Survey progress		  			
 ***********************************************************************
+****** Section 1: progress ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
-
-*** Section 1: Survey progress
-	*Number of firms that started survey on specific date
-format %-td date 
-graph twoway histogram date, frequency width(1) ///
-		tlabel(11jan2023(1)20feb2023, angle(60) labsize(vsmall)) ///
-		ytitle("responses") ///
-		title("{bf:Endline survey: number of responses}") 
-gr export el_survey_response_byday.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_survey_response_byday.png
-putpdf pagebreak	
-
-	* response rate by treatment status
-graph bar (count) survey_completed, over(treatment) blabel(total, format(%9.0fc)) ///
-	legend(pos(6) row(1) label(1 "Answers completed")) ///
-	title("Endline completed", pos(12)) note("Date: `c(current_date)'") ///
-	ytitle("number of firms") ///
-	ylabel(0(10)100, nogrid)
-graph export el_responserate_tstatus_abs.png, replace
+{
+* total number of firms starting the survey
+graph bar (count), over(treatment) blabel(total, format(%9.0fc)) ///
+	title("Number of companies that at least started to fill the survey",size(medium) pos(12)) note("Date: `c(current_date)'") ///
+	ytitle("Number of at least initiated survey response")
+graph export total.png, width(5000) replace
 putpdf paragraph, halign(center)
-putpdf image el_responserate_tstatus_abs.png
+putpdf image total.png, width(5000)
 putpdf pagebreak
 
-*Genarte shre of answers
-sum id_plateforme 
-gen share1= (`r(N)'/176)*100
-
-count if survey_completed==1
-gen share2= (`r(N)'/176)*100
-
-count if validation==1
-gen share3= (`r(N)'/176)*100
-
-* Share of firms that started the survey
-graph bar share*, blabel(total, format(%9.2fc)) ///
-	legend (pos(6) row(6) label(1 "Started answering") label (2 "Answers completed") ///
-	label  (3 "Answers validated")) ///
-	title("Started, Completed, Validated") note("Date: `c(current_date)'") ///
-	ytitle("share of total sample") ///
-	ylabel(0(10)100, nogrid) 
-graph export el_responserate.png, replace
+*Number of validated
+graph bar (count) if attest ==1, over(treatment) blabel(total, format(%9.0fc)) ///
+	title("Number of companies that have validated their answers", pos(12)) note("Date: `c(current_date)'") ///
+	ytitle("Number of entries")
+graph export valide.png, width(5000) replace
 putpdf paragraph, halign(center)
-putpdf image el_responserate.png
+putpdf image valide.png, width(5000)
 putpdf pagebreak
 
-drop share1 share2 share3
 
-
-	* response rate by treatment status
-graph bar (sum) survey_completed validation, over(treatment) blabel(total, format(%9.2fc)) ///
-	legend (pos(6) row(1) label(1 "Answers completed") ///
-	label(2 "Answers validated")) ///
-	title("Completed & validated by treatment status") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries") ///
-	ylabel(0(10)100, nogrid) 
-graph export el_responserate_tstatus.png, replace
+*share
+count if id_plateforme !=.
+gen share_started= (`r(N)'/176)*100
+graph bar share_started, blabel(total, format(%9.2fc)) ///
+	title("Share of companies that at least started to fill the survey") note("Date: `c(current_date)'") ///
+	ytitle("Number of complete survey response")
+graph export responserate1.png, width(5000) replace
 putpdf paragraph, halign(center)
-putpdf image el_responserate_tstatus.png
+putpdf image responserate1.png, width(5000)
 putpdf pagebreak
+drop share_started
 
-	* How the company responded to the questionnaire
-graph bar (count), over(survey_phone) over(treatment) blabel(total) ///
+	* total number of firms starting the survey
+count if attest==1
+gen share= (`r(N)'/176)*100
+graph bar share, blabel(total, format(%9.2fc)) ///
+	title("Proportion of companies that have validated their answers" ,size(medium) pos(12)) note("Date: `c(current_date)'") ///
+	ytitle("Number of entries")
+graph export responserate2.png, width(5000) replace
+putpdf paragraph, halign(center)
+putpdf image responserate2.png, width(5000)
+putpdf pagebreak
+drop share
+
+	 *Manière avec laquelle l'entreprise a répondu au questionnaire
+graph bar (count), over(survey_phone) blabel(total) ///
 	name(formation, replace) ///
-	ytitle("Number of companies") ///
-	title("How the company responded to the questionnaire")
-graph export el_type_of_surveyanswer.png, replace
+	ytitle("Number of firms") ///
+	title("How the company responded to the questionnaire?")
+graph export type_of_surveyanswer.png, width(5000) replace
 putpdf paragraph, halign(center)
-putpdf image el_type_of_surveyanswer.png
+putpdf image type_of_surveyanswer.png, width(5000)
 putpdf pagebreak
+
+	*timeline of responses
+format %-td date 
+histogram date, frequency addlabel width(0.5) ///
+		tlabel(20jun2024(1)04jul2024, angle(60) labsize(vsmall)) ///
+		ytitle("Answers") ///
+		title("{bf:Endline survey: number of responses}") 
+gr export survey_response_byday.png, replace
+putpdf paragraph, halign(center) 
+putpdf image survey_response_byday.png
+putpdf pagebreak
+
+}
 
 	* Number of missing answers per section - all
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting miss_eri_ssa, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(3) label(1 "Innovation ") label(2 "Network ") ///
-	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ") label(7 "SSA Export readiness")) ///
+graph hbar (sum) miss_inno miss_export miss_exp_pracc miss_eri_ssa miss_empl miss_manindicators miss_manprac miss_marksource miss_network miss_networkserv miss_netcoop miss_carefi miss_carloc miss_extlist miss_accounting, over(treatment) ///
+blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(5) row(6) label(1 "Innovation") label(2 "Export") ///
+	label(3 "Export practices") label(4 "Export readiness") ///
+	label(5 "Employees ") label(6 "Management Indicators") label(7 "Management prac") ///
+	label(8 "Marketing Innov") label(9 "Network") label(10 "Network services") label(11 "Network coop") ///
+	label(12 "Efficency") label(13 "Locus of control") label(14 "List experiment") label(15 "Accounting")) ///
 	title("Sum of missing answers per section") ///
 	subtitle("sample: all initiated surveys") 
 gr export el_missing_asnwers_all.png, replace
@@ -122,96 +122,426 @@ putpdf image el_missing_asnwers_all.png
 putpdf pagebreak
 
 	* Number of missing answers per section - validated
-graph hbar (sum) miss_inno miss_network miss_management miss_eri miss_gender miss_accounting miss_eri_ssa if validation == 1, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(3) label(1 "Innovation ") label(2 "Network ") ///
-	label(3 "Management") label(4 "Export readiness") ///
-	label(5 "Gender ") label(6 "Accounting ") label(7 "SSA Export readiness")) ///
-	title("Sum of missing answers per section") ///
+graph hbar (sum) miss_inno miss_export miss_exp_pracc miss_eri_ssa miss_empl miss_manindicators miss_manprac miss_marksource miss_network miss_networkserv miss_netcoop miss_carefi miss_carloc miss_extlist miss_accounting if attest == 1, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(5) row(6) label(1 "Innovation") label(2 "Export") ///
+	label(3 "Export practices") label(4 "Export readiness") ///
+	label(5 "Employees ") label(6 "Management Indicators") label(7 "Management prac") ///
+	label(8 "Marketing Innov") label(9 "Network") label(10 "Network services") label(11 "Network coop") ///
+	label(12 "Efficency") label(13 "Locus of control") label(14 "List experiment") label(15 "Accounting")) ///
 	subtitle("sample: all validated surveys")
 gr export el_missing_asnwers_validated.png, replace
 putpdf paragraph, halign(center) 
 putpdf image el_missing_asnwers_validated.png
 putpdf pagebreak
 
+***********************************************************************
+* 	PART 3:  Vizualisations	  			
+***********************************************************************
 ****** Section 2: innovation ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
 
-	* Type of innovation
-graph hbar (mean) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
-	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
-	label  (5 "No innovation")) ///
-	title("Type of innovation") ///
-	ylabel(0(0.25)1, nogrid) 
-gr export el_typeinnovation_share.png, replace
+	*Products or services innovations
+betterbar inno_improve inno_new inno_both inno_none, over(treatment) barlab ci ///
+	title("Products or services innovations", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_psinnovation.png, width(6000) replace 
 putpdf paragraph, halign(center) 
-putpdf image el_typeinnovation_share.png
-putpdf pagebreak	
+putpdf image el_psinnovation.png, width(6000)
+putpdf pagebreak
 
-graph hbar (sum) inno_produit inno_process inno_lieu inno_commerce inno_aucune, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Innovation product modification") label (2 "Innovation process modification") ///
-	label  (3 "Innovation place of work") label  (4 "Innovation marketing") ///
-	label  (5 "No innovation")) ///
-	title("Type of innovation") 
-gr export el_typeinnovation.png, replace
+	*Type of innovations
+betterbar inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres, over(treatment) barlab ci ///
+	title("Type of innovations", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_typeinnovation.png, width(6000) replace 
 putpdf paragraph, halign(center) 
-putpdf image el_typeinnovation.png
-putpdf pagebreak	
+putpdf image el_typeinnovation.png, width(6000)
+putpdf pagebreak
+
+	*Source of the innovation	
+betterbar inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother, over(treatment) barlab ci ///
+	title("Source of innovations", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_sourceinnovation.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_sourceinnovation.png, width(6000)
+putpdf pagebreak
 
 
-*Source of the innovation	
-graph hbar (mean) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
-	label  (3 "Business contact") label  (4 "Event") ///
-	label  (5 "Employee") label  (6 "Standards and norms")) ///
-	title("Source of innovation") ///
-	ylabel(0(0.1)0.5, nogrid) 
-	gr export el_source_inno_share.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image el_source_inno_share.png
-	putpdf pagebreak
+* Entreprise model
+graph bar (count), over(entreprise_model) over(treatment)  blabel(total, format(%9.1fc) gap(-0.2)) ///
+	legend (pos(6) row(3)) ///
+	subtitle("Entreprise model")
+gr export el_entreprise_model.png, replace
+putpdf paragraph, halign(center) 
+putpdf image el_entreprise_model.png
+putpdf pagebreak
 
-graph hbar (sum) inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Personal idea") label (2 "Consultant") ///
-	label  (3 "Business contact") label  (4 "Event") ///
-	label  (5 "Employee") label  (6 "Standards and norms")) ///
-	title("Source of innovation") 
-	gr export el_source_inno.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image el_source_inno.png
-	putpdf pagebreak
-	
-	
-****** Section 3: Networks ******
+****** Section 3: Export ******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 3: Networks"), bold
-	
-	* Number of female and male CEO met
-graph bar (mean) net_nb_m net_nb_f , over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
-	title("Number of female vs male CEO met") ///
-	legend(order(1 "Male CEO" 2 "Female CEO") pos(6))
- gr export el_mean_CEO_met.png, replace
+putpdf text ("Section 3: Export"), bold
+
+* Export: direct, indirect, no export
+graph bar (mean) export_1 export_2 export_3, over(treatment) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
+    legend (pos(6) row(6) label (1 "Direct export") label (2 "Indirect export") ///
+	label (3 "No export")) ///
+	title("Firm & export status", pos(12)) 
+gr export el_firm_exports.png, width(5000) replace
 putpdf paragraph, halign(center) 
-putpdf image el_mean_CEO_met.png
-putpdf pagebreak	
+putpdf image el_firm_exports.png, width(5000)
+putpdf pagebreak
+
+* Reasons for not exporting
+graph bar (mean) export_41 export_42 export_43 export_44 export_45, over(treatment) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
+    legend (pos(6) row(6) label (1 "Not profitable") label (2 "Did not find clients abroad") ///
+	label (3 "Too complicated") label (4 "Requires too much investment") label (5 "Binary other reason")) ///
+	ylabel(0(20)100, nogrid)  ///
+	title("Reasons for not exporting", pos(12)) 
+gr export el_no_exports.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_no_exports.png, width(5000)
+putpdf pagebreak
+
+*No of export destinations
+sum exp_pays
+stripplot exp_pays, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Number of countries") ///
+		title("Number of export countries" , pos(12)) ///
+		name(el_exp_pays, replace)
+    gr export el_exp_pays.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_exp_pays.png, width(5000)
+	putpdf pagebreak
 	
-		* male
+stripplot exp_pays, by(treatment) jitter(4) vertical ///
+		ytitle("Number of countries") ///
+		title("Number of export countries",size(medium) pos(12)) ///
+		name(el_exp_pays_treat, replace)
+    gr export el_exp_pays_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_exp_pays_treat.png, width(5000)
+	putpdf pagebreak
+
+	twoway (kdensity exp_pays if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity exp_pays if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of export countries", pos(12) size(medium)) ///
+	   xtitle("Number of countries",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_exp_pays_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_exp_pays_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box exp_pays if exp_pays > 0, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Number of export countries", pos(12))
+gr export el_exp_pays_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_exp_pays_box.png, width(5000)
+putpdf pagebreak
+
+*No of export destinations SSA
+sum exp_pays_ssa
+stripplot exp_pays, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Number of countries") ///
+		title("Number of export countries SSA" , pos(12)) ///
+		name(el_exp_paysSSA, replace)
+    gr export el_exp_paysSSA.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_exp_paysSSA.png, width(5000)
+	putpdf pagebreak
+	
+stripplot exp_pays_ssa, by(treatment) jitter(4) vertical ///
+		ytitle("Number of countries") ///
+		title("Number of export countries SSA",size(medium) pos(12)) ///
+		name(el_exp_paysSSA_treat, replace)
+    gr export el_exp_paysSSA_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_exp_paysSSA_treat.png, width(5000)
+	putpdf pagebreak
+
+	twoway (kdensity exp_pays_ssa if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity exp_pays_ssa if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of export countries SSA", pos(12) size(medium)) ///
+	   xtitle("Number of countries",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_exp_paysSSA_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_exp_paysSSA_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box exp_pays_ssa if exp_pays_ssa > 0, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Number of export countries SSA", pos(12))
+gr export el_exp_paysSSA_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_exp_paysSSA_box.png, width(5000)
+putpdf pagebreak
+
+*International clients
+sum clients
+stripplot clients, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Number of clients") ///
+		title("Number of International clients" , pos(12)) ///
+		name(el_clients, replace)
+    gr export el_clients.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_clients.png, width(5000)
+	putpdf pagebreak
+	
+stripplot clients, by(treatment) jitter(4) vertical ///
+		ytitle("Number of clients") ///
+		title("Number of International client",size(medium) pos(12)) ///
+		name(el_clients_treat, replace)
+    gr export el_clients_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_clients_treat.png, width(5000)
+	putpdf pagebreak
+
+	twoway (kdensity clients if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity clients if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of International clients", pos(12) size(medium)) ///
+	   xtitle("Number of clients",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_clients_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_clients_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box clients if clients > 0, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Number of International clients", pos(12))
+gr export el_clients_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_clients_box.png, width(5000)
+putpdf pagebreak
+
+*International clients SSA
+sum clients_ssa
+stripplot clients_ssa, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Number of clients") ///
+		title("Number of International clients SSA" , pos(12)) ///
+		name(el_clientsSSA, replace)
+    gr export el_clientsSSA.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_clientsSSA.png, width(5000)
+	putpdf pagebreak
+	
+stripplot clients_ssa, by(treatment) jitter(4) vertical ///
+		ytitle("Number of clients") ///
+		title("Number of International clients SSA" , pos(12) size(medium)) ///
+		name(el_clientsSSA_treat, replace)
+    gr export el_clientsSSA_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_clientsSSA_treat.png, width(5000)
+	putpdf pagebreak
+
+	twoway (kdensity clients_ssa if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity clients_ssa if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   xtitle("Number of International clients SSA",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_clientsSSA_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_clientsSSA_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box clients_ssa if clients_ssa > 0, over(treatment) blabel(total, format(%9.2fc)) ///
+ 	title("Number of International clients SSA", pos(12))
+gr export el_clientsSSA_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_clientsSSA_box.png, width(5000)
+putpdf pagebreak
+
+*International orders SSA
+sum clients_ssa_commandes
+stripplot clients_ssa_commandes, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Number of orders from SSA") ///
+		title("Number of orders" , pos(12)) ///
+		name(el_ordersSSA, replace)
+    gr export el_ordersSSA.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_ordersSSA.png, width(5000)
+	putpdf pagebreak
+	
+stripplot clients_ssa_commandes, by(treatment) jitter(4) vertical ///
+		ytitle("Number of orders from SSA") ///
+		title("Number of orders",size(medium) pos(12)) ///
+		name(el_ordersSSA_treat, replace)
+    gr export el_ordersSSA_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_ordersSSA_treat.png, width(5000)
+	putpdf pagebreak
+
+	twoway (kdensity clients_ssa_commandes if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity clients_ssa_commandes if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of orders from SSA", pos(12) size(medium)) ///
+	   xtitle("Number of orders",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_ordersSSA_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_ordersSSA_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box clients_ssa_commandes if clients_ssa_commandes > 0, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Number of orders from SSA", pos(12))
+gr export el_ordersSSA_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_ordersSSA_box.png, width(5000)
+putpdf pagebreak
+	
+*export practices
+betterbar exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent, over(treatment) barlab ci ///
+	title("Export practices", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_expprac.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_expprac.png, width(6000)
+putpdf pagebreak
+
+*export practices SSA
+betterbar ssa_action1 ssa_action2 ssa_action3 ssa_action4, over(treatment) barlab ci ///
+	title("Export practices in SSA", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_exppracSSA.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_exppracSSA.png, width(6000)
+putpdf pagebreak
+
+*export cost perception
+	 betterbar expp_cost, over(treatment) barlab ci ///
+    title("Perception of export costs", pos(12)) note("1 = very low, 7= very high", pos(6)) ///
+    ylabel(0(1)7, nogrid) ///
+    ytitle("Mean perception of export costs")
+gr export el_export_costs.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_export_costs.png, width(5000)
+putpdf pagebreak
+
+*export benefits perception
+	 betterbar expp_ben, over(treatment) barlab ci ///
+    title("Perception of export benefits", pos(12)) note("1 = very low, 7= very high", pos(6)) ///
+    ylabel(0(1)7, nogrid) ///
+    ytitle("Mean perception of export benefits")
+gr export el_export_bene.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_export_bene.png, width(5000)
+putpdf pagebreak
+
+****** Section 4: The Firm ******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 4: The Firm"), bold
+
+*empl
+twoway (kdensity employes if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity employes if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of full-time employees", pos(12)) ///
+	   xtitle("Number of full-time employees",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_fte_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_fte_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+*female empl
+twoway (kdensity car_empl1 if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity car_empl1 if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of female employees", pos(12)) ///
+	   xtitle("Number of female employees",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_ftefemale_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_ftefemale_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+*youth
+twoway (kdensity car_empl2 if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity car_empl2 if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of young employees (less than 36)", pos(12)) ///
+	   xtitle("Number of young employees (less than 36)",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_fteyouth_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_fteyouth_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+****** Section 5: Management******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 5: Management"), bold
+
+*performance indicators
+betterbar man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre, over(treatment) barlab ci ///
+	title("Performance indicators", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_perfindic.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_perfindic.png, width(6000)
+putpdf pagebreak
+
+*performance frequency
+betterbar man_fin_per_fre, over(treatment) barlab ci ///
+	title("KPIs tracking frequency", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_KPItrack.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_KPItrack.png, width(6000)
+putpdf pagebreak
+
+*management activities
+betterbar man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis, over(treatment) barlab ci ///
+	title("Management activities", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_manact.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_manact.png, width(6000)
+putpdf pagebreak
+
+*marketing source
+betterbar man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres, over(treatment) barlab ci ///
+	title("Marketing strategies source", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_marksource.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_marksource.png, width(6000)
+putpdf pagebreak
+
+****** Section 6: Network******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 6: Network"), bold
+
+*associations
+twoway (kdensity net_association if treatment == 0, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity net_association if treatment == 1, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Number of formal asssociations membership", pos(12)) ///
+	   xtitle("Number of formal asssociations membership",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_assoc_treat_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_assoc_treat_kdens.png, width(5000)
+putpdf pagebreak
+
+* male
 tw ///
-	(kdensity net_nb_m if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
-	(kdensity net_nb_m if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
+	(kdensity net_size3_m if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_size3_m if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
 	, ///
-	xtitle("Male CEOs met", size(vsmall)) ///
+	xtitle("Male entrepreneurs discussions about business", size(vsmall)) ///
 	ytitle("Density", size(vsmall)) ///	
 	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
 	name(network_density_m, replace)
 		
 		* female
 tw ///
-	(kdensity net_nb_f if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
-	(kdensity net_nb_f if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
+	(kdensity net_gender3 if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_gender3 if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
 	, ///
-	xtitle("Female CEOs met", size(vsmall)) ///
+	xtitle("Female entrepreneurs discussions about business", size(vsmall)) ///
 	ytitle("Densitiy", size(vsmall)) ///	
 	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
 	name(network_density_f, replace)
@@ -222,225 +552,115 @@ putpdf paragraph, halign(center)
 putpdf image el_network_density.png
 putpdf pagebreak	
 
-	* Quality of advice 
-		* distribution
-sum net_nb_qualite,d
-histogram net_nb_qualite, width(1) frequency addlabels xlabel(0(1)10, nogrid format(%9.0f)) discrete ///
-	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
-	ytitle("No. of firms") ///
-	xtitle("Quality of advice of the business network") ///
-	ylabel(0(5)50 , nogrid) ///
-	text(100 `r(mean)' "Mean", size(small) place(e)) ///
-	text(100 `r(p50)' "Median", size(small) place(e))
-gr export el_quality_advice.png, replace
+* Number of discussions with family/friends
+betterbar net_size4_m net_gender4, over(treatment) barlab ci  ///
+	title("Discussions about business")
+ gr export el_mean_fafri_met.png, replace
 putpdf paragraph, halign(center) 
-putpdf image el_quality_advice.png
-putpdf pagebreak
-
-		* distribution by treatment status
+putpdf image el_mean_fafri_met.png
+putpdf pagebreak	
+	
+		* male
 tw ///
-	(kdensity net_nb_qualite if treatment == 1, lp(l) lc(maroon) yaxis(2) bw(0.5)) ///
-	(histogram net_nb_qualite if treatment == 1, freq w(.5) recast(scatter) msize(small) mc(green)) ///
-	(kdensity net_nb_qualite if treatment == 0, lp(l) lc(navy) yaxis(2) bw(0.5)) ///
-	(histogram net_nb_qualite if treatment == 0, freq w(.5) recast(scatter) msize(small) mc(green)) ///
+	(kdensity net_size4_m if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_size4_m if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
 	, ///
-	xtitle("CEO network quality: treatment vs. control", size(vsmall)) ///
-	ytitle("Densitiy", axis(2) size(vsmall)) ///	
+	xtitle("Male family/friends discussions about business", size(vsmall)) ///
+	ytitle("Density", size(vsmall)) ///	
 	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
-	name(network_qualite_den, replace)
-gr export el_quality_advice_treatment.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_quality_advice_treatment.png
-putpdf pagebreak
-
-	* Interactions between CEO	
-graph bar (mean) net_coop_pos net_coop_neg, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Positive answers for the perception of interactions between CEOs") label(2 "Negative answers for the perception of interactions between CEOs")) ///
-	title("Perception of interactions between CEOs") ///
-	ylabel(0(1)3, nogrid) 
-gr export el_perceptions_interactions.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_perceptions_interactions.png
-putpdf pagebreak
+	name(network_density_fafrim, replace)
+		
+		* female
+tw ///
+	(kdensity net_gender4 if treatment == 1, lp(l) lc(maroon) bw(0.5)) ///
+	(kdensity net_gender4 if treatment == 0, lp(l) lc(navy) bw(0.5)) ///
+	, ///
+	xtitle("Female family/friends discussions about business", size(vsmall)) ///
+	ytitle("Densitiy", size(vsmall)) ///	
+	legend(symxsize(small) order(1 "Treatment" 2 "Control")  pos(6) row(1)) ///
+	name(network_density_fafrif, replace)
 	
-graph hbar netcoop7 netcoop2 netcoop1 netcoop3 netcoop9 netcoop8 netcoop10 netcoop4 netcoop6 netcoop5, over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
-	legend (pos(6) row(6) label (1 "Trust") label(2 "Partnership") ///
-	label(3 "Communicate") label(4 "Win") label(5 "Power") ///
-	label(6 "Connect") label(7 "Opponent") label(8 "Dominate") ///
-	label(9 "Beat") label(10 "Retreat")) ///
-	title("Perception of interactions between CEOs") ///
-	ylabel(0(0.5)0.7, nogrid) 
-gr export el_perceptions_interactions_details.png, replace
+gr combine network_density_fafrim network_density_fafrif, name(el_network_densityfafri, replace) ycommon
+gr export el_network_densityfafri.png, replace
 putpdf paragraph, halign(center) 
-putpdf image el_perceptions_interactions_details.png
+putpdf image el_network_densityfafri.png
 putpdf pagebreak
 
-****** Section 3: Management practices ****** 
+* Number of discussions with m/f other entrepreneurs
+betterbar net_size3_m net_gender3, over(treatment) barlab ci  ///
+	title("Entrepneurship discussions", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+ gr export el_mean_entrepreneurs_met.png, replace
+putpdf paragraph, halign(center) 
+putpdf image el_mean_entrepreneurs_met.png
+putpdf pagebreak
+
+*consortium femme female met
+*efficency 
+sum net_gender3_giz,d
+histogram net_gender3_giz, width(1) frequency addlabels xlabel(0(2)30, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
+	title("Female entrepneurs met during consortia activities", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal)) ///
+	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(100 `r(p50)' "Median", size(vsmall) place(w))
+graph export el_femmet.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_femmet.png, width(6000)
+putpdf pagebreak
+
+*net services
+betterbar net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre, over(treatment) barlab ci ///
+	title("Network services", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_netserv.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_netserv.png, width(6000)
+putpdf pagebreak
+
+* Interactions between CEO	
+betterbar net_coop_pos net_coop_neg, over(treatment) barlab ci ///
+	title("Perception of interactions", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_netcoop.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_netcoop.png, width(6000)
+putpdf pagebreak
+
+*net coop
+betterbar netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10, over(treatment) barlab ci ///
+	title("Network interactions", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_netcoop.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_netcoop.png, width(6000)
+putpdf pagebreak
+
+****** Section 5: Entrepneurship******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 3: Management practices"), bold
+putpdf text ("Section 6: Entrepneurship"), bold
 
-		* Key Performance indicators (KPIs)
-graph hbar (percent), over(man_fin_num, relabel(1 "aucun" 2 "1-2" 3 "3-9" 4 "10+")) over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-    title("Number of KPIs") ///
-	ylabel(0(5)50, nogrid)
-gr export el_performance.png, replace
+*efficency 
+betterbar car_efi_fin1 car_efi_man car_efi_motiv, over(treatment) barlab ci ///
+	title("Entrepneurship efficency", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_entrep_effi.png, width(6000) replace 
 putpdf paragraph, halign(center) 
-putpdf image el_performance.png
+putpdf image el_entrep_effi.png, width(6000)
 putpdf pagebreak
 
-		* KPIs frequency
-graph hbar (percent), over(man_fin_per_fre, relabel(1 "jamais" 2 "annuellement" 3 "mensuellement" 4 "hebdomadaire" 5 "quotidiennement")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2))  ///
-    legend(pos(2) row(3) size(vsmall)) ///
-    title("Frequency KPIs") ///
-	ylabel(0(10)100, nogrid)
-gr export el_performance_frequency.png, replace
+*locus of control 
+betterbar car_loc_env car_loc_exp car_loc_soin, over(treatment) barlab ci ///
+	title("Entrepneurship Locus", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export el_entrep_loc.png, width(6000) replace 
 putpdf paragraph, halign(center) 
-putpdf image el_performance_frequency.png
+putpdf image el_entrep_loc.png, width(6000)
 putpdf pagebreak
 
-		* Frequency employees performance
-graph hbar (percent), over(man_hr_ind, relabel(1 "never" 2 "annually" 3 "quartely" 4 "monthly" 5 "weekly+")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(2) row(3) size(vsmall)) ///
-    title("Frequency Employees Performance") ///
-	ylabel(0(10)100, nogrid)
-gr export el_performance_employees.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_performance_employees.png
-putpdf pagebreak
-
-
-	/*	* Employees Incentives
-graph hbar (mean) man_hr_obj, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend (pos(2) row(3) size(vsmall)) ///
-    title ("Employees Incentives") ///
-*/ 
-
-*Employees motivation
-graph hbar (percent), over(man_hr_pro, relabel(1 "individual performance + firm" 2 "individual performance" 3 "other factors" 4 "None")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(2) row(3) size(vsmall)) ///
-    title("Employees Motivation") ///
-	ylabel(0(10)100, nogrid)
-gr export el_motivation_employees.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_motivation_employees.png
-putpdf pagebreak
-
-		* Employees goal awareness
-graph hbar (percent), over(man_ind_awa, relabel(1 "seniors" 2 "most seniors + few employees" 3 "most seniors + most employees" 4 "all seniors + all employees")) over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-    legend(pos(2) row(3) size(vsmall)) ///
-    title("Employmees Awareness of Firms' Goals") ///
-	ylabel(0(10)100, nogrid)
-gr export el_goal_awa.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_goal_awa.png
-putpdf pagebreak
-
-		* Source of new management strategies
-graph bar (mean) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
-	label  (3 "Employees") label  (4 "Family") ///
-	label  (5 "Event") label  (6 "No new strategy") label (7 "Other sources")) ///
-	title("Source of New Management Strategies") ///
-	ylabel(0(0.25)1, nogrid) 
-	gr export el_source_share_strategy.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image el_source_share_strategy.png
-	putpdf pagebreak
-
-
-graph bar (sum) man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7,over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label(1 "Consultant") label (2 "Business contact") ///
-	label  (3 "Employees") label  (4 "Family") ///
-	label  (5 "Event") label  (6 "No new strategy") label (7 "Other sources")) ///
-	title("Source of New Management Strategies") 
-	gr export el_source_strategy.png, replace
-	putpdf paragraph, halign(center) 
-	putpdf image el_source_strategy.png
-	putpdf pagebreak
-
-****** Section 4: Export management and readiness ******
-putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 4: Export readiness"), bold
-
-	* Export Knowledge questions
-graph hbar (mean) exp_kno_ft_co exp_kno_ft_ze, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(1) label (1 "COMESA") label(2 "ZECLAF") size(vsmall)) ///
-	title("Export Knowledge") ///
-	ylabel(0(0.2)1, nogrid)    
-gr export el_ex_k.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_ex_k.png
-putpdf pagebreak	
-	
-	* Export management/readiness
-graph bar (mean) exp_pra_cible exp_pra_plan exp_pra_mission exp_pra_douane exp_pra_foire exp_pra_rexp exp_pra_sci, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	legend (pos(6) row(4) label (1 "Analysis of target markets") label(2 "Develop export plan") ///
-	label(3 "Trade mission to target market") label(4 "Access customs website") label(5 "Participate in international trade fairs") ///
-	label(6 "Employee for export activities") label(7 "Work with an international trading company")size(small)) ///
-	title("Export Readiness Practices") ///
-	ylabel(0(0.25)1, nogrid)    
-gr export el_erp.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_erp.png
-putpdf pagebreak	
-
-
-	* Export preparation investment	
-egen exprep_inv_95p = pctile(exprep_inv), p(95)
-graph bar exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) blabel(total, format(%9.2fc)) ///
-	title("Investment in export readiness")
-gr export el_bar_exprep_inv.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_bar_exprep_inv.png
-putpdf pagebreak
-
-stripplot exprep_inv if exprep_inv<exprep_inv_95p, over(treatment) vertical ///
-	title("Investment in export readiness")
-gr export el_strip_exprep_inv.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_strip_exprep_inv.png
-putpdf pagebreak	
-
-	* Export costs perception	
-graph hbar (mean) exprep_couts, over(treatment) blabel(total, format(%9.1fc) gap(-0.2)) ///
-	title("Export preparation costs") ///
-	ylabel(0(1)10, nogrid)    
-gr export el_exprep_couts.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_exprep_couts.png
-putpdf pagebreak	
-
-****** Section 5: Characteristics of the company****** 
-putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 5: Entrepreneurial empowerment"), bold
- 
-	* Locus of efficience
-graph hbar (mean) car_efi_conv car_efi_fin1 car_efi_nego, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) /// 
-	legend (pos(6) row(9) label(1 "Able to motivate the employees in my company") label(2 "Able to attract customers for my business") ///
-	label(3 "Have the skills to access new sources of funding")size(vsmall)) ///
-	title("Locus of efficience for female entrepreuneurs") ///
-	ylabel(0(1)5, nogrid)    
-gr export el_locusefi.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_locusefi.png
-putpdf pagebreak
-
-
-    *Locus of control
-graph hbar (mean)  car_loc_succ car_loc_exp car_loc_env, over(treatment) blabel(total, format(%9.2fc) gap(-0.2)) ///
-	legend (pos(6) row(6) label (1 "Introduce my company & product internationally") label (2 "Master export administrative and logistic procedures") ///
-	label  (3 "Comfortable making new business contacts") ) ///
-	title("Locus of control for female entrepreuneurs") ///
-	ylabel(0(1)5, nogrid)    
-gr export el_locuscontrol.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_locuscontrol.png
-putpdf pagebreak
-        
-	
-
+*listexp
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp, over(list_group, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
+graph bar listexp1, over(list_group_el, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///
@@ -450,205 +670,295 @@ putpdf paragraph, halign(center)
 putpdf image el_bar_listexp.png
 putpdf pagebreak
 
-
-****** Section 6: Accounting section ****** 
+****** Section 6: Accounting******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 6: Accounting indicators"), bold
-
-*bar chart and boxplots of accounting variable by treatment
-     * variable ca_2022:
-egen ca_95p = pctile(ca), p(95)
-graph bar ca if ca<ca_95p, over(treatment) blabel(total, format(%9.2fc)) ///
-	title("Turnover in 2022")
-gr export el_bar_ca_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_bar_ca_2022.png
-putpdf pagebreak
-
-stripplot ca if ca<ca_95p, over(treatment) vertical ///
-	title("Turnover in 2022")
-gr export el_strip_ca_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_strip_ca_2022.png
-putpdf pagebreak
-
-     * variable ca_exp_2022:
-egen ca_exp_95p = pctile(ca_exp), p(95)
-graph bar ca_exp if ca_exp<ca_exp_95p, over(treatment) blabel(total, format(%9.2fc)) ///
-	title("Export turnover in 2022")
-gr export el_bar_ca_exp_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_bar_ca_exp_2022.png
-putpdf pagebreak
-
-stripplot ca_exp if ca_exp<ca_exp_95p , over(treatment) vertical ///
-	title("Export turnover in 2022")
-gr export el_strip_ca_exp_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_strip_ca_exp_2022.png
-putpdf pagebreak
-
-     * variable profit_2022:
-egen profit_95p = pctile(profit), p(95)
-graph bar profit if profit<profit_95p, over(treatment) blabel(total, format(%9.2fc)) ///
-	title("Profit in 2022")
-gr export el_bar_profit_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_bar_profit_2022.png
-putpdf pagebreak
-
-stripplot profit if profit<profit_95p, over(treatment) vertical ///
-	title("Profit in 2022")
-gr export el_strip_profit_2022.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_strip_profit_2022.png
-putpdf pagebreak
-
-*scatter plots between CA and CA_Exp
-scatter ca_exp ca if ca<ca_95p & ca_exp<ca_exp_95p, title("Proportion des bénéfices d'exportation par rapport au bénéfice total",size(medium))
-gr export el_scatter_ca.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_scatter_ca.png
-putpdf pagebreak
-
-*scatter plots between CA_Exp and exprep_inv
-scatter ca_exp exprep_inv if ca_exp<ca_exp_95p & exprep_inv<exprep_inv_95p, title("Part de l'investissement dans la préparation des exportations par rapport au CA à l'exportation",size(small))
-gr export el_scatter_exprep.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_scatter_exprep.png
-putpdf pagebreak
-
-*scatter plots expprep_couts and exprep_inv
-scatter  exprep_inv exprep_couts if exprep_inv<exprep_inv_95p, title("Scatter plot between perception of export costs and amount invested in exports",size(small))
-gr export el_scatter_exprep_couts.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_scatter_exprep_couts.png
-putpdf pagebreak
-
-
-****** Section 7: Employees & ASS activities ******
-putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 7: Employment & SSA activities"), bold
-
-**** Africa-related actions********************
-graph bar (mean) ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5, over(treatment) ///
-	blabel(total, format(%9.2fc) size(vsmall)) ///
-	title ("ASS activities") ///
-	ytitle("Share of affirmative firms") ///
-	legend(pos (6) col(2) label(1 "Potential client in SSA") label(2 "Commercial partner in SSA") label(3 "External finance for export costs") label(4 "Investment in sales structure") label(5 "Digital innovation or communication system") size(small))
-gr export el_ssa_action_share.png, replace
-putpdf paragraph, halign(center) 
-putpdf image el_ssa_action_share.png
-putpdf pagebreak
-
-**** Employment********************
-
- * Generate graphs to see difference of employment between baseline & midline
-*Bart chart: sum
-graph bar (sum) employes if employes >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Sum of full time employees") 
-gr export fte_details_sum_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image fte_details_sum_bar.png
-putpdf pagebreak
-
-graph bar (sum) car_empl1 if car_empl1 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-		title("Sum of female employees")  
-gr export fte_femmes_details_sum_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image fte_femmes_details_sum_bar.png
-putpdf pagebreak
-
-graph bar (sum) car_empl4 if car_empl4 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Sum of part time employees")  
-gr export pte_details_sum_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image pte_details_sum_bar.png
-putpdf pagebreak
-
-graph bar (sum) car_empl2 if car_empl2 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Sum of young employees") 
-gr export young_employees_details_sum_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image young_employees_details_sum_bar.png
-putpdf pagebreak
-
-*Bart chart: mean
-graph bar (mean) employes if employes >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Mean of full time employees") 
-gr export fte_details_mean_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image fte_details_mean_bar.png
-putpdf pagebreak
-
-graph bar (mean) car_empl1 if car_empl1 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Mean of female employees") 
-gr export fte_femmes_details_mean_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image fte_femmes_details_mean_bar.png
-putpdf pagebreak
-
-graph bar (mean) car_empl4 if car_empl4 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Mean of part time employees")
-gr export pte_details_mean_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image pte_details_mean_bar.png
-putpdf pagebreak
-
-graph bar (mean) car_empl2 if car_empl2 >= 0, over(treatment, label(labs(small))) ///
-	blabel(total, format(%9.0fc) size(vsmall)) ///
-	title("Mean of young employees")  
-gr export young_employees_details_mean_bar.png, replace
-putpdf paragraph, halign(center) 
-putpdf image young_employees_details_mean_bar.png
-putpdf pagebreak
-
-
-
-
-
-
-
-*local inno_vars 
-*missingplot `inno_vars', labels mlabcolor(blue)
-
-	* network vars
-*local 
-*missingplot, variablenames labels mlabcolor(blue)
-
-* Add visualisation for missing values per section	
-
-
-
-
-
+putpdf text ("Section 7: Accounting"), bold
+{
+	*Bénéfices/Perte 2023
+graph pie, over(profit_2023_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
+   bgcolor(white) legend(pos(6)) ///
+   title("Did the company make a loss or a profit in 2023?", pos(12))
+   gr export profit_2023_category.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image profit_2023_category.png, width(5000)
+	putpdf pagebreak
 	
-*Statistics with average time per survey
-/*graph bar (mean) time_survey, blabel(total) ///
-	title("Temps moyen pour remplir le sondage") 
-gr export temps_moyen_sondage.png, replace
+graph pie, over(profit_2023_category) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
+    graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
+    title("Did the company make a loss or a profit in 2023?", pos(12) size(small))
+   gr export profit_2023_category_treat.png, replace
+	putpdf paragraph, halign(center) 
+	putpdf image profit_2023_category_treat.png, width(5000)
+	putpdf pagebreak
+	
+    * Chiffre d'affaires total en dt en 2023 
+sum comp_ca2023
+stripplot comp_ca2023 if comp_ca2023!=666 & comp_ca2023!=888 & comp_ca2023!=999 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		title("Total turnover in 2023",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_ca2023, replace)
+    gr export el_comp_ca2023.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_ca2023.png, width(5000)
+	putpdf pagebreak
+
+stripplot comp_ca2023 if comp_ca2023!=666 & comp_ca2023!=888 & comp_ca2023!=999, by(treatment) jitter(4) vertical  ///
+		title("Total turnover in 2023",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_ca2023_treat, replace)
+    gr export el_comp_ca2023_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_ca2023_treat.png, width(5000)
+	putpdf pagebreak
+	
+twoway (kdensity comp_ca2023 if treatment == 0 & comp_ca2023!=666 & comp_ca2023!=888 & comp_ca2023!=999, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+       (kdensity comp_ca2023 if treatment == 1 & comp_ca2023!=666 & comp_ca2023!=888 & comp_ca2023!=999 , lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Total turnover in 2023", pos(12)) ///
+	   xtitle("Total turnover",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_comp_ca2023_kdens.png, width(5000) replace
 putpdf paragraph, halign(center) 
-putpdf image temps_moyen_sondage.png
-sum time_survey,d
-putpdf paragraph
-putpdf text ("Survey time statistics"), linebreak bold
-putpdf text ("min. `: display %9.0g `r(min)'' minutes, max. `: display %9.0g `r(max)'' minutes & median `: display %9.0g `r(p50)'' minutes."), linebreak
-putpdf pagebreak*/
-/*
-		* CA, CA export
-gen w_ca2021_usd=w_ca2021/3
-sum w_ca2021_usd,d
-graph bar w_ca2021_usd, over(pole, relabel(1 "Agriculture" 2"Handcrafts& Cosmetics" 3"Services" 4"IT")) ///
-****************************************************************
-* 	PART 7:  save pdf
+putpdf image el_comp_ca2023_kdens.png, width(5000)
+putpdf pagebreak
+	   
+ graph box comp_ca2023 if comp_ca2023 > 0 & comp_ca2023!=666 & comp_ca2023!=888 & comp_ca2023!=999 , over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Total turnover in 2023 in TND", pos(12))
+gr export el_comp_ca2023_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_ca2023_box.png, width(5000)
+putpdf pagebreak
+
+    * Chiffre d'affaires total en dt en 2024 
+sum comp_ca2024
+stripplot comp_ca2024 if comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		title("Total turnover in 2024",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_ca2024, replace)
+    gr export el_comp_ca2024.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_ca2024.png, width(5000)
+	putpdf pagebreak
+
+stripplot comp_ca2024 if comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999 , by(treatment) jitter(4) vertical ///
+		title("Total turnover in 2024",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_ca2024_treat, replace)
+    gr export el_comp_ca2024_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_ca2024_treat.png, width(5000)
+	putpdf pagebreak
+
+twoway (kdensity comp_ca2024 if treatment == 0 & comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999 , lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+       (kdensity comp_ca2024 if treatment == 1 & comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999 , lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Total turnover in 2024", pos(12)) ///
+	   xtitle("Total turnover",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_comp_ca2024_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_ca2024_kdens.png, width(5000)
+putpdf pagebreak
+	   	
+ graph box comp_ca2024 if comp_ca2024 > 0 & comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Total turnover in 2024 in TND", pos(12))
+gr export el_comp_ca2024_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_ca2024_box.png, width(5000)
+putpdf pagebreak
+
+   *Chiffre d'affaires à l'export en dt en 2023
+ sum compexp_2023
+stripplot compexp_2023 if compexp_2023!=666 & compexp_2023!=888 & compexp_2023!=999 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		title("Export turnover in 2023",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_compexp_2023, replace)
+    gr export el_compexp_2023.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2023.png, width(5000)
+	putpdf pagebreak
+
+stripplot compexp_2023 if compexp_2023!=666 & compexp_2023!=888 & compexp_2023!=999, by(treatment) jitter(4) vertical ///
+		title("Export turnover in 2023",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_compexp_2023_treat, replace)
+    gr export el_compexp_2023_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2023_treat.png, width(5000)
+	putpdf pagebreak
+	
+twoway (kdensity compexp_2023 if treatment == 0 & compexp_2023!=666 & compexp_2023!=888 & compexp_2023!=999, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+       (kdensity compexp_2023 if treatment == 1 & compexp_2023!=666 & compexp_2023!=888 & compexp_2023!=999, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Export turnover in 2023", pos(12)) ///
+	   xtitle("Export turnover",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_compexp_2023_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_compexp_2023_kdens.png, width(5000)
+putpdf pagebreak
+	
+ graph box compexp_2023 if compexp_2023 > 0 & compexp_2023!=666 & compexp_2023!=888 & compexp_2023!=999, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Export turnover in 2023 in TND", pos(12))
+gr export el_compexp_2023_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_compexp_2023_box.png, width(5000)
+putpdf pagebreak
+
+	*Bénéfices/Perte 2024
+graph pie, over(profit_2024_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
+   bgcolor(white) legend(pos(6)) ///
+   title("Did the company make a loss or a profit in 2024?", pos(12))
+   gr export profit_2024_category.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image profit_2024_category.png, width(5000)
+	putpdf pagebreak
+	
+	graph pie, over(profit_2024_category)  by(treatment) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
+   bgcolor(white) legend(pos(6)) ///
+   title("Did the company make a loss or a profit in 2024?", pos(12) size(small))
+   gr export profit_2024_category_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image profit_2024_category_treat.png, width(5000)
+	putpdf pagebreak
+	
+   *Chiffre d'affaires à l'export en dt en 2024
+sum compexp_2024
+stripplot compexp_2024 if compexp_2024!=666 & compexp_2024!=888 & compexp_2024!=999, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Amount in TND") ///
+		title("Export turnover in 2024",size(medium) pos(12)) ///
+		name(el_compexp_2024, replace)
+    gr export el_compexp_2024.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2024.png, width(5000)
+	putpdf pagebreak
+	
+stripplot compexp_2024 if compexp_2024!=666 & compexp_2024!=888 & compexp_2024!=999, by(treatment) jitter(4) vertical  ///
+		ytitle("Amount in TND") ///
+		title("Export turnover in 2024",size(medium) pos(12)) ///
+		name(el_compexp_2024_treat, replace)
+    gr export el_compexp_2024_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2024_treat.png, width(5000)
+	putpdf pagebreak
+
+twoway (kdensity compexp_2024 if treatment == 0 & compexp_2024!=666 & compexp_2024!=888 & compexp_2024!=999, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity compexp_2024 if treatment == 1 & compexp_2024!=666 & compexp_2024!=888 & compexp_2024!=999, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Export turnover in 2024", pos(12)) ///
+	   xtitle("Export turnover",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_compexp_2024_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_compexp_2024_kdens.png, width(5000)
+putpdf pagebreak
+
+graph box compexp_2024 if compexp_2024 > 0 & compexp_2024!=666 & compexp_2024!=888 & compexp_2024!=999, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Export turnover in 2024 in TND", pos(12))
+gr export el_compexp_2024_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_compexp_2024_box.png, width(5000)
+putpdf pagebreak
+
+ *Profit en dt en 2023
+sum comp_benefice2023
+stripplot comp_benefice2023 if comp_benefice2023!=666 & comp_benefice2023!=888 & comp_benefice2023!=999, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		ytitle("Amount in TND") ///
+		title("Company profit in 2023",size(medium) pos(12)) ///
+		name(el_comp_benefice2023, replace)
+    gr export el_comp_benefice2023.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2023.png, width(5000)
+	putpdf pagebreak
+
+stripplot comp_benefice2023 if comp_benefice2023!=666 & comp_benefice2023!=888 & comp_benefice2023!=999, by(treatment) jitter(4) vertical ///
+		ytitle("Amount in TND") ///
+		title("Company profit in 2023",size(medium) pos(12)) ///
+		name(el_comp_benefice2023_treat, replace)
+    gr export el_comp_benefice2023_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_benefice2023_treat.png, width(5000)
+	putpdf pagebreak
+
+twoway (kdensity comp_benefice2023 if treatment == 0 & comp_benefice2023!=666 & comp_benefice2023!=888 & comp_benefice2023!=999, lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity comp_benefice2023 if treatment == 1 & comp_benefice2023!=666 & comp_benefice2023!=888 & comp_benefice2023!=999, lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Company profit in 2023", pos(12)) ///
+	   xtitle("Company profit",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_comp_benefice2023_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_benefice2023_kdens.png, width(5000)
+putpdf pagebreak
+
+
+ graph box comp_benefice2023 if comp_benefice2023!=666 & comp_benefice2023!=888 & comp_benefice2023!=999, over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Company profit in 2023 in TND", pos(12))
+gr export el_comp_benefice2023_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_benefice2023_box.png, width(5000)
+putpdf pagebreak
+
+ *Profit en dt en 2024
+sum comp_benefice2024
+stripplot comp_benefice2024 if comp_benefice2024!=666 & comp_benefice2024!=888 & comp_benefice2024!=999 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+		title("Company profit in 2024",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_benefice2024, replace)
+    gr export el_comp_benefice2024.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_compexp_2024.png, width(5000)
+	putpdf pagebreak
+	
+stripplot comp_benefice2024 if comp_benefice2024!=666 & comp_benefice2024!=888 & comp_benefice2024!=999 , by(treatment) jitter(4) vertical  ///
+		title("Company profit in 2024",size(medium) pos(12)) ///
+		ytitle("Amount in TND") ///
+		name(el_comp_benefice2024_treat, replace)
+    gr export el_comp_benefice2024_treat.png, width(5000) replace
+	putpdf paragraph, halign(center) 
+	putpdf image el_comp_benefice2024_treat.png, width(5000)
+	putpdf pagebreak
+
+twoway (kdensity comp_benefice2024 if treatment == 0 & comp_benefice2024!=666 & comp_benefice2024!=888 & comp_benefice2024!=999 , lcolor(blue) lpattern(solid) legend(label(1 "Control"))) ///
+	   (kdensity comp_benefice2024 if treatment == 1 & comp_benefice2024!=666 & comp_benefice2024!=888 & comp_benefice2024!=999 , lcolor(red) lpattern(dash) legend(label(2 "Treatment"))), ///
+       legend(symxsize(small) order(1 "Control" 2 "Treatment")) ///
+	   title("Company profit in 2024", pos(12)) ///
+	   xtitle("Company profit",size(medium)) ///
+	   ytitle("Densitiy", size(medium))
+gr export el_comp_benefice2024_kdens.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_benefice2024_kdens.png, width(5000)
+putpdf pagebreak
+
+ graph box comp_benefice2024 if comp_benefice2024!=666 & comp_benefice2024!=888 & comp_benefice2024!=999 , over(treatment) blabel(total, format(%9.2fc)) ///
+	title("Company profit in 2024 in TND", pos(12))
+gr export el_comp_benefice2024_box.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_comp_benefice2024_box.png, width(5000)
+putpdf pagebreak
+}
+
+****** Section 7: Intervention******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 7: Intervention"), bold
+
+*efficency 
+sum int_contact, d
+histogram int_contact, width(1) frequency addlabels xlabel(0(2)15, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
+	title("Interactions outside consortia", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal)) ///
+	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
+	text(100 `r(p50)' "Median", size(vsmall) place(w))
+graph export el_interac_cons.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image el_interac_cons.png, width(6000)
+putpdf pagebreak
+
 ***********************************************************************
+* 	PART 4:  save pdf
+***********************************************************************
+	* change directory to progress folder
+
 	* pdf
 putpdf save "endline_statistics", replace
-

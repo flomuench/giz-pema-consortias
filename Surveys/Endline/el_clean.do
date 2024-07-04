@@ -50,7 +50,7 @@ replace `x'= lower(`x')
 
 
 	*fix date
-*format date %-td
+format Date %-td
 
 *drop empty rows
 drop if id_plateforme ==.
@@ -185,8 +185,8 @@ lab var net_services_other "Example other situation of using entrepneurs network
 
 *lab var net_gender1 "Discuss company's business with female suppliers" REMOVED FROM QUESTIONS
 *lab var net_gender2 "Discuss company's business with female clients" REMOVED FROM QUESTIONS
-lab var net_gender3 "Discuss company's business with other female entrepreneurs"
-lab var net_gender4 "Discuss company's business with female friends or family" 
+lab var net_gender3 "Female entrepneur business discussion"
+lab var net_gender4 "Female Family/friends business discussion"
 
 lab var net_gender3_giz "Female entrepreneurs met while in GIZ"
 
@@ -238,10 +238,10 @@ lab var comp_ca2023_intervalles "Intervals of total turnover in 2023 in dt"
 lab var comp_ca2024_intervalles "Intervals of total turnover in 2024 in dt"
 
 lab var profit_2023_category_perte "Intervals of loss in 2023 in dt"
-lab var profit_2024_category_perte "Intervals of loss in 2023 in dt"
+lab var profit_2024_category_perte "Intervals of loss in 2024 in dt"
 
 lab var profit_2023_category_gain "Intervals of profit in 2023 in dt"
-lab var profit_2024_category_gain "Intervals of profit in 2023 in dt"
+lab var profit_2024_category_gain "Intervals of profit in 2024 in dt"
 
 
 * Section Intervention-retour sur le CF
@@ -289,18 +289,47 @@ foreach var of local yesnovariables {
 		*scale variables
 local lowhighvar expp_cost expp_ben 
 
-label define lowhigh 1 "very low" 7 "very high"
+label define lowhigh  1 "Strongly low" ///
+                      2 "low" ///
+                      3 "Slightly low" ///
+                      4 "Neither low nor high" ///
+                      5 "Slightly high" ///
+                      6 "high" ///
+                      7 "Strongly high"
+					  
 foreach var of local lowhighvar {
 	label values `var' lowhigh
 }
 		*agree or not variables
 local agreenotvar car_efi_fin1 car_efi_man car_efi_motiv  car_loc_env car_loc_exp car_loc_soin //
 
-label define agreenot 1 "strongly disagree" 7 "strongly agree"
+label define agreenot 1 "Strongly disagree" ///
+                      2 "Disagree" ///
+                      3 "Slightly disagree" ///
+                      4 "Neither disagree nor agree" ///
+                      5 "Slightly agree" ///
+                      6 "Agree" ///
+                      7 "Strongly agree"
 foreach var of local agreenotvar {
 	label values `var' agreenot
 	
 }
+
+*CANNOT LABEL NON INTEGERS VARS
+replace man_fin_per_fre = 1 if man_fin_per_fre == 0
+replace man_fin_per_fre = 2 if man_fin_per_fre == 0.25
+replace man_fin_per_fre = 3 if man_fin_per_fre == 0.5
+replace man_fin_per_fre = 4 if man_fin_per_fre == 0.75
+replace man_fin_per_fre = 5 if man_fin_per_fre == 1
+
+label define label_freq_kpi 1 "Never" 2 "Annually" 3 "Monthy" 4 "Weekly" 5 "Daily"
+label values man_fin_per_fre label_freq_kpi
+
+*label profit
+label define profit_label 0 "Loss" 1 "Profit"
+lab values profit_2023_category profit_label
+lab values profit_2024_category profit_label
+
 /*
 *labeling likert scale variables 
 label define likert 1"Strongly disagree" 2 "Disagree" 3 "Slightly disagree" 4 "Neither disagree nor agree" 5 "Slightly Agree" 6 "Agree" 5 "Strongly Agree"
@@ -315,8 +344,7 @@ label values man_fin_per kpi
 
 			* monitoring (frequency)
 				* financial performance
-label define label_freq_kpi 0 "Never" 0.25 "Annually" 0.5 "Monthy" 0.75 "Weekly" 1 "Daily"
-label values man_fin_per_fre label_freq_kpi
+
 			
 				* employee performance
 label define label_freq_empl 0 "Never" 0.25 "Annually" 0.5 "Quarterly" 0.75 "Monthly" 1 "Weekly or more"
@@ -336,9 +364,14 @@ label values man_ind_awa kpi_empl
 label define label_list_group 1 "treatment_group" 0 "control_group"
 label values list_group label_list_group 
 */
+		*entreprise_model
+label define label_entreprise_model 1 "B2C" 2 "B2B" 3 "B2C & B2B"
+label values entreprise_model label_entreprise_model
 		* declaration of honour
 label define label_attest  1 "Yes"
 label values attest label_attest
+
+
 
 ***********************************************************************
 * 	Part 7: Save the changes made to the data		  			
