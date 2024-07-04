@@ -103,6 +103,11 @@ foreach var of local innov_vars {
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "badlet les types de produit aaaaaaaaaaaaaaaaaaaaaaaaaaa"
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
+*export = 0 if it does not export
+ 
+replace compexp_2023 = 0 if export_1 == 0
+replace compexp_2024 = 0 if export_1 == 0
+
 /*
 	*benefits
 local bene_vars int_ben1 int_ben2 int_ben3 int_ben_autres
@@ -115,10 +120,6 @@ foreach var of local bene_vars {
 	replace `var' = "ouverture sur des nouveaux marchés" if strpos(lower(`var'), "ouverture sur des nouveaux marchés") | strpos(lower(`var'), "new markets")
 }
 */
-
-
-	* make manual changes
-		* ca
 
 
 /*

@@ -52,7 +52,7 @@ generate inno_improve = regexm(inno_produit, "1")
 lab var inno_improve "Improved existing products/services"
 
 generate inno_new = regexm(inno_produit, "2")
-lab var el_produit3 "Introduced new products/services" 
+lab var inno_new "Introduced new products/services" 
 
 generate inno_both = inno_improve + inno_new
 label var inno_both "Improved & introduced new products/services"
@@ -80,7 +80,7 @@ lab var inno_mot_dummyother "Binary other source of inspiration"
 lab var inno_mot_other "Example of other source of inspiration"
 
 generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_dummyother
-lab var inno_mot_client "Total of innovation inspirations"
+lab var inno_mot_total "Total of innovation inspirations"
 
 drop inno_mot
 
@@ -100,16 +100,16 @@ generate netcoop9 = regexm(net_coop, "9")
 generate netcoop10 = regexm(net_coop, "10")
 
 	* lab each cooperate word dummy
-label var netcoop1 "Win"
-label var netcoop2 "Communicate"
+label var netcoop1 "Jealousy"
+label var netcoop2 "Cooperate"
 label var netcoop3 "Trust"
-label var netcoop4 "Beat"
-label var netcoop5 "Power"
-label var netcoop6 "Retreat"
-label var netcoop7 "Partnership" 
-label var netcoop8 "Opponent"
+label var netcoop4 "Protecting business secrets"
+label var netcoop5 "Risks"
+label var netcoop6 "Conflict"
+label var netcoop7 "Learn" 
+label var netcoop8 "Partnership"
 label var netcoop9 "Connect" 
-label var netcoop10 "Dominate"
+label var netcoop10 "Competition"
 
 	* generate a count of positive & negative cooperative words
 generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
@@ -172,6 +172,14 @@ lab var refus_4 "Collaboration require time that they don't have due to other pr
 generate refus_5 = regexm(int_refus, "5")
 lab var refus_5 "Others" 
 
+***********************************************************************
+* 	PART 11: Network
+***********************************************************************
+gen net_size3_m = net_size3 - net_gender3
+lab var net_size3_m "Male entrepneur business discussion"
+
+gen net_size4_m = net_size4 - net_gender4
+lab var net_size4_m "Male Family/friends business discussion"
 ***********************************************************************
 * 	PART 11: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
@@ -246,9 +254,87 @@ lab var survey_phone "Comapnies who answered the survey on phone (with enumerato
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
 
+	*responded online
+local ids 983 1009 1028 1044 1045 1096 1102 1116 1134 1159 1205 1243 1244
+foreach var of local ids {
+	replace survey_phone = 1 if id_plateforme == `var'
+}
 
 ***********************************************************************
-* 	PART 14:  generate normalized financial data (per employee)
+* 	PART 14:  Transform categorical variables into continuous variables
+***********************************************************************
+*comp_ca2023_intervalles
+replace comp_ca2023 = 5000 if comp_ca2023_intervalles == 8
+replace comp_ca2023 = 25000 if comp_ca2023_intervalles == 7
+replace comp_ca2023 = 100000 if comp_ca2023_intervalles == 6
+replace comp_ca2023 = 225000 if comp_ca2023_intervalles == 5
+replace comp_ca2023 = 400000 if comp_ca2023_intervalles == 4
+replace comp_ca2023 = 600000 if comp_ca2023_intervalles == 3
+replace comp_ca2023 = 850000 if comp_ca2023_intervalles == 2
+replace comp_ca2023 = 1000000 if comp_ca2023_intervalles == 1
+
+*comp_ca2024_intervalles
+replace comp_ca2024 = 5000 if comp_ca2024_intervalles == 8
+replace comp_ca2024 = 25000 if comp_ca2024_intervalles == 7
+replace comp_ca2024 = 100000 if comp_ca2024_intervalles == 6
+replace comp_ca2024 = 225000 if comp_ca2024_intervalles == 5
+replace comp_ca2024 = 400000 if comp_ca2024_intervalles == 4
+replace comp_ca2024 = 600000 if comp_ca2024_intervalles == 3
+replace comp_ca2024 = 850000 if comp_ca2024_intervalles == 2
+replace comp_ca2024 = 1000000 if comp_ca2024_intervalles == 1
+
+*comp_benefice2023_intervalles
+replace comp_benefice2023 = 5000 if profit_2023_category_perte == 8
+replace comp_benefice2023 = 25000 if profit_2023_category_perte == 7
+replace comp_benefice2023 = 100000 if profit_2023_category_perte == 6
+replace comp_benefice2023 = 225000 if profit_2023_category_perte == 5
+replace comp_benefice2023 = 400000 if profit_2023_category_perte == 4
+replace comp_benefice2023 = 600000 if profit_2023_category_perte == 3
+replace comp_benefice2023 = 850000 if profit_2023_category_perte == 2
+replace comp_benefice2023 = 1000000 if profit_2023_category_perte == 1
+
+replace comp_benefice2023 = 5000 if profit_2023_category_gain == 8
+replace comp_benefice2023 = 25000 if profit_2023_category_gain == 7
+replace comp_benefice2023 = 100000 if profit_2023_category_gain == 6
+replace comp_benefice2023 = 225000 if profit_2023_category_gain == 5
+replace comp_benefice2023 = 400000 if profit_2023_category_gain == 4
+replace comp_benefice2023 = 600000 if profit_2023_category_gain == 3
+replace comp_benefice2023 = 850000 if profit_2023_category_gain == 2
+replace comp_benefice2023 = 1000000 if profit_2023_category_gain == 1
+
+*comp_benefice2024_intervalles
+replace comp_benefice2024 = 5000 if profit_2024_category_perte == 8
+replace comp_benefice2024 = 25000 if profit_2024_category_perte == 7
+replace comp_benefice2024 = 100000 if profit_2024_category_perte == 6
+replace comp_benefice2024 = 225000 if profit_2024_category_perte == 5
+replace comp_benefice2024 = 400000 if profit_2024_category_perte == 4
+replace comp_benefice2024 = 600000 if profit_2024_category_perte == 3
+replace comp_benefice2024 = 850000 if profit_2024_category_perte == 2
+replace comp_benefice2024 = 1000000 if profit_2024_category_perte == 1
+
+replace comp_benefice2024 = 5000 if profit_2024_category_gain == 8
+replace comp_benefice2024 = 25000 if profit_2024_category_gain == 7
+replace comp_benefice2024 = 100000 if profit_2024_category_gain == 6
+replace comp_benefice2024 = 225000 if profit_2024_category_gain == 5
+replace comp_benefice2024 = 400000 if profit_2024_category_gain == 4
+replace comp_benefice2024 = 600000 if profit_2024_category_gain == 3
+replace comp_benefice2024 = 850000 if profit_2024_category_gain == 2
+replace comp_benefice2024 = 1000000 if profit_2024_category_gain == 1
+
+replace comp_benefice2023=comp_benefice2023*(-1) if profit_2023_category==0
+
+replace comp_benefice2024=comp_benefice2024*(-1) if profit_2024_category==0
+
+*marginal_exp_2023
+gen marginal_exp_2023 = 0
+replace marginal_exp_2023 = 1 if compexp_2023 > 0 & compexp_2023 < .
+
+*marginal_exp_2024
+gen marginal_exp_2024 = 0
+replace marginal_exp_2024 = 1 if compexp_2024 > 0 & compexp_2024 < .
+
+***********************************************************************
+* 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
 local varn comp_ca2023 comp_ca2024 compexp_2023 compexp_2024 comp_benefice2023 comp_benefice2024
 
@@ -262,6 +348,6 @@ replace n`x' = `x'/employes if n`x'!= .
 }
 
 ***********************************************************************
-* 	PART 15: save dta file  										  
+* 	PART 16: save dta file  										  
 ***********************************************************************
 save "${el_final}/el_final", replace

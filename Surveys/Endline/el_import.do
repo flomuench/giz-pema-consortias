@@ -25,7 +25,6 @@ import excel "${el_raw}/el_raw.xlsx", firstrow clear
 * 	PART 2:  Rename variable for code	  			
 ************************************************************************
 rename Id id_plateforme 
-drop HeureDEBUT
 rename NOMESE firmname 
 rename NOMREP repondant_endline 
 rename Firmname same_firmname
@@ -82,6 +81,10 @@ save "${el_raw}/ecommerce_el_pii", replace
 
 restore
 
+*import list_group_el from master for listexp
+merge 1:1 id_plateforme using "${master_final}/endline_contactlist", keepusing(list_group_el)
+drop if _merge != 3
+drop _merge
 
 ***********************************************************************
 * 	PART 3:  save a de-identified analysis file	
