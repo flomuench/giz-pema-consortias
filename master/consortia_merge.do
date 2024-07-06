@@ -133,9 +133,10 @@ append using "${ml_final}/ml_final"
 order id_plateforme surveyround treatment, first
 sort id_plateforme surveyround
 
-/*	* append with endline
-append using "${endline_final/el_final}"
-*/
+	* append registration +  baseline + midline data with endline
+append using "${el_final}/el_final"
+order id_plateforme surveyround treatment, first
+sort id_plateforme surveyround
 
 	* declare panel data set
 xtset id_plateforme surveyround, delta(1)
@@ -155,7 +156,6 @@ local cst_vars_str "legalstatus subsector"
 foreach var of local cst_vars_str {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == ""
 }
-
 
 
 ***********************************************************************
