@@ -434,6 +434,23 @@ foreach var of local ys {
 		replace `var' = . if inlist(`var', -777, -888, -999)
 }
 
+ *For financial data: replace "Don't know (-999) and refusal with missing value"
+
+local finvars compexp_2024 compexp_2023 comp_ca2024 comp_ca2023 comp_benefice2024 comp_benefice2023 clients_ssa_commandes clients_ssa clients exp_pays exp_pays_ssa employes car_empl1 car_empl2
+
+foreach var of local  finvars {
+	replace `var' = . if `var' == -999
+	replace `var' = . if `var' == -888
+	replace `var' = . if `var' == -777
+	replace `var' = . if `var' == -666
+	replace `var' = . if `var' == 999
+	replace `var' = . if `var' == 888
+	replace `var' = . if `var' == 777
+	replace `var' = . if `var' == 666
+	replace `var' = . if `var' == 1234
+	replace `var' = . if `var' == -1234
+}
+
 ***********************************************************************
 * 	PART 3: Filter caused replacements
 ***********************************************************************
@@ -500,7 +517,7 @@ replace product_hom1 ="textile" if ustrregexm(produit1,"trousses cuir/ similicui
 
 
 
- 
+
 
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
