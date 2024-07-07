@@ -192,6 +192,24 @@ putpdf paragraph, halign(center)
 putpdf image el_firm_exports.png, width(5000)
 putpdf pagebreak
 
+*export or not 2023
+graph pie, over(marginal_exp_2023) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
+    graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
+    title("Did the company export in 2023 (based on export turnover) ?", pos(12) size(small))
+gr export export_2023_pie.png, replace
+putpdf paragraph, halign(center) 
+putpdf image export_2023_pie.png, width(5000)
+putpdf pagebreak
+
+*export or not 2024
+graph pie, over(marginal_exp_2024) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
+    graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
+    title("Did the company export in 2024 (based on export turnover) ?", pos(12) size(small))
+gr export export_2024_pie.png, replace
+putpdf paragraph, halign(center) 
+putpdf image export_2024_pie.png, width(5000)
+putpdf pagebreak
+
 * Reasons for not exporting
 graph bar (mean) export_41 export_42 export_43 export_44 export_45, over(treatment) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(6) row(6) label (1 "Not profitable") label (2 "Did not find clients abroad") ///
@@ -730,6 +748,7 @@ putpdf image el_comp_ca2023_box.png, width(5000)
 putpdf pagebreak
 
     * Chiffre d'affaires total en dt en 2024 
+
 sum comp_ca2024
 stripplot comp_ca2024 if comp_ca2024!=666 & comp_ca2024!=888 & comp_ca2024!=999 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
 		title("Total turnover in 2024",size(medium) pos(12)) ///

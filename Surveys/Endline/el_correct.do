@@ -103,10 +103,6 @@ foreach var of local innov_vars {
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "badlet les types de produit aaaaaaaaaaaaaaaaaaaaaaaaaaa"
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-*export = 0 if it does not export
- 
-replace compexp_2023 = 0 if export_1 == 0
-replace compexp_2024 = 0 if export_1 == 0
 
 /*
 	*benefits
