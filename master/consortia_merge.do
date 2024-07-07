@@ -138,7 +138,6 @@ append using "${el_final}/el_final"
 order id_plateforme surveyround treatment, first
 sort id_plateforme, stable
 
-
 	* declare panel data set
 xtset id_plateforme surveyround, delta(1)
 
@@ -157,7 +156,6 @@ local cst_vars_str "legalstatus subsector"
 foreach var of local cst_vars_str {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == ""
 }
-
 
 
 ***********************************************************************

@@ -134,6 +134,10 @@ label var export_1 "Direct export"
 label var export_2 "Indirect export"
 label var export_3 "No export"
 
+*export = 0 if it does not export
+ 
+replace compexp_2023 = 0 if export_1 == 0
+replace compexp_2024 = 0 if export_1 == 0
 
 generate export_41 = regexm(export_4, "1")
 

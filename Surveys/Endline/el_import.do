@@ -82,7 +82,7 @@ save "${el_raw}/ecommerce_el_pii", replace
 restore
 
 *import list_group_el from master for listexp
-merge 1:1 id_plateforme using "${master_final}/endline_contactlist", keepusing(list_group_el)
+merge m:1 id_plateforme using "${master_final}/endline_contactlist", keepusing(list_group_el)
 drop if _merge != 3
 drop _merge
 

@@ -746,6 +746,300 @@ foreach var of local y_vars {
 *bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
 
 ***********************************************************************
+*PART 8: Creation of index for the endline
+***********************************************************************	
+	* Put all variables used to calculate indices into a local
+			*Management practices index
+local man "man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
+			
+			*Innovation index
+local inno "inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres"
+			
+			*Export practices index
+local eri "exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent"		
+			
+			*Export performance index
+local epi "compexp_2023 compexp_2024 export_1 export_2 exp_pays"			
+			
+			*Business performance index
+local bpi "employes comp_ca2023 comp_benefice2023 comp_ca2024 comp_benefice2024"
+
+			*Self-efficacy index
+local female_efficacy "car_efi_fin1 car_efi_man car_efi_motiv"
+
+			*Sense of control index
+local female_loc "car_loc_env car_loc_exp car_loc_soin"
+
+
+local all_index `man' `inno'  `eri' `epi' `bpi' `female_efficacy' `female_loc' 
+
+* IMPORTANT MODIFICATION: Missing values, Don't know, refuse or needs check answers are being transformed to zeros
+foreach var of local all_index {
+    gen temp_`var' = `var'
+    replace temp_`var' = . if `var' == 999 & surveyround ==3  // don't know transformed to missing values
+    replace temp_`var' = . if `var' == 888 & surveyround ==3 
+    replace temp_`var' = . if `var' == 777 & surveyround ==3 
+    replace temp_`var' = . if `var' == 666 & surveyround ==3 
+	replace temp_`var' = . if `var' == -999 & surveyround ==3 // added - since we transformed profit into negative in endline
+    replace temp_`var' = . if `var' == -888 & surveyround ==3 
+    replace temp_`var' = . if `var' == -777 & surveyround ==3 
+    replace temp_`var' = . if `var' == -666 & surveyround ==3 
+}
+
+		* calcuate the z-score for each variable
+foreach var of local all_index {
+	sum temp_`var' if treatment == 0 & surveyround ==3 
+	gen temp_`var'z = (`var' - r(mean))/r(sd) /* new variable gen is called --> varnamez */
+}
+
+	* calculate the index value: average of zscores
+			*Management Practices Index
+egen el_mpi= rowmean(temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz temp_man_source_consz temp_man_source_pdgz temp_man_source_famz temp_man_source_evenz temp_man_source_autresz) if surveyround ==3
+
+			*Innovation practices index
+egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) if surveyround ==3
+			
+			*Self-efficacy index
+egen sei = rowmean(temp_car_efi_fin1z temp_car_efi_manz temp_car_efi_motivz) if surveyround ==3
+
+			*Sense of control index
+egen sci = rowmean(temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz) if surveyround ==3
+		
+			*Gender index
+egen gender= rowmean(sei sci) if surveyround ==3		
+			
+			*Export readiness index
+egen el_eri = rowmean(temp_exp_pra_rexpz temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_normez temp_exp_pra_ventz) if surveyround ==3			
+			
+			*Export performance index
+egen el_epi = rowmean(temp_export_1z temp_export_2z temp_exp_paysz)	if surveyround ==3		
+			
+			*Business performance index
+egen bpi_2023 = rowmean(temp_employesz temp_comp_ca2023z temp_comp_benefice2023z)
+egen bpi_2024 = rowmean(temp_employesz temp_comp_ca2024z temp_comp_benefice2024z)
+
+		* labeling
+label var el_mpi "Endline Maganement practices index -Z Score"
+label var ipi "Innovation practices index -Z Score"
+label var sei "Self-efficacy index -Z Score"
+label var sci "Sense of control index -Z Score"
+label var gender "Gender index -Z Score"
+label var el_eri "Endline Export readiness index -Z Score"
+label var el_epi "Endline Export performance index -Z Score"
+label var bpi_2023 "Business performance index- Z-score in 2023"
+label var bpi_2024 "Business performance index- Z-score in 2024"
+
+
+	* create total points per index dimension
+			
+			*Digital sales index
+egen el_mpi_points= rowtotal(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres) if surveyround ==3, missing // total 16 points
+			
+			*Digital marketing index
+
+			*Innovation index
+egen el_inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres) if surveyround ==3, missing // total 7 points
+
+			*Self-efficacy index
+egen el_sei_points = rowtotal(car_efi_fin1 car_efi_man car_efi_motiv) if surveyround ==3, missing // total 21 points
+
+			*Sense of control index
+egen el_sci_points = rowtotal (car_loc_env car_loc_exp car_loc_soin) if surveyround ==3, missing // total 21 points
+
+			* export readiness index (eri)
+egen el_eri_points = rowtotal(exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent) if surveyround ==3, missing // total 5 points
+
+
+		* labeling
+label var el_mpi_points "Management practices index points"
+label var el_inno_points "Innovation practices index points"
+label var el_sei_points "Self-efficacy index points"
+label var el_sci_points "Sense of control index points"
+label var el_eri_points "Export readiness index points"
+
+***********************************************************************
+*PART 9: Transform enline variables
+***********************************************************************	
+ssc install winsor
+
+*Full time employees
+winsor temp_employes, gen(w99_employes) p(0.01) highonly
+winsor temp_employes, gen(w97_employes) p(0.03) highonly
+winsor temp_employes, gen(w95_employes) p(0.05) highonly
+
+gen ihs_employes_99 = log(w99_employes + sqrt((w99_employes*w99_employes)+1))
+lab var ihs_employes_99 "IHS of full time employees, wins.99th"
+gen ihs_employes_97 = log(w97_employes + sqrt((w97_employes*w97_employes)+1))
+lab var ihs_employes_97 "IHS of full time employees, wins.97th"
+gen ihs_employes_95 = log(w95_employes + sqrt((w95_employes*w95_employes)+1))
+lab var ihs_employes_95 "IHS of full time employees, wins.95th"
+
+*Female employees
+winsor car_empl1, gen(w99_car_empl1) p(0.01) highonly
+winsor car_empl1, gen(w97_car_empl1) p(0.03) highonly
+winsor car_empl1, gen(w95_car_empl1) p(0.05) highonly
+
+gen ihs_car_empl1_99 = log(w99_car_empl1 + sqrt((w99_car_empl1*w99_car_empl1)+1))
+lab var ihs_car_empl1_99 "IHS of female employees, wins.99th"
+gen ihs_car_empl1_97 = log(w97_car_empl1 + sqrt((w97_car_empl1*w97_car_empl1)+1))
+lab var ihs_car_empl1_97 "IHS of female employees, wins.97th"
+gen ihs_car_empl1_95 = log(w95_car_empl1 + sqrt((w95_car_empl1*w95_car_empl1)+1))
+lab var ihs_car_empl1_95 "IHS of female employees, wins.95th"
+
+*Young employees
+*winsor car_empl2 if surveyround ==3, gen(w99_fte_young) p(0.01) highonly
+winsor car_empl2 if surveyround ==3, gen(w97_fte_young) p(0.03) highonly
+winsor car_empl2 if surveyround ==3, gen(w95_fte_young) p(0.05) highonly
+
+*gen ihs_fte_young_99 = log(w99_fte_young + sqrt((w99_fte_young*w99_fte_young)+1))
+*lab var ihs_fte_young_99 "IHS of young employees, wins.99th"
+gen ihs_fte_young_97 = log(w97_fte_young + sqrt((w97_fte_young*w97_fte_young)+1))
+lab var ihs_fte_young_97 "IHS of young employees, wins.97th"
+gen ihs_fte_young_95 = log(w95_fte_young + sqrt((w95_fte_young*w95_fte_young)+1))
+lab var ihs_fte_young_95 "IHS of young employees, wins.95th"
+
+*Total turnover variable
+	*In 2023
+*winsor temp_comp_ca2023, gen(w99_comp_ca2023) p(0.01) highonly
+winsor temp_comp_ca2023, gen(w97_comp_ca2023) p(0.03) highonly
+winsor temp_comp_ca2023, gen(w95_comp_ca2023) p(0.05) highonly
+
+*gen ihs_ca99_2023 = log(w99_comp_ca2023 + sqrt((w99_comp_ca2023*w99_comp_ca2023)+1))
+*lab var ihs_ca99_2023 "IHS of total turnover in 2023, wins.99th"
+gen ihs_ca97_2023 = log(w97_comp_ca2023 + sqrt((w97_comp_ca2023*w97_comp_ca2023)+1))
+lab var ihs_ca97_2023 "IHS of total turnover in 2023, wins.97th"
+gen ihs_ca95_2023 = log(w95_comp_ca2023 + sqrt((w95_comp_ca2023*w95_comp_ca2023)+1))
+lab var ihs_ca95_2023 "IHS of total turnover in 2023, wins.95th"
+
+	*In 2024
+*winsor temp_comp_ca2024, gen(w99_comp_ca2024) p(0.01) highonly
+winsor temp_comp_ca2024, gen(w97_comp_ca2024) p(0.03) highonly
+winsor temp_comp_ca2024, gen(w95_comp_ca2024) p(0.05) highonly
+
+*gen ihs_ca99_2024 = log(w99_comp_ca2024 + sqrt((w99_comp_ca2024*w99_comp_ca2024)+1))
+*lab var ihs_ca99_2024 "IHS of total turnover in 2024, wins.99th"
+gen ihs_ca97_2024 = log(w97_comp_ca2024 + sqrt((w97_comp_ca2024*w97_comp_ca2024)+1))
+lab var ihs_ca97_2024 "IHS of total turnover in 2024, wins.97th"
+gen ihs_ca95_2024 = log(w95_comp_ca2024 + sqrt((w95_comp_ca2024*w95_comp_ca2024)+1))
+lab var ihs_ca95_2024 "IHS of total turnover in 2024, wins.95th"
+
+
+*Export turnover variable
+	*In 2023
+*winsor temp_compexp_2023, gen(w99_compexp2023) p(0.01) highonly
+winsor temp_compexp_2023, gen(w97_compexp2023) p(0.03) highonly
+winsor temp_compexp_2023, gen(w95_compexp2023) p(0.05) highonly
+
+*gen ihs_exports99_2023 = log(w99_compexp2023 + sqrt((w99_compexp2023*w99_compexp2023)+1))
+*lab var ihs_exports99_2023 "IHS of exports in 2023, wins.99th"
+gen ihs_exports97_2023 = log(w97_compexp2023 + sqrt((w97_compexp2023*w97_compexp2023)+1))
+lab var ihs_exports97_2023 "IHS of exports in 2023, wins.97th"
+gen ihs_exports95_2023 = log(w95_compexp2023 + sqrt((w95_compexp2023*w95_compexp2023)+1))
+lab var ihs_exports95_2023 "IHS of exports in 2023, wins.95th"
+
+	*In 2024
+*winsor temp_compexp_2024, gen(w99_compexp2024) p(0.01) highonly
+winsor temp_compexp_2024, gen(w97_compexp2024) p(0.03) highonly
+winsor temp_compexp_2024, gen(w95_compexp2024) p(0.05) highonly
+
+*gen ihs_exports99_2024 = log(w99_compexp2024 + sqrt((w99_compexp2024*w99_compexp2024)+1))
+*lab var ihs_exports99_2024 "IHS of exports in 2024, wins.99th"
+gen ihs_exports97_2024 = log(w97_compexp2024 + sqrt((w97_compexp2024*w97_compexp2024)+1))
+lab var ihs_exports97_2024 "IHS of exports in 2024, wins.97th"
+gen ihs_exports95_2024 = log(w95_compexp2024 + sqrt((w95_compexp2024*w95_compexp2024)+1))
+lab var ihs_exports95_2024 "IHS of exports in 2024, wins.95th"
+
+	
+*Profit variable
+	*In 2023
+*winsor temp_comp_benefice2023, gen(w99_comp_benefice2023) p(0.01) highonly
+winsor temp_comp_benefice2023, gen(w97_comp_benefice2023) p(0.03) highonly
+winsor temp_comp_benefice2023, gen(w95_comp_benefice2023) p(0.05) highonly
+
+*gen ihs_profit99_2023 = log(w99_comp_benefice2023 + sqrt((w99_comp_benefice2023*w99_comp_benefice2023)+1))
+*lab var ihs_profit99_2023 "IHS of profit in 2023, wins.99th"
+gen ihs_profit97_2023 = log(w97_comp_benefice2023 + sqrt((w97_comp_benefice2023*w97_comp_benefice2023)+1))
+lab var ihs_profit97_2023 "IHS of profit in 2023, wins.97th"
+gen ihs_profit95_2023 = log(w95_comp_benefice2023 + sqrt((w95_comp_benefice2023*w95_comp_benefice2023)+1))
+lab var ihs_profit95_2023 "IHS of profit in 2023, wins.95th"
+
+	*In 2024
+*winsor temp_comp_benefice2024, gen(w99_comp_benefice2024) p(0.01) highonly
+winsor temp_comp_benefice2024, gen(w97_comp_benefice2024) p(0.03) highonly
+winsor temp_comp_benefice2024, gen(w95_comp_benefice2024) p(0.05) highonly
+
+*gen ihs_profit99_2024 = log(w99_comp_benefice2024 + sqrt((w99_comp_benefice2024*w99_comp_benefice2024)+1))
+*lab var ihs_profit99_2024 "IHS of profit in 2024, wins.99th"
+gen ihs_profit97_2024 = log(w97_comp_benefice2024 + sqrt((w97_comp_benefice2024*w97_comp_benefice2024)+1))
+lab var ihs_profit97_2024 "IHS of profit in 2024, wins.97th"
+gen ihs_profit95_2024 = log(w95_comp_benefice2024 + sqrt((w95_comp_benefice2024*w95_comp_benefice2024)+1))
+lab var ihs_profit95_2024 "IHS of profit in 2024, wins.95th"
+
+*Cost variable
+* Generating a cost variable
+*gen cost_2020 = temp_comp_ca2020 - temp_comp_benefice2020 if surveyround ==1
+*lab var cost_2020 "Total costs in 2020 in TND"
+
+gen cost_2023 = temp_comp_ca2023 - temp_comp_benefice2023 if surveyround ==3
+lab var cost_2023 "Total costs in 2023 in TND"
+
+gen cost_2024 = temp_comp_ca2024 - temp_comp_benefice2024 if surveyround ==3
+lab var cost_2024 "Total costs in 2024 in TND"
+
+*winsor cost_2020, gen(w99_cost_2020) p(0.01) highonly
+*winsor cost_2020, gen(w97_cost_2020) p(0.03) highonly
+*winsor cost_2020, gen(w95_cost_2020) p(0.05) highonly
+
+*gen ihs_cost99_2020 = log(w99_cost_2020 + sqrt((w99_cost_2020*w99_cost_2020)+1))
+*lab var ihs_cost99_2020 "IHS of total costs in 2020, wins.99th"
+*gen ihs_cost97_2020 = log(w97_cost_2020 + sqrt((w97_cost_2020*w97_cost_2020)+1))
+*lab var ihs_cost97_2020 "IHS of total costs in 2020, wins.97th"
+*gen ihs_cost95_2020 = log(w95_cost_2020 + sqrt((w95_cost_2020*w95_cost_2020)+1))
+*lab var ihs_cost95_2020 "IHS of total costs in 2020, wins.95th"
+
+*winsor cost_2023, gen(w99_cost_2023) p(0.01) highonly
+winsor cost_2023, gen(w97_cost_2023) p(0.03) highonly
+winsor cost_2023, gen(w95_cost_2023) p(0.05) highonly
+
+*gen ihs_cost99_2023 = log(w99_cost_2023 + sqrt((w99_cost_2023*w99_cost_2023)+1))
+*lab var ihs_cost99_2023 "IHS of total costs in 2023, wins.99th"
+gen ihs_cost97_2023 = log(w97_cost_2023 + sqrt((w97_cost_2023*w97_cost_2023)+1))
+lab var ihs_cost97_2023 "IHS of total costs in 2023, wins.97th"
+gen ihs_cost95_2023 = log(w95_cost_2023 + sqrt((w95_cost_2023*w95_cost_2023)+1))
+lab var ihs_cost95_2023 "IHS of total costs in 2023, wins.95th"
+
+*winsor cost_2024, gen(w99_cost_2024) p(0.01) highonly
+winsor cost_2024, gen(w97_cost_2024) p(0.03) highonly
+winsor cost_2024, gen(w95_cost_2024) p(0.05) highonly
+
+*gen ihs_cost99_2024 = log(w99_cost_2024 + sqrt((w99_cost_2024*w99_cost_2024)+1))
+*lab var ihs_cost99_2024 "IHS of total costs in 2024, wins.99th"
+gen ihs_cost97_2024 = log(w97_cost_2024 + sqrt((w97_cost_2024*w97_cost_2024)+1))
+lab var ihs_cost97_2024 "IHS of total costs in 2024, wins.97th"
+gen ihs_cost95_2024 = log(w95_cost_2024 + sqrt((w95_cost_2024*w95_cost_2024)+1))
+lab var ihs_cost95_2024 "IHS of total costs in 2024, wins.95th"
+
+
+*drop temporary vars		  
+drop temp_*
+
+* gen refus variable
+duplicates tag id_plateforme, gen(dup)
+gen el_refus = (dup < 1)
+drop dup
+
+	*profit2023 positive
+gen profit_2023_pos = 1 if comp_benefice2023 >= 0
+replace profit_2023_pos = 0 if comp_benefice2023 < 0
+
+lab var profit_2023_pos "Profit 2023 > 0"
+	*profit2024 possible
+gen profit_2024_pos = 1 if comp_benefice2024 >= 0
+replace profit_2024_pos = 0 if comp_benefice2024 < 0
+
+lab var profit_2024_pos "Profit 2024 > 0"
+
+***********************************************************************
 * 	PART final save:    save as final consortium_database
 ***********************************************************************
 save "${master_final}/consortium_final", replace

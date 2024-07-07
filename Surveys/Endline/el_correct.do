@@ -103,7 +103,6 @@ foreach var of local innov_vars {
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "badlet les types de produit aaaaaaaaaaaaaaaaaaaaaaaaaaa"
 replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
-
 /*
 	*benefits
 local bene_vars int_ben1 int_ben2 int_ben3 int_ben_autres
