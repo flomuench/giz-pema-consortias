@@ -316,13 +316,12 @@ foreach var of local agreenotvar {
 }
 
 *CANNOT LABEL NON INTEGERS VARS
-replace man_fin_per_fre = 1 if man_fin_per_fre == 0
-replace man_fin_per_fre = 2 if man_fin_per_fre == 0.25
-replace man_fin_per_fre = 3 if man_fin_per_fre == 0.5
-replace man_fin_per_fre = 4 if man_fin_per_fre == 0.75
-replace man_fin_per_fre = 5 if man_fin_per_fre == 1
+replace man_fin_per_fre = 1 if man_fin_per_fre == 0.25
+replace man_fin_per_fre = 2 if man_fin_per_fre == 0.5
+replace man_fin_per_fre = 3 if man_fin_per_fre == 0.75
+replace man_fin_per_fre = 4 if man_fin_per_fre == 1
 
-label define label_freq_kpi 1 "Never" 2 "Annually" 3 "Monthy" 4 "Weekly" 5 "Daily"
+label define label_freq_kpi 0 "Never" 1 "Annually" 2 "Monthy" 3 "Weekly" 4 "Daily"
 label values man_fin_per_fre label_freq_kpi
 
 *label profit

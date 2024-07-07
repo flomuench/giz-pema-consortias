@@ -157,7 +157,8 @@ label var export_43 "Too complicated"
 label var export_44 "Requires too much investment"
 label var export_45 "Other"
 
-
+* replace ssa orders 0 if it is missing value
+replace clients_ssa_commandes = 0 if clients_ssa == 0 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
@@ -191,7 +192,7 @@ lab var net_size4_m "Male Family/friends business discussion"
 egen miss_inno = rowmiss(inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres)
 
 	* section 2 export
-egen miss_export = rowmiss(exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes)
+egen miss_export = rowmiss(exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes) if export_3 == 0
 
 	* section 3 export practices
 egen miss_exp_pracc = rowmiss(exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent)
@@ -212,10 +213,10 @@ egen miss_manprac = rowmiss(man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_
 egen miss_marksource = rowmiss(man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres)
 
 	* section 8: network size
-egen miss_network = rowmiss(net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz)
+egen miss_network = rowmiss(net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz) if net_size3 > 0 & net_size4 > 0
 
 	* section 10: network services
-egen miss_networkserv = rowmiss(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre)
+egen miss_networkserv = rowmiss(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre) if net_size3 > 0
 
 	*section 11: netcoop
 egen miss_netcoop = rowmiss (net_coop_pos net_coop_neg)
@@ -329,12 +330,26 @@ replace comp_benefice2023=comp_benefice2023*(-1) if profit_2023_category==0
 
 replace comp_benefice2024=comp_benefice2024*(-1) if profit_2024_category==0
 
+*export = 0 if it does not export
+ 
+replace compexp_2023 = 0 if export_1 == 0
+replace compexp_2024 = 0 if export_1 == 0
+
 *marginal_exp_2023
+label define ext_exp 0 "Did not export" 1 "Exported"
+
 gen marginal_exp_2023 = 0
+lab var marginal_exp_2023 "extensive margin of export based on export turnover 2023"
+label values marginal_exp_2023 ext_exp
+
 replace marginal_exp_2023 = 1 if compexp_2023 > 0 & compexp_2023 < .
+
 
 *marginal_exp_2024
 gen marginal_exp_2024 = 0
+lab var marginal_exp_2024 "extensive margin of export based on export turnover 2024"
+label values marginal_exp_2024 ext_exp
+
 replace marginal_exp_2024 = 1 if compexp_2024 > 0 & compexp_2024 < .
 
 ***********************************************************************

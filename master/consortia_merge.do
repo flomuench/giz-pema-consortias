@@ -133,10 +133,10 @@ append using "${ml_final}/ml_final"
 order id_plateforme surveyround treatment, first
 sort id_plateforme surveyround
 
-	* append registration +  baseline + midline data with endline
+* append with endline
 append using "${el_final}/el_final"
 order id_plateforme surveyround treatment, first
-sort id_plateforme surveyround
+sort id_plateforme, stable
 
 	* declare panel data set
 xtset id_plateforme surveyround, delta(1)
