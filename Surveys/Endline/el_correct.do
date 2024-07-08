@@ -100,8 +100,6 @@ foreach var of local innov_vars {
 
 }
 
-replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "badlet les types de produit aaaaaaaaaaaaaaaaaaaaaaaaaaa"
-replace inno_exampl_produit1 = "badlet les types de produit" if inno_exampl_produit1 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 
 /*
 	*benefits
@@ -236,9 +234,283 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 ***********************************************************************
 	* correct wrongly coded values for man_hr_obj
 
+***********************************************************************
+* 	PART 7: Translate the different opend ended questions in french 
+***********************************************************************
+	*products_other
+replace products_other= "c'est une gammes contenant 4 produits: mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if products_other =="c une gamme feha 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre"
+replace products_other= "huille de pépin de figues de barbarie" if products_other =="huille de pépin fils de barbarine"
+replace products_other= "des miroirs fait avec du bois de palmier" if products_other =="les merroires . avec les bois de palmier"
+replace products_other= "les conceptions graphiques" if products_other =="les conseptiens grafiques"
+replace products_other= "les herbes aromatiques séchées (romarin, armoise, géranium)" if products_other =="les sotaces et les herbes séchées (chih ,klil ,3atercheya)"
+replace products_other= "maquillage: les crayons, les pinceaux, palette contouring" if products_other =="les creants / les panseaus/palette contouring"
+replace products_other= "services ( consulting/ project management )" if products_other =="services ( consulting/ project management ) ++++++++++++++++++++++++++++++++"
+replace products_other= "mélasse" if products_other =="milllasse"
+*replace products_other= "mélasse" if products_other =="حولي و حايك" TBC id:1197
+*replace products_other= "mélasse" if products_other =="la franche" TBC id:1234
+*replace products_other= "mélasse" if products_other =="le rp odoo" TBC id: 1239
+replace products_other= "bouteille d'huile d'olive" if products_other =="bouiteille de huile de lolive"
+replace products_other= "harissa et des épices" if products_other =="hrissaa et les épices +++++++++++++++++++++++++++++++++++"
+replace products_other= "les patisseries traditionnelles" if products_other =="el halawiyet el ta9lidia"
+replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
+
+*inno_exampl_produit1
+replace inno_exampl_produit1 = "on fait des déplacements aux différentes régions et on fait des formations dans leurs locals" if inno_exampl_produit1 == "yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement *****************"
+replace inno_exampl_produit1 = "la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne" if inno_exampl_produit1 == "la création et la diminution de prix , améloration de qualité tissue kenou yekhdmou ken haut gamme oualeou yekhdmou hata l moyen gamme"
+replace inno_exampl_produit1 = "améliorations du chiffre d'affaire" if inno_exampl_produit1 == "améliorations de chiffre d'affaire **************************" /*TBC*/
+replace inno_exampl_produit1 = "b2b, pause cafe ,evenement, site web , logiciel erp" if inno_exampl_produit1 == "b2b, pause cafe ,evenement, site web , logiciel erp +++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "gamme de maquillage , améliorations dans le laboratoire" if inno_exampl_produit1 == "gamme de maquillage , améliorations fl laboratoire ++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "on a augmenté le nombre d'employés, on a augmenté le rendement, on a rajouté de nouveaux articles (assiettes rondes/ pizza...)" if inno_exampl_produit1 == "zedna fl nombre des employés / kabarna fl rendement / zedou des articles (assiette rond/ pizza...)" 
+replace inno_exampl_produit1 = "accompagnement et vulgarisation scientifique" if inno_exampl_produit1 == "accompagnement et vulgarisation scientifique +++++++++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "on a amélioré l'emballage, les étiquettes, la qualité du produit et on a fait des coffret cadeaux double/ simple" if inno_exampl_produit1 == "hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple +++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "on a rajouté des machines afin d'améliorer la capacité de production / introduire une nouvelle gamme dans secteur décoration ( céramique artistique )" if inno_exampl_produit1 == "zedet fl les machines bech thasen fl capacité de production / introduire une nouvelle gamme fl secteur décoration ( céramique artistique )" 
+replace inno_exampl_produit1 = "diversité des produits , je cible le consommateur, diversification des services" if inno_exampl_produit1 == "diversité des produits , je cible le consommateur, diversification des services ++++++++++++++++++++++++++++++++++++++++"  /*TBC*/
+replace inno_exampl_produit1 = "j'ai changé l'entreprise avec laquelle je travaille avec: c'était une entreprise américaine et maintenant c'est devenue une entreprise allemande." if inno_exampl_produit1 == "badalt l'entreprise eli ttaamel maaha meli kenet entreprise américaine walet entreprise allemande"  
+replace inno_exampl_produit1 = "sacs en 5k/10k/25k" if inno_exampl_produit1 == "sacs en 5k/10k/25k ++++++++++++++++++++++++++++++++++++++++++"  
+replace inno_exampl_produit1 = "nous avons augmenter le nombre de produits et nous avons change l'emballage" if inno_exampl_produit1 == "zedna fel nombre de produit w badelto fel pacakage"  /*TBC*/
+replace inno_exampl_produit1 = "marketing" if inno_exampl_produit1 == "marketing **********************************************************"  /*TBC*/
+replace inno_exampl_produit1 = "la qualité de l'amande: une meilleure et plus bonne qualité" if inno_exampl_produit1 == "qualité amande: qualité kbira w behia ***********************"  /*TBC*/
+replace inno_exampl_produit1 = "la qualité: j'ai fait de nouveaux partenariats" if inno_exampl_produit1 == "qualité : 3malt des partenariat nouvelles ******************"  /*TBC*/
+replace inno_exampl_produit1 = "on a changé le logo et l'emballage + qualité espace ecologique en bois .decoration . formation ferme pedagogique" if inno_exampl_produit1 == "badalna logo w l embalage . callité espace ecologique en bois .decoration . formation ferme pedagogique" 
+replace inno_exampl_produit1 = "matériaux de construction" if inno_exampl_produit1 == "matériaux de construction ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"  
+replace inno_exampl_produit1 = "changement du logo et couleur personalisé et création des parfum sur mesure" if inno_exampl_produit1 == "changement du logo w couleur personamisé et création des parfum sur mesure ++++++++++++++++++++++++++++++++++++++++++++++++"  
+replace inno_exampl_produit1 = "développement du mode de paiement" if inno_exampl_produit1 == "développement en mode de paiement **************************************"  /*TBC*/
+replace inno_exampl_produit1 = "taille et couleur de produit" if inno_exampl_produit1 == "taille et coulleur de produit+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "création et innovation de produit .changer la formation des produit" if inno_exampl_produit1 == "création et innovation de produit .changer la formation des produit +++++++++++++++++++++++++++++++++++++++++++++++++++"  /*TBC*/
+replace inno_exampl_produit1 = "" if inno_exampl_produit1 == "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"  /*TBC*/
+replace inno_exampl_produit1 = "regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage" if inno_exampl_produit1 == "regrouper el ma3mel wel stokhage fi nafes leblasav /tawartou fi produit fel quantite et des different qualite des nouvelles texture et un nouveaux emballages"  
+replace inno_exampl_produit1 = "des produits bio qui sont devenus plus bio à plus de 40%" if inno_exampl_produit1 == "des produit bio oualeou akther bio 40% bio aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  
+replace inno_exampl_produit1 = "d'autres produits et services digital" if inno_exampl_produit1 == "d'autres produits et services digital ...,............................"  /*TBC*/
+replace inno_exampl_produit1 = "on rajouté une nouvelle ligne de produits énérgétiques/ packs de produits/ des formations gratuites pour les femmes" if inno_exampl_produit1 == "zedou ligne mta3 produits energetique / packh de produit /des formations gratuite pour femmes"
+replace inno_exampl_produit1 = "amélioration de la qualité du produit et changement du fournisseur" if inno_exampl_produit1 == "ameloration du qualite de produit fi tabdil le fourniseur" 
+replace inno_exampl_produit1 = "de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique" if inno_exampl_produit1 == "des nouvelles solutions digitales zedou fel quantité et de nouveaux partenariat en affrique"  /*TBC*/
+replace inno_exampl_produit1 = "on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers" if inno_exampl_produit1 == "3aoudou embalage jdid carton certification iso o khadem jdod responsable qualité manajement o 2 ouvrier jdod" 
+replace inno_exampl_produit1 = "changement de design" if inno_exampl_produit1 == "changement de design ****************************************" 
+replace inno_exampl_produit1 = "changement de l'emballage extérieur des boites, tapis berbéres" if inno_exampl_produit1 == "changement de l'emballage extérieur des boites, tapis barbére , da5elna clim et zarbia dans le même produit*" 
+replace inno_exampl_produit1 = "augmentation de ca" if inno_exampl_produit1 == "augmenation de ca ********************************" /*TBC*/
+replace inno_exampl_produit1 = "on a amélioré l'emballage, je vois ce que les consommateurs veulent et j'améliore le produit et j'ai fait une diversification des articles (des choses qui sortent de l'ordinaire)" if inno_exampl_produit1 == "hasnet fl emballage/ je vois ce que les consommateurs veulent w thasen fl produit/ w aamlt diversification fl les articles ( hajet kharja mel l'ordinaire)"
+*replace inno_exampl_produit1 = "de la teinture, amélioration de la production à travers de nouvelles idées" if inno_exampl_produit1 == "sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat ++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit1 = "j'ai fait de nouvelles infusions destiné pour les femmes allaitantes / on a fait des améliorations dans la qualité de production/ on a rajouté dans production et qualité de la moringa" if inno_exampl_produit1 == "aamlt des infusions jdod destiné pour les femmes allaitante / aamelou améliorations fl qualité de production/ zedou fl production et qualité de la moringa" 
+replace inno_exampl_produit1 = "sport et enfant" if inno_exampl_produit1 == "sport et enfant*********************************************" /*TBC*/
+replace inno_exampl_produit1 = "développement des nouveaux produit" if inno_exampl_produit1 == "développement des nouveaux produit,............................" /*TBC*/
+replace inno_exampl_produit1 = "changement de l' emballage et qualité de produit" if inno_exampl_produit1 == "changement de l' emballage et qualité de produit ++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+*replace inno_exampl_produit1 = "on a amélioré la production" if inno_exampl_produit1 == "hasanna fil masna3 w wafarna l9loub +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit1 = "des nouvelles création des produits" if inno_exampl_produit1 == "des nouvelles création des produits ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit1 = "odoo et tecnologie web" if inno_exampl_produit1 == "odoo et tecnologie web ++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit1 = "l'emballage et le design/ dans le produit que nous avons transformé avec des sucres naturels/ innovation dans la diversité des produits en produisant des produits biologiques comme les graines de lin" if inno_exampl_produit1 == "fel emballage fel designe / fel produit 3awadhto b des sucres naturelles / innovation fel anwe3 mta3 bel produit ya3mlo des produits biologique kima zere3et ketene"
+replace inno_exampl_produit1 = "la qualite de la chaine de production qui est devenue plus petite et la qualite de production" if inno_exampl_produit1 == "la qualite fel chaine de production radoha sghira o fel qualite de production"
+
+
+*inno_exampl_produit2
+replace inno_exampl_produit2 = "de nouveaux jouets en bois et d'autres ustensilles de cuisine" if inno_exampl_produit2 == "des nouvelles jouets en bois et des autres ustenside de cuisine ************"
+replace inno_exampl_produit2 = "des etudes à l'étranger" if inno_exampl_produit2 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+replace inno_exampl_produit2 = "de nouvelles formations de coiffure, ils ont rajouté un atelier de coifire et la possibilité de se déplacer dans les différentes régions pour faire les formations" if inno_exampl_produit2 == "des nouvelles formation de coiffure zedou atelier o de coiffure o f sociale zedou partie social mta3 jihet yetnaklou lel jihet o ya3mlou des formation"
+replace inno_exampl_produit2 = "des jbeyeb (tenues traditionnelles masculines)" if inno_exampl_produit2 == "jbeyeb les liquette aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+replace inno_exampl_produit2 = "gel fixateur" if inno_exampl_produit2 == "gel fixateur **************************************************************************"
+replace inno_exampl_produit2 = "on s'est concentré sur des services profesionnels" if inno_exampl_produit2 == "rakzou aala les services professionnels +++++++++++++++++++"
+replace inno_exampl_produit2 = "concealer, eyeliner, blush, bodyblush" if inno_exampl_produit2 == "concilier , eyeliner , blush , bodyblush ++++++++++++++++++++++++++++++++++++++++++++ +++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "services marketing en ligne/ on a travaillé sur l'image de marque/ site web en cours pour les ventes en ligne/ j'ai fait un logiciel interne personnalisé" if inno_exampl_produit2 == "services marketing en ligne / tkhdem aala l'image/ site web (en cours) pour les ventes en ligne/ aamlt logiciel interne personnalisée"
+replace inno_exampl_produit2 = "le conseil" if inno_exampl_produit2 == "le conseil ++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "on a sorti une nouvelle gamme de produits de décoration et ont s'est concentré sur la céramique artistique" if inno_exampl_produit2 == "kharajna gamme jdida f les articles de decoration / rakazna aala ceramique artistique +++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "produit publicitaires , importer des nouveaux produit naturels  et elle fait leurs chartes, elle fait des choses personnalisées en fonction de l'occasion ou de la demande du client" if inno_exampl_produit2 == "produit publicitaires , importer des nouveaux produit naturels w taamel les chartes met3hom , w taamel hajet personnalisé heya w l'occasion/ demande de client"
+replace inno_exampl_produit2 = "l'astrotourisme" if inno_exampl_produit2 == "les astrotorisme .................................."
+replace inno_exampl_produit2 = "des produits cosmétiques et ont diversifié les produits de décoration" if inno_exampl_produit2 == "des produit cosémitique amlou variation produit de décoration aaaaaaaaaaaaaaaaaaaaaa"
+replace inno_exampl_produit2 = "tomates, piments, melons et citrouille" if inno_exampl_produit2 == "tomùate, pimon , dele3 ,9ra3***********************"
+replace inno_exampl_produit2 = "des produit agro alimentaires" if inno_exampl_produit2 == "des produit agro alimentaires ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "des bougies" if inno_exampl_produit2 == "des bougies ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "déloppement dans export" if inno_exampl_produit2 == "déloppement fel export ********************************"
+replace inno_exampl_produit2 = "parures et housses de lit" if inno_exampl_produit2 == "parure de lit et ouss de lit ++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "produit en gré" if inno_exampl_produit2 == "produit en gré +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit2 = "de nouveaux sacs à main en cuir" if inno_exampl_produit2 == "des nouvelles sacs a main en cuire *****************************************************" 
+replace inno_exampl_produit2 = "des nouvelles formes de produit" if inno_exampl_produit2 == "des nouvelles forme de produit ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit2 = "organisation d'évenements" if inno_exampl_produit2 == "organisation des evenements++++++++++++++++++++++++++++++++++" 
+replace inno_exampl_produit2 = "lancement d'un nouveau produit : pour un cadeau (cookies de gourmandise)" if inno_exampl_produit2 == "lancement d'un nouveau produit : pour un cadeau (cookies m3a gourmandise)**********************************************************************************" 
+replace inno_exampl_produit2 = "maquillage: les écrans, de noveaux mascaras, gloss et pinceaux" if inno_exampl_produit2 == "les crean /des nouveaux mascara et glosse et panceau" 
+replace inno_exampl_produit2 = "des confitures, sauce tomate, jus de citronade" if inno_exampl_produit2 == "des coniftueres sauce tomate les jus citronade aaaaaaaaaaaaaaaaaaaaaa" 
+replace inno_exampl_produit2 = "le marketing digital" if inno_exampl_produit2 == "le marketing digital....................................................." /*TBC*/
+replace inno_exampl_produit2 = "des confitures de tomates sucrées + de nouveaux parfums pour les pâtes à tartiner" if inno_exampl_produit2 == "confutour deb tomate sucre/ des gouts jdod pour les pates a tartiner"
+replace inno_exampl_produit2 = "sacs de soirée, accessoires de soirée" if inno_exampl_produit2 == "sacs de soiré /accesoire de soiré.........................................*"
+replace inno_exampl_produit2 = "des solutions digitales" if inno_exampl_produit2 == "les solutions degitales....................................." /*TBC*/
+replace inno_exampl_produit2 = "nouvelle conception et liaison intelligente" if inno_exampl_produit2 == "nouvelle conception et liaison intelligente ..........." /*TBC*/
+replace inno_exampl_produit2 = "des articles de cadeaux, Haïk Kamraya, des sacs et des pochette sur taille de pc block note" if inno_exampl_produit2 == "les articles de cadeau haiek 9amraya des sacs et des pochette sur taille de pc block note"
+replace inno_exampl_produit2 = "des abats-jours en laine et fibres végétales" if inno_exampl_produit2 == "abajoret bil 7alfa w souf *************************"
+replace inno_exampl_produit2 = "j'ai fait une évolution avec les fibres végétales/ j'ai fait des chnagement avec le mais pour les personnes qui ont des maladies infectieuses et les personnes qui souhaitent faire un régime" if inno_exampl_produit2 == "aamlt évolution bel halfa/ aamlt halawiyet sihiya bel mais ll laabed eli aandha des maladies infectieuse w ll laabed eli theb taamel régime"
+replace inno_exampl_produit2 = "des parasols et des drapaux de Tunisie avec des fibres végétales " if inno_exampl_produit2 == "medhalat , aalam tounes bel halfa ++++++++++++++++++++++++++++++++++++++++++++++"
+*replace inno_exampl_produit2 = "des parasols et des drapaux de Tunisie avec des fibres végétales " if inno_exampl_produit2 == "خدمت موديلات قريبة للزمني و فيها حاجات مطورة و مواكبة للعصر"
+replace inno_exampl_produit2 = "service dans le domaine de sport" if inno_exampl_produit2 == "service dans le domaine de sport***********************************" /*TBC*/
+replace inno_exampl_produit2 = "coffret cadeau" if inno_exampl_produit2 == "coffret cadeau *************************************" /*TBC*/
+replace inno_exampl_produit2 = "le conseil, audit" if inno_exampl_produit2 == "le conseil, audit *************************************************" /*TBC*/
+replace inno_exampl_produit2 = "changement de la quantité de produit .innovation de bssissa avec du chocolats et des fruits secs .et goutée pour les enfants" if inno_exampl_produit2 == "changement de la quantité de produit .innovation de bssissa avec du chocolats et des fruits secs .et goutée pour les enfants+++++++++++++++++++++"
+replace inno_exampl_produit2 = "des nouvelles création des produits" if inno_exampl_produit2 == "des nouvelles création des produits ++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit2 = "odoo et la partie marketing" if inno_exampl_produit2 == "odoo et la partie marketing ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit2 = "sucré  et salé avec une nouvelle texture/ le fondant" if inno_exampl_produit2 == "sucret salé b texture jdida / le fandant /***********" 
+replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "mini chaine dolive ***************************......................" /*TBC*/
+
+
+*inno_proc_other
+replace inno_proc_other= "changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes" if inno_proc_other =="changement de l’emballage . introduction des nouveaux jouets et des nouvelle gammes **********"
+replace inno_proc_other= "l'export à renforcer la formation" if inno_proc_other =="lexport kaouitou f formationn aaaaaaaaaaaaaaaaaaaaaaaaaa" /*TBC*/
+replace inno_proc_other= "des formations pour les employés afin de garantir la durabilté des produits artisanaux" if inno_proc_other =="des formation lel employés bech todhmen el durabilté les produit artisanaux" 
+replace inno_proc_other= "ils ont intégré du commercial et ont un nouvel canal de distribution" if inno_proc_other =="dakhlou el commercial oualew andhon un un canal de distrubtion ****************************" 
+replace inno_proc_other= "aménagement, extension du laboratoire" if inno_proc_other =="aménagement, extension du laboratoire +++++++++++++" 
+replace inno_proc_other= "ils ont fait des changements au niveau des offres et ont fait des changements dans les packs services" if inno_proc_other =="aamlou des changements au niveau des offres / w aamlt changement fl les packs services" 
+replace inno_proc_other= "elle a l'intention d'introduire un planning des matières nouvelles afin de faciliter le travail et réduire le coût de production" if inno_proc_other =="planning bech dakhel bih des matieres jdoud bech tsahel khedma w thasen fl cout de production" 
+replace inno_proc_other= "de nouveaux employes et de nouvelles matières ont été rajoutés" if inno_proc_other =="zedna des employés , zedna matériel jdid +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "elle a changé l'organisation du management intérieur" if inno_proc_other =="badlt fl l'organisation de management haja intérieur" 
+replace inno_proc_other= "par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel" if inno_proc_other =="par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel +++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "elle a aggrandit l'espace de stockage et les touriste viennent pour voir l'expérience" if inno_proc_other =="kabaret fl stockage , ijiw les touriste ichoufou l'experiences" 
+replace inno_proc_other= "elles ont travaillés sur des formations techniques (pratiques), ont rajouté des workshops pour les petits et se sont concentrés plus sur le digital" if inno_proc_other =="khdemna aala les formations technique (pratique) w zedna des workshop ll sghar / rakazna aala digitale akther +++++++++++++" 
+replace inno_proc_other= "site web , sponsoring , les promotions, application mobile" if inno_proc_other =="site web , sponsoring , les promotions, application mobile ++++++++++++++++++++++++" 
+replace inno_proc_other= "elle a fait un site web" if inno_proc_other =="aamalt site web +++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "elle a changé de local" if inno_proc_other =="changer local ************************************" 
+replace inno_proc_other= "team building" if inno_proc_other =="team building ********************************************************" 
+replace inno_proc_other= "les compétences de l'équipe et de nouveaux recrutements" if inno_proc_other =="les competences de lequippe et recrutement jdod............................" 
+replace inno_proc_other= "mise en place de panneaux solaires pour génerer l'éclectricité dans sa ferme" if inno_proc_other =="paneau solaire pour electricté dans sa ferme ++++++++++++++++++++" 
+replace inno_proc_other= "genre" if inno_proc_other =="genre +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/ 
+replace inno_proc_other= "l'export" if inno_proc_other =="l' expot +++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/ 
+replace inno_proc_other= "changement de local" if inno_proc_other =="changement de local++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "aggrandissement de l'équipe et de nouveaux bureaux" if inno_proc_other =="agrandir l equipe neveau bureau +++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "étude de marché à l'etranger" if inno_proc_other =="étude de marché à l'etranger****************************************" 
+replace inno_proc_other= "ajout d'une nouvelle ligne de production + prospection de marché à l'étranger" if inno_proc_other =="zedou ligne de production / chofto des marche bara" 
+replace inno_proc_other= "ils ont rajouté des marchés à l'international" if inno_proc_other =="zedou enfathou ala marchés international *****************************" 
+replace inno_proc_other= "ajout d'une charte graphique, changement de l'emballage, changement du site web et de nouveaux catalogues" if inno_proc_other =="iso chart graphique kemla embalage kemel badlouh o site web o nouveaux catalogue" 
+replace inno_proc_other= "elle a augmenté le nombre d'employés afin d'améliorer la production et augmenter la rapidité du traail + elle a travoué de nouvelles méthodes de travail où elle donne la majorité du travail aux employés et elle prends la responsabilité et s'occupe du suivi du travail" if inno_proc_other =="zedet chwaya khadema bech thasen fl production w tzid fl rapidité fl khedma / lkat nouvelles méthodes fl khedma maaneha taati ll khadema ykhdmou koul chay w prendre la responsabilité w heya taamel el suivi metaa khedma" 
+*replace inno_proc_other= "ils ont rajouté des marchés à l'international" if inno_proc_other =="ghayart fl mantoujet aamalt midhalet ++++++++++++++++++++++++++++++++++++++++++" /*TBC*/ 
+replace inno_proc_other= "actions de marketing" if inno_proc_other =="actions de marketing**********************************************" 
+replace inno_proc_other= "le local a été aggrandi" if inno_proc_other =="kabarna fi local ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
+replace inno_proc_other= "intégration de nouveaux matériaux" if inno_proc_other =="integration de nouveaux materieles**********************......................................." 
+
+*inno_mot_other
+replace inno_mot_other= "suite à des formations où elle a eu une idée sur les besoins que les gens ont et a pensé à faire des formations pour aider ces personnes en besoin" if inno_mot_other =="suite a des formation ykaounou fehom houma khdhet men andhom lfekra besoin men aned eness eli tkaouen fehom eli houma m aryef khammet tamlelhom formation bech thabbebhom f produit" 
+replace inno_mot_other= "suite à un déjeuner avec le groupe projet pompate qui ont fait des remarques" if inno_mot_other =="ijini groupe projet pompate youfter hadheya yaatini des remarques nkhouha ++++++++++++++++++++++++++++" 
+replace inno_mot_other= "par des recherches sur internet pour avoir des nouvelle méthodes de marketing / j'ai fait un site web pour les ventes en ligne / a travers des fournisseurs" if inno_mot_other =="par des recherches sur internet pour avoir des nouvelle méthodes de marketing / aamlt site web pour les ventes en ligne / a travers des fournisseurs" 
+replace inno_mot_other= "l'inspiration provient des formations / je vois ce qui est demandé sur le marché, on fait des analyses et ont sort le produit par rapport à ce que le consommateur a besoin" if inno_mot_other =="l'inspiration men les formations / nchoufou chnowa el matloub fl marché w naamelou les analyses w nkharjou el produit par rapport ll consommateur chnowa hachtou" 
+replace inno_mot_other= "en fonction de la demande du marché" if inno_mot_other =="heya w demande de marché ++++++++++++++++++++++++++++++++++" 
+replace inno_mot_other= "réunion avec d'autres membres du consortium" if inno_mot_other =="réunion avec d’autre nombre du consortium" 
+replace inno_mot_other= "du travail" if inno_mot_other =="mil 5edma" /*TBC*/ 
+replace inno_mot_other= "à partir des réclamations qui se trouve dans le bilan" if inno_mot_other =="a partir mel les reclamation qui se trouve dans le billant"
+replace inno_mot_other= "elle meme , famille amis , equipe de travail" if inno_mot_other =="elle meme , famille amis , equipe de travail ++++++++++++++"
+replace inno_mot_other= "participation aux formations" if inno_mot_other =="participatin au les formation ++++++++++++++++++++++++++++++++++++++++"
+replace inno_mot_other= "de l'equipe, recherche sur l' internet reseaux sociaux" if inno_mot_other =="de l'equipe recherche sur l' internet reseaux sociaux ++++++++++++++++++++++++++"
+replace inno_mot_other= "son fils/ radio (express FM)" if inno_mot_other =="weldha / express fm"
+replace inno_mot_other= "l'idée provient d'eux mêmes ou d'anciennes idées" if inno_mot_other =="fekra men 3andhom afkar kdima"
+replace inno_mot_other= "de sa propre équipe" if inno_mot_other =="men son propres equipes"
+replace inno_mot_other= "de la GIZ" if inno_mot_other =="mme ikram mel giz"
+*replace inno_mot_other= "3d de bouzard" if inno_mot_other =="3d de bouzard" /*TBC*/ 
+replace inno_mot_other= "c'est sa propre idée" if inno_mot_other =="fekrtha heya ++++++++++++++++++++++++++++++"
+replace inno_mot_other= "programmes TV/ elle voit des photos par exemple de la télévision ou des publicités dans la rue" if inno_mot_other =="programme tv/ tchouf tsawer par exemple men television wala des publicités fl cheraa"
+replace inno_mot_other= "les programmes d'appui" if inno_mot_other =="les programme d'appui +++++++++++++++++++++++++"
+replace inno_mot_other= "les besoins du marché" if inno_mot_other =="besois du merchés +++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_mot_other= "en fonction de la demande du marché" if inno_mot_other =="en facteur de la demande du marche"
+
+*export_other
+replace export_other= "l'export en Afrique est dur" if export_other =="f afrique lesxport s3ib"
+replace export_other= "il n'y a pas de demande" if export_other =="mafammech demande"
+replace export_other= "manque des ressources pour mettre une personne qui va s'occuper de l'export + elle n'a pas trouvé des stagières de commerce internationale pour les aider à faire des étude de marché pour l'export" if export_other =="manque des ressources pour mettre une personne yetlhé bel export malkatech des stagieres de commerce internationaux bech y3aounohom lel etude de marche pour l'export"
+replace export_other= "ils préfèrent se concentrer sur le marché national" if export_other =="taw ihebou irakzou aala nationale akther"
+replace export_other= "manque de ressources et de certifications d'autres pays" if export_other =="manque de ressources , certification men douwal okhra ++++++++++++++++++++++++++++++"
+replace export_other= "ils n'ont pas la capacité de production requise" if export_other =="famech capacite de production"
+replace export_other= "il n'y a pas d'opportunité" if export_other =="mafamech opportunité"
+replace export_other= "elle a arrete la production" if export_other =="elle a arrete la production ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+replace export_other= "je n'ai pas de contrats, je ne pars pas aux foires de commerce, je n'ai pas de site web et je n'ai personne qui puisse s'occuper des activités d'export" if export_other =="aandich des contacts , manemchich les foires de commerce , aandich site web, aandich chkoun bech yaamali export +++++++++++++++++++++++"
+replace export_other= "ils ont arrêté d'exporter, une proposition leur a été faite pour cette gamme afin de commmercialiser en Tunisie" if export_other =="maatech taamel,kaset w manajmouch ikamlou fl l'export / jethom proposition metaa gamme hedheya pour commercialiser en tunisie"
+replace export_other= "il n'y a pas d'opportunité" if export_other =="famech des opportunités +++++++++++++++++++++++++"
+replace export_other= "il n'y a pas d'opportunité" if export_other =="famech opportunité d'export"
+replace export_other= "il a des opportunités d'export mais elle n'a pas terminé l'opération" if export_other =="fama des opportunités metaa exportation ama tkmelech l'operation +++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/ 
+replace export_other= "on na pas trouver les bonnes personnes dans les pays étrangers" if export_other =="on na pas trouver les bonnes personnes fel les pays étrangers"
+replace export_other= "ils ne savent pas comment exporter: les procédures et les processus leurs font défaut, il manque les certifications, ils ont des clients et ne connaissent pas les étapes nécéssaires pour l'exportation" if export_other =="mayarfouch kifeh ysadrou les procedures l process kemla neksethom les certifcation o kol nekshom les client maoujoudin ama nekshom les etapes mta l'exportation"
+replace export_other= "il n'y a pas de financement" if export_other =="famech financement financier"
+replace export_other= "elle n'a pas l'accès à l'exporation, il n'y a pas d'opportunités et l'export une importante capacité de production qu'elle ne peut pas assurer." if export_other =="aandhech l’accès bech tsader w famech opportunité w zid ihebou aala quantité kbira ama heya matnajamech"
+
+
+*man_sources_other
+replace man_sources_other= "j'ai travaillé avec une entreprise néérlandaise sur terrain + les formations en ligne et en présentielles" if man_sources_other =="khdmet maa entreprises f holanda sur terrain+les formations en ligne/présentiel ++++++++++++++++"
+replace man_sources_other= "je vois ce qui se passe sur le marché à l'échelle internationale et je m'inspire des nouveautés sur le marché internationales pour de nouvelles stratégies" if man_sources_other =="nchoufou chnowa derej fl marche a l’échelle international w hakeka tjina l'influence metaa des nouvelles stratégies"
+replace man_sources_other= "j'ai appris des nouvelles stratégies à partir des formations en ligne et en présentiel, des programmes et des expériences passées" if man_sources_other =="men des formations en ligne et présentiel et des programmes , des experiences taalamthom ++++++++++++++++++++++++++++"
+replace man_sources_other= "les formations en ligne / les missions b2b" if man_sources_other =="les formations en ligne / les missions b2b +++++++++++++++++++++++++++++++++"
+replace man_sources_other= "les formations , des programmes de coaching sinon je fais des analyses et je vois ou je dois m’améliorer" if man_sources_other =="les formations , des programme de coaching sinon naamel les analyses w je vois ou je dois m’améliore"
+replace man_sources_other= "elle lit beaucoup Science Nord d'où elle a appris la planification, le développement des stratégies et des idées" if man_sources_other =="takra barcha nord sciences taalmet menou planification/ developpement des strategie/ developpement des idees +++++++++++++++++++++++++++++++++++++++++++++++"
+replace man_sources_other= "les formations professionnelles où elle a appris la création de l'entreprise et les programmes de la GIZ" if man_sources_other =="dawarat takwineya taalem les créations de l'entreprise / les programmes giz ++++++++++++++++++++++++++++++++++"
+replace man_sources_other= "les formations de la GIZ et l'expérience" if man_sources_other =="formatiions de giz w l'expérience"
+replace man_sources_other= "les formations de la GIZ" if man_sources_other =="formations de giz ++++++++++++++++++++++++++++++++++++"
+replace man_sources_other= "les broadcasts sur Internet" if man_sources_other =="bodcast sur internet ++++++++++++++++++++++++++"
+replace man_sources_other= "les études" if man_sources_other =="les etudes ++++++++++++++++++++++++++++"
+replace man_sources_other= "une agence de communication qui suit le programme dream for use gg4 youth" if man_sources_other =="agence de communication heya teb3a proggrame dream for use gg4 youth" /*TBC */
+replace man_sources_other= "l'inspiration de nouvelles stratégies provient d'elle-même" if man_sources_other =="l'inspiration tji men aandha"
+replace man_sources_other= "des formations" if man_sources_other =="des formations+++"
+replace man_sources_other= "des programmes TV / des formations présentielles / des publicités" if man_sources_other =="mel programmes tv / les formations présentiel / mel les publicités"
+replace man_sources_other= "elle meme fait la recherche sur internet et les formations en ligne" if man_sources_other =="elle meme fait la recherche sur internet et les formations en ligne +++++++++++++++++++++"
+replace man_sources_other= "les formations et les commandes" if man_sources_other =="les formations et les commandes ++++++++++++++++++++++++++++++++++++++++++++++"
+replace man_sources_other= "j'ai étudié" if man_sources_other =="9rit"
+
+*net_services_other
+replace net_services_other= "elle a utilise ses contacts avec d'autres entrepreneurs pour faire des connaissances à travers eux" if net_services_other =="elle a utilise ses contacts avec d'autre entrepreneur pour faire des connaissances à travers eux+++++++++++++++++++++++++++++"
+replace net_services_other= "établir des liens avec d'autres entrepreneures" if net_services_other =="faire des liens avec d'autre entrepreneures ++++++++++++++++++++++++++++++++++++++++++++"
+replace net_services_other= "partage des formations et les sites" if net_services_other =="partage des formations et les sites ++++++++++++++++++++++++"
+replace net_services_other= "comment pénétrer un nouveau marché" if net_services_other =="comment créer un nouveau marché"
+replace net_services_other= "les compétitions, les événements et des formations" if net_services_other =="compétetions, les évenements, des formations"
+replace net_services_other= "elle utilise ses contacts pour le partage d'expériences" if net_services_other =="estaamlet les contacts met3ha pour partage d'expériencess"
+
+*int_ben1
+replace int_ben1="Le travail sur soi-même" if int_ben1== "تعمل على روحك" 
+replace int_ben1="" if int_ben1== "-" /*TBC*/
+replace int_ben1="de nouveaux partenaires qui ont débuté à travailler avec moi" if int_ben1== "des partenaires walew yekhdmou meaya"
+
+*int_ben2
+replace int_ben2="Le travail d'équipe" if int_ben2== "تعمل عالفريق متاعك" 
+replace int_ben2="j'ai trouvé des chemins pour exportation et prospection" if int_ben2== "lkit des chemins pour exportation et prospection" 
+replace int_ben2="j'ai appris beaucoup ded choses par rapport aux techniques" if int_ben2== "tet3alem barcha hajet fe les techniques"  /*TBC*/
+replace int_ben2="nom de bons contacts au sein du consortium" if int_ben2== "non des contactes behin fel consortuim"
+replace int_ben2="connaissances des marchés africains" if int_ben2== "connassances des marcheres aafricain"
+
+*int_ben3
+replace int_ben3="Travail sur le produit en restauration" if int_ben3== "تعمل عالمنتوج متاعم" 
+replace int_ben3="expériences par rapport aux visites te permettent de faire des analyses / comparaison / évaluation des produits par rapport aux secteurs" if int_ben3== "expériences par rapport ll les visites ikhalik tnajem taamel les analyses / comparaison / évaluation des produits par rapport aux secteurs"
+replace int_ben3="j'ai appris d'eux les procédures d'export et des techniques digitales" if int_ben3== "t3alamet menhom fel export o fel digitale"
+replace int_ben3="des opportunités d'exposition en Arabie Saoudite" if int_ben3== "opportunité dexposition f saudi"
+
+*int_ben_autres
+replace int_ben_autres="" if int_ben_autres== "+++++++++++++++++++++" /*TBC*/
+
+
+*int_incv1
+replace int_incv1="L'entreprise a été victime d'injustice et n'a pas été inscrit dans le groupe malgré un dossier complet" if int_incv1== "تعرضت شركني لظلم وعدم التسجيل في المجموعة رغم مدي بملفي كامل وشامل" 
+replace int_incv1="L'ambiance générale" if int_incv1== "jaw l3am" 
+
+*int_incv2
+replace int_incv2="Je ne peux pas être d'accord avec les idées des participantes" if int_incv2== "matnajemesh twafe9 bin les aidées des participants" 
+replace int_incv2="limitation des ressources financières" if int_incv2== "immitation des ressources financier" 
+replace int_incv2="" if int_incv2== "++++++" /*TBC */
+replace int_incv2="il y a une importante hétérogénéité au sein du consortium: certaines entreprises sont encores débutantes alors que d'autres sont bien établies depuis longtemps" if int_incv2== "les membres est trop élevés ykalak khater fama abed debuante o fama abed kdom barcha"
+replace int_incv2="Malheureusement, il y une distinction régionale (entre le Sud et le Nord)" if int_incv2== "التميز بين الجنوب والشمال الاسف"
+replace int_incv2="il n'y a pas de motivation pour l'équipe" if int_incv2== "mfamech motivation lel equipe"
+
+
+*int_incv3
+replace int_incv3="" if int_incv3== "+++++++++++++"  /*TBC */
+replace int_incv3="" if int_incv3 == "+++++"  /*TBC */
+replace int_incv3="les formations qui ont été faites étaient une perte de temps car elles n'étaient pas stratégies car ils n'ont pas le même courant de pensée" if int_incv3 == "les formation eli amlhom perdre de temps khater mahomech stratégique khater houma déjà mouch nafes tafkir"  
+replace int_incv3="Je n'en profiterai pas financièrement" if int_incv3 == "لن استفاد ماديا"  
+replace int_incv3="Ca prends trop de temps de ma vie" if int_incv3 == "yekhou barcha wakt mn hyeti"  
+
+*int_incv_autres
+replace int_incv_autres="" if int_incv_autres =="+++++++++++++++++++"  /*TBC */
+replace int_incv_autres="" if int_incv_autres =="++++"  /*TBC */
+replace int_incv_autres="J'ai perdu mon temps et j'ai fait de gros efforts pour assister à toute la cérémonie, et finalement nous avons été victimes d'une grande injustice." if int_incv_autres =="ضيعت وقتي وبذلت مجهود كبير للحضور طيلة التكويل وفي الاخر نتعرض لظلم كبير"  
+replace int_incv_autres="notre diversité nous a fait perdre beaucoup de temps et d'énergie pour fixer la meilleure stratégie pour le gie; cumul beaucoup de retard sur ma propre entreprise (voir même une stagnation pendant une longue période)" if int_incv_autres =="notre diversité nous a fait perdre beaucoup de temps et d'énergie pour fixer la meilleure stratégie pour le gie ==&gt; cumul beaucoup de retard sur ma propre entreprise (voir même une stagnation pendant une longue période)"  
+
+*int_other
+replace int_other= "elle a dit à quoi cela sert de participer au consortium lorsque elle a un service et pas un bien pour faire l'exportation. De plus, elle a une plateforme à l'échelle nationale (et non internationale) ce qui la pousse à avoir de nouvelles strategies pour pouvoir exporter si elle fait partie du consortium" if int_other =="kalt a quoi sert de participer au consortium wakteli heya aandha services mouch bien bech taamel l'exportation w zid heya aandha plateforme a l’échelle nationale mouch internationale (lezem tkoun internationale ) donc bech taamel l'exportation w tcherek fl consortium lezem des nouvelles stratégie"
+replace int_other="" if int_other =="————————"  /*TBC */
+replace int_other="elle n'est pas prete à participer au consortium" if int_other =="elle n'est pas prete a participer au consortium +++++++++++++++++++++++++++++++++++++"
+replace int_other="pour des raisons légales: le consortium égigne que la gérante soit une femme alors que son co-gérant est un homme" if int_other=="pour des raisons légal / consortium oblige tkoun gérante totalement féminine w heya maaha rajel donc mays3dhech"
+replace int_other="l'aggréssivité de certaines personnes, le comportement des entrepreneurs et la mauvaise organisation de la GIZ" if int_other =="grasivite des personnes le comportement des entrepreneur acause du mal organisation de giz"
+replace int_other="elle ne peut pas faire partie du consortium car elle a des engagements familiaux" if int_other =="manajmtech nemchi aandi des engagements familiaux"
+replace int_other="elle n'est pas disponible" if int_other =="n'est disponible +++++++++++++++++++++++++++++++++++"
+replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"	
 
 ***********************************************************************
-* 	PART 7:  Destring remaining numerical vars
+* 	PART 8:  Destring remaining numerical vars
 ***********************************************************************
 
 local destrvar comp_ca2023 comp_ca2024 comp_benefice2023 comp_benefice2024 compexp_2023 compexp_2024
