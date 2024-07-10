@@ -69,8 +69,8 @@ replace needs_check = 1 if surveyround==3 & net_association > 10 & net_associati
 replace questions_needing_checks = questions_needing_checks + "L'entreprise a plus de 10 contacts d'affaire, veuillez vérifier. / " if surveyround==3 & net_association > 10 & net_association !=.
 
 *is treatment but has 0 associations
-replace needs_check = 1 if surveyround==3 & treatment ==1 & net_association == 0
-replace questions_needing_checks = questions_needing_checks + "L'entreprise est traitement, donc elle est membre du consortium, veuillez vérifier. / " if surveyround==3 & treatment ==1 & net_association == 0
+replace needs_check = 1 if surveyround==3 & take_up ==1 & net_association == 0
+replace questions_needing_checks = questions_needing_checks + "Le nombre d'affiliations aux associations est de 0, alors qu'elle participe aux activités des consortiums. Veuillez vérifier. / " if surveyround==3 & take_up ==1 & net_association == 0
 
 /* --------------------------------------------------------------------
 	PART 2.3: Comptabilité / accounting questions
@@ -208,8 +208,9 @@ replace questions_needing_checks = questions_needing_checks + "Nombre de discuss
 
 replace needs_check = 1 if net_size4 > 30 & surveyround == 3 & net_size4 != .
 replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille est supérieur à 30, veuillez vérifier. / " if net_size4 > 30 & surveyround == 3 & net_size4 != .
+
 ***********************************************************************
-* 	Part 3: Cross-checking answers from baseline & midline		
+* 	Part 3: Cross-checking answers from baseline & endline		
 ***********************************************************************
 *panel data to long
 replace ca_2021 = ca if surveyround == 1
@@ -217,7 +218,7 @@ gen ca_exp2021 = ca_exp if surveyround == 1
 replace profit_2021 = profit if surveyround == 1
 
 *generate financial per empl
-local varn ca_2018 ca_2019 ca_2020 ca_2021 ca_exp2018 ca_exp2019 ca_exp2020 ca_exp2021 profit_2021
+local varn ca_2021 ca_exp2021 profit_2021
 
 foreach x of local varn { 
 gen n`x' = 0
@@ -228,60 +229,29 @@ replace n`x' = `x'/employes if n`x'!= .
 }
 
 *add inflation //https://www.focus-economics.com/country-indicator/tunisia/inflation/#:~:text=Inflation%20in%20Tunisia,information%2C%20visit%20our%20dedicated%20page
-replace nca_2018 = nca_2018*1.356
-replace nca_2019 = nca_2018*1.289
-replace nca_2020 = nca_2018*1.233
-replace nca_2021 = nca_2018*1.176
+replace nca_2021 = nca_2021*1.176
 
-replace nca_exp2018 = nca_exp2018*1.356
-replace nca_exp2019 = nca_exp2019*1.289
-replace nca_exp2020 = nca_exp2020*1.233
-
-replace nprofit_2021 = nprofit_2021*1.176
+replace nca_exp2021 = nca_exp2021*1.176
 
 *manual thresholds at 95% (Highest among surveyrounds)
 	*turnover total
-
-local old_turnover "nca_2018 nca_2019 nca_2020 nca_2021"
+	
 local new_turnover "ncomp_ca2023 ncomp_ca2024"
-scalar maxtt_p95 = 0
-
-foreach var of local old_turnover {
-    sum `var', d
-	
-	if r(p95) > maxtt_p95 {
-	
-	scalar drop maxtt_p95
-	scalar maxtt_p95 = r(p95)
-	scalar list
-}
-}
 
 foreach var of local new_turnover {
-	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' > maxtt_p95
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport aux dernières vagues, vérifier / " if `var' != . & surveyround == 3 & `var' > maxtt_p95
+	sum nca_2021, d
+	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
 }	
 
 	*turnover export
-local old_turnoverexp "nca_exp2018 nca_exp2019 nca_exp2020 nca_exp_2021"
 local new_turnoverexp "ncompexp_2023 ncompexp_2024"
-scalar maxte_p95 = 0
-
-foreach var of local old_turnover {
-    sum `var', d
-	
-	if r(p95) > maxte_p95 {
-	
-	scalar drop maxte_p95
-	scalar maxte_p95 = r(p95)
-	scalar list
-}
-}
 
 
 foreach var of local new_turnoverexp {
-	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' > maxte_p95
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport aux dernières vagues, vérifier / " if `var' != . & surveyround == 3 & `var' > maxte_p95
+	sum nca_exp2021, d
+	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
 }	
 
 	*profit
@@ -290,40 +260,18 @@ local new_profit "ncomp_benefice2023 ncomp_benefice2024"
 foreach var of local new_profit {
 	sum profit_2021, d
 	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport aux dernières vagues, vérifier / " if `var' != . & surveyround == 3 & `var' > r(p95)
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
 }	
 
 		*employees
-local fte_surveyround "surveyround==1 surveyround==2"
-scalar maxm_p95 = 0
-
-foreach var of local fte_surveyround {
-    sum employes if `var', detail
-    if r(p95) > maxm_p95 {
-		scalar drop maxm_p95
-		scalar maxm_p95 = r(p95)
-		di maxm_p95
-	}
-}
-
-replace needs_check = 1 if employes != . & surveyround == 3 & employes > maxm_p95
-replace questions_needing_checks = questions_needing_checks + "employés très grand par rapport aux dernières vagues, êtes vous sure? / " if employes != . & surveyround == 3 & employes > maxm_p95
+sum employes if surveyround == 1, d
+replace needs_check = 1 if employes != . & surveyround == 3 & employes > r(p95)
+replace questions_needing_checks = questions_needing_checks + "employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if employes != . & surveyround == 3 & employes > r(p95)
 
 *employees femmes
-local fte_surveyround "surveyround==1 surveyround==2"
-scalar maxf_p95 = 0
-
-foreach var of local fte_surveyround {
-    sum car_empl1 if `var', detail
-    if r(p95) > maxf_p95 {
-		scalar drop maxf_p95
-		scalar maxf_p95 = r(p95)
-		di maxf_p95
-	}
-}
-
-replace needs_check = 1 if car_empl1 != . & surveyround == 3 & car_empl1 > maxm_p95
-replace questions_needing_checks = questions_needing_checks + "employés femmes très grand par rapport aux dernières vagues, êtes vous sure? / " if car_empl1 != . & surveyround == 3 & car_empl1 > maxm_p95
+sum car_empl1 if surveyround == 1, d
+replace needs_check = 1 if car_empl1 != . & surveyround == 3 & car_empl1 > r(p95)
+replace questions_needing_checks = questions_needing_checks + "employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if car_empl1 != . & surveyround == 3 & car_empl1 > r(p95)
 
 *growth rate 2021
 	*ca
@@ -341,14 +289,17 @@ foreach var of local compta_vars {
     drop first_`var'
 }
 
-gen gr_ca2021_2024 = (adjusted_comp_ca2024 - adjusted_ca_2021*1.176) / adjusted_ca_2021*1.176
+replace adjusted_ca_2021 = adjusted_ca_2021*1.176
+replace adjusted_ca_exp2021 = adjusted_ca_exp2021*1.176
 
-gen gr_ca2021_2023 = (adjusted_comp_ca2023 - adjusted_ca_2021*1.176) / adjusted_ca_2021*1.176
+gen gr_ca2021_2024 = (adjusted_comp_ca2024 - adjusted_ca_2021) / adjusted_ca_2021
+
+gen gr_ca2021_2023 = (adjusted_comp_ca2023 - adjusted_ca_2021) / adjusted_ca_2021
 
 	*ca_exp
-gen gr_caexp2021_2024 = (adjusted_compexp_2024 - adjusted_ca_exp2021*1.176) / adjusted_ca_exp2021*1.176
+gen gr_caexp2021_2024 = (adjusted_compexp_2024 - adjusted_ca_exp2021) / adjusted_ca_exp2021
 
-gen gr_caexp2021_2023 = (adjusted_compexp_2023 - adjusted_ca_exp2021*1.176) / adjusted_ca_exp2021*1.176
+gen gr_caexp2021_2023 = (adjusted_compexp_2023 - adjusted_ca_exp2021) / adjusted_ca_exp2021
 
 	*profit
 gen gr_profit2021_2024 = (adjusted_comp_benefice2024 - adjusted_profit_2021) / adjusted_profit_2021
@@ -469,41 +420,52 @@ gen gr_empl2021_2024 = (adjusted_el_empl - adjusted_bl_empl) / adjusted_bl_empl
 . 
 */
 
+*ca2024
 scalar gr_ca2021_2024p95 = 13.31702
-scalar gr_ca2021_2023p95 = 13.06044
-scalar gr_caexp2021_2024p95 = 6.457024 
-scalar gr_caexp2021_2023p95 = 5.673024
-scalar gr_profit2021_2024p95 =  11.5
-scalar gr_profit2021_2024p5 = -6.714286
-scalar gr_profit2021_2023p95 = 11.5
-scalar gr_profit2021_2023p5 = -7.25
-scalar gr_empl2021_2024p95 = 4 
-
-local gr_vars "gr_ca2021_2024 gr_ca2021_2023 gr_caexp2021_2024 gr_caexp2021_2023 gr_profit2021_2024 gr_profit2021_2023 gr_empl2021_2024"
 
 replace needs_check = 1 if gr_ca2021_2024 > gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
 replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2024 est superiéur à 1331,702 %, veuillez vérifier / " if gr_ca2021_2024 > gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
 
+*ca2023
+scalar gr_ca2021_2023p95 = 13.06044
+
 replace needs_check = 1 if gr_ca2021_2023 > gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
 replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2023 est superiéur à 1306,044 %, veuillez vérifier / " if gr_ca2021_2023 > gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
+
+*ca_exp2024
+scalar gr_caexp2021_2024p95 = 6.457024 
 
 replace needs_check = 1 if gr_caexp2021_2024 > gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
 replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2024 est superiéur à 645,7024 %, veuillez vérifier / " if gr_caexp2021_2024 > gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
 
+*ca_exp2023
+scalar gr_caexp2021_2023p95 = 5.673024
+
 replace needs_check = 1 if gr_caexp2021_2023 > gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
 replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2023 est superiéur à 567,3024 %, veuillez vérifier / " if gr_caexp2021_2023 > gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
 
+*ca_profit2024
+scalar gr_profit2021_2024p95 =  2
+scalar gr_profit2021_2024p5 = -1.5
+
 replace needs_check = 1 if gr_profit2021_2024 > gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à 1150 %, veuillez vérifier / " if gr_profit2021_2024 > gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à 200 %, veuillez vérifier / " if gr_profit2021_2024 > gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
 
 replace needs_check = 1 if gr_profit2021_2024 < gr_profit2021_2024p5 & surveyround == 3 & gr_profit2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à -671,4286 %, veuillez vérifier / " if gr_profit2021_2024 < gr_profit2021_2024p5 & surveyround == 3 & gr_profit2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à -150 %, veuillez vérifier / " if gr_profit2021_2024 < gr_profit2021_2024p5 & surveyround == 3 & gr_profit2021_2024 != .
+
+*ca_profit2023
+scalar gr_profit2021_2023p95 = 2
+scalar gr_profit2021_2023p5 = -2
 
 replace needs_check = 1 if gr_profit2021_2023 > gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à 1150 %, veuillez vérifier / " if gr_profit2021_2023 > gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à 200 %, veuillez vérifier / " if gr_profit2021_2023 > gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
 
 replace needs_check = 1 if gr_profit2021_2023 < gr_profit2021_2023p5 & surveyround == 3 & gr_profit2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à -725 %, veuillez vérifier / " if gr_profit2021_2023 < gr_profit2021_2023p5 & surveyround == 3 & gr_profit2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à -200 %, veuillez vérifier / " if gr_profit2021_2023 < gr_profit2021_2023p5 & surveyround == 3 & gr_profit2021_2023 != .
+
+*empl
+scalar gr_empl2021_2024p95 = 4 
 
 replace needs_check = 1 if gr_empl2021_2024 > gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
 replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA est superiéur à 400 %, veuillez vérifier / " if gr_empl2021_2024 > gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
