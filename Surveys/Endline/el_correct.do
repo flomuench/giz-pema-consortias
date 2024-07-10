@@ -83,7 +83,7 @@ drop if dup>1
 
 
 	* amouri frogot to mention that 999 needs to have a - before in case of don't know
-local 999vars ca ca_2024 profit profit_2024 ca_exp compexp_2024 
+local 999vars ca ca_2024 profit profit_2024 ca_exp ca_exp_2024 
 foreach var of local 999vars {
 	replace `var' = -999 if `var' == 999
 	replace `var' = -888 if `var' == 888
@@ -519,7 +519,7 @@ replace int_other="lors de la sélection du groupe, il n'y a pas de transparence
 * 	PART 8:  Destring remaining numerical vars
 ***********************************************************************
 
-local destrvar ca ca_2024 profit profit_2024 ca_exp compexp_2024
+local destrvar ca ca_2024 profit profit_2024 ca_exp ca_exp_2024
 foreach x of local destrvar { 
 destring `x', replace
 format `x' %25.0fc

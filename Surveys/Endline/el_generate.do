@@ -137,7 +137,7 @@ label var export_3 "No export"
 *export = 0 if it does not export
  
 replace ca_exp = 0 if export_1 == 0
-replace compexp_2024 = 0 if export_1 == 0
+replace ca_exp_2024 = 0 if export_1 == 0
 
 generate export_41 = regexm(export_4, "1")
 
@@ -231,7 +231,7 @@ egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin)
 egen miss_extlist = rowmiss(listexp1)
 	
 	* section 15: accounting/KPI
-egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp compexp_2024)
+egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp ca_exp_2024)
 
 	
 
@@ -334,7 +334,7 @@ replace profit_2024=profit_2024*(-1) if profit_2024_category==0
 *export = 0 if it does not export
  
 replace ca_exp = 0 if export_1 == 0
-replace compexp_2024 = 0 if export_1 == 0
+replace ca_exp_2024 = 0 if export_1 == 0
 
 *marginal_exp_2023
 label define ext_exp 0 "Did not export" 1 "Exported"
@@ -351,39 +351,39 @@ gen marginal_exp_2024 = 0
 lab var marginal_exp_2024 "extensive margin of export based on export turnover 2024"
 label values marginal_exp_2024 ext_exp
 
-replace marginal_exp_2024 = 1 if compexp_2024 > 0 & compexp_2024 < .
+replace marginal_exp_2024 = 1 if ca_exp_2024 > 0 & ca_exp_2024 < .
 
 ************** Correct financial data so that it is not replaced by intervals FICHE SUIVI **************
 // id_plateforme 1005 / entreprise n'est plus en activité depuis aout 2022 elle revient aux production aux mai 2024 elle à une perte de 17000 dt depuis aout 2022 jusquà maintenent donc les cA totale en 2023 0 est en 2024 elle à dit que dans le mois de mai (le mois de retour en production) est de 500 dt 
  
-replace comp_ca2023 = 0 if id_plateforme == 1005
-replace comp_ca2024 = 500 if id_plateforme == 1005
-replace comp_benefice2023 = -5700 if id_plateforme == 1005
-replace comp_benefice2024 = -5700 if id_plateforme == 1005
+replace ca = 0 if id_plateforme == 1005
+replace ca_2024 = 500 if id_plateforme == 1005
+replace profit = -5700 if id_plateforme == 1005
+replace profit_2024 = -5700 if id_plateforme == 1005
 
 
 // id_plateforme 1138 / n'a pas donnée les bénéfices en 2024 (elle n'a pas aucun aidé combients)
-replace comp_benefice2024 = 999 if id_plateforme == 1138
+replace profit_2024 = 999 if id_plateforme == 1138
 
 // id_plateforme 1150 / elle a donné benefice 3000 exactement, mais comme 3000 inferieur à 5000 donc j'ai du mettre dans l'intervalle entre 0 et 9 999. ( pas besoin de retour dans la fiche de correction ) 
-replace comp_benefice2024 = 3000 if id_plateforme == 1150
+replace profit_2024 = 3000 if id_plateforme == 1150
 
 // id_plateforme 1151 /	les benefices en 2024 =0  stable elle a dit jusqua juin est neant 
-replace comp_benefice2024 = 0 if id_plateforme == 1151
+replace profit_2024 = 0 if id_plateforme == 1151
 
 *id_plateforme 1132 // Refuses to give comptability
-local compta_vars "comp_ca2023 comp_ca2023_intervalles comp_ca2024 comp_ca2024_intervalles compexp_2023 compexp_2024 comp_benefice2023 comp_benefice2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain"
+local compta_vars "ca comp_ca2023_intervalles ca_2024 comp_ca2024_intervalles ca_exp ca_exp_2024 profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain"
 
 foreach var of local compta_vars {
 	replace `var' = 888 if id_plateforme == 1132 
 }
 
 	*id_plateforme 1167 // Has no idea about CA 2024
-replace comp_ca2024 = 999 if id_plateforme == 1167
+replace ca_2024 = 999 if id_plateforme == 1167
 
 * 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
-local varn ca ca_2024 ca_exp compexp_2024 profit profit_2024
+local varn ca ca_2024 ca_exp ca_exp_2024 profit profit_2024
 
 foreach x of local varn { 
 gen n`x' = 0
