@@ -436,7 +436,8 @@ foreach var of local ys {
 
  *For financial data: replace "Don't know (-999) and refusal with missing value"
 
-local finvars ca_exp_2024 ca_exp ca_2024 ca profit_2024 profit clients_ssa_commandes clients_ssa clients exp_pays exp_pays_ssa employes car_empl1 car_empl2
+local finvars ca ca_exp ca_2024 ca_exp_2024 profit profit_2024 clients_ssa_commandes clients_ssa clients exp_pays exp_pays_ssa employes car_empl1 car_empl2
+
 
 foreach var of local  finvars {
 	replace `var' = . if `var' == -999

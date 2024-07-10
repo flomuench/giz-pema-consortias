@@ -221,7 +221,7 @@ lab var net_size "Network size"
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes sales profit
+local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes sales profit car_efi
 ds `allvars', has(type string)
 
 	* Create temporary variable
@@ -259,7 +259,7 @@ lab var size "z-score sales + employees + profit"
 
 
 			* management practices (mpi)
-egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez temp_man_hr_proz temp_man_fin_numz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
+egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez temp_man_hr_proz temp_man_fin_numz temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
 			
 			* marketing practices index (marki)
 egen marki = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz)
@@ -777,12 +777,6 @@ local epi "compexp_2023 compexp_2024 export_1 export_2 exp_pays"
 			
 			*Business performance index
 local bpi "employes comp_ca2023 comp_benefice2023 comp_ca2024 comp_benefice2024"
-
-			*Self-efficacy index
-local female_efficacy "car_efi_fin1 car_efi_man car_efi_motiv"
-
-			*Sense of control index
-local female_loc "car_loc_env car_loc_exp car_loc_soin"
 
 
 local all_index `man' `inno'  `eri' `epi' `bpi' `female_efficacy' `female_loc' 

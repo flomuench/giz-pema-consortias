@@ -199,7 +199,7 @@ foreach var of local not1234_vars {
 /* --------------------------------------------------------------------
 	PART 2.4: Networking questions
 ----------------------------------------------------------------------*/
-
+*products_other
 replace needs_check = 1 if net_size3 > 0 & net_services_pratiques == . & surveyround == 3 & attest == 1
 replace questions_needing_checks = questions_needing_checks + "Réponses net_services manquantes alors que le nombre de contact avec d'autres entrepreneurs est > 0, veuillez vérifier. / " if net_size3 > 0 & net_services_pratiques == . & surveyround == 3 & attest == 1
 
@@ -208,6 +208,204 @@ replace questions_needing_checks = questions_needing_checks + "Nombre de discuss
 
 replace needs_check = 1 if net_size4 > 30 & surveyround == 3 & net_size4 != .
 replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille est supérieur à 30, veuillez vérifier. / " if net_size4 > 30 & surveyround == 3 & net_size4 != .
+
+/* --------------------------------------------------------------------
+	PART 2.5: Open-ended questions
+----------------------------------------------------------------------*/
+	*products_other
+replace needs_check = 1 if id_plateforme == 1197 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "le nom du produit additionnel n'est pas clair (حولي و حايك)/ " if id_plateforme == 1197 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1234 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "le nom du produit additionnel n'est pas clair (la franche)/ " if id_plateforme == 1234 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 989 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "elle n'a pas donné de produit addtionnel(0)/ " if id_plateforme == 989 & surveyround == 3
+
+*inno_exampl_produit1
+replace needs_check = 1 if id_plateforme == 989 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "à préciser(recrutement)/ " if id_plateforme == 989 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1010 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation/ " if id_plateforme == 1010 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1017 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation du produit/ " if id_plateforme == 1017 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1035 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser/ " if id_plateforme == 1035 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1043 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (diversité des produits , je cible le consommateur, diversification des services )/ " if id_plateforme == 1043 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1046 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (des nouvelles techniques et de nouveaux outils d'auteur dans la création de contenus)/ " if id_plateforme == 1046 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1049 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation de produit(j'ai changé l'entreprise avec laquelle je travaille avec: c'était une entreprise américaine et maintenant c'est devenue une entreprise allemande.)/ " if id_plateforme == 1049 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1055 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (nous avons augmenter le nombre de produits et nous avons change l'emballage)/ " if id_plateforme == 1055 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1065 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation de produit ou à préciser (marketing )/ " if id_plateforme == 1065 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1098 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (nous allons introduire d'autres services innovants à la fin de l'année 2024)/ " if id_plateforme == 1098 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1112 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (matériaux de construction)/ " if id_plateforme == 1112 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1118 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (développement en mode de paiement )/ " if id_plateforme == 1118 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1128 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (création et innovation de produit changer la formation des produit)/ " if id_plateforme == 1128 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1128 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (d'autres produits et services digital)/ " if id_plateforme == 1128 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1170 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique)/ " if id_plateforme == 1170 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1178 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation de produit ou à préciser (introduire à d'autres marchés - augmenter le chiffre d'affaire - export)/ " if id_plateforme == 1178 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1190 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (changement des types de produits élargir la gamme des produits)/ " if id_plateforme == 1190 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1191 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation de produit ou à préciser (augmenation de ca )/ " if id_plateforme == 1191 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1210 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (sport et enfant)/ " if id_plateforme == 1210 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1224 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (développement des nouveaux produit)/ " if id_plateforme == 1224 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1231 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Pas compris, à expliquer (hasanna fil masna3 w wafarna l9loub )/ " if id_plateforme == 1231 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1234 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (des nouvelles création des produits )/ " if id_plateforme == 1234 & surveyround == 3
+
+*inno_exampl_produit2
+replace needs_check = 1 if id_plateforme == 999 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (nouvelle services de comptabilité carbone( déclaration de matériel ))/ " if id_plateforme == 999 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1019 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (rakzou aala les services professionnels)/ " if id_plateforme == 1019 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1035 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (le conseil)/ " if id_plateforme == 1035 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1046 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (ils proposent des services sur mesure )/ " if id_plateforme == 1046 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1112 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (des produit agro alimentaires )/ " if id_plateforme == 1112 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1118 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation de produit ou à préciser (déloppement fel export)/ " if id_plateforme == 1118 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1124 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Pas compris, à expliquer (produit en gré)/ " if id_plateforme == 1124 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1128 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (des nouvelles forme de produit)/ " if id_plateforme == 1128 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1153 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (le marketing digital)/ " if id_plateforme == 1153 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1170 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (les solutions degitales)/ " if id_plateforme == 1170 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1176 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (nouvelle conception et liaison intelligente)/ " if id_plateforme == 1176 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1210 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (service dans le domaine de sport)/ " if id_plateforme == 1210 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1222 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (le conseil, audit )/ " if id_plateforme == 1222 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1248 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser (mini chaine dolive)/ " if id_plateforme == 1248 & surveyround == 3
+
+*inno_proc_other
+replace needs_check = 1 if id_plateforme == 988 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser quel type d'innovation (l'export da5elto, service formation )/ " if id_plateforme == 988 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1087 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser quel type d'innovation (les competences de lequippe et recrutement jdod)/ " if id_plateforme == 1087 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1117 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser quel type d'innovation, ce n'est pas clair (genre)/ " if id_plateforme == 1117 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1118 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser quel type d'innovation (informations , technique de commmunication avec le client)/ " if id_plateforme == 1118 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1124 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation (l' expot)/ " if id_plateforme == 1124 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1135 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation (étude de marché à l'etranger)/ " if id_plateforme == 1135 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1176 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Ce n'est pas une innovation (zedou enfathou ala marchés international)/ " if id_plateforme == 1176 & surveyround == 3
+
+*inno_mot_other
+replace needs_check = 1 if id_plateforme == 986 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source de l'innovation (à travers les besoins)/ " if id_plateforme == 986 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1065 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source de l'innovation (selon les besoins)/ " if id_plateforme == 1065 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1081 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source de l'innovation (mil 5edma)/ " if id_plateforme == 1081 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1125 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Il y a une innovation et à cliquer sur d'autres sources d'innovation: pourquoi ce commentaire ? (non concernné)/ " if id_plateforme == 1125 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1186 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "La source d'innovation n'est pas claire(3d de bouzard)/ " if id_plateforme == 1186 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1215 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source de l'innovation (recherche,)/ " if id_plateforme == 1215 & surveyround == 3
+
+*export_other
+replace needs_check = 1 if id_plateforme == 1054 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "La raison pour laquelle elle n'exporte pas n'est pas claire (fama des opportunités metaa exportation ama tkmelech l'operation )/ " if id_plateforme == 1054 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1083 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "La raison pour laquelle elle n'exporte pas n'est pas claire (parce quelle nexiste plus)/ " if id_plateforme == 1083 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1222 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "La raison pour laquelle elle n'exporte pas n'est pas claire (prospection)/ " if id_plateforme == 1222 & surveyround == 3
+
+*man_sources_other
+replace needs_check = 1 if id_plateforme == 996 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source d'apprentissage des nouvelles stratégies(des structure de accompangement)/ " if id_plateforme == 996 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1068 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source d'apprentissage des nouvelles stratégies (organisime internationale)/ " if id_plateforme == 1068 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1151 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "La source d'apprentissage des nouvelles stratégies n'est pas claire(agence de communication heya teb3a proggrame dream for use gg4 youth)/ " if id_plateforme == 1151 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1176 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser la source d'apprentissage des nouvelles stratégies (a travers des recherches)/ " if id_plateforme == 1176 & surveyround == 3
+
+*int_ben
+replace needs_check = 1 if id_plateforme == 1068 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser les bénéfices de la participation au consortium(tet3alem barcha hajet fe les techniques)/ " if id_plateforme == 1068 & surveyround == 3
+
+replace needs_check = 1 if id_plateforme == 1135 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "À préciser les bénéfices de la participation au consortium(complémentarité)/ " if id_plateforme == 1135 & surveyround == 3
+
+*int_other
+replace needs_check = 1 if id_plateforme == 1028 & surveyround == 3
+replace questions_needing_checks = questions_needing_checks + "Elle n'a pas donné de raison pour sa non-participation au consortium(————————)/ " if id_plateforme == 1028 & surveyround == 3
 
 ***********************************************************************
 * 	Part 3: Cross-checking answers from baseline & endline		
@@ -483,6 +681,9 @@ replace questions_needing_checks = questions_needing_checks + "matricule fiscale
 
 *replace needs_check = 1 if id_plateforme == 1083
 *replace questions_needing_checks = questions_needing_checks + "matricule fiscale tjrs. faux. Appeler pour comprendre le problème." if id_plateforme == 1083 & surveyround == 2
+
+
+
 
 
 ***********************************************************************
