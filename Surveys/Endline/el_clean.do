@@ -71,6 +71,13 @@ forvalues x = 1(1)2 {
 
 		* rename for coherence with baseline
 rename empl employes
+rename comp_benefice2023 profit 
+rename comp_benefice2024 profit_2024 
+rename compexp_2023 ca_exp
+rename compexp_2024 ca_exp_2024
+rename comp_ca2023 ca
+rename comp_ca2024 ca_2024
+
 lab var employes "Number of employeess"
 
 lab var car_empl1 "Number of female employees"
@@ -101,23 +108,23 @@ lab var entreprise_model "Type of clients: B2B, B2C or both B2B and B2C"
 
 * Section Export
 
-label var exp_pays "Number of export countries"
+*label var exp_pays "Number of export countries"
 label var exp_pays_ssa "Number of SSA export countries"
 label var clients "Number of international clients"
 label var clients_ssa "Number of international clients in SSA"
 label var clients_ssa_commandes "Number of SSA orders"
 
 	
-label var exp_pra_rexp "Appointing a manager responsible for export-related commercial activities."
-label var exp_pra_foire "Participation in international exhibition/trade fairs"
-label var exp_pra_sci "Find a business partner or international trading company"
+label var exp_pra_rexp "designate an employee in charge of export-related activities"
+label var exp_pra_foire "participate in international trade exhibitions/fairs"
+label var exp_pra_sci "engage or work with an international trading company"
 label var exp_pra_norme "Product certification"
 label var exp_pra_vent "Investment in sales structure"
 
-lab var ssa_action1 "Expression of interest from a potential client in Sub-Saharan Africa for your products/services."
-lab var ssa_action2 "Identification of a business partner capable of promoting products/services in Sub-Saharan Africa."
-lab var ssa_action3 "Securing external funding for initial export costs (grants, loans, guarantees, etc.)"
-lab var ssa_action4 "Investment in sales infrastructure targeting the Sub-Saharan African market" 
+lab var ssa_action1 "SSA client"
+lab var ssa_action2 "identification of a business partner likely to promote my product/services in Su"
+lab var ssa_action3 "commitment of external financing for preliminary export costs"
+lab var ssa_action4 "investment in the sales structure in a target market in Sub-Saharan Africa" 
 
 
 
@@ -144,13 +151,6 @@ lab var man_fin_pra_pro "Calculating the costs, prices, and profits achieved on 
 lab var man_fin_pra_dis "Distunction between business accounts and personal accounts"
 
 lab var man_ind_awa "Providing performance incentives to employees"
-
-/* REMOVED QUESTIONS
-lab var man_mark_prix "Studying competitors' prices and products in target local and international markets"
-lab var man_mark_clients "Collecting data on customer needs and satisfaction levels"
-lab var man_mark_pub "Advertising (paid) in any form"
-lab var man_mark_dig "Establishing a digital presence for the company (website or social media)"
-*/
 
 lab var inno_proc_met "New methods or technologies for producing goods/services"
 lab var inno_proc_log "New logistical procedures, delivery, or distribution of goods/services"
@@ -215,17 +215,16 @@ label var q29 "Tax identification number"
 *label var q29_tel "Accountant's phone number"
 *label var q29_mail "Accountant's email"
 
-label var comp_ca2023 "Total turnover in 2023 in dt"
-label var comp_ca2024 "Total turnover in 2024 in dt"
+*label var comp_ca2023 "Total turnover in 2023 in dt"
+label var ca_2024 "Total turnover in 2024 in dt"
 
-label var compexp_2023 "Export turnover in 2023 in dt"
+*label var ca_exp "Export turnover in 2023 in dt"
 label var compexp_2024 "Export turnover in 2024 in dt"
 
 label var profit_2023_category "Profit/Loss in 2023 in dt"
 label var profit_2024_category "Profit/Loss in 2024 in dt"
 
-label var comp_benefice2023 "Company profit in 2023 in dt"
-label var comp_benefice2024 "Company profit in 2024 in dt"
+label var profit_2024 "Company profit in 2024 in dt"
 
 
 label var profit_2023_category_perte "Company loss category in 2023 in dt"
