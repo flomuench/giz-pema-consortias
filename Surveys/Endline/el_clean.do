@@ -219,7 +219,7 @@ label var q29 "Tax identification number"
 label var ca_2024 "Total turnover in 2024 in dt"
 
 *label var ca_exp "Export turnover in 2023 in dt"
-label var compexp_2024 "Export turnover in 2024 in dt"
+label var ca_exp_2024 "Export turnover in 2024 in dt"
 
 label var profit_2023_category "Profit/Loss in 2023 in dt"
 label var profit_2024_category "Profit/Loss in 2024 in dt"
