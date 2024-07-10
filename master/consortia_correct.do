@@ -438,6 +438,7 @@ foreach var of local ys {
 
 local finvars ca ca_exp ca_2024 ca_exp_2024 profit profit_2024 clients_ssa_commandes clients_ssa clients exp_pays exp_pays_ssa employes car_empl1 car_empl2
 
+
 foreach var of local  finvars {
 	replace `var' = . if `var' == -999
 	replace `var' = . if `var' == -888
