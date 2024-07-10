@@ -101,6 +101,7 @@ foreach var of local innov_vars {
 }
 
 
+
 /*
 	*benefits
 local bene_vars int_ben1 int_ben2 int_ben3 int_ben_autres
@@ -172,9 +173,6 @@ foreach var of local numvars_with_strings {
 
 *4.1 Manually Transform any remaining "word numerics" to actual numerics 
 * browse id_plateforme ca ca_exp Profit ca_2021 ca_exp2021 
- 
-
-
 
 
 

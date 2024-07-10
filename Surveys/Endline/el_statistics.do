@@ -96,7 +96,7 @@ putpdf pagebreak
 	*timeline of responses
 format %-td date 
 histogram date, frequency addlabel width(0.5) ///
-		tlabel(20jun2024(1)04jul2024, angle(60) labsize(vsmall)) ///
+		tlabel(20jun2024(1)08jul2024, angle(60) labsize(vsmall)) ///
 		ytitle("Answers") ///
 		title("{bf:Endline survey: number of responses}") 
 gr export survey_response_byday.png, replace
@@ -654,9 +654,9 @@ putpdf paragraph, halign(center)
 putpdf image el_netcoop.png, width(6000)
 putpdf pagebreak
 
-****** Section 5: Entrepneurship******
+****** Section 7: Entrepneurship******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 6: Entrepneurship"), bold
+putpdf text ("Section 7: Entrepneurship"), bold
 
 *efficency 
 betterbar car_efi_fin1 car_efi_man car_efi_motiv, over(treatment) barlab ci ///
@@ -688,9 +688,9 @@ putpdf paragraph, halign(center)
 putpdf image el_bar_listexp.png
 putpdf pagebreak
 
-****** Section 6: Accounting******
+****** Section 8.1: Accounting******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 7: Accounting"), bold
+putpdf text ("Section 8.1: Accounting"), bold
 {
 	*Bénéfices/Perte 2023
 graph pie, over(profit_2023_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
@@ -957,9 +957,83 @@ putpdf image el_profit_2024_box.png, width(5000)
 putpdf pagebreak
 }
 
+****** Section 8.2: Accounting CHECK******
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 8.2: Accounting checks"), bold
+
+*CA x BENEFICE 2024
+twoway scatter comp_ca2024 comp_benefice2024, mlabel(id_plateforme)
+gr export el_caXbene2024.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXbene2024.png, width(5000)
+putpdf pagebreak
+
+*CA x BENEFICE 2023
+twoway scatter comp_ca2023 comp_benefice2023, mlabel(id_plateforme)
+gr export el_caXbene2023.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXbene2023.png, width(5000)
+putpdf pagebreak
+
+*CA x CA EXPORT 2024
+twoway scatter comp_ca2024 compexp_2024, mlabel(id_plateforme)
+gr export el_caXcaexp2024.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXcaexp2024.png, width(5000)
+putpdf pagebreak
+
+*CA x CA EXPORT 2023
+twoway scatter comp_ca2023 compexp_2023, mlabel(id_plateforme)
+gr export el_caXcaexp2023.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXcaexp2023.png, width(5000)
+putpdf pagebreak
+
+*CA x empl 2024
+twoway scatter comp_ca2024 employes, mlabel(id_plateforme)
+gr export el_caXempl2024.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXempl2024.png, width(5000)
+putpdf pagebreak
+
+*CA x empl 2023
+twoway scatter comp_ca2023 employes, mlabel(id_plateforme)
+gr export el_caXempl2023.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caXempl2023.png, width(5000)
+putpdf pagebreak
+
+*CA EXPORT x empl 2024
+twoway scatter compexp_2024 employes, mlabel(id_plateforme)
+gr export el_caexpXempl2024.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caexpXempl2024.png, width(5000)
+putpdf pagebreak
+
+*CA EXPORT x empl 2023
+twoway scatter compexp_2023 employes, mlabel(id_plateforme)
+gr export el_caexpXempl2023.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_caexpXempl2023.png, width(5000)
+putpdf pagebreak
+
+*BENEFICE x empl 2024
+twoway scatter comp_benefice2024 employes, mlabel(id_plateforme)
+gr export el_beneXempl2024.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_beneXempl2024.png, width(5000)
+putpdf pagebreak
+
+*BENEFICE x empl 2023
+twoway scatter comp_benefice2023 employes, mlabel(id_plateforme)
+gr export el_beneXempl2023.png, width(5000) replace
+putpdf paragraph, halign(center) 
+putpdf image el_beneXempl2023.png, width(5000)
+putpdf pagebreak
+
 ****** Section 7: Intervention******
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 7: Intervention"), bold
+putpdf text ("Section 9: Intervention"), bold
 
 *efficency 
 sum int_contact, d
