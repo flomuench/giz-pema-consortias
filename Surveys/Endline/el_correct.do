@@ -83,7 +83,7 @@ drop if dup>1
 
 
 	* amouri frogot to mention that 999 needs to have a - before in case of don't know
-local 999vars comp_ca2023 comp_ca2024 comp_benefice2023 comp_benefice2024 compexp_2023 compexp_2024 
+local 999vars ca ca_2024 profit profit_2024 ca_exp compexp_2024 
 foreach var of local 999vars {
 	replace `var' = -999 if `var' == 999
 	replace `var' = -888 if `var' == 888
@@ -248,12 +248,13 @@ replace products_other= "services ( consulting/ project management )" if product
 replace products_other= "mélasse" if products_other =="milllasse"
 *replace products_other= "mélasse" if products_other =="حولي و حايك" TBC id:1197
 *replace products_other= "mélasse" if products_other =="la franche" TBC id:1234
-*replace products_other= "mélasse" if products_other =="le rp odoo" TBC id: 1239
+replace products_other= "ERP odoo" if products_other =="le rp odoo" /*logiciel de comptabilité*/
 replace products_other= "bouteille d'huile d'olive" if products_other =="bouiteille de huile de lolive"
 replace products_other= "harissa et des épices" if products_other =="hrissaa et les épices +++++++++++++++++++++++++++++++++++"
 replace products_other= "les patisseries traditionnelles" if products_other =="el halawiyet el ta9lidia"
 replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
 
+*Créer une variable inno_produit_correct s'il a vraiment une innovation/ modification du produit réelle
 *inno_exampl_produit1
 replace inno_exampl_produit1 = "on fait des déplacements aux différentes régions et on fait des formations dans leurs locals" if inno_exampl_produit1 == "yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement *****************"
 replace inno_exampl_produit1 = "la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne" if inno_exampl_produit1 == "la création et la diminution de prix , améloration de qualité tissue kenou yekhdmou ken haut gamme oualeou yekhdmou hata l moyen gamme"
@@ -280,7 +281,7 @@ replace inno_exampl_produit1 = "création et innovation de produit .changer la f
 replace inno_exampl_produit1 = "" if inno_exampl_produit1 == "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"  /*TBC*/
 replace inno_exampl_produit1 = "regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage" if inno_exampl_produit1 == "regrouper el ma3mel wel stokhage fi nafes leblasav /tawartou fi produit fel quantite et des different qualite des nouvelles texture et un nouveaux emballages"  
 replace inno_exampl_produit1 = "des produits bio qui sont devenus plus bio à plus de 40%" if inno_exampl_produit1 == "des produit bio oualeou akther bio 40% bio aaaaaaaaaaaaaaaaaaaaaaaaaaaaa"  
-replace inno_exampl_produit1 = "d'autres produits et services digital" if inno_exampl_produit1 == "d'autres produits et services digital ...,............................"  /*TBC*/
+replace inno_exampl_produit1 = "d'autres produits et services digitaux" if inno_exampl_produit1 == "d'autres produits et services digital ...,............................"  /*TBC*/
 replace inno_exampl_produit1 = "on rajouté une nouvelle ligne de produits énérgétiques/ packs de produits/ des formations gratuites pour les femmes" if inno_exampl_produit1 == "zedou ligne mta3 produits energetique / packh de produit /des formations gratuite pour femmes"
 replace inno_exampl_produit1 = "amélioration de la qualité du produit et changement du fournisseur" if inno_exampl_produit1 == "ameloration du qualite de produit fi tabdil le fourniseur" 
 replace inno_exampl_produit1 = "de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique" if inno_exampl_produit1 == "des nouvelles solutions digitales zedou fel quantité et de nouveaux partenariat en affrique"  /*TBC*/
@@ -289,7 +290,7 @@ replace inno_exampl_produit1 = "changement de design" if inno_exampl_produit1 ==
 replace inno_exampl_produit1 = "changement de l'emballage extérieur des boites, tapis berbéres" if inno_exampl_produit1 == "changement de l'emballage extérieur des boites, tapis barbére , da5elna clim et zarbia dans le même produit*" 
 replace inno_exampl_produit1 = "augmentation de ca" if inno_exampl_produit1 == "augmenation de ca ********************************" /*TBC*/
 replace inno_exampl_produit1 = "on a amélioré l'emballage, je vois ce que les consommateurs veulent et j'améliore le produit et j'ai fait une diversification des articles (des choses qui sortent de l'ordinaire)" if inno_exampl_produit1 == "hasnet fl emballage/ je vois ce que les consommateurs veulent w thasen fl produit/ w aamlt diversification fl les articles ( hajet kharja mel l'ordinaire)"
-*replace inno_exampl_produit1 = "de la teinture, amélioration de la production à travers de nouvelles idées" if inno_exampl_produit1 == "sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat ++++++++++++++++++++++++++++++++++++" /*TBC*/
+replace inno_exampl_produit1 = "de la teinture, amélioration de la production à travers de nouvelles idées et création de chapeaux en paille" if inno_exampl_produit1 == "sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat ++++++++++++++++++++++++++++++++++++" /*TBC*/
 replace inno_exampl_produit1 = "j'ai fait de nouvelles infusions destiné pour les femmes allaitantes / on a fait des améliorations dans la qualité de production/ on a rajouté dans production et qualité de la moringa" if inno_exampl_produit1 == "aamlt des infusions jdod destiné pour les femmes allaitante / aamelou améliorations fl qualité de production/ zedou fl production et qualité de la moringa" 
 replace inno_exampl_produit1 = "sport et enfant" if inno_exampl_produit1 == "sport et enfant*********************************************" /*TBC*/
 replace inno_exampl_produit1 = "développement des nouveaux produit" if inno_exampl_produit1 == "développement des nouveaux produit,............................" /*TBC*/
@@ -333,10 +334,10 @@ replace inno_exampl_produit2 = "sacs de soirée, accessoires de soirée" if inno
 replace inno_exampl_produit2 = "des solutions digitales" if inno_exampl_produit2 == "les solutions degitales....................................." /*TBC*/
 replace inno_exampl_produit2 = "nouvelle conception et liaison intelligente" if inno_exampl_produit2 == "nouvelle conception et liaison intelligente ..........." /*TBC*/
 replace inno_exampl_produit2 = "des articles de cadeaux, Haïk Kamraya, des sacs et des pochette sur taille de pc block note" if inno_exampl_produit2 == "les articles de cadeau haiek 9amraya des sacs et des pochette sur taille de pc block note"
-replace inno_exampl_produit2 = "des abats-jours en laine et fibres végétales" if inno_exampl_produit2 == "abajoret bil 7alfa w souf *************************"
-replace inno_exampl_produit2 = "j'ai fait une évolution avec les fibres végétales/ j'ai fait des chnagement avec le mais pour les personnes qui ont des maladies infectieuses et les personnes qui souhaitent faire un régime" if inno_exampl_produit2 == "aamlt évolution bel halfa/ aamlt halawiyet sihiya bel mais ll laabed eli aandha des maladies infectieuse w ll laabed eli theb taamel régime"
-replace inno_exampl_produit2 = "des parasols et des drapaux de Tunisie avec des fibres végétales " if inno_exampl_produit2 == "medhalat , aalam tounes bel halfa ++++++++++++++++++++++++++++++++++++++++++++++"
-*replace inno_exampl_produit2 = "des parasols et des drapaux de Tunisie avec des fibres végétales " if inno_exampl_produit2 == "خدمت موديلات قريبة للزمني و فيها حاجات مطورة و مواكبة للعصر"
+replace inno_exampl_produit2 = "des abats-jours en laine et paille" if inno_exampl_produit2 == "abajoret bil 7alfa w souf *************************"
+replace inno_exampl_produit2 = "j'ai fait une évolution avec la paille/ j'ai fait des chnagement avec le mais pour les personnes qui ont des maladies infectieuses et les personnes qui souhaitent faire un régime" if inno_exampl_produit2 == "aamlt évolution bel halfa/ aamlt halawiyet sihiya bel mais ll laabed eli aandha des maladies infectieuse w ll laabed eli theb taamel régime"
+replace inno_exampl_produit2 = "des parasols et des drapaux de Tunisie avec de la paille " if inno_exampl_produit2 == "medhalat , aalam tounes bel halfa ++++++++++++++++++++++++++++++++++++++++++++++"
+replace inno_exampl_produit2 = "j'ai travaillé des modèles traditionnels et modernes" if inno_exampl_produit2 == "خدمت موديلات قريبة للزمني و فيها حاجات مطورة و مواكبة للعصر" /*TBC*/
 replace inno_exampl_produit2 = "service dans le domaine de sport" if inno_exampl_produit2 == "service dans le domaine de sport***********************************" /*TBC*/
 replace inno_exampl_produit2 = "coffret cadeau" if inno_exampl_produit2 == "coffret cadeau *************************************" /*TBC*/
 replace inno_exampl_produit2 = "le conseil, audit" if inno_exampl_produit2 == "le conseil, audit *************************************************" /*TBC*/
@@ -348,6 +349,13 @@ replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "
 
 
 *inno_proc_other
+*Faire la correction des réponses au niveau el_correct (traduire et corriger le texte) + Au niveau du consoria_generate faire la categorisation + la correction avec les variables *_correct
+*Faire une categorisation en fonction (vérifier si les réponses ne sont couvertes par les variables déjà existantes dans le questionnaire): 
+	*Types d'innovation: 
+		*1)inno_produit_correct: innovation ou amélioration ?
+		*2)processus de production inno_(proc_prod_correct): inno_proc_met
+		*3)Marketing & commercialisation (proc_mark_correct): inno_proc_prix + inno_proc_log
+		*4) gestion & organisation (proc_org_correct): inno_proc_sup
 replace inno_proc_other= "changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes" if inno_proc_other =="changement de l’emballage . introduction des nouveaux jouets et des nouvelle gammes **********"
 replace inno_proc_other= "l'export à renforcer la formation" if inno_proc_other =="lexport kaouitou f formationn aaaaaaaaaaaaaaaaaaaaaaaaaa" /*TBC*/
 replace inno_proc_other= "des formations pour les employés afin de garantir la durabilté des produits artisanaux" if inno_proc_other =="des formation lel employés bech todhmen el durabilté les produit artisanaux" 
@@ -513,7 +521,7 @@ replace int_other="lors de la sélection du groupe, il n'y a pas de transparence
 * 	PART 8:  Destring remaining numerical vars
 ***********************************************************************
 
-local destrvar comp_ca2023 comp_ca2024 comp_benefice2023 comp_benefice2024 compexp_2023 compexp_2024
+local destrvar ca ca_2024 profit profit_2024 ca_exp compexp_2024
 foreach x of local destrvar { 
 destring `x', replace
 format `x' %25.0fc

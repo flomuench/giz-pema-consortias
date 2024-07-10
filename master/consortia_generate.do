@@ -316,11 +316,11 @@ egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mar
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
 				* efficacy "the ability to produce a desired or intended result."
 				* sense of initiative
-egen female_efficacy_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv), missing
+egen female_efficacy_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv), missing
 egen female_initiative_points = rowtotal(car_init_prob car_init_init car_init_opp), missing
-egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_exp), missing
+egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_exp car_loc_soin), missing
 
-egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp), missing
+egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp car_loc_exp car_loc_soin), missing
 
 		* labeling
 label var eri_points "Export readiness index points"
@@ -376,24 +376,38 @@ gen profit_pct = .
 	egen profit_pct2 = rank(profit) if surveyround == 2 & !inlist(profit, -777, -888, -999, .)
 	sum profit if surveyround == 2 & !inlist(profit, -777, -888, -999, .)
 	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 2
-	drop profit_pct1 profit_pct2
 
+	egen profit_pct3 = rank(profit) if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
+	sum profit if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
+	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 3
+	
+	*egen profit_pct4 = rank(comp_benefice2024) if surveyround == 3 & !inlist(comp_benefice2024, -777, -888, -999, 1234, .)
+	*sum profit if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
+	*replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 3
+	
+	drop profit_pct1 profit_pct2 profit_pct3
 
 	* winsorize
 		* all outcomes (but profit)
 local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
+	winsor2 `var', suffix(_w95) cuts(0 95) 		  // winsorize
+
 }
 		* profit
 winsor2 profit, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
+winsor2 profit, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
 
+winsor2 comp_benefice2024, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
+winsor2 comp_benefice2024, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
+*changer le comp_benefice2024 en profit_2024
 
 	* find optimal k before ihs-transformation
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99" // add at endline: exp_pays_w99
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95" // add at endline: exp_pays_w99
 
 		* check how many zeros
 foreach var of local ys {
@@ -750,7 +764,7 @@ foreach var of local y_vars {
 ***********************************************************************	
 	* Put all variables used to calculate indices into a local
 			*Management practices index
-local man "man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
+local man "man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa"
 			
 			*Innovation index
 local inno "inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres"
@@ -784,6 +798,8 @@ foreach var of local all_index {
     replace temp_`var' = . if `var' == -888 & surveyround ==3 
     replace temp_`var' = . if `var' == -777 & surveyround ==3 
     replace temp_`var' = . if `var' == -666 & surveyround ==3 
+    replace temp_`var' = . if `var' ==1234 & surveyround ==3 
+
 }
 
 		* calcuate the z-score for each variable
@@ -794,26 +810,33 @@ foreach var of local all_index {
 
 	* calculate the index value: average of zscores
 			*Management Practices Index
-egen el_mpi= rowmean(temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz temp_man_source_consz temp_man_source_pdgz temp_man_source_famz temp_man_source_evenz temp_man_source_autresz) if surveyround ==3
+egen el_mpi= rowmean(temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz) 
 
 			*Innovation practices index
-egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) if surveyround ==3
+egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) 
 			
 			*Self-efficacy index
-egen sei = rowmean(temp_car_efi_fin1z temp_car_efi_manz temp_car_efi_motivz) if surveyround ==3
+egen sei = rowmean(temp_car_efi_fin1z temp_car_efi_manz temp_car_efi_motivz) 
 
 			*Sense of control index
-egen sci = rowmean(temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz) if surveyround ==3
+egen sci = rowmean(temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz) 
 		
 			*Gender index
 egen gender= rowmean(sei sci) if surveyround ==3		
 			
 			*Export readiness index
-egen el_eri = rowmean(temp_exp_pra_rexpz temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_normez temp_exp_pra_ventz) if surveyround ==3			
+egen el_eri = rowmean(temp_exp_pra_rexpz temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_normez temp_exp_pra_ventz) 			
 			
 			*Export performance index
-egen el_epi = rowmean(temp_export_1z temp_export_2z temp_exp_paysz)	if surveyround ==3		
-			
+egen el_epi = rowmean(temp_export_1z temp_export_2z temp_exp_paysz)	if surveyround ==3	
+*Changer le nom de la variable ca_exp2023 en ca_exp et on maintien la variable ca_exp2024	
+* Creer une dummy variable export si ca_exp est positive (faire attention aux valeurs manquantes)
+* Inclure la variable la variable dummy + Inclure la variable chiffre d'affaire export 2023 
+* Rajouter le nom des nouvelles variables et les inclure dans les anciens indexes.			
+			*SSA Export readiness index (diagnostic)
+egen ssa_eri			
+			*SAA Export performance index (diagnostic)
+egen ssa_epi	
 			*Business performance index
 egen bpi_2023 = rowmean(temp_employesz temp_comp_ca2023z temp_comp_benefice2023z)
 egen bpi_2024 = rowmean(temp_employesz temp_comp_ca2024z temp_comp_benefice2024z)
@@ -887,7 +910,7 @@ gen ihs_car_empl1_95 = log(w95_car_empl1 + sqrt((w95_car_empl1*w95_car_empl1)+1)
 lab var ihs_car_empl1_95 "IHS of female employees, wins.95th"
 
 *Young employees
-*winsor car_empl2 if surveyround ==3, gen(w99_fte_young) p(0.01) highonly
+winsor2 car_empl2 if surveyround ==3, suffix(_w99) cuts(0 99)
 winsor car_empl2 if surveyround ==3, gen(w97_fte_young) p(0.03) highonly
 winsor car_empl2 if surveyround ==3, gen(w95_fte_young) p(0.05) highonly
 

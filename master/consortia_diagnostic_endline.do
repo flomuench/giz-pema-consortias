@@ -34,8 +34,8 @@ use "${master_final}/consortium_final", clear
 ----------------------------------------------------------------------*/
 
 * First, management practices index: 
-egen man_index_raw= rowtotal(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres) if surveyround ==3
-g man_index = (man_index_raw/16)*100 if surveyround ==3
+egen man_index_raw= rowtotal(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa) if surveyround ==3
+g man_index = (man_index_raw/11)*100 if surveyround ==3
 egen avg_man_index = mean(man_index) if surveyround ==3
 egen sectoral_avg_man_index = mean(man_index) if surveyround ==3, by(sector)
 
@@ -73,7 +73,9 @@ egen sectoral_avg_exp_pays_diag = mean(exp_pays) if surveyround ==3, by(sector)
 lab var avg_exp_pays_diag "Average of number of export countries"
 lab var sectoral_avg_exp_pays_diag "Sectoral average of number of export countries"
 
-*Fifhtly, employer productivity
+*Fifhtly 
+
+*Sixthly, employer productivity
 replace comp_ca2023 = . if comp_ca2023 == 999
 replace comp_ca2023 = . if comp_ca2023 == 888
 replace comp_ca2023 = . if comp_ca2023 == 777

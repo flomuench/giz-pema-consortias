@@ -136,7 +136,7 @@ label var export_3 "No export"
 
 *export = 0 if it does not export
  
-replace compexp_2023 = 0 if export_1 == 0
+replace ca_exp = 0 if export_1 == 0
 replace compexp_2024 = 0 if export_1 == 0
 
 generate export_41 = regexm(export_4, "1")
@@ -231,7 +231,7 @@ egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin)
 egen miss_extlist = rowmiss(listexp1)
 	
 	* section 15: accounting/KPI
-egen miss_accounting = rowmiss(comp_benefice2023 comp_benefice2024 comp_ca2023 comp_ca2024 compexp_2023 compexp_2024)
+egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp compexp_2024)
 
 	
 
@@ -268,71 +268,71 @@ foreach var of local ids {
 ***********************************************************************
 * 	PART 14:  Transform categorical variables into continuous variables
 ***********************************************************************
-*comp_ca2023_intervalles
-replace comp_ca2023 = 5000 if comp_ca2023_intervalles == 8
-replace comp_ca2023 = 25000 if comp_ca2023_intervalles == 7
-replace comp_ca2023 = 100000 if comp_ca2023_intervalles == 6
-replace comp_ca2023 = 225000 if comp_ca2023_intervalles == 5
-replace comp_ca2023 = 400000 if comp_ca2023_intervalles == 4
-replace comp_ca2023 = 600000 if comp_ca2023_intervalles == 3
-replace comp_ca2023 = 850000 if comp_ca2023_intervalles == 2
-replace comp_ca2023 = 1000000 if comp_ca2023_intervalles == 1
+*ca_intervalles
+replace ca = 5000 if comp_ca2023_intervalles == 8
+replace ca = 25000 if comp_ca2023_intervalles == 7
+replace ca = 100000 if comp_ca2023_intervalles == 6
+replace ca = 225000 if comp_ca2023_intervalles == 5
+replace ca = 400000 if comp_ca2023_intervalles == 4
+replace ca = 600000 if comp_ca2023_intervalles == 3
+replace ca = 850000 if comp_ca2023_intervalles == 2
+replace ca = 1000000 if comp_ca2023_intervalles == 1
 
 *comp_ca2024_intervalles
-replace comp_ca2024 = 5000 if comp_ca2024_intervalles == 8
-replace comp_ca2024 = 25000 if comp_ca2024_intervalles == 7
-replace comp_ca2024 = 100000 if comp_ca2024_intervalles == 6
-replace comp_ca2024 = 225000 if comp_ca2024_intervalles == 5
-replace comp_ca2024 = 400000 if comp_ca2024_intervalles == 4
-replace comp_ca2024 = 600000 if comp_ca2024_intervalles == 3
-replace comp_ca2024 = 850000 if comp_ca2024_intervalles == 2
-replace comp_ca2024 = 1000000 if comp_ca2024_intervalles == 1
+replace ca_2024 = 5000 if comp_ca2024_intervalles == 8
+replace ca_2024 = 25000 if comp_ca2024_intervalles == 7
+replace ca_2024 = 100000 if comp_ca2024_intervalles == 6
+replace ca_2024 = 225000 if comp_ca2024_intervalles == 5
+replace ca_2024 = 400000 if comp_ca2024_intervalles == 4
+replace ca_2024 = 600000 if comp_ca2024_intervalles == 3
+replace ca_2024 = 850000 if comp_ca2024_intervalles == 2
+replace ca_2024 = 1000000 if comp_ca2024_intervalles == 1
 
-*comp_benefice2023_intervalles
-replace comp_benefice2023 = 5000 if profit_2023_category_perte == 8
-replace comp_benefice2023 = 25000 if profit_2023_category_perte == 7
-replace comp_benefice2023 = 100000 if profit_2023_category_perte == 6
-replace comp_benefice2023 = 225000 if profit_2023_category_perte == 5
-replace comp_benefice2023 = 400000 if profit_2023_category_perte == 4
-replace comp_benefice2023 = 600000 if profit_2023_category_perte == 3
-replace comp_benefice2023 = 850000 if profit_2023_category_perte == 2
-replace comp_benefice2023 = 1000000 if profit_2023_category_perte == 1
+*profit_intervalles
+replace profit = 5000 if profit_2023_category_perte == 8
+replace profit = 25000 if profit_2023_category_perte == 7
+replace profit = 100000 if profit_2023_category_perte == 6
+replace profit = 225000 if profit_2023_category_perte == 5
+replace profit = 400000 if profit_2023_category_perte == 4
+replace profit = 600000 if profit_2023_category_perte == 3
+replace profit = 850000 if profit_2023_category_perte == 2
+replace profit = 1000000 if profit_2023_category_perte == 1
 
-replace comp_benefice2023 = 5000 if profit_2023_category_gain == 8
-replace comp_benefice2023 = 25000 if profit_2023_category_gain == 7
-replace comp_benefice2023 = 100000 if profit_2023_category_gain == 6
-replace comp_benefice2023 = 225000 if profit_2023_category_gain == 5
-replace comp_benefice2023 = 400000 if profit_2023_category_gain == 4
-replace comp_benefice2023 = 600000 if profit_2023_category_gain == 3
-replace comp_benefice2023 = 850000 if profit_2023_category_gain == 2
-replace comp_benefice2023 = 1000000 if profit_2023_category_gain == 1
+replace profit = 5000 if profit_2023_category_gain == 8
+replace profit = 25000 if profit_2023_category_gain == 7
+replace profit = 100000 if profit_2023_category_gain == 6
+replace profit = 225000 if profit_2023_category_gain == 5
+replace profit = 400000 if profit_2023_category_gain == 4
+replace profit = 600000 if profit_2023_category_gain == 3
+replace profit = 850000 if profit_2023_category_gain == 2
+replace profit = 1000000 if profit_2023_category_gain == 1
 
-*comp_benefice2024_intervalles
-replace comp_benefice2024 = 5000 if profit_2024_category_perte == 8
-replace comp_benefice2024 = 25000 if profit_2024_category_perte == 7
-replace comp_benefice2024 = 100000 if profit_2024_category_perte == 6
-replace comp_benefice2024 = 225000 if profit_2024_category_perte == 5
-replace comp_benefice2024 = 400000 if profit_2024_category_perte == 4
-replace comp_benefice2024 = 600000 if profit_2024_category_perte == 3
-replace comp_benefice2024 = 850000 if profit_2024_category_perte == 2
-replace comp_benefice2024 = 1000000 if profit_2024_category_perte == 1
+*profit_2024_intervalles
+replace profit_2024 = 5000 if profit_2024_category_perte == 8
+replace profit_2024 = 25000 if profit_2024_category_perte == 7
+replace profit_2024 = 100000 if profit_2024_category_perte == 6
+replace profit_2024 = 225000 if profit_2024_category_perte == 5
+replace profit_2024 = 400000 if profit_2024_category_perte == 4
+replace profit_2024 = 600000 if profit_2024_category_perte == 3
+replace profit_2024 = 850000 if profit_2024_category_perte == 2
+replace profit_2024 = 1000000 if profit_2024_category_perte == 1
 
-replace comp_benefice2024 = 5000 if profit_2024_category_gain == 8
-replace comp_benefice2024 = 25000 if profit_2024_category_gain == 7
-replace comp_benefice2024 = 100000 if profit_2024_category_gain == 6
-replace comp_benefice2024 = 225000 if profit_2024_category_gain == 5
-replace comp_benefice2024 = 400000 if profit_2024_category_gain == 4
-replace comp_benefice2024 = 600000 if profit_2024_category_gain == 3
-replace comp_benefice2024 = 850000 if profit_2024_category_gain == 2
-replace comp_benefice2024 = 1000000 if profit_2024_category_gain == 1
+replace profit_2024 = 5000 if profit_2024_category_gain == 8
+replace profit_2024 = 25000 if profit_2024_category_gain == 7
+replace profit_2024 = 100000 if profit_2024_category_gain == 6
+replace profit_2024 = 225000 if profit_2024_category_gain == 5
+replace profit_2024 = 400000 if profit_2024_category_gain == 4
+replace profit_2024 = 600000 if profit_2024_category_gain == 3
+replace profit_2024 = 850000 if profit_2024_category_gain == 2
+replace profit_2024 = 1000000 if profit_2024_category_gain == 1
 
-replace comp_benefice2023=comp_benefice2023*(-1) if profit_2023_category==0
+replace profit=profit*(-1) if profit_2023_category==0
 
-replace comp_benefice2024=comp_benefice2024*(-1) if profit_2024_category==0
+replace profit_2024=profit_2024*(-1) if profit_2024_category==0
 
 *export = 0 if it does not export
  
-replace compexp_2023 = 0 if export_1 == 0
+replace ca_exp = 0 if export_1 == 0
 replace compexp_2024 = 0 if export_1 == 0
 
 *marginal_exp_2023
@@ -342,7 +342,7 @@ gen marginal_exp_2023 = 0
 lab var marginal_exp_2023 "extensive margin of export based on export turnover 2023"
 label values marginal_exp_2023 ext_exp
 
-replace marginal_exp_2023 = 1 if compexp_2023 > 0 & compexp_2023 < .
+replace marginal_exp_2023 = 1 if ca_exp > 0 & ca_exp < .
 
 
 *marginal_exp_2024
@@ -355,7 +355,7 @@ replace marginal_exp_2024 = 1 if compexp_2024 > 0 & compexp_2024 < .
 ***********************************************************************
 * 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
-local varn comp_ca2023 comp_ca2024 compexp_2023 compexp_2024 comp_benefice2023 comp_benefice2024
+local varn ca ca_2024 ca_exp compexp_2024 profit profit_2024
 
 foreach x of local varn { 
 gen n`x' = 0
