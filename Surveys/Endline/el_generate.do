@@ -195,7 +195,7 @@ egen miss_inno = rowmiss(inno_proc_met inno_proc_log inno_proc_prix inno_proc_su
 egen miss_export = rowmiss(exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes) if export_3 == 0
 
 	* section 3 export practices
-egen miss_exp_pracc = rowmiss(exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent)
+egen miss_exp_pracc = rowmiss(exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent)
 
 	* section 4: SSA export readiness
 egen miss_eri_ssa = rowmiss(ssa_action1 ssa_action2 ssa_action3 ssa_action4)

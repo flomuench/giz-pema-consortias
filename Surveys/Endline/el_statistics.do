@@ -411,7 +411,7 @@ putpdf image el_ordersSSA_box.png, width(5000)
 putpdf pagebreak
 	
 *export practices
-betterbar exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent, over(treatment) barlab ci ///
+betterbar exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent, over(treatment) barlab ci ///
 	title("Export practices", position(12)) ///
 	ylabel(,labsize(vsmall) angle(horizontal))
 graph export el_expprac.png, width(6000) replace 
