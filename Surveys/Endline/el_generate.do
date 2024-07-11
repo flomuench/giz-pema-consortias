@@ -134,11 +134,6 @@ label var export_1 "Direct export"
 label var export_2 "Indirect export"
 label var export_3 "No export"
 
-*export = 0 if it does not export
- 
-replace ca_exp = 0 if export_1 == 0
-replace ca_exp_2024 = 0 if export_1 == 0
-
 generate export_41 = regexm(export_4, "1")
 
 generate export_42 = regexm(export_4, "2")
@@ -252,18 +247,19 @@ label values survey_completed yesno
 ***********************************************************************
 * 	PART 13:  Generate variables for companies who answered on phone	
 ***********************************************************************
-gen survey_phone = 0
+gen survey_phone = 1
 lab var survey_phone "Comapnies who answered the survey on phone (with enumerators)" 
 
 
 label define Surveytype 1 "Phone" 0 "Online"
 label values survey_phone Surveytype
 
+
 	*responded online
-local ids 983 985 1009 1028 1044 1045 1096 1098 1102 1116 1125 1134 1159 1195 1196 1197 1199 1201 1202 1203 1204 1205
+local ids 983 985 1000 1009 1028 1044 1045 1064 1096 1098 1102 1116 1125 1134 1143 1159 1195 1203 1204 1205 1243 1244
 
 foreach var of local ids {
-	replace survey_phone = 1 if id_plateforme == `var'
+	replace survey_phone = 0 if id_plateforme == `var'
 }
 
 ***********************************************************************
@@ -333,8 +329,8 @@ replace profit_2024=profit_2024*(-1) if profit_2024_category==0
 
 *export = 0 if it does not export
  
-replace ca_exp = 0 if export_1 == 0
-replace ca_exp_2024 = 0 if export_1 == 0
+replace ca_exp = 0 if export_1 == 0 & id_plateforme != 1059 & ca_exp == . // exported in 2023, stopped in 2024
+replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *marginal_exp_2023
 label define ext_exp 0 "Did not export" 1 "Exported"
@@ -361,6 +357,12 @@ replace ca_2024 = 500 if id_plateforme == 1005
 replace profit = -5700 if id_plateforme == 1005
 replace profit_2024 = -5700 if id_plateforme == 1005
 
+// id_plateforme 1049 / manque de la partie comptabilité / 29568688"Faux Num/ J'ai appelé Madame Samia, mais le manager a répondu. Il est en colere et ne veut ni répondre ni donner le téléphone à Madame Samia
+local compta_vars "ca comp_ca2023_intervalles ca_2024 comp_ca2024_intervalles ca_exp ca_exp_2024 profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain"
+
+foreach var of local compta_vars {
+	replace `var' = 888 if id_plateforme == 1049 
+}
 
 // id_plateforme 1138 / n'a pas donnée les bénéfices en 2024 (elle n'a pas aucun aidé combients)
 replace profit_2024 = 999 if id_plateforme == 1138
@@ -381,6 +383,32 @@ foreach var of local compta_vars {
 	*id_plateforme 1167 // Has no idea about CA 2024
 replace ca_2024 = 999 if id_plateforme == 1167
 
+	*id_plateforme 1059 //  met3ametech avec des entrepreuners donc ell ne repond pas a q17 et elle n'a pas travaille  en 2024 donc elle ne peut pas repondre aux question sur les benefices + et 2023 mesajletech ni pertes ni benefices  et aussi cest une entreprise totalement exportatrice en 2023
+	
+replace profit = 0 if id_plateforme == 1059
+replace profit_2024 = 0 if id_plateforme == 1059
+
+	*1083 // lentreprise  ferme depuis 2 ans donc elle na pas donne le chiffres dafffaire et le matricule fiscale
+local compta_vars "ca ca_2024 ca_exp ca_exp_2024 profit profit_2024"
+
+foreach var of local compta_vars {
+	replace `var' = 0 if id_plateforme == 1083 
+}
+
+*1190 // reste partie comptabilité et matriculle fiscale elle ne connait pas 
+local compta_vars "ca ca_2024 ca_exp ca_exp_2024 profit profit_2024"
+
+foreach var of local compta_vars {
+	replace `var' = 0 if id_plateforme == 1083 
+}
+
+	*
+	*1122 // maandhech des employées kolhom des vendeuses wyekhdmou mi temps
+replace employes = 0 if id_plateforme == 1122
+
+	*1196 // Il n'y a aucune personne qui travaille avec elle à plein temps
+replace employes = 0 if id_plateforme == 1196
+***********************************************************************
 * 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
 local varn ca ca_2024 ca_exp ca_exp_2024 profit profit_2024

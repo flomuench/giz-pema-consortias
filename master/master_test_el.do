@@ -70,8 +70,8 @@ local new_turnover "nca nca_2024"
 
 foreach var of local new_turnover {
 	sum nca_2021, d
-	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
+	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) & `var' != .
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95) & `var' != .
 }	
 
 	*turnover export
@@ -80,8 +80,8 @@ local new_turnoverexp "nca_exp nca_exp_2024"
 
 foreach var of local new_turnoverexp {
 	sum nca_exp2021, d
-	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
+	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) & `var' != .
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95) & `var' != .
 }	
 
 	*profit
@@ -89,26 +89,15 @@ local new_profit "nprofit nprofit_2024"
 
 foreach var of local new_profit {
 	sum profit_2021, d
-	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) 
-	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95)
+	replace needs_check = 1 if `var' != . & surveyround == 3 & `var' >  r(p95) & `var' != .
+	replace questions_needing_checks = questions_needing_checks + "`var' par employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if `var' != . & surveyround == 3 & `var' > r(p95) & `var' != .
 }	
 
-		*employees
-sum employes if surveyround == 1, d
-replace needs_check = 1 if employes != . & surveyround == 3 & employes > r(p95)
-replace questions_needing_checks = questions_needing_checks + "employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if employes != . & surveyround == 3 & employes > r(p95)
-
-*employees femmes
-sum car_empl1 if surveyround == 1, d
-replace needs_check = 1 if car_empl1 != . & surveyround == 3 & car_empl1 > r(p95)
-replace questions_needing_checks = questions_needing_checks + "employés très grand par rapport à la baseline, veuillez vérifier les deux valeurs / " if car_empl1 != . & surveyround == 3 & car_empl1 > r(p95)
-
-*growth rate 2021
-	*ca
+*growth rates
 gen bl_empl = employes if surveyround == 1
-gen el_empl = employes if surveyround == 3
+replace ca_exp_2021 = ca_exp if surveyround == 1
 
-local compta_vars "ca_2024 ca ca_2021 ca_exp_2024 ca_exp ca_exp2021 profit_2024 profit profit_2021 bl_empl el_empl"
+local compta_vars "ca_2021 ca_exp_2021 profit_2021 bl_empl"
 sort id_plateforme surveyround
 
 foreach var of local compta_vars {
@@ -119,186 +108,200 @@ foreach var of local compta_vars {
     drop first_`var'
 }
 
+*add inflation
 replace adjusted_ca_2021 = adjusted_ca_2021*1.176
-replace adjusted_ca_exp2021 = adjusted_ca_exp2021*1.176
+replace adjusted_ca_exp_2021 = adjusted_ca_exp_2021*1.176
 
-gen gr_ca2021_2024 = (adjusted_ca_2024 - adjusted_ca_2021) / adjusted_ca_2021
+*generate growth rates
+gen gr_ca2021_2024 = (ca_2024 - adjusted_ca_2021) / adjusted_ca_2021 if ca_2024 != . & surveyround == 3
 
-gen gr_ca2021_2023 = (adjusted_ca - adjusted_ca_2021) / adjusted_ca_2021
+gen gr_ca2021_2023 = (ca - adjusted_ca_2021) / adjusted_ca_2021 if ca != . & surveyround == 3
 
 	*ca_exp
-gen gr_caexp2021_2024 = (adjusted_ca_exp_2024 - adjusted_ca_exp2021) / adjusted_ca_exp2021
+gen gr_caexp2021_2024 = (ca_exp_2024 - adjusted_ca_exp_2021) / adjusted_ca_exp_2021 if ca_exp_2024 != . & surveyround == 3
 
-gen gr_caexp2021_2023 = (adjusted_ca_exp - adjusted_ca_exp2021) / adjusted_ca_exp2021
+gen gr_caexp2021_2023 = (ca_exp - adjusted_ca_exp_2021) / adjusted_ca_exp_2021 if ca_exp != . & surveyround == 3
 
 	*profit
-gen gr_profit2021_2024 = (adjusted_profit_2024 - adjusted_profit_2021) / adjusted_profit_2021
+gen gr_profit2021_2024 = (profit_2024 - adjusted_profit_2021) / adjusted_profit_2021 if profit_2024 != . & surveyround == 3
 
-gen gr_profit2021_2023 = (adjusted_profit - adjusted_profit_2021) / adjusted_profit_2021
+gen gr_profit2021_2023 = (profit - adjusted_profit_2021) / adjusted_profit_2021 if profit != . & surveyround == 3
 
 	*employes
-gen gr_empl2021_2024 = (adjusted_el_empl - adjusted_bl_empl) / adjusted_bl_empl
+gen gr_empl2021_2024 = (employes - adjusted_bl_empl) / adjusted_bl_empl if employes != . & surveyround == 3
 
 /*
- sum gr_ca2021_2024 gr_ca2021_2023 gr_caexp2021_2024 gr_caexp2021_2023 gr_profit2021_2024 gr_profit2021_2023 gr_empl2021_2024 if surveyround == 3, d
+sum gr_ca2021_2024 gr_ca2021_2023 gr_caexp2021_2024 gr_caexp2021_2023 gr_profit2021_2024 gr_profit2021_2023 gr_empl2021_2024 if surveyround == 3, d
 
                        gr_ca2021_2024
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -1.378453      -1.378453
- 5%    -1.343776      -1.377376
-10%    -1.219643      -1.346902       Obs                  73
-25%    -1.008794      -1.343776       Sum of wgt.          73
+ 1%           -1             -1
+ 5%    -.9957483      -.9967294
+10%    -.8937075      -.9959508       Obs                  78
+25%    -.6134818      -.9957483       Sum of wgt.          78
 
-50%    -.2449115                      Mean           1.211455
-                        Largest       Std. dev.       4.54005
-75%     1.417024       10.37702
-90%     3.657024       14.14022       Variance       20.61206
-95%     10.37702       18.21702       Skewness        3.70752
-99%     26.84102       26.84102       Kurtosis       18.35552
+50%    -.1770902                      Mean           .9725437
+                        Largest       Std. dev.       3.34369
+75%     1.107365       9.629251
+90%     3.251701       10.22449       Variance       11.18026
+95%     9.629251       13.17234       Skewness        3.42845
+99%     19.40816       19.40816       Kurtosis       16.15069
 
                        gr_ca2021_2023
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -1.382976      -1.382976
- 5%    -1.346902      -1.378453
-10%    -1.177176      -1.377376       Obs                  74
-25%    -.3880521      -1.346902       Sum of wgt.          74
+ 1%           -1             -1
+ 5%    -.9959508             -1
+10%     -.787415      -.9967294       Obs                  79
+25%    -.1496599      -.9959508       Sum of wgt.          79
 
-50%     1.111824                      Mean           3.038799
-                        Largest       Std. dev.      7.882228
-75%     2.603465       14.14022
-90%     6.457024       14.29702       Variance       62.12952
-95%     14.14022       45.65702       Skewness       4.431664
-99%     45.65702       45.65702       Kurtosis       23.90827
+50%     .8221574                      Mean           2.169327
+                        Largest       Std. dev.      5.535046
+75%     1.882509       10.22449
+90%     5.377551       10.33787       Variance       30.63674
+95%     10.22449       33.01361       Skewness       4.543058
+99%     33.01361       33.01361       Kurtosis       25.22736
 
                       gr_caexp2021_2024
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -1.382976      -1.382976
- 5%    -1.382976      -1.382976
-10%    -1.382976      -1.382976       Obs                  31
-25%    -1.382976      -1.382976       Sum of wgt.          31
+ 1%           -1             -1
+ 5%           -1             -1
+10%           -1             -1       Obs                  31
+25%           -1             -1       Sum of wgt.          31
 
-50%    -1.338876                      Mean          -.1236601
-                        Largest       Std. dev.      3.482699
-75%     -.598976        .773024
-90%      .773024       4.214803       Variance       12.12919
-95%     6.457024       6.457024       Skewness       3.789172
-99%     16.25702       16.25702       Kurtosis       17.39033
+50%    -.8198432                      Mean           .0468342
+                        Largest       Std. dev.      2.510654
+75%    -.2346939        .984127
+90%      .984127       3.047632       Variance       6.303384
+95%     4.668934       4.668934       Skewness       3.666513
+99%      11.7551        11.7551       Kurtosis       16.77452
 
                       gr_caexp2021_2023
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%    -1.382976      -1.382976
- 5%    -1.382976      -1.382976
-10%    -1.382976      -1.382976       Obs                  31
-25%    -1.382976      -1.382976       Sum of wgt.          31
+ 1%           -1             -1
+ 5%           -1             -1
+10%           -1             -1       Obs                  31
+25%           -1             -1       Sum of wgt.          31
 
-50%    -1.341953                      Mean          -.2724707
-                        Largest       Std. dev.      2.194006
-75%     -.442176       2.537024
-90%     2.537024       2.603465       Variance       4.813663
-95%     5.673024       5.673024       Skewness       2.533828
-99%     7.946655       7.946655       Kurtosis       8.881398
+50%     -.744898                      Mean           .2586257
+                        Largest       Std. dev.      1.947047
+75%     .8221574       2.968254
+90%     2.968254       4.102041       Variance        3.79099
+95%     5.073858       5.073858       Skewness       1.596964
+99%     5.746054       5.746054       Kurtosis         4.3391
 
                      gr_profit2021_2024
 -------------------------------------------------------------
       Percentiles      Smallest
  1%    -16.95745      -16.95745
- 5%           -6      -8.142858
-10%        -3.28      -6.714286       Obs                  71
-25%    -1.238095             -6       Sum of wgt.          71
+ 5%    -6.714286      -8.142858
+10%           -4          -7.25       Obs                  77
+25%    -1.166667      -6.714286       Sum of wgt.          77
 
-50%          -.5                      Mean           1.477424
-                        Largest       Std. dev.      15.21618
-75%     .9762846              7
-90%            4           11.5       Variance        231.532
-95%            7       12.33333       Skewness       7.483395
-99%          124            124       Kurtosis       60.95613
+50%          -.5                      Mean           1.335887
+                        Largest       Std. dev.      14.63997
+75%            1              7
+90%            4           11.5       Variance       214.3288
+95%            7       12.33333       Skewness       7.760952
+99%          124            124       Kurtosis       65.74869
 
                      gr_profit2021_2023
 -------------------------------------------------------------
       Percentiles      Smallest
  1%         -8.5           -8.5
- 5%    -5.285714      -7.382979
-10%    -3.777778          -7.25       Obs                  73
-25%    -1.271297      -5.285714       Sum of wgt.          73
+ 5%        -7.25      -7.428571
+10%    -3.857143      -7.382979       Obs                  78
+25%    -1.271297          -7.25       Sum of wgt.          78
 
-50%        -.375                      Mean           1.639976
-                        Largest       Std. dev.      14.92524
+50%       -.4375                      Mean           1.437764
+                        Largest       Std. dev.      14.48241
 75%            1              9
-90%            4           11.5       Variance       222.7627
-95%            9       12.33333       Skewness       7.697777
-99%          124            124       Kurtosis       63.62787
+90%            4           11.5       Variance       209.7402
+95%            9       12.33333       Skewness       7.913424
+99%          124            124       Kurtosis       67.49981
 
                       gr_empl2021_2024
 -------------------------------------------------------------
       Percentiles      Smallest
- 1%         -.96           -.96
- 5%         -.75            -.9
-10%    -.7058824            -.8       Obs                  87
-25%    -.3333333           -.75       Sum of wgt.          87
+ 1%           -1             -1
+ 5%         -.75           -.96
+10%    -.7058824            -.9       Obs                  91
+25%    -.3333333            -.8       Sum of wgt.          91
 
-50%            0                      Mean            2.15379
-                        Largest       Std. dev.      16.11009
+50%            0                      Mean           2.070107
+                        Largest       Std. dev.      15.75413
 75%           .5              4
-90%     1.333333              4       Variance       259.5349
-95%            4             17       Skewness       8.954912
-99%        149.5          149.5       Kurtosis       82.32536
+90%     1.333333              4       Variance       248.1926
+95%            4             17       Skewness       9.163689
+99%        149.5          149.5       Kurtosis       86.17249
 
-. 
 */
 
 *ca2024
-scalar gr_ca2021_2024p95 = 13.31702
+scalar gr_ca2021_2024p95 = 9.629251
 
-replace needs_check = 1 if gr_ca2021_2024 > gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2024 est superiéur à 1331,702 %, veuillez vérifier / " if gr_ca2021_2024 > gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
+replace needs_check = 1 if gr_ca2021_2024 >= gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2024 est superiéur à 962,9251 %, veuillez vérifier / " if gr_ca2021_2024 >= gr_ca2021_2024p95 & surveyround == 3 & gr_ca2021_2024 != .
+
+scalar gr_ca2021_2024p5 = -.9957483
+
+replace needs_check = 1 if gr_ca2021_2024 <= gr_ca2021_2024p5 & surveyround == 3 & gr_ca2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2024 est superiéur à -99,57483 %, veuillez vérifier / " if gr_ca2021_2024 <= gr_ca2021_2024p5 & surveyround == 3 & gr_ca2021_2024 != .
 
 *ca2023
-scalar gr_ca2021_2023p95 = 13.06044
+scalar gr_ca2021_2023p95 = 10.22449 
 
-replace needs_check = 1 if gr_ca2021_2023 > gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2023 est superiéur à 1306,044 %, veuillez vérifier / " if gr_ca2021_2023 > gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
+replace needs_check = 1 if gr_ca2021_2023 >= gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2023 est superiéur à 1022,449  %, veuillez vérifier / " if gr_ca2021_2023 >= gr_ca2021_2023p95 & surveyround == 3 & gr_ca2021_2023 != .
+
+scalar gr_ca2021_2023p5 = -.9959508
+
+replace needs_check = 1 if gr_ca2021_2023 <= gr_ca2021_2023p5 & surveyround == 3 & gr_ca2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA 2023 est superiéur à -99,59508 %, veuillez vérifier / " if gr_ca2021_2023 <= gr_ca2021_2023p5 & surveyround == 3 & gr_ca2021_2023 != .
 
 *ca_exp2024
-scalar gr_caexp2021_2024p95 = 6.457024 
+scalar gr_caexp2021_2024p95 = 4.668934 
 
-replace needs_check = 1 if gr_caexp2021_2024 > gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2024 est superiéur à 645,7024 %, veuillez vérifier / " if gr_caexp2021_2024 > gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
+replace needs_check = 1 if gr_caexp2021_2024 >= gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2024 est superiéur à 466,8934  %, veuillez vérifier / " if gr_caexp2021_2024 >= gr_caexp2021_2024p95 & surveyround == 3 & gr_caexp2021_2024 != .
 
+scalar gr_caexp2021_2024p5 = -1
+
+replace needs_check = 1 if gr_caexp2021_2024 <= gr_caexp2021_2024p5 & surveyround == 3 & gr_caexp2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2024 est -100 %, veuillez vérifier / " if gr_caexp2021_2024 <= gr_caexp2021_2024p5 & surveyround == 3 & gr_caexp2021_2024 != .
 *ca_exp2023
-scalar gr_caexp2021_2023p95 = 5.673024
+scalar gr_caexp2021_2023p95 = 5.073858
 
-replace needs_check = 1 if gr_caexp2021_2023 > gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2023 est superiéur à 567,3024 %, veuillez vérifier / " if gr_caexp2021_2023 > gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
+replace needs_check = 1 if gr_caexp2021_2023 >= gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2023 est superiéur à 507,3858 %, veuillez vérifier / " if gr_caexp2021_2023 >= gr_caexp2021_2023p95 & surveyround == 3 & gr_caexp2021_2023 != .
+
+
+scalar gr_caexp2021_2023p5 = -1
+
+replace needs_check = 1 if gr_caexp2021_2023 <= gr_caexp2021_2023p5 & surveyround == 3 & gr_caexp2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA export 2023 est -100 %, veuillez vérifier / " if gr_caexp2021_2023 <= gr_caexp2021_2023p5 & surveyround == 3 & gr_caexp2021_2023 != .
 
 *ca_profit2024
-scalar gr_profit2021_2024p95 =  2
-scalar gr_profit2021_2024p5 = -1.5
+scalar gr_profit2021_2024p95 =  7
 
-replace needs_check = 1 if gr_profit2021_2024 > gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à 200 %, veuillez vérifier / " if gr_profit2021_2024 > gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
 
-replace needs_check = 1 if gr_profit2021_2024 < gr_profit2021_2024p5 & surveyround == 3 & gr_profit2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à -150 %, veuillez vérifier / " if gr_profit2021_2024 < gr_profit2021_2024p5 & surveyround == 3 & gr_profit2021_2024 != .
+replace needs_check = 1 if gr_profit2021_2024 >= gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2024 est superiéur à 700 %, veuillez vérifier / " if gr_profit2021_2024 >= gr_profit2021_2024p95 & surveyround == 3 & gr_profit2021_2024 != .
 
 *ca_profit2023
-scalar gr_profit2021_2023p95 = 2
-scalar gr_profit2021_2023p5 = -2
+scalar gr_profit2021_2023p95 = 9
 
-replace needs_check = 1 if gr_profit2021_2023 > gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à 200 %, veuillez vérifier / " if gr_profit2021_2023 > gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
-
-replace needs_check = 1 if gr_profit2021_2023 < gr_profit2021_2023p5 & surveyround == 3 & gr_profit2021_2023 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à -200 %, veuillez vérifier / " if gr_profit2021_2023 < gr_profit2021_2023p5 & surveyround == 3 & gr_profit2021_2023 != .
+replace needs_check = 1 if gr_profit2021_2023 >= gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance Profit 2023 est superiéur à 900 %, veuillez vérifier / " if gr_profit2021_2023 >= gr_profit2021_2023p95 & surveyround == 3 & gr_profit2021_2023 != .
 
 *empl
 scalar gr_empl2021_2024p95 = 4 
 
-replace needs_check = 1 if gr_empl2021_2024 > gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
-replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA est superiéur à 400 %, veuillez vérifier / " if gr_empl2021_2024 > gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
+replace needs_check = 1 if gr_empl2021_2024 >= gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Taux de croissance CA est superiéur à 400 %, veuillez vérifier / " if gr_empl2021_2024 >= gr_empl2021_2024p95 & surveyround == 3 & gr_empl2021_2024 != .
 
 /* --------------------------------------------------------------------
 	PART 2.2: Comptabilité / accounting questions
@@ -445,7 +448,7 @@ replace needs_check = 1 if surveyround==3 & clients > 10000 & clients != .
 replace questions_needing_checks = questions_needing_checks + "Nombre de clients international superiéur à 10000, veuillez vérifier aussi le nombre de clients SSA. / "  if surveyround==3 & clients > 10000 & clients != .
 
 *Does export practices and activties, but no client?
-local export_act "exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4"
+local export_act "exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4"
 foreach var of local export_act {
 	replace needs_check = 1 if surveyround == 3 & `var' == 1 & clients == 0
 	replace questions_needing_checks = questions_needing_checks + "L'entreprise dit qu'elle fait `var', mais elle n'a pas de clients, veuillez vérifier. / " if surveyround == 3 & `var' == 1 & clients == 0
@@ -674,10 +677,6 @@ replace questions_needing_checks = questions_needing_checks + "(int_other) Elle 
 ***********************************************************************
 *use regex to check that matricule fiscale starts with 7 numbers followed by a letter
 	*mistake in matricule fiscale
-
-replace needs_check = 1 if id_plateforme == 1190 & surveyround == 3
-replace questions_needing_checks = questions_needing_checks + "matricule fiscale 1234567X est erronée, veuillez vérifier / " if id_plateforme == 1190 & surveyround == 3
-
 *manually adding matricules that conform with regex but are wrong anyways
 
 *replace needs_check = 1 if id_plateforme == 1083
@@ -723,7 +722,11 @@ foreach var of local compta_vars {
 }
 
 ***********************************************************************
-* 	PART 8:  Export an excel sheet with needs_check variables  			
+* 	PART 8:  Manually cancel needs_check if fixed	
+***********************************************************************
+replace needs_check = 0 if id_plateforme == 1026 // large outlier firm, comptability should be fine.
+***********************************************************************
+* 	PART 9:  Export an excel sheet with needs_check variables  			
 ***********************************************************************
 *re-merge additional contact information to dataset (?)
 /*
@@ -753,29 +756,17 @@ egen occurence = count(id_plateforme), by(id_plateforme)
 drop if occurence < 2 // drop firms that have not yet responded to midline 
 drop occurence
 
-
-
 			* export excel file. manually add variables listed in questions_needing_check
 				* group variables into lists (locals) to facilitate overview
-local order_vars "id_plateforme surveyround needs_check attest survey_phone treatment commentaires_elamouri questions_needing_checks"
-local accounting_vars "`order_vars' employes car_empl1 gr_empl2021_2024 ca_2021 ca gr_ca2021_2023 ca_2021 ca_2024 gr_ca2021_2024 ca_exp2021 ca_exp gr_ca2021_2023 ca_exp2021 ca_exp_2024 gr_caexp2021_2024 profit_2021 profit gr_profit2021_2023 profit_2021 profit_2024 gr_profit2021_2024"
-local networking_vars "`accounting_vars' net_size3 net_association net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre"
-local export_vars "`networking_vars' clients exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4"
+local order_vars "id_plateforme surveyround take_up needs_check attest survey_phone treatment commentaires_elamouri questions_needing_checks"
+local accounting_vars "`order_vars' adjusted_bl_empl employes car_empl1 gr_empl2021_2024 adjusted_ca_2021 ca gr_ca2021_2023 adjusted_ca_2021 ca_2024 gr_ca2021_2024 export_3 adjusted_ca_exp_2021 ca_exp gr_ca2021_2023 adjusted_ca_exp_2021 ca_exp_2024 gr_caexp2021_2024 adjusted_profit_2021 profit gr_profit2021_2023 adjusted_profit_2021 profit_2024 gr_profit2021_2024"
+local networking_vars "`accounting_vars' net_size3 net_size4 net_association net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre"
+local export_vars "`networking_vars' clients exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4"
 local management_vars "`export_vars' man_fin_per_fre man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv"
 local openended_vars "`management_vars' products_other inno_exampl_produit1 inno_exampl_produit2 inno_proc_other inno_mot_other export_other man_sources_other int_ben2 int_other"
 				
 * Export to Excel
 export excel `openended_vars' using "${el_checks}/fiche_correction.xlsx" ///
-   if surveyround == 3 | ///
-   (surveyround == 1 & (gr_ca2021_2024 > gr_ca2021_2024p95) & gr_ca2021_2024 != .) | ///
-   (surveyround == 1 & (gr_ca2021_2023 > gr_ca2021_2023p95) & gr_ca2021_2023 != .) | ///
-   (surveyround == 1 & (gr_caexp2021_2024 > gr_caexp2021_2024p95) & gr_caexp2021_2024 != .) | ///
-   (surveyround == 1 & (gr_caexp2021_2023 > gr_caexp2021_2023p95) & gr_caexp2021_2023 != .) | ///
-   (surveyround == 1 & (gr_profit2021_2024 > gr_profit2021_2024p95) & gr_profit2021_2024 != .) | ///
-   (surveyround == 1 & (gr_profit2021_2024 < gr_profit2021_2024p5) & gr_profit2021_2024 != .) | ///
-   (surveyround == 1 & (gr_profit2021_2023 > gr_profit2021_2023p95) & gr_profit2021_2023 != .) | ///
-   (surveyround == 1 & (gr_profit2021_2023 < gr_profit2021_2023p5) & gr_profit2021_2023 != .) | ///
-   (surveyround == 1 & (gr_empl2021_2024 > gr_empl2021_2024p95) & gr_empl2021_2024 != .), ///
-   sheetreplace firstrow(var) datestring("%-td")
+   if surveyround == 3 & attest == 1, sheetreplace firstrow(var) datestring("%-td")
 
 restore
