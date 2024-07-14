@@ -223,7 +223,7 @@ lab var net_size "Network size"
 ***********************************************************************
 * 	PART 8:   Create the indices based on a z-score			  
 ***********************************************************************
-/*
+
 {
 	*Definition of all variables that are being used in index calculation
 local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin
@@ -333,7 +333,7 @@ egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fi
 egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub), missing
 			
 			*Innovation index
-egen el_inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres), missing 
+egen inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres), missing 
 
 			* female empowerment index (genderi)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
@@ -354,7 +354,7 @@ label var female_efficacy_points "Women's entrepreneurial effifacy points"
 label var female_initiative_points "Women's entrepreneurial initiaitve points"
 label var female_loc_points "Women's locus of control points"
 label var genderi_points "Gender index points"
-label var el_inno_points "Innovation practices index points"
+label var inno_points "Innovation practices index points"
 
 	* drop temporary vars		  										  
 drop temp_*
@@ -796,11 +796,6 @@ foreach var of local y_vars {
 *bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
 *bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
 
-***********************************************************************
-*PART 8: Creation of index for the endline
-***********************************************************************	
-
-*/
 ***********************************************************************
 * 	PART final save:    save as final consortium_database
 ***********************************************************************
