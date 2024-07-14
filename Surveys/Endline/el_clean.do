@@ -77,7 +77,7 @@ rename compexp_2023 ca_exp
 rename compexp_2024 ca_exp_2024
 rename comp_ca2023 ca
 rename comp_ca2024 ca_2024
-
+rename exp_pra_norme exprep_norme 
 lab var employes "Number of employeess"
 
 lab var car_empl1 "Number of female employees"
@@ -118,7 +118,7 @@ label var clients_ssa_commandes "Number of SSA orders"
 label var exp_pra_rexp "designate an employee in charge of export-related activities"
 label var exp_pra_foire "participate in international trade exhibitions/fairs"
 label var exp_pra_sci "engage or work with an international trading company"
-label var exp_pra_norme "Product certification"
+label var exprep_norme "Product certification"
 label var exp_pra_vent "Investment in sales structure"
 
 lab var ssa_action1 "SSA client"
@@ -276,7 +276,7 @@ lab var int_other "example of another refusal to participate in consortia activi
 * 	PART 6: 	Label the variables values	  			
 ***********************************************************************
 		*yes/no variables loop:
-local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_norme exp_pra_vent ssa_action1 ssa_action2 ///
+local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ///
 ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_per_pro man_fin_pra_dis man_ind_awa ///
 man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre
 
