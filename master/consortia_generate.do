@@ -180,6 +180,14 @@ gen profit_pos = (profit > 0)
 replace profit_pos = . if profit == .
 lab var profit_pos "Profit > 0"
 
+<<<<<<< Updated upstream
+=======
+	*profit2024 positive
+gen profit_2024_pos = 1 if profit_2024 >= 0
+replace profit_2024_pos = 0 if profit_2024 < 0
+
+lab var profit_2024_pos "Profit 2024 > 0"
+>>>>>>> Stashed changes
 
 ***********************************************************************
 *	PART 5: Exported dummy
@@ -221,12 +229,29 @@ lab var net_size "Network size"
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
+<<<<<<< Updated upstream
 local allvars man_ind_awa man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays ca_exp exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 man_hr_pro man_fin_num ca employes sales profit car_efi
+=======
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin
+>>>>>>> Stashed changes
 ds `allvars', has(type string)
 
 	* Create temporary variable
 foreach var of local allvars {
 	g temp_`var' = `var'
+<<<<<<< Updated upstream
+=======
+    replace temp_`var' = . if `var' == 999 // don't know transformed to missing values
+    replace temp_`var' = . if `var' == 888 
+    replace temp_`var' = . if `var' == 777 
+    replace temp_`var' = . if `var' == 666 
+	replace temp_`var' = . if `var' == -999 // added - since we transformed profit into negative in endline
+    replace temp_`var' = . if `var' == -888
+    replace temp_`var' = . if `var' == -777
+    replace temp_`var' = . if `var' == -666
+    replace temp_`var' = . if `var' == 1234 
+
+>>>>>>> Stashed changes
 }
 
 	* calculate z-score for each individual outcome
@@ -245,21 +270,40 @@ foreach var of local allvars {
 
 	* calculate the index value: average of zscores 
 			* export readiness index (eri)
+<<<<<<< Updated upstream
 egen eri = rowmean(temp_exprep_normez temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_rexpz temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exprep_normez)			
 			
 			* export readiness SSA index (eri_ssa)
 egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z temp_ssa_action4z temp_ssa_action5z)
+=======
+egen eri = rowmean(temp_exprep_normez temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exp_pra_rexpz temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_ventz)			
+			
+			* export readiness SSA index (eri_ssa)
+egen eri_ssa = rowmean(temp_ssa_action1z temp_ssa_action2z temp_ssa_action3z temp_ssa_action4z temp_ssa_action5z temp_exp_pays_ssaz temp_clients_ssaz temp_clients_ssa_commandesz) 
+>>>>>>> Stashed changes
 
 			* export performance
-egen epp = rowmean(temp_exp_paysz temp_ca_expz)
+egen epp = rowmean(temp_exportedz temp_export_1z temp_export_2z temp_exp_paysz temp_ca_expz)
 
+<<<<<<< Updated upstream
 			* business size
 egen size = rowmean(temp_employesz temp_salesz temp_profitz)
 lab var size "z-score sales + employees + profit"
+=======
+			*Innovation practices index
+egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) 
+			
+			* business performance
+egen bpi = rowmean(temp_employesz temp_salesz temp_profitz)
+>>>>>>> Stashed changes
 
 
 			* management practices (mpi)
+<<<<<<< Updated upstream
 egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_ind_awaz temp_man_fin_per_frez temp_man_hr_proz temp_man_fin_numz temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
+=======
+egen mpi = rowmean(temp_man_hr_objz temp_man_hr_feedz temp_man_pro_anoz temp_man_fin_enrz temp_man_fin_profitz temp_man_fin_perz temp_man_hr_proz temp_man_fin_numz temp_man_fin_per_indz temp_man_fin_per_proz temp_man_fin_per_quaz temp_man_fin_per_stoz temp_man_fin_per_empz temp_man_fin_per_livz temp_man_fin_per_frez temp_man_fin_pra_budz temp_man_fin_pra_proz temp_man_fin_pra_disz temp_man_ind_awaz) // added at midline: man_ind_awa man_fin_per_fre instead of man_fin_per, man_hr_feed, man_hr_pro
+>>>>>>> Stashed changes
 			
 			* marketing practices index (marki)
 egen marki = rowmean(temp_man_mark_prixz temp_man_mark_divz temp_man_mark_clientsz temp_man_mark_offrez temp_man_mark_pubz)
@@ -269,11 +313,11 @@ egen mpmarki = rowmean(mpi marki)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
 				* efficacy "the ability to produce a desired or intended result."
 				* sense of initiative
-egen female_efficacy = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz)
+egen female_efficacy = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_efi_manz temp_car_efi_motivz)
 egen female_initiative = rowmean(temp_car_init_probz temp_car_init_initz temp_car_init_oppz)
-egen female_loc = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz temp_car_loc_expz)
+egen female_loc = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz)
 
-egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz)	
+egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_efi_manz temp_car_efi_motivz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz)
 
 		* labeling
 label var eri "Export readiness"
@@ -285,6 +329,9 @@ label var female_efficacy "Effifacy"
 label var female_initiative "Initiaitve"
 label var female_loc "Locus of control"
 label var genderi "Entrepreneurial empowerment"
+label var ipi "Innovation practices index -Z Score"
+label var bpi "Business performance index- Z-score"
+label var bpi_2024 "Business performance index- Z-score in 2024"
 
 }
 
@@ -293,34 +340,38 @@ label var genderi "Entrepreneurial empowerment"
 ***********************************************************************
 {
 	* find out max. points
-sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per
+sum temp_man_hr_obj temp_man_hr_feed temp_man_pro_ano temp_man_fin_enr temp_man_fin_profit temp_man_fin_per temp_man_hr_pro temp_man_fin_num temp_man_fin_per_ind temp_man_fin_per_pro temp_man_fin_per_qua temp_man_fin_per_sto temp_man_fin_per_emp temp_man_fin_per_liv temp_man_fin_per_fre temp_man_fin_pra_bud temp_man_fin_pra_pro temp_man_fin_pra_dis temp_man_ind_awa
 sum temp_man_mark_prix temp_man_mark_div temp_man_mark_clients temp_man_mark_offre temp_man_mark_pub
-sum temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_rexp temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan
-sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp
+sum temp_exprep_norme temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douane temp_exp_pra_plan temp_exp_pra_rexp temp_exp_pra_foire temp_exp_pra_sci temp_exp_pra_vent
+sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_efi_man temp_car_efi_motiv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp temp_car_loc_env temp_car_loc_exp temp_car_loc_soin
 sum temp_exprep_norme temp_exp_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
+sum temp_inno_improve temp_inno_new temp_inno_proc_met temp_inno_proc_log temp_inno_proc_prix temp_inno_proc_sup temp_inno_proc_autres
 	
 	* create total points per index dimension
-			* export readiness index (eri)
-egen eri_points = rowtotal(exprep_norme exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme), missing			
+			* export readiness index (eri) 
+egen eri_points = rowtotal(exprep_norme exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exp_pra_rexp exp_pra_foire exp_pra_sci exp_pra_vent), missing			
 			
-			* export readiness SSA index (eri_ssa)
+			* export readiness SSA index (eri_ssa) 
 egen eri_ssa_points = rowtotal(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5), missing
 
-			* management practices (mpi)
-egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_ind_awa man_fin_per_fre man_fin_num), missing
+			* management practices (mpi)  
+egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per temp_man_hr_pro man_fin_num man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa), missing
 			
-			* marketing practices index (marki)
+			* marketing practices index (marki) 
 egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub), missing
 			
+			*Innovation index
+egen el_inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres), missing 
+
 			* female empowerment index (genderi)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
 				* efficacy "the ability to produce a desired or intended result."
 				* sense of initiative
 egen female_efficacy_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv), missing
 egen female_initiative_points = rowtotal(car_init_prob car_init_init car_init_opp), missing
-egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_exp car_loc_soin), missing
+egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
 
-egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp car_loc_exp car_loc_soin), missing
+egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
 
 		* labeling
 label var eri_points "Export readiness index points"
@@ -331,6 +382,7 @@ label var female_efficacy_points "Women's entrepreneurial effifacy points"
 label var female_initiative_points "Women's entrepreneurial initiaitve points"
 label var female_loc_points "Women's locus of control points"
 label var genderi_points "Gender index points"
+label var el_inno_points "Innovation practices index points"
 
 	* drop temporary vars		  										  
 drop temp_*
@@ -377,9 +429,15 @@ gen profit_pct = .
 	sum profit if surveyround == 2 & !inlist(profit, -777, -888, -999, .)
 	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 2
 
+<<<<<<< Updated upstream
 	egen profit_pct3 = rank(profit) if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
 	sum profit if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
 	replace profit_pct = profit_pct2/(`r(N)' + 1) if surveyround == 3
+=======
+	egen profit_pct3 = rank(profit) if surveyround == 3 & !inlist(profit, -777, -888, -999, 999, 888, 777, 1234, .)
+	sum profit if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
+	replace profit_pct = profit_pct3/(`r(N)' + 1) if surveyround == 3
+>>>>>>> Stashed changes
 	
 	*egen profit_pct4 = rank(comp_benefice2024) if surveyround == 3 & !inlist(comp_benefice2024, -777, -888, -999, 1234, .)
 	*sum profit if surveyround == 3 & !inlist(profit, -777, -888, -999, .)
@@ -388,13 +446,31 @@ gen profit_pct = .
 	drop profit_pct1 profit_pct2 profit_pct3
 
 	* winsorize
+<<<<<<< Updated upstream
 		* all outcomes (but profit)
 local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam"
 foreach var of local wins_vars {
 	winsor2 `var', suffix(_w99) cuts(0 99) 		  // winsorize
 	winsor2 `var', suffix(_w95) cuts(0 95) 		  // winsorize
+=======
+		* winsorize all outcomes (but profit)
+local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 ca_exp_2024 net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz"
+>>>>>>> Stashed changes
 
+foreach var of local wins_vars {
+    replace `var' = . if `var' == 999  // don't know transformed to missing values
+    replace `var' = . if `var' == 888 
+    replace `var' = . if `var' == 777 
+    replace `var' = . if `var' == 666 
+    replace `var' = . if `var' == -999 // added - since we transformed profit into negative in endline
+    replace `var' = . if `var' == -888 
+    replace `var' = . if `var' == -777 
+    replace `var' = . if `var' == -666 
+    replace `var' = . if `var' == 1234
+    winsor2 `var', suffix(_w99) cuts(0 99)  // winsorize
+    winsor2 `var', suffix(_w95) cuts(0 95)  // winsorize
 }
+
 		* profit
 winsor2 profit, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
 winsor2 profit, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
@@ -407,7 +483,11 @@ winsor2 comp_benefice2024, suffix(_w95) cuts(5 95) // winsorize also at lowest p
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
+<<<<<<< Updated upstream
 local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95" // add at endline: exp_pays_w99
+=======
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99 exp_pays_w99 profit_2024_w99  employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95 exp_pays_w95 profit_2024_w95" // add at endline: exp_pays_w99
+>>>>>>> Stashed changes
 
 		* check how many zeros
 foreach var of local ys {
@@ -512,14 +592,16 @@ putexcel A2:H2 = "", border(top)
 	
 				* define column headings
 putexcel A2 = "", border(bottom) hcenter
-putexcel B2 = "employees", border(bottom) hcenter
-putexcel C2 = "female employees", border(bottom) hcenter
-putexcel D2 = "young employees", border(bottom) hcenter
-putexcel E2 = "domestic sales", border(bottom) hcenter
-putexcel F2 = "export sales", border(bottom) hcenter
-putexcel G2 = "total sales", border(bottom) hcenter
-putexcel H2 = "profit", border(bottom) hcenter
+putexcel B2 = "Employees", border(bottom) hcenter
+putexcel C2 = "Female employees", border(bottom) hcenter
+putexcel D2 = "Young employees", border(bottom) hcenter
+putexcel E2 = "Domestic sales", border(bottom) hcenter
+putexcel F2 = "Export sales", border(bottom) hcenter
+putexcel G2 = "Total sales", border(bottom) hcenter
+putexcel H2 = "Profit", border(bottom) hcenter
 putexcel I2 = "Export invt.", border(bottom) hcenter
+putexcel J2 = "Export countries", border(bottom) hcenter
+putexcel K2 = "Profit in 2024", border(bottom) hcenter
 	
 				* define rows
 putexcel A3 = "k = 1", border(bottom) hcenter
@@ -680,7 +762,7 @@ gen cons_dig = (pole == 4)
 ***********************************************************************	
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
-local peer_vars "mpmarki genderi epp size profit"
+local peer_vars "mpmarki genderi epp profit"
 foreach var of local peer_vars {
 	* get labels for new variables
 	gettoken label labels : labels
@@ -733,7 +815,7 @@ sort treatment pole surveyround
 sort treatment surveyround id_plateforme, stable
 
 	* extend to panel, gen distance
-local peer_vars "mpmarki genderi epp size profit"
+local peer_vars "mpmarki genderi epp profit"
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
 foreach var of local peer_vars {
 	* get the labels
