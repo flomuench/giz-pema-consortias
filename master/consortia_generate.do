@@ -198,7 +198,7 @@ lab var exp_invested "Export investment > 0"
 
 
 ***********************************************************************
-*	PART 6: Innovation
+*	PART 6.1: Innovation
 ***********************************************************************	
 egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit), missing
 bys id_plateforme (surveyround): gen innovated = (innovations > 0)
@@ -206,6 +206,74 @@ bys id_plateforme (surveyround): gen innovated = (innovations > 0)
 *br id_plateforme surveyround innovations innovated
 lab var innovations "Total innovations"
 lab var innovated "Innovated"
+
+***********************************************************************
+*	PART 6.2: Categorize the different types of innovation
+***********************************************************************	
+gen inno_product_imp = 0
+lab var inno_product_imp "Improving the existing product"
+gen inno_product_new = 0
+lab var inno_product_new "New product innovation"
+gen proc_prod_correct = 0 
+replace proc_prod_correct =1 if inno_proc_met == 1
+lab var proc_prod_correct "Innovation in the production process"
+gen proc_mark_correct = 0
+replace proc_mark_correct =1 if inno_proc_prix == 1 | inno_proc_log ==1
+lab var proc_mark_correct "Innovation in sales and marketing techniques"
+gen inno_org_correct = 0
+replace inno_org_correct =1	if inno_proc_sup == 1
+lab var inno_org_correct "Innovation in management techniques and organization"
+
+*inno_product_imp
+*replace inno_product_imp =1 if id_plateforme == 983
+
+*inno_product_new
+*replace inno_product_new =1 if id_plateforme == 1
+
+*inno_product_imp
+
+*proc_prod_correct
+replace proc_prod_correct =1 if id_plateforme == 1020 /*elle a l'intention d'introduire un planning des matières nouvelles afin de faciliter le travail et réduire le coût de production*/
+replace proc_prod_correct =1 if id_plateforme == 1027 /*de nouveaux employes et de nouvelles matières ont été rajoutés*/
+replace proc_prod_correct =1 if id_plateforme == 1036 /*elle a aggrandit l'espace de stockage et les touriste viennent pour voir l'expérience*/
+replace proc_prod_correct =1 if id_plateforme == 1046 /*le local a changé */
+replace proc_prod_correct =1 if id_plateforme == 1068 /*elle a changé de local*/
+replace proc_prod_correct =1 if id_plateforme == 1108 /*mise en place de panneaux solaires pour génerer l'éclectricité dans sa ferme*/
+replace proc_prod_correct =1 if id_plateforme == 1126 /*changement de l’atelier o elle travaille plus sur le marketing digitale*/
+replace proc_prod_correct =1 if id_plateforme == 1128 /*changement de local*/
+replace proc_prod_correct =1 if id_plateforme == 1147 /*le systheme erp cest la gestion de commande et de fourniseurs et des espace et des machines*/
+replace proc_prod_correct =1 if id_plateforme == 1164 /*ajout d'une nouvelle ligne de production + prospection de marché à l'étranger*/
+replace proc_prod_correct =1 if id_plateforme == 1192 /*elle a augmenté le nombre d'employés afin d'améliorer la production et augmenter la rapidité du traail + elle a travoué de nouvelles méthodes de travail où elle donne la majorité du travail aux employés et elle prends la responsabilité et s'occupe du suivi du travail*/
+replace proc_prod_correct =1 if id_plateforme == 1193 /*ghayart fl mantoujet aamalt midhalet bel halfa*/
+replace proc_prod_correct =1 if id_plateforme == 1230 /*le local a été aggrandi*/
+replace proc_prod_correct =1 if id_plateforme == 1248 /*intégration de nouveaux matériaux*/
+
+*proc_mark_correct
+replace proc_mark_correct =1 if id_plateforme == 984 /*changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes*/
+replace proc_mark_correct =1 if id_plateforme == 1010 /*ils ont intégré du commercial et ont un nouvel canal de distribution*/
+replace proc_mark_correct =1 if id_plateforme == 1019 /*ils ont fait des changements au niveau des offres et ont fait des changements dans les packs services*/
+replace proc_mark_correct =1 if id_plateforme == 1035 /*par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel*/
+replace proc_mark_correct =1 if id_plateforme == 1038 /*elles ont travaillés sur des formations techniques (pratiques), ont rajouté des workshops pour les petits et se sont concentrés plus sur le digital*/
+replace proc_mark_correct =1 if id_plateforme == 1043 /*site web , sponsoring , les promotions, application mobile*/
+replace proc_mark_correct =1 if id_plateforme == 1054 /*elle a fait un site web*/
+replace proc_mark_correct =1 if id_plateforme == 1118 /*informations , technique de commmunication avec le client*/
+replace proc_mark_correct =1 if id_plateforme == 1126 /*changement de l’atelier o elle travaille plus sur le marketing digitale*/
+replace proc_mark_correct =1 if id_plateforme == 1182 /*ajout d'une charte graphique, changement de l'emballage, changement du site web et de nouveaux catalogues*/
+replace proc_mark_correct =1 if id_plateforme == 1215 /*actions de marketing*/
+
+*inno_org_correct 
+replace inno_org_correct =1 if id_plateforme == 1005 /*des formations pour les employés afin de garantir la durabilté des produits artisanaux*/
+replace inno_org_correct =1 if id_plateforme == 1017 /*aménagement, extension du laboratoire*/
+replace inno_org_correct =1 if id_plateforme == 1020 /*elle a l'intention d'introduire un planning des matières nouvelles afin de faciliter le travail et réduire le coût de production*/
+replace inno_org_correct =1 if id_plateforme == 1030 /*elle a changé l'organisation du management intérieur*/
+replace inno_org_correct =1 if id_plateforme == 1050 /*nous avons adopté de nouvelles stratégies dans le recrutement, telles que les techniciens supérieurs sont devenus aussi prisés que les ingénieurs ( walew yesaktbou akther des techniciens sup)*/
+replace inno_org_correct =1 if id_plateforme == 1071 /*team building*/
+replace inno_org_correct =1 if id_plateforme == 1087 /*les compétences de l'équipe et de nouveaux recrutements*/
+replace inno_org_correct =1 if id_plateforme == 1108 /*mise en place de panneaux solaires pour génerer l'éclectricité dans sa ferme*/
+replace inno_org_correct =1 if id_plateforme == 1132 /*aggrandissement de l'équipe et de nouveaux bureaux*/
+replace inno_org_correct =1 if id_plateforme == 1147 /*le systheme erp cest la gestion de commande et de fourniseurs et des espace et des machines*/
+replace inno_org_correct =1 if id_plateforme == 1192 /*elle a augmenté le nombre d'employés afin d'améliorer la production et augmenter la rapidité du traail + elle a travoué de nouvelles méthodes de travail où elle donne la majorité du travail aux employés et elle prends la responsabilité et s'occupe du suivi du travail*/
+replace inno_org_correct =1 if id_plateforme == 1247 /*changement de formation personnels et les technique et le loi pour les personnel*/
 
 ***********************************************************************
 *	PART 7: network

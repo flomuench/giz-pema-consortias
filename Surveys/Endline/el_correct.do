@@ -347,13 +347,6 @@ replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "
 
 
 *inno_proc_other
-*Faire la correction des réponses au niveau el_correct (traduire et corriger le texte) + Au niveau du consoria_generate faire la categorisation + la correction avec les variables *_correct
-*Faire une categorisation en fonction (vérifier si les réponses ne sont couvertes par les variables déjà existantes dans le questionnaire): 
-	*Types d'innovation: 
-		*1)inno_produit_correct: innovation ou amélioration ?
-		*2)processus de production inno_(proc_prod_correct): inno_proc_met
-		*3)Marketing & commercialisation (proc_mark_correct): inno_proc_prix + inno_proc_log
-		*4) gestion & organisation (proc_org_correct): inno_proc_sup
 replace inno_proc_other= "changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes" if inno_proc_other =="changement de l’emballage . introduction des nouveaux jouets et des nouvelle gammes **********"
 replace inno_proc_other= "l'export à renforcer la formation" if inno_proc_other =="lexport kaouitou f formationn aaaaaaaaaaaaaaaaaaaaaaaaaa" /*TBC*/
 replace inno_proc_other= "des formations pour les employés afin de garantir la durabilté des produits artisanaux" if inno_proc_other =="des formation lel employés bech todhmen el durabilté les produit artisanaux" 
