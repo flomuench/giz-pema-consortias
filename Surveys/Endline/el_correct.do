@@ -240,7 +240,7 @@ replace products_other= "c'est une gammes contenant 4 produits: mixoil plusplus 
 replace products_other= "huille de pépin de figues de barbarie" if products_other =="huille de pépin fils de barbarine"
 replace products_other= "des miroirs fait avec du bois de palmier" if products_other =="les merroires . avec les bois de palmier"
 replace products_other= "les conceptions graphiques" if products_other =="les conseptiens grafiques"
-replace products_other= "les herbes aromatiques séchées (romarin, armoise, géranium)" if products_other =="les sotaces et les herbes séchées (chih ,klil ,3atercheya)"
+replace products_other= "les herbes aromatiques séchées (romarin, armoise, géranium)" if id_plateforme==1133
 replace products_other= "maquillage: les crayons, les pinceaux, palette contouring" if products_other =="les creants / les panseaus/palette contouring"
 replace products_other= "services ( consulting/ project management )" if products_other =="services ( consulting/ project management ) ++++++++++++++++++++++++++++++++"
 replace products_other= "mélasse" if products_other =="milllasse"
@@ -251,8 +251,9 @@ replace products_other= "bouteille d'huile d'olive" if products_other =="bouitei
 replace products_other= "harissa et des épices" if products_other =="hrissaa et les épices +++++++++++++++++++++++++++++++++++"
 replace products_other= "les patisseries traditionnelles" if products_other =="el halawiyet el ta9lidia"
 replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
+replace products_other= "c'est une gamme composée de 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if id_plateforme==1037
+replace products_other= "contenus de formation digital" if id_plateforme==1046
 
-*Créer une variable inno_produit_correct s'il a vraiment une innovation/ modification du produit réelle
 *inno_exampl_produit1
 replace inno_exampl_produit1 = "on fait des déplacements aux différentes régions et on fait des formations dans leurs locals" if inno_exampl_produit1 == "yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement *****************"
 replace inno_exampl_produit1 = "la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne" if inno_exampl_produit1 == "la création et la diminution de prix , améloration de qualité tissue kenou yekhdmou ken haut gamme oualeou yekhdmou hata l moyen gamme"

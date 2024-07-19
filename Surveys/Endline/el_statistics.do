@@ -96,7 +96,7 @@ putpdf pagebreak
 	*timeline of responses
 format %-td date 
 histogram date, frequency addlabel width(0.5) ///
-		tlabel(20jun2024(1)12jul2024, angle(60) labsize(vsmall)) ///
+		tlabel(20jun2024(1)16jul2024, angle(60) labsize(vsmall)) ///
 		ytitle("Answers") ///
 		title("{bf:Endline survey: number of responses}") 
 gr export survey_response_byday.png, replace

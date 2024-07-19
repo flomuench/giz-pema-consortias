@@ -57,6 +57,9 @@ rename DL int_other
 rename BZ net_services_other
 rename vousenmesuredenousfournirl accord_q29
 
+
+*Drop id_duplicates
+drop if id_plateforme == 1210 & inno_mot == "/ 2 / 3 / 4 /"
 ***********************************************************************
 * 	PART 3:  create + save bl_pii file	  			
 ***********************************************************************
