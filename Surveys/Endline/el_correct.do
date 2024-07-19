@@ -225,50 +225,49 @@ replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
 ***********************************************************************
 * Correct management practices
 ***********************************************************************
-replace man_fin_per_ind = 1 if id_plateforme == "984" 
-replace man_fin_per_pro = 1 if id_plateforme == "984"
-replace man_fin_per_qua = 1 if id_plateforme == "984"
-replace man_fin_per_sto = 1 if id_plateforme == "984"
-replace man_fin_per_emp = 1 if id_plateforme == "984"
-replace man_fin_per_liv = 1 if id_plateforme == "984"
+replace man_fin_per_ind = 1 if id_plateforme == 984
+replace man_fin_per_pro = 1 if id_plateforme == 984
+replace man_fin_per_qua = 1 if id_plateforme == 984
+replace man_fin_per_sto = 1 if id_plateforme == 984
+replace man_fin_per_emp = 1 if id_plateforme == 984
+replace man_fin_per_liv = 1 if id_plateforme == 984
 
-replace man_fin_per_fre = 2 if id_plateforme =="984"
+replace man_fin_per_fre = 2 if id_plateforme == 984
 
-replace man_fin_per_ind = 1 if id_plateforme == "1000" 
-replace man_fin_per_pro = 1 if id_plateforme == "1000"
-replace man_fin_per_qua = 1 if id_plateforme == "1000"
-replace man_fin_per_sto = 0 if id_plateforme == "1000"
-replace man_fin_per_emp = 1 if id_plateforme == "1000"
-replace man_fin_per_liv = 1 if id_plateforme == "1000"
+replace man_fin_per_ind = 1 if id_plateforme == 1000
+replace man_fin_per_pro = 1 if id_plateforme == 1000
+replace man_fin_per_qua = 1 if id_plateforme == 1000
+replace man_fin_per_sto = 0 if id_plateforme == 1000
+replace man_fin_per_emp = 1 if id_plateforme == 1000
+replace man_fin_per_liv = 1 if id_plateforme == 1000
 
-replace man_fin_per_fre = 3 if id_plateforme =="1000"
+replace man_fin_per_fre = 3 if id_plateforme == 1000
 
-replace man_fin_per_liv = 0 if id_plateforme == "1059"
+replace man_fin_per_liv = 0 if id_plateforme == 1059
 
-replace man_fin_per_ind = 1 if id_plateforme == "1126"
-replace man_fin_per_pro = 1 if id_plateforme == "1126"
-replace man_fin_per_qua = 1 if id_plateforme == "1126"
-replace man_fin_per_sto = 1 if id_plateforme == "1126"
-replace man_fin_per_emp = 1 if id_plateforme == "1126"
-replace man_fin_per_liv = 1 if id_plateforme == "1126"
+replace man_fin_per_ind = 1 if id_plateforme == 1126
+replace man_fin_per_pro = 1 if id_plateforme == 1126
+replace man_fin_per_qua = 1 if id_plateforme == 1126
+replace man_fin_per_sto = 1 if id_plateforme == 1126
+replace man_fin_per_emp = 1 if id_plateforme == 1126
+replace man_fin_per_liv = 1 if id_plateforme == 1126
+replace man_fin_per_fre = 3 if id_plateforme == 1126
 
-replace man_fin_per_fre = 3 if id_plateforme =="1126"
 
+replace man_sources_other ="Apprentissage de nouvelles strategies grace à sa participation à deux sturctures d'accompagnement des entreprises qui sont: impact partner et afkar" if id_plateforme == 996
 
-replace man_sources_other ="Apprentissage de nouvelles strategies grace à sa participation à deux sturctures d'accompagnement des entreprises qui sont: impact partner et afkar" if id_plateform =="996" 
+replace man_sources_other "Apprentissage de nouvelles strategies grace au formation de la GIZ" if id_plateforme == 1068
 
-replace man_sources_other "Apprentissage de nouvelles strategies grace au formation de la GIZ" if id_plateforme =="1068"
+replace man_sources_other "Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use" if id_plateforme == 1151
 
-replace man_sources_other "Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use" if id_plateforme=="1151"
-
-replace man_sources_other "Apprentissage de nouvelles strategie grace à la recherche: article de marketing et management" if id_plateforme ="1176" 
+replace man_sources_other "Apprentissage de nouvelles strategie grace à la recherche: article de marketing et management" if id_plateforme == 1176
 
 
 ******************************************************************************
 * Correct products
 *****************************************************************************
-replace products_other ="vetement traditionnel: houli et hayek" if id_plateform =="1197" 
-replace products_other = " frange parfumée" if id_plateforme =="1234" 
+replace products_other ="vetement traditionnel: houli et hayek" if id_plateform ==1197 
+replace products_other = " frange parfumée" if id_plateforme ==1234
 
 
 
@@ -276,34 +275,34 @@ replace products_other = " frange parfumée" if id_plateforme =="1234"
 ***********************************************************************
 * Correct product innovation 
 ***********************************************************************
-replace inno_mot_other = "Diversification des fournisseurs et marketing à travers les clients" if id_plateforme =="986"
-replace inno_mot_other = "Exportation du services, introduction de nouvelles formations dans leur services" if id_plateforme =="988"
-replace inno_exampl_produit2 = "Introduction d'un nouveau service d'accompagnement pour les entreprises: la comptabilité carbonne pour déterminer l'impact environnemental d'une entreprise et le rapport extra financier annuel qui contient les actions ,démarches et les profits" if id_plateforme =="999"
-replace inno_exampl_produit1 = "Packaging: changement du logo et charte graphique" if id_plateforme =="1010"
-replace inno_exampl_produit2 = "Introduction d'un nouveau service: cours dédié aux professionnels(pas que les eleves,etudiants)" if id_plateforme =="1019"
-replace inno_exampl_produit1 = "Vulgarisation scientifique" if id_plateforme == "1035" 
-replace inno_exampl_produit1 ="Penetration au marché du B2C, avant elle travaille seulement sur le B2B"  if id_plateforme =="1043" 
-replace inno_exampl_produit1 = "Innovation technique dans l'outil de creation de contenues" if id_plateforme =="1046" 
-replace inno_exampl_produit2 = " Service sur mesure selon la demande et besoin des clients" if id_plateforme =="1046"
-replace inno_exampl_propduit1 = "Changement de l'entreprise avec laquelle elle travaille" if id_plateforme =="1049"
-replace inno_mot_other ="Introduire des nouvelles formes des produits sur la plateforme selon les besoins des clients" if id_plateforme =="1065" 
-replace inno_mot_other ="l'environement du travail et des concurents" if id_plateforme =="1081" 
-replace inno_proc_other = "amelioration des competences des employés, nouveau recrutement et audit RH" if id_plateforme =="1087" 
-replace inno_exampl_produit1 = "Amélioration au niveau des modes de paiement grâce à des formations de la GIZ avec des experts à l'échelle internationale" if id_plateforme =="1118" 
-replace inno_exampl_produit1 = "lancement d'un site web de l'entreprise" if id_plateforme =="1118" 
-replace inno_proc_other =" amelioration des techniques de communication avec les clients" if id_plateforme =="1118" 
-replace inno_mot_other = 0 if id_plateforme =="1125"
-replace inno_exampl_produit1= "produits personnalisable selon les besoin des clients" if id_plateforme=="1128" 
-replace inno_exampl_produit2= "introduction des nouveaux produits, modification de la forme des produits" if id_plateforme =="1128" 
-replace inno_proc_other =" prospection à l'etranger et lancement des appels d'offres à l'etranger" if id_plateforme == "1135"
-replace inno_proc_other = "Ouverture sur le marché etranger grace aux strategies marketing " if id_plateforme =="1176" 
-replace inno_exampl_produit2 ="Des nouvelles conceptions basées sur les cartes, tels que les cartes de télécommande, Ils entretiennent l'intelligence artificielle" if id_plateforme =="1176" 
-replace inno_exampl_produit1 = "Introduire ses services au marché africain" if id_plateforme =="1178" 
-replace inno_mot_other ="Innovation provient des etudiants qui ont effectué un stage PFE au sein de leur entreprise: nouveau emballage et charte graphique" if id_plateforme =="1186" 
-replace inno_exampl_produit1 = "Diversification des produits" if id_plateforme == "1191" 
-replace inno_exampl_produit1 = " Developpement des nouveaux produits tel que: parfum cheveux,creme hydratante spf20,spray solaire et creme cuir lait bebe" if id_plateform=="1224" 
-replace inno_exampl_produit1 =" Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits" if id_plateforme =="1231" 
-replace inno_exampl_produit1 =  "frange des rideaux parfumées" id if_plateforme =="1234" 
+replace inno_mot_other = "Diversification des fournisseurs et marketing à travers les clients" if id_plateforme ==986
+replace inno_mot_other = "Exportation du services, introduction de nouvelles formations dans leur services" if id_plateforme ==988
+replace inno_exampl_produit2 = "Introduction d'un nouveau service d'accompagnement pour les entreprises: la comptabilité carbonne pour déterminer l'impact environnemental d'une entreprise et le rapport extra financier annuel qui contient les actions ,démarches et les profits" if id_plateforme ==999
+replace inno_exampl_produit1 = "Packaging: changement du logo et charte graphique" if id_plateforme ==1010
+replace inno_exampl_produit2 = "Introduction d'un nouveau service: cours dédié aux professionnels(pas que les eleves,etudiants)" if id_plateforme ==1019
+replace inno_exampl_produit1 = "Vulgarisation scientifique" if id_plateforme == 1035 
+replace inno_exampl_produit1 ="Penetration au marché du B2C, avant elle travaille seulement sur le B2B"  if id_plateforme ==1043
+replace inno_exampl_produit1 = "Innovation technique dans l'outil de creation de contenues" if id_plateforme ==1046 
+replace inno_exampl_produit2 = " Service sur mesure selon la demande et besoin des clients" if id_plateforme ==1046
+replace inno_exampl_propduit1 = "Changement de l'entreprise avec laquelle elle travaille" if id_plateforme ==1049
+replace inno_mot_other ="Introduire des nouvelles formes des produits sur la plateforme selon les besoins des clients" if id_plateforme ==1065 
+replace inno_mot_other ="l'environement du travail et des concurents" if id_plateforme ==1081
+replace inno_proc_other = "amelioration des competences des employés, nouveau recrutement et audit RH" if id_plateforme ==1087 
+replace inno_exampl_produit1 = "Amélioration au niveau des modes de paiement grâce à des formations de la GIZ avec des experts à l'échelle internationale" if id_plateforme ==1118 
+replace inno_exampl_produit1 = "lancement d'un site web de l'entreprise" if id_plateforme ==1118
+replace inno_proc_other =" amelioration des techniques de communication avec les clients" if id_plateforme ==1118 
+replace inno_mot_other = 0 if id_plateforme ==1125
+replace inno_exampl_produit1= "produits personnalisable selon les besoin des clients" if id_plateforme==1128 
+replace inno_exampl_produit2= "introduction des nouveaux produits, modification de la forme des produits" if id_plateforme ==1128 
+replace inno_proc_other =" prospection à l'etranger et lancement des appels d'offres à l'etranger" if id_plateforme == 1135
+replace inno_proc_other = "Ouverture sur le marché etranger grace aux strategies marketing " if id_plateforme ==1176
+replace inno_exampl_produit2 ="Des nouvelles conceptions basées sur les cartes, tels que les cartes de télécommande, Ils entretiennent l'intelligence artificielle" if id_plateforme ==1176 
+replace inno_exampl_produit1 = "Introduire ses services au marché africain" if id_plateforme ==1178
+replace inno_mot_other ="Innovation provient des etudiants qui ont effectué un stage PFE au sein de leur entreprise: nouveau emballage et charte graphique" if id_plateforme ==1186 
+replace inno_exampl_produit1 = "Diversification des produits" if id_plateforme == 1191
+replace inno_exampl_produit1 = " Developpement des nouveaux produits tel que: parfum cheveux,creme hydratante spf20,spray solaire et creme cuir lait bebe" if id_plateform==1224 
+replace inno_exampl_produit1 =" Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits" if id_plateforme ==1231 
+replace inno_exampl_produit1 =  "frange des rideaux parfumées" id if_plateforme ==1234
 
 
 
@@ -312,101 +311,101 @@ replace inno_exampl_produit1 =  "frange des rideaux parfumées" id if_plateforme
 *************************************************************************
 *Correct net service 
 *************************************************************************
-replace net_services_pratiques = "1" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_mark = "1" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_contract= "0"  if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_autre = "1" if id_plateforme =="999" (1 = Yes / 0 = No)
-replace net_services_other = "stratégies nationales des consultants" if id_plateforme =="999"
+replace net_services_pratiques = 1 if id_plateforme ==999 
+replace net_services_produits= 1 if id_plateforme ==999 
+replace net_services_mark = 1 if id_plateforme ==999 
+replace net_services_sup= 1 if id_plateforme ==999 
+replace net_services_contract= 0 if id_plateforme == 999 
+replace net_services_confiance = 0 if id_plateforme ==999 
+replace net_services_autre = 1 if id_plateforme ==999 
+replace net_services_other = "stratégies nationales des consultants" if id_plateforme ==999
 
-replace net_services_pratiques = "1" if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_produits= "0" if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_contract= "0"  if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="1005" (1 = Yes / 0 = No)
-replace net_services_autre = "0" if id_plateforme =="1005" (1 = Yes / 0 = No)
-
-
-replace net_services_pratiques = "0" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_contract= "0"  if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_confiance = "1" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_autre = "1" if id_plateforme =="1009" (1 = Yes / 0 = No)
-replace net_services_other = "Collaboration entre les entrepreneurs"  if id_plateforme =="1009"
-
-replace net_services_pratiques = "1" if id_plateforme =="1054"(1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_contract= "0" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_autre = "1" if id_plateforme =="1054" (1 = Yes / 0 = No)
-replace net_services_other = "Apprentissage de nouvelles techniques de production tels que des conseils pour les machines" if id_plateforme =="1054" 
+replace net_services_pratiques = 1 if id_plateforme ==1005 
+replace net_services_produits= 0 if id_plateforme ==1005 
+replace net_services_mark = 0 if id_plateforme ==1005 
+replace net_services_sup= 1 if id_plateforme ==1005 
+replace net_services_contract= 0  if id_plateforme ==1005 
+replace net_services_confiance = 0 if id_plateforme ==1005 
+replace net_services_autre = 0 if id_plateforme ==1005 
 
 
-replace net_services_pratiques = "1" if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_contract= "0"  if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="1122" (1 = Yes / 0 = No)
-replace net_services_autre = "0" if id_plateforme =="1122" (1 = Yes / 0 = No)
+replace net_services_pratiques = 0 if id_plateforme ==1009 
+replace net_services_produits= 1 if id_plateforme ==1009 
+replace net_services_mark = 0 if id_plateforme ==1009 
+replace net_services_sup= 1 if id_plateforme ==1009 
+replace net_services_contract= 0  if id_plateforme ==1009 
+replace net_services_confiance = 1 if id_plateforme ==1009 
+replace net_services_autre = 1 if id_plateforme ==1009 
+replace net_services_other = "Collaboration entre les entrepreneurs"  if id_plateforme ==1009
+
+replace net_services_pratiques = 1 if id_plateforme ==1054
+replace net_services_produits= 1 if id_plateforme ==1054 
+replace net_services_mark = 0 if id_plateforme ==1054 
+replace net_services_sup= 1 if id_plateforme ==1054 
+replace net_services_contract= 0 if id_plateforme == 1054 
+replace net_services_confiance = 0 if id_plateforme ==1054 
+replace net_services_autre = 1 if id_plateforme ==1054 
+replace net_services_other = "Apprentissage de nouvelles techniques de production tels que des conseils pour les machines" if id_plateforme ==1054 
 
 
-replace net_services_pratiques = "0" if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_contract= "1"  if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="1133" (1 = Yes / 0 = No)
-replace net_services_autre = "0" if id_plateforme =="1133" (1 = Yes / 0 = No)
+replace net_services_pratiques = 1 if id_plateforme ==1122 
+replace net_services_produits= 1 if id_plateforme ==1122 
+replace net_services_mark = 0 if id_plateforme ==1122 
+replace net_services_sup= 1 if id_plateforme ==1122 
+replace net_services_contract= 0  if id_plateforme ==1122 
+net_services_confiance = 0 if id_plateforme ==1122 
+replace net_services_autre = 0 if id_plateforme ==1122 
 
 
-replace net_services_pratiques = "1" if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_mark = "1" if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_sup= "0" if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_contract= "0"  if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_confiance = "0" if id_plateforme =="1179" (1 = Yes / 0 = No)
-replace net_services_autre = "0" if id_plateforme =="1179" (1 = Yes / 0 = No)
-
-replace net_services_pratiques = "0" if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_mark = "0" if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_sup= "0" if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_contract= "1"  if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_confiance = "1" if id_plateforme =="1197" (1 = Yes / 0 = No)
-replace net_services_autre = "0" if id_plateforme =="1197" (1 = Yes / 0 = No)
+replace net_services_pratiques = 0 if id_plateforme ==1133 
+replace net_services_produits= 1 if id_plateforme ==1133 
+replace net_services_mark = 0 if id_plateforme ==1133 
+replace net_services_sup= 1 if id_plateforme ==1133 
+replace net_services_contract= 1  if id_plateforme ==1133 
+replace net_services_confiance = 0 if id_plateforme ==1133 
+replace net_services_autre = 0 if id_plateforme ==1133 
 
 
-replace net_services_pratiques = "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_produits= "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_mark = "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_sup= "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_contract= "1"  if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_confiance = "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_autre = "1" if id_plateforme =="1224" (1 = Yes / 0 = No)
-replace net_services_other = "Collaboration avec d'autres entreprises" =="1224" (1 = Yes / 0 = No) 
+replace net_services_pratiques = 1 if id_plateforme == 1179 
+replace net_services_produits= 1 if id_plateforme == 1179 
+replace net_services_mark = 1 if id_plateforme == 1179 
+replace net_services_sup= 0 if id_plateforme == 1179 
+replace net_services_contract= 0  if id_plateforme == 1179 
+replace net_services_confiance = 0 if id_plateforme == 1179 
+replace net_services_autre = 0 if id_plateforme == 1179 
+
+replace net_services_pratiques = 0 if id_plateforme == 1197
+replace net_services_produits= 1 if id_plateforme ==1197
+replace net_services_mark = 0 if id_plateforme ==1197
+replace net_services_sup= 0 if id_plateforme ==1197 
+replace net_services_contract= 1  if id_plateforme ==1197 
+replace net_services_confiance = 1 if id_plateforme == 1197
+replace net_services_autre = 0 if id_plateforme == 1197
 
 
+replace net_services_pratiques = 1 if id_plateforme ==1224
+replace net_services_produits= 1 if id_plateforme ==1224
+replace net_services_mark = 1 if id_plateforme ==1224
+replace net_services_sup= 1 if id_plateforme ==1224
+replace net_services_contract= 1  if id_plateforme ==1224
+replace net_services_confiance = 1 if id_plateforme ==1224
+replace net_services_autre = 1 if id_plateforme ==1224
+replace net_services_other = "Collaboration avec d'autres entreprises" ==1224
 
 
 
 
 
 
-replace net_size4 = 0 if id_plateforme =="1000"
 
-replace net_size4 = 10 if id_plateforme =="1036"
-replace net_size3 = 30 if id_plateforme =="1036"
 
-replace net_size4 = 10 if id_plateforme =="1108"
-replace net_size3 = 12 if id_plateforme =="1108" 
+replace net_size4 = 0 if id_plateforme ==1000
+
+replace net_size4 = 10 if id_plateforme ==1036
+replace net_size3 = 30 if id_plateforme ==1036
+
+replace net_size4 = 10 if id_plateforme ==1108
+replace net_size3 = 12 if id_plateforme ==1108 
 
 
 
@@ -415,7 +414,7 @@ replace net_size3 = 12 if id_plateforme =="1108"
 *Correct export part 
 *************************************************************************
 
-replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme =="1054" 
+replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme ==1054
 
 
 
@@ -424,20 +423,20 @@ replace export_other ="des problemes qui survient à la finalisation de l'operat
 **************************************************************************
 * Correct CA
 *************************************************************************
-replace ca_2023 = 3500000 if id_plateforme =="1027" 
-replace ca_2024 = 1700000 if id_plateforme =="1027" 
-replace profit_2023 = 30000 if id_plateforme =="1134" 
-replace profit_2024 = 30000 if id_plateforme =="1134" 
+replace ca_2023 = 3500000 if id_plateforme ==1027 
+replace ca_2024 = 1700000 if id_plateforme ==1027 
+replace profit_2023 = 30000 if id_plateforme ==1134 
+replace profit_2024 = 30000 if id_plateforme ==1134 
 
-replace ca_2023 =2500000 if id_plateforme =="1147"
-replace ca_2024 =2300000 if id_plateforme == "1147" 
+replace ca_2023 =2500000 if id_plateforme ==1147
+replace ca_2024 =2300000 if id_plateforme == 1147 
 
-replace profit_2023 = 30000 if id_plateforme == "1167"
-replace profit_2024 = 25000 if id_plateforme == "1167"
+replace profit_2023 = 30000 if id_plateforme == 1167
+replace profit_2024 = 25000 if id_plateforme == 1167
 
-replace ca_2024 = 3000 if id_plateforme =="1186" 
+replace ca_2024 = 3000 if id_plateforme == 1186 
  
- replace ca_2021 = 50000 if id_plateforme =="1203" 
+ replace ca_2021 = 50000 if id_plateforme == 1203 
  
 
 
@@ -446,9 +445,9 @@ replace ca_2024 = 3000 if id_plateforme =="1186"
 * Correct Ben and Int 
 ************************************************************************
 
-replace int_ben2 ="les techniques de communication et de ventes" if id_plateforme =="1068" 
+replace int_ben2 ="les techniques de communication et de ventes" if id_plateforme ==1068 
 
-replace int_ben2 ="les membres du consortium sont complementaires" id_plateforme =="1135" 
+replace int_ben2 ="les membres du consortium sont complementaires" id_plateforme == 1135 
 
 
 
