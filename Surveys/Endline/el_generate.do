@@ -422,6 +422,19 @@ replace n`x' = . if `x' == 999
 replace n`x' = `x'/employes if n`x'!= .
 }
 
+************************************************************************
+*Part 16: Harmonization of open ended questions (benefits&inconnvenients)
+*************************************************************************
+
+gen int_ben1_correct = int_ben1 
+replace int_ben1_correct = "Collaboration" if int_ben1_correct == "de nouveaux partenaires qui ont débuté à travailler avec moi"
+
+
+
+
+
+
+
 ***********************************************************************
 * 	PART 16: save dta file  										  
 ***********************************************************************
