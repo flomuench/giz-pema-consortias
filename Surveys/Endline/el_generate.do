@@ -306,9 +306,24 @@ replace n`x' = `x'/employes if n`x'!= .
 *************************************************************************
 
 gen int_ben1_correct = int_ben1 
-replace int_ben1_correct = "Collaboration" if int_ben1_correct == "de nouveaux partenaires qui ont débuté à travailler avec moi"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés"
+replace int_ben1_correct = "Développement personnel"
+replace int_ben1_correct = "Développement professionel"
+replace int_ben1_correct = "Réseautage, partage et collaboration"
 
+gen int_ben2_correct = int_ben2
+gen int_ben3_correct = int_ben3 
+gen int_ben_autres_correct = int_ben_autres
 
+gen int_incv1_correct = int_incv1 
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct==""
+replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct==""
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct==""
+replace int_incv1_correct = "Problèmes organisationnels et structurels" if  int_incv1_correct==""
+
+gen int_incv2_correct = int_incv2
+gen int_incv3_correct = int_incv3
+gen int_incv_autres_correct = int_incv_autres
 
 
 
