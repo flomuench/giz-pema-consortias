@@ -394,12 +394,6 @@ replace net_services_autre = "1" if id_plateforme =="1224" (1 = Yes / 0 = N
 replace net_services_other = "Collaboration avec d'autres entreprises" =="1224" (1 = Yes / 0 = No) 
 
 
-
-
-
-
-
-
 replace net_size4 = 0 if id_plateforme =="1000"
 
 replace net_size4 = 10 if id_plateforme =="1036"
@@ -409,16 +403,11 @@ replace net_size4 = 10 if id_plateforme =="1108"
 replace net_size3 = 12 if id_plateforme =="1108" 
 
 
-
-
 *************************************************************************
 *Correct export part 
 *************************************************************************
 
 replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme =="1054" 
-
-
-
 
 
 **************************************************************************
@@ -439,8 +428,6 @@ replace ca_2024 = 3000 if id_plateforme =="1186"
  
  replace ca_2021 = 50000 if id_plateforme =="1203" 
  
-
-
 
 *************************************************************************
 * Correct Ben and Int 
@@ -685,6 +672,16 @@ replace net_services_other= "elle utilise ses contacts pour le partage d'expéri
 replace int_ben1="Le travail sur soi-même" if int_ben1== "تعمل على روحك" 
 replace int_ben1="" if int_ben1== "-" /*TBC*/
 replace int_ben1="de nouveaux partenaires qui ont débuté à travailler avec moi" if int_ben1== "des partenaires walew yekhdmou meaya"
+replace int_ben1="apprentissage des procedures liés à l'export" if int_ben1== "ta3alom les prorusses de l’export"
+replace int_ben1="des nouvelles connaissances" if int_ben1== "bech tetaref ala abed jdod"
+replace int_ben1="des nouvelles connaissances" if int_ben1== "t3arfet ala abed jdod"
+replace int_ben1="réseautage à l'echelle nationale" if int_ben1== "resautage a la chelle naationel"
+replace int_ben1="réseautage" if int_ben1== "le resautage"
+
+
+
+
+
 
 *int_ben2
 replace int_ben2="Le travail d'équipe" if int_ben2== "تعمل عالفريق متاعك" 
@@ -692,25 +689,46 @@ replace int_ben2="j'ai trouvé des chemins pour exportation et prospection" if i
 replace int_ben2="j'ai appris beaucoup ded choses par rapport aux techniques" if int_ben2== "tet3alem barcha hajet fe les techniques"  /*TBC*/
 replace int_ben2="nom de bons contacts au sein du consortium" if int_ben2== "non des contactes behin fel consortuim"
 replace int_ben2="connaissances des marchés africains" if int_ben2== "connassances des marcheres aafricain"
+replace int_ben2="network" if int_ben2== "netwark"
+
+
 
 *int_ben3
-replace int_ben3="Travail sur le produit en restauration" if int_ben3== "تعمل عالمنتوج متاعم" 
+replace int_ben3="Travail sur le produit" if int_ben3== "تعمل عالمنتوج متاعم" 
 replace int_ben3="expériences par rapport aux visites te permettent de faire des analyses / comparaison / évaluation des produits par rapport aux secteurs" if int_ben3== "expériences par rapport ll les visites ikhalik tnajem taamel les analyses / comparaison / évaluation des produits par rapport aux secteurs"
 replace int_ben3="j'ai appris d'eux les procédures d'export et des techniques digitales" if int_ben3== "t3alamet menhom fel export o fel digitale"
 replace int_ben3="des opportunités d'exposition en Arabie Saoudite" if int_ben3== "opportunité dexposition f saudi"
+replace int_ben3="des evenements b2b à l'etranger" if int_ben3== "des éventements b2b a l'étrange"
+replace int_ben3="partenariat et expériences" if int_ben3== "charaka et expériences"
+replace int_ben3="travailler ensemble" if int_ben3== "oualeou yekhdmou maa badhhom"
+replace int_ben3="apprentissage dans les domaines de l'export et le digitale" if int_ben3== "t3alamet menhom fel export o fel digitale"
+replace int_ben3="foire à l'etranger" if int_ben3== "foire a letranger"
+
+
+
 
 *int_ben_autres
 replace int_ben_autres="" if int_ben_autres== "+++++++++++++++++++++" /*TBC*/
+replace int_ben_autres="financement" if int_ben_autres=="l9it chkoun ymawalni"
+replace int_ben_autres="echange des informations" if int_ben_autres=="echenage des information"
+
+
 
 
 *int_incv1
+replace int_incv1="La methode de selection des entreprises" if int_incv1== "difficulté enou thatou les membres mabaadhhom meghir ma yakhtarou baadhhom" 
+replace int_incv1="Difference des profils et caractéres  " if int_incv1== "les membres meandhomch nafes profil o mech nafes tbi3a" 
+replace int_incv1="manque d'organisation au sein du gie" if int_incv1== "l'organisation mta gie maajbthech mehish mnadhma" 
 replace int_incv1="L'entreprise a été victime d'injustice et n'a pas été inscrit dans le groupe malgré un dossier complet" if int_incv1== "تعرضت شركني لظلم وعدم التسجيل في المجموعة رغم مدي بملفي كامل وشامل" 
 replace int_incv1="L'ambiance générale" if int_incv1== "jaw l3am" 
 
 *int_incv2
-replace int_incv2="Je ne peux pas être d'accord avec les idées des participantes" if int_incv2== "matnajemesh twafe9 bin les aidées des participants" 
-replace int_incv2="limitation des ressources financières" if int_incv2== "immitation des ressources financier" 
 replace int_incv2="" if int_incv2== "++++++" /*TBC */
+replace int_incv2="Je ne peux pas gérer les differences d'idées des participantes" if int_incv2== "matnajemesh twafe9 bin les aidées des participants" 
+replace int_incv2="beaucoup de membres ont quitté le consortium suite au conflits internes qui existe entre quelques membres" if int_incv2=="barcha kharjou men consortium b houkem fama barcha machekel bin les membres du consortium"
+replace int_incv2="limitation des ressources financières" if int_incv2== "immitation des ressources financier" 
+replace int_incv2="conflit avec la giz en terme de difference d'idées" if int_incv2=="les conflit mta giz barha macchekel maytfehmoush ala nafes les aidéés"
+replace int_incv2="perturbation de la performance de mon entreprise suite à la perte du temps et d'argent" if int_incv2=="contribuant ainsi à une perturbation de la performance de mon entreprise"
 replace int_incv2="il y a une importante hétérogénéité au sein du consortium: certaines entreprises sont encores débutantes alors que d'autres sont bien établies depuis longtemps" if int_incv2== "les membres est trop élevés ykalak khater fama abed debuante o fama abed kdom barcha"
 replace int_incv2="Malheureusement, il y une distinction régionale (entre le Sud et le Nord)" if int_incv2== "التميز بين الجنوب والشمال الاسف"
 replace int_incv2="il n'y a pas de motivation pour l'équipe" if int_incv2== "mfamech motivation lel equipe"
@@ -722,6 +740,9 @@ replace int_incv3="" if int_incv3 == "+++++"  /*TBC */
 replace int_incv3="les formations qui ont été faites étaient une perte de temps car elles n'étaient pas stratégies car ils n'ont pas le même courant de pensée" if int_incv3 == "les formation eli amlhom perdre de temps khater mahomech stratégique khater houma déjà mouch nafes tafkir"  
 replace int_incv3="Je n'en profiterai pas financièrement" if int_incv3 == "لن استفاد ماديا"  
 replace int_incv3="Ca prends trop de temps de ma vie" if int_incv3 == "yekhou barcha wakt mn hyeti"  
+replace int_incv3="perte d'energie" if int_incv3=="perte d'évergie"
+
+
 
 *int_incv_autres
 replace int_incv_autres="" if int_incv_autres =="+++++++++++++++++++"  /*TBC */
