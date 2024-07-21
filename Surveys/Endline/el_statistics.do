@@ -134,6 +134,7 @@ putpdf paragraph, halign(center)
 putpdf image el_missing_asnwers_validated.png
 putpdf pagebreak
 
+
 ***********************************************************************
 * 	PART 3:  Vizualisations	  			
 ***********************************************************************

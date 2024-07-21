@@ -370,7 +370,28 @@ foreach var of local compta_vars {
 }
 
 ***********************************************************************
+<<<<<<< Updated upstream
 * 	PART 8:  Export an excel sheet with needs_check variables  			
+=======
+* 	PART 8:  Manually cancel needs_check if fixed	
+***********************************************************************
+replace needs_check = 0 if id_plateforme == 1026 // large outlier firm, comptability should be fine.
+
+***********************************************************************
+* 	PART 9:  Second test sheet
+***********************************************************************
+replace needs_check = 1 if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
+
+replace needs_check = 1 if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
+
+replace needs_check = 1 if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
+replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
+
+***********************************************************************
+* 	PART 9:  Export an excel sheet with needs_check variables  			
+>>>>>>> Stashed changes
 ***********************************************************************
 replace needs_check = 0 if id_plateforme =="984" 
 replace needs_check = 0 if id_plateforme =="986" 

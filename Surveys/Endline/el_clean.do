@@ -320,7 +320,7 @@ replace man_fin_per_fre = 2 if man_fin_per_fre == 0.5
 replace man_fin_per_fre = 3 if man_fin_per_fre == 0.75
 replace man_fin_per_fre = 4 if man_fin_per_fre == 1
 
-label define label_freq_kpi 0 "Never" 1 "Annually" 2 "Monthy" 3 "Weekly" 4 "Daily"
+label define label_freq_kpi 0 "Never" 1 "Annually" 2 "Trimester" 3 "Monthly" 4 "Daily"
 label values man_fin_per_fre label_freq_kpi
 
 *label profit

@@ -89,6 +89,19 @@ merge m:1 id_plateforme using "${master_final}/endline_contactlist", keepusing(l
 drop if _merge != 3
 drop _merge
 
+*import fiche de SUIVI
+preserve
+
+import excel "${el_raw}/FichedesuiviCF", firstrow clear
+rename A id_plateforme
+save "${el_raw}/FichedesuiviCF.dta", replace
+
+restore
+
+merge 1:1 id_plateforme using "${el_raw}/FichedesuiviCF", keepusing(A1_date_heure)
+drop if _merge != 3
+drop _merge
+
 ***********************************************************************
 * 	PART 3:  save a de-identified analysis file	
 ***********************************************************************
