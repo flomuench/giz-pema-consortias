@@ -154,6 +154,12 @@ label var export_45 "Other"
 
 * replace ssa orders 0 if it is missing value
 replace clients_ssa_commandes = 0 if clients_ssa == 0 
+
+*export = 0 if it does not export
+ 
+replace ca_exp = 0 if export_1 == 0 & id_plateforme != 1059 & ca_exp == . // exported in 2023, stopped in 2024
+replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
+
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
@@ -263,75 +269,8 @@ foreach var of local ids {
 }
 
 ***********************************************************************
-* 	PART 14:  Transform categorical variables into continuous variables
+* 	PART 14:  Generate variables for extensive marigns	
 ***********************************************************************
-*ca_intervalles
-replace ca = 5000 if comp_ca2023_intervalles == 8
-replace ca = 25000 if comp_ca2023_intervalles == 7
-replace ca = 100000 if comp_ca2023_intervalles == 6
-replace ca = 225000 if comp_ca2023_intervalles == 5
-replace ca = 400000 if comp_ca2023_intervalles == 4
-replace ca = 600000 if comp_ca2023_intervalles == 3
-replace ca = 850000 if comp_ca2023_intervalles == 2
-replace ca = 1000000 if comp_ca2023_intervalles == 1
-
-*comp_ca2024_intervalles
-replace ca_2024 = 5000 if comp_ca2024_intervalles == 8
-replace ca_2024 = 25000 if comp_ca2024_intervalles == 7
-replace ca_2024 = 100000 if comp_ca2024_intervalles == 6
-replace ca_2024 = 225000 if comp_ca2024_intervalles == 5
-replace ca_2024 = 400000 if comp_ca2024_intervalles == 4
-replace ca_2024 = 600000 if comp_ca2024_intervalles == 3
-replace ca_2024 = 850000 if comp_ca2024_intervalles == 2
-replace ca_2024 = 1000000 if comp_ca2024_intervalles == 1
-
-*profit_intervalles
-replace profit = 5000 if profit_2023_category_perte == 8
-replace profit = 25000 if profit_2023_category_perte == 7
-replace profit = 100000 if profit_2023_category_perte == 6
-replace profit = 225000 if profit_2023_category_perte == 5
-replace profit = 400000 if profit_2023_category_perte == 4
-replace profit = 600000 if profit_2023_category_perte == 3
-replace profit = 850000 if profit_2023_category_perte == 2
-replace profit = 1000000 if profit_2023_category_perte == 1
-
-replace profit = 5000 if profit_2023_category_gain == 8
-replace profit = 25000 if profit_2023_category_gain == 7
-replace profit = 100000 if profit_2023_category_gain == 6
-replace profit = 225000 if profit_2023_category_gain == 5
-replace profit = 400000 if profit_2023_category_gain == 4
-replace profit = 600000 if profit_2023_category_gain == 3
-replace profit = 850000 if profit_2023_category_gain == 2
-replace profit = 1000000 if profit_2023_category_gain == 1
-
-*profit_2024_intervalles
-replace profit_2024 = 5000 if profit_2024_category_perte == 8
-replace profit_2024 = 25000 if profit_2024_category_perte == 7
-replace profit_2024 = 100000 if profit_2024_category_perte == 6
-replace profit_2024 = 225000 if profit_2024_category_perte == 5
-replace profit_2024 = 400000 if profit_2024_category_perte == 4
-replace profit_2024 = 600000 if profit_2024_category_perte == 3
-replace profit_2024 = 850000 if profit_2024_category_perte == 2
-replace profit_2024 = 1000000 if profit_2024_category_perte == 1
-
-replace profit_2024 = 5000 if profit_2024_category_gain == 8
-replace profit_2024 = 25000 if profit_2024_category_gain == 7
-replace profit_2024 = 100000 if profit_2024_category_gain == 6
-replace profit_2024 = 225000 if profit_2024_category_gain == 5
-replace profit_2024 = 400000 if profit_2024_category_gain == 4
-replace profit_2024 = 600000 if profit_2024_category_gain == 3
-replace profit_2024 = 850000 if profit_2024_category_gain == 2
-replace profit_2024 = 1000000 if profit_2024_category_gain == 1
-
-replace profit=profit*(-1) if profit_2023_category==0
-
-replace profit_2024=profit_2024*(-1) if profit_2024_category==0
-
-*export = 0 if it does not export
- 
-replace ca_exp = 0 if export_1 == 0 & id_plateforme != 1059 & ca_exp == . // exported in 2023, stopped in 2024
-replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
-
 *marginal_exp_2023
 label define ext_exp 0 "Did not export" 1 "Exported"
 
@@ -348,66 +287,6 @@ lab var marginal_exp_2024 "extensive margin of export based on export turnover 2
 label values marginal_exp_2024 ext_exp
 
 replace marginal_exp_2024 = 1 if ca_exp_2024 > 0 & ca_exp_2024 < .
-
-************** Correct financial data so that it is not replaced by intervals FICHE SUIVI **************
-// id_plateforme 1005 / entreprise n'est plus en activité depuis aout 2022 elle revient aux production aux mai 2024 elle à une perte de 17000 dt depuis aout 2022 jusquà maintenent donc les cA totale en 2023 0 est en 2024 elle à dit que dans le mois de mai (le mois de retour en production) est de 500 dt 
- 
-replace ca = 0 if id_plateforme == 1005
-replace ca_2024 = 500 if id_plateforme == 1005
-replace profit = -5700 if id_plateforme == 1005
-replace profit_2024 = -5700 if id_plateforme == 1005
-
-// id_plateforme 1049 / manque de la partie comptabilité / 29568688"Faux Num/ J'ai appelé Madame Samia, mais le manager a répondu. Il est en colere et ne veut ni répondre ni donner le téléphone à Madame Samia
-local compta_vars "ca comp_ca2023_intervalles ca_2024 comp_ca2024_intervalles ca_exp ca_exp_2024 profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain"
-
-foreach var of local compta_vars {
-	replace `var' = 888 if id_plateforme == 1049 
-}
-
-// id_plateforme 1138 / n'a pas donnée les bénéfices en 2024 (elle n'a pas aucun aidé combients)
-replace profit_2024 = 999 if id_plateforme == 1138
-
-// id_plateforme 1150 / elle a donné benefice 3000 exactement, mais comme 3000 inferieur à 5000 donc j'ai du mettre dans l'intervalle entre 0 et 9 999. ( pas besoin de retour dans la fiche de correction ) 
-replace profit_2024 = 3000 if id_plateforme == 1150
-
-// id_plateforme 1151 /	les benefices en 2024 =0  stable elle a dit jusqua juin est neant 
-replace profit_2024 = 0 if id_plateforme == 1151
-
-*id_plateforme 1132 // Refuses to give comptability
-local compta_vars "ca comp_ca2023_intervalles ca_2024 comp_ca2024_intervalles ca_exp ca_exp_2024 profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain"
-
-foreach var of local compta_vars {
-	replace `var' = 888 if id_plateforme == 1132 
-}
-
-	*id_plateforme 1167 // Has no idea about CA 2024
-replace ca_2024 = 999 if id_plateforme == 1167
-
-	*id_plateforme 1059 //  met3ametech avec des entrepreuners donc ell ne repond pas a q17 et elle n'a pas travaille  en 2024 donc elle ne peut pas repondre aux question sur les benefices + et 2023 mesajletech ni pertes ni benefices  et aussi cest une entreprise totalement exportatrice en 2023
-	
-replace profit = 0 if id_plateforme == 1059
-replace profit_2024 = 0 if id_plateforme == 1059
-
-	*1083 // lentreprise  ferme depuis 2 ans donc elle na pas donne le chiffres dafffaire et le matricule fiscale
-local compta_vars "ca ca_2024 ca_exp ca_exp_2024 profit profit_2024"
-
-foreach var of local compta_vars {
-	replace `var' = 0 if id_plateforme == 1083 
-}
-
-*1190 // reste partie comptabilité et matriculle fiscale elle ne connait pas 
-local compta_vars "ca ca_2024 ca_exp ca_exp_2024 profit profit_2024"
-
-foreach var of local compta_vars {
-	replace `var' = 0 if id_plateforme == 1083 
-}
-
-	*
-	*1122 // maandhech des employées kolhom des vendeuses wyekhdmou mi temps
-replace employes = 0 if id_plateforme == 1122
-
-	*1196 // Il n'y a aucune personne qui travaille avec elle à plein temps
-replace employes = 0 if id_plateforme == 1196
 ***********************************************************************
 * 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
