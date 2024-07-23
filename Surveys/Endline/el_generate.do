@@ -306,24 +306,127 @@ replace n`x' = `x'/employes if n`x'!= .
 *************************************************************************
 
 gen int_ben1_correct = int_ben1 
-replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés"
-replace int_ben1_correct = "Développement personnel"
-replace int_ben1_correct = "Développement professionel"
-replace int_ben1_correct = "Réseautage, partage et collaboration"
-
 gen int_ben2_correct = int_ben2
-gen int_ben3_correct = int_ben3 
+gen int_ben3_correct = int_ben3
 gen int_ben_autres_correct = int_ben_autres
 
-gen int_incv1_correct = int_incv1 
-replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct==""
-replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct==""
-replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct==""
-replace int_incv1_correct = "Problèmes organisationnels et structurels" if  int_incv1_correct==""
 
+
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Mission a l’export"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="L'exportation"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="Connaissance Afrique"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Opportunités sur le marché international"
+replace int_ben3_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben3_correct=="des éventements B2B a l'étrange"
+replace int_ben3_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben3_correct=="Visibilité internationale"
+replace int_ben3_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben3_correct=="Opportunités sur des marchés internationaux"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Ouverture vers de nouveaux marchés"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Les avantages/offres de voyage (Rwanda, Dubaï, ...)"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Établir des voies pour l'exportation et la prospection"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="Participants foires à l'international"
+replace int_ben3_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben3_correct=="Développement de l'entreprise"
+replace int_ben3_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben3_correct=="Augmentation du chiffre d'affaires (CA)"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Participants aux foires internationales"
+replace int_ben1_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben1_correct=="Prospection de pays en Afrique"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="ouverture sur des nouveaux marché"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="l'ouverture sur de nouveaux marchés"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="organisation des voyages pour accéder au marché à l'export(Sénégal)"
+replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if int_ben2_correct=="Participation à des grands événements ( exp Tunisia Africa Business Meetings)"
+
+
+
+replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="Apprentissage des processus d'exportation"
+replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="Apprentissage pour diriger une entreprise : marketing"
+replace int_ben2_correct = "Développement professionel" if int_ben2_correct=="Apprentissage"
+replace int_ben2_correct = "Développement professionel" if int_ben2_correct=="Apprenez beaucoup de choses sur les techniques"
+replace int_ben3_correct = "Développement professionel" if int_ben3_correct=="Expériences liées aux visites, possibilité de faire des analyses / comparaisons / évaluations des produits par rapport aux secteurs"
+replace int_ben3_correct = "Développement professionel" if int_ben3_correct=="Les formations"
+replace int_ben3_correct = "Développement professionel" if int_ben3_correct=="Les conseils et l'encadrement en général"
+replace int_ben3_correct = "Développement professionel" if int_ben3_correct=="Il y a des méthodes de gestion et de travail. Énergie positive dans le consortium"
+replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="Projet et expériences"
+replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="b2b , les formations"
+
+
+
+replace int_ben1_correct = "Développement personnel" if int_ben1_correct=="Travaille sur vous-même"
+replace int_ben1_correct = "Développement personnel" if int_ben1_correct=="Communication entre eux"
+replace int_ben2_correct = "Développement personnel" if int_ben2_correct=="Travaille en équipe "
+replace int_ben1_correct = "Développement personnel" if int_ben1_correct=="Apprentissage mutuel entre eux"
+replace int_ben1_correct = "Développement personnel" if int_ben1_correct=="Relationnelle"
+replace int_ben2_correct = "Développement personnel" if int_ben2_correct=="Brain storming"
+replace int_ben1_correct = "Développement personnel" if int_ben1_correct=="Apprendre comment gérer les conflits"
+replace int_ben3_correct = "Développement personnel" if int_ben3_correct=="solidarité"
+
+
+
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage et partage d'expériences"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Le réseau"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échange"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseaux"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Énergie entre les chefs d'entreprise"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Collaboration avec d'autres chefs d'entreprise"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les connaissances et les relations avec d'autres entrepreneures"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échange d'expériences"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Elle a rencontré des gens et établi des relations avec les membres du consortium"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Pour connaître de nouvelles personnes"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Nouveaux contacts, conventions avec d'autres entreprises"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Partage d'informations"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Collaboration"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Mutualisation des moyens"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les échanges d’expériences entre les membres du consortium"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les entrepreneurs deviennent partenaires"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Profit commun"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Network (réseau)"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Partage d'expérience"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échanges d'informations"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Nouvelles relations"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage entre les membres du consortium"
+
+
+
+gen int_incv1_correct = int_incv1 
 gen int_incv2_correct = int_incv2
 gen int_incv3_correct = int_incv3
 gen int_incv_autres_correct = int_incv_autres
+
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="le dialogue est compliqué"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="Égoïsme"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="communication difficile au début pour créer un lien social et professionnel entre elles  "
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="gère quelque conflits "
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="jalousie"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="manque de communication"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="Égoïsme"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="Égoïsme"
+
+
+
+
+replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="les niveaux de maturités sont très différents et les attentes également"
+replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Notre diversité nous a fait perdre beaucoup de temps et d'énergie pour fixer la meilleure stratégie pour le GIE ==&gt; cumul beaucoup de retard sur ma propre entreprise (voir même une stagnation pendant une longue période)"
+replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Esprit d un manager n accepte  pas l innovation mène à l exclusion"
+replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Absence d’ethique de travail par quelques membres"
+
+
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps allouer au consortium au détriments de son propre entreprise"
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps alloué au consortium au détriments de son propre entreprise"
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="perte d'argent"
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="Engagement moral"
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="Il y'a beaucoup de charge de travail "
+replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps allouer au consortium au détriments de son propre entreprise"
+
+
+
+
+
+
+
+replace int_incv1_correct = "Problèmes organisationnels et structurels" if  int_incv1_correct=="programme chargé"
+replace int_incv1_correct = "Problèmes organisationnels et structurels" if  int_incv1_correct=="Perte du temps (abscence de stratégie claire)"
+replace int_incv_autres_correct = "Problèmes organisationnels et structurels" if  int_incv_autres_correct=="La GIZ a pris des décisions critiquées dans le processus de sélection des membres du consortium, ce qui a engendré des problèmes dans tous les GIE.  Critères de sélection flous ou non transparents. Manque d'évaluation des capacités, de la maturité et des engagements des membres des GIE."
+replace int_incv3_correct = "Problèmes organisationnels et structurels" if  int_incv3_correct=="les procédures s rigide"
+replace int_incv_autres_correct = "Problèmes organisationnels et structurels" if  int_incv_autres_correct=="manque de financement" 
+
+
 
 
 

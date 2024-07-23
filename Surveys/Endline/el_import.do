@@ -92,7 +92,7 @@ drop _merge
 *import fiche de SUIVI
 preserve
 
-import excel "${el_raw}/FichedesuiviCF", firstrow clear
+import excel "${el_raw}/FichedesuiviCF.xlsx", firstrow clear
 rename A id_plateforme
 save "${el_raw}/FichedesuiviCF.dta", replace
 
