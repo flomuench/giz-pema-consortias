@@ -700,7 +700,7 @@ lab var localsales2024_w99 "Domestic sales 2024 wins. 99th"
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 sales_w99 exp_inv_w99 exp_pays_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95 exp_pays_w95 profit_2024_w99 ca_w99 ca_exp_2024_w99 profit_w99 costs_w99 costs_2024_w99 ca_exp_w99"  // add at endline: exp_pays_w9
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 sales_w99 exp_inv_w99 exp_pays_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95 exp_pays_w95 profit_2024_w99 ca_w99 ca_exp_2024_w99 profit_w99 costs_w99 costs_2024_w99 ca_exp_w99 ca_2024_w99 localsales2024_w99 localsales_w99"  // add at endline: exp_pays_w9
      
 
 		* check how many zeros
@@ -814,8 +814,14 @@ putexcel F2 = "Export sales", border(bottom) hcenter
 putexcel G2 = "Total sales", border(bottom) hcenter
 putexcel H2 = "Profit", border(bottom) hcenter
 putexcel I2 = "Export invt.", border(bottom) hcenter
-putexcel J2 = "Export countries", border(bottom) hcenter
-putexcel K2 = "Profit in 2024", border(bottom) hcenter
+putexcel J2 = "Total sales 2023", border(bottom) hcenter
+*putexcel K2 = "Total sales 2024", border(bottom) hcenter
+putexcel K2 = "Export 2023", border(bottom) hcenter
+*putexcel M2 = "Export 2024", border(bottom) hcenter
+putexcel L2 = "Profit 2023", border(bottom) hcenter
+*putexcel O2 = "Profit 2024", border(bottom) hcenter
+putexcel M2 = "Costs 2023", border(bottom) hcenter
+*putexcel Q2 = "Costs 2024", border(bottom) hcenter
 	
 				* define rows
 putexcel A3 = "k = 1", border(bottom) hcenter
@@ -851,10 +857,10 @@ foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exp_inv_w99 sales_w99 {
 	}
 }
 
-/*
+*ca_2024_w99 profit_2024_w99 costs_2024_w99 ca_exp_2024_w99
 *endline K^
-local columns "J K L M N O P Q"
-foreach var of varlist ca_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 profit_w99 profit_2024_w99 costs_w99 costs_2024_w99 {
+local columns "J K L M"
+foreach var of varlist ca_w99 ca_exp_w99  profit_w99  costs_w99  {
 	local row = 3
 	gettoken column columns : columns
 	forvalues i = 1(1)5 {
@@ -864,7 +870,7 @@ foreach var of varlist ca_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 profit_w99 
 			local row = `row' + 1
 	}
 }
-*/
+
 
 		* drop all the created variables
 drop missing_bl_* // *_k?
@@ -899,17 +905,29 @@ lab var car_empl1_w99_k3 "Female employees"
 *rename long var
 rename clients_ssa_commandes_w99 orderssa_w99
 
+rename ihs_localsales2024_w99_k5 ihs_ls2024_w99_k5
+rename ihs_localsales_w99_k5 ihs_ls_w99_k5
+rename ihs_ca_exp_2024_w99_k5 ihs_caexp2024_w99_k5
+rename ihs_profit_2024_w99_k5 ihs_profit2024_w99_k5
+rename ihs_profit_2024_w99_k1 ihs_profit2024_w99_k1
+
+
+rename ihs_ca_exp_2024_w99_k1 ihs_caexp2024_w99_k1
+rename ihs_ca_exp_2024_w99_k2 ihs_caexp2024_w99_k2
+rename ihs_ca_exp_2024_w99_k3 ihs_caexp2024_w99_k3
+rename ihs_ca_exp_2024_w99_k4 ihs_caexp2024_w99_k4
+
 {
 	* results for optimal k
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10"
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
 local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"
-local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 marginal_exp_2023 marginal_exp_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "bpi bpi_2024 ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 localsales_w99 localsales2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 marginal_exp_2023 marginal_exp_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
+local business_performance "bpi bpi_2024 ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 localsales_w99 localsales2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_w99_k5 ihs_ca_2024_w99_k5 ihs_ls_w99_k5 ihs_ls2024_w99_k5 ihs_ca_exp_w99_k5 ihs_caexp2024_w99_k5 ihs_costs_w99_k5 ihs_costs_2024_w99_k5 ihs_profit_w99_k5 ihs_profit2024_w99_k5 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_caexp2024_w99_k4 ihs_ca_exp_w99_k4 ihs_profit2024_w99_k1"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl
