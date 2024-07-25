@@ -160,6 +160,8 @@ replace clients_ssa_commandes = 0 if clients_ssa == 0
 replace ca_exp = 0 if export_1 == 0 & id_plateforme != 1059 & ca_exp == . // exported in 2023, stopped in 2024
 replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
+*exp_pays = 0 if it does not export_1
+replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
