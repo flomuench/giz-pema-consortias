@@ -155,6 +155,10 @@ replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répond
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
+local id 989 994 995 997 1004 1025 1031 1067 1074 1090 1094 1110 1124 1127 1136 1137 1154 1161 1162 1175 1202 1214 1219 1235 1241
+foreach var of local id {
+	replace refus = 1 if surveyround == 3 & id_plateforme == `var'
+}
 }
 ***********************************************************************
 * 	PART 3:  entreprise no longer in operations	
@@ -457,7 +461,7 @@ lab var net_size "Network size"
 
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg
 ds `allvars', has(type string)
 
 	* Create temporary variable
@@ -489,6 +493,9 @@ foreach var of local allvars {
 }
 
 	* calculate the index value: average of zscores 
+			* networking
+egen network = rowmean(temp_net_associationz temp_net_size3z temp_net_gender3_gizz temp_net_services_pratiquesz temp_net_services_produitsz temp_net_services_markz temp_net_services_supz temp_net_services_contractz temp_net_services_confiancez temp_net_services_autrez temp_net_coop_posz temp_net_coop_negz)
+
 			* export readiness index (eri)
 egen eri = rowmean(temp_exprep_normez temp_exp_pra_ciblez temp_exp_pra_missionz temp_exp_pra_douanez temp_exp_pra_planz temp_exp_pra_rexpz temp_exp_pra_foirez temp_exp_pra_sciz temp_exp_pra_ventz)			
 			
@@ -523,6 +530,7 @@ egen female_loc = rowmean(temp_car_loc_succz temp_car_loc_envz temp_car_loc_insp
 egen genderi = rowmean(temp_car_efi_fin1z temp_car_efi_negoz temp_car_efi_convz temp_car_efi_manz temp_car_efi_motivz temp_car_init_probz temp_car_init_initz temp_car_init_oppz temp_car_loc_succz temp_car_loc_envz temp_car_loc_inspz temp_car_loc_envz temp_car_loc_expz temp_car_loc_soinz)
 
 		* labeling
+label var network "Network"
 label var eri "Export readiness"
 label var eri_ssa "Export readiness SSA"
 label var epp "Export performance"
@@ -615,7 +623,7 @@ use links to understand the code syntax for creating the accounting variables' g
 ***********************************************************************
 *	PART 11: Continuous outcomes (winsorization + ihs-transformation)
 ***********************************************************************
-*{
+
 {
 	* log-transform capital invested
 foreach var of varlist capital ca employes {
@@ -649,7 +657,7 @@ gen profit_pct = .
 	
 	* winsorize
 		* winsorize all outcomes (but profit)
-local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 ca_exp_2024 net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz"
+local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 ca_exp_2024 net_association net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz clients clients_ssa clients_ssa_commandes"
 
 foreach var of local wins_vars {
     replace `var' = . if `var' == 999  // don't know transformed to missing values
@@ -672,11 +680,28 @@ winsor2 profit, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile t
 winsor2 profit_2024, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
 winsor2 profit_2024, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
 
+************ generate costs & local sales ************
+
+gen costs_w99 = ca_w99 - profit_w99
+lab var costs_w99 "Costs wins. 99th"
+
+gen costs_2024_w99 = ca_2024_w99 - profit_2024_w99
+lab var costs_2024_w99 "Costs 2024 wins. 99th"
+
+gen localsales_w99 = ca_w99 - ca_exp_w99
+lab var localsales_w99 "Domestic sales 2023 wins. 99th"
+
+gen localsales2024_w99 = ca_2024_w99 - ca_exp_2024_w99
+lab var localsales2024_w99 "Domestic sales 2024 wins. 99th"
+
+************************************************************
+
 	* find optimal k before ihs-transformation
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_w99 ca_exp_w99 sales_w99 profit_w99 exp_inv_w99 exp_pays_w99 profit_2024_w99  employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95 exp_pays_w95 profit_2024_w95" // add at endline: exp_pays_w99
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 sales_w99 exp_inv_w99 exp_pays_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_w95 ca_exp_w95 sales_w95 profit_w95 exp_inv_w95 exp_pays_w95 profit_2024_w99 ca_w99 ca_exp_2024_w99 profit_w99 costs_w99 costs_2024_w99 ca_exp_w99"  // add at endline: exp_pays_w9
+     
 
 		* check how many zeros
 foreach var of local ys {
@@ -826,10 +851,24 @@ foreach var of varlist ca_w99 ca_exp_w99 profit_w99 exp_inv_w99 sales_w99 {
 	}
 }
 
+/*
+*endline K^
+local columns "J K L M N O P Q"
+foreach var of varlist ca_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 profit_w99 profit_2024_w99 costs_w99 costs_2024_w99 {
+	local row = 3
+	gettoken column columns : columns
+	forvalues i = 1(1)5 {
+			reg ihs_`var'_k`i' i.treatment l.`var' i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
+			local r2 = e(r2)
+			putexcel `column'`row' = `r2', hcenter nformat(0.000)  // `++row'
+			local row = `row' + 1
+	}
+}
+*/
 
 		* drop all the created variables
 drop missing_bl_* // *_k?
-
+drop *_y0
 
 		* label optimal k variables & k = 1 for consistency checks
 lab var ihs_exp_inv_w99_k1 "Export investment"
@@ -854,35 +893,23 @@ lab var car_empl1_w99_k3 "Female employees"
 }
 
 ***********************************************************************
-* 	PART 12: generate costs (profit - CA)
-***********************************************************************
-gen costs_w99 = ca_w99 - profit_w99
-lab var costs_w99 "Costs wins. 99th"
-
-gen ihs_costs_w99_k4 = ihs_ca_w99_k4 - ihs_profit_w99_k4
-lab var ihs_costs_w99_k4 "IHS Costs wins. 99th K^4"
-
-gen ihs_costs_w99_k1 = ihs_ca_w99_k1 - ihs_profit_w99_k1
-lab var ihs_costs_w99_k1 "IHS Costs wins. 99th K^1"
-
-***********************************************************************
 * 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
-*drop ca_w99 & profit y0 for further use
-drop ca_w99_y0
-drop profit_w99_y0
+
+*rename long var
+rename clients_ssa_commandes_w99 orderssa_w99
 
 {
 	* results for optimal k
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2"
-local empowerment "genderi female_efficacy female_loc listexp"
-local mp "mpi"
-local innovation "innovated innovations inno_produit inno_process inno_lieu inno_commerce"
-local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1 epp" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 costs_w99 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz"
+local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
+local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
+local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp ihs_ca_exp_w99_k1 ihs_ca_exp_w99_k4 exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 marginal_exp_2023 marginal_exp_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
+local business_performance "bpi bpi_2024 ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 localsales_w99 localsales2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl

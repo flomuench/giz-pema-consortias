@@ -17,7 +17,7 @@
 use "${master_final}/consortium_final", clear
 
 	* change directory
-cd "${master_regressiontables}/midline"
+cd "${master_regressiontables}/endline"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
