@@ -205,7 +205,8 @@ lab var car_loc_soin "Managing to balance personal and professional life"
 *lab var extrovert2 "Preference to work alone or with a small devoted team" REMOVED FROM QUESTIONS
 *lab var extrovert3 "Feeling exhausted after interacting with  employees, suppliers, and clients" REMOVED FROM QUESTIONS
 
-lab var listexp1 "List experiment"
+rename listexp1 listexp
+lab var listexp "List experiment"
 
 * Section accounting 
 

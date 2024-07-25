@@ -229,7 +229,7 @@ egen miss_carefi = rowmiss(car_efi_fin1 car_efi_man car_efi_motiv)
 egen miss_carloc = rowmiss(car_loc_env car_loc_exp car_loc_soin)
 
 	*section 14: listexp
-egen miss_extlist = rowmiss(listexp1)
+egen miss_extlist = rowmiss(listexp)
 	
 	* section 15: accounting/KPI
 egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp ca_exp_2024)
@@ -253,6 +253,7 @@ label values survey_completed yesno
 ***********************************************************************
 * 	PART 13:  Generate variables for companies who answered on phone	
 ***********************************************************************
+*method of answer
 gen survey_phone = 1
 lab var survey_phone "Comapnies who answered the survey on phone (with enumerators)" 
 
@@ -262,7 +263,9 @@ label values survey_phone Surveytype
 
 
 	*responded online
-local ids 983 985 1000 1009 1028 1044 1045 1064 1096 1098 1102 1116 1125 1134 1143 1159 1195 1203 1204 1205 1243 1244
+
+local ids 983 985 1000 1001 1007 1009 1028 1044 1045 1051 1057 1061 1064 1096 1098 1102 1116 1125 1130 1134 1143 1159 1178 1195 1203 1204 1205 1237 1243 1244 1245
+
 
 foreach var of local ids {
 	replace survey_phone = 0 if id_plateforme == `var'

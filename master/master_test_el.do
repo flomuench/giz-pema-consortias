@@ -722,36 +722,210 @@ foreach var of local compta_vars {
 }
 
 ***********************************************************************
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-* 	PART 8:  Export an excel sheet with needs_check variables  			
-=======
 * 	PART 8:  Manually cancel needs_check if fixed	
 ***********************************************************************
 replace needs_check = 0 if id_plateforme == 1026 // large outlier firm, comptability should be fine.
+
+*fiche de correction #1
+replace needs_check = 0 if id_plateforme == 984
+replace questions_needing_checks = " " if id_plateforme == 984
+
+replace needs_check = 0 if id_plateforme == 986
+replace questions_needing_checks = " " if id_plateforme == 986
+
+replace needs_check = 0 if id_plateforme == 988
+replace questions_needing_checks = " " if id_plateforme == 988
+
+replace needs_check = 0 if id_plateforme == 996
+replace questions_needing_checks = " " if id_plateforme == 996
+
+replace needs_check = 0 if id_plateforme == 999
+replace questions_needing_checks = " " if id_plateforme == 999
+
+replace needs_check = 0 if id_plateforme == 1000
+replace questions_needing_checks = " " if id_plateforme == 1000
+
+replace needs_check = 0 if id_plateforme == 1005
+replace questions_needing_checks = " " if id_plateforme == 1005
+
+replace needs_check = 0 if id_plateforme == 1009
+replace questions_needing_checks = " " if id_plateforme == 1009
+
+replace needs_check = 0 if id_plateforme == 1010
+replace questions_needing_checks = " " if id_plateforme == 1010
+
+replace needs_check = 0 if id_plateforme == 1017
+replace questions_needing_checks = " " if id_plateforme == 1017
+
+replace needs_check = 0 if id_plateforme == 1019
+replace questions_needing_checks = " " if id_plateforme == 1019
+
+replace needs_check = 0 if id_plateforme == 1027
+replace questions_needing_checks = " " if id_plateforme == 1027
+
+replace needs_check = 0 if id_plateforme == 1028
+replace questions_needing_checks = " " if id_plateforme == 1028
+
+replace needs_check = 0 if id_plateforme == 1035
+replace questions_needing_checks = " " if id_plateforme == 1035
+
+replace needs_check = 0 if id_plateforme == 1036
+replace questions_needing_checks = " " if id_plateforme == 1036
+
+replace needs_check = 0 if id_plateforme == 1043
+replace questions_needing_checks = " " if id_plateforme == 1043
+
+replace needs_check = 0 if id_plateforme == 1046
+replace questions_needing_checks = " " if id_plateforme == 1046
+
+replace needs_check = 0 if id_plateforme == 1049
+replace questions_needing_checks = " " if id_plateforme == 1049
+
+replace needs_check = 0 if id_plateforme == 1054
+replace questions_needing_checks = " " if id_plateforme == 1054
+
+replace needs_check = 0 if id_plateforme == 1059
+replace questions_needing_checks = " " if id_plateforme == 1059
+
+replace needs_check = 0 if id_plateforme == 1065
+replace questions_needing_checks = " " if id_plateforme == 1065
+
+replace needs_check = 0 if id_plateforme == 1068
+replace questions_needing_checks = " " if id_plateforme == 1068
+
+replace needs_check = 0 if id_plateforme == 1081
+replace questions_needing_checks = " " if id_plateforme == 1081
+
+replace needs_check = 0 if id_plateforme == 1083
+replace questions_needing_checks = " " if id_plateforme == 1083
+
+replace needs_check = 0 if id_plateforme == 1087
+replace questions_needing_checks = " " if id_plateforme == 1087
+
+replace needs_check = 0 if id_plateforme == 1084
+replace questions_needing_checks = " " if id_plateforme == 1084
+
+replace needs_check = 0 if id_plateforme == 1097
+replace questions_needing_checks = " " if id_plateforme == 1097
+
+replace needs_check = 0 if id_plateforme == 1108
+replace questions_needing_checks = " " if id_plateforme == 1108
+
+replace needs_check = 0 if id_plateforme == 1118
+replace questions_needing_checks = " " if id_plateforme == 1118
+
+replace needs_check = 0 if id_plateforme == 1122
+replace questions_needing_checks = " " if id_plateforme == 1122
+
+replace needs_check = 0 if id_plateforme == 1125
+replace questions_needing_checks = " " if id_plateforme == 1125
+
+replace needs_check = 0 if id_plateforme == 1126
+replace questions_needing_checks = " " if id_plateforme == 1126
+
+replace needs_check = 0 if id_plateforme == 1128
+replace questions_needing_checks = " " if id_plateforme == 1128
+
+replace needs_check = 0 if id_plateforme == 1133
+replace questions_needing_checks = " " if id_plateforme == 1133
+
+replace needs_check = 0 if id_plateforme == 1134
+replace questions_needing_checks = " " if id_plateforme == 1134
+
+replace needs_check = 0 if id_plateforme == 1135
+replace questions_needing_checks = " " if id_plateforme == 1135
+
+replace needs_check = 0 if id_plateforme == 1147
+replace questions_needing_checks = " " if id_plateforme == 1147
+
+replace needs_check = 0 if id_plateforme == 1151
+replace questions_needing_checks = " " if id_plateforme == 1151
+
+replace needs_check = 0 if id_plateforme == 1164
+replace questions_needing_checks = " " if id_plateforme == 1164
+
+replace needs_check = 0 if id_plateforme == 1167
+replace questions_needing_checks = " " if id_plateforme == 1167
+
+replace needs_check = 0 if id_plateforme == 1176
+replace questions_needing_checks = " " if id_plateforme == 1176
+
+replace needs_check = 0 if id_plateforme == 1178
+replace questions_needing_checks = " " if id_plateforme == 1178
+
+replace needs_check = 0 if id_plateforme == 1179
+replace questions_needing_checks = " " if id_plateforme == 1179
+
+replace needs_check = 0 if id_plateforme == 1182
+replace questions_needing_checks = " " if id_plateforme == 1182
+
+replace needs_check = 0 if id_plateforme == 1186
+replace questions_needing_checks = " " if id_plateforme == 1186
+
+replace needs_check = 0 if id_plateforme == 1191
+replace questions_needing_checks = " " if id_plateforme == 1191
+
+replace needs_check = 0 if id_plateforme == 1197
+replace questions_needing_checks = " " if id_plateforme == 1197
+
+replace needs_check = 0 if id_plateforme == 1203
+replace questions_needing_checks = " " if id_plateforme == 1203
+
+replace needs_check = 0 if id_plateforme == 1224
+replace questions_needing_checks = " " if id_plateforme == 1224
+
+replace needs_check = 0 if id_plateforme == 1231
+replace questions_needing_checks = " " if id_plateforme == 1231
+
+replace needs_check = 0 if id_plateforme == 1234
+replace questions_needing_checks = " " if id_plateforme == 1234
+
+replace needs_check = 0 if id_plateforme == 1239
+replace questions_needing_checks = " " if id_plateforme == 1239
+
+replace needs_check = 0 if id_plateforme == 1243
+replace questions_needing_checks = " " if id_plateforme == 1243
+
 
 ***********************************************************************
 * 	PART 9:  Second test sheet
 ***********************************************************************
+*net_gender3 too big
 replace needs_check = 1 if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
 replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
 
+*net_gender4 too big
 replace needs_check = 1 if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
 replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
 
+*net_gender3_giz too big
 replace needs_check = 1 if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
 replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
 
+*profit/ca ratio > 1
+	*2023
+gen profitca_ratio = profit/ca if surveyround == 3
+
+replace needs_check = 1 if profitca_ratio >= 1 & surveyround == 3 & profitca_ratio != .
+replace questions_needing_checks = questions_needing_checks + "Le ratio du profit 2023 par rapport au CA est supérieur ou égal à 100%, veuillez vérifier / " if profitca_ratio >= 1 & surveyround == 3 & profitca_ratio != .
+
+*profit/ca ratio > 1
+	*2024
+gen profitca_ratio_2024 = profit_2024/ca_2024 if surveyround == 3
+
+replace needs_check = 1 if profitca_ratio_2024 >= 1 & surveyround == 3 & profitca_ratio_2024 != .
+replace questions_needing_checks = questions_needing_checks + "Le ratio du profit 2024 par rapport au CA est supérieur ou égal à 100%, veuillez vérifier / " if profitca_ratio_2024 >= 1 & surveyround == 3 & profitca_ratio_2024 != .
+
+*manual test for 1186
+replace needs_check = 1 if id_plateforme == 1186 & surveyround == 3 
+replace questions_needing_checks = questions_needing_checks + "Le nombre d'employés est absurde par rapport au nombre d'employés baseline, et le CA" if id_plateforme == 1186 & surveyround == 3
+
+*manual test for 1108
+replace needs_check = 1 if id_plateforme == 1108 & surveyround == 3 
+replace questions_needing_checks = "Nous avons corrigé le nombre total d'entrepreneurs (net_size3 et net_size4) sans demander le nombre de femmes de ce dernier. / " if id_plateforme == 1108 & surveyround == 3
+
 ***********************************************************************
 * 	PART 9:  Export an excel sheet with needs_check variables  			
->>>>>>> Stashed changes
-=======
-* 	PART 8:  Manually cancel needs_check if fixed	
-***********************************************************************
-replace needs_check = 0 if id_plateforme == 1026 // large outlier firm, comptability should be fine.
-***********************************************************************
-* 	PART 9:  Export an excel sheet with needs_check variables  			
->>>>>>> parent of 529cebc (needs check)
 ***********************************************************************
 *re-merge additional contact information to dataset (?)
 /*

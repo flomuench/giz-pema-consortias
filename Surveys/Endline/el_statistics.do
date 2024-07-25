@@ -96,7 +96,7 @@ putpdf pagebreak
 	*timeline of responses
 format %-td date 
 histogram date, frequency addlabel width(0.5) ///
-		tlabel(20jun2024(1)16jul2024, angle(60) labsize(vsmall)) ///
+		tlabel(20jun2024(1)24jul2024, angle(60) labsize(vsmall)) ///
 		ytitle("Answers") ///
 		title("{bf:Endline survey: number of responses}") 
 gr export survey_response_byday.png, replace
@@ -679,7 +679,7 @@ putpdf pagebreak
 
 *listexp
 *graph bar list_exp, over(list_group) - where list_exp provides the number of confirmed affirmations).
-graph bar listexp1, over(list_group_el, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
+graph bar listexp, over(list_group_el, relabel(1 "Non-sensitive" 2 "Sensitive  incl." 3 "Non-sensitive" 4 "Sensitive incl.")) over(treatment) ///
 	blabel(total, format(%9.2fc) gap(-0.2)) ///
 	title("List experiment question") ///
 ytitle("No. of affirmations") ///
