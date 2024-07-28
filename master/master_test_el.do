@@ -748,7 +748,36 @@ replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepre
 =======
 * 	PART 8:  Manually cancel needs_check if fixed	
 ***********************************************************************
-replace needs_check = 0 if id_plateforme == 1026 // large outlier firm, comptability should be fine.
+replace needs_check = 0 if id_plateforme == 1001
+replace needs_check = 0 if id_plateforme == 1007
+replace needs_check = 0 if id_plateforme == 1035
+replace needs_check = 0 if id_plateforme == 1036
+replace needs_check = 0 if id_plateforme == 1037
+replace needs_check = 0 if id_plateforme == 1038
+replace needs_check = 0 if id_plateforme == 1041
+replace needs_check = 0 if id_plateforme == 1050
+replace needs_check = 0 if id_plateforme == 1054
+replace needs_check = 0 if id_plateforme == 1055
+replace needs_check = 0 if id_plateforme == 1057
+replace needs_check = 0 if id_plateforme == 1098
+replace needs_check = 0 if id_plateforme == 1108
+replace needs_check = 0 if id_plateforme == 1130
+replace needs_check = 0 if id_plateforme == 1133
+replace needs_check = 0 if id_plateforme == 1134
+replace needs_check = 0 if id_plateforme == 1153
+replace needs_check = 0 if id_plateforme == 1170 
+replace needs_check = 0 if id_plateforme == 1190 
+replace needs_check = 0 if id_plateforme == 1192 
+replace needs_check = 0 if id_plateforme == 1196
+replace needs_check = 0 if id_plateforme == 1245 
+replace needs_check = 0 if id_plateforme == 1248
+replace needs_check = 0 if id_plateforme == 1215
+
+
+
+
+
+ // large outlier firm, comptability should be fine.
 ***********************************************************************
 * 	PART 9:  Export an excel sheet with needs_check variables  			
 >>>>>>> parent of 529cebc (needs check)
