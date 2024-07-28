@@ -660,18 +660,30 @@ gen profit_pct = .
 local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 ca_exp_2024 net_association net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz clients clients_ssa clients_ssa_commandes"
 
 foreach var of local wins_vars {
-    replace `var' = . if `var' == 999  // don't know transformed to missing values
-    replace `var' = . if `var' == 888 
-    replace `var' = . if `var' == 777 
-    replace `var' = . if `var' == 666 
-    replace `var' = . if `var' == -999 // added - since we transformed profit into negative in endline
-    replace `var' = . if `var' == -888 
-    replace `var' = . if `var' == -777 
-    replace `var' = . if `var' == -666 
-    replace `var' = . if `var' == 1234
-    winsor2 `var', suffix(_w99) cuts(0 99)  // winsorize
-    winsor2 `var', suffix(_w95) cuts(0 95)  // winsorize
+		gen `var'_w99 = .
+		gen `var'_w95 = .
 }
+
+forvalues s = 1(1)3 {
+	foreach var of local wins_vars {
+		replace `var' = . if `var' == 999  // don't know transformed to missing values
+		replace `var' = . if `var' == 888 
+		replace `var' = . if `var' == 777 
+		replace `var' = . if `var' == 666 
+		replace `var' = . if `var' == -999 // added - since we transformed profit into negative in endline
+		replace `var' = . if `var' == -888 
+		replace `var' = . if `var' == -777 
+		replace `var' = . if `var' == -666 
+		replace `var' = . if `var' == 1234
+
+		winsor2 `var' if surveyround == `s', suffix(_`s'w99) cuts(1 99)  // winsorize
+		replace `var'_w99 = `var'_`s'w99 if surveyround ==  `s'
+		
+		winsor2 `var' if surveyround == `s', suffix(_`s'w95) cuts(5 95)  // winsorize
+		replace `var'_w95 = `var'_`s'w95 if surveyround ==  `s'
+					}
+								}
+
 
 		* profit
 winsor2 profit, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
@@ -908,7 +920,11 @@ rename clients_ssa_commandes_w99 orderssa_w99
 rename ihs_localsales2024_w99_k5 ihs_ls2024_w99_k5
 rename ihs_localsales_w99_k5 ihs_ls_w99_k5
 rename ihs_ca_exp_2024_w99_k5 ihs_caexp2024_w99_k5
+
 rename ihs_profit_2024_w99_k5 ihs_profit2024_w99_k5
+rename ihs_profit_2024_w99_k4 ihs_profit2024_w99_k4
+rename ihs_profit_2024_w99_k3 ihs_profit2024_w99_k3
+rename ihs_profit_2024_w99_k2 ihs_profit2024_w99_k2
 rename ihs_profit_2024_w99_k1 ihs_profit2024_w99_k1
 
 
@@ -922,12 +938,12 @@ rename ihs_ca_exp_2024_w99_k4 ihs_caexp2024_w99_k4
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_association_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99"
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
 local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 marginal_exp_2023 marginal_exp_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
-local business_performance "bpi bpi_2024 ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos ihs_profit_w99_k1 ihs_profit_w99_k2 ihs_profit_w99_k3 ihs_profit_w99_k4 profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 localsales_w99 localsales2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_w99_k5 ihs_ca_2024_w99_k5 ihs_ls_w99_k5 ihs_ls2024_w99_k5 ihs_ca_exp_w99_k5 ihs_caexp2024_w99_k5 ihs_costs_w99_k5 ihs_costs_2024_w99_k5 ihs_profit_w99_k5 ihs_profit2024_w99_k5 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_caexp2024_w99_k4 ihs_ca_exp_w99_k4 ihs_profit2024_w99_k1"
+local business_performance "bpi bpi_2024 ihs_sales_w99_k1 ihs_sales_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ihs_sales_w99_k2 ihs_sales_w99_k3 ihs_sales_w99_k5 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 localsales_w99 localsales2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_w99_k5 ihs_ca_2024_w99_k5 ihs_ls_w99_k5 ihs_ls2024_w99_k5 ihs_ca_exp_w99_k5 ihs_caexp2024_w99_k5 ihs_costs_w99_k5 ihs_costs_2024_w99_k5 ihs_profit_w99_k5 ihs_profit2024_w99_k5 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_caexp2024_w99_k4 ihs_ca_exp_w99_k4 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 ihs_profit2024_w99_k4 ihs_profit_w99_k4 profit_2023_category profit_2024_category"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance'
 
 	* gen dummy + replace missings with zero at bl

@@ -16,6 +16,7 @@
 * 	Part 0: 	set the stage		  
 ***********************************************************************
 {
+{
 use "${master_final}/consortium_final", clear
 
 /*	* export dta file for Michael Anderson
@@ -110,7 +111,7 @@ program qvalues
 	end  
 
 }
-
+}
 ***********************************************************************
 * 	PART 1: survey attrition 		
 ***********************************************************************
@@ -366,7 +367,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 *		tokenize `varlist'
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1   // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Network size & cooperation} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
@@ -381,7 +382,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 				
 			* Bottom panel: ATT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2  // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2   // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -404,22 +405,40 @@ coefplot ///
 	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
 	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
 	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)), ///
+	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
+	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Association membership (ITT)"' `1'2 = `"Association membership (TOT)"' `2'1 = `"entrepreneurship discussions (ITT)"' `2'2 = `"entrepreneurship discussions (TOT)"' `3'1 = `"Male entrepreneurship discussions (ITT)"' `3'2 = `"Male entrepreneurship discussions (TOT)"' `4'1 = `"Female entrepreneurship discussions (ITT)"' `4'2 = `"Female entrepreneurship discussions (TOT)"' `5'1 = `"Female entrepreneurs met at activities (ITT)"' `5'2 = `"Female entrepreneurs met at activities (TOT)"' `6'1 = `"Positive cooperation (ITT)"' `6'2 = `"Positive cooperation (TOT)"' `7'1 = `"Negative cooperation (ITT)"' `7'2 = `"Negative cooperation (TOT)"') ///
+		eqrename(`1'1 = `"Association membership wins. 99th (ITT)"' `1'2 = `"Association membership wins. 99th (TOT)"' `2'1 = `"Entrepreneurship discussions wins. 99th (ITT)"' `2'2 = `"Entrepreneurship discussions wins. 99th (TOT)"' `3'1 = `"Male entrepreneurship discussions wins. 99th (ITT)"' `3'2 = `"Male entrepreneurship discussions wins. 99th (TOT)"' `4'1 = `"Female entrepreneurship discussions wins. 99th (ITT)"' `4'2 = `"Female entrepreneurship discussions wins. 99th (TOT)"' `5'1 = `"Family or friends entrepreneurship discussions wins. 99th (ITT)"' `5'2 = `"Family or friends entrepreneurship discussions wins. 99th (TOT)"' `6'1 = `"Female family or friends entrepreneurship discussions wins. 99th (ITT)"' `6'2 = `"Female family or friends entrepreneurship discussions wins. 99th (TOT)"' `7'1 = `"Male family or friends entrepreneurship discussions wins. 99th (ITT)"' `7'2 = `"Male family or friends entrepreneurship discussions wins. 99th (TOT)"' `8'1 = `"Female entrepreneurs met at activities wins. 99th (ITT)"' `8'2 = `"Female entrepreneurs met at activities wins. 99th (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
 
+
+						* coefplot
+coefplot ///
+	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
+	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`9'1 = `"Positive cooperation (ITT)"' `9'2 = `"Positive cooperation (TOT)"' `10'1 = `"Negative cooperation (ITT)"' `10'2 = `"Negative cooperation (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		name(el_`generate'coop_cfplot, replace)
+	
+gr export el_`generate'coop_cfplot.png, replace
+
+
 end
 
 	* apply program to business performance outcomes
-rct_regression_network net_association net_size3 net_size3_m net_gender3 net_gender3_giz net_coop_pos net_coop_neg, gen(netnumb)
+rct_regression_network net_association_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_coop_pos net_coop_neg, gen(netnumb)
 
 }
 
@@ -1699,7 +1718,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* Top panel: ITT
 		local regressions `1'1 `2'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Export costs} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Export costs & benefits perception} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2024,7 +2043,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial empowerment: Efficacy} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Exporting table} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2063,7 +2082,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Exports (ITT)"' `1'2 = `"Exports (TOT)"' `2'1 = `"Exports via intermediate (ITT)"' `2'2 = `"Exports via intermediate  (TOT)"' `3'1 = `"Does not export (ITT)"' `3'2 = `"Does not export (TOT)"'  `4'1 = `"Extensive margin export 2023 (ITT)"' `4'2 = `"Extensive margin export 2023 "' `5'1 = `"Extensive margin export 2024 (ITT)"' `5'2 = `"Extensive margin export 2024"') ///
+		eqrename(`1'1 = `"Exports (ITT)"' `1'2 = `"Exports (TOT)"' `2'1 = `"Exports via intermediate (ITT)"' `2'2 = `"Exports via intermediate  (TOT)"' `3'1 = `"Does not export (ITT)"' `3'2 = `"Does not export (TOT)"'  `4'1 = `"Extensive margin export 2023 (ITT)"' `4'2 = `"Extensive margin export 2023 (TOT)"' `5'1 = `"Extensive margin export 2024 (ITT)"' `5'2 = `"Extensive margin export 2024 (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -2278,7 +2297,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Number of export countries wins. 99 (ITT)"' `1'2 = `"Number of export countries wins. 99 (TOT)"' `2'1 = `"Clients abroad wins. 99 (ITT)"' `2'2 = `"Clients abroad wins. 99 (TOT)"' `3'1 = `"Clients abroad SSA wins. 99 (ITT)"' `3'2 = `"Clients abroad SSA wins. 99 (TOT)"' `4'1 = `"Orders SSA  wins. 99 (ITT)"' `4'2 = `"Orders SSA  wins. 99 (TOT)"') ///
+		eqrename(`1'1 = `"Number of export countries (ITT)"' `1'2 = `"Number of export countries (TOT)"' `2'1 = `"Clients abroad (ITT)"' `2'2 = `"Clients abroad (TOT)"' `3'1 = `"Clients abroad SSA (ITT)"' `3'2 = `"Clients abroad SSA (TOT)"' `4'1 = `"Orders SSA (ITT)"' `4'2 = `"Orders SSA (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -2455,7 +2474,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions wins 99th.} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2567,7 +2586,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions ihs wins. 99th k^} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2625,7 +2644,7 @@ rct_regression_fink5 ihs_ca_w99_k5 ihs_ca_2024_w99_k5 ihs_ls_w99_k5 ihs_ls2024_w
 
 }
 
-**************** financial k^5 ****************
+**************** export k^s ****************
 {
 capture program drop rct_regression_finexpks // enables re-running
 program rct_regression_finexpks
@@ -2679,7 +2698,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1   // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions: export sensitivity to k} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2734,10 +2753,11 @@ end
 rct_regression_finexpks ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_caexp2024_w99_k4 ihs_ca_exp_w99_k4, gen(finexpks)
 
 }
-**************** financial wins 99th ****************
+
+**************** profit k^s ****************
 {
-capture program drop rct_regression_fin // enables re-running
-program rct_regression_fin
+capture program drop rct_regression_finprtks // enables re-running
+program rct_regression_finprtks
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
@@ -2786,9 +2806,9 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1   // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions: Profit Sensitivity to k} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
@@ -2801,7 +2821,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2  // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -2825,14 +2845,12 @@ coefplot ///
 	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
 	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
 	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
+	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Sales 2023 wins. 99th (ITT)"' `1'2 = `"Sales 2023 wins. 99th (TOT)"' `2'1 = `"Sales 2024 wins. 99th (ITT)"' `2'2 = `"Sales 2024 wins. 99th (TOT)"' `3'1 = `"Domestic Sales 2023 wins. 99th (ITT)"' `3'2 = `"Domestic Sales 2023 wins. 99th (TOT)"'  `4'1 = `"Domestic Sales 2024 wins. 99th (ITT)"' `4'2 = `"Domestic Sales 2024 wins. 99th (TOT) "' `5'1 = `"Export turnover 2023 wins. 99th (ITT)"' `5'2 = `"Export turnover 2023 wins. 99th (TOT)"' `6'1 = `"Export turnover 2024 wins. 99th (ITT)"' `6'2 = `"Export turnover 2024 wins. 99th (TOT)"' `7'1 = `"Costs 2023 wins. 99th (ITT)"' `7'2 = `"Costs 2023 wins. 99th (TOT)"' `8'1 = `"Costs 2024 wins. 99th (ITT)"' `8'2 = `"Costs 2024 wins. 99th (TOT)"'  `9'1 = `"Profit 2023 wins. 99th (ITT)"' `9'2 = `"Profit 2023 wins. 99th (TOT) "' `10'1 = `"Profit 2024 wins. 99th (ITT)"' `10'2 = `"Profit 2024 wins. 99th (TOT)"') ///
+		eqrename(`1'1 = `"Profit k^1 2024 (ITT)"' `1'2 = `"Profit k^1 2024 (TOT)"' `2'1 = `"Profit k^1 2023 (ITT)"' `2'2 = `"Profit k^1 2023 (TOT)"' `3'1 = `"Profit k^2 2024 (ITT)"' `3'2 = `"Profit k^2 2024 (TOT)"'  `4'1 = `"Profit k^2 2023 (ITT)"' `4'2 = `"Profit k^2 2023 (TOT) "' `5'1 = `"Profit k^3 2024 (ITT)"' `5'2 = `"Profit k^3 2024 (TOT) "' `6'1 = `"Profit k^3 2023 (ITT)"' `6'2 = `"Profit k^3 2023 (TOT)"' `7'1 = `"Profit k^4 2024 (ITT)"' `7'2 = `"Profit k^4 2024 (TOT)"' `8'1 = `"Profit k^4 2023 (ITT)"' `8'2 = `"Profit k^4 2023 (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -2842,6 +2860,111 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_fin ca_w99 ca_2024_w99 localsales_w99 localsales2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_w99 profit_2024_w99, gen(fin)
+rct_regression_finprtks ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 ihs_profit2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k5 ihs_profit_w99_k5, gen(finprtks)
+
+}
+
+**************** profitable? ****************
+
+{
+capture program drop rct_regression_pft // enables re-running
+program rct_regression_pft
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+		
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+		}
+		
+* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
+		* tokenize to use all variables at the same time
+tokenize `varlist'
+
+/*		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
+	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(id_plateforme)) ///
+	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(id_plateforme)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+		
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace	
+*/		
+		
+		* Put all regressions into one table
+			* Top panel: ITT
+		local regressions `1'1 `2'1 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial results: profitable} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				mlabels(, depvars) /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'2 `2'2 // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", append ///
+				fragment ///	
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				
+			* coefplot
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Profitable 2023 (ITT)"' `1'2 = `"Profitable 2023 (TOT)"' `2'1 = `"Profitable 2024 (ITT)"' `2'2 = `"Profitable 2024 (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		name(el_`generate'_cfplot, replace)
+	
+gr export el_`generate'_cfplot.png, replace
+
+end
+
+	* apply program to export outcomes
+rct_regression_pft profit_2023_category profit_2024_category, gen(pft)
 
 }
