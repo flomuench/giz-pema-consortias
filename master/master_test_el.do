@@ -890,17 +890,25 @@ replace questions_needing_checks = " " if id_plateforme == 1243
 ***********************************************************************
 * 	PART 9:  Second test sheet
 ***********************************************************************
+*net_size3 too big
+replace needs_check = 1 if net_size3 >= 30 & surveyround == 3 & net_size3 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_size3 >= 30 & surveyround == 3 & net_size3 != .
+
+*net_size4 too big
+replace needs_check = 1 if net_size4 >= 30 & surveyround == 3 & net_size4 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_size4 >= 30 & surveyround == 3 & net_size4 != .
+
 *net_gender3 too big
-replace needs_check = 1 if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
-replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
+replace needs_check = 1 if net_gender3 >= 30 & surveyround == 3 & net_gender3 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 >= 30 & surveyround == 3 & net_gender3 != .
 
 *net_gender4 too big
-replace needs_check = 1 if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
-replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
+replace needs_check = 1 if net_gender4 >= 30 & surveyround == 3 & net_gender4 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 >= 30 & surveyround == 3 & net_gender4 != .
 
 *net_gender3_giz too big
-replace needs_check = 1 if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
-replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
+replace needs_check = 1 if net_gender3_giz >= 30 & surveyround == 3 & net_gender3_giz != .
+replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz >= 30 & surveyround == 3 & net_gender3_giz != .
 
 *profit/ca ratio > 1
 	*2023

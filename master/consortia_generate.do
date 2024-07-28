@@ -660,8 +660,8 @@ gen profit_pct = .
 local wins_vars "capital ca ca_exp sales exp_inv employes car_empl1 car_empl2 exp_pays inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 ca_exp_2024 net_association net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz clients clients_ssa clients_ssa_commandes"
 
 foreach var of local wins_vars {
-		gen `var'_w99 = .
-		gen `var'_w95 = .
+		gen `var'_w99 = `var'
+		gen `var'_w95 = `var'
 }
 
 forvalues s = 1(1)3 {
@@ -675,22 +675,32 @@ forvalues s = 1(1)3 {
 		replace `var' = . if `var' == -777 
 		replace `var' = . if `var' == -666 
 		replace `var' = . if `var' == 1234
-
-		winsor2 `var' if surveyround == `s', suffix(_`s'w99) cuts(1 99)  // winsorize
-		replace `var'_w99 = `var'_`s'w99 if surveyround ==  `s'
 		
-		winsor2 `var' if surveyround == `s', suffix(_`s'w95) cuts(5 95)  // winsorize
-		replace `var'_w95 = `var'_`s'w95 if surveyround ==  `s'
+		sum `var', d
+		replace `var'_w99 = `r(p99)' if `var' > `r(p99)' & surveyround ==  `s' & `var' != .
+		*winsor `var' if surveyround == `s', suffix(_`s'w99) cuts(0 99)  // winsorize
+		*replace `var'_w99 = `var'_`s'w99 if surveyround ==  `s'
+		
+		sum `var', d
+		replace `var'_w95 = `r(p95)' if `var' > `r(p95)' & surveyround ==  `s' & `var' != .
+		*winsor `var' if surveyround == `s', suffix(_`s'w95) cuts(0 95)  // winsorize
+		*replace `var'_w95 = `var'_`s'w95 if surveyround ==  `s'
 					}
 								}
 
+gen profit_w99 = .
+gen profit_w95 = .
 
 		* profit
-winsor2 profit, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
-winsor2 profit, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
-
-winsor2 profit_2024, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
-winsor2 profit_2024, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
+forvalues s = 1(1)3 {
+	winsor2 profit if surveyround == `s', suffix(_`s'w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
+	replace profit_w99 = profit_`s'w99 if surveyround == `s'
+	
+	winsor2 profit if surveyround == `s', suffix(_`s'w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
+	replace profit_w95 = profit_`s'w95 if surveyround == `s'
+}
+	winsor2 profit_2024, suffix(_w99) cuts(1 99) // winsorize also at lowest percentile to reduce influence of negative outliers
+	winsor2 profit_2024, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
 
 ************ generate costs & local sales ************
 
@@ -938,7 +948,7 @@ rename ihs_ca_exp_2024_w99_k4 ihs_caexp2024_w99_k4
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_association_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_association_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_association_w95 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95"
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
 local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"

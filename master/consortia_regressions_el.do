@@ -367,7 +367,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 *		tokenize `varlist'
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Network size & cooperation} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
@@ -382,7 +382,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 				
 			* Bottom panel: ATT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2   // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -405,13 +405,12 @@ coefplot ///
 	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
 	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
 	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)), ///
+	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Association membership wins. 99th (ITT)"' `1'2 = `"Association membership wins. 99th (TOT)"' `2'1 = `"Entrepreneurship discussions wins. 99th (ITT)"' `2'2 = `"Entrepreneurship discussions wins. 99th (TOT)"' `3'1 = `"Male entrepreneurship discussions wins. 99th (ITT)"' `3'2 = `"Male entrepreneurship discussions wins. 99th (TOT)"' `4'1 = `"Female entrepreneurship discussions wins. 99th (ITT)"' `4'2 = `"Female entrepreneurship discussions wins. 99th (TOT)"' `5'1 = `"Family or friends entrepreneurship discussions wins. 99th (ITT)"' `5'2 = `"Family or friends entrepreneurship discussions wins. 99th (TOT)"' `6'1 = `"Female family or friends entrepreneurship discussions wins. 99th (ITT)"' `6'2 = `"Female family or friends entrepreneurship discussions wins. 99th (TOT)"' `7'1 = `"Male family or friends entrepreneurship discussions wins. 99th (ITT)"' `7'2 = `"Male family or friends entrepreneurship discussions wins. 99th (TOT)"' `8'1 = `"Female entrepreneurs met at activities wins. 99th (ITT)"' `8'2 = `"Female entrepreneurs met at activities wins. 99th (TOT)"') ///
+		eqrename(`1'1 = `"Association membership wins. 95th (ITT)"' `1'2 = `"Association membership wins. 95th (TOT)"' `2'1 = `"Entrepreneurship discussions wins. 95th (ITT)"' `2'2 = `"Entrepreneurship discussions wins. 95th (TOT)"' `3'1 = `"Male entrepreneurship discussions wins. 95th (ITT)"' `3'2 = `"Male entrepreneurship discussions wins. 95th (TOT)"' `4'1 = `"Female entrepreneurship discussions wins. 95th (ITT)"' `4'2 = `"Female entrepreneurship discussions wins. 95th (TOT)"' `5'1 = `"Family or friends entrepreneurship discussions wins. 95th (ITT)"' `5'2 = `"Family or friends entrepreneurship discussions wins. 95th (TOT)"' `6'1 = `"Female family or friends entrepreneurship discussions wins. 95th (ITT)"' `6'2 = `"Female family or friends entrepreneurship discussions wins. 95th (TOT)"' `7'1 = `"Male family or friends entrepreneurship discussions wins. 95th (ITT)"' `7'2 = `"Male family or friends entrepreneurship discussions wins. 95th (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -421,13 +420,13 @@ gr export el_`generate'_cfplot.png, replace
 
 						* coefplot
 coefplot ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
+	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
+	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`9'1 = `"Positive cooperation (ITT)"' `9'2 = `"Positive cooperation (TOT)"' `10'1 = `"Negative cooperation (ITT)"' `10'2 = `"Negative cooperation (TOT)"') ///
+		eqrename(`8'1 = `"Positive cooperation (ITT)"' `8'2 = `"Positive cooperation (TOT)"' `9'1 = `"Negative cooperation (ITT)"' `9'2 = `"Negative cooperation (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'coop_cfplot, replace)
@@ -438,7 +437,7 @@ gr export el_`generate'coop_cfplot.png, replace
 end
 
 	* apply program to business performance outcomes
-rct_regression_network net_association_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_coop_pos net_coop_neg, gen(netnumb)
+rct_regression_network net_association_w95 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_coop_pos net_coop_neg, gen(netnumb)
 
 }
 
@@ -1218,7 +1217,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Indicatros tracking frequency (ITT)"' `1'2 = `"Indicatros tracking frequency (TOT)"') ///
+		eqrename(`1'1 = `"Indicators tracking frequency (ITT)"' `1'2 = `"Indicators tracking frequency (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
