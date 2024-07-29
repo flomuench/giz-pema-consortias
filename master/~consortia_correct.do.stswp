@@ -529,6 +529,8 @@ replace product_hom1 ="textile" if ustrregexm(produit1,"trousses cuir/ similicui
 
 }
 
+
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

@@ -62,8 +62,8 @@ set scheme plotplain
 		global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
-	else if "`c(username)'" == "fmuench" {
-		global person = "C:/Users/fmuench/Documents"
+	else if "`c(username)'" == "MUNCHFA" {
+		global person = "G:/My Drive"
 	}
 
 	else {
