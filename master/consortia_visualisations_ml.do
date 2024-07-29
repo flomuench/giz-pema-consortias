@@ -2,7 +2,7 @@
 * 			Descriptive Statistics in master file *					  
 ***********************************************************************
 *																	  
-*	PURPOSE: Understand the structure of the data from the baseline					  
+*	PURPOSE: Understand the structure of the data from the midline					  
 *																	  
 *	OUTLINE: 	PART 1: Paths
 *				PART 2: Midline statistics	  
@@ -136,7 +136,7 @@ putpdf pagebreak
 putpdf paragraph, font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
 	*Innovated or not ?
-graph bar (mean) innovated, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) innovated if surveyround ==3, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	ylabel(0(0.25)1, nogrid) 
 	gr export ml_innovated_share.png, replace
 	putpdf paragraph, halign(center) 
