@@ -940,6 +940,32 @@ local id 1001 1007 1035 1036 1037 1038 1041 1050 1054 1055 1057 1098 1108 1130 1
 foreach var of local id {
 	replace needs_check = 0 if id_plateforme ==  `var'
 }
+
+replace needs_check = 0 if id_plateforme == 1001
+replace needs_check = 0 if id_plateforme == 1007
+replace needs_check = 0 if id_plateforme == 1035
+replace needs_check = 0 if id_plateforme == 1036
+replace needs_check = 0 if id_plateforme == 1037
+replace needs_check = 0 if id_plateforme == 1038
+replace needs_check = 0 if id_plateforme == 1041
+replace needs_check = 0 if id_plateforme == 1050
+replace needs_check = 0 if id_plateforme == 1054
+replace needs_check = 0 if id_plateforme == 1055
+replace needs_check = 0 if id_plateforme == 1057
+replace needs_check = 0 if id_plateforme == 1098
+replace needs_check = 0 if id_plateforme == 1108
+replace needs_check = 0 if id_plateforme == 1130
+replace needs_check = 0 if id_plateforme == 1133
+replace needs_check = 0 if id_plateforme == 1134
+replace needs_check = 0 if id_plateforme == 1153
+replace needs_check = 0 if id_plateforme == 1170 
+replace needs_check = 0 if id_plateforme == 1190 
+replace needs_check = 0 if id_plateforme == 1192 
+replace needs_check = 0 if id_plateforme == 1196
+replace needs_check = 0 if id_plateforme == 1245 
+replace needs_check = 0 if id_plateforme == 1248
+replace needs_check = 0 if id_plateforme == 1215
+
 ***********************************************************************
 * 	PART 11:  Export an excel sheet with needs_check variables  			
 ***********************************************************************

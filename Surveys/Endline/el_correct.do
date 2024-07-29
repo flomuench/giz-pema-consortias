@@ -370,7 +370,22 @@ replace inno_exampl_produit1 = " Developpement des nouveaux produits tel que: pa
 replace inno_exampl_produit1 =" Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits" if id_plateforme ==1231 
 replace inno_exampl_produit1 =  "frange des rideaux parfumées" if id_plateforme ==1234
 
+*Correction V2
+replace inno_exampl_produit1 =  "Packaging EcoFriendly en bois et investissement dans la recherche de piéces Eco-Friendly pour innover avec de nouveux materiaux de recyclage " if id_plateforme ==1055
+replace inno_exampl_produit1 =  "Pas d'innovation " if id_plateforme ==1098
 
+
+replace inno_exampl_produit2 = "Le Marketing Digital ( Elles ont mis en place un responsable Marketing qui travaille sur les reseaux sociaux , les sites web et sponsoring)" if id_plateforme ==1153 
+
+replace inno_exampl_produit1 =  "Creation de nouvelles solutions digitales destiné au milieu universitaire, recrutement et RH, digitalisation des methodes de paiements" if id_plateforme ==1170
+replace inno_exampl_produit2 =  "Des nouveaux partenariats à Kenya et Cote d'ivoire" if id_plateforme ==1170
+
+replace inno_exampl_produit1 =  "Creation de nouveaux produits avec la meme matiere premiere: themara" if id_plateforme ==1190 
+
+replace inno_mot_other = "des boîtes de développement et de recherche pour les entreprises qui fournissent des idées de changement" if id_plateforme ==1215 
+
+
+replace inno_exampl_produit2 =  "Creation d'une machine qui fait tout le process de production de l'huile d'olive" if id_plateforme ==1248
 
 
 
@@ -458,7 +473,15 @@ replace net_services_confiance = 1 if id_plateforme ==1224
 replace net_services_autre = 1 if id_plateforme ==1224
 replace net_services_other = "Collaboration avec d'autres entreprises" if id_plateforme ==1224
 
-
+*Correction V2
+replace net_services_pratiques = 1 if id_plateforme ==1054
+replace net_services_produits= 1 if id_plateforme ==1054
+replace net_services_mark = 0 if id_plateforme ==1054
+replace net_services_sup= 1 if id_plateforme ==1054
+replace net_services_contract= 1  if id_plateforme ==1054
+replace net_services_confiance = 1 if id_plateforme ==1054
+replace net_services_autre = 1 if id_plateforme ==1054
+replace net_services_other = "recherche de financement et controle management" if id_plateforme ==1054
 
 
 
@@ -467,23 +490,30 @@ replace net_services_other = "Collaboration avec d'autres entreprises" if id_pla
 
 replace net_size4 = 0 if id_plateforme ==1000
 
-replace net_size4 = 10 if id_plateforme ==1036
-replace net_size3 = 30 if id_plateforme ==1036
-
 replace net_size4 = 10 if id_plateforme ==1108
 replace net_size3 = 12 if id_plateforme ==1108 
 
+*correction V2
+replace net_size3 = 10 if  id_plateforme ==1036 
+replace net_gender3= 8 if  id_plateforme ==1036
+replace net_size4 = 5 if  id_plateforme ==1036 
+replace net_gender4 = 3 if  id_plateforme ==1036
 
 
+replace net_size3 = 12 if  id_plateforme ==1108
+replace net_gender3= 10 if  id_plateforme ==1108
+replace net_size4 = 10 if  id_plateforme ==1108
+replace net_gender4 = 5 if  id_plateforme ==1108
+
+replace net_association = 1 if id_plateforme==1050
+
+replace net_association = 1 if id_plateforme==1153 
 
 *************************************************************************
 *Correct export part 
 *************************************************************************
 
 replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme ==1054
-
-
-
 
 *************************************************************************
 *Correct financial part
@@ -563,6 +593,44 @@ replace ca_2024 = 3000 if id_plateforme == 1186
  
 *replace ca_2021 = 50000 if id_plateforme == 1203 
 
+*Correction V2
+
+replace employes = 5 if id_plateforme == 1001 
+
+* 1035 // L'entreprise n'a pas fait de bénéfices car elle n'a pas produit en 2024
+replace profit_2024 = 0 if id_plateforme ==1035
+replace ca_2024 = 5000 if id_plateforme ==1035
+
+replace profit_2024 = 5000 if id_plateforme ==1007
+replace profit_2024 = 4000 if id_plateforme ==1036
+replace ca_2024 = 25000 if id_plateforme ==1036 
+
+
+* 1037 // l'entreprise a arrete son activité 
+
+replace ca_2024 = 0 if id_plateforme ==1037 
+replace profit_2024 = 0 if id_plateforme ==1037
+
+replace ca = 10000 if id_plateforme ==1054
+replace profit = 2000 if id_plateforme ==1054
+
+
+replace ca = 120000 if id_plateforme ==1055
+replace profit = 30000 if id_plateforme ==1055 
+replace ca_2024 = 60000 if id_plateforme ==1055
+replace profit_2024 = -12000 if id_plateforme ==1055 
+
+* 1130 // ( probleme financier khater khedma met3na koulha bel deplacement) 
+replace ca_2024 = 500 if id_plateforme ==1130
+
+replace profit = 1000 if id_plateforme ==1133
+
+*1190 // la dame est malade elle ne peut pas repondre et elle ne sait pas pour CA 2024 d'apres l'ecoute , on peut mettre le min intervalle 
+
+replace ca = 8000 if id_plateforme ==1190
+replace ca_2024 = 5000 if id_plateforme ==1190
+
+replace profit = 3000 if id_plateforme ==1192
 *************************************************************************
 * Correct Ben and Int 
 ************************************************************************
@@ -570,10 +638,6 @@ replace ca_2024 = 3000 if id_plateforme == 1186
 replace int_ben2 ="les techniques de communication et de ventes" if id_plateforme ==1068 
 
 replace int_ben2 ="les membres du consortium sont complementaires" if id_plateforme == 1135 
-
-
-
-
 
 ***********************************************************************
 * 	PART 5:  Convert data types to the appropriate format
