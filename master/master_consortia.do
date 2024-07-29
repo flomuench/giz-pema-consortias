@@ -251,7 +251,9 @@ if (0) do "${master_github}/consortia_test_el.do"
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
 ----------------------------------------------------------------------*/
-if (0) do "${master_github}/consortia_visualisations.do"
+if (0) do "${master_github}/consortia_visualisations_bl.do"
+if (0) do "${master_github}/consortia_visualisations_ml.do"
+if (0) do "${master_github}/consortia_visualisations_el.do"
 /* --------------------------------------------------------------------
 	PART 4.2: Regressions midline
 ----------------------------------------------------------------------*/

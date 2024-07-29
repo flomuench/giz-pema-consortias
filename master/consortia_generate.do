@@ -155,7 +155,7 @@ replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répond
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
-local id 989 994 995 997 1004 1025 1031 1067 1074 1090 1094 1110 1124 1127 1136 1137 1154 1161 1162 1175 1202 1214 1219 1235 1241
+local id 989 994 997 995 1004 1025 1031 1056 1067 1074 1090 1094 1110 1123 1124 1127 1136 1137 1154 1161 1162 1166 1175
 foreach var of local id {
 	replace refus = 1 if surveyround == 3 & id_plateforme == `var'
 }
@@ -166,11 +166,13 @@ foreach var of local id {
 ***********************************************************************		
 gen closed = 0 
 lab var closed "Companies that are no longer operating"
-
+replace closed = 1 if id_plateforme == 989
 replace closed = 1 if id_plateforme == 1083
 replace closed = 1 if id_plateforme == 1059 
 replace closed = 1 if id_plateforme == 1090
 replace closed = 1 if id_plateforme == 1044
+replace closed = 1 if id_plateforme == 1127
+replace closed = 1 if id_plateforme == 1154
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
@@ -229,18 +231,10 @@ lab var exp_invested "Export investment > 0"
 
 
 ***********************************************************************
-*	PART 6.1: Innovation
+*	PART 6.1: Categorize the different types of innovation
 ***********************************************************************	
-*** Innovation (continous count)
-egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit), missing
-bys id_plateforme (surveyround): gen innovated = (innovations > 0)
-	replace innovated = . if innovations == .
-*br id_plateforme surveyround innovations innovated
-lab var innovations "Total innovations"
-lab var innovated "Innovated"
-
 *** Categorisation
-{	
+
 gen inno_product_imp = 0
 lab var inno_product_imp "Improving the existing product"
 gen inno_product_new = 0
@@ -472,6 +466,16 @@ replace inno_org_correct =1 if id_plateforme == 1244 /*suivi des chantiers verts
 }
 
 ***********************************************************************
+*	PART 6.2: Innovation
+***********************************************************************	
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit  inno_product_new proc_prod_correct proc_mark_correct inno_org_correct inno_product_new), missing
+bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+	replace innovated = . if innovations == .
+*br id_plateforme surveyround innovations innovated
+lab var innovations "Total innovations"
+lab var innovated "Innovated"
+
+***********************************************************************
 *	PART 7: network
 ***********************************************************************	
 {
@@ -509,7 +513,7 @@ lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes ca_tun profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new
 ds `allvars', has(type string)
 
 	* Create temporary variable
@@ -555,7 +559,8 @@ egen epp = rowmean(temp_exportedz temp_export_1z temp_export_2z temp_exp_paysz t
 
 			*Innovation practices index
 egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) 
-			
+egen ipi_correct = rowmean (temp_proc_prod_correctz temp_proc_mark_correctz temp_inno_org_correctz temp_inno_product_impz temp_inno_product_newz)		
+	
 			* business performance
 egen bpi = rowmean(temp_employesz temp_ca_tunz temp_profitz)
 egen bpi_2024 = rowmean(temp_employesz temp_ca_2024z temp_profit_2024z)
@@ -589,6 +594,7 @@ label var female_initiative "Initiaitve"
 label var female_loc "Locus of control"
 label var genderi "Entrepreneurial empowerment"
 label var ipi "Innovation practices index -Z Score"
+label var ipi_correct "Corrected Innovation practices index - Z-score"
 label var bpi "Business performance index- Z-score"
 label var bpi_2024 "Business performance index- Z-score in 2024"
 
@@ -605,6 +611,7 @@ sum temp_exprep_norme temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douan
 sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_efi_man temp_car_efi_motiv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp temp_car_loc_env temp_car_loc_exp temp_car_loc_soin
 sum temp_exprep_norme temp_exp_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
 sum temp_inno_improve temp_inno_new temp_inno_proc_met temp_inno_proc_log temp_inno_proc_prix temp_inno_proc_sup temp_inno_proc_autres
+sum temp_proc_prod_correct temp_proc_mark_correct temp_inno_org_correct temp_inno_product_imp temp_inno_product_new		
 	
 	* create total points per index dimension
 			* export readiness index (eri) 
@@ -621,7 +628,8 @@ egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mar
 			
 			*Innovation index
 egen inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres), missing 
-
+egen correct_inno_points = rowtotal (proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new)
+			
 			* female empowerment index (genderi)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
 				* efficacy "the ability to produce a desired or intended result."
@@ -642,6 +650,7 @@ label var female_initiative_points "Women's entrepreneurial initiaitve points"
 label var female_loc_points "Women's locus of control points"
 label var genderi_points "Gender index points"
 label var inno_points "Innovation practices index points"
+label var correct_inno_points "Corrected innovation practices index points"
 
 	* drop temporary vars		  										  
 drop temp_*

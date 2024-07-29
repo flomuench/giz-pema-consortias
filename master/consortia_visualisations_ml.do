@@ -2,14 +2,14 @@
 * 			Descriptive Statistics in master file *					  
 ***********************************************************************
 *																	  
-*	PURPOSE: Understand the structure of the data from the baseline					  
+*	PURPOSE: Understand the structure of the data from the midline					  
 *																	  
 *	OUTLINE: 	PART 1: Paths
 *				PART 2: Midline statistics	  
 
 *	Authors:  	Florian Münch, Kaïs Jomaa, Ayoub Chamakhi & Amina Bousnina						    
 *	ID variable: id_platforme		  					  
-*	Requires:  	 consortium_final.dta
+*	Requires:  	 ecommerce_data_final.dta
 
 										  
 ***********************************************************************
@@ -26,12 +26,9 @@ cd "${master_output}/figures"
 
 set scheme s1color
 
-
-
 ***********************************************************************
-* 	PART 3: Midline statistics
+* 	PART 2: Midline statistics
 ***********************************************************************
-{
 * create word document
 set scheme s1color
 set graphics on
@@ -139,7 +136,7 @@ putpdf pagebreak
 putpdf paragraph, font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
 	*Innovated or not ?
-graph bar (mean) innovated, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
+graph bar (mean) innovated if surveyround ==3, over(surveyround, label(labs(small))) over(treatment, label(labs(small))) blabel(total, format(%9.2fc) gap(-0.2)) ///
 	ylabel(0(0.25)1, nogrid) 
 	gr export ml_innovated_share.png, replace
 	putpdf paragraph, halign(center) 
@@ -1333,7 +1330,6 @@ graph bar (mean) exp_kno_ft_co exp_kno_ft_ze ssa_action1 exp_invested if surveyr
 	ylabel(0(0.2)1, nogrid) 
 gr export ml_blog.png, replace
 
-}
 
 ***********************************************************************
 * 	PART 4:  Mdiline Indexes
@@ -1480,3 +1476,4 @@ putpdf pagebreak
 	
 }
 putpdf save "midline_index_statistics", replace
+
