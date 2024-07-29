@@ -890,17 +890,25 @@ replace questions_needing_checks = " " if id_plateforme == 1243
 ***********************************************************************
 * 	PART 9:  Second test sheet
 ***********************************************************************
+*net_size3 too big
+replace needs_check = 1 if net_size3 >= 30 & surveyround == 3 & net_size3 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_size3 >= 30 & surveyround == 3 & net_size3 != .
+
+*net_size4 too big
+replace needs_check = 1 if net_size4 >= 30 & surveyround == 3 & net_size4 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_size4 >= 30 & surveyround == 3 & net_size4 != .
+
 *net_gender3 too big
-replace needs_check = 1 if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
-replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 > 30 & surveyround == 3 & net_gender3 != .
+replace needs_check = 1 if net_gender3 >= 30 & surveyround == 3 & net_gender3 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les autres femmes entrepreneuses est supérieur à 30, veuillez vérifier. / " if net_gender3 >= 30 & surveyround == 3 & net_gender3 != .
 
 *net_gender4 too big
-replace needs_check = 1 if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
-replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 > 30 & surveyround == 3 & net_gender4 != .
+replace needs_check = 1 if net_gender4 >= 30 & surveyround == 3 & net_gender4 != .
+replace questions_needing_checks = questions_needing_checks + "Nombre de discussions d'affaire avec les memebres de la famille femmes est supérieur à 30, veuillez vérifier. / " if net_gender4 >= 30 & surveyround == 3 & net_gender4 != .
 
 *net_gender3_giz too big
-replace needs_check = 1 if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
-replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz > 30 & surveyround == 3 & net_gender3_giz != .
+replace needs_check = 1 if net_gender3_giz >= 30 & surveyround == 3 & net_gender3_giz != .
+replace questions_needing_checks = questions_needing_checks + "Nombre d'entrepreneuses femmes rencontré aux activités GIZ est supérieur à 30, veuillez vérifier. / " if net_gender3_giz >= 30 & surveyround == 3 & net_gender3_giz != .
 
 *profit/ca ratio > 1
 	*2023
@@ -924,8 +932,42 @@ replace questions_needing_checks = questions_needing_checks + "Le nombre d'emplo
 replace needs_check = 1 if id_plateforme == 1108 & surveyround == 3 
 replace questions_needing_checks = "Nous avons corrigé le nombre total d'entrepreneurs (net_size3 et net_size4) sans demander le nombre de femmes de ce dernier. / " if id_plateforme == 1108 & surveyround == 3
 
+
 ***********************************************************************
-* 	PART 9:  Export an excel sheet with needs_check variables  			
+* 	PART 10:  Third test sheet
+***********************************************************************
+local id 1001 1007 1035 1036 1037 1038 1041 1050 1054 1055 1057 1098 1108 1130 1133 1134 1153 1170 1192 1196 1248 1096 1190 1245
+foreach var of local id {
+	replace needs_check = 0 if id_plateforme ==  `var'
+}
+
+replace needs_check = 0 if id_plateforme == 1001
+replace needs_check = 0 if id_plateforme == 1007
+replace needs_check = 0 if id_plateforme == 1035
+replace needs_check = 0 if id_plateforme == 1036
+replace needs_check = 0 if id_plateforme == 1037
+replace needs_check = 0 if id_plateforme == 1038
+replace needs_check = 0 if id_plateforme == 1041
+replace needs_check = 0 if id_plateforme == 1050
+replace needs_check = 0 if id_plateforme == 1054
+replace needs_check = 0 if id_plateforme == 1055
+replace needs_check = 0 if id_plateforme == 1057
+replace needs_check = 0 if id_plateforme == 1098
+replace needs_check = 0 if id_plateforme == 1108
+replace needs_check = 0 if id_plateforme == 1130
+replace needs_check = 0 if id_plateforme == 1133
+replace needs_check = 0 if id_plateforme == 1134
+replace needs_check = 0 if id_plateforme == 1153
+replace needs_check = 0 if id_plateforme == 1170 
+replace needs_check = 0 if id_plateforme == 1190 
+replace needs_check = 0 if id_plateforme == 1192 
+replace needs_check = 0 if id_plateforme == 1196
+replace needs_check = 0 if id_plateforme == 1245 
+replace needs_check = 0 if id_plateforme == 1248
+replace needs_check = 0 if id_plateforme == 1215
+
+***********************************************************************
+* 	PART 11:  Export an excel sheet with needs_check variables  			
 ***********************************************************************
 *re-merge additional contact information to dataset (?)
 /*
@@ -959,13 +1001,13 @@ drop occurence
 				* group variables into lists (locals) to facilitate overview
 local order_vars "id_plateforme surveyround take_up needs_check attest survey_phone treatment commentaires_elamouri questions_needing_checks"
 local accounting_vars "`order_vars' adjusted_bl_empl employes car_empl1 gr_empl2021_2024 adjusted_ca_2021 ca gr_ca2021_2023 adjusted_ca_2021 ca_2024 gr_ca2021_2024 export_3 adjusted_ca_exp_2021 ca_exp gr_ca2021_2023 adjusted_ca_exp_2021 ca_exp_2024 gr_caexp2021_2024 adjusted_profit_2021 profit gr_profit2021_2023 adjusted_profit_2021 profit_2024 gr_profit2021_2024"
-local networking_vars "`accounting_vars' net_size3 net_size4 net_association net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre"
+local networking_vars "`accounting_vars' net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_association net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre"
 local export_vars "`networking_vars' clients exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4"
 local management_vars "`export_vars' man_fin_per_fre man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv"
 local openended_vars "`management_vars' products_other inno_exampl_produit1 inno_exampl_produit2 inno_proc_other inno_mot_other export_other man_sources_other int_ben2 int_other"
 				
 * Export to Excel
 export excel `openended_vars' using "${el_checks}/fiche_correction.xlsx" ///
-   if surveyround == 3 & attest == 1, sheetreplace firstrow(var) datestring("%-td")
+   if surveyround == 3, sheetreplace firstrow(var) datestring("%-td")
 
 restore
