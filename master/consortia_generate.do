@@ -100,7 +100,45 @@ gen status = (take_up_per > 0 & take_up_per < .)
 
 
 * PHASE 2 of the treatment: "consortia export promotion"
-
+replace take_up = 0 if id_plateforme == 991 & surveyround ==3
+replace take_up = 0 if id_plateforme == 994 & surveyround ==3
+replace take_up = 0 if id_plateforme == 996 & surveyround ==3
+replace take_up = 0 if id_plateforme == 998 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1015 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1019 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1022 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1026 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1028 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1035 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1037 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1040 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1045 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1051  & surveyround ==3
+replace take_up = 0 if id_plateforme == 1059 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1061 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1079 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1087 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1089 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1097 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1128 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1136 & surveyround ==3 
+replace take_up = 0 if id_plateforme == 1146 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1150 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1162 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1166 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1169 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1184 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1192 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1194 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1195 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1201 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1214 & surveyround ==3 
+replace take_up = 0 if id_plateforme == 1219 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1231 & surveyround ==3 
+replace take_up = 0 if id_plateforme == 1233 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1241 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1242 & surveyround ==3
+replace take_up = 0 if id_plateforme == 1247 & surveyround ==3
 }
 
 ***********************************************************************
@@ -173,6 +211,22 @@ replace closed = 1 if id_plateforme == 1090
 replace closed = 1 if id_plateforme == 1044
 replace closed = 1 if id_plateforme == 1127
 replace closed = 1 if id_plateforme == 1154
+
+local el_variables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres entreprise_model exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes ///
+exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4 expp_cost expp_ben employes car_empl1 car_empl2 man_fin_per_ind ///
+ man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons ///
+ man_source_pdg man_source_fam man_source_even man_source_autres net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques ///
+ net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man ///
+ car_efi_motiv car_loc_env car_loc_exp car_loc_soin listexp ca ca_exp comp_ca2023_intervalles ca_2024 ca_exp_2024 comp_ca2024_intervalles ///
+ profit_2023_category profit_2024_category profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain ///
+ int_contact attest  el_produit1 el_produit2 el_produit3 inno_none inno_improve inno_new inno_both inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client ///
+ inno_mot_dummyother inno_mot_total netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg export_1 ///
+ export_2 export_3 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5 net_size3_m net_size4_m
+
+foreach var of local el_variables {
+    replace `var' = 0 if surveyround == 3 & closed == 1
+}
+
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
