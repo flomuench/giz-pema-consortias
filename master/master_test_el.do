@@ -965,7 +965,9 @@ replace needs_check = 0 if id_plateforme == 1196
 replace needs_check = 0 if id_plateforme == 1245 
 replace needs_check = 0 if id_plateforme == 1248
 replace needs_check = 0 if id_plateforme == 1215
-
+ 
+replace needs_check = 1 if id_plateforme == 1153 & surveyround == 3
+replace questions_needing_checks =  "CA export 2023 est de 13 TND, veuillez vérifier / " if id_plateforme == 1153 & surveyround == 3
 ***********************************************************************
 * 	PART 11:  Export an excel sheet with needs_check variables  			
 ***********************************************************************
