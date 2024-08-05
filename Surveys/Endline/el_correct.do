@@ -377,7 +377,7 @@ replace inno_exampl_produit2 = "Des cocottes de cuisine capables de résister à
 
 replace inno_proc_other="Encourager l'egalité entre hommes et femmes en recrutant plus des femmes dans des postes avant préoccupés par des hommes" if id_plateforme == 1117
 
-replace inno_proc_other=" Exporter et se focaliser sur le marché italien surtout le sud de l'italie" if inno_proc_other =="l' expot" if id_plateforme == 1124
+replace inno_proc_other=" Exporter et se focaliser sur le marché italien surtout le sud de l'italie" if id_plateforme == 1124
 
 replace inno_exampl_produit1 = "Nouveaux services en relation avec le domaine du sport et animation des enfants" if id_plateforme == 1210 
 
@@ -591,18 +591,18 @@ replace ca_exp_2024 = 0 if id_plateforme ==1061
 
 replace net_association = 1 if id_plateforme == 1088 
 
-replace ca = 5000 id_plateforme == 1102 
-replace profit_2023 = 2000 if id_plateforme == 1102
+replace ca = 5000 if id_plateforme == 1102 
+replace profit = 2000 if id_plateforme == 1102
 replace ca_exp_2024 = 0 if id_plateforme ==1102
 
 replace employes = 2 if id_plateforme == 1186 
 replace ca_2024 = 3000 if id_plateforme == 1186
 replace profit_2024 = 0 if id_plateforme == 1186
 replace ca = 6000 if id_plateforme == 1186
-replace profit_2023 = 0 if id_plateforme == 1186
+replace profit = 0 if id_plateforme == 1186
 
 replace ca_2024 = 8000 if id_plateforme == 1230
-replace ca_exp_2023 = 0 if id_plateforme ==1153
+replace ca_exp = 0 if id_plateforme ==1153
 
 
 
