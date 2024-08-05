@@ -373,9 +373,9 @@ putpdf pagebreak
 
  graph box clients if clients > 0 & surveyround == 3, over(treatment) blabel(total, format(%9.2fc)) ///
 		title("Number of International clients" , pos(12)) 
-gr export el_clients_treat_box.png
+gr export el_int_clients_treat_box.png
 putpdf paragraph, halign(center) 
-putpdf image el_clients_treat_box.png, width(5000)
+putpdf image el_int_clients_treat_box.png, width(5000)
 putpdf pagebreak
 
  graph box clients if clients > 0 & surveyround == 3, over(take_up) blabel(total, format(%9.2fc)) ///
