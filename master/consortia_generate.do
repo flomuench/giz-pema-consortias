@@ -101,44 +101,122 @@ gen status = (take_up_per > 0 & take_up_per < .)
 
 * PHASE 2 of the treatment: "consortia export promotion"
 replace take_up = 0 if id_plateforme == 991 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 991 & surveyround ==3
 replace take_up = 0 if id_plateforme == 994 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 994 & surveyround ==3
 replace take_up = 0 if id_plateforme == 996 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 996 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 998 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 998 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1015 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1015 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1019 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1019 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1022 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1022 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1026 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1026 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1028 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1028 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1035 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1035 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1037 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1037 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1040 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1040 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1045 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1045 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1051  & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1051 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1059 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1059 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1061 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1061 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1079 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1079 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1087 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1087 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1089 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1089 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1097 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1097 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1128 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1128 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1136 & surveyround ==3 
+replace desistement_consortium = 1 if id_plateforme == 1136 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1146 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1146 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1150 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1150 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1162 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1162 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1166 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1166 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1169 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1169 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1184 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1184 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1192 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1192 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1194 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1194 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1195 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1195 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1201 & surveyround ==3
-replace take_up = 0 if id_plateforme == 1214 & surveyround ==3 
+replace desistement_consortium = 1 if id_plateforme == 1201 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1214 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1214 & surveyround ==3
+ 
 replace take_up = 0 if id_plateforme == 1219 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1219 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1225 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1225 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1231 & surveyround ==3 
+replace desistement_consortium = 1 if id_plateforme == 1231 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1233 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1233 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1241 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1241 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1242 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1242 & surveyround ==3
+
 replace take_up = 0 if id_plateforme == 1247 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1247 & surveyround ==3
 }
 
 ***********************************************************************
@@ -288,7 +366,7 @@ lab var exp_invested "Export investment > 0"
 *	PART 6.1: Categorize the different types of innovation
 ***********************************************************************	
 *** Categorisation
-
+{
 gen inno_product_imp = 0
 lab var inno_product_imp "Improving the existing product"
 gen inno_product_new = 0
@@ -315,6 +393,7 @@ replace inno_product_imp =1 if id_plateforme == 1007 /*nouveau design */
 replace inno_product_imp =1 if id_plateforme == 1009 /*nouveaux recrutements, conception et mise en place des projets de pergola avec les horeca (hotels)*/
 replace inno_product_imp =1 if id_plateforme == 1013 /*amélioration de qualité de cuire de produit et amélioration de chaine de produit , amélioration de la finition des sac trouses ect */
 replace inno_product_imp =1 if id_plateforme == 1019 /*services sous forme de chatroom en ligne /aamlt des améliorations au niveau de la plateforme*/
+replace inno_product_imp =1 if id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
 replace inno_product_imp =1 if id_plateforme == 1027 /*gamme de maquillage , améliorations fl laboratoire */
 replace inno_product_imp =1 if id_plateforme == 1035 /*accompagnement et vulgarisation scientifique */
 replace inno_product_imp =1 if id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
@@ -323,6 +402,7 @@ replace inno_product_imp =1 if id_plateforme == 1043 /*produit publicitaires , i
 replace inno_product_imp =1 if id_plateforme == 1050 /*nous avons réalisé des innovations et des améliorations grâce à des systèmes personnalisés adaptés aux consommateurs*/
 replace inno_product_imp =1 if id_plateforme == 1054 /*sacs en 5k/10k/25k */
 replace inno_product_imp =1 if id_plateforme == 1055 /*nous avons augmenter le nombre de produits et nous avons change l'emballage*/
+replace inno_product_imp =1 if id_plateforme == 1107 /*amélioration de résistance mécanique */
 replace inno_product_imp =1 if id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
 replace inno_product_imp =1 if id_plateforme == 1119 /*ameliaration pour les mise a jour logiciel*/
 replace inno_product_imp =1 if id_plateforme == 1124 /*taille et coulleur de produit*/
@@ -354,6 +434,7 @@ replace inno_product_new =1 if id_plateforme == 996 /*un autre modele de portfeu
 replace inno_product_new =1 if id_plateforme == 999 /*nouvelle services de comptabilité carbone( déclaration de matériel ) */
 replace inno_product_new =1 if id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
 replace inno_product_new =1 if id_plateforme == 1005 /*des jbeyeb (tenues traditionnelles masculines)*/
+replace inno_product_new =1 if id_plateforme == 1107 /*les vasques  des meubles ( exp : des tables ) */
 replace inno_product_new =1 if id_plateforme == 1010 /*gel fixateur */
 replace inno_product_new =1 if id_plateforme == 1017 /*biscuit traditionnelle , biscuit secs , gamme sans sucres*/
 replace inno_product_new =1 if id_plateforme == 1020 /*developement un systeme complet de production des plante adapter pour tous les types des climats*/
@@ -363,6 +444,7 @@ replace inno_product_new =1 if id_plateforme == 1030 /*zedna fl nombre des emplo
 replace inno_product_new =1 if id_plateforme == 1035 /*le conseil */
 replace inno_product_new =1 if id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
 replace inno_product_new =1 if id_plateforme == 1038 /*on a rajouté des machines afin d'améliorer la capacité de production / introduire une nouvelle gamme dans secteur décoration ( céramique artistique )*/
+replace inno_product_new =1 if id_plateforme == 1040 /*الفخار الهريسة العربي السلاطه مشويه التوابل اللبسه التقليدية*/
 replace inno_product_new =1 if id_plateforme == 1041 /*zedet fruits et légume surgelé */
 replace inno_product_new =1 if id_plateforme == 1043 /*diversité des produits , je cible le consommateur, diversification des services*/
 replace inno_product_new =1 if id_plateforme == 1046 /*ils proposent des services sur mesure */
@@ -396,6 +478,8 @@ replace inno_product_new =1 if id_plateforme == 1153 /*d'autres produits et serv
 replace inno_product_new =1 if id_plateforme == 1157 /*audit interne de securité */
 replace inno_product_new =1 if id_plateforme == 1164 /*on rajouté une nouvelle ligne de produits énérgétiques/ packs de produits/ des formations gratuites pour les femmes// des confitures de tomates sucrées + de nouveaux parfums pour les pâtes à tartiner*/
 replace inno_product_new =1 if id_plateforme == 1167 /*sacs de soiré /accesoire de soiré*/
+replace inno_product_new =1 if id_plateforme == 1168 /*lancement de gamme de salon de jardin */
+replace inno_product_new =1 if id_plateforme == 1169 /*coté choix et diversité de formation destiné pour les proffesionnels*/
 replace inno_product_new =1 if id_plateforme == 1170 /*de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique*/
 replace inno_product_new =1 if id_plateforme == 1176 /*nouvelle conception et liaison intelligente */
 replace inno_product_new =1 if id_plateforme == 1182 /*une gamme luvia c serum o mousse o creme b vitamine c */
@@ -465,6 +549,7 @@ replace proc_mark_correct =1 if id_plateforme == 1005 /*la création et la dimin
 replace proc_mark_correct =1 if id_plateforme == 1010 /*ils ont intégré du commercial et ont un nouvel canal de distribution*/
 replace proc_mark_correct =1 if id_plateforme == 1017 /*b2b, pause cafe ,evenement, site web , logiciel erp */
 replace proc_mark_correct =1 if id_plateforme == 1019 /*ils ont fait des changements au niveau des offres et ont fait des changements dans les packs services*/
+replace proc_mark_correct =1 if id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
 replace proc_mark_correct =1 if id_plateforme == 1030 /*services marketing en ligne/ on a travaillé sur l'image de marque/ site web en cours pour les ventes en ligne/ j'ai fait un logiciel interne personnalisé*/
 replace proc_mark_correct =1 if id_plateforme == 1035 /*par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel*/
 replace proc_mark_correct =1 if id_plateforme == 1038 /*elles ont travaillés sur des formations techniques (pratiques), ont rajouté des workshops pour les petits et se sont concentrés plus sur le digital*/
@@ -482,6 +567,7 @@ replace proc_mark_correct =1 if id_plateforme == 1071 /*meilleur organisation du
 replace proc_mark_correct =1 if id_plateforme == 1087 /*la certifaction /recouler la game cheuveux/ lemballage /qutite des produits*/
 replace proc_mark_correct =1 if id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
 replace proc_mark_correct =1 if id_plateforme == 1117 /*changement du logo w couleur personamisé et création des parfum sur mesure */
+replace proc_mark_correct =1 if id_plateforme == 1118 /*lancement d'un site web de l'entreprise*/
 replace proc_mark_correct =1 if id_plateforme == 1126 /*elle travaille sur le marketing digitale o elle lancer un site de l’export a l’internationale */
 replace proc_mark_correct =1 if id_plateforme == 1147 /*regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage*/
 replace proc_mark_correct =1 if id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
@@ -567,7 +653,7 @@ lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new ca_tun
 ds `allvars', has(type string)
 
 	* Create temporary variable

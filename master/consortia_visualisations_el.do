@@ -173,7 +173,7 @@ putpdf image el_firm_exports.png, width(5000)
 putpdf pagebreak
 
 *export or not 2023
-graph pie if surveyround == 3, over(marginal_exp_2023) by(take_up) plabel(_all percent, format(%9.0f) size(medium)) ///
+graph pie if surveyround == 3, over(exported) by(take_up) plabel(_all percent, format(%9.0f) size(medium)) ///
     graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
     title("Did the company export in 2023 (based on export turnover) ?", pos(12) size(small))
 gr export export_2023_pie.png, replace
@@ -182,7 +182,7 @@ putpdf image export_2023_pie.png, width(5000)
 putpdf pagebreak
 
 *export or not 2024
-graph pie if surveyround == 3, over(marginal_exp_2024) by(take_up) plabel(_all percent, format(%9.0f) size(medium)) ///
+graph pie if surveyround == 3, over(exported_2024) by(take_up) plabel(_all percent, format(%9.0f) size(medium)) ///
     graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
     title("Did the company export in 2024 (based on export turnover) ?", pos(12) size(small))
 gr export export_2024_pie.png, replace
@@ -1091,7 +1091,25 @@ graph export el_interac_cons.png, width(6000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_interac_cons.png, width(6000)
 putpdf pagebreak
+/*
+*Benefits of being part of a consortium
+graph bar (count) int_ben1_correct int_ben2_correct int_ben3_correct int_ben_autres_correct if surveyround == 3, over(pole) ///
+	title("Benefits from the consortium", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export int_ben.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image int_ben.png, width(6000)
+putpdf pagebreak
 
+*Benefits of being part of a consortium
+graph bar (count) int_incv1_correct int_incv2_correct int_incv3_correct int_incv_autres_correct if surveyround == 3, over(pole) ///
+	title("Disadvantages from the consortium", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+graph export int_incv.png, width(6000) replace 
+putpdf paragraph, halign(center) 
+putpdf image int_incv.png, width(6000)
+putpdf pagebreak
+*/
 ****** Section 8: Indexes******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 10: Indexes"), bold
