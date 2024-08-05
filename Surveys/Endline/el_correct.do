@@ -79,7 +79,6 @@ drop if dup>1
 ***********************************************************************
 * 	PART 3:  Automatic corrections
 ***********************************************************************
-{
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
 
 
@@ -168,8 +167,6 @@ foreach var of local numvars_with_strings {
 }
 
 */
-}
-
 ***********************************************************************
 * 	PART 4:  Manual correction (by variable not by row)
 ***********************************************************************
@@ -208,11 +205,27 @@ lab val id_adminrect correct
 replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
 */
 
+***********************************************************************
+* 	EXAMPLE CODE:  Replace string with numeric values		  			
+***********************************************************************
+/*
+{
+*Remplacer les textes de la variable investcom_2021
+replace investcom_2021 = "100000" if investcom_2021== "100000dt"
+replace investcom_2021 = "18000" if investcom_2021== "huit mille dinars"
+replace investcom_2021 = "0" if investcom_2021== "zéro"
+
+
+replace investcom_2021 = "`refused'" if investcom_2021 == "-888"
+replace investcom_2021 = "`not_know'" if investcom_2021 == "-999"
+replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
+
+}
+*/
 
 ***********************************************************************
 * 	PART 5:  Transform categorical variables into continuous variables
 ***********************************************************************
-{
 *ca_intervalles
 replace ca = 5000 if comp_ca2023_intervalles == 8
 replace ca = 25000 if comp_ca2023_intervalles == 7
@@ -275,12 +288,9 @@ replace profit=profit*(-1) if profit_2023_category==0
 
 replace profit_2024=profit_2024*(-1) if profit_2024_category==0
 
-}
-
 ***********************************************************************
 * Correct management practices
 ***********************************************************************
-{
 replace man_fin_per_ind = 1 if id_plateforme == 984
 replace man_fin_per_pro = 1 if id_plateforme == 984
 replace man_fin_per_qua = 1 if id_plateforme == 984
@@ -318,7 +328,6 @@ replace man_sources_other = "Apprentissage de nouvelles strategies de marketing 
 
 replace man_sources_other = "Apprentissage de nouvelles strategie grace à la recherche: article de marketing et management" if id_plateforme == 1176
 
-}
 
 ******************************************************************************
 * Correct products
@@ -332,7 +341,6 @@ replace products_other = " frange parfumée" if id_plateforme ==1234
 ***********************************************************************
 * Correct product innovation 
 ***********************************************************************
-{
 replace inno_mot_other = "Diversification des fournisseurs et marketing à travers les clients" if id_plateforme ==986
 replace inno_mot_other = "Exportation du services, introduction de nouvelles formations dans leur services" if id_plateforme ==988
 replace inno_exampl_produit2 = "Introduction d'un nouveau service d'accompagnement pour les entreprises: la comptabilité carbonne pour déterminer l'impact environnemental d'une entreprise et le rapport extra financier annuel qui contient les actions ,démarches et les profits" if id_plateforme ==999
@@ -362,29 +370,28 @@ replace inno_exampl_produit1 = " Developpement des nouveaux produits tel que: pa
 replace inno_exampl_produit1 =" Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits" if id_plateforme ==1231 
 replace inno_exampl_produit1 =  "frange des rideaux parfumées" if id_plateforme ==1234
 
-*Correction V2
-replace inno_exampl_produit1 =  "Packaging EcoFriendly en bois et investissement dans la recherche de piéces Eco-Friendly pour innover avec de nouveux materiaux de recyclage " if id_plateforme ==1055
-replace inno_exampl_produit1 =  "Pas d'innovation " if id_plateforme ==1098
+replace inno_exampl_produit1 = "Commerce international: Vente pure" if id_plateforme == 1112
+replace inno_exampl_produit2 = "Introduction d'un nouveau produit agroalimentaire de l'egypte dans sa vente pure de commerce international" if id_plateforme == 1112 
+replace inno_exampl_produit2 = "Des cocottes de cuisine capables de résister à une température de 300 degrés" if id_plateforme == 1124 
 
 
-replace inno_exampl_produit2 = "Le Marketing Digital ( Elles ont mis en place un responsable Marketing qui travaille sur les reseaux sociaux , les sites web et sponsoring)" if id_plateforme ==1153 
+replace inno_proc_other="Encourager l'egalité entre hommes et femmes en recrutant plus des femmes dans des postes avant préoccupés par des hommes" if id_plateforme == 1117
 
-replace inno_exampl_produit1 =  "Creation de nouvelles solutions digitales destiné au milieu universitaire, recrutement et RH, digitalisation des methodes de paiements" if id_plateforme ==1170
-replace inno_exampl_produit2 =  "Des nouveaux partenariats à Kenya et Cote d'ivoire" if id_plateforme ==1170
+replace inno_proc_other=" Exporter et se focaliser sur le marché italien surtout le sud de l'italie" if inno_proc_other =="l' expot" if id_plateforme == 1124
 
-replace inno_exampl_produit1 =  "Creation de nouveaux produits avec la meme matiere premiere: themara" if id_plateforme ==1190 
+replace inno_exampl_produit1 = "Nouveaux services en relation avec le domaine du sport et animation des enfants" if id_plateforme == 1210 
 
-replace inno_mot_other = "des boîtes de développement et de recherche pour les entreprises qui fournissent des idées de changement" if id_plateforme ==1215 
+replace inno_proc_other= "Nouveaux services en relation avec le domaine du sport et animation des enfants" if id_plateforme == 1210 
+
+replace inno_exampl_produit2 = " Integration d'un nouveau systeme d'information et manuel de procedures" if id_plateforme == 1222 
+
+replace  export_other = " Elle a commencé la prospection en cote d'ivoire mais elle a abondonné car l'export coute trop cher" if id_plateforme == 1222 
 
 
-replace inno_exampl_produit2 =  "Creation d'une machine qui fait tout le process de production de l'huile d'olive" if id_plateforme ==1248
-
-}
 
 *************************************************************************
 *Correct net service 
 *************************************************************************
-{
 replace net_services_pratiques = 1 if id_plateforme ==999 
 replace net_services_produits= 1 if id_plateforme ==999 
 replace net_services_mark = 1 if id_plateforme ==999 
@@ -466,15 +473,7 @@ replace net_services_confiance = 1 if id_plateforme ==1224
 replace net_services_autre = 1 if id_plateforme ==1224
 replace net_services_other = "Collaboration avec d'autres entreprises" if id_plateforme ==1224
 
-*Correction V2
-replace net_services_pratiques = 1 if id_plateforme ==1054
-replace net_services_produits= 1 if id_plateforme ==1054
-replace net_services_mark = 0 if id_plateforme ==1054
-replace net_services_sup= 1 if id_plateforme ==1054
-replace net_services_contract= 1  if id_plateforme ==1054
-replace net_services_confiance = 1 if id_plateforme ==1054
-replace net_services_autre = 1 if id_plateforme ==1054
-replace net_services_other = "recherche de financement et controle management" if id_plateforme ==1054
+
 
 
 
@@ -483,26 +482,21 @@ replace net_services_other = "recherche de financement et controle management" i
 
 replace net_size4 = 0 if id_plateforme ==1000
 
+replace net_size4 = 10 if id_plateforme ==1036
+replace net_size3 = 30 if id_plateforme ==1036
+
 replace net_size4 = 10 if id_plateforme ==1108
 replace net_size3 = 12 if id_plateforme ==1108 
 
-*correction V2
-replace net_size3 = 10 if  id_plateforme ==1036 
-replace net_gender3= 8 if  id_plateforme ==1036
-replace net_size4 = 5 if  id_plateforme ==1036 
-replace net_gender4 = 3 if  id_plateforme ==1036
+replace net_size3 = 15 if id_plateforme ==1193 
+replace net_size4 = 10 if id_plateforme ==1193 
 
 
-replace net_size3 = 12 if  id_plateforme ==1108
-replace net_gender3= 10 if  id_plateforme ==1108
-replace net_size4 = 10 if  id_plateforme ==1108
-replace net_gender4 = 5 if  id_plateforme ==1108
 
-replace net_association = 1 if id_plateforme==1050
 
-replace net_association = 1 if id_plateforme==1153 
 
-}
+
+
 
 *************************************************************************
 *Correct export part 
@@ -510,10 +504,13 @@ replace net_association = 1 if id_plateforme==1153
 
 replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme ==1054
 
+
+
+
 *************************************************************************
 *Correct financial part
 *************************************************************************
-{
+
 // id_plateforme 1005 / entreprise n'est plus en activité depuis aout 2022 elle revient aux production aux mai 2024 elle à une perte de 17000 dt depuis aout 2022 jusquà maintenent donc les cA totale en 2023 0 est en 2024 elle à dit que dans le mois de mai (le mois de retour en production) est de 500 dt 
  
 replace ca = 0 if id_plateforme == 1005
@@ -588,46 +585,37 @@ replace ca_2024 = 3000 if id_plateforme == 1186
  
 *replace ca_2021 = 50000 if id_plateforme == 1203 
 
-*Correction V2
+* 1061 //  ne connait pas ca exp 2024, on reduit le nb d'employés car ils ont reduit la production. 
+replace employes = 2 if id_plateforme == 1061
+replace ca_exp_2024 = 0 if id_plateforme ==1061
 
-replace employes = 5 if id_plateforme == 1001 
+replace net_association = 1 if id_plateforme == 1088 
 
-* 1035 // L'entreprise n'a pas fait de bénéfices car elle n'a pas produit en 2024
-replace profit_2024 = 0 if id_plateforme ==1035
-replace ca_2024 = 5000 if id_plateforme ==1035
+replace ca = 5000 id_plateforme == 1102 
+replace profit_2023 = 2000 if id_plateforme == 1102
+replace ca_exp_2024 = 0 if id_plateforme ==1102
 
-replace profit_2024 = 5000 if id_plateforme ==1007
-replace profit_2024 = 4000 if id_plateforme ==1036
-replace ca_2024 = 25000 if id_plateforme ==1036 
+replace employes = 2 if id_plateforme == 1186 
+replace ca_2024 = 3000 if id_plateforme == 1186
+replace profit_2024 = 0 if id_plateforme == 1186
+replace ca = 6000 if id_plateforme == 1186
+replace profit_2023 = 0 if id_plateforme == 1186
 
-
-* 1037 // l'entreprise a arrete son activité 
-
-replace ca_2024 = 0 if id_plateforme ==1037 
-replace profit_2024 = 0 if id_plateforme ==1037
-
-replace ca = 10000 if id_plateforme ==1054
-replace profit = 2000 if id_plateforme ==1054
+replace ca_2024 = 8000 if id_plateforme == 1230
+replace ca_exp_2023 = 0 if id_plateforme ==1153
 
 
-replace ca = 120000 if id_plateforme ==1055
-replace profit = 30000 if id_plateforme ==1055 
-replace ca_2024 = 60000 if id_plateforme ==1055
-replace profit_2024 = -12000 if id_plateforme ==1055 
 
-* 1130 // ( probleme financier khater khedma met3na koulha bel deplacement) 
-replace ca_2024 = 500 if id_plateforme ==1130
 
-replace profit = 1000 if id_plateforme ==1133
 
-*1190 // la dame est malade elle ne peut pas repondre et elle ne sait pas pour CA 2024 d'apres l'ecoute , on peut mettre le min intervalle 
+* 1193 //  faillitte 
 
-replace ca = 8000 if id_plateforme ==1190
-replace ca_2024 = 5000 if id_plateforme ==1190
+replace ca = 0 if id_plateforme == 1193  
 
-replace profit = 3000 if id_plateforme ==1192
 
-}
+
+
+
 
 *************************************************************************
 * Correct Ben and Int 
@@ -638,10 +626,21 @@ replace int_ben2 ="les techniques de communication et de ventes" if id_plateform
 replace int_ben2 ="les membres du consortium sont complementaires" if id_plateforme == 1135 
 
 
+
+
+
+***********************************************************************
+* 	PART 5:  Convert data types to the appropriate format
+***********************************************************************
+
+***********************************************************************
+* 	PART 6:  autres / miscellaneous adjustments
+***********************************************************************
+	* correct wrongly coded values for man_hr_obj
+
 ***********************************************************************
 * 	PART 7: Translate the different opend ended questions in french 
 ***********************************************************************
-{
 	*products_other
 replace products_other= "c'est une gammes contenant 4 produits: mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if products_other =="c une gamme feha 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre"
 replace products_other= "huille de pépin de figues de barbarie" if products_other =="huille de pépin fils de barbarine"
@@ -708,6 +707,15 @@ replace inno_exampl_produit1 = "l'emballage et le design/ dans le produit que no
 replace inno_exampl_produit1 = "la qualite de la chaine de production qui est devenue plus petite et la qualite de production" if inno_exampl_produit1 == "la qualite fel chaine de production radoha sghira o fel qualite de production"
 
 
+
+
+
+
+
+
+
+
+
 *inno_exampl_produit2
 replace inno_exampl_produit2 = "de nouveaux jouets en bois et d'autres ustensilles de cuisine" if inno_exampl_produit2 == "des nouvelles jouets en bois et des autres ustenside de cuisine ************"
 replace inno_exampl_produit2 = "des etudes à l'étranger" if inno_exampl_produit2 == "des etudes a letranger aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
@@ -754,6 +762,12 @@ replace inno_exampl_produit2 = "sucré  et salé avec une nouvelle texture/ le f
 replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "mini chaine dolive ***************************......................" /*TBC*/
 
 
+
+
+
+
+
+
 *inno_proc_other
 replace inno_proc_other= "changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes" if inno_proc_other =="changement de l’emballage . introduction des nouveaux jouets et des nouvelle gammes **********"
 replace inno_proc_other= "l'export à renforcer la formation" if inno_proc_other =="lexport kaouitou f formationn aaaaaaaaaaaaaaaaaaaaaaaaaa" /*TBC*/
@@ -786,6 +800,12 @@ replace inno_proc_other= "elle a augmenté le nombre d'employés afin d'amélior
 replace inno_proc_other= "actions de marketing" if inno_proc_other =="actions de marketing**********************************************" 
 replace inno_proc_other= "le local a été aggrandi" if inno_proc_other =="kabarna fi local ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
 replace inno_proc_other= "intégration de nouveaux matériaux" if inno_proc_other =="integration de nouveaux materieles**********************......................................." 
+
+
+
+
+
+
 
 *inno_mot_other
 replace inno_mot_other= "suite à des formations où elle a eu une idée sur les besoins que les gens ont et a pensé à faire des formations pour aider ces personnes en besoin" if inno_mot_other =="suite a des formation ykaounou fehom houma khdhet men andhom lfekra besoin men aned eness eli tkaouen fehom eli houma m aryef khammet tamlelhom formation bech thabbebhom f produit" 
@@ -914,9 +934,7 @@ replace int_other="pour des raisons légales: le consortium égigne que la géra
 replace int_other="l'aggréssivité de certaines personnes, le comportement des entrepreneurs et la mauvaise organisation de la GIZ" if int_other =="grasivite des personnes le comportement des entrepreneur acause du mal organisation de giz"
 replace int_other="elle ne peut pas faire partie du consortium car elle a des engagements familiaux" if int_other =="manajmtech nemchi aandi des engagements familiaux"
 replace int_other="elle n'est pas disponible" if int_other =="n'est disponible +++++++++++++++++++++++++++++++++++"
-replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"
-
-}	
+replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"	
 
 ***********************************************************************
 * 	PART 8:  Destring remaining numerical vars
@@ -929,11 +947,6 @@ format `x' %25.0fc
 }
 
 ***********************************************************************
-* 	PART 9:  Replace export countries 0 if ca_exp = 0
-***********************************************************************
-replace exp_pays = 0 if exp_pays == . & ca_exp == 0
-
-***********************************************************************
-* 	Part end: Save the changes made to the data		  			
+* 	Part 8: Save the changes made to the data		  			
 ***********************************************************************
 save "${el_intermediate}/el_intermediate", replace

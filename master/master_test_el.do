@@ -965,6 +965,32 @@ replace needs_check = 0 if id_plateforme == 1196
 replace needs_check = 0 if id_plateforme == 1245 
 replace needs_check = 0 if id_plateforme == 1248
 replace needs_check = 0 if id_plateforme == 1215
+
+
+replace needs_check = 0 if id_plateforme == 1022
+replace needs_check = 0 if id_plateforme == 1061
+replace needs_check = 0 if id_plateforme == 1088
+replace needs_check = 0 if id_plateforme == 1102
+replace needs_check = 0 if id_plateforme == 1112
+replace needs_check = 0 if id_plateforme == 1117
+replace needs_check = 0 if id_plateforme == 1186
+replace needs_check = 0 if id_plateforme == 1193
+replace needs_check = 0 if id_plateforme == 1210
+replace needs_check = 0 if id_plateforme == 1222
+replace needs_check = 0 if id_plateforme == 1225
+replace needs_check = 0 if id_plateforme == 1230
+replace needs_check = 0 if id_plateforme == 1153
+
+
+
+
+
+
+
+
+
+
+
  
 replace needs_check = 1 if id_plateforme == 1153 & surveyround == 3
 replace questions_needing_checks =  "CA export 2023 est de 13 TND, veuillez vérifier / " if id_plateforme == 1153 & surveyround == 3
