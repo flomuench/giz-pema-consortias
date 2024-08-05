@@ -329,6 +329,7 @@ replace int_ben2_correct = "Expansion et ouverture sur de nouveaux marchés" if 
 
 
 
+
 replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="Apprentissage des processus d'exportation"
 replace int_ben1_correct = "Développement professionel" if int_ben1_correct=="Apprentissage pour diriger une entreprise : marketing"
 replace int_ben2_correct = "Développement professionel" if int_ben2_correct=="Apprentissage"
@@ -356,26 +357,39 @@ replace int_ben3_correct = "Développement personnel" if int_ben3_correct=="soli
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage et partage d'expériences"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Le réseau"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échange"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseaux"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="réseaux"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Énergie entre les chefs d'entreprise"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Collaboration avec d'autres chefs d'entreprise"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="réseautage"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="reseautage"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="réseautage entre les membres du consortium"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les connaissances et les relations avec d'autres entrepreneures"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échange d'expériences"
+replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="echange d'expériences"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Elle a rencontré des gens et établi des relations avec les membres du consortium"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Pour connaître de nouvelles personnes"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Nouveaux contacts, conventions avec d'autres entreprises"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Partage d'informations"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Collaboration"
+replace int_ben3_correct = "Réseautage, partage et collaboration" if int_ben3_correct=="collaboration"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Mutualisation des moyens"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les échanges d’expériences entre les membres du consortium"
+replace int_ben3_correct = "Réseautage, partage et collaboration" if int_ben3_correct=="Les échanges d’expériences entre les membres du consortium"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Les entrepreneurs deviennent partenaires"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Profit commun"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Network (réseau)"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Partage d'expérience"
+replace int_ben3_correct = "Réseautage, partage et collaboration" if int_ben3_correct=="partage d'expérience"
 replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Échanges d'informations"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Nouvelles relations"
-replace int_ben1_correct = "Réseautage, partage et collaboration" if int_ben1_correct=="Réseautage entre les membres du consortium"
+replace int_ben3_correct = "Réseautage, partage et collaboration" if int_ben3_correct=="nouvelles relations"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="partage et échange avec d'autres femmes:réflexions,avis,visions"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="les échanges des informations"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="les contacts"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="nom de bons contacts au sein du consortium"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="échange des idées"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="échange des expériences entre les nombres du consortium"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="coopération avec d'autres femmes chefs d'entreprise"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="coopérations"
+replace int_ben2_correct = "Réseautage, partage et collaboration" if int_ben2_correct=="esprit d équipe et collaboration"
+replace int_ben_autres_correct = "Réseautage, partage et collaboration" if int_ben_autres_correct=="à travers le consortium elle commencée de travailler ensemble"
+replace int_ben_autres_correct = "Réseautage, partage et collaboration" if int_ben_autres_correct=="echenage des information"
+
 
 
 
@@ -390,26 +404,26 @@ replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_in
 replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="gère quelque conflits "
 replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="jalousie"
 replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="manque de communication"
-replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="Égoïsme"
-replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="Égoïsme"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="jalousie entre les membres du consortium"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="manque de communication et coordination entre les membres de consortium"
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="conflit entre les membres" 
+replace int_incv1_correct = "Conflits et difficultés relationnelles" if  int_incv1_correct=="jalousi" 
 
 
 
 
-replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="les niveaux de maturités sont très différents et les attentes également"
+
+replace int_incv3_correct = "Complexité et diversité des membres" if  int_incv3_correct=="les niveaux de maturités sont très différents et les attentes également"
 replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Notre diversité nous a fait perdre beaucoup de temps et d'énergie pour fixer la meilleure stratégie pour le GIE ==&gt; cumul beaucoup de retard sur ma propre entreprise (voir même une stagnation pendant une longue période)"
-replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Esprit d un manager n accepte  pas l innovation mène à l exclusion"
-replace int_incv1_correct = "Complexité et diversité des membres" if  int_incv1_correct=="Absence d’ethique de travail par quelques membres"
+replace int_incv3_correct = "Complexité et diversité des membres" if  int_incv3_correct=="Esprit d un manager n accepte  pas l innovation mène à l exclusion"
+replace int_incv2_correct = "Complexité et diversité des membres" if  int_incv2_correct=="Absence d’ethique de travail par quelques membres"
 
 
 replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps allouer au consortium au détriments de son propre entreprise"
 replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps alloué au consortium au détriments de son propre entreprise"
 replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="perte d'argent"
-replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="Engagement moral"
-replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="Il y'a beaucoup de charge de travail "
-replace int_incv1_correct = "Impact sur les ressources et l'énergie" if  int_incv1_correct=="le temps allouer au consortium au détriments de son propre entreprise"
-
-
+replace int_incv2_correct = "Impact sur les ressources et l'énergie" if  int_incv2_correct=="Engagement moral"
+replace int_incv2_correct = "Impact sur les ressources et l'énergie" if  int_incv2_correct=="Il y'a beaucoup de charge de travail "
 
 
 
