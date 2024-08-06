@@ -265,7 +265,7 @@ lab var costs "Costs"
 *	PART 5: Export - dummies
 ***********************************************************************
 * Exported
-gen exported = (ca_exp > 0)
+replace exported = (ca_exp > 0)
 replace exported = . if ca_exp == .
 lab var exported "Export sales > 0"
 
@@ -517,8 +517,6 @@ replace inno_org_correct =1 if id_plateforme == 1182 /*on a un nouvel emballage 
 replace inno_org_correct =1 if id_plateforme == 1239 /*odoo et tecnologie web */
 replace inno_org_correct =1 if id_plateforme == 1244 /*suivi des chantiers verts/mangemenet des projets plus adapté/améliorer la gestion financière*/
 
-}
-
 ***********************************************************************
 *	PART 6.2: Innovation
 ***********************************************************************	
@@ -567,7 +565,7 @@ lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes sales profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new ca_tun
 ds `allvars', has(type string)
 
 	* Create temporary variable
@@ -764,7 +762,7 @@ gen profit_pct = .
 	
 	* winsorize
 		* winsorize all outcomes (but profit)
-local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes"
+local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes prni pr2024ni cani ca2024ni"
 
 foreach var of local wins_vars {
 		gen `var'_w99 = `var'
@@ -840,9 +838,8 @@ lab var ca_tun_2024_w95 "Domestic sales 2024 wins. 95th"
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95"
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95 prni_w99 pr2024ni_w99 cani_w99 ca2024ni_w99 prni_w95 pr2024ni_w95 cani_w95 ca2024ni_w95"
      
-
 		* check how many zeros
 foreach var of local ys {
 		sum `var' if surveyround == 2 & !inlist(`var', -777, -888, -999,.)
@@ -1015,6 +1012,27 @@ lab var car_empl1_w99_k1 "Female employees"
 lab var car_empl2_w99_k1 "Young employees"
 lab var ihs_employes_w99_k3 "Employees" 
 lab var car_empl1_w99_k3 "Female employees"
+lab var net_size3_w99 "Network all contacts, Winsorized 99th Percentile"
+lab var net_size3_m_w99 "Network male contacts, Winsorized 99th Percentile"
+lab var net_gender3_w99 "Network female contacts, Winsorized 99th Percentile"
+lab var net_size4_w99 "Network all contacts, Winsorized 99th Percentile"
+lab var net_size4_m_w99 "Network male contacts, Winsorized 99th Percentile"
+lab var net_gender4_w99 "Network female contacts, Winsorized 99th Percentile"
+
+lab var net_size3_w95 "Network all contacts, Winsorized 95th Percentile"
+lab var net_size3_m_w95 "Network male contacts, Winsorized 95th Percentile"
+lab var net_gender3_w95 "Network female contacts, Winsorized 95th Percentile"
+lab var net_size4_w95 "Network all contacts, Winsorized 95th Percentile"
+lab var net_size4_m_w95 "Network male contacts, Winsorized 95th Percentile"
+lab var net_gender4_w95 "Network female contacts, Winsorized 95th Percentile"
+
+gen net_pratiques = net_services_pratiques 
+gen net_produits = net_services_produits
+gen net_mark = net_services_mark
+gen net_sup = net_services_sup
+gen net_contract = net_services_contract
+gen net_confiance = net_services_confiance
+gen net_autre = net_services_autre
 
 }
 
@@ -1061,13 +1079,13 @@ rename ihs_ca_exp_2024_w`p'_k5 ihs_caexp2024_w`p'_k5
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre"
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
-local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"
-local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
-local business_performance99 " ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category"
-local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3"
+local innovation "ipi ipi_correct innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45 exp_pays_ssa_w99 exp_pays_ssa_w95" // add at endline: ihs_exp_pays_w99_k1
+local business_performance99 "closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
+local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3 ihs_ca_2024_w95_k1 ihs_costs_2024_w95_k1"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance99'  `business_performance95'
 
 	* gen dummy + replace missings with zero at bl
