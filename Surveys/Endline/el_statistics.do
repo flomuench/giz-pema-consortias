@@ -96,7 +96,7 @@ putpdf pagebreak
 	*timeline of responses
 format %-td date 
 histogram date, frequency addlabel width(0.5) ///
-		tlabel(20jun2024(1)24jul2024, angle(60) labsize(vsmall)) ///
+		tlabel(20jun2024(1)05aug2024, angle(60) labsize(vsmall)) ///
 		ytitle("Answers") ///
 		title("{bf:Endline survey: number of responses}") 
 gr export survey_response_byday.png, replace
@@ -194,7 +194,7 @@ putpdf image el_firm_exports.png, width(5000)
 putpdf pagebreak
 
 *export or not 2023
-graph pie, over(marginal_exp_2023) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
+graph pie, over(exported) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
     graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
     title("Did the company export in 2023 (based on export turnover) ?", pos(12) size(small))
 gr export export_2023_pie.png, replace
@@ -203,7 +203,7 @@ putpdf image export_2023_pie.png, width(5000)
 putpdf pagebreak
 
 *export or not 2024
-graph pie, over(marginal_exp_2024) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
+graph pie, over(exported_2024) by(treatment) plabel(_all percent, format(%9.0f) size(medium)) ///
     graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
     title("Did the company export in 2024 (based on export turnover) ?", pos(12) size(small))
 gr export export_2024_pie.png, replace

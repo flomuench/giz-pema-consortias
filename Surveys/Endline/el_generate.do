@@ -282,6 +282,9 @@ gen exported_2024 = (ca_exp_2024 > 0)
 replace exported_2024 = . if ca_exp_2024 == .
 lab var exported_2024 "Export sales 2024 > 0"
 
+gen exported= (ca_exp > 0)
+replace exported = . if ca_exp == .
+lab var exported "Export sales 2023 > 0"
 ***********************************************************************
 * 	PART 15:  generate normalized financial data (per employee)
 ***********************************************************************
@@ -435,13 +438,18 @@ replace int_incv_autres_correct = "Problèmes organisationnels et structurels" i
 replace int_incv3_correct = "Problèmes organisationnels et structurels" if  int_incv3_correct=="les procédures s rigide"
 replace int_incv_autres_correct = "Problèmes organisationnels et structurels" if  int_incv_autres_correct=="manque de financement" 
 
+************************************************************************
+*	Part 18: Create non-intervaled financial values
+*************************************************************************
+gen prni = profit if profit_2023_category_perte == . & profit_2023_category_gain == .
 
+gen pr2024ni = profit_2024 if profit_2024_category_perte == . & profit_2024_category_gain == .
 
+gen cani = ca if comp_ca2023_intervalles == .
 
-
-
+gen ca2024ni = ca_2024 if comp_ca2024_intervalles == .
 
 ***********************************************************************
-* 	PART 16: save dta file  										  
+* 	PART 18: save dta file  										  
 ***********************************************************************
 save "${el_final}/el_final", replace
