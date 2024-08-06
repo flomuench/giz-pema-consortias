@@ -328,9 +328,8 @@ rct_regression_indexes network eri eri_ssa epp mpi female_efficacy female_loc ge
 reg net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, cluster(id_plateforme)
 	* "reghfde" one way clustered SE (firm)
 reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster id_plateforme)
-	* twoway clusterd
+	* twoway clustered
 reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster id_plateforme consortia_cluster)
-reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster consortia_cluster1)
 reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster consortia_cluster1)
 
 /*	
