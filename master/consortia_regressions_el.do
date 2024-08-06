@@ -34,7 +34,7 @@ save "${master_final}/sample_clarke.dta", replace
 restore
 */	
 		* change directory
-cd "${master_regressiontables}/endline"
+cd "${master_regressiontables}/endline/regressions"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
@@ -216,7 +216,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 	* Put all regressions into one table
 		* Top panel: ATE
-		local regressions `1'1 // adjust manually to number of variables 
+		local regressions `1'1  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Indexes} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
@@ -2542,7 +2542,7 @@ save "${master_final}/sample_clarke.dta", replace
 restore
 */	
 		* change directory
-cd "${master_regressiontables}/endline"
+cd "${master_regressiontables}/endline/regressions"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)

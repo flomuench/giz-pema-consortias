@@ -17,7 +17,7 @@
 use "${master_final}/consortium_final", clear
 
 	* change directory
-cd "${master_regressiontables}/endline"
+cd "${master_regressiontables}/endline/heterogeneity"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
@@ -528,8 +528,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -546,8 +546,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -564,8 +564,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 
@@ -653,8 +653,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -671,8 +671,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -689,8 +689,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -777,8 +777,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -795,8 +795,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -813,8 +813,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -901,8 +901,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -919,8 +919,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -937,12 +937,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 ****************************  inno_produit ***************************
 
 local outcomes "inno_improve inno_new inno_both inno_none" //
@@ -1026,8 +1026,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1044,8 +1044,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1062,8 +1062,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -1151,8 +1151,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1169,8 +1169,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1187,8 +1187,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -1276,8 +1276,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1294,8 +1294,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1312,8 +1312,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -1401,8 +1401,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1419,8 +1419,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1437,12 +1437,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 ****************************  man_fin_per ***************************
 
 local outcomes "man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv" //
@@ -1526,8 +1526,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1544,8 +1544,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1562,8 +1562,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -1651,8 +1651,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1669,8 +1669,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1687,8 +1687,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -1776,8 +1776,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1794,8 +1794,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1812,12 +1812,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 
 ****************************  exp_pra ***************************
 
@@ -1902,8 +1902,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -1920,8 +1920,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -1938,8 +1938,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2027,8 +2027,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2045,8 +2045,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2063,8 +2063,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2152,8 +2152,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2170,8 +2170,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2188,12 +2188,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 ****************************  efi ***************************
 
 local outcomes "car_efi_fin1 car_efi_man car_efi_motiv" //
@@ -2277,8 +2277,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2295,8 +2295,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2313,8 +2313,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2402,8 +2402,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2420,8 +2420,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2438,12 +2438,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 ****************************  export - extensive margin ***************************
 
 local outcomes "export_1 export_2 exported exported_2024" //
@@ -2527,8 +2527,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2545,8 +2545,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2563,8 +2563,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2652,8 +2652,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2670,8 +2670,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2688,8 +2688,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2777,8 +2777,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2795,8 +2795,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2813,8 +2813,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -2902,8 +2902,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -2920,8 +2920,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -2938,8 +2938,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 **************************** clear memory & reload ***************************
@@ -2948,7 +2948,7 @@ clear all
 use "${master_final}/consortium_final", clear
 
 	* change directory
-cd "${master_regressiontables}/endline"
+cd "${master_regressiontables}/endline/heterogeneity"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
@@ -3039,8 +3039,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elht_pole_`outcome'_90, replace)
+    gr export elht_pole_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -3057,8 +3057,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elht_pole_`outcome'_95, replace)
+    gr export elht_pole_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -3075,8 +3075,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elht_pole_`outcome'_99, replace)
+    gr export elht_pole_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -3164,8 +3164,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(elhp_`outcome'_90, replace)
-    gr export elhpp_`outcome'_90, replace.png, replace
+        name(elhtp_`outcome'_90, replace)
+    gr export elhtp_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -3182,8 +3182,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elhtp__`outcome'_95, replace)
+    gr export elhtp__`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -3200,12 +3200,12 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elhtp_`outcome'_99, replace)
+    gr export elhtp__`outcome'_99.png, replace
 }
 
 estimates clear
-
+graph drop _all
 **************************** financial wins 95th ***************************
 
 local outcomes "ihs_ca_w95_k1 ihs_ca_2024_w95_k1 ihs_catun_w95_k1 ihs_catun2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k1 ihs_costs_w95_k1 ihs_costs_2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k1" //
@@ -3289,8 +3289,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 90th percentile.", span size(small)) /// 90th only holds for large firms
-        name(el_het_pole_`outcome'_90, replace)
-    gr export el_het_pole_`outcome'_90.png, replace
+        name(elhtp_`outcome'_90, replace)
+    gr export elhtp_`outcome'_90.png, replace
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
@@ -3307,8 +3307,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(el_het_pole_`outcome'_95, replace)
-    gr export el_het_pole_`outcome'_95.png, replace
+        name(elhtp_`outcome'_95, replace)
+    gr export elhtp_`outcome'_95.png, replace
 
     // Coefficient plot for 99% confidence interval
     coefplot ///
@@ -3325,8 +3325,8 @@ foreach outcome of local outcomes {
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
         note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(el_het_pole_`outcome'_99, replace)
-    gr export el_het_pole_`outcome'_99.png, replace
+        name(elhtp_`outcome'_99, replace)
+    gr export elhtp_`outcome'_99.png, replace
 }
 
 estimates clear
@@ -3540,8 +3540,8 @@ coefplot ///
 		xtitle("Export readiness index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -3622,8 +3622,8 @@ coefplot ///
 		xtitle("Export readiness index SSA") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -3703,8 +3703,8 @@ coefplot ///
 		xtitle("Export performance") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -3784,8 +3784,8 @@ coefplot ///
 		xtitle("Management performance index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -3865,8 +3865,8 @@ coefplot ///
 		xtitle("Female efficacy") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -3946,8 +3946,8 @@ coefplot ///
 		xtitle("Female locus") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -4027,8 +4027,8 @@ coefplot ///
 		xtitle("Gender index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -4108,8 +4108,8 @@ coefplot ///
 		xtitle("Female employees") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 
@@ -4189,8 +4189,8 @@ coefplot ///
 		xtitle("IHS profit, wins.") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm5_`outcome', replace)
-gr export el_het_firm5_`outcome'.png, replace
+		name(elht_firm5_`outcome', replace)
+gr export elht_firm5_`outcome'.png, replace
 
 }
 }
@@ -4396,8 +4396,8 @@ coefplot ///
 		xtitle("Export readiness index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4478,8 +4478,8 @@ coefplot ///
 		xtitle("Export readiness index SSA") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4559,8 +4559,8 @@ coefplot ///
 		xtitle("Export performance") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4640,8 +4640,8 @@ coefplot ///
 		xtitle("Management performance index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4721,8 +4721,8 @@ coefplot ///
 		xtitle("Female efficacy") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4802,8 +4802,8 @@ coefplot ///
 		xtitle("Female locus") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4883,8 +4883,8 @@ coefplot ///
 		xtitle("Gender index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -4964,8 +4964,8 @@ coefplot ///
 		xtitle("Female employees") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 
@@ -5045,8 +5045,8 @@ coefplot ///
 		xtitle("IHS profit, wins.") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_firm10_`outcome', replace)
-gr export el_het_firm10_`outcome'.png, replace
+		name(elht_firm10_`outcome', replace)
+gr export elht_firm10_`outcome'.png, replace
 
 }
 }
@@ -5277,8 +5277,8 @@ coefplot ///
 		xtitle("Export readiness index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5359,8 +5359,8 @@ coefplot ///
 		xtitle("Export readiness index SSA") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5440,8 +5440,8 @@ coefplot ///
 		xtitle("Export performance") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5521,8 +5521,8 @@ coefplot ///
 		xtitle("Management performance index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5602,8 +5602,8 @@ coefplot ///
 		xtitle("Female efficacy") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5683,8 +5683,8 @@ coefplot ///
 		xtitle("Female locus") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5764,8 +5764,8 @@ coefplot ///
 		xtitle("Gender index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5845,8 +5845,8 @@ coefplot ///
 		xtitle("Female employees") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 
@@ -5926,8 +5926,8 @@ coefplot ///
 		xtitle("IHS profit, wins.") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_network_`outcome', replace)
-gr export el_het_network_`outcome'.png, replace
+		name(elht_network_`outcome', replace)
+gr export elht_network_`outcome'.png, replace
 
 }
 }
@@ -6156,8 +6156,8 @@ coefplot ///
 		xtitle("Export readiness index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6238,8 +6238,8 @@ coefplot ///
 		xtitle("Export readiness index SSA") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6319,8 +6319,8 @@ coefplot ///
 		xtitle("Export performance") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6400,8 +6400,8 @@ coefplot ///
 		xtitle("Management performance index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6481,8 +6481,8 @@ coefplot ///
 		xtitle("Female efficacy") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6562,8 +6562,8 @@ coefplot ///
 		xtitle("Female locus") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6643,8 +6643,8 @@ coefplot ///
 		xtitle("Gender index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6724,8 +6724,8 @@ coefplot ///
 		xtitle("Female employees") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 
@@ -6805,8 +6805,8 @@ coefplot ///
 		xtitle("IHS profit, wins.") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_mpi_`outcome', replace)
-gr export el_het_mpi_`outcome'.png, replace
+		name(elht_mpi_`outcome', replace)
+gr export elht_mpi_`outcome'.png, replace
 
 }
 }
@@ -7035,8 +7035,8 @@ coefplot ///
 		xtitle("Export readiness index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7117,8 +7117,8 @@ coefplot ///
 		xtitle("Export readiness index SSA") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7197,8 +7197,8 @@ coefplot ///
 		xtitle("Export performance") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 90th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7278,8 +7278,8 @@ coefplot ///
 		xtitle("Management performance index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7359,8 +7359,8 @@ coefplot ///
 		xtitle("Female efficacy") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7440,8 +7440,8 @@ coefplot ///
 		xtitle("Female locus") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7521,8 +7521,8 @@ coefplot ///
 		xtitle("Gender index") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7602,8 +7602,8 @@ coefplot ///
 		xtitle("Female employees") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 
@@ -7683,8 +7683,8 @@ coefplot ///
 		xtitle("IHS profit, wins.") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("Confidence interval at the 99th percentile.", span size(small)) /// 95th only holds for lare firms
-		name(el_het_genderi_`outcome', replace)
-gr export el_het_genderi_`outcome'.png, replace
+		name(elht_genderi_`outcome', replace)
+gr export elht_genderi_`outcome'.png, replace
 
 }
 }

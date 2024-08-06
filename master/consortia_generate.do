@@ -366,7 +366,7 @@ lab var exp_invested "Export investment > 0"
 *	PART 6.1: Categorize the different types of innovation
 ***********************************************************************	
 *** Categorisation
-{
+
 gen inno_product_imp = 0
 lab var inno_product_imp "Improving the existing product"
 gen inno_product_new = 0
