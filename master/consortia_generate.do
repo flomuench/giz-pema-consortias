@@ -279,7 +279,8 @@ foreach var of local id {
 
 ***********************************************************************
 * 	PART 3:  entreprise no longer in operations	
-***********************************************************************		
+***********************************************************************
+{		
 gen closed = 0 
 lab var closed "Companies that are no longer operating"
 replace closed = 1 if id_plateforme == 989
@@ -304,11 +305,12 @@ exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa
 foreach var of local el_variables {
     replace `var' = 0 if surveyround == 3 & closed == 1
 }
-
+}
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
 ***********************************************************************
+{
 * Domestic sales
 gen ca_tun = .
 	replace ca_tun = ca - ca_exp if ca_exp != . & ca != .
@@ -338,10 +340,12 @@ lab var profit_pos "Profit > 0"
 * Costs (winsorised costs in Part 11 Winsorisation)
 gen costs = ca - profit
 lab var costs "Costs"
+}
 
 ***********************************************************************
 *	PART 5: Export - dummies
 ***********************************************************************
+{
 * Exported
 replace exported = (ca_exp > 0)
 replace exported = . if ca_exp == .
@@ -361,12 +365,13 @@ gen exp_invested = (exp_inv > 0)
 replace exp_invested = . if exp_inv == .
 lab var exp_invested "Export investment > 0"
 
+}
 
 ***********************************************************************
 *	PART 6.1: Categorize the different types of innovation
 ***********************************************************************	
 *** Categorisation
-
+{
 gen inno_product_imp = 0
 lab var inno_product_imp "Improving the existing product"
 gen inno_product_new = 0
@@ -1125,7 +1130,7 @@ gen net_autre = net_services_autre
 ***********************************************************************
 * 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
-
+{
 *rename long var
 
 forvalues p = 95(4)99 { 
@@ -1192,7 +1197,7 @@ foreach var of local ys {
 
 }
 
-
+}
 ***********************************************************************
 * 	PART 14: Tunis dummy	
 ***********************************************************************
@@ -1204,6 +1209,7 @@ lab var city "HQ in Tunis, Sousse, Sfax"
 ***********************************************************************
 * 	PART 15: Entreprise Size
 ***********************************************************************
+{
 * Generate entrep_size variable and label it
 gen entrep_size = .
 lab var entrep_size "1- small, 2- large"
@@ -1227,6 +1233,7 @@ replace entrep_size2 = . if employes ==.
 
 label define entrep_size_label2 1 "Small" 2 "Large"
 label values entrep_size2 entrep_size_label2
+}
 
 ***********************************************************************
 * 	PART 16: Digital consortia dummy	
@@ -1236,6 +1243,7 @@ gen cons_dig = (pole == 4)
 ***********************************************************************
 * 	PART 17: peer effects: baseline peer quality	
 ***********************************************************************	
+{
 	* loop over all peer quality baseline characteristics
 local labels `" "management practices" "entrepreneurial confidence" "export performance" "business size" "profit" "'
 local peer_vars "mpmarki genderi epp profit"
@@ -1316,6 +1324,17 @@ foreach var of local y_vars {
 }
 *bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
 *bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
+
+}
+
+
+***********************************************************************
+* 	PART 18: create cluster variable for twoway clustered SE	
+***********************************************************************	
+* variable defined as in Cai and Szeidl (2018)
+gen consortia_cluster = id_plateforme
+	replace consortia_cluster = pole if treatment == 1
+
 
 ***********************************************************************
 * 	PART final save:    save as final consortium_database
