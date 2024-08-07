@@ -100,123 +100,7 @@ gen status = (take_up_per > 0 & take_up_per < .)
 
 
 * PHASE 2 of the treatment: "consortia export promotion"
-replace take_up = 0 if id_plateforme == 991 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 991 & surveyround ==3
-replace take_up = 0 if id_plateforme == 994 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 994 & surveyround ==3
-replace take_up = 0 if id_plateforme == 996 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 996 & surveyround ==3
 
-replace take_up = 0 if id_plateforme == 998 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 998 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1015 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1015 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1019 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1019 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1022 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1022 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1026 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1026 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1028 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1028 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1035 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1035 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1037 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1037 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1040 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1040 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1045 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1045 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1051  & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1051 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1059 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1059 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1061 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1061 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1079 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1079 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1087 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1087 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1089 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1089 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1097 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1097 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1128 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1128 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1136 & surveyround ==3 
-replace desistement_consortium = 1 if id_plateforme == 1136 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1146 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1146 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1150 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1150 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1162 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1162 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1166 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1166 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1169 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1169 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1184 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1184 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1192 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1192 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1194 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1194 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1195 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1195 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1201 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1201 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1214 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1214 & surveyround ==3
- 
-replace take_up = 0 if id_plateforme == 1219 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1219 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1225 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1225 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1231 & surveyround ==3 
-replace desistement_consortium = 1 if id_plateforme == 1231 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1233 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1233 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1241 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1241 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1242 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1242 & surveyround ==3
-
-replace take_up = 0 if id_plateforme == 1247 & surveyround ==3
-replace desistement_consortium = 1 if id_plateforme == 1247 & surveyround ==3
 }
 
 ***********************************************************************
@@ -271,7 +155,7 @@ replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répond
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
-local id 989 994 997 995 1004 1025 1031 1056 1067 1074 1090 1094 1110 1123 1124 1127 1136 1137 1154 1161 1162 1166 1175
+local id 989 994 995 997 1004 1025 1031 1067 1074 1090 1094 1110 1124 1127 1136 1137 1154 1161 1162 1175 1202 1214 1219 1235 1241
 foreach var of local id {
 	replace refus = 1 if surveyround == 3 & id_plateforme == `var'
 }
@@ -282,29 +166,11 @@ foreach var of local id {
 ***********************************************************************		
 gen closed = 0 
 lab var closed "Companies that are no longer operating"
-replace closed = 1 if id_plateforme == 989
+
 replace closed = 1 if id_plateforme == 1083
 replace closed = 1 if id_plateforme == 1059 
 replace closed = 1 if id_plateforme == 1090
 replace closed = 1 if id_plateforme == 1044
-replace closed = 1 if id_plateforme == 1127
-replace closed = 1 if id_plateforme == 1154
-
-local el_variables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres entreprise_model exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes ///
-exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4 expp_cost expp_ben employes car_empl1 car_empl2 man_fin_per_ind ///
- man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons ///
- man_source_pdg man_source_fam man_source_even man_source_autres net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques ///
- net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man ///
- car_efi_motiv car_loc_env car_loc_exp car_loc_soin listexp ca ca_exp comp_ca2023_intervalles ca_2024 ca_exp_2024 comp_ca2024_intervalles ///
- profit_2023_category profit_2024_category profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain ///
- int_contact attest  el_produit1 el_produit2 el_produit3 inno_none inno_improve inno_new inno_both inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client ///
- inno_mot_dummyother inno_mot_total netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg export_1 ///
- export_2 export_3 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5 net_size3_m net_size4_m
-
-foreach var of local el_variables {
-    replace `var' = 0 if surveyround == 3 & closed == 1
-}
-
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
@@ -343,7 +209,7 @@ lab var costs "Costs"
 *	PART 5: Export - dummies
 ***********************************************************************
 * Exported
-replace exported = (ca_exp > 0)
+gen exported = (ca_exp > 0)
 replace exported = . if ca_exp == .
 lab var exported "Export sales > 0"
 
@@ -363,10 +229,18 @@ lab var exp_invested "Export investment > 0"
 
 
 ***********************************************************************
-*	PART 6.1: Categorize the different types of innovation
+*	PART 6.1: Innovation
 ***********************************************************************	
-*** Categorisation
+*** Innovation (continous count)
+egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit), missing
+bys id_plateforme (surveyround): gen innovated = (innovations > 0)
+	replace innovated = . if innovations == .
+*br id_plateforme surveyround innovations innovated
+lab var innovations "Total innovations"
+lab var innovated "Innovated"
 
+*** Categorisation
+{	
 gen inno_product_imp = 0
 lab var inno_product_imp "Improving the existing product"
 gen inno_product_new = 0
@@ -393,7 +267,6 @@ replace inno_product_imp =1 if id_plateforme == 1007 /*nouveau design */
 replace inno_product_imp =1 if id_plateforme == 1009 /*nouveaux recrutements, conception et mise en place des projets de pergola avec les horeca (hotels)*/
 replace inno_product_imp =1 if id_plateforme == 1013 /*amélioration de qualité de cuire de produit et amélioration de chaine de produit , amélioration de la finition des sac trouses ect */
 replace inno_product_imp =1 if id_plateforme == 1019 /*services sous forme de chatroom en ligne /aamlt des améliorations au niveau de la plateforme*/
-replace inno_product_imp =1 if id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
 replace inno_product_imp =1 if id_plateforme == 1027 /*gamme de maquillage , améliorations fl laboratoire */
 replace inno_product_imp =1 if id_plateforme == 1035 /*accompagnement et vulgarisation scientifique */
 replace inno_product_imp =1 if id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
@@ -402,7 +275,6 @@ replace inno_product_imp =1 if id_plateforme == 1043 /*produit publicitaires , i
 replace inno_product_imp =1 if id_plateforme == 1050 /*nous avons réalisé des innovations et des améliorations grâce à des systèmes personnalisés adaptés aux consommateurs*/
 replace inno_product_imp =1 if id_plateforme == 1054 /*sacs en 5k/10k/25k */
 replace inno_product_imp =1 if id_plateforme == 1055 /*nous avons augmenter le nombre de produits et nous avons change l'emballage*/
-replace inno_product_imp =1 if id_plateforme == 1107 /*amélioration de résistance mécanique */
 replace inno_product_imp =1 if id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
 replace inno_product_imp =1 if id_plateforme == 1119 /*ameliaration pour les mise a jour logiciel*/
 replace inno_product_imp =1 if id_plateforme == 1124 /*taille et coulleur de produit*/
@@ -434,7 +306,6 @@ replace inno_product_new =1 if id_plateforme == 996 /*un autre modele de portfeu
 replace inno_product_new =1 if id_plateforme == 999 /*nouvelle services de comptabilité carbone( déclaration de matériel ) */
 replace inno_product_new =1 if id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
 replace inno_product_new =1 if id_plateforme == 1005 /*des jbeyeb (tenues traditionnelles masculines)*/
-replace inno_product_new =1 if id_plateforme == 1107 /*les vasques  des meubles ( exp : des tables ) */
 replace inno_product_new =1 if id_plateforme == 1010 /*gel fixateur */
 replace inno_product_new =1 if id_plateforme == 1017 /*biscuit traditionnelle , biscuit secs , gamme sans sucres*/
 replace inno_product_new =1 if id_plateforme == 1020 /*developement un systeme complet de production des plante adapter pour tous les types des climats*/
@@ -444,7 +315,6 @@ replace inno_product_new =1 if id_plateforme == 1030 /*zedna fl nombre des emplo
 replace inno_product_new =1 if id_plateforme == 1035 /*le conseil */
 replace inno_product_new =1 if id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
 replace inno_product_new =1 if id_plateforme == 1038 /*on a rajouté des machines afin d'améliorer la capacité de production / introduire une nouvelle gamme dans secteur décoration ( céramique artistique )*/
-replace inno_product_new =1 if id_plateforme == 1040 /*الفخار الهريسة العربي السلاطه مشويه التوابل اللبسه التقليدية*/
 replace inno_product_new =1 if id_plateforme == 1041 /*zedet fruits et légume surgelé */
 replace inno_product_new =1 if id_plateforme == 1043 /*diversité des produits , je cible le consommateur, diversification des services*/
 replace inno_product_new =1 if id_plateforme == 1046 /*ils proposent des services sur mesure */
@@ -478,8 +348,6 @@ replace inno_product_new =1 if id_plateforme == 1153 /*d'autres produits et serv
 replace inno_product_new =1 if id_plateforme == 1157 /*audit interne de securité */
 replace inno_product_new =1 if id_plateforme == 1164 /*on rajouté une nouvelle ligne de produits énérgétiques/ packs de produits/ des formations gratuites pour les femmes// des confitures de tomates sucrées + de nouveaux parfums pour les pâtes à tartiner*/
 replace inno_product_new =1 if id_plateforme == 1167 /*sacs de soiré /accesoire de soiré*/
-replace inno_product_new =1 if id_plateforme == 1168 /*lancement de gamme de salon de jardin */
-replace inno_product_new =1 if id_plateforme == 1169 /*coté choix et diversité de formation destiné pour les proffesionnels*/
 replace inno_product_new =1 if id_plateforme == 1170 /*de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique*/
 replace inno_product_new =1 if id_plateforme == 1176 /*nouvelle conception et liaison intelligente */
 replace inno_product_new =1 if id_plateforme == 1182 /*une gamme luvia c serum o mousse o creme b vitamine c */
@@ -549,7 +417,6 @@ replace proc_mark_correct =1 if id_plateforme == 1005 /*la création et la dimin
 replace proc_mark_correct =1 if id_plateforme == 1010 /*ils ont intégré du commercial et ont un nouvel canal de distribution*/
 replace proc_mark_correct =1 if id_plateforme == 1017 /*b2b, pause cafe ,evenement, site web , logiciel erp */
 replace proc_mark_correct =1 if id_plateforme == 1019 /*ils ont fait des changements au niveau des offres et ont fait des changements dans les packs services*/
-replace proc_mark_correct =1 if id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
 replace proc_mark_correct =1 if id_plateforme == 1030 /*services marketing en ligne/ on a travaillé sur l'image de marque/ site web en cours pour les ventes en ligne/ j'ai fait un logiciel interne personnalisé*/
 replace proc_mark_correct =1 if id_plateforme == 1035 /*par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel*/
 replace proc_mark_correct =1 if id_plateforme == 1038 /*elles ont travaillés sur des formations techniques (pratiques), ont rajouté des workshops pour les petits et se sont concentrés plus sur le digital*/
@@ -567,7 +434,6 @@ replace proc_mark_correct =1 if id_plateforme == 1071 /*meilleur organisation du
 replace proc_mark_correct =1 if id_plateforme == 1087 /*la certifaction /recouler la game cheuveux/ lemballage /qutite des produits*/
 replace proc_mark_correct =1 if id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
 replace proc_mark_correct =1 if id_plateforme == 1117 /*changement du logo w couleur personamisé et création des parfum sur mesure */
-replace proc_mark_correct =1 if id_plateforme == 1118 /*lancement d'un site web de l'entreprise*/
 replace proc_mark_correct =1 if id_plateforme == 1126 /*elle travaille sur le marketing digitale o elle lancer un site de l’export a l’internationale */
 replace proc_mark_correct =1 if id_plateforme == 1147 /*regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage*/
 replace proc_mark_correct =1 if id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
@@ -603,15 +469,7 @@ replace inno_org_correct =1 if id_plateforme == 1182 /*on a un nouvel emballage 
 replace inno_org_correct =1 if id_plateforme == 1239 /*odoo et tecnologie web */
 replace inno_org_correct =1 if id_plateforme == 1244 /*suivi des chantiers verts/mangemenet des projets plus adapté/améliorer la gestion financière*/
 
-***********************************************************************
-*	PART 6.2: Innovation
-***********************************************************************	
-egen innovations = rowtotal(inno_commerce inno_lieu inno_process inno_produit  inno_product_new proc_prod_correct proc_mark_correct inno_org_correct inno_product_new), missing
-bys id_plateforme (surveyround): gen innovated = (innovations > 0)
-	replace innovated = . if innovations == .
-*br id_plateforme surveyround innovations innovated
-lab var innovations "Total innovations"
-lab var innovated "Innovated"
+}
 
 ***********************************************************************
 *	PART 7: network
@@ -651,7 +509,7 @@ lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 {
 	*Definition of all variables that are being used in index calculation
-local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new ca_tun
+local allvars man_fin_per_fre car_loc_exp man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub exp_pra_foire exp_pra_sci exp_pra_rexp exp_pra_cible exp_pra_mission exp_pra_douane exp_pra_plan exprep_norme exp_inv exprep_couts exp_pays exp_afrique car_efi_fin1 car_efi_nego car_efi_conv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5 exp_pays_ssa clients_ssa clients_ssa_commandes man_hr_pro man_fin_num employes ca_tun profit inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres man_fin_per_qua man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_fin_per_ind man_fin_per_pro man_fin_per_sto exported export_1 export_2 ca ca_exp ca_2024 ca_exp_2024 profit_2024 exp_pra_vent car_efi_man car_efi_motiv car_loc_soin net_association net_size3 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre net_coop_pos net_coop_neg
 ds `allvars', has(type string)
 
 	* Create temporary variable
@@ -697,8 +555,7 @@ egen epp = rowmean(temp_exportedz temp_export_1z temp_export_2z temp_exp_paysz t
 
 			*Innovation practices index
 egen ipi = rowmean(temp_inno_improvez temp_inno_newz temp_inno_proc_metz temp_inno_proc_logz temp_inno_proc_prixz temp_inno_proc_supz temp_inno_proc_autresz) 
-egen ipi_correct = rowmean (temp_proc_prod_correctz temp_proc_mark_correctz temp_inno_org_correctz temp_inno_product_impz temp_inno_product_newz)		
-	
+			
 			* business performance
 egen bpi = rowmean(temp_employesz temp_ca_tunz temp_profitz)
 egen bpi_2024 = rowmean(temp_employesz temp_ca_2024z temp_profit_2024z)
@@ -732,7 +589,6 @@ label var female_initiative "Initiaitve"
 label var female_loc "Locus of control"
 label var genderi "Entrepreneurial empowerment"
 label var ipi "Innovation practices index -Z Score"
-label var ipi_correct "Corrected Innovation practices index - Z-score"
 label var bpi "Business performance index- Z-score"
 label var bpi_2024 "Business performance index- Z-score in 2024"
 
@@ -749,7 +605,6 @@ sum temp_exprep_norme temp_exp_pra_cible temp_exp_pra_mission temp_exp_pra_douan
 sum temp_car_efi_fin1 temp_car_efi_nego temp_car_efi_conv temp_car_efi_man temp_car_efi_motiv temp_car_init_prob temp_car_init_init temp_car_init_opp temp_car_loc_succ temp_car_loc_env temp_car_loc_insp temp_car_loc_env temp_car_loc_exp temp_car_loc_soin
 sum temp_exprep_norme temp_exp_inv temp_exprep_couts temp_exp_pays temp_exp_afrique
 sum temp_inno_improve temp_inno_new temp_inno_proc_met temp_inno_proc_log temp_inno_proc_prix temp_inno_proc_sup temp_inno_proc_autres
-sum temp_proc_prod_correct temp_proc_mark_correct temp_inno_org_correct temp_inno_product_imp temp_inno_product_new		
 	
 	* create total points per index dimension
 			* export readiness index (eri) 
@@ -766,8 +621,7 @@ egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mar
 			
 			*Innovation index
 egen inno_points = rowtotal(inno_improve inno_new inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres), missing 
-egen correct_inno_points = rowtotal (proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new)
-			
+
 			* female empowerment index (genderi)
 				* locus of control "believe that one has control over outcome, as opposed to external forces"
 				* efficacy "the ability to produce a desired or intended result."
@@ -788,7 +642,6 @@ label var female_initiative_points "Women's entrepreneurial initiaitve points"
 label var female_loc_points "Women's locus of control points"
 label var genderi_points "Gender index points"
 label var inno_points "Innovation practices index points"
-label var correct_inno_points "Corrected innovation practices index points"
 
 	* drop temporary vars		  										  
 drop temp_*
@@ -848,7 +701,7 @@ gen profit_pct = .
 	
 	* winsorize
 		* winsorize all outcomes (but profit)
-local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes prni pr2024ni cani ca2024ni"
+local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes"
 
 foreach var of local wins_vars {
 		gen `var'_w99 = `var'
@@ -924,8 +777,9 @@ lab var ca_tun_2024_w95 "Domestic sales 2024 wins. 95th"
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95 prni_w99 pr2024ni_w99 cani_w99 ca2024ni_w99 prni_w95 pr2024ni_w95 cani_w95 ca2024ni_w95"
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95"
      
+
 		* check how many zeros
 foreach var of local ys {
 		sum `var' if surveyround == 2 & !inlist(`var', -777, -888, -999,.)
@@ -1098,27 +952,6 @@ lab var car_empl1_w99_k1 "Female employees"
 lab var car_empl2_w99_k1 "Young employees"
 lab var ihs_employes_w99_k3 "Employees" 
 lab var car_empl1_w99_k3 "Female employees"
-lab var net_size3_w99 "Network all contacts, Winsorized 99th Percentile"
-lab var net_size3_m_w99 "Network male contacts, Winsorized 99th Percentile"
-lab var net_gender3_w99 "Network female contacts, Winsorized 99th Percentile"
-lab var net_size4_w99 "Network all contacts, Winsorized 99th Percentile"
-lab var net_size4_m_w99 "Network male contacts, Winsorized 99th Percentile"
-lab var net_gender4_w99 "Network female contacts, Winsorized 99th Percentile"
-
-lab var net_size3_w95 "Network all contacts, Winsorized 95th Percentile"
-lab var net_size3_m_w95 "Network male contacts, Winsorized 95th Percentile"
-lab var net_gender3_w95 "Network female contacts, Winsorized 95th Percentile"
-lab var net_size4_w95 "Network all contacts, Winsorized 95th Percentile"
-lab var net_size4_m_w95 "Network male contacts, Winsorized 95th Percentile"
-lab var net_gender4_w95 "Network female contacts, Winsorized 95th Percentile"
-
-gen net_pratiques = net_services_pratiques 
-gen net_produits = net_services_produits
-gen net_mark = net_services_mark
-gen net_sup = net_services_sup
-gen net_contract = net_services_contract
-gen net_confiance = net_services_confiance
-gen net_autre = net_services_autre
 
 }
 
@@ -1165,13 +998,13 @@ rename ihs_ca_exp_2024_w`p'_k5 ihs_caexp2024_w`p'_k5
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre"
+local network "network net_size net_size_w99 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95"
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
-local innovation "ipi ipi_correct innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new"
-local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45 exp_pays_ssa_w99 exp_pays_ssa_w95" // add at endline: ihs_exp_pays_w99_k1
-local business_performance99 "closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
-local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3 ihs_ca_2024_w95_k1 ihs_costs_2024_w95_k1"
+local innovation "ipi innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother"
+local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 epp exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45" // add at endline: ihs_exp_pays_w99_k1
+local business_performance99 " ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category"
+local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance99'  `business_performance95'
 
 	* gen dummy + replace missings with zero at bl

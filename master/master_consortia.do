@@ -42,7 +42,6 @@ ssc install estout, replace
 ssc install coefplot, replace
 ssc install missingplot, replace
 ssc install nmissing, replace
-ssc install reghfde, replace
 */
 
 	* set scheme for visualisations
@@ -65,10 +64,6 @@ set scheme burd 			// for presentation, coloured
 	
 	else if "`c(username)'" == "MUNCHFA" {
 		global person = "G:/My Drive"
-	}
-	
-	else if "`c(username)'" == "fmuench" {
-		global person = "C:/Users/fmuench/Documents"
 	}
 	
 	else {

@@ -882,9 +882,6 @@ replace net_services_other= "elle utilise ses contacts pour le partage d'expéri
 replace int_ben1="Le travail sur soi-même" if int_ben1== "تعمل على روحك" 
 replace int_ben1="" if int_ben1== "-" /*TBC*/
 replace int_ben1="de nouveaux partenaires qui ont débuté à travailler avec moi" if int_ben1== "des partenaires walew yekhdmou meaya"
-replace int_ben1="apprentissage procedures de l'export" if int_ben1 =="ta3alom les prorusses de l’export"
-replace int_ben1 ="nouvelles connaissances" if int_ben1 =="bech tetaref ala abed jdod"
-replace int_ben1 ="nouvelles connaissances" if int_ben1 =="t3arfet ala abed jdod"
 
 *int_ben2
 replace int_ben2="Le travail d'équipe" if int_ben2== "تعمل عالفريق متاعك" 
@@ -898,14 +895,10 @@ replace int_ben3="Travail sur le produit en restauration" if int_ben3== "تعم�
 replace int_ben3="expériences par rapport aux visites te permettent de faire des analyses / comparaison / évaluation des produits par rapport aux secteurs" if int_ben3== "expériences par rapport ll les visites ikhalik tnajem taamel les analyses / comparaison / évaluation des produits par rapport aux secteurs"
 replace int_ben3="j'ai appris d'eux les procédures d'export et des techniques digitales" if int_ben3== "t3alamet menhom fel export o fel digitale"
 replace int_ben3="des opportunités d'exposition en Arabie Saoudite" if int_ben3== "opportunité dexposition f saudi"
-replace int_ben3 ="partenariat et expériences" if int_ben3=="charaka et expériences"
-replace int_ben3 ="Travailler ensemble" if int_ben3=="oualeou yekhdmou maa badhhom"
-
-
 
 *int_ben_autres
 replace int_ben_autres="" if int_ben_autres== "+++++++++++++++++++++" /*TBC*/
-replace int_ben_autres="financement" if int_ben_autres=="l9it chkoun ymawalni"
+
 
 *int_incv1
 replace int_incv1="L'entreprise a été victime d'injustice et n'a pas été inscrit dans le groupe malgré un dossier complet" if int_incv1== "تعرضت شركني لظلم وعدم التسجيل في المجموعة رغم مدي بملفي كامل وشامل" 
