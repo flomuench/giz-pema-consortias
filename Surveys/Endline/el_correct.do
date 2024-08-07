@@ -910,6 +910,12 @@ replace int_ben_autres="financement" if int_ben_autres=="l9it chkoun ymawalni"
 *int_incv1
 replace int_incv1="L'entreprise a été victime d'injustice et n'a pas été inscrit dans le groupe malgré un dossier complet" if int_incv1== "تعرضت شركني لظلم وعدم التسجيل في المجموعة رغم مدي بملفي كامل وشامل" 
 replace int_incv1="L'ambiance générale" if int_incv1== "jaw l3am" 
+replace int_incv1="La methode de selection des entreprises" if int_incv1=="difficulté enou thatou les membres mabaadhhom meghir ma yakhtarou baadhhom"
+replace int_incv1="Diversité des profils et caracteres des membres" if int_incv1=="les membres meandhomch nafes profil o mech nafes tbi3a"
+replace int_incv1="Mal organisation du gie" if int_incv1=="l'organisation mta gie maajbthech mehish mnadhma"
+
+
+
 
 *int_incv2
 replace int_incv2="Je ne peux pas être d'accord avec les idées des participantes" if int_incv2== "matnajemesh twafe9 bin les aidées des participants" 
@@ -918,6 +924,9 @@ replace int_incv2="" if int_incv2== "++++++" /*TBC */
 replace int_incv2="il y a une importante hétérogénéité au sein du consortium: certaines entreprises sont encores débutantes alors que d'autres sont bien établies depuis longtemps" if int_incv2== "les membres est trop élevés ykalak khater fama abed debuante o fama abed kdom barcha"
 replace int_incv2="Malheureusement, il y une distinction régionale (entre le Sud et le Nord)" if int_incv2== "التميز بين الجنوب والشمال الاسف"
 replace int_incv2="il n'y a pas de motivation pour l'équipe" if int_incv2== "mfamech motivation lel equipe"
+replace int_incv2="Beaucoup de membres ont quitté le consortium à cause des conflits internes" if int_incv2=="barcha kharjou men consortium b houkem fama barcha machekel bin les membres du consortium"
+replace int_incv2="conflit avec la giz, beaucoup d'idées qui ne sont pas d'accord entre giz et gie" if int_incv2=="les conflit mta giz barha macchekel maytfehmoush ala nafes les aidéés"
+
 
 
 *int_incv3
