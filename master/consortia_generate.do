@@ -607,7 +607,7 @@ replace inno_org_correct =1 if id_plateforme == 1176 /*des nouvelles technologie
 replace inno_org_correct =1 if id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
 replace inno_org_correct =1 if id_plateforme == 1239 /*odoo et tecnologie web */
 replace inno_org_correct =1 if id_plateforme == 1244 /*suivi des chantiers verts/mangemenet des projets plus adapté/améliorer la gestion financière*/
-
+}
 ***********************************************************************
 *	PART 6.2: Innovation
 ***********************************************************************	

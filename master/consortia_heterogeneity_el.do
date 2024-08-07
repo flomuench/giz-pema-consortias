@@ -95,94 +95,94 @@ program wolf4
 	args ind1 ind2 var1 var2 var3 var4 var5 var6 var7 var8 var9 var10 var11 cond1 cond2 cond3 cond4 surveyround name
 	version 16
 rwolf2 ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `14', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `15', cluster(id_plateforme)) ///
-		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `15', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `16', cluster(id_plateforme)) ///
-		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `16', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)) ///
-		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `17', cluster(id_plateforme)) ///
-		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `17', cluster(id_plateforme)), ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `14', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `15', cluster(consortia_cluster)) ///
+		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `15', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `16', cluster(consortia_cluster)) ///
+		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `16', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `12' treatment `12'_y0 i.missing_bl_`12' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `12' `12'_y0 i.missing_bl_`12' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)) ///
+		(reg `13' treatment `13'_y0 i.missing_bl_`13' i.strata_final if `18' & `17', cluster(consortia_cluster)) ///
+		(ivreg2 `13' `13'_y0 i.missing_bl_`13' i.strata_final (take_up = treatment) if `18' & `17', cluster(consortia_cluster)), ///
 	indepvars(`1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2') ///
 	seed(110723) reps(30) usevalid strata(strata_final)
 
@@ -199,60 +199,60 @@ program wolf3
 	args ind1 ind2 var1 var2 var3 var4 var5 var6 var7 var8 var9 cond1 cond2 cond3 surveyround name
 	version 16
 rwolf2 ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `12', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `13', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `14', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `14', cluster(id_plateforme)), ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `12', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `13', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `15' & `14', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `15' & `14', cluster(consortia_cluster)), ///
 	indepvars(`1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2') ///
 	seed(110723) reps(30) usevalid strata(strata_final)
 
@@ -269,42 +269,42 @@ program wolf2
 	args ind1 ind2 var1 var2 var3 var4 var5 var6 var7 var8 var9 cond1 cond2 surveyround name
 	version 16
 rwolf2 ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `14' & `12', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `14' & `12', cluster(id_plateforme)) ///
-		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)) ///
-		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `14' & `13', cluster(id_plateforme)) ///
-		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `14' & `13', cluster(id_plateforme)), ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `14' & `12', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `14' & `12', cluster(consortia_cluster)) ///
+		(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `7' treatment `7'_y0 i.missing_bl_`7' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `7' `7'_y0 i.missing_bl_`7' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `8' treatment `8'_y0 i.missing_bl_`8' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `8' `8'_y0 i.missing_bl_`8' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `9' treatment `9'_y0 i.missing_bl_`9' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `9' `9'_y0 i.missing_bl_`9' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `10' treatment `10'_y0 i.missing_bl_`10' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `10' `10'_y0 i.missing_bl_`10' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)) ///
+		(reg `11' treatment `11'_y0 i.missing_bl_`11' i.strata_final if `14' & `13', cluster(consortia_cluster)) ///
+		(ivreg2 `11' `11'_y0 i.missing_bl_`11' i.strata_final (take_up = treatment) if `14' & `13', cluster(consortia_cluster)), ///
 	indepvars(`1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2', `1', `2') ///
 	seed(110724) reps(30) usevalid strata(strata_final)
 
@@ -338,7 +338,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -347,7 +347,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -458,14 +458,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -583,14 +583,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -707,14 +707,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -831,14 +831,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -956,14 +956,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1081,14 +1081,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1206,14 +1206,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1331,14 +1331,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1456,14 +1456,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1581,14 +1581,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1706,14 +1706,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1832,14 +1832,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -1957,14 +1957,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2082,14 +2082,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2207,14 +2207,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2332,14 +2332,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2457,14 +2457,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2582,14 +2582,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2707,14 +2707,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2832,14 +2832,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -2969,14 +2969,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -3094,14 +3094,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -3219,14 +3219,14 @@ foreach outcome of local outcomes {
     foreach cond of local conditions {
         foreach sector of local groups {
             // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
             scalar `outcome'p1 = b[4,2]
 
             // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
             estadd local bl_control "Yes"
             estadd local strata_final "Yes"
             matrix b = r(table) // access p-values for mht
@@ -3358,7 +3358,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -3367,7 +3367,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -3472,14 +3472,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3554,14 +3554,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3635,14 +3635,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3716,14 +3716,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3797,14 +3797,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3878,14 +3878,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -3959,14 +3959,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4040,14 +4040,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4121,14 +4121,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4214,7 +4214,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -4223,7 +4223,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -4328,14 +4328,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4410,14 +4410,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4491,14 +4491,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4572,14 +4572,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4653,14 +4653,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4734,14 +4734,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4815,14 +4815,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4896,14 +4896,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -4977,14 +4977,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5095,7 +5095,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -5104,7 +5104,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -5209,14 +5209,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5291,14 +5291,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5372,14 +5372,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5453,14 +5453,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5534,14 +5534,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5615,14 +5615,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5696,14 +5696,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5777,14 +5777,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5858,14 +5858,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -5974,7 +5974,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -5983,7 +5983,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -6088,14 +6088,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6170,14 +6170,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6251,14 +6251,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6332,14 +6332,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6413,14 +6413,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6494,14 +6494,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6575,14 +6575,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6656,14 +6656,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6737,14 +6737,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -6853,7 +6853,7 @@ foreach outcome in `varlist' {
 				gettoken group groups : groups
 					
 					* ITT
-					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+					eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display
@@ -6862,7 +6862,7 @@ foreach outcome in `varlist' {
 
 
 					* ATT, IV		
-					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+					eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
 					quietly ereturn display // provides same table but with r(table)
@@ -6967,14 +6967,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7049,14 +7049,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7129,14 +7129,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7210,14 +7210,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7291,14 +7291,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7372,14 +7372,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7453,14 +7453,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7534,14 +7534,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
@@ -7615,14 +7615,14 @@ local groups "s i"
 
 foreach cond of local conditions {
 		gettoken sector sectors : sectors
-			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(id_plateforme)
+			eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
 			scalar `outcome'p1 = b[4,2]
 
 			* ATT, IV		
-			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(id_plateforme) first
+			eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			matrix b = r(table)			// access p-values for mht
