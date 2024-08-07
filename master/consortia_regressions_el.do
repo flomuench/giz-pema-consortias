@@ -113,10 +113,8 @@ program qvalues
 }
 }
 ***********************************************************************
-* 	PART 1: survey attrition 		
+* 	PART 1: test for differential survey attrition 		
 ***********************************************************************
-
-*test for differential total attrition
 {
 	* is there differential attrition between treatment and control group?
 		* column (1): at endline
@@ -148,6 +146,7 @@ esttab `attrition' using "el_attrition.tex", replace ///
 ***********************************************************************
 * 	PART 2: balance table		
 ***********************************************************************
+{
 *take_up
 	*without outlier
 iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_take_up_baltab_adj) replace
@@ -161,6 +160,7 @@ iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car
 
 *with outlier
 iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_unadj) replace
+
 
 *operated/closed
 {
@@ -265,7 +265,6 @@ end
 	* apply program to network outcomes
 rct_regression_close closed, gen(closed)
 
-}
 ************************************************************
 * 	PART 3: list experiment regression
 ***********************************************************************
@@ -419,6 +418,37 @@ end
 rct_regression_indexes network eri eri_ssa epp mpi female_efficacy female_loc genderi ipi_correct bpi bpi_2024, gen(indexes)
 
 }
+
+***********************************************************************
+* 	PART 5: endline results - check consistency reg & reghfde - regression network outcomes
+***********************************************************************
+* variables:
+	* net_association net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_coop_pos net_coop_neg
+
+* 1: ANCOVA
+	* "reg" one way clustered SE (firm)
+reg net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, cluster(id_plateforme)
+	* "reghfde" one way clustered SE (firm)
+reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster id_plateforme)
+	* twoway clustered
+reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster id_plateforme consortia_cluster)
+reghdfe net_association i.treatment net_association_y0 i.missing_bl_net_association i.strata_final if surveyround == 3, vce(cluster consortia_cluster1)
+
+/*	
+			Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+reg		 = .9857697   .2939672     3.35   0.001      .403583    1.567956
+reghfde	 = .9857697   .2939672     3.35   0.001      .401478    1.570061
+	
+*/	
+* 2: 2SLS
+	* ivreg2
+ivreg2 net_association net_association_y0 i.missing_bl_net_association i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+	* reghdfe
+reghdfe net_association i.strata_final (take_up = treatment) if surveyround == 3, absorb(net_association_y0 i.missing_bl_net_association) vce(cluster id_plateforme)
+
+
+* 3: two way clustered SE (firm, consortium)
+
 
 ***********************************************************************
 * 	PART 5: endline results - regression network outcomes
