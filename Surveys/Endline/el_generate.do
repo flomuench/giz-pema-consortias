@@ -309,14 +309,6 @@ gen int_ben2_correct = int_ben2
 gen int_ben3_correct = int_ben3
 gen int_ben_autres_correct = int_ben_autres
 
-
-gen int_ben1_correct = ""
-gen int_ben2_correct = ""
-gen int_ben3_correct = ""
-gen int_ben_autres_correct = ""
-
-
-
 replace int_ben1_correct = "Export" if int_ben1=="mission a l’export"
 replace int_ben1_correct = "Export" if int_ben1=="l'exportation"
 replace int_ben2_correct = "Export" if int_ben2=="connaissance afrique"
@@ -438,13 +430,6 @@ gen int_incv1_correct = int_incv1
 gen int_incv2_correct = int_incv2
 gen int_incv3_correct = int_incv3
 gen int_incv_autres_correct = int_incv_autres
-
-
-gen int_incv1_correct = ""
-gen int_incv2_correct = ""
-gen int_incv3_correct = ""
-gen int_incv_autres_correct = "" 
-
 
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="conflit à cause de la différence d'options"
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="cconflit internes"

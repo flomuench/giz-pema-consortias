@@ -15,8 +15,7 @@
 ***********************************************************************
 * 	Part 0: 	set the stage		  
 ***********************************************************************
-{
-{
+
 use "${master_final}/consortium_final", clear
 
 /*	* export dta file for Michael Anderson
@@ -34,14 +33,14 @@ save "${master_final}/sample_clarke.dta", replace
 restore
 */	
 		* change directory
-cd "${master_regressiontables}/endline"
+cd "${master_regressiontables}/endline/regressions"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
 
 		* set graphics on for coefplot
 set graphics on
-}
+
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -111,7 +110,6 @@ program qvalues
 	end  
 
 }
-}
 ***********************************************************************
 * 	PART 1: test for differential survey attrition 		
 ***********************************************************************
@@ -146,7 +144,7 @@ esttab `attrition' using "el_attrition.tex", replace ///
 ***********************************************************************
 * 	PART 2: balance table		
 ***********************************************************************
-{
+
 *take_up
 	*without outlier
 iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_take_up_baltab_adj) replace
@@ -264,7 +262,7 @@ end
 
 	* apply program to network outcomes
 rct_regression_close closed, gen(closed)
-
+}
 ************************************************************
 * 	PART 3: list experiment regression
 ***********************************************************************
@@ -1244,6 +1242,21 @@ rct_regression_ipivars proc_prod_correct proc_mark_correct inno_org_correct inno
 ***********************************************************************
 * 	PART 7: endline results - regression table management knowledge transfer
 ***********************************************************************
+**************** memory limit clear all and reload ****************
+
+clear all
+
+{
+use "${master_final}/consortium_final", clear	
+		* change directory
+cd "${master_regressiontables}/endline/regressions"
+
+		* declare panel data
+xtset id_plateforme surveyround, delta(1)
+
+		* set graphics on for coefplot
+set graphics on
+}
 **************** man_fin_per ****************
 {
 {
@@ -1670,10 +1683,7 @@ end
 rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres, gen(mans)
 
 }
-
 }
-
-
 ***********************************************************************
 * 	PART 8: endline results - regression table export knowledge transfer
 ***********************************************************************
@@ -2223,7 +2233,7 @@ rct_regression_locus car_loc_env car_loc_exp car_loc_soin, gen(locus)
 * 	PART 10: endline results - regression table export
 ***********************************************************************
 **************** export - extensive margin ****************
-
+{
 {
 capture program drop rct_regression_exp // enables re-running
 program rct_regression_exp
@@ -2546,41 +2556,11 @@ rct_regression_expclients exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_
 rct_regression_expclients exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_w95 orderssa_w95, gen(exp_int95)
 
 }
-
+}
 ***********************************************************************
 * 	PART 11: endline results - regression performance results
 ***********************************************************************
-
-**************** memory limit clear all and reload ****************
-
-clear all
-
 {
-use "${master_final}/consortium_final", clear
-
-/*	* export dta file for Michael Anderson
-preserve
-keep id_plateforme surveyround treatment take_up *net_size *net_nb_f *net_nb_m *net_nb_qualite *net_coop_pos strata_final
-save "${master_final}/sample.dta", replace
-restore
-*/
-
-* export dta file for Damian Clarke
-/*
-preserve
-keep id_plateforme surveyround treatment take_up *genderi *female_efficacy *female_loc strata_final
-save "${master_final}/sample_clarke.dta", replace
-restore
-*/	
-		* change directory
-cd "${master_regressiontables}/endline"
-
-		* declare panel data
-xtset id_plateforme surveyround, delta(1)
-
-		* set graphics on for coefplot
-set graphics on
-}
 
 **************** empl ****************
 
@@ -3569,4 +3549,5 @@ end
 	* apply program to export outcomes
 rct_regression_pft profit_2023_category profit_2024_category, gen(pft)
 
+}
 }
