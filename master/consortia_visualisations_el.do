@@ -24,7 +24,15 @@ cd "${master_output}/figures"
 *correlation matrix of selected variables
 *correlate ca_2021 ca_exp_2021 profit_2021 exprep_inv
 
+if "`c(username)'" == "MUNCHFA" | "`c(username)'" == "fmuench"  {
+	set scheme stcolor
+} 
+	else {
+
 set scheme s1color
+		
+	}
+	
 
 ***********************************************************************
 * 	PART 2: Endline statistics
@@ -43,11 +51,11 @@ putpdf text ("Consortia: Endline Statistics"), bold linebreak
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 
-****** Section 1: Survey Progress Overview******
+****** Section 1: Response rate & take-up ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
 {
-* total number of firms answering the survey
+* response rate
 graph bar (count) attest if surveyround ==3, over(treatment) blabel(total, format(%9.0fc)) ///
 	title("Number of companies that have validated their answers", pos(12)) ///
 	ytitle("Number of entries")
@@ -83,26 +91,37 @@ putpdf paragraph, halign(center)
 putpdf image el_reponse_rate_take_up.png, width(5000)
 putpdf pagebreak
 
-* Take-up rate per pole
-graph bar (count) attest if surveyround == 3 & treatment == 1,blabel(total, format(%9.0fc)) over(take_up) by(pole, note("")) ///
+* Take-up 
+gen one = 1
+
+graph bar (sum) one if treatment == 1 & surveyround != 1, blabel(total, format(%9.0fc)) over(take_up) by(surveyround, note("")) ///
 	legend (pos(1) row(1) label(1 "Drop-out") label(2 "Participate")) ///
-	ytitle("Number")
-graph export takeup_pole.png, replace
+	ytitle("Number of firms")	
+graph export "${master_output}/figures/take_up/take_up.png", replace
+putpdf paragraph, halign(center)
+putpdf image takeup.png
+putpdf pagebreak
+
+* Take up by consortia
+graph bar (sum) one if surveyround == 3 & treatment == 1, blabel(total, format(%9.0fc)) over(take_up) by(pole, note("")) ///
+	legend (pos(1) row(1) label(1 "Drop-out") label(2 "Participate")) ///
+	ytitle("Number of firms")
+graph export "${master_output}/figures/take_up/takeup_pole.png", replace
 putpdf paragraph, halign(center)
 putpdf image takeup_pole.png
 putpdf pagebreak
 
-graph hbar (sum) refus if surveyround == 3, over(pole) blabel(total, format(%9.0fc)) ///
-	title("Endline refusal") ///
-	ytitle("Number of entries") ///
-	ylabel(0(5)20, nogrid) 
-graph export el_attritionrate_pole.png, replace
-putpdf paragraph, halign(center)
-putpdf image el_attritionrate_pole.png
-putpdf pagebreak
+graph bar (sum) one if surveyround != 1 & treatment == 1, blabel(total, format(%9.0fc)) over(take_up) by(pole surveyround, note("") cols(2)) ///
+	legend (pos(1) row(1) label(1 "Drop-out") label(2 "Participate")) ///
+	ytitle("Number of firms")
+graph export "${master_output}/figures/take_up/takeup_pole_surveyround.png", replace
+
+
 }
 
 ****** Section 2: innovation ******
+{
+
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
 
@@ -158,7 +177,10 @@ putpdf paragraph, halign(center)
 putpdf image el_entreprise_model.png
 putpdf pagebreak
 
+}
+
 ****** Section 3: Export ******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Export"), bold
 
@@ -423,7 +445,10 @@ putpdf paragraph, halign(center)
 putpdf image el_export_bene.png, width(5000)
 putpdf pagebreak
 
-****** Section 4: The Firm ******
+}
+
+****** Section 4: Employees ******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 4: The Firm"), bold
 
@@ -478,7 +503,10 @@ putpdf paragraph, halign(center)
 putpdf image el_fteyouth_treat_kdens.png, width(5000)
 putpdf pagebreak
 
+}
+
 ****** Section 5: Management******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Management"), bold
 
@@ -518,7 +546,10 @@ putpdf paragraph, halign(center)
 putpdf image el_marksource.png, width(6000)
 putpdf pagebreak
 
+}
+
 ****** Section 6: Network******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 6: Network"), bold
 
@@ -615,9 +646,12 @@ putpdf paragraph, halign(center)
 putpdf image el_netcoop.png, width(6000)
 putpdf pagebreak
 
-****** Section 7: Entrepneurship******
+}
+
+****** Section 7: Entrepreneurial Confidence ******
+{
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 7: Entrepneurship"), bold
+putpdf text ("Section 7: Entrepreneurial Self-Confidence"), bold
 
 *efficency 
 betterbar car_efi_fin1 car_efi_man car_efi_motiv if surveyround==3, over(take_up) barlab ci ///
@@ -659,7 +693,11 @@ putpdf paragraph, halign(center)
 putpdf image el_bar_listexp.png
 putpdf pagebreak
 
-****** Section 8.1: Accounting******
+}
+
+****** Section 8: Accounting******
+****** Section 8.1: Export ******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 8.1: Accounting"), bold
 {
@@ -876,7 +914,10 @@ gr export el_ca_exp_2024_box.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_ca_exp_2024_box.png, width(5000)
 putpdf pagebreak
-  
+
+}
+
+{  
   	*Bénéfices/Perte 2023
 graph pie if surveyround==3, over(profit_2023_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
    bgcolor(white) legend(pos(6)) ///
@@ -1001,7 +1042,10 @@ putpdf pagebreak
 
 }
 
+}
+
 ****** Section 8.2: Accounting CHECK******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 8.2: Accounting checks"), bold
 
@@ -1075,7 +1119,10 @@ putpdf paragraph, halign(center)
 putpdf image el_beneXempl2023.png, width(5000)
 putpdf pagebreak
 
-****** Section 7: Intervention******
+}
+
+****** Section 9: Intervention******
+{
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 9: Intervention"), bold
 
@@ -1110,6 +1157,9 @@ putpdf paragraph, halign(center)
 putpdf image int_incv.png, width(6000)
 putpdf pagebreak
 */
+
+}
+
 ****** Section 8: Indexes******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 10: Indexes"), bold

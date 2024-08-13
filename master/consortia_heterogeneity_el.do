@@ -322,9 +322,12 @@ esttab e(RW) using "${master_regressiontables}/endline/`17'", replace
 end
 }
 ** By consortium, by initial network size,by export initial export status **
+
 ***********************************************************************
 * 	PART 2:  Pole heterogeneity
 ***********************************************************************
+	* change directory
+cd "${master_regressiontables}/endline/heterogeneity/pole"
 
 ****************************  Summary Table ***************************
 {
@@ -2514,6 +2517,9 @@ estimates clear
 ***********************************************************************
 * 	PART 3:  Export status heterogeneity
 ***********************************************************************
+	* change directory
+cd "${master_regressiontables}/endline/heterogeneity/export"
+
 *operation export to surveyround endline
 sort id_plateforme surveyround
 

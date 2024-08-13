@@ -81,6 +81,7 @@ recast int desistement_consortium
 ***********************************************************************
 * 	PART 5:     relabel outcome variables for regression tables
 ***********************************************************************
+{
 lab var ca "Sales"
 lab var ca_exp "Export sales"
 lab var profit "Profit" 
@@ -120,12 +121,19 @@ lab var exp_afrique "Export to SSA"
 lab var capital "Capital"
 
 lab var net_time "Meetings with other CEOs, past 3 months"
+}
 
 ***********************************************************************
-* 	PART 6:    change gouvernorat label
+* 	PART 6:    change value labels
 ***********************************************************************
+* gouvernorat
 lab def gov 10 "Tunis" 11 "Tunis South-West" 20 "Tunis North", modify
 
+* consortia/pole
+	* translate to English
+label define pole 1 "Agro-Food" 2 "Handicraft & Cosmetics" 3 "Business Services" 4 "Digital Services", replace
+
+ 
 ***********************************************************************
 * 	PART 7:    shorten variable names for regressions
 ***********************************************************************
