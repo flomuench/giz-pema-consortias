@@ -621,10 +621,6 @@ replace ca = 0 if id_plateforme == 1193
 * Correct Ben and Int 
 ************************************************************************
 
-replace int_ben2 ="les techniques de communication et de ventes" if id_plateforme ==1068 
-
-replace int_ben2 ="les membres du consortium sont complementaires" if id_plateforme == 1135 
-
 
 
 
