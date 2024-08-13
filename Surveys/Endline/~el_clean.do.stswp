@@ -27,7 +27,7 @@ use "${el_intermediate}/el_intermediate", clear
 ***********************************************************************
 * 	PART 2: 	Removing whitespace & format string and date & lower case 		  			
 ***********************************************************************
-
+{
 	*remove leading and trailing white space
 {
 ds, has(type string) 
@@ -53,6 +53,7 @@ format Date %-td
 
 *drop empty rows
 drop if id_plateforme ==.
+}
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
@@ -63,6 +64,7 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Rename the variables as needed
 ***********************************************************************
+{
 		* rename to correct survey coding typos
 forvalues x = 1(1)2 {
 	rename car_carempl_div`x' car_empl`x'
@@ -81,9 +83,13 @@ lab var employes "Number of employeess"
 
 lab var car_empl1 "Number of female employees"
 lab var car_empl2 "Number of youth less than 36 years old"
+
+}
+
 ***********************************************************************
 * 	PART 5: 	Label the variables		  			
 ***********************************************************************
+{
         * label the dataset
 label data "Endline Survey"
 notes _dta : June/July 2024
@@ -168,7 +174,7 @@ lab var net_association " Number of membership in associations"
 *lab var net_size1 "Discuss company's business with suppliers" REMOVED FROM QUESTIONS
 *lab var net_size2 "Discuss company's business with clients" REMOVED FROM QUESTIONS
 lab var net_size3 "Discuss company's business with other entrepreneurs"
-lab var net_size4 "Discuss company's business with friends or family" 
+lab var net_size4 "Discuss company's business with friends/family" 
 
 lab var net_services_pratiques "Sharing management practices and solutions for entrepreneurial challenges (e.g., management, finance, quality control, etc.)"
 lab var net_services_produits "Exchanging ideas on new products/services or technologies"
@@ -181,10 +187,10 @@ lab var net_services_other "Example other situation of using entrepneurs network
 
 *lab var net_gender1 "Discuss company's business with female suppliers" REMOVED FROM QUESTIONS
 *lab var net_gender2 "Discuss company's business with female clients" REMOVED FROM QUESTIONS
-lab var net_gender3 "Female entrepneur business discussion"
-lab var net_gender4 "Female Family/friends business discussion"
+lab var net_gender3 "Discuss company's business with female entrepreneurs"
+lab var net_gender4 "Discuss company's business with female friends/family"
 
-lab var net_gender3_giz "Female entrepreneurs met while in GIZ"
+lab var net_gender3_giz "Female entrepreneurs met via consortium"
 
 * Section L'entrepreneuse
 lab var car_efi_fin1 "Having the necessary skills to access sources of funding"
@@ -269,9 +275,12 @@ lab var expp_cost "likert scale of export disadventages perception"
 
 lab var int_other "example of another refusal to participate in consortia activities"
 
+}
+
 ***********************************************************************
 * 	PART 6: 	Label the variables values	  			
 ***********************************************************************
+{
 		*yes/no variables loop:
 local yesnovariables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ///
 ssa_action3 ssa_action4 man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_pra_bud man_fin_per_pro man_fin_pra_dis man_ind_awa ///
@@ -366,7 +375,7 @@ label values entreprise_model label_entreprise_model
 label define label_attest  1 "Yes"
 label values attest label_attest
 
-
+}
 
 ***********************************************************************
 * 	Part 7: Save the changes made to the data		  			

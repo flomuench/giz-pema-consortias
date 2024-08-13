@@ -61,7 +61,7 @@ drop inno_produit
 ***********************************************************************
 * 	PART 5:  Create continuous variable for inspiration of innovation
 *********************************************************************** 
-
+{
 generate inno_mot_cons = regexm(inno_mot, "1")
 lab var inno_mot_cons "Consultant"
 
@@ -83,10 +83,22 @@ generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mo
 lab var inno_mot_total "Total of innovation inspirations"
 
 drop inno_mot
+}
 
 ***********************************************************************
-* 	PART 7: net_coop
+* 	PART 7: network
 ***********************************************************************
+{
+* 
+gen net_size3_m = net_size3 - net_gender3
+lab var net_size3_m "Male entrepreneur business discussion"
+ 
+gen net_size4_m = net_size4 - net_gender4
+lab var net_size4_m "Male Family/friends business discussion"
+
+gen net_female_perc3 = net_gender3/net_size3
+
+* net_coop
 	* generate dummies for each cooperative word
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
@@ -112,17 +124,18 @@ label var netcoop9 "Connect"
 label var netcoop10 "Competition"
 
 	* generate a count of positive & negative cooperative words
-generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
+generate net_coop_pos = netcoop2 + netcoop3 + netcoop7 + netcoop8 + netcoop9
 label var net_coop_pos "Positive answers for the the perception of interactions between CEOs" 
-generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
+generate net_coop_neg = netcoop1 + netcoop4 + netcoop5 + netcoop6 +  netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
 drop net_coop
+}
 
 ***********************************************************************
 * 	PART 8: Export
 ***********************************************************************
-
+{
 generate export_1 = regexm(export, "1")
 
 generate export_2 = regexm(export, "2")
@@ -163,6 +176,9 @@ replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *exp_pays = 0 if it does not export_1
 replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
+
+}
+
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
@@ -181,14 +197,6 @@ lab var refus_4 "Collaboration require time that they don't have due to other pr
 generate refus_5 = regexm(int_refus, "5")
 lab var refus_5 "Others" 
 
-***********************************************************************
-* 	PART 11: Network
-***********************************************************************
-gen net_size3_m = net_size3 - net_gender3
-lab var net_size3_m "Male entrepneur business discussion"
-
-gen net_size4_m = net_size4 - net_gender4
-lab var net_size4_m "Male Family/friends business discussion"
 
 ***********************************************************************
 * 	PART 11: Generate variable to assess number of missing values per firm			  										  
