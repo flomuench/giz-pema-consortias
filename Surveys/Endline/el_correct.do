@@ -515,10 +515,10 @@ replace products_other= "les patisseries traditionnelles" if products_other =="e
 replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
 replace products_other= "c'est une gamme composée de 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if id_plateforme==1037
 replace products_other= "contenus de formation digital" if id_plateforme==1046
-replace products_other= "Elle a cessé la production d'insecticides depuis un an" if products_other =="elle a arrêté la production""insecticide 3andi 1 ans"+++++++++++++++++++++++++++++++++++++++""
-replace products_other= "recrutement, assistance technique et  projets de développement" if products_other =="recrutementassistance technique projets de développement"
-replace products_other= "sacs en cuire " if products_other =="shekaz ( vente des sacs en cuire ) https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://shekaz.com/&ved=2ahukewjxx8an4oqhaxukraqehvlxcguqfnoeceeqaq&usg=aovvaw23ijdchzn0recnvthpeonf"
 
+replace products_other= "Elle a cessé la production d'insecticides depuis un an" if id_plateforme ==1035
+replace products_other= "recrutement, assistance technique et  projets de développement" if id_plateforme ==1125
+replace products_other= "sacs en cuire " if id_plateforme ==1126
 
 
 
