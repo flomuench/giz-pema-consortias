@@ -87,6 +87,16 @@ drop inno_mot
 ***********************************************************************
 * 	PART 7: net_coop
 ***********************************************************************
+{
+* 
+gen net_size3_m = net_size3 - net_gender3
+lab var net_size3_m "Male entrepreneur business discussion"
+ 
+gen net_size4_m = net_size4 - net_gender4
+lab var net_size4_m "Male Family/friends business discussion"
+
+
+* net_coop
 	* generate dummies for each cooperative word
 generate netcoop1 = regexm(net_coop, "1")
 generate netcoop2 = regexm(net_coop, "2")
@@ -118,6 +128,8 @@ generate net_coop_neg = netcoop4 + netcoop5 + netcoop6 + netcoop8 + netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
 drop net_coop
+
+}
 
 ***********************************************************************
 * 	PART 8: Export

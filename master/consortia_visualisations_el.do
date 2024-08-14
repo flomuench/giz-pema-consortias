@@ -38,7 +38,6 @@ set scheme s1color
 * 	PART 2: Endline statistics
 ***********************************************************************
 * create word document
-set scheme s1color
 set graphics on
 
 
@@ -606,7 +605,6 @@ putpdf image el_network_density_f.png, width(5000)
 putpdf pagebreak
 
 *consortium femme female met
-*efficency 
 sum net_gender3_giz,d
 histogram net_gender3_giz, width(1) frequency addlabels xlabel(0(2)30, nogrid format(%9.0f)) discrete ///
 	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
@@ -618,6 +616,16 @@ graph export el_femmet.png, width(6000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_femmet.png, width(6000)
 putpdf pagebreak
+
+	* Female entrepreneur contacts relative to number known via GIZ
+graph bar net_gender3_w99 net_gender3_giz_w99 if surveyround == 3 & treatment == 1, over(take_up, lab(labsize(medsmall))) ///
+	legend(order(1 "Female Entrepreneurs in Network" ///
+		   2 "Female Entrepreneurs known via Consortium") ///
+		   pos(6) rows(2) size(medsmall)) ///
+		   ylab(, labsize(medsmall))
+	note("The figure only considers firms in the treatment group.")
+graph export "${master_output}/figures/endline/network/el_fem_vs_femgiz.png", width(6000) replace 
+
 
 *net services
 betterbar net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre if surveyround==3, over(take_up) barlab ci ///

@@ -618,8 +618,9 @@ bys id_plateforme (surveyround): gen innovated = (innovations > 0)
 lab var innovations "Total innovations"
 lab var innovated "Innovated"
 
+
 ***********************************************************************
-*	PART 7: network
+*	PART 7: network size
 ***********************************************************************	
 {
 	* create total network size
@@ -642,11 +643,6 @@ lab var net_female_entr "Discussed business with female entrepreneur"
 gen net_female_friend = (net_gender4 > 0)
 replace net_female_friend = . if net_gender4 == .
 lab var net_female_friend "Discussed business with female friend"
-
-
-	* Ratio contacts via GIZ out of total female entrepreneurs
-gen net_giz_ratio = net_gender3_giz/net_gender3
-lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 }
 
@@ -1127,6 +1123,25 @@ gen net_autre = net_services_autre
 
 }
 
+
+***********************************************************************
+*	PART 12: network composition: ratios
+***********************************************************************	
+{
+	* gender ratio for entrepreneur contacts
+gen net_gender3_ratio = net_gender3_w95/net_size3_m_w95
+gen net_female3_share = net_gender3_w95/net_size3_w95
+
+	* Ratio contacts via GIZ out of total female entrepreneurs
+		* first replace GIZ 0 for control group
+replace net_gender3_giz = 0 if treatment == 0
+gen net_giz_ratio = net_gender3_giz/net_gender3_w95
+lab var net_giz_ratio "% female entrepreneurs met via consortium"
+
+
+}
+
+
 ***********************************************************************
 * 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
@@ -1170,7 +1185,7 @@ rename ihs_ca_exp_2024_w`p'_k5 ihs_caexp2024_w`p'_k5
 		* k = 10^3 --> employees, female employees, young employees
 		* k = 10^4 --> domestic sales, export sales, total sales, exp_inv
 	* collect all ys in string
-local network "network net_size net_size_w99 net_size_w95 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre"
+local network "network net_size net_size_w99 net_size_w95 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_m_w99 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre net_gender3_ratio net_giz_ratio"
 
 local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
 local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres"
@@ -1203,6 +1218,7 @@ foreach var of local ys {
 }
 
 }
+
 ***********************************************************************
 * 	PART 14: Tunis dummy	
 ***********************************************************************
