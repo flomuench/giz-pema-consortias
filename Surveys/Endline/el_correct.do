@@ -195,8 +195,6 @@ replace products_other ="vetement traditionnel: houli et hayek" if id_plateforme
 replace products_other = " frange parfumée" if id_plateforme ==1234
 
 
-
-
 ***********************************************************************
 * Correct product innovation 
 ***********************************************************************
@@ -342,6 +340,14 @@ replace net_services_other = "Collaboration avec d'autres entreprises" if id_pla
 * Correct net size 
 *************************************************************************
 {
+
+*** Account for the filter: if net_size3 ou net_size4 = 0, replace net_gender3 & net_gender4 == 0
+forvalues x = 3(1)4 {
+	replace net_gender`x' = 0 if net_size`x' == 0
+}
+
+*** Company specific corrections
+* id 1000
 replace net_size4 = 0 if id_plateforme  ==1000
 
 * id 1036
@@ -515,7 +521,7 @@ replace products_other= "les patisseries traditionnelles" if products_other =="e
 replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
 replace products_other= "c'est une gamme composée de 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if id_plateforme==1037
 replace products_other= "contenus de formation digital" if id_plateforme==1046
-replace products_other= "Elle a cessé la production d'insecticides depuis un an" if products_other =="elle a arrêté la production""insecticide 3andi 1 ans"+++++++++++++++++++++++++++++++++++++++""
+replace products_other= "Elle a cessé la production d'insecticides depuis un an" if id_plateforme == 1035
 replace products_other= "recrutement, assistance technique et  projets de développement" if products_other =="recrutementassistance technique projets de développement"
 replace products_other= "sacs en cuire " if products_other =="shekaz ( vente des sacs en cuire ) https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://shekaz.com/&ved=2ahukewjxx8an4oqhaxukraqehvlxcguqfnoeceeqaq&usg=aovvaw23ijdchzn0recnvthpeonf"
 

@@ -96,7 +96,6 @@ lab var net_size3_m "Male entrepreneur business discussion"
 gen net_size4_m = net_size4 - net_gender4
 lab var net_size4_m "Male Family/friends business discussion"
 
-gen net_female_perc3 = net_gender3/net_size3
 
 * net_coop
 	* generate dummies for each cooperative word
