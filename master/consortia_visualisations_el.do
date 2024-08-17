@@ -176,6 +176,106 @@ putpdf paragraph, halign(center)
 putpdf image el_entreprise_model.png
 putpdf pagebreak
 
+*Endline Innovation practices index
+gr tw ///
+	(kdensity ipi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram ipi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity ipi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram ipi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity ipi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram ipi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Innovation practices index}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Innovation practices index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(ipi_el, replace)
+graph export ipi_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ipi_el.png
+putpdf pagebreak
+
+*Endline Innovation practices index - points
+gr tw ///
+	(kdensity inno_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram inno_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity inno_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram inno_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity inno_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram inno_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Innovation practices index}", size(medium)) ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Innovation practices index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(inno_points_el, replace)
+graph export inno_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image inno_points_el.png
+putpdf pagebreak
+
+*Endline Corrected Innovation practices index
+gr tw ///
+	(kdensity ipi_correct if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram ipi_correct if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity ipi_correct if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram ipi_correct if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity ipi_correct if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram ipi_correct if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Innovation practices index (corrected)}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Innovation practices index (corrected)") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(ipi_correct_el, replace)
+graph export ipi_correct_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image ipi_correct_el.png
+putpdf pagebreak
+
+*Endline Corrected Innovation practices index - points
+gr tw ///
+	(kdensity correct_inno_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram correct_inno_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity correct_inno_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram correct_inno_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity correct_inno_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram correct_inno_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Innovation practices index (corrected)}", size(medium)) ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Innovation practices index (corrected)") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(correct_inno_points_el, replace)
+graph export correct_inno_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image correct_inno_points_el.png
+putpdf pagebreak
+
 }
 
 ****** Section 3: Export ******
@@ -444,6 +544,133 @@ putpdf paragraph, halign(center)
 putpdf image el_export_bene.png, width(5000)
 putpdf pagebreak
 
+
+*Endline Export readiness index
+gr tw ///
+	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Export readiness index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export readiness index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(eri_el, replace)
+graph export eri_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image eri_el.png
+putpdf pagebreak
+
+*Endline Export readiness index points
+gr tw ///
+	(kdensity eri_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Export readiness index}") ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Export readiness index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(eri_points_el, replace)
+graph export eri_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image eri_points_el.png
+putpdf pagebreak
+
+
+*Endline Export readiness SSA index
+gr tw ///
+	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_ssa if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri_ssa if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Export readiness SSA index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export readiness SSA index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(eri_ssa_el, replace)
+graph export eri_ssa_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image eri_ssa_el.png
+putpdf pagebreak
+
+*Endline Export readiness SSA index- points
+gr tw ///
+	(kdensity eri_ssa_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity eri_ssa_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity eri_ssa_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram eri_ssa_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Export readiness SSA index}") ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Export readiness SSA index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(eri_ssa_points_el, replace)
+graph export eri_ssa_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image eri_ssa_points_el.png
+putpdf pagebreak
+
+*Endline Export performance index
+gr tw ///
+	(kdensity epp if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram epp if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity epp if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram epp if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity epp if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram epp if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Export performance index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Export performance index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(epp_el, replace)
+graph export epp_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image epp_el.png
+putpdf pagebreak
+
 }
 
 ****** Section 4: Employees ******
@@ -544,6 +771,57 @@ graph export el_marksource.png, width(6000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_marksource.png, width(6000)
 putpdf pagebreak
+
+*Endline Management practices index
+gr tw ///
+	(kdensity mpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity mpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Management practices index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Management practices index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(mpi_el, replace)
+graph export mpi_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image mpi_el.png
+putpdf pagebreak
+
+*Endline Management practices index- points
+gr tw ///
+	(kdensity mpi_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram mpi_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity mpi_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram mpi_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity mpi_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram mpi_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Management practices index}") ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Management practices index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(mpi_points_el, replace)
+graph export mpi_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image mpi_points_el.png
+putpdf pagebreak
+
 
 }
 
@@ -654,6 +932,31 @@ putpdf paragraph, halign(center)
 putpdf image el_netcoop.png, width(6000)
 putpdf pagebreak
 
+*Endline network index
+gr tw ///
+	(kdensity network if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram network if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity network if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram network if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity network if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram network if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Network Index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Network index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(network_el, replace)
+graph export network_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image network_el.png
+putpdf pagebreak
+
 }
 
 ****** Section 7: Entrepreneurial Confidence ******
@@ -701,6 +1004,155 @@ putpdf paragraph, halign(center)
 putpdf image el_bar_listexp.png
 putpdf pagebreak
 
+*Endline Female Effifacy index
+gr tw ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_efficacy if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Effifacy index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Female Effifacy index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_efficacy_el, replace)
+graph export female_efficacy_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_efficacy_el.png
+putpdf pagebreak
+
+*Endline Female Effifacy index - points
+gr tw ///
+	(kdensity female_efficacy_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_efficacy_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_efficacy_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_efficacy_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Effifacy index}") ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Female Effifacy index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_efficacy_points_el, replace)
+graph export female_efficacy_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_efficacy_points_el.png
+putpdf pagebreak
+
+*Endline Female Locus of control index
+gr tw ///
+	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_loc if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_loc if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Locus of control index}") ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Female Locus of control index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_loc_el, replace)
+graph export female_loc_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_loc_el.png
+putpdf pagebreak
+
+*Endline Female Locus of control index - points
+gr tw ///
+	(kdensity female_loc_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram female_loc_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity female_loc_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram female_loc_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity female_loc_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram female_loc_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Locus of control index}") ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Female Locus of control index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(female_loc_points_el, replace)
+graph export female_loc_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image female_loc_points_el.png
+putpdf pagebreak
+
+*Endline Female Entrepreneurial empowerment index
+gr tw ///
+	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity genderi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Entrepreneurial empowerment index}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Female Entrepreneurial empowerment index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(genderi_el, replace)
+graph export genderi_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image genderi_el.png
+putpdf pagebreak
+
+*Endline Female Entrepreneurial empowerment index- points
+gr tw ///
+	(kdensity genderi_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram genderi_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity genderi_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram genderi_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity genderi_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram genderi_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Female Entrepreneurial empowerment index}", size(medium)) ///
+	subtitle("{it:Index calculated based on points}") ///
+	xtitle("Female Entrepreneurial empowerment index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(genderi_points_el, replace)
+graph export genderi_points_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image genderi_points_el.png
+putpdf pagebreak
 }
 
 ****** Section 8: Accounting******
@@ -1048,6 +1500,81 @@ putpdf paragraph, halign(center)
 putpdf image el_profit_2024_box.png, width(5000)
 putpdf pagebreak 
 
+*Endline Business performance index
+gr tw ///
+	(kdensity bpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity bpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity bpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Business performance index}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Business performance index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(bpi_el, replace)
+graph export bpi_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bpi_el.png
+putpdf pagebreak
+
+*Endline Business performance index
+gr tw ///
+	(kdensity bpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity bpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity bpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram bpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Business performance index}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Business performance index") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(bpi_el, replace)
+graph export bpi_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bpi_el.png
+putpdf pagebreak
+
+*Endline Business performance index in 2024
+gr tw ///
+	(kdensity bpi_2024 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
+	(histogram bpi_2024 if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
+	(kdensity bpi_2024 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
+	(histogram bpi_2024 if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
+	(kdensity bpi_2024 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	(histogram bpi_2024 if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
+	, ///
+	title("{bf:Endline Distribution of Business performance index in 2024}", size(medium)) ///
+	subtitle("{it:Index calculated based on z-score method}") ///
+	xtitle("Business performance index in 2024") ///
+	ytitle("Number of observations", axis(1)) ///
+	ytitle("Densitiy", axis(2)) ///
+	legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+					 3 "Control group") ///
+               c(1) pos(6) ring(6)) ///
+	name(bpi_2024_el, replace)
+graph export bpi_2024_el.png, replace
+putpdf paragraph, halign(center) 
+putpdf image bpi_2024_el.png
+putpdf pagebreak
+
 }
 
 }
@@ -1166,540 +1693,6 @@ putpdf image int_incv.png, width(6000)
 putpdf pagebreak
 */
 
-}
-
-****** Section 8: Indexes******
-putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 10: Indexes"), bold
-
-{
-*Endline network index
-gr tw ///
-	(kdensity network if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram network if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity network if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram network if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity network if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram network if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Network Index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Network index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(network_el, replace)
-graph export network_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image network_el.png
-putpdf pagebreak
-
-*Endline Export readiness index
-gr tw ///
-	(kdensity eri if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Export readiness index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export readiness index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(eri_el, replace)
-graph export eri_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image eri_el.png
-putpdf pagebreak
-
-*Endline Export readiness index points
-gr tw ///
-	(kdensity eri_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Export readiness index}") ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Export readiness index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(eri_points_el, replace)
-graph export eri_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image eri_points_el.png
-putpdf pagebreak
-
-
-*Endline Export readiness SSA index
-gr tw ///
-	(kdensity eri_ssa if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri_ssa if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Export readiness SSA index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export readiness SSA index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(eri_ssa_el, replace)
-graph export eri_ssa_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image eri_ssa_el.png
-putpdf pagebreak
-
-*Endline Export readiness SSA index- points
-gr tw ///
-	(kdensity eri_ssa_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity eri_ssa_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity eri_ssa_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram eri_ssa_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Export readiness SSA index}") ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Export readiness SSA index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(eri_ssa_points_el, replace)
-graph export eri_ssa_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image eri_ssa_points_el.png
-putpdf pagebreak
-
-*Endline Export performance index
-gr tw ///
-	(kdensity epp if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram epp if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity epp if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram epp if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity epp if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram epp if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Export performance index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Export performance index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(epp_el, replace)
-graph export epp_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image epp_el.png
-putpdf pagebreak
-
-
-*Endline Management practices index
-gr tw ///
-	(kdensity mpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity mpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Management practices index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Management practices index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(mpi_el, replace)
-graph export mpi_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image mpi_el.png
-putpdf pagebreak
-
-*Endline Management practices index- points
-gr tw ///
-	(kdensity mpi_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram mpi_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity mpi_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram mpi_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity mpi_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram mpi_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Management practices index}") ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Management practices index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(mpi_points_el, replace)
-graph export mpi_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image mpi_points_el.png
-putpdf pagebreak
-
-
-*Endline Female Effifacy index
-gr tw ///
-	(kdensity female_efficacy if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_efficacy if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_efficacy if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Effifacy index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Female Effifacy index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(female_efficacy_el, replace)
-graph export female_efficacy_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_efficacy_el.png
-putpdf pagebreak
-
-*Endline Female Effifacy index - points
-gr tw ///
-	(kdensity female_efficacy_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_efficacy_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_efficacy_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_efficacy_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Effifacy index}") ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Female Effifacy index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(female_efficacy_points_el, replace)
-graph export female_efficacy_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_efficacy_points_el.png
-putpdf pagebreak
-
-*Endline Female Locus of control index
-gr tw ///
-	(kdensity female_loc if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_loc if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_loc if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_loc if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Locus of control index}") ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Female Locus of control index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(female_loc_el, replace)
-graph export female_loc_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_loc_el.png
-putpdf pagebreak
-
-*Endline Female Locus of control index - points
-gr tw ///
-	(kdensity female_loc_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram female_loc_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity female_loc_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram female_loc_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity female_loc_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram female_loc_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Locus of control index}") ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Female Locus of control index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(female_loc_points_el, replace)
-graph export female_loc_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image female_loc_points_el.png
-putpdf pagebreak
-
-*Endline Female Entrepreneurial empowerment index
-gr tw ///
-	(kdensity genderi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram genderi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity genderi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram genderi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity genderi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram genderi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Entrepreneurial empowerment index}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Female Entrepreneurial empowerment index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(genderi_el, replace)
-graph export genderi_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image genderi_el.png
-putpdf pagebreak
-
-*Endline Female Entrepreneurial empowerment index- points
-gr tw ///
-	(kdensity genderi_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram genderi_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity genderi_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram genderi_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity genderi_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram genderi_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Female Entrepreneurial empowerment index}", size(medium)) ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Female Entrepreneurial empowerment index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(genderi_points_el, replace)
-graph export genderi_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image genderi_points_el.png
-putpdf pagebreak
-
-*Endline Innovation practices index
-gr tw ///
-	(kdensity ipi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram ipi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity ipi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram ipi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity ipi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram ipi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Innovation practices index}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Innovation practices index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(ipi_el, replace)
-graph export ipi_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ipi_el.png
-putpdf pagebreak
-
-*Endline Innovation practices index - points
-gr tw ///
-	(kdensity inno_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram inno_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity inno_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram inno_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity inno_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram inno_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Innovation practices index}", size(medium)) ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Innovation practices index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(inno_points_el, replace)
-graph export inno_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image inno_points_el.png
-putpdf pagebreak
-
-*Endline Corrected Innovation practices index
-gr tw ///
-	(kdensity ipi_correct if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram ipi_correct if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity ipi_correct if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram ipi_correct if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity ipi_correct if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram ipi_correct if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Innovation practices index (corrected)}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Innovation practices index (corrected)") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(ipi_correct_el, replace)
-graph export ipi_correct_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image ipi_correct_el.png
-putpdf pagebreak
-
-*Endline Corrected Innovation practices index - points
-gr tw ///
-	(kdensity correct_inno_points if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram correct_inno_points if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity correct_inno_points if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram correct_inno_points if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity correct_inno_points if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram correct_inno_points if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Innovation practices index (corrected)}", size(medium)) ///
-	subtitle("{it:Index calculated based on points}") ///
-	xtitle("Innovation practices index (corrected)") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(correct_inno_points_el, replace)
-graph export correct_inno_points_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image correct_inno_points_el.png
-putpdf pagebreak
-
-*Endline Business performance index
-gr tw ///
-	(kdensity bpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity bpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity bpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Business performance index}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Business performance index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(bpi_el, replace)
-graph export bpi_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image bpi_el.png
-putpdf pagebreak
-
-*Endline Business performance index
-gr tw ///
-	(kdensity bpi if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity bpi if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity bpi if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram bpi if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Business performance index}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Business performance index") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(bpi_el, replace)
-graph export bpi_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image bpi_el.png
-putpdf pagebreak
-
-*Endline Business performance index in 2024
-gr tw ///
-	(kdensity bpi_2024 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(0.4)) ///
-	(histogram bpi_2024 if treatment == 1 & take_up == 1 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(maroon)) ///
-	(kdensity bpi_2024 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(0.4)) ///
-	(histogram bpi_2024 if treatment == 1 & take_up == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(green)) ///
-	(kdensity bpi_2024 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
-	(histogram bpi_2024 if treatment == 0 & surveyround == 3, freq w(.1) recast(scatter) msize(small) mc(navy)) ///
-	, ///
-	title("{bf:Endline Distribution of Business performance index in 2024}", size(medium)) ///
-	subtitle("{it:Index calculated based on z-score method}") ///
-	xtitle("Business performance index in 2024") ///
-	ytitle("Number of observations", axis(1)) ///
-	ytitle("Densitiy", axis(2)) ///
-	legend(rows(3) symxsize(small) ///
-               order(1 "Treatment group, participated" ///
-                     2 "Treatment group, absent" ///
-					 3 "Control group") ///
-               c(1) pos(6) ring(6)) ///
-	name(bpi_2024_el, replace)
-graph export bpi_2024_el.png, replace
-putpdf paragraph, halign(center) 
-putpdf image bpi_2024_el.png
-putpdf pagebreak	
 }
 
 
