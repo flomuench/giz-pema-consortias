@@ -163,7 +163,7 @@ iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car
 
 
 ***********************************************************************
-* 	PART 2: operated/closed		
+* 	PART 3: operated/closed		
 ***********************************************************************
 {
 capture program drop rct_regression_close // enables re-running the program
@@ -268,8 +268,8 @@ end
 rct_regression_close closed, gen(closed)
 }
 
-************************************************************
-* 	PART 3: list experiment regression
+***********************************************************************
+* 	PART 4: list experiment regression
 ***********************************************************************
 
 {
@@ -305,7 +305,7 @@ esttab lexp1 lexp2 lexp3 using "el_listexp1.tex", replace ///
 }
 
 ***********************************************************************
-* 	PART 4: Endline results - regression table indexes
+* 	PART 5: Endline results - regression table indexes
 ***********************************************************************
 
 {
@@ -423,7 +423,7 @@ rct_regression_indexes network eri eri_ssa epp mpi female_efficacy female_loc ge
 }
 
 ***********************************************************************
-* 	PART 5: endline results - check consistency reg & reghfde - regression network outcomes
+* 	PART 6: endline results - check consistency reg & reghfde - regression network outcomes
 ***********************************************************************
 /*
 * variables:
@@ -455,13 +455,14 @@ reghdfe net_association i.strata_final (take_up = treatment) if surveyround == 3
 */
 
 ***********************************************************************
-* 	PART 5: endline results - regression network outcomes
+* 	PART 7: endline results - regression network outcomes
 ***********************************************************************
 * useful reference for adjusting coefplots: https://www.statalist.org/forums/forum/general-stata-discussion/general/1713248-coefplot-add-a-line-break-to-coefficient-labels
-
+		
 **************** number of network & coop ****************
 {
-
+* change directory
+cd "${master_regressiontables}/endline/regressions/network"
 **** TABLES FOR PAPER ****
 {
 capture program drop rct_regression_network_paper // enables re-running
@@ -1257,10 +1258,13 @@ rct_regression_coop netcoop2 netcoop3 netcoop7 netcoop8 netcoop9 netcoop1 netcoo
 
 
 ***********************************************************************
-* 	PART 9: endline results - regression table entrepreneurial empowerment
+* 	PART 8: endline results - regression table entrepreneurial empowerment
 ***********************************************************************
 {
 **************** efi ****************
+
+* change directory
+cd "${master_regressiontables}/endline/regressions/confidence"
 
 {
 capture program drop rct_regression_efi // enables re-running
@@ -1479,10 +1483,12 @@ rct_regression_locus car_loc_env car_loc_exp car_loc_soin, gen(locus)
 
 
 ***********************************************************************
-* 	PART 6: endline results - regression table innovation knowledge transfer
+* 	PART 9: endline results - regression table innovation knowledge transfer
 ***********************************************************************
 {
 **************** inno_produit ****************
+* change directory
+cd "${master_regressiontables}/endline/regressions/innovation"
 
 {
 capture program drop rct_regression_kt // enables re-running
@@ -1917,7 +1923,7 @@ rct_regression_ipivars proc_prod_correct proc_mark_correct inno_org_correct inno
 
 
 ***********************************************************************
-* 	PART 7: endline results - regression table management knowledge transfer
+* 	PART 10: endline results - regression table management knowledge transfer
 ***********************************************************************
 **************** memory limit clear all and reload ****************
 
@@ -1926,7 +1932,7 @@ clear all
 {
 use "${master_final}/consortium_final", clear	
 		* change directory
-cd "${master_regressiontables}/endline/regressions"
+cd "${master_regressiontables}/endline/regressions/management"
 
 		* declare panel data
 xtset id_plateforme surveyround, delta(1)
@@ -2363,10 +2369,12 @@ rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_eve
 }
 
 ***********************************************************************
-* 	PART 8: endline results - regression table export knowledge transfer
+* 	PART 11: endline results - regression table export knowledge transfer
 ***********************************************************************
 **************** exp_pra ****************
 {
+	* change directory
+cd "${master_regressiontables}/endline/regressions/export"
 {
 capture program drop rct_regression_expra // enables re-running
 program rct_regression_expra
@@ -2690,10 +2698,12 @@ rct_regression_expcost expp_cost expp_ben, gen(expcost)
 
 
 ***********************************************************************
-* 	PART 10: endline results - regression table export
+* 	PART 12: endline results - regression table export
 ***********************************************************************
 **************** export - extensive margin ****************
 {
+	* change directory
+cd "${master_regressiontables}/endline/regressions/export"
 {
 capture program drop rct_regression_exp // enables re-running
 program rct_regression_exp
@@ -3018,10 +3028,11 @@ rct_regression_expclients exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_
 }
 }
 ***********************************************************************
-* 	PART 11: endline results - regression performance results
+* 	PART 13: endline results - regression performance results
 ***********************************************************************
 {
-
+* change directory
+cd "${master_regressiontables}/endline/regressions/compta"
 **************** empl ****************
 
 {
