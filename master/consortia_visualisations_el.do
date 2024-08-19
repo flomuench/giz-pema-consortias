@@ -695,6 +695,17 @@ putpdf paragraph, halign(center)
 putpdf image el_fte_treat_kdens.png, width(5000)
 putpdf pagebreak
 
+preserve
+collapse (mean) employes if employes!=666 & employes!=777 & employes!=888 & employes!=999 & employes!=1234 , by(surveyround treatment take_up)
+twoway (connected employes surveyround if treatment == 1 & take_up == 1) (connected employes surveyround if treatment == 1 & take_up == 0) (connected employes surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of number of employees") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) /// 
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 
+graph export did_plot2_employes.png, replace	
+restore
+
 *female empl
 twoway  (kdensity car_empl1 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
         (kdensity car_empl1 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(1.5)) ///
@@ -704,13 +715,24 @@ twoway  (kdensity car_empl1 if treatment == 1 & take_up == 1 & surveyround == 3,
                order(1 "Treatment group, participated" ///
                      2 "Treatment group, absent" ///
                      3 "Control group") ///
-               col(1) pos(6) ring(6)) ///
+					 col(1) pos(6) ring(6)) ///
 	   title("Number of female employees", pos(12)) ///
 	   xtitle("Number of female employees",size(medium)) 
 gr export el_ftefemale_treat_kdens.png, replace
 putpdf paragraph, halign(center) 
 putpdf image el_ftefemale_treat_kdens.png, width(5000)
 putpdf pagebreak
+
+preserve
+collapse (mean) car_empl1 if car_empl1!=666 & car_empl1!=777 & car_empl1!=888 & car_empl1!=999 & car_empl1!=1234 , by(surveyround treatment take_up)
+twoway (connected car_empl1 surveyround if treatment == 1 & take_up == 1) (connected car_empl1 surveyround if treatment == 1 & take_up == 0) (connected car_empl1 surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of number of female employees") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) /// 
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 
+graph export did_plot2_car_empl1.png, replace	
+restore	
 
 *youth
 twoway  (kdensity car_empl2 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
@@ -729,7 +751,20 @@ putpdf paragraph, halign(center)
 putpdf image el_fteyouth_treat_kdens.png, width(5000)
 putpdf pagebreak
 
+
+preserve
+collapse (mean) car_empl2 if car_empl2!=666 & car_empl2!=777 & car_empl2!=888 & car_empl2!=999 & car_empl2!=1234 , by(surveyround treatment take_up)
+twoway (connected car_empl2 surveyround if treatment == 1 & take_up == 1) (connected car_empl2 surveyround if treatment == 1 & take_up == 0) (connected car_empl2 surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of number of young employees") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) /// 
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 
+graph export did_plot2_car_empl2.png, replace	
+restore	
 }
+
+
 
 ****** Section 5: Management******
 {
@@ -1189,7 +1224,19 @@ stripplot ca if  ca<ca_95p & ca>0 & surveyround==3 & ca!=666 & ca!=777 & ca!=888
 	putpdf paragraph, halign(center) 
 	putpdf image el_ca_treat.png, width(5000)
 	putpdf pagebreak
-*/*	
+
+preserve
+collapse (mean) ca if  ca<ca_95p & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , by(surveyround treatment take_up)
+twoway (connected ca surveyround if treatment == 1 & take_up == 1) (connected ca surveyround if treatment == 1 & take_up == 0) (connected ca surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of total turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 
+graph export did_plot2_ca.png, replace
+restore	
+	
+/*	
 twoway  (kdensity ca if treatment == 1 & take_up == 1 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
         (kdensity ca if treatment == 1 & take_up == 0 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(green) yaxis(2) bw(1.5)) ///
         (kdensity ca if treatment == 0 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(navy) yaxis(2) bw(0.4)) ///
@@ -1296,6 +1343,18 @@ stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666
 	putpdf paragraph, halign(center) 
 	putpdf image el_ca_exp_treat.png, width(5000)
 	putpdf pagebreak
+	
+preserve
+collapse (mean) ca_exp if  ca_exp <ca_exp_95p & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , by(surveyround take_up treatment)
+twoway (connected ca_exp surveyround if treatment == 1 & take_up == 1) (connected ca_exp surveyround if treatment == 1 & take_up == 0) (connected ca_exp surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of total turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 
+graph export did_plot2_ca_exp.png, replace
+restore	
+
 /*	
 twoway  (kdensity ca_exp if treatment == 1 & take_up == 1 & surveyround == 3 & ca_exp<ca_exp_95p & ca_exp>0 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
         (kdensity ca_exp if treatment == 1 & take_up == 0 & surveyround == 3 & ca_exp<ca_exp_95p & ca_exp>0 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , lp(l) lc(green) yaxis(2) bw(1.5)) ///
@@ -1438,6 +1497,17 @@ gr export el_profit_box.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_profit_box.png, width(5000)
 putpdf pagebreak
+
+preserve
+collapse (mean) profit if profit!=666 & profit!=777 & profit!=888 & profit!=999 & profit!=1234 , by(surveyround take_up treatment)
+twoway (connected profit surveyround if treatment == 1 & take_up == 1) (connected profit surveyround if treatment == 1 & take_up == 0) (connected profit surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of total turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) 		   
+graph export did_plot2_profit.png, replace
+restore	
 
 	*Bénéfices/Perte 2024
 graph pie if surveyround==3, over(profit_2024_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
@@ -1673,7 +1743,7 @@ graph export el_interac_cons.png, width(6000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_interac_cons.png, width(6000)
 putpdf pagebreak
-/*
+
 *Benefits of being part of a consortium
 graph bar (count) int_ben1_correct int_ben2_correct int_ben3_correct int_ben_autres_correct if surveyround == 3, over(pole) ///
 	title("Benefits from the consortium", position(12)) ///
@@ -1691,7 +1761,7 @@ graph export int_incv.png, width(6000) replace
 putpdf paragraph, halign(center) 
 putpdf image int_incv.png, width(6000)
 putpdf pagebreak
-*/
+
 
 }
 
