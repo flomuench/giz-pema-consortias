@@ -41,6 +41,16 @@ xtset id_plateforme surveyround, delta(1)
 		* set graphics on for coefplot
 set graphics on
 
+		* set color scheme
+if "`c(username)'" == "MUNCHFA" | "`c(username)'" == "fmuench"  {
+	set scheme stcolor
+} 
+	else {
+
+set scheme s1color
+		
+	}
+
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -815,7 +825,6 @@ end
 network_comp_presentation net_gender3_w95 net_size3_m_w95 net_gender3_ratio net_giz_ratio, gen(netcomp_entr)	
 
 
-
 	* network composition familly/friends & gender 
 capture program drop network_comp_presentation // enables re-running
 program network_comp_presentation
@@ -1124,7 +1133,7 @@ gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_
 
 end
 
-	* apply program to business performance outcomes
+	* apply program to network use/services
 rct_regression_netserv net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre, gen(network_use)
 
 }
@@ -1242,7 +1251,7 @@ coefplot ///
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
 eqrename(`1'1 = `"Jealousy (ITT)"' `1'2 = `"Jealousy (TOT)"' `4'1 = `"Protecting business secrets (ITT)"' `4'2 = `"Protecting business secrets (TOT)"' `5'1 = `"Risks (ITT)"' `5'2 = `"Risks (TOT)"' `6'1 = `"Conflict (ITT)"' `6'2 = `"Conflict (TOT)"' `10'1 = `"Competition (ITT)"' `10'2 = `"Competition (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
+		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 
@@ -1317,7 +1326,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial empowerment: Efficacy} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
@@ -1332,7 +1341,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2  // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -1351,14 +1360,17 @@ esttab e(RW) using rw_`generate'.tex, replace
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
 	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
+	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1.5(0.5)1.5) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Efficacy: financial sources (ITT)"' `1'2 = `"Efficacy: financial sources (TOT)"' `2'1 = `"Efficacy: management (ITT)"' `2'2 = `"Efficacy: management (TOT)"' `3'1 = `"Efficacy: motivation (ITT)"' `3'2 = `"Efficacy: motivation (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
+		title("Efficacy (Ability)", pos(11)) ///
+		eqrename(`1'1 = `"Efficacy: Z-score (ITT)"' `1'2 = `"Efficacy: Z-score (TOT)"' `2'1 = `"Capable to get funding (ITT)"' `2'2 = `"Capable to get funding (TOT)"' `3'1 = `"Able to manage the firm (ITT)"' `3'2 = `"Able to manage the firm (TOT)"' `4'1 = `"Motivate employees (ITT)"' `4'2 = `"Motivate employees (TOT)"') ///
+		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		ysc(outergap(-5)) ///
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
@@ -1366,7 +1378,7 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_efi car_efi_fin1 car_efi_man car_efi_motiv, gen(efi)
+rct_regression_efi female_efficacy car_efi_fin1 car_efi_man car_efi_motiv, gen(efi)
 
 }
 
@@ -1423,7 +1435,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1  // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial empowerment: Locus of Control} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
@@ -1438,7 +1450,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2   // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2  // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -1457,14 +1469,17 @@ esttab e(RW) using rw_`generate'.tex, replace
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
 	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
+	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)), ///
+	keep(*treatment take_up) drop(_cons) xline(0)  xlabel(-1.5(0.5)1.5) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Locus: ease of networking (ITT)"' `1'2 = `"Locus: ease of networking (TOT)"' `2'1 = `"Locus: export administration & logistics (ITT)"' `2'2 = `"Locus: export administration & logistics (TOT)"' `3'1 = `"Locus: private & professional life (ITT)"' `3'2 = `"Locus: private & professional life (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
+		eqrename(`1'1 = `"Locus of Control `=char(13)'`=char(10)' Z-score (ITT)"' `1'2 = `"Locus of Control `=char(13)'`=char(10)' Z-score (TOT)"' `2'1 = `"Ease of establishing `=char(13)'`=char(10)' business contacts (ITT)"' `2'2 = `"Ease of establishing `=char(13)'`=char(10)' business contacts (TOT)"' `3'1 = `"Master Export Logistics `=char(13)'`=char(10)' & Administration (ITT)"' `3'2 = `"Master Export Logistics `=char(13)'`=char(10)' & Administration (TOT)"' `4'1 = `"Reconciliate private & `=char(13)'`=char(10)' professional life (ITT)"' `4'2 = `"Reconciliate private & `=char(13)'`=char(10)' professional life (TOT)"') ///
+		xtitle("Treatment coefficient", size(medsmall)) /// 
+		title("Locus of Control", justification(center) pos(11)) ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		ysc(outergap(-45)) ///
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
@@ -1472,7 +1487,7 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_locus car_loc_env car_loc_exp car_loc_soin, gen(locus)
+rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 
 }
 

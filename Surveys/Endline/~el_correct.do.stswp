@@ -53,11 +53,12 @@ gen check_again = 0
 gen questions_needing_checks = ""
 }
 
+
 ***********************************************************************
 * 	PART 3:  Automatic corrections
 ***********************************************************************
 *2.1 Remove commas, dots, dt and dinar Turn zero, zéro into 0 for all numeric vars
-{
+
 
 	* amouri frogot to mention that 999 needs to have a - before in case of don't know
 local 999vars ca ca_2024 profit profit_2024 ca_exp ca_exp_2024 
@@ -75,8 +76,8 @@ foreach var of local innov_vars {
 	replace `var' = usubinstr(`var', ".", "", .)
 
 
-	}
 }
+
 ***********************************************************************
 * 	PART 4:  Transform categorical variables into continuous variables
 ***********************************************************************
@@ -142,7 +143,6 @@ replace profit_2024 = 1000000 if profit_2024_category_gain == 1
 replace profit=profit*(-1) if profit_2023_category==0
 
 replace profit_2024=profit_2024*(-1) if profit_2024_category==0
-
 }
 
 ***********************************************************************
@@ -185,7 +185,6 @@ replace man_sources_other = "Apprentissage de nouvelles strategies grace au form
 replace man_sources_other = "Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use" if id_plateforme == 1151
 
 replace man_sources_other = "Apprentissage de nouvelles strategie grace à la recherche: article de marketing et management" if id_plateforme == 1176
-
 }
 
 ******************************************************************************
@@ -248,7 +247,7 @@ replace  export_other = " Elle a commencé la prospection en cote d'ivoire mais 
 }
 
 *************************************************************************
-* Correct net service 
+*Correct net service 
 *************************************************************************
 {
 replace net_services_pratiques = 1 if id_plateforme ==999 
@@ -335,7 +334,6 @@ replace net_services_other = "Collaboration avec d'autres entreprises" if id_pla
 }
 
 
-
 *************************************************************************
 * Correct net size 
 *************************************************************************
@@ -348,29 +346,34 @@ forvalues x = 3(1)4 {
 
 *** Company specific corrections
 * id 1000
-replace net_size4 = 0 if id_plateforme  ==1000
+replace net_size4 = 0 if id_plateforme ==1000
 
 * id 1036
 replace net_size4 = 10 if id_plateforme ==1036
 replace net_size3 = 30 if id_plateforme ==1036
-replace net_gender3 = . if id_plateforme ==1036
-replace net_gender4 = . if id_plateforme ==1036
+
+replace net_gender4 = 7 if id_plateforme ==1036
+replace net_gender3 = 20 if id_plateforme ==1036
 
 * id 1108
 replace net_size4 = 10 if id_plateforme ==1108
 replace net_size3 = 12 if id_plateforme ==1108 
 
-replace net_gender3 = . if id_plateforme ==1108
-replace net_gender4 = . if id_plateforme ==1108
+replace net_gender4 = 9 if id_plateforme ==1108
+replace net_gender3 = 10 if id_plateforme ==1108
 
 * id 1193
 replace net_size3 = 15 if id_plateforme ==1193 
-replace net_size4 = 10 if id_plateforme ==1193
+replace net_size4 = 10 if id_plateforme ==1193 
 
-replace net_gender3 = . if id_plateforme ==1193
-replace net_gender4 = . if id_plateforme ==1193
+
 
 }
+
+
+
+
+
 
 *************************************************************************
 *Correct export part 
@@ -382,9 +385,9 @@ replace export_other ="des problemes qui survient à la finalisation de l'operat
 
 
 *************************************************************************
-* Correct financial part
+*Correct financial part
 *************************************************************************
-{
+
 // id_plateforme 1005 / entreprise n'est plus en activité depuis aout 2022 elle revient aux production aux mai 2024 elle à une perte de 17000 dt depuis aout 2022 jusquà maintenent donc les cA totale en 2023 0 est en 2024 elle à dit que dans le mois de mai (le mois de retour en production) est de 500 dt 
  
 replace ca = 0 if id_plateforme == 1005
@@ -487,22 +490,30 @@ replace ca_exp = 0 if id_plateforme ==1153
 replace ca = 0 if id_plateforme == 1193  
 
 
-}
+
 
 
 
 *************************************************************************
 * Correct Ben and Int 
 ************************************************************************
-replace int_ben2 ="les techniques de communication et de ventes" if id_plateforme ==1068 
-replace int_ben2 ="les membres du consortium sont complementaires" if id_plateforme == 1135 
+
+
 
 
 
 ***********************************************************************
-* Translate the different opend ended questions in french 
+* 	PART 5:  Convert data types to the appropriate format
 ***********************************************************************
-{
+
+***********************************************************************
+* 	PART 6:  autres / miscellaneous adjustments
+***********************************************************************
+	* correct wrongly coded values for man_hr_obj
+
+***********************************************************************
+* 	PART 7: Translate the different opend ended questions in french 
+***********************************************************************
 	*products_other
 replace products_other= "c'est une gammes contenant 4 produits: mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if products_other =="c une gamme feha 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre"
 replace products_other= "huille de pépin de figues de barbarie" if products_other =="huille de pépin fils de barbarine"
@@ -521,10 +532,10 @@ replace products_other= "les patisseries traditionnelles" if products_other =="e
 replace products_other= "concasseur ammande et pistache" if products_other =="concaseur e mande et pistache"
 replace products_other= "c'est une gamme composée de 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if id_plateforme==1037
 replace products_other= "contenus de formation digital" if id_plateforme==1046
-replace products_other= "Elle a cessé la production d'insecticides depuis un an" if id_plateforme == 1035
-replace products_other= "recrutement, assistance technique et  projets de développement" if products_other =="recrutementassistance technique projets de développement"
-replace products_other= "sacs en cuire " if products_other =="shekaz ( vente des sacs en cuire ) https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://shekaz.com/&ved=2ahukewjxx8an4oqhaxukraqehvlxcguqfnoeceeqaq&usg=aovvaw23ijdchzn0recnvthpeonf"
-
+replace products_other= "Elle a cessé la production d'insecticides depuis un an" if id_plateforme ==1035
+replace products_other= "recrutement, assistance technique et  projets de développement" if id_plateforme ==1125
+replace products_other= "sacs en cuire " if id_plateforme ==1126
+replace products_other= "gel anti douleur,serum des cheuveux, mousse netoyant" if id_plateforme ==1182
 
 
 
@@ -821,9 +832,7 @@ replace int_other="pour des raisons légales: le consortium égigne que la géra
 replace int_other="l'aggréssivité de certaines personnes, le comportement des entrepreneurs et la mauvaise organisation de la GIZ" if int_other =="grasivite des personnes le comportement des entrepreneur acause du mal organisation de giz"
 replace int_other="elle ne peut pas faire partie du consortium car elle a des engagements familiaux" if int_other =="manajmtech nemchi aandi des engagements familiaux"
 replace int_other="elle n'est pas disponible" if int_other =="n'est disponible +++++++++++++++++++++++++++++++++++"
-replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"
-
-}	
+replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"	
 
 ***********************************************************************
 * 	PART 8:  Destring remaining numerical vars

@@ -96,7 +96,7 @@ save "${master_gdrive}/contact_info_master", replace
 ***********************************************************************	
 
 ***********************************************************************
-* 	PART 3: merge to create analysis data set (analysis data)
+* 	PART 3: merge registration & bl to create analysis data set (analysis data)
 ***********************************************************************
 {
 	* merge registration with baseline data
@@ -128,10 +128,12 @@ lab val surveyround round
 save "${master_raw}/consortium_raw", replace
 
 }
+
 ***********************************************************************
 * 	PART 4: append analysis data set with midline & endline
 ***********************************************************************
-	* append registration +  baseline data with midline
+{
+* append with midline
 append using "${ml_final}/ml_final"
 order id_plateforme surveyround treatment, first
 sort id_plateforme surveyround
@@ -141,7 +143,7 @@ append using "${el_final}/el_final"
 order id_plateforme surveyround treatment, first
 sort id_plateforme, stable
 
-	* declare panel data set
+* declare panel data set
 xtset id_plateforme surveyround, delta(1)
 
 * dealing with attrition
@@ -152,17 +154,17 @@ tsfill, full
 local cst_vars_num "treatment strata_final eligible gouvernorat id_admin_correct year_created subsector_corrige"
 foreach var of local cst_vars_num {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == .
-}
+	}
 
 
 local cst_vars_str "legalstatus subsector"
 foreach var of local cst_vars_str {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == ""
+	}	
+
 }
-
-
 ***********************************************************************
-* 	PART 5: merge with participation data (THIS CODE NEEDS TO BE UPDATED ONCE MIDLINE DATA HAS BEEN COLLECTED)
+* 	PART 5: merge with participation data
 ***********************************************************************
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 		*  import participation data

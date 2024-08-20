@@ -61,7 +61,7 @@ drop inno_produit
 ***********************************************************************
 * 	PART 5:  Create continuous variable for inspiration of innovation
 *********************************************************************** 
-{
+
 generate inno_mot_cons = regexm(inno_mot, "1")
 lab var inno_mot_cons "Consultant"
 
@@ -83,10 +83,9 @@ generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mo
 lab var inno_mot_total "Total of innovation inspirations"
 
 drop inno_mot
-}
 
 ***********************************************************************
-* 	PART 7: network
+* 	PART 7: network: net_size_m & net_coop
 ***********************************************************************
 {
 * 
@@ -96,7 +95,6 @@ lab var net_size3_m "Male entrepreneur business discussion"
 gen net_size4_m = net_size4 - net_gender4
 lab var net_size4_m "Male Family/friends business discussion"
 
-gen net_female_perc3 = net_gender3/net_size3
 
 * net_coop
 	* generate dummies for each cooperative word
@@ -130,12 +128,13 @@ generate net_coop_neg = netcoop1 + netcoop4 + netcoop5 + netcoop6 +  netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
 drop net_coop
+
 }
 
 ***********************************************************************
 * 	PART 8: Export
 ***********************************************************************
-{
+
 generate export_1 = regexm(export, "1")
 
 generate export_2 = regexm(export, "2")
@@ -176,8 +175,6 @@ replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *exp_pays = 0 if it does not export_1
 replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
-
-}
 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
@@ -535,11 +532,66 @@ replace int_incv3_correct = "Program implementation" if  int_incv3=="les formati
 replace int_incv3_correct = "Program implementation" if  int_incv3=="la différence de maturité des entreprises qui constitue le consortium"
 
 
+*************************************************************************
+*	Part 18: Categorisation products_other
+*************************************************************************
+gen products_other_correct = products_other 
+
+replace products_other_correct ="Learning Disabilities Assessment" if products_other =="depistage de signe de trouble d’apprentissage"
+replace products_other_correct ="Home Accessories" if products_other =="pergola et structure en bois"
+replace products_other_correct ="Courses and Training" if products_other =="des cours en ligne"
+replace products_other_correct ="Kitchenware" if products_other =="organic bowl"
+replace products_other_correct ="Kitchenware" if products_other =="service de présentation/ les planches / assiette plat"
+replace products_other_correct ="Essential Oils" if products_other =="c'est une gamme composée de 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre"
+replace products_other_correct ="Courses and Training" if products_other =="contenus de formation digital"
+replace products_other_correct ="Merchandising Products" if products_other =="produits dérivés"
+replace products_other_correct ="Essential Oils" if products_other =="huille de pépin de figues de barbarie"
+replace products_other_correct ="Human Resources and Technical Consulting" if products_other =="recrutement, assistance technique et  projets de développement"
+replace products_other_correct ="Home Accessories" if products_other =="des miroirs fait avec du bois de palmier"
+replace products_other_correct ="Graphic Design" if products_other =="les conceptions graphiques"
+replace products_other_correct ="Dried Aromatic Herbs" if products_other =="les herbes aromatiques séchées (romarin, armoise, géranium)"
+replace products_other_correct ="Make up" if products_other =="maquillage: les crayons, les pinceaux, palette contouring"
+replace products_other_correct ="Home Accessories" if products_other =="organisateur de sacs"
+replace products_other_correct ="Digital Business Solutions" if products_other =="sollution digital /automotasiation insciption en ligne /sollutions rh et de recrutement /solution de degitalisation de cheques / solutions degitale de courssiers"
+replace products_other_correct ="Professional Services" if products_other =="services ( consulting/ project management )"
+replace products_other_correct ="Essential Oils" if products_other =="huile de millas"
+replace products_other_correct ="Dried Aromatic Herbs" if products_other =="ail en poudre"
+replace products_other_correct ="Traditional Clothing" if products_other =="vetement traditionnel: houli et hayek"
+replace products_other_correct ="Oils" if products_other =="bouteille d'huile d'olive"
+replace products_other_correct ="Dried Aromatic Herbs" if products_other =="harissa et des épices"
+replace products_other_correct ="Home Accessories" if products_other ==" frange parfumée"
+replace products_other_correct ="logicel ERP" if products_other =="ERP odoo"
+replace products_other_correct ="Refrigeration Equipment" if products_other =="ventes et installation equipements frigorifique"
+replace products_other_correct ="Water Systems and Irrigation Management" if products_other =="etudes/suivi des travaux des systèmes d alimentation en eau potable et des périmètres irrigués"
+replace products_other_correct ="Traditional Pastries" if products_other =="les patisseries traditionnelles"
+replace products_other_correct ="Pastry Equipment" if products_other =="concasseur ammande et pistache"
+replace products_other_correct ="Fashion accessories" if products_other =="sacs en cuire"
+replace products_other_correct ="Skin and Hair care" if products_other =="gel anti douleur,serum des cheuveux, mousse netoyant"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 ************************************************************************
-*	Part 18: Create non-intervaled financial values
+*	Part 19: Create non-intervaled financial values
 *************************************************************************
 gen prni = profit if profit_2023_category_perte == . & profit_2023_category_gain == .
 
@@ -550,6 +602,6 @@ gen cani = ca if comp_ca2023_intervalles == .
 gen ca2024ni = ca_2024 if comp_ca2024_intervalles == .
 
 ***********************************************************************
-* 	PART 18: save dta file  										  
+* 	PART 20: save dta file  										  
 ***********************************************************************
 save "${el_final}/el_final", replace

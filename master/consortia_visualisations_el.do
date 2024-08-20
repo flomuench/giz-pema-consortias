@@ -63,11 +63,10 @@ putpdf paragraph, halign(center)
 putpdf image el_reponse_rate.png, width(5000)
 putpdf pagebreak
 
-graph bar (sum) refus if surveyround == 3, over(treatment) blabel(total, format(%9.0fc)) ///
-	title("Endline refusal") note("Date: `c(current_date)'") ///
-	ytitle("Number of entries") ///
-	ylabel(0(5)20, nogrid) 
-graph export el_attritionrate.png, replace
+graph bar (sum) refus, over(treatment) blabel(total, format(%9.0fc)) by(surveyround, note("{bf:Note}: There are 176 firms in total. 87 in treatment, and 89 in control. ML & EL response rates are 82% & 68%.") title("Attrition") rows(1))  ///
+	ytitle("Number of companies") ///
+	ylabel(0(5)35, nogrid) 
+graph export "${master_output}/figures/response_rate/el_attritionrate.png", replace
 putpdf paragraph, halign(center)
 putpdf image el_attritionrate.png
 putpdf pagebreak
@@ -901,18 +900,37 @@ putpdf pagebreak
 
 
 		* female
+			* Take up
 twoway  (kdensity net_gender3 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
         (kdensity net_gender3 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(1.5)) ///
         (kdensity net_gender3 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
         , ///
-        legend(rows(3) symxsize(small) ///
+		legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participated" ///
                      2 "Treatment group, absent" ///
                      3 "Control group") ///
                col(1) pos(6) ring(6)) ///
 	   title("Female entrepreneurs discussions about business", size(medium)) ///
 	   xtitle("Number of female entrepreneurs met",size(medium)) 
-gr export el_network_density_f.png, width(5000) replace
+	   
+			* T vs. C
+  sum     net_gender3_w99 if treatment == 0 
+  local   control_mean = r(mean) 
+  sum     net_gender3_w99 if treatment == 1
+  local   treatment_mean = r(mean)
+  
+twoway  (kdensity net_gender3_w99 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
+        (kdensity net_gender3_w99 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(1.5)) ///
+		, ///
+		 xline(`control_mean', lcolor(green) lpattern(dash)) ///
+         xline(`treatment_mean', lcolor(maroon) lpattern(dash)) ///
+		legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			xtitle("Female entrepreneurs regularly met to discuss business",size(medium)) ///
+	   note("{bf:Note}: Variable shows endline responses and is winsorised at the 99% percent level.")
+gr export "${master_output}/figures/endline/network/el_network_density_f.png", width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_network_density_f.png, width(5000)
 putpdf pagebreak

@@ -53,28 +53,6 @@ gen check_again = 0
 gen questions_needing_checks = ""
 }
 
-***********************************************************************
-* 	PART 1.2:  Identify and remove duplicates 
-***********************************************************************
-/*
-sort id_plateforme date
-quietly by id_plateforme date:  gen dup = cond(_N==1,0,_n)
-drop if dup>1
-*/
-
-/*duplicates report id_plateforme heuredébut
-duplicates tag id_plateforme heuredébut, gen(dup)
-drop if dup>1
-*/
-
-
-*Individual duplicate drops (where heure debut is not the same). If the re-shape
-*command in bl_test gives an error it is because there are remaining duplicates,
-*please check them individually and drop (actually el-amouri is supposed to that)
-*drop if id_plateforme==1239 & heuredébut=="16:02:55"
-
-*restore original order
-*sort date heuredébut
 
 ***********************************************************************
 * 	PART 3:  Automatic corrections
@@ -100,132 +78,10 @@ foreach var of local innov_vars {
 
 }
 
-
-
-/*
-	*benefits
-local bene_vars int_ben1 int_ben2 int_ben3 int_ben_autres
-foreach var of local bene_vars {
-	replace `var' = "réseautage" if strpos(lower(`var'), "réseautage") | strpos(lower(`var'), "reseautage") | strpos(lower(`var'), "réseaux") | strpos(lower(`var'), "relation") | strpos(lower(`var'), "relations")
-	replace `var' = "apprentissage" if strpos(lower(`var'), "apprentissage") | strpos(lower(`var'), "learning")
-	replace `var' = "développement de l'entreprise" if strpos(lower(`var'), "développement de l'entreprise") | strpos(lower(`var'), "business development")
-	replace `var' = "échange d'expériences" if strpos(lower(`var'), "échange d'expériences") | strpos(lower(`var'), "exchange experiences" | strpos(lower(`var'), "exchange"))
-	replace `var' = "coopération" if strpos(lower(`var'), "coopération") | strpos(lower(`var'), "collaboration")
-	replace `var' = "ouverture sur des nouveaux marchés" if strpos(lower(`var'), "ouverture sur des nouveaux marchés") | strpos(lower(`var'), "new markets")
-}
-*/
-
-
-/*
-	* loop over all accounting variables with string
-ds ca ca_exp profit ca_2021 ca_exp_2021 profit_2021, has(type string) 
-local numvars_with_strings "`r(varlist)'"
-foreach var of local numvars_with_strings {
-    replace `var' = ustrregexra( `var',"dinars","")
-    replace `var' = ustrregexra( `var',"dinar","")
-    replace `var' = ustrregexra( `var',"milles","000")
-    replace `var' = ustrregexra( `var',"mille","000")
-	replace `var' = ustrregexra( `var',"millions","000000")
-    replace `var' = ustrregexra( `var',"million","000000") 
-    replace `var' = ustrregexra( `var',"dt","")
-    replace `var' = ustrregexra( `var',"k","000")
-    replace `var' = ustrregexra( `var',"dt","")
-    replace `var' = ustrregexra( `var',"tnd","")
-    replace `var' = ustrregexra( `var',"TND","")
-	replace `var' = ustrregexra( `var',"DT","")
-	replace `var' = ustrregexra( `var',"D","")
-    replace `var' = ustrregexra( `var',"zéro","0")
-    replace `var' = ustrregexra( `var',"zero","0")
-    replace `var' = ustrregexra( `var'," ","")
-    replace `var' = ustrregexra( `var',"un","1")
-    replace `var' = ustrregexra( `var',"deux","2")
-    replace `var' = ustrregexra( `var',"trois","3")
-    replace `var' = ustrregexra( `var',"quatre","4")
-    replace `var' = ustrregexra( `var',"cinq","5")
-    replace `var' = ustrregexra( `var',"six","6")
-    replace `var' = ustrregexra( `var',"sept","7")
-    replace `var' = ustrregexra( `var',"huit","8")
-    replace `var' = ustrregexra( `var',"neuf","9")
-    replace `var' = ustrregexra( `var',"dix","10")
-    replace `var' = ustrregexra( `var',"O","0")
-    replace `var' = ustrregexra( `var',"o","0")
-    replace `var' = ustrregexra( `var',"دينار تونسي","")
-    replace `var' = ustrregexra( `var',"دينار","")
-    replace `var' = ustrregexra( `var',"تونسي","")
-    replace `var' = ustrregexra( `var',"د","")
-    replace `var' = ustrregexra( `var',"de","")
-    replace `var' = ustrregexra( `var',"d","")
-    replace `var' = ustrregexra( `var',"na","")
-    replace `var' = ustrregexra( `var',"r","")
-    replace `var' = ustrregexra( `var',"m","000")
-    replace `var' = ustrregexra( `var',"مليون","000000")
-    replace `var' = subinstr(`var', ".", "",.)
-    replace `var' = subinstr(`var', ",", ".",.)
-    replace `var' = "`not_know'" if `var' =="je ne sais pas"
-    replace `var' = "`not_know'" if `var' =="لا أعرف"
-
-}
-
-*/
 ***********************************************************************
-* 	PART 4:  Manual correction (by variable not by row)
+* 	PART 4:  Transform categorical variables into continuous variables
 ***********************************************************************
-
-*4.1 Manually Transform any remaining "word numerics" to actual numerics 
-* browse id_plateforme ca ca_exp Profit ca_2021 ca_exp2021 
-
-
-
-*4.2 Comparison of newly provided accounting data for firms with needs_check=1
-*Please compare new and old and decide whether to replace the value. 
-*If new value continues to be strange, then check_again plus comment
-
-
-
-*4.3 Manual corrections that were in correction but not automatically update in raw data
-
-
-
-
-
-***********************************************************************
-* 	EXAMPLE CODE FOR : use regular expressions to correct variables 		  			
-***********************************************************************
-/* for reference and guidance, regularly these commands are used in this section
-gen XXX = ustrregexra(XXX, "^216", "")
-gen id_adminrect = ustrregexm(id_admin, "([0-9]){6,7}[a-z]")
-
-*replace id_adminrige = $check_again if id_adminrect == 1
-lab def correct 1 "correct" 0 "incorrect"
-lab val id_adminrect correct
-
-*/
-/*
-
-replace id_base_repondent = ustrregexra( id_base_repondent ,"mme ","")
-*/
-
-***********************************************************************
-* 	EXAMPLE CODE:  Replace string with numeric values		  			
-***********************************************************************
-/*
 {
-*Remplacer les textes de la variable investcom_2021
-replace investcom_2021 = "100000" if investcom_2021== "100000dt"
-replace investcom_2021 = "18000" if investcom_2021== "huit mille dinars"
-replace investcom_2021 = "0" if investcom_2021== "zéro"
-
-
-replace investcom_2021 = "`refused'" if investcom_2021 == "-888"
-replace investcom_2021 = "`not_know'" if investcom_2021 == "-999"
-replace investcom_2021 = "`not_know'" if investcom_2021 == "لا اعرف"
-
-}
-*/
-
-***********************************************************************
-* 	PART 5:  Transform categorical variables into continuous variables
-***********************************************************************
 *ca_intervalles
 replace ca = 5000 if comp_ca2023_intervalles == 8
 replace ca = 25000 if comp_ca2023_intervalles == 7
@@ -287,10 +143,12 @@ replace profit_2024 = 1000000 if profit_2024_category_gain == 1
 replace profit=profit*(-1) if profit_2023_category==0
 
 replace profit_2024=profit_2024*(-1) if profit_2024_category==0
+}
 
 ***********************************************************************
 * Correct management practices
 ***********************************************************************
+{
 replace man_fin_per_ind = 1 if id_plateforme == 984
 replace man_fin_per_pro = 1 if id_plateforme == 984
 replace man_fin_per_qua = 1 if id_plateforme == 984
@@ -327,7 +185,7 @@ replace man_sources_other = "Apprentissage de nouvelles strategies grace au form
 replace man_sources_other = "Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use" if id_plateforme == 1151
 
 replace man_sources_other = "Apprentissage de nouvelles strategie grace à la recherche: article de marketing et management" if id_plateforme == 1176
-
+}
 
 ******************************************************************************
 * Correct products
@@ -339,6 +197,7 @@ replace products_other = " frange parfumée" if id_plateforme ==1234
 ***********************************************************************
 * Correct product innovation 
 ***********************************************************************
+{
 replace inno_mot_other = "Diversification des fournisseurs et marketing à travers les clients" if id_plateforme ==986
 replace inno_mot_other = "Exportation du services, introduction de nouvelles formations dans leur services" if id_plateforme ==988
 replace inno_exampl_produit2 = "Introduction d'un nouveau service d'accompagnement pour les entreprises: la comptabilité carbonne pour déterminer l'impact environnemental d'une entreprise et le rapport extra financier annuel qui contient les actions ,démarches et les profits" if id_plateforme ==999
@@ -385,11 +244,12 @@ replace inno_exampl_produit2 = " Integration d'un nouveau systeme d'information 
 
 replace  export_other = " Elle a commencé la prospection en cote d'ivoire mais elle a abondonné car l'export coute trop cher" if id_plateforme == 1222 
 
-
+}
 
 *************************************************************************
 *Correct net service 
 *************************************************************************
+{
 replace net_services_pratiques = 1 if id_plateforme ==999 
 replace net_services_produits= 1 if id_plateforme ==999 
 replace net_services_mark = 1 if id_plateforme ==999 
@@ -471,7 +331,7 @@ replace net_services_confiance = 1 if id_plateforme ==1224
 replace net_services_autre = 1 if id_plateforme ==1224
 replace net_services_other = "Collaboration avec d'autres entreprises" if id_plateforme ==1224
 
-
+}
 
 
 *************************************************************************
@@ -488,14 +348,25 @@ forvalues x = 3(1)4 {
 * id 1000
 replace net_size4 = 0 if id_plateforme ==1000
 
+* id 1036
 replace net_size4 = 10 if id_plateforme ==1036
 replace net_size3 = 30 if id_plateforme ==1036
 
+replace net_gender4 = 7 if id_plateforme ==1036
+replace net_gender3 = 20 if id_plateforme ==1036
+
+* id 1108
 replace net_size4 = 10 if id_plateforme ==1108
 replace net_size3 = 12 if id_plateforme ==1108 
 
+replace net_gender4 = 9 if id_plateforme ==1108
+replace net_gender3 = 10 if id_plateforme ==1108
+
+* id 1193
 replace net_size3 = 15 if id_plateforme ==1193 
 replace net_size4 = 10 if id_plateforme ==1193 
+
+
 
 }
 
