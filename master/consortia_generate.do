@@ -282,6 +282,7 @@ foreach var of local id {
 ***********************************************************************
 {		
 gen closed = 0 
+replace closed = . if refus == 1
 lab var closed "Companies that are no longer operating"
 replace closed = 1 if id_plateforme == 989
 replace closed = 1 if id_plateforme == 1083
@@ -291,21 +292,27 @@ replace closed = 1 if id_plateforme == 1044
 replace closed = 1 if id_plateforme == 1127
 replace closed = 1 if id_plateforme == 1154
 
-local el_variables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres entreprise_model exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes ///
-exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4 expp_cost expp_ben employes car_empl1 car_empl2 man_fin_per_ind ///
- man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa man_source_cons ///
- man_source_pdg man_source_fam man_source_even man_source_autres net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques ///
- net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man ///
- car_efi_motiv car_loc_env car_loc_exp car_loc_soin listexp ca ca_exp comp_ca2023_intervalles ca_2024 ca_exp_2024 comp_ca2024_intervalles ///
+* replace company-level outcomes with zero if company has ceased operations, but not indivudal level outcomes
+	* only replace if missing value
+local el_variables inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres entreprise_model ///
+exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent ssa_action1 ssa_action2 ssa_action3 ssa_action4 expp_cost expp_ben ///
+ employes car_empl1 car_empl2 /// 
+ man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa ///
+ ca ca_exp comp_ca2023_intervalles ca_2024 ca_exp_2024 comp_ca2024_intervalles ///
  profit_2023_category profit_2024_category profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain ///
- int_contact attest  el_produit1 el_produit2 el_produit3 inno_none inno_improve inno_new inno_both inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client ///
- inno_mot_dummyother inno_mot_total netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg export_1 ///
- export_2 export_3 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5 net_size3_m net_size4_m
+ inno_improve inno_new inno_both export_1 ///
+ export_2 export_3 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5
 
 foreach var of local el_variables {
-    replace `var' = 0 if surveyround == 3 & closed == 1
+    replace `var' = 0 if surveyround == 3 & closed == 1 & `var' == .
 }
 }
+
+* individual level outcomes
+// netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man
+// car_efi_motiv car_loc_env car_loc_exp car_loc_soin listexp
+// int_contact attest  
+//  inno_none inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother inno_mot_total  
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
