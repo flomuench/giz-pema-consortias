@@ -1346,7 +1346,7 @@ stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666
 	
 preserve
 collapse (mean) ca_exp if  ca_exp <ca_exp_95p & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , by(surveyround take_up treatment)
-twoway (connected ca_exp surveyround if treatment == 1 & take_up == 1) (connected ca_exp surveyround if treatment == 1 & take_up == 0) (connected ca_exp surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of total turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
+twoway (connected ca_exp surveyround if treatment == 1 & take_up == 1) (connected ca_exp surveyround if treatment == 1 & take_up == 0) (connected ca_exp surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of export turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participated" ///
                      2 "Treatment group, absent" ///
@@ -1500,7 +1500,7 @@ putpdf pagebreak
 
 preserve
 collapse (mean) profit if profit!=666 & profit!=777 & profit!=888 & profit!=999 & profit!=1234 , by(surveyround take_up treatment)
-twoway (connected profit surveyround if treatment == 1 & take_up == 1) (connected profit surveyround if treatment == 1 & take_up == 0) (connected profit surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of total turnover") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
+twoway (connected profit surveyround if treatment == 1 & take_up == 1) (connected profit surveyround if treatment == 1 & take_up == 0) (connected profit surveyround if treatment == 0), xlabel (1(1)3) ytitle("Mean of profit") xtitle("1- Baseline 2- Midline 3-Endline") legend(label(1 Control) label(2 Present)) ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participated" ///
                      2 "Treatment group, absent" ///
