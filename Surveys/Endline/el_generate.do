@@ -54,7 +54,7 @@ lab var inno_improve "Improved existing products/services"
 generate inno_new = regexm(inno_produit, "2")
 lab var inno_new "Introduced new products/services" 
 
-generate inno_both = inno_improve + inno_new
+generate inno_both = (inno_improve == 1 & inno_new == 1)
 label var inno_both "Improved & introduced new products/services"
 
 drop inno_produit
@@ -307,7 +307,7 @@ replace n`x' = `x'/employes if n`x'!= .
 ************************************************************************
 *Part 16: Harmonization of open ended questions (benefits&inconnvenients)
 *************************************************************************
-
+{
 
 gen int_ben1_correct = int_ben1 
 gen int_ben2_correct = int_ben2
@@ -530,11 +530,12 @@ replace int_incv3_correct = "Program implementation" if  int_incv3=="les formati
 replace int_incv3_correct = "Program implementation" if  int_incv3=="Je n'en profiterai pas financièrement"
 replace int_incv3_correct = "Program implementation" if  int_incv3=="les formations qui ont été faites étaient une perte de temps car elles n'étaient pas stratégies car ils n'ont pas le même courant de pensée"
 replace int_incv3_correct = "Program implementation" if  int_incv3=="la différence de maturité des entreprises qui constitue le consortium"
-
+}
 
 *************************************************************************
 *	Part 18: Categorisation products_other
 *************************************************************************
+{
 gen products_other_correct = products_other 
 
 replace products_other_correct ="Learning Disabilities Assessment" if products_other =="depistage de signe de trouble d’apprentissage"
@@ -569,7 +570,7 @@ replace products_other_correct ="Fashion accessories" if products_other =="sacs 
 replace products_other_correct ="Skin and Hair care" if products_other =="gel anti douleur,serum des cheuveux, mousse netoyant"
 
 
-
+}
 
 
 

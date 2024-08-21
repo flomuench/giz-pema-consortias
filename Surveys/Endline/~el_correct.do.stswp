@@ -156,7 +156,7 @@ replace man_fin_per_sto = 1 if id_plateforme == 984
 replace man_fin_per_emp = 1 if id_plateforme == 984
 replace man_fin_per_liv = 1 if id_plateforme == 984
 
-replace man_fin_per_fre = 2 if id_plateforme == 984
+replace man_fin_per_fre = 0.25 if id_plateforme == 984
 
 replace man_fin_per_ind = 1 if id_plateforme == 1000
 replace man_fin_per_pro = 1 if id_plateforme == 1000
@@ -165,7 +165,7 @@ replace man_fin_per_sto = 0 if id_plateforme == 1000
 replace man_fin_per_emp = 1 if id_plateforme == 1000
 replace man_fin_per_liv = 1 if id_plateforme == 1000
 
-replace man_fin_per_fre = 3 if id_plateforme == 1000
+replace man_fin_per_fre = 0.5 if id_plateforme == 1000
 
 replace man_fin_per_liv = 0 if id_plateforme == 1059
 
@@ -175,7 +175,7 @@ replace man_fin_per_qua = 1 if id_plateforme == 1126
 replace man_fin_per_sto = 1 if id_plateforme == 1126
 replace man_fin_per_emp = 1 if id_plateforme == 1126
 replace man_fin_per_liv = 1 if id_plateforme == 1126
-replace man_fin_per_fre = 3 if id_plateforme == 1126
+replace man_fin_per_fre = 0.5 if id_plateforme == 1126
 
 
 replace man_sources_other ="Apprentissage de nouvelles strategies grace à sa participation à deux sturctures d'accompagnement des entreprises qui sont: impact partner et afkar" if id_plateforme == 996
@@ -387,7 +387,7 @@ replace export_other ="des problemes qui survient à la finalisation de l'operat
 *************************************************************************
 *Correct financial part
 *************************************************************************
-
+{
 // id_plateforme 1005 / entreprise n'est plus en activité depuis aout 2022 elle revient aux production aux mai 2024 elle à une perte de 17000 dt depuis aout 2022 jusquà maintenent donc les cA totale en 2023 0 est en 2024 elle à dit que dans le mois de mai (le mois de retour en production) est de 500 dt 
  
 replace ca = 0 if id_plateforme == 1005
@@ -489,7 +489,7 @@ replace ca_exp = 0 if id_plateforme ==1153
 
 replace ca = 0 if id_plateforme == 1193  
 
-
+}
 
 
 
@@ -514,6 +514,7 @@ replace ca = 0 if id_plateforme == 1193
 ***********************************************************************
 * 	PART 7: Translate the different opend ended questions in french 
 ***********************************************************************
+{
 	*products_other
 replace products_other= "c'est une gammes contenant 4 produits: mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre" if products_other =="c une gamme feha 4 produits : mixoil plusplus (poudre/liquide) /mixoil simple / mixoil liquide et poudre"
 replace products_other= "huille de pépin de figues de barbarie" if products_other =="huille de pépin fils de barbarine"
@@ -537,11 +538,11 @@ replace products_other= "recrutement, assistance technique et  projets de dével
 replace products_other= "sacs en cuire " if id_plateforme ==1126
 replace products_other= "gel anti douleur,serum des cheuveux, mousse netoyant" if id_plateforme ==1182
 
+}
 
 
 
-
-
+{
 *inno_exampl_produit1
 replace inno_exampl_produit1 = "on fait des déplacements aux différentes régions et on fait des formations dans leurs locals" if inno_exampl_produit1 == "yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement *****************"
 replace inno_exampl_produit1 = "la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne" if inno_exampl_produit1 == "la création et la diminution de prix , améloration de qualité tissue kenou yekhdmou ken haut gamme oualeou yekhdmou hata l moyen gamme"
@@ -644,7 +645,7 @@ replace inno_exampl_produit2 = "sucré  et salé avec une nouvelle texture/ le f
 replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "mini chaine dolive ***************************......................" /*TBC*/
 
 
-
+}
 
 
 
