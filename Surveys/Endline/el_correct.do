@@ -491,8 +491,53 @@ replace ca = 0 if id_plateforme == 1193
 
 
 
+*Correcting sources of management
+replace man_source_even = 1 if man_sources_other =="participation a des formations"
+replace man_source_even = 1 if man_sources_other =="a travers les formation"
+replace man_source_even = 1 if man_sources_other =="des formation des recherches"
+replace man_source_even = 1 if man_sources_other =="suite a la participation a des formation"
+replace man_source_even = 1 if man_sources_other =="mes études, les formations en leadership, intelligence émotionnel et management, des recherches"
+replace man_source_even = 1 if man_sources_other =="j'ai travaillé avec une entreprise néérlandaise sur terrain + les formations en ligne et en présentielles"
+replace man_source_even = 1 if man_sources_other =="j'ai appris des nouvelles stratégies à partir des formations en ligne et en présentiel, des programmes et des expériences passées"
+replace man_source_even = 1 if man_sources_other =="les formations en ligne / les missions b2b"
+replace man_source_even = 1 if man_sources_other =="aamlet des formations de technologie des formations d'information ll équipe technique /des formations de marketing fl digital fl finance fl comptabilité"
+replace man_source_even = 1 if man_sources_other =="les formations professionnelles où elle a appris la création de l'entreprise et les programmes de la GIZ"
+replace man_source_even = 1 if man_sources_other =="Apprentissage de nouvelles strategies grace au formation de la GIZ"
+replace man_source_even = 1 if man_sources_other =="des formation cherket fehom"
+replace man_source_even = 1 if man_sources_other =="les formations de la GIZ et l'expérience"
+replace man_source_even = 1 if man_sources_other =="internet et par une formation entreprenariat et mangement agricole"
+replace man_source_even = 1 if man_sources_other =="giz et l'expérience personnel et les sociétés"
+replace man_source_even = 1 if man_sources_other =="des formation et des livres et de articles"
+replace man_source_even = 1 if man_sources_other =="les formations de la GIZ"
+replace man_source_even = 1 if man_sources_other =="les formations"
+replace man_source_even = 1 if man_sources_other =="accompagnement , giz"
+replace man_source_even = 1 if man_sources_other =="le bureau de formations pic /les formation a utica"
+replace man_source_even = 1 if man_sources_other =="formation giz ,formations individuelles"
+replace man_source_even = 1 if man_sources_other =="Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use"
+replace man_source_even = 1 if man_sources_other =="les formations de giz"
+replace man_source_even = 1 if man_sources_other =="formation de giz"
+replace man_source_even = 1 if man_sources_other =="des formations"
+replace man_source_even = 1 if man_sources_other =="des programmes TV / des formations présentielles / des publicités"
+replace man_source_even = 1 if man_sources_other =="formations , programme d'accompagnement"
+replace man_source_even = 1 if man_sources_other =="les formations en ligne avec giz ."
+replace man_source_even = 1 if man_sources_other =="elle meme fait la recherche sur internet et les formations en ligne"
+replace man_source_even = 1 if man_sources_other =="les formations et les commandes"
+replace man_source_even = 1 if man_sources_other =="les seminaire et les associations"
 
 
+replace man_source_pdg = 1 if man_sources_other =="j'ai travaillé avec une entreprise néérlandaise sur terrain + les formations en ligne et en présentielles"
+replace man_source_pdg = 1 if man_sources_other =="des nouvelles stratégies basées sur les études de management, les vidéos de business, ainsi que les expériences entre entrepreneurs"
+replace man_source_pdg = 1 if man_sources_other =="networking"
+replace man_source_pdg = 1 if man_sources_other =="giz et l'expérience personnel et les sociétés"
+replace man_source_pdg = 1 if man_sources_other =="chambres national des femmes chefs d'entreprise"
+
+
+
+replace man_source_cons = 1 if man_sources_other =="Apprentissage de nouvelles strategies grace à sa participation à deux sturctures d'accompagnement des entreprises qui sont: impact partner et afkar"
+replace man_source_cons = 1 if man_sources_other =="les formations , des programmes de coaching sinon je fais des analyses et je vois ou je dois m’améliorer"
+replace man_source_cons = 1 if man_sources_other =="accompagnement , giz"
+replace man_source_cons = 1 if man_sources_other =="Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use"
+replace man_source_cons = 1 if man_sources_other =="formations , programme d'accompagnement"
 
 *************************************************************************
 * Correct Ben and Int 
