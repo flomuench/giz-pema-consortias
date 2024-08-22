@@ -530,6 +530,19 @@ replace product_hom1 ="textile" if ustrregexm(produit1,"trousses cuir/ similicui
 }
 
 ***********************************************************************
+*	PART 6: Management - weighting
+***********************************************************************	
+* Management number of indicators monitored
+* given we changed survey question design, calculate sum of monitored indicators (at ml we asked for the sum directly)
+egen temp_man_ind = rowtotal(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv), missing
+replace man_fin_num = 0 if surveyround == 3 & (temp_man_ind == 0)
+replace man_fin_num = 0.33 if surveyround == 3 & (temp_man_ind > 0 & temp_man_ind <= 2)
+replace man_fin_num = 0.66 if surveyround == 3 & (temp_man_ind > 2 & temp_man_ind <= 4)
+replace man_fin_num = 1 if surveyround == 3 & (temp_man_ind > 4 & temp_man_ind <= 6)
+
+drop temp_man_ind
+
+***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
 save "${master_intermediate}/consortium_inter", replace
