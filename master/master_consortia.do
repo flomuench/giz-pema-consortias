@@ -43,6 +43,15 @@ ssc install coefplot, replace
 ssc install missingplot, replace
 ssc install nmissing, replace
 ssc install reghfde, replace
+
+	* if there are issues on new computer with ivreg2, error code: vcvorthog, execute the following:
+	
+   capture mata: mata drop m_calckw()
+        capture mata: mata drop m_omega()
+        capture mata: mata drop ms_vcvorthog()
+        capture mata: mata drop s_vkernel()
+        mata: mata mlib index
+
 */
 
 	* set scheme for visualisations
