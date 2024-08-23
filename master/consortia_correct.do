@@ -542,6 +542,27 @@ replace man_fin_num = 1 if surveyround == 3 & (temp_man_ind > 4 & temp_man_ind <
 
 drop temp_man_ind
 
+*fix the weighting of baseline frequency questions so that it does not bias the z-score
+replace man_hr_obj = 0.25 if man_hr_obj == 1 & surveyround == 1
+replace man_hr_obj = 0.5 if man_hr_obj == 2 & surveyround == 1
+replace man_hr_obj = 0.75 if man_hr_obj == 3 & surveyround == 1
+replace man_hr_obj = 1 if man_hr_obj == 4 & surveyround == 1
+
+replace man_hr_feed = 0.25 if man_hr_feed == 1 & surveyround == 1
+replace man_hr_feed = 0.5 if man_hr_feed == 2 & surveyround == 1
+replace man_hr_feed = 0.75 if man_hr_feed == 3 & surveyround == 1
+replace man_hr_feed = 1 if man_hr_feed == 4 & surveyround == 1
+
+replace man_pro_ano = 0.25 if man_pro_ano == 1 & surveyround == 1
+replace man_pro_ano = 0.5 if man_pro_ano == 2 & surveyround == 1
+replace man_pro_ano = 0.75 if man_pro_ano == 3 & surveyround == 1
+replace man_pro_ano = 1 if man_pro_ano == 4 & surveyround == 1
+
+replace man_fin_per = 0.25 if man_fin_per == 1 & surveyround == 1
+replace man_fin_per = 0.5 if man_fin_per == 2 & surveyround == 1
+replace man_fin_per = 0.75 if man_fin_per == 3 & surveyround == 1
+replace man_fin_per = 1 if man_fin_per == 4 & surveyround == 1
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************

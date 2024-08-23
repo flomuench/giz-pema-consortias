@@ -156,7 +156,7 @@ replace man_fin_per_sto = 1 if id_plateforme == 984
 replace man_fin_per_emp = 1 if id_plateforme == 984
 replace man_fin_per_liv = 1 if id_plateforme == 984
 
-replace man_fin_per_fre = 0.25 if id_plateforme == 984
+replace man_fin_per = 0.25 if id_plateforme == 984
 
 replace man_fin_per_ind = 1 if id_plateforme == 1000
 replace man_fin_per_pro = 1 if id_plateforme == 1000
@@ -165,7 +165,7 @@ replace man_fin_per_sto = 0 if id_plateforme == 1000
 replace man_fin_per_emp = 1 if id_plateforme == 1000
 replace man_fin_per_liv = 1 if id_plateforme == 1000
 
-replace man_fin_per_fre = 0.5 if id_plateforme == 1000
+replace man_fin_per = 0.5 if id_plateforme == 1000
 
 replace man_fin_per_liv = 0 if id_plateforme == 1059
 
@@ -175,7 +175,7 @@ replace man_fin_per_qua = 1 if id_plateforme == 1126
 replace man_fin_per_sto = 1 if id_plateforme == 1126
 replace man_fin_per_emp = 1 if id_plateforme == 1126
 replace man_fin_per_liv = 1 if id_plateforme == 1126
-replace man_fin_per_fre = 0.5 if id_plateforme == 1126
+replace man_fin_per = 0.5 if id_plateforme == 1126
 
 
 replace man_sources_other ="Apprentissage de nouvelles strategies grace à sa participation à deux sturctures d'accompagnement des entreprises qui sont: impact partner et afkar" if id_plateforme == 996

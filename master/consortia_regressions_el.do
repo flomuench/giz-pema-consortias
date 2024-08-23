@@ -15,7 +15,7 @@
 ***********************************************************************
 * 	Part 0: 	set the stage		  
 ***********************************************************************
-
+{
 use "${master_final}/consortium_final", clear
 
 /*	* export dta file for Michael Anderson
@@ -50,7 +50,7 @@ if "`c(username)'" == "MUNCHFA" | "`c(username)'" == "fmuench"  {
 set scheme s1color
 		
 	}
-
+}
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -317,32 +317,49 @@ esttab lexp1 lexp2 lexp3 using "el_listexp1.tex", replace ///
 ***********************************************************************
 * 	PART 5: Endline results - regression table indexes
 ***********************************************************************
-
 {
-capture program drop rct_regression_indexes // enables re-running the program
-program rct_regression_indexes
-	version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-
-		}
 	
+capture program drop rct_regression_indexes
+program rct_regression_indexes
+    version 16
+    syntax varlist(min=1 numeric), GENerate(string)
+    
+    foreach var in `varlist' {
+        capture confirm variable `var'_y0
+        if _rc == 0 {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+            sum `var' if treatment == 0 & surveyround == 3
+            estadd scalar control_mean = r(mean)
+            estadd scalar control_sd = r(sd)
+        }
+        else {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+            sum `var' if treatment == 0 & surveyround == 3
+            estadd scalar control_mean = r(mean)
+            estadd scalar control_sd = r(sd)
+        }
+    }
+
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
@@ -479,25 +496,41 @@ capture program drop rct_regression_network_paper // enables re-running
 program rct_regression_network_paper
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+    foreach var in `varlist' {
+        capture confirm variable `var'_y0
+        if _rc == 0 {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+            sum `var' if treatment == 0 & surveyround == 3
+            estadd scalar control_mean = r(mean)
+            estadd scalar control_sd = r(sd)
+        }
+        else {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
 
-		}
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+            sum `var' if treatment == 0 & surveyround == 3
+            estadd scalar control_mean = r(mean)
+            estadd scalar control_sd = r(sd)
+        }
+    }
 		
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -533,7 +566,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  
 				noobs
 				
 			* Bottom panel: ATT
@@ -543,7 +576,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
 				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -712,13 +745,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -763,7 +794,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				noobs
 				
 			* Bottom panel: ATT
@@ -773,7 +804,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
 				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -833,13 +864,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -884,7 +913,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				noobs
 				
 			* Bottom panel: ATT
@@ -894,7 +923,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
 				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -936,13 +965,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -987,7 +1014,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				noobs
 				
 			* Bottom panel: ATT
@@ -997,7 +1024,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
 				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final) ///  L.*  ?.missing_bl_*
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -1039,7 +1066,7 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment  i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
@@ -1202,7 +1229,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
@@ -1212,7 +1239,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -1265,13 +1292,18 @@ rct_regression_coop netcoop2 netcoop3 netcoop7 netcoop8 netcoop9 netcoop1 netcoo
 }
 }
 
-
 ***********************************************************************
 * 	PART 8: endline results - regression table entrepreneurial empowerment
 ***********************************************************************
 {
 	
 **************** TABLES FOR PAPER ****************
+* change label for table output
+lab var car_efi_fin1 "access new funding"
+lab var car_loc_env "grasp internal and external dynamics"
+lab var car_loc_exp "deal with exports requisities"
+lab var car_loc_soin "balance personal and professional life"
+
 {
 capture program drop rct_confidence // enables re-running
 program rct_confidence
@@ -1281,41 +1313,77 @@ version 16							// define Stata version 15 used
 	foreach var in `varlist' {		// do following for all variables in varlist seperately			
 		* start with midline results for first var/column
 		if `i' == 1 {	
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+						capture confirm variable `var'_y0
+				        if _rc == 0 {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+           sum `var' if treatment == 0 & surveyround == 3
+		   estadd scalar ml_control_mean = r(mean)
+		   estadd scalar ml_control_sd = r(sd)
+        }
+        else {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+           sum `var' if treatment == 0 & surveyround == 3
+		   estadd scalar ml_control_mean = r(mean)
+		   estadd scalar ml_control_sd = r(sd)
+        }
 		
 		* put = 2 to move to endline		 
 		local i = `i' + 1
 		} 
 		else {
-* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+						capture confirm variable `var'_y0
+				        if _rc == 0 {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+           sum `var' if treatment == 0 & surveyround == 3
+		   estadd scalar ml_control_mean = r(mean)
+		   estadd scalar ml_control_sd = r(sd)
+        }
+        else {
+            // ITT: ANCOVA plus stratification dummies
+            eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+
+            // ATT, IV
+            eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            
+            // Calculate control group mean
+           sum `var' if treatment == 0 & surveyround == 3
+		   estadd scalar ml_control_mean = r(mean)
+		   estadd scalar ml_control_sd = r(sd)
+        }
 		}	
 }
 
@@ -1354,7 +1422,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final *_y0) ///  L.* oL.* ?.missing_bl_*  *_y0
 				noobs
 			
 			* Bottom panel: ITT
@@ -1363,8 +1431,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 				fragment ///	
 				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				stats(el_control_mean el_control_sd ml_control_mean ml_control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				drop(_cons *.strata_final *_y0) ///  L.* `5' `6' ?.missing_bl_*  *_y0
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -1396,21 +1464,39 @@ version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -1504,22 +1590,39 @@ program rct_regression_locus
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -1625,12 +1728,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -1732,12 +1833,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -1840,12 +1939,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -1950,12 +2047,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2055,7 +2150,42 @@ rct_regression_ipivars proc_prod_correct proc_mark_correct inno_org_correct inno
 ***********************************************************************
 **************** memory limit clear all and reload ****************
 clear all
+{
+use "${master_final}/consortium_final", clear
+
+/*	* export dta file for Michael Anderson
+preserve
+keep id_plateforme surveyround treatment take_up *net_size *net_nb_f *net_nb_m *net_nb_qualite *net_coop_pos strata_final
+save "${master_final}/sample.dta", replace
+restore
+*/
+
+* export dta file for Damian Clarke
+/*
+preserve
+keep id_plateforme surveyround treatment take_up *genderi *female_efficacy *female_loc strata_final
+save "${master_final}/sample_clarke.dta", replace
+restore
+*/	
+		* change directory
 cd "${master_regressiontables}/endline/regressions/management"
+
+		* declare panel data
+xtset id_plateforme surveyround, delta(1)
+
+		* set graphics on for coefplot
+set graphics on
+
+		* set color scheme
+if "`c(username)'" == "MUNCHFA" | "`c(username)'" == "fmuench"  {
+	set scheme stcolor
+} 
+	else {
+
+set scheme s1color
+		
+	}
+}
 **************** TABLES FOR PAPER ****************
 
 **************** TABLES FOR PRESENTATION ****************
@@ -2171,12 +2301,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2280,12 +2408,12 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
@@ -2370,7 +2498,7 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to frequency of monitoring performance outcomes
-rct_regression_fre man_fin_per_fre, gen(freq)
+rct_regression_fre man_fin_per, gen(freq)
 
 }
 
@@ -2385,12 +2513,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2492,12 +2618,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2591,11 +2715,12 @@ end
 rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres, gen(mans)
 
 }
-}
 
+}
 ***********************************************************************
 * 	PART 11: endline results - regression table export knowledge transfer
 ***********************************************************************
+{
 	* change directory
 cd "${master_regressiontables}/endline/regressions/export"
 
@@ -2607,12 +2732,10 @@ version 16							// define Stata version 15 used
 		
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
 			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2697,7 +2820,7 @@ gr export el_`generate'_cfp.png, replace
 end
 	
 	* apply program to export readiness index
-eri_presentation mpi, gen(eri)	
+eri_presentation eri, gen(eri)	
 
 
 **************** exp_pra ****************
@@ -2710,40 +2833,39 @@ version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
-		if "`var'" != "exp_pra_vent" {
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-		}
-	else {
-				* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-	}
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 }
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -2841,13 +2963,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2895,7 +3015,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
@@ -2905,7 +3025,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -2924,7 +3044,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Potential client (ITT)"' `1'2 = `"Potential client (TOT)"' `2'1 = `"Commercial partner (ITT)"' `2'2 = `"Commercial partner (TOT)"' `3'1 = `"External financial engagement (ITT)"' `3'2 = `"External financial engagement (TOT)"' `4'1 = `"Invest in SSA sales structure (ITT)"' `4'2 = `"Invest in SSA sales structure (TOT)"') ///
+		eqrename(`1'1 = `"Potential client (ITT)"' `1'2 = `"Potential client (TOT)"' `2'1 = `"Commercial partner (ITT)"' `2'2 = `"Commercial partner (TOT)"' `3'1 = `"External financial engagement (ITT)"' `3'2 = `"External financial engagement (TOT)"' `4'1 = `"Invest in SSA sales structure (ITT)"' `4'2 = `"Invest in SSA sales structure (TOT)"' `5'1 = `"Digital innovation (ITT)"' `5'2 = `"Digital innovation (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -2948,13 +3068,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -3002,7 +3120,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
@@ -3012,7 +3130,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -3045,8 +3163,6 @@ rct_regression_expcost expp_cost expp_ben, gen(expcost)
 
 }
 
-
-
 ***********************************************************************
 * 	PART 12: endline results - regression table export
 ***********************************************************************
@@ -3060,22 +3176,39 @@ program rct_regression_exp
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3169,13 +3302,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -3223,7 +3354,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
@@ -3233,7 +3364,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -3275,22 +3406,39 @@ program rct_regression_expclients
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3375,6 +3523,7 @@ rct_regression_expclients exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_
 
 rct_regression_expclients exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_w95 orderssa_w95, gen(exp_int95)
 
+}
 }
 }
 ***********************************************************************
@@ -3496,22 +3645,39 @@ program rct_regression_fin
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3608,22 +3774,39 @@ program rct_regression_fin
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3721,22 +3904,39 @@ program rct_regression_fink4
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3832,22 +4032,39 @@ program rct_regression_fink4
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -3944,22 +4161,39 @@ program rct_regression_finexpks
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -4055,22 +4289,39 @@ program rct_regression_finprtks
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -4165,22 +4416,18 @@ program rct_regression_finprtks
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -4221,7 +4468,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
@@ -4231,7 +4478,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -4274,23 +4521,40 @@ capture program drop rct_regression_pft // enables re-running
 program rct_regression_pft
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			foreach var in `varlist' {
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
 		}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
@@ -4320,7 +4584,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Financial results: profitable} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
@@ -4335,7 +4599,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -4353,12 +4617,13 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), //////
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Profitable 2023 (ITT)"' `1'2 = `"Profitable 2023 (TOT)"' `2'1 = `"Profitable 2024 (ITT)"' `2'2 = `"Profitable 2024 (TOT)"') ///
+		eqrename(`1'1 = `"Profitable 2023 (ITT)"' `1'2 = `"Profitable 2023 (TOT)"' `2'1 = `"Profitable 2024 (ITT)"' `2'2 = `"Profitable 2024 (TOT)"' `3'1 = `"Profitable 2021-2024 (ITT)"' `3'2 = `"Profitable 2021-2024 (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -4368,7 +4633,7 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_pft profit_2023_category profit_2024_category, gen(pft)
+rct_regression_pft profit_2023_category profit_2024_category profit_pos, gen(pft)
 
 }
 }
