@@ -217,7 +217,7 @@ egen miss_empl = rowmiss(employes car_empl1 car_empl2)
 egen miss_manindicators = rowmiss(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv)
 
 	* section 7: management practices
-egen miss_manprac = rowmiss(man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
+egen miss_manprac = rowmiss(man_fin_per man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
 
 	* section 8: marketing source
 egen miss_marksource = rowmiss(man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres)
