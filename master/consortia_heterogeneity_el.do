@@ -1,5 +1,5 @@
 ***********************************************************************
-* 			Master midline analysis/regressions: heterogeneity analysis				  
+* 			Master endline analysis/regressions: heterogeneity analysis				  
 ***********************************************************************
 *																	  
 *	PURPOSE: 	Undertake sub-group/heterogeneity analyses
@@ -655,67 +655,127 @@ local outcomes "net_association net_size3_w99 net_size3_m_w99 net_gender3_w99 ne
 local conditions "pole==1 pole==2 pole==3 pole==4"
 local groups "aa ac s tic"
 
+
 foreach outcome of local outcomes {
-    // Retrieve the label of the outcome variable
     local outcome_label : variable label `outcome'
 
     foreach cond of local conditions {
-        foreach sector of local groups {
-            // Regression for ITT
-            eststo `outcome'_`sector'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
-            estadd local bl_control "Yes"
-            estadd local strata_final "Yes"
-            matrix b = r(table) // access p-values for mht
-            scalar `outcome'p1 = b[4,2]
-
-            // Regression for ATT
-            eststo `outcome'_`sector'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
-            estadd local bl_control "Yes"
-            estadd local strata_final "Yes"
-            matrix b = r(table) // access p-values for mht
-            scalar `outcome'p2 = b[4,1]
+        gettoken group groups : groups
+			
+        capture confirm variable `outcome'_y0
+        if _rc == 0 { // If `outcome'_y0 exists
             
-            // Calculate control group mean
-            sum `outcome' if treatment == 0 & surveyround == 3 & `cond'
-            estadd scalar control_mean = r(mean)
-            estadd scalar control_sd = r(sd)
+            // ITT: ANCOVA plus stratification dummies
+            eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            quietly ereturn display
+            matrix b = r(table) 
+            scalar `outcome'_`group'1_p1 = b[4,2]
+
+            // ATT, IV
+            eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
+            estadd local bl_control "Yes"
+            estadd local strata_final "Yes"
+            quietly ereturn display 
+            matrix b = r(table)
+            scalar `outcome'_`group'2_p2 = b[4,1]
+
+        } 
+		else { // If `outcome'_y0 does not exist
+            display "Running ITT and ATT models for `outcome' without baseline outcome under condition `cond' with group `group'"
+            
+            // ITT: ANCOVA plus stratification dummies (without `outcome'_y0 and missing_bl_`outcome')
+            eststo `outcome'_`group'1: reg `outcome' i.treatment i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            quietly ereturn display
+            matrix b = r(table)
+            scalar `outcome'_`group'1_p1 = b[4,2]
+
+            // ATT, IV (without `outcome'_y0 and missing_bl_`outcome')
+            eststo `outcome'_`group'2: ivreg2 `outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
+            estadd local bl_control "No"
+            estadd local strata_final "Yes"
+            quietly ereturn display
+            matrix b = r(table)
+            scalar `outcome'_`group'2_p2 = b[4,1]
         }
     }
-
-    // ITT results table
-    local regressions `outcome'_aa1 `outcome'_ac1 `outcome'_s1 `outcome'_tic1 
-    esttab `regressions' using "rt_hetero_pole_`outcome'.tex", replace ///
-        prehead("\begin{table}[!h] \centering \\ \caption{Treatment effect on "`outcome_label'"} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{6}{c}} \hline\hline") ///
-        posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
-        fragment ///
-        cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-        mlabels(, depvars) /// use dep vars labels as model title
-        star(* 0.1 ** 0.05 *** 0.01) ///
-        nobaselevels ///
-        label      /// specifies EVs have label
-        mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
-        pattern(1 1 1 1)) ///
-        collabels(none) /// do not use statistics names below models
-        drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
-        noobs
-    
-    // TOT results table
-    local regressions `outcome'_aa2 `outcome'_ac2 `outcome'_s2 `outcome'_tic2 
-    esttab `regressions' using "rt_hetero_pole_`outcome'.tex", append ///
-        fragment ///
-        posthead("\hline \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-        cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-        stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-        drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
-        star(* 0.1 ** 0.05 *** 0.01) ///
-        mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
-        pattern(1 1 1 1)) ///
-        mlabels(none) nonumbers /// do not use varnames as model titles
-        collabels(none) /// do not use statistics names below models
-        nobaselevels ///
-        label      /// specifies EVs have label
-        prefoot("\hline") ///
-        postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+					
+	capture confirm variable `outcome'_y0
+	if _rc == 0 { // If `outcome'_y0 exists
+		// ITT results table
+		local regressions `outcome'_aa1 `outcome'_ac1 `outcome'_s1 `outcome'_tic1 
+		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", replace ///
+			prehead("\begin{table}[!h] \centering \\ \caption{Treatment effect on "`outcome_label'"} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{6}{c}} \hline\hline") ///
+			posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
+			fragment ///
+			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+			mlabels(, depvars) /// use dep vars labels as model title
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			label      /// specifies EVs have label
+			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			pattern(1 1 1 1)) ///
+			collabels(none) /// do not use statistics names below models
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			noobs
+		
+		// TOT results table
+		local regressions `outcome'_aa2 `outcome'_ac2 `outcome'_s2 `outcome'_tic2 
+		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", append ///
+			fragment ///
+			posthead("\hline \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			pattern(1 1 1 1)) ///
+			mlabels(none) nonumbers /// do not use varnames as model titles
+			collabels(none) /// do not use statistics names below models
+			nobaselevels ///
+			label      /// specifies EVs have label
+			prefoot("\hline") ///
+			postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+	}
+	else {
+				// ITT results table
+		local regressions `outcome'_aa1 `outcome'_ac1 `outcome'_s1 `outcome'_tic1 
+		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", replace ///
+			prehead("\begin{table}[!h] \centering \\ \caption{Treatment effect on "`outcome_label'"} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{6}{c}} \hline\hline") ///
+			posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
+			fragment ///
+			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+			mlabels(, depvars) /// use dep vars labels as model title
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			label      /// specifies EVs have label
+			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			pattern(1 1 1 1)) ///
+			collabels(none) /// do not use statistics names below models
+			drop(_cons *.strata_final) ///
+			noobs
+		
+		// TOT results table
+		local regressions `outcome'_aa2 `outcome'_ac2 `outcome'_s2 `outcome'_tic2 
+		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", append ///
+			fragment ///
+			posthead("\hline \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+			drop(_cons *.strata_final) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			pattern(1 1 1 1)) ///
+			mlabels(none) nonumbers /// do not use varnames as model titles
+			collabels(none) /// do not use statistics names below models
+			nobaselevels ///
+			label      /// specifies EVs have label
+			prefoot("\hline") ///
+			postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
+	}
 
     // Coefficient plot for 95% confidence interval
     coefplot ///
