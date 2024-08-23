@@ -281,7 +281,6 @@ rct_regression_close closed, gen(closed)
 ***********************************************************************
 * 	PART 4: list experiment regression
 ***********************************************************************
-
 {
 	* ITT, ancova	
 			* baseline differences amount
@@ -745,11 +744,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3 & `var' >= 0, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3 `var' >= 0, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -864,11 +863,11 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3 & `var' >= 0, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3 & `var' >= 0, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -1533,6 +1532,8 @@ rct_confidence female_loc female_loc car_loc_env car_loc_exp car_loc_soin, gen(c
 
 }
 
+
+
 **************** TABLES FOR PRESENTATION ****************
 **************** efi ****************
 
@@ -1792,6 +1793,129 @@ rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 
 }
 
+
+***********************************************************************
+* 	PART 9:knowledge transfer overview: MPI, ERI, II
+***********************************************************************
+capture program drop kt_overview // enables re-running
+program kt_overview
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+	capture confirm variable `var'_y0
+        if _rc == 0 {	
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+
+			}
+			else {
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+			}
+
+		}
+		
+	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
+		* tokenize to use all variables at the same time
+tokenize `varlist'
+
+/*
+		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+	
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace  
+*/
+	
+		* Put all regressions into one table
+			* Top panel: ITT
+*		tokenize `varlist'
+		local regressions `1'1 `2'1 // `3'1 adjust manually to number of variables 
+		esttab `regressions' using "${master_regressiontables}/endline/regressions/rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge Transfer - Management Practices Index} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{3}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+				mlabels(, depvars) /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				noobs
+				
+			* Bottom panel: ATT
+		local regressions `1'2 `2'2 // `3'2 adjust manually to number of variables 
+		esttab `regressions' using "${master_regressiontables}/endline/regressions/rt_`generate'.tex", append ///
+				fragment ///
+				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				label ///
+				nobaselevels ///
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \\ \multicolumn{2}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 95 percent level, corresponding to three extreme values. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values are clustered at the individual firm-level for the control group and at the consortia level for treatment group firms.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") 
+				// when inserting table in overleaf/latex, requires adding space after %
+				// add the following for MHT RW when done: Adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) are reported below the standard errors
+				
+						* coefplot
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), /// (`3'1, pstyle(p3)) (`3'2, pstyle(p3))
+	keep(*treatment take_up) drop(_cons *strata_final) xline(0) /// xlabel(0(1)10)
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' Index (ITT)"' `1'2 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' Index (TOT)"' `2'1 = `"Innovation `=char(13)'`=char(10)' Index (ITT)"' `2'2 = `"Innovation `=char(13)'`=char(10)' Index (TOT)"') /// `2'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index (ITT)"' `2'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index (TOT)"'
+		xtitle("Treatment Effect", size(medsmall)) ///  
+		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		ysc(outergap(-50)) /// negative outer gap --> reduces space btw coef names & plot
+		name(el_`generate'_cfp, replace)
+	
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp.png", replace
+
+
+end
+	
+kt_overview mpi ipi, gen(kt) // eri
 
 ***********************************************************************
 * 	PART 9: endline results - regression table innovation knowledge transfer
@@ -2102,9 +2226,10 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Entrepreneurs (ITT)"' `2'2 = `"Entrepreneurs (TOT)"' `3'1 = `"Events (ITT)"' `3'2 = `"Events (TOT)"' `4'1 = `"Clients (ITT)"' `4'2 = `"Clients (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
+		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Events (ITT)"' `3'2 = `"Events (TOT)"' `4'1 = `"Clients (ITT)"' `4'2 = `"Clients (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
-		title("Innovation source") ///
+		title("Innovation") ///
+		subtitle("Sources") ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 	
@@ -2380,7 +2505,8 @@ program rct_regression_indic
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
+		capture confirm variable `var'_y0
+        if _rc == 0 {
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
@@ -2395,6 +2521,22 @@ sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
+		else {
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+	}
+}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -2471,7 +2613,7 @@ coefplot ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 	
-gr export el_`generate'_cfplot.png, replace
+gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfplot.png", replace
 
 end
 
@@ -2488,15 +2630,14 @@ program rct_regression_fre
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
+		capture confirm variable `var'_y0
+        if _rc == 0 {
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 			estadd local strata_final "Yes"
 			
 			* calculate control group mean
@@ -2505,6 +2646,22 @@ sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
+		else {
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+	}
+}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -2592,7 +2749,8 @@ program rct_regression_manpra
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
+		capture confirm variable `var'_y0
+        if _rc == 0 {
 			* ITT: ancova plus stratification dummies
 			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 			estadd local strata_final "Yes"
@@ -2607,6 +2765,22 @@ sum `var' if treatment == 0 & surveyround == 3
 estadd scalar control_mean = r(mean)
 estadd scalar control_sd = r(sd)
 		}
+		else {
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+	}
+}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -2680,7 +2854,7 @@ coefplot ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 	
-gr export el_`generate'_cfplot.png, replace
+gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfplot.png", replace
 
 end
 
@@ -2786,10 +2960,11 @@ coefplot ///
 		subtitle("Sources", size(medsmall)) ///
 		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		ysc(outergap(5)) ///
+		ysc(outergap(10)) ///
+		note("{bf:Note}: The Consultant (TOT) is significant at the 10% level.", span) ///
 		name(el_`generate'_cfplot, replace)
 	
-gr export el_`generate'_cfplot.png, replace
+gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfplot.png", replace
 
 end
 
@@ -2799,6 +2974,7 @@ rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_eve
 }
 
 }
+
 ***********************************************************************
 * 	PART 11: endline results - regression table export knowledge transfer
 ***********************************************************************
@@ -2812,21 +2988,40 @@ version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
 
-		}
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No"
+				estadd local strata_final "Yes"
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean)
+				estadd scalar control_sd = r(sd)
+        }
+}
 		
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -2851,7 +3046,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 *		tokenize `varlist'
-		local regressions `1'1 // adjust manually to number of variables 
+		local regressions `1'1 `2'1 // adjust manually to number of variables 
 		esttab `regressions' using rt_`generate'.tex, replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge Transfer - Export Readiness Index} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{3}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
@@ -2866,7 +3061,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 				
 			* Bottom panel: ATT
-		local regressions `1'2  // adjust manually to number of variables 
+		local regressions `1'2 `2'2  // adjust manually to number of variables 
 		esttab `regressions' using rt_`generate'.tex, append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -2885,12 +3080,13 @@ esttab e(RW) using rw_`generate'.tex, replace
 				
 						* coefplot
 coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)), ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) /// xlabel(0(1)10)
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index (ITT)"' `1'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index (TOT)"') ///
+		eqrename(`1'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, General (ITT)"' `1'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, General (TOT)"' `2'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, SSA (ITT)"' `2'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, SSA (TOT)"') ///
 		xtitle("Treatment Effect", size(medsmall)) ///  
 		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height 
 		ysc(outergap(-40)) /// negative outer gap --> reduces space btw coef names & plot
@@ -2902,7 +3098,7 @@ gr export el_`generate'_cfp.png, replace
 end
 	
 	* apply program to export readiness index
-eri_presentation eri, gen(eri)	
+eri_presentation eri eri_ssa, gen(eri)	
 
 
 **************** exp_pra ****************
@@ -3020,10 +3216,12 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Appointed `=char(13)'`=char(10)' export manager (ITT)"' `1'2 = `"Appointed `=char(13)'`=char(10)' export manager (TOT)"' `2'1 = `"Participated in `=char(13)'`=char(10)' trade fairs (ITT)"' `2'2 = `"Participated in `=char(13)'`=char(10)' trade fairs (TOT)"' `3'1 = `"Identified foreign `=char(13)'`=char(10)' business partner (ITT)"' `3'2 = `"Identified foreign `=char(13)'`=char(10)' business partner  (TOT)"' `4'1 = `"Holds international `=char(13)'`=char(10)' certification (ITT)"' `4'2 = `"Holds international `=char(13)'`=char(10)' certification (TOT)"' `5'1 = `"Invested in sales `=char(13)'`=char(10)' structure abroad (ITT)"' `5'2 = `"Invested in sales `=char(13)'`=char(10)' structure abroads (TOT)"') ///
+		title("Export Readiness") ///
+		subtitle("General") ///
+		eqrename(`1'1 = `"Export manager (ITT)"' `1'2 = `"Export manager (TOT)"' `2'1 = `"Trade fair participation (ITT)"' `2'2 = `"Trade fair participation (TOT)"' `3'1 = `"Commmercial partner (ITT)"' `3'2 = `"Commercial partner  (TOT)"' `4'1 = `"Intl. certification (ITT)"' `4'2 = `"Intl. certification (TOT)"' `5'1 = `"Invested in sales structure (ITT)"' `5'2 = `"Invested in sales structure (TOT)"') ///
 		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		ysc(outergap(-30)) ///
+		ysc(outergap(-5)) ///
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
@@ -3126,7 +3324,9 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Potential client (ITT)"' `1'2 = `"Potential client (TOT)"' `2'1 = `"Commercial partner (ITT)"' `2'2 = `"Commercial partner (TOT)"' `3'1 = `"External financial engagement (ITT)"' `3'2 = `"External financial engagement (TOT)"' `4'1 = `"Invest in SSA sales structure (ITT)"' `4'2 = `"Invest in SSA sales structure (TOT)"' `5'1 = `"Digital innovation (ITT)"' `5'2 = `"Digital innovation (TOT)"') ///
+		title("Export Readiness") ///
+		subtitle("Sub-Sahara Africa") ///
+		eqrename(`1'1 = `"Potential client (ITT)"' `1'2 = `"Potential client (TOT)"' `2'1 = `"Commercial partner (ITT)"' `2'2 = `"Commercial partner (TOT)"' `3'1 = `"Financial support (ITT)"' `3'2 = `"Financial support (TOT)"' `4'1 = `"Invested in sales structure (ITT)"' `4'2 = `"Invested in sales structure (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -3466,7 +3666,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Reason of not exporting: high cost (ITT)"' `1'2 = `"Reason of not exporting: high cost (TOT)"' `2'1 = `"Reason of not exporting: no client (ITT)"' `2'2 = `"Reason of not exporting: no client (TOT)"' `3'1 = `"Reason of not exporting: complicated (ITT)"' `3'2 = `"Reason of not exporting: complicated (TOT)"' `4'1 = `"Reason of not exporting: risk & uncertainty (ITT)"' `4'2 = `"Reason of not exporting: risk & uncertainty (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
+		eqrename(`1'1 = `"High cost (ITT)"' `1'2 = `"High cost (TOT)"' `2'1 = `"No client (ITT)"' `2'2 = `"No client (TOT)"' `3'1 = `"Complicated (ITT)"' `3'2 = `"Complicated (TOT)"' `4'1 = `"Risk & uncertainty (ITT)"' `4'2 = `"Risk & uncertainty (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -3608,6 +3808,7 @@ rct_regression_expclients exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_
 }
 }
 }
+
 ***********************************************************************
 * 	PART 13: endline results - regression performance results
 ***********************************************************************
