@@ -494,7 +494,7 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Management"), bold
 
 *performance indicators
-betterbar man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre, over(treatment) barlab ci ///
+betterbar man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per, over(treatment) barlab ci ///
 	title("Performance indicators", position(12)) ///
 	ylabel(,labsize(vsmall) angle(horizontal))
 graph export el_perfindic.png, width(6000) replace 
@@ -503,7 +503,7 @@ putpdf image el_perfindic.png, width(6000)
 putpdf pagebreak
 
 *performance frequency
-betterbar man_fin_per_fre, over(treatment) barlab ci ///
+betterbar man_fin_per, over(treatment) barlab ci ///
 	title("KPIs tracking frequency", position(12)) ///
 	ylabel(,labsize(vsmall) angle(horizontal))
 graph export el_KPItrack.png, width(6000) replace 

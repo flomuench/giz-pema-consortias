@@ -146,7 +146,8 @@ lab var man_fin_per_qua "The quality of inputs"
 lab var man_fin_per_sto "Stock"
 lab var man_fin_per_emp "Employee performance and absenteeism"
 lab var man_fin_per_liv "On time delivery" 
-lab var man_fin_per_fre "frequency of performance indicators examination" 
+rename man_fin_per_fre man_fin_per
+lab var man_fin_per "frequency of performance indicators examination" 
 
 lab var man_fin_pra_bud "Maintaining an up-to-date written or digital budget and a business plan"
 lab var man_fin_pra_pro "Calculating the costs, prices, and profits achieved on each product or service sold."
