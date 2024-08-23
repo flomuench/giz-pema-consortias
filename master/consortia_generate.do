@@ -634,6 +634,8 @@ bys id_plateforme (surveyround): gen innovated = (innovations > 0)
 lab var innovations "Total innovations"
 lab var innovated "Innovated"
 
+egen inno_process_sum = rowtotal(inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres) if surveyround == 3, missing
+
 
 ***********************************************************************
 *	PART 7: network size
