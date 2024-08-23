@@ -1608,9 +1608,6 @@ rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 }
 
 
-
-
-
 ***********************************************************************
 * 	PART 9: endline results - regression table innovation knowledge transfer
 ***********************************************************************

@@ -65,6 +65,10 @@ set scheme plotplain
 	else if "`c(username)'" == "MUNCHFA" {
 		global person = "G:/My Drive"
 	}
+	
+	else if "`c(username)'" == "fmuench" {
+		global person = "C:/Users/fmuench/Documents"
+	}
 
 	else {
 		global person = "G:/Meine Ablage" 
