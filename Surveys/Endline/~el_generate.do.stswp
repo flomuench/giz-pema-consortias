@@ -134,7 +134,7 @@ drop net_coop
 ***********************************************************************
 * 	PART 8: Export
 ***********************************************************************
-
+{
 generate export_1 = regexm(export, "1")
 
 generate export_2 = regexm(export, "2")
@@ -175,21 +175,22 @@ replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *exp_pays = 0 if it does not export_1
 replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
+}
 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
 generate refus_1 = regexm(int_refus, "1")
-lab var refus_1 "Other companies are either not economically beneficial or very different"
+lab var refus_1 "Members different/not beneficial"
 
 generate refus_2 = regexm(int_refus, "2")
-lab var refus_2 "Other companies are direct competitors, collaboration is not possible"
+lab var refus_2 "Members are competitors"
 
 generate refus_3 = regexm(int_refus, "3")
-lab var refus_3 "Collaboration with other women entrepreneurs is challenging on a personal level"
+lab var refus_3 "Collaboration is personally challenging"
 
 generate refus_4 = regexm(int_refus, "4")
-lab var refus_4 "Collaboration require time that they don't have due to other priority"
+lab var refus_4 "Collaboration requires time"
 
 generate refus_5 = regexm(int_refus, "5")
 lab var refus_5 "Others" 
@@ -217,7 +218,7 @@ egen miss_empl = rowmiss(employes car_empl1 car_empl2)
 egen miss_manindicators = rowmiss(man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv)
 
 	* section 7: management practices
-egen miss_manprac = rowmiss(man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
+egen miss_manprac = rowmiss(man_fin_per man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa)
 
 	* section 8: marketing source
 egen miss_marksource = rowmiss(man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres)

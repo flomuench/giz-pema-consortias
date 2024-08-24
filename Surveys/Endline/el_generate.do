@@ -134,7 +134,7 @@ drop net_coop
 ***********************************************************************
 * 	PART 8: Export
 ***********************************************************************
-
+{
 generate export_1 = regexm(export, "1")
 
 generate export_2 = regexm(export, "2")
@@ -175,21 +175,22 @@ replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *exp_pays = 0 if it does not export_1
 replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
+}
 
 ***********************************************************************
 * 	PART 10: Refusal to participate in consortium
 ***********************************************************************
 generate refus_1 = regexm(int_refus, "1")
-lab var refus_1 "Other companies are either not economically beneficial or very different"
+lab var refus_1 "Members different/not beneficial"
 
 generate refus_2 = regexm(int_refus, "2")
-lab var refus_2 "Other companies are direct competitors, collaboration is not possible"
+lab var refus_2 "Members are competitors"
 
 generate refus_3 = regexm(int_refus, "3")
-lab var refus_3 "Collaboration with other women entrepreneurs is challenging on a personal level"
+lab var refus_3 "Collaboration is personally challenging"
 
 generate refus_4 = regexm(int_refus, "4")
-lab var refus_4 "Collaboration require time that they don't have due to other priority"
+lab var refus_4 "Collaboration requires time"
 
 generate refus_5 = regexm(int_refus, "5")
 lab var refus_5 "Others" 

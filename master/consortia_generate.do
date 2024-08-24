@@ -301,12 +301,15 @@ exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes exp_pra_rexp exp
  ca ca_exp comp_ca2023_intervalles ca_2024 ca_exp_2024 comp_ca2024_intervalles ///
  profit_2023_category profit_2024_category profit profit_2024 profit_2023_category_perte profit_2023_category_gain profit_2024_category_perte profit_2024_category_gain ///
  inno_improve inno_new inno_both export_1 ///
- export_2 export_3 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5
+ export_2 export_41 export_42 export_43 export_44 export_45 refus_1 refus_2 refus_3 refus_4 refus_5
 
 foreach var of local el_variables {
     replace `var' = 0 if surveyround == 3 & closed == 1 & `var' == .
 }
 }
+
+	* put export 
+replace export_3
 
 * individual level outcomes
 // netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man

@@ -375,17 +375,22 @@ replace net_gender4 = . if id_plateforme == 1193
 
 
 
-
-
-
 *************************************************************************
 *Correct export part 
 *************************************************************************
-
 replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme ==1054
 
+replace export = "0" if id_plateforme == 1153 // voir fiche de correction version finale
+
+replace export = "0" if id_plateforme == 1157 // suite logique de ses reponses a ca_exp & ca_exp_2024
+
+replace export = "0" if id_plateforme == 1244 // suite logique de ses reponses a ca_exp & ca_exp_2024
+
+replace export = "0" if id_plateforme == 1245 // voir fiche de correction version 2
 
 
+
+* a revoir/verifier: 1005, 1157, 1231, 1244
 
 *************************************************************************
 *Correct financial part
@@ -484,6 +489,11 @@ replace profit = 0 if id_plateforme == 1186
 replace ca_2024 = 8000 if id_plateforme == 1230
 replace ca_exp = 0 if id_plateforme ==1153
 
+replace ca_exp = 0 if id_plateforme == 1132 // repondu export_1 == 0
+replace ca_exp = . if id_plateforme == 1049
+replace ca_exp_2024 = 0 if id_plateforme == 1132 // repondu export_1 == 0
+replace ca_exp_2024 = . if id_plateforme == 1049
+
 
 
 
@@ -492,9 +502,11 @@ replace ca_exp = 0 if id_plateforme ==1153
 
 replace ca = 0 if id_plateforme == 1193  
 
+
 }
 
 *Correcting sources of management
+{
 replace man_source_even = 1 if man_sources_other =="participation a des formations"
 replace man_source_even = 1 if man_sources_other =="a travers les formation"
 replace man_source_even = 1 if man_sources_other =="des formation des recherches"
@@ -541,6 +553,9 @@ replace man_source_cons = 1 if man_sources_other =="les formations , des program
 replace man_source_cons = 1 if man_sources_other =="accompagnement , giz"
 replace man_source_cons = 1 if man_sources_other =="Apprentissage de nouvelles strategies de marketing et management grace à une agence de communication et sa participation à un programme Dream of Use"
 replace man_source_cons = 1 if man_sources_other =="formations , programme d'accompagnement"
+
+
+}
 
 *************************************************************************
 * Correct Ben and Int 
@@ -698,7 +713,7 @@ replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "
 
 
 
-
+{
 *inno_proc_other
 replace inno_proc_other= "changement de l’emballage, introduction des nouveaux jouets et des nouvelle gammes" if inno_proc_other =="changement de l’emballage . introduction des nouveaux jouets et des nouvelle gammes **********"
 replace inno_proc_other= "l'export à renforcer la formation" if inno_proc_other =="lexport kaouitou f formationn aaaaaaaaaaaaaaaaaaaaaaaaaa" /*TBC*/
@@ -732,12 +747,12 @@ replace inno_proc_other= "actions de marketing" if inno_proc_other =="actions de
 replace inno_proc_other= "le local a été aggrandi" if inno_proc_other =="kabarna fi local ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" 
 replace inno_proc_other= "intégration de nouveaux matériaux" if inno_proc_other =="integration de nouveaux materieles**********************......................................." 
 
+}
 
 
 
 
-
-
+{
 *inno_mot_other
 replace inno_mot_other= "suite à des formations où elle a eu une idée sur les besoins que les gens ont et a pensé à faire des formations pour aider ces personnes en besoin" if inno_mot_other =="suite a des formation ykaounou fehom houma khdhet men andhom lfekra besoin men aned eness eli tkaouen fehom eli houma m aryef khammet tamlelhom formation bech thabbebhom f produit" 
 replace inno_mot_other= "suite à un déjeuner avec le groupe projet pompate qui ont fait des remarques" if inno_mot_other =="ijini groupe projet pompate youfter hadheya yaatini des remarques nkhouha ++++++++++++++++++++++++++++" 
@@ -882,6 +897,7 @@ replace int_other="l'aggréssivité de certaines personnes, le comportement des 
 replace int_other="elle ne peut pas faire partie du consortium car elle a des engagements familiaux" if int_other =="manajmtech nemchi aandi des engagements familiaux"
 replace int_other="elle n'est pas disponible" if int_other =="n'est disponible +++++++++++++++++++++++++++++++++++"
 replace int_other="lors de la sélection du groupe, il n'y a pas de transparence" if int_other =="fel selection du grouppe mefamech chafafia"	
+}
 
 ***********************************************************************
 * 	PART 8:  Destring remaining numerical vars

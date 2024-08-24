@@ -1781,6 +1781,23 @@ putpdf image int_incv.png, width(6000)
 putpdf pagebreak
 
 
+graph bar (mean) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3,  ///
+	title("Reasons for not joining the consortium", position(12)) ///
+		legend(rows(3) symxsize(small) ///
+               order(1 "Members different/not beneficial" ///
+                     2 "Members are competitors" ///
+					 3 "Collaboration is personally challenging" ///
+					 4 "Collaboration requires time" ///
+					 5 "Others") ///
+               c(1) pos(6) ring(6)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+
+graph bar (count) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3, over(pole) ///
+	title("Disadvantages from the consortium", position(12)) ///
+	ylabel(,labsize(vsmall) angle(horizontal))
+
+
+
 }
 
 
