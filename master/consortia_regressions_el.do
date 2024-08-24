@@ -2972,7 +2972,7 @@ gr export "${master_regressiontables}/endline/regressions/management/el_`generat
 end
 
 	* apply program to sources of management practices
-rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres, gen(mans)
+rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_even man_source_formation man_source_autres, gen(mans)
 
 }
 

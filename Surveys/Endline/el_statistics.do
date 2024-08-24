@@ -521,7 +521,7 @@ putpdf image el_manact.png, width(6000)
 putpdf pagebreak
 
 *marketing source
-betterbar man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres, over(treatment) barlab ci ///
+betterbar man_source_cons man_source_pdg man_source_fam man_source_even man_source_formation man_source_autres, over(treatment) barlab ci ///
 	title("Marketing strategies source", position(12)) ///
 	ylabel(,labsize(vsmall) angle(horizontal))
 graph export el_marksource.png, width(6000) replace 
