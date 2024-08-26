@@ -119,7 +119,7 @@ graph export "${master_output}/figures/take_up/takeup_pole_surveyround.png", rep
 
 ****** Section 2: innovation ******
 {
-
+cd "${master_output}/figures/endline/innovation"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 2: Innovation"), bold
 
@@ -279,6 +279,7 @@ putpdf pagebreak
 
 ****** Section 3: Export ******
 {
+cd "${master_output}/figures/endline/export"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Export"), bold
 
@@ -301,6 +302,13 @@ putpdf paragraph, halign(center)
 putpdf image export_2023_pie.png, width(5000)
 putpdf pagebreak
 
+* export or not 2023 by pole
+graph bar (mean) exported if surveyround == 3, over(take_up) by(pole, title("Exported in 2023", pos(12) size(large)) note("")) ///
+    graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
+	ytitle("Share of firms", size(medlarge)) ///
+	ylabel(0(0.1)0.5)
+gr export exported_2023_pole.png, replace
+
 *export or not 2024
 graph pie if surveyround == 3, over(exported_2024) by(take_up) plabel(_all percent, format(%9.0f) size(medium)) ///
     graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
@@ -309,6 +317,12 @@ gr export export_2024_pie.png, replace
 putpdf paragraph, halign(center) 
 putpdf image export_2024_pie.png, width(5000)
 putpdf pagebreak
+
+graph bar (mean) exported_2024 if surveyround == 3, over(take_up) by(pole, title("Exported in 2024", pos(12) size(large)) note("")) ///
+    graphregion(fcolor(none) lcolor(none)) bgcolor(white) legend(pos(6)) ///
+	ytitle("Share of firms", size(medlarge)) ///
+	ylabel(0(0.1)0.5)
+gr export exported_2024_pole.png, replace
 
 * Reasons for not exporting
 graph bar (mean) export_41 export_42 export_43 export_44 export_45 if surveyround == 3, over(take_up) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
@@ -320,6 +334,11 @@ gr export el_no_exports.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_no_exports.png, width(5000)
 putpdf pagebreak
+
+graph bar (mean) export_41 export_42 export_43 export_44 export_45 if surveyround == 3, over(take_up) by(pole, note("") title("Reasons for not exporting", pos(12))) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
+    legend (pos(6) row(6) label (1 "Not profitable") label (2 "Did not find clients abroad") ///
+	label (3 "Too complicated") label (4 "Requires too much investment") label (5 "Binary other reason")) ///
+	ylabel(0(20)100, nogrid)  
 
 *No of export destinations
 sum exp_pays
@@ -352,9 +371,9 @@ putpdf paragraph, halign(center)
 putpdf image el_exp_pays_treat_kdens.png, width(5000)
 putpdf pagebreak
 
-twoway  (kdensity exp_pays if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
-        (kdensity exp_pays if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(1.5)) ///
-        (kdensity exp_pays if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+twoway  (kdensity exp_pays_w99 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(2)) ///
+        (kdensity exp_pays_w99 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(2)) ///
+        (kdensity exp_pays_w99 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(2)) ///
         , ///
 		title("Number of export countries", pos(12) size(medium)) ///
 	xtitle("Number of countries") ///
@@ -674,6 +693,7 @@ putpdf pagebreak
 
 ****** Section 4: Employees ******
 {
+cd "${master_output}/figures/endline/compta"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 4: The Firm"), bold
 
@@ -764,9 +784,9 @@ restore
 }
 
 
-
 ****** Section 5: Management******
 {
+cd "${master_output}/figures/endline/management"	
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 5: Management"), bold
 
@@ -861,6 +881,7 @@ putpdf pagebreak
 
 ****** Section 6: Network******
 {
+cd "${master_output}/figures/endline/network"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 6: Network"), bold
 
@@ -1014,6 +1035,7 @@ putpdf pagebreak
 
 ****** Section 7: Entrepreneurial Confidence ******
 {
+cd "${master_output}/figures/endline/confidence"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 7: Entrepreneurial Self-Confidence"), bold
 
@@ -1209,10 +1231,13 @@ putpdf pagebreak
 }
 
 ****** Section 8: Accounting******
-****** Section 8.1: Export ******
 {
 putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 8.1: Accounting"), bold
+putpdf text ("Section 8.1: Export"), bold
+{
+cd "${master_output}/figures/endline/compta"
+
+*** Sales
 {
     * Chiffre d'affaires total en dt en 2023 
 egen ca_95p = pctile(ca), p(95)
@@ -1225,7 +1250,7 @@ putpdf image el_bar_ca_2023.png
 putpdf pagebreak
 	
 sum ca
-stripplot ca if  ca<ca_95p & ca>0 & surveyround==3 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+stripplot ca_w99 if ca_w99>0 & surveyround==3 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
 		title("Total turnover in 2023",size(medium) pos(12)) ///
 		ytitle("Amount in TND") ///
 		name(el_ca, replace)
@@ -1332,6 +1357,10 @@ putpdf paragraph, halign(center)
 putpdf image el_ca_2024_box.png, width(5000)
 putpdf pagebreak
 
+}
+
+*** Export
+{
 
    *Chiffre d'affaires à l'export en dt en 2023
 egen ca_exp_95p = pctile(ca_exp), p(95)
@@ -1343,8 +1372,8 @@ putpdf paragraph, halign(center)
 putpdf image el_bar_ca_exp.png
 putpdf pagebreak
 	
-sum ca_exp
-stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
+sum ca_exp_w99
+stripplot ca_exp_w95 if ca_exp_w95>0 & surveyround==3, jitter(4) vertical yline(`=r(mean)', lcolor(red)) ///
 		title("Export turnover in 2023",size(medium) pos(12)) ///
 		ytitle("Amount in TND") ///
 		name(el_ca_exp, replace)
@@ -1353,7 +1382,7 @@ stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666
 	putpdf image el_ca_exp.png, width(5000)
 	putpdf pagebreak
 
-stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , by(take_up) jitter(4) vertical  ///
+stripplot ca_exp_w95 if surveyround==3, by(take_up) jitter(4) vertical  ///
 		title("Export turnover in 2023",size(medium) pos(12)) ///
 		ytitle("Amount in TND") ///
 		name(el_ca_exp_treat, replace)
@@ -1361,6 +1390,8 @@ stripplot ca_exp if  ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666
 	putpdf paragraph, halign(center) 
 	putpdf image el_ca_exp_treat.png, width(5000)
 	putpdf pagebreak
+	
+kdensity ca_exp_w95 if surveyround == 3
 	
 preserve
 collapse (mean) ca_exp if  ca_exp <ca_exp_95p & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , by(surveyround take_up treatment)
@@ -1373,10 +1404,24 @@ twoway (connected ca_exp surveyround if treatment == 1 & take_up == 1) (connecte
 graph export did_plot2_ca_exp.png, replace
 restore	
 
-/*	
-twoway  (kdensity ca_exp if treatment == 1 & take_up == 1 & surveyround == 3 & ca_exp<ca_exp_95p & ca_exp>0 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
-        (kdensity ca_exp if treatment == 1 & take_up == 0 & surveyround == 3 & ca_exp<ca_exp_95p & ca_exp>0 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , lp(l) lc(green) yaxis(2) bw(1.5)) ///
-        (kdensity ca_exp if treatment == 0 & surveyround == 3 & ca_exp<ca_exp_95p & ca_exp>0 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234 , lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+* pre treatment export distribution
+twoway ///
+ (kdensity ca_exp_w95 if treatment == 1 & take_up == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+ (kdensity ca_exp_w95 if treatment == 1 & take_up == 0 & surveyround == 1, lp(l) lc(green) yaxis(2) bw(50000)) ///
+ (kdensity ca_exp_w95 if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2) bw(50000)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Export turnover in 2021", pos(12)) ///
+	   xtitle("Export turnover",size(medium)) 
+* post treatment export distribution
+twoway ///
+ (kdensity ca_exp_w95 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+ (kdensity ca_exp_w95 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(50000)) ///
+ (kdensity ca_exp_w95 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(50000)) ///
         , ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participated" ///
@@ -1389,7 +1434,7 @@ gr export el_ca_exp_kdens.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_ca_exp_kdens.png, width(5000)
 putpdf pagebreak
-*/	  
+  
 	   
  graph box ca_exp if ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234, over(take_up) blabel(total, format(%9.2fc)) ///
 	title("Export turnover in 2023", pos(12))
@@ -1454,6 +1499,8 @@ putpdf pagebreak
 
 }
 
+*** Profit
+
 {  
   	*Bénéfices/Perte 2023
 graph pie if surveyround==3, over(profit_2023_category) plabel(_all percent, format(%9.0f) size(medium)) graphregion(fcolor(none) lcolor(none)) ///
@@ -1483,6 +1530,11 @@ stripplot profit if surveyround==3 & profit!=666 & profit!=777 & profit!=888 & p
 	putpdf image el_profit.png, width(5000)
 	putpdf pagebreak
 
+stripplot profit if surveyround==3 & profit!=666 & profit!=777 & profit!=888 & profit!=999 & profit!=1234, by(treatment) jitter(4) vertical ///
+		ytitle("Amount in TND") ///
+		title("Company profit in 2023",size(medium) pos(12)) ///
+		name(el_profit_treat, replace)
+		
 stripplot profit if surveyround==3 & profit!=666 & profit!=777 & profit!=888 & profit!=999 & profit!=1234, by(take_up) jitter(4) vertical ///
 		ytitle("Amount in TND") ///
 		title("Company profit in 2023",size(medium) pos(12)) ///
@@ -1669,6 +1721,7 @@ putpdf pagebreak
 
 ****** Section 8.2: Accounting CHECK******
 {
+
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 8.2: Accounting checks"), bold
 
@@ -1746,51 +1799,70 @@ putpdf pagebreak
 
 ****** Section 9: Intervention******
 {
+cd "${master_output}/figures/endline/intervention"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 9: Intervention"), bold
 
-*efficency 
+* Interactions outside the consortium 
 sum int_contact, d
-histogram int_contact, width(1) frequency addlabels xlabel(0(2)15, nogrid format(%9.0f)) discrete ///
-	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) ///
-	title("Interactions outside consortia", position(12)) ///
-	ylabel(,labsize(vsmall) angle(horizontal)) ///
-	text(100 `r(mean)' "Mean", size(vsmall) place(e)) ///
-	text(100 `r(p50)' "Median", size(vsmall) place(w))
+histogram int_contact, width(1) frequency xlabel(0(1)12, nogrid format(%9.0f)) discrete ///
+	xline(`r(mean)', lpattern(1)) xline(`r(p50)', lpattern()) /// 	title("Interactions outside consortia", position(12)) ///
+	ylabel(0(1)10,labsize(medsmall) angle(horizontal)) ///
+	xtitle("Consortia members contacted outside activities", size(medlarge)) ///
+	ytitle("Frequency", size(medlarge)) ///
+	text(10 `r(mean)' "Mean", size(vsmall) place(e))
 graph export el_interac_cons.png, width(6000) replace 
 putpdf paragraph, halign(center) 
 putpdf image el_interac_cons.png, width(6000)
 putpdf pagebreak
 
 *Benefits of being part of a consortium
-graph bar (count) int_ben1_correct int_ben2_correct int_ben3_correct int_ben_autres_correct if surveyround == 3, over(pole) ///
-	title("Benefits from the consortium", position(12)) ///
-	ylabel(,labsize(vsmall) angle(horizontal))
+graph bar (sum) int_ben_network int_ben_professional int_ben_export int_ben_personal if surveyround == 3 & take_up == 1, ///
+	ytitle("Number of firms", size(large)) ///
+	ylabel(0(5)35,labsize(medlarge) angle(horizontal)) ///
+	legend(rows(4) size(large) ///
+               order(1 "Network" ///
+                     2 "Professional Development" ///
+					 3 "Export" ///
+					 4 "Personal Development") ///
+               c(1) pos(6) ring(6)) ///
+	note("{bf: Note}: Based on responses from 44 out of 46 firms that decided to join a consortium.", span size(medlarge))
 graph export int_ben.png, width(6000) replace 
 putpdf paragraph, halign(center) 
 putpdf image int_ben.png, width(6000)
 putpdf pagebreak
 
 *Benefits of being part of a consortium
-graph bar (count) int_incv1_correct int_incv2_correct int_incv3_correct int_incv_autres_correct if surveyround == 3, over(pole) ///
-	title("Disadvantages from the consortium", position(12)) ///
-	ylabel(,labsize(vsmall) angle(horizontal))
+graph bar (sum) int_incv_conflict int_incv_diversity int_incv_workload int_incv_impl if surveyround == 3 & take_up == 1, ///
+	ytitle("Number of firms", size(large)) ///
+	ylabel(0(5)35,labsize(medlarge) angle(horizontal)) ///
+	legend(rows(4) size(large) ///
+               order(1 "Personal Conflicts" ///
+                     2 "Members' Diversity" ///
+					 3 "Workload" ///
+					 4 "Consortia Implementation ") ///
+               c(1) pos(6) ring(6)) ///
+	note("{bf: Note}: Based on responses from 44 out of 46 firms that decided to join a consortium.", span size(medlarge))
 graph export int_incv.png, width(6000) replace 
 putpdf paragraph, halign(center) 
 putpdf image int_incv.png, width(6000)
 putpdf pagebreak
 
 
-graph bar (mean) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3,  ///
+graph bar (mean) refus_1 refus_2 refus_3 refus_4 refus_6 refus_5  if surveyround == 3 & int_refus != "",  ///
 	title("Reasons for not joining the consortium", position(12)) ///
 		legend(rows(3) symxsize(small) ///
                order(1 "Members different/not beneficial" ///
                      2 "Members are competitors" ///
 					 3 "Collaboration is personally challenging" ///
 					 4 "Collaboration requires time" ///
-					 5 "Others") ///
-               c(1) pos(6) ring(6)) ///
-	ylabel(,labsize(vsmall) angle(horizontal))
+					 5 "Consortium implementation" ///
+					 6 "Others") ///
+               c(1) pos(6) ring(6)) /// 0(0.025)0.15
+	ylabel(0.1(0.1)0.8,labsize(medsmall) angle(horizontal)) ///
+	note("{bf:Note}: Based on 19 responses among 41 drop-outs.", span)
+graph export reasons_drop_out.png, width(6000) replace 
+
 
 graph bar (count) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3, over(pole) ///
 	title("Disadvantages from the consortium", position(12)) ///

@@ -11,7 +11,7 @@
 * 	3) Indices
 *
 *																	  															      
-*	Author:  	Amira Bouziri, Kais Jomaa, Eya Hanefi		 												  
+*	Author:  	Florian Muench, Amira Bouziri, Kais Jomaa, Eya Hanefi		 												  
 *	ID variaregise: 	id_plateforme 			  					  
 *	Requires: el_intermediate.dta 	  								  
 *	Creates:  el_final.dta			                          
@@ -31,6 +31,7 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 ***********************************************************************
 * 	PART 3:  el_produits
 ***********************************************************************
+{
 generate el_produit1 = regexm(el_products, "el_produit1")
 lab var el_produit1 " Best selling product or service"
 
@@ -40,11 +41,18 @@ lab var el_produit2 "Second best selling product or service"
 generate el_produit3 = regexm(el_products, "el_produit3")
 lab var el_produit3 "Third best selling product or service" 
 
+foreach var of varlist el_produit1 el_produit2 el_produit3 {
+	replace `var' = . if el_products == ""
+}
+
+
 drop el_products
+}
+
 ***********************************************************************
 * 	PART 4:  Create continuous variable for number of innovation
 *********************************************************************** 
-
+{
 generate inno_none = regexm(inno_produit, "0")
 lab var inno_none "No innovation introduced"
 
@@ -54,14 +62,21 @@ lab var inno_improve "Improved existing products/services"
 generate inno_new = regexm(inno_produit, "2")
 lab var inno_new "Introduced new products/services" 
 
+foreach var of varlist inno_none inno_improve inno_new {
+	replace `var' = . if inno_produit == ""
+}
+
 generate inno_both = (inno_improve == 1 & inno_new == 1)
+replace inno_both = . if inno_improve == . & inno_new == . 
 label var inno_both "Improved & introduced new products/services"
 
 drop inno_produit
+}
+
 ***********************************************************************
 * 	PART 5:  Create continuous variable for inspiration of innovation
 *********************************************************************** 
-
+{
 generate inno_mot_cons = regexm(inno_mot, "1")
 lab var inno_mot_cons "Consultant"
 
@@ -79,10 +94,17 @@ lab var inno_mot_dummyother "Binary other source of inspiration"
 
 lab var inno_mot_other "Example of other source of inspiration"
 
+foreach var of varlist inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_eve inno_mot_client inno_mot_dummyother {
+	replace `var' = . if inno_mot == ""
+}
+
 generate inno_mot_total = inno_mot_cons + inno_mot_cont + inno_mot_eve + inno_mot_client + inno_mot_dummyother
 lab var inno_mot_total "Total of innovation inspirations"
 
+
 drop inno_mot
+
+}
 
 ***********************************************************************
 * 	PART 7: network: net_size_m & net_coop
@@ -135,13 +157,33 @@ drop net_coop
 * 	PART 8: Export
 ***********************************************************************
 {
+	
+*** exported based on direct survey answer
 generate export_1 = regexm(export, "1")
 
 generate export_2 = regexm(export, "2")
 
 generate export_3 = regexm(export, "3")
 
+* re insert missing values
+forvalues x = 1(1)3 {
+	replace export_`x' = . if export == ""
+}
+
 drop export
+
+*** exported based on export sales
+gen exported_2024 = (ca_exp_2024 > 0)
+replace exported_2024 = . if ca_exp_2024 == .
+lab var exported_2024 "Export sales 2024 > 0"
+
+gen exported= (ca_exp > 0)
+replace exported = . if ca_exp == .
+lab var exported "Export sales 2023 > 0"
+
+
+
+*** reasons for not having exported
 
 label var export_1 "Direct export"
 label var export_2 "Indirect export"
@@ -156,6 +198,11 @@ generate export_43 = regexm(export_4, "3")
 generate export_44 = regexm(export_4, "4")
 
 generate export_45 = regexm(export_4, "5")
+
+* reinsert missing values
+forvalues x = 1(1)5 {
+	replace export_4`x' = . if export_4 == ""
+}
 
 drop export_4
 
@@ -175,11 +222,15 @@ replace ca_exp_2024 = 0 if export_1 == 0 & ca_exp_2024 == .
 
 *exp_pays = 0 if it does not export_1
 replace exp_pays = 0 if export_1 == 0 & export_2 == 0 & exp_pays != .
+
+
+
 }
 
 ***********************************************************************
-* 	PART 10: Refusal to participate in consortium
+* 	PART 9: Refusal to participate in consortium
 ***********************************************************************
+{
 generate refus_1 = regexm(int_refus, "1")
 lab var refus_1 "Members different/not beneficial"
 
@@ -195,10 +246,31 @@ lab var refus_4 "Collaboration requires time"
 generate refus_5 = regexm(int_refus, "5")
 lab var refus_5 "Others" 
 
+* if firms mentioned existing categories in open answers, code as 1
+replace refus_2 = 1 if id_plateforme ==1134
+replace refus_4 = 1 if id_plateforme ==1128
+replace refus_4 = 1 if id_plateforme ==1231
+replace refus_4 = 1 if id_plateforme ==1192
+replace refus_4 = 1 if id_plateforme ==1231
+replace refus_4 = 1 if id_plateforme ==996 
+replace refus_4 = 1 if id_plateforme ==1097
+
+
+* create additional categories based on open anwers
+gen refus_6 = .
+replace refus_6 = 0 if int_refus != "Implementation"
+replace refus_6 = 1 if id_plateforme == 1087
+replace refus_6 = 1 if id_plateforme == 1097
+replace refus_6 = 1 if id_plateforme == 1134
+replace refus_6 = 1 if id_plateforme == 1184
+replace refus_6 = 1 if id_plateforme == 1247
+
+}
 
 ***********************************************************************
-* 	PART 11: Generate variable to assess number of missing values per firm			  										  
+* 	PART 10: Generate variable to assess number of missing values per firm			  										  
 ***********************************************************************
+{
 	* section 1: innovation
 egen miss_inno = rowmiss(inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres)
 
@@ -250,9 +322,10 @@ egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp ca_exp_2024)
 gen missing_values = miss_inno + miss_export + miss_exp_pracc + miss_eri_ssa + miss_empl + miss_manindicators + miss_manprac + miss_marksource + miss_network + miss_networkserv + miss_netcoop + miss_carefi + miss_carloc + miss_extlist + miss_accounting
 lab var missing_values "missing values per company"
 
+}
 
 ***********************************************************************
-* 	PART 12: Generate variable to assess completed answers		  										  
+* 	PART 11: Generate variable to assess completed answers		  										  
 ***********************************************************************
 generate survey_completed= 0
 replace survey_completed= 1 if missing_values == 0
@@ -261,7 +334,7 @@ label values survey_completed yesno
 
 
 ***********************************************************************
-* 	PART 13:  Generate variables for companies who answered on phone	
+* 	PART 12:  Generate variables for companies who answered on phone	
 ***********************************************************************
 *method of answer
 gen survey_phone = 1
@@ -281,18 +354,9 @@ foreach var of local ids {
 	replace survey_phone = 0 if id_plateforme == `var'
 }
 
-***********************************************************************
-* 	PART 14:  Generate variables for extensive marigns	
-***********************************************************************
-gen exported_2024 = (ca_exp_2024 > 0)
-replace exported_2024 = . if ca_exp_2024 == .
-lab var exported_2024 "Export sales 2024 > 0"
 
-gen exported= (ca_exp > 0)
-replace exported = . if ca_exp == .
-lab var exported "Export sales 2023 > 0"
 ***********************************************************************
-* 	PART 15:  generate normalized financial data (per employee)
+* 	PART 13:  generate normalized financial data (per employee)
 ***********************************************************************
 local varn ca ca_2024 ca_exp ca_exp_2024 profit profit_2024
 
@@ -306,7 +370,7 @@ replace n`x' = `x'/employes if n`x'!= .
 }
 
 ************************************************************************
-*Part 16: Harmonization of open ended questions (benefits&inconnvenients)
+*	Part 14: Harmonization of open ended questions (benefits&inconnvenients)
 *************************************************************************
 {
 
@@ -340,6 +404,16 @@ replace int_ben3_correct = "Export" if int_ben3=="foire a letranger"
 replace int_ben3_correct = "Export" if int_ben3=="des opportunités d'exposition en Arabie Saoudite"
 replace int_ben2_correct = "Export" if int_ben2=="connaissances des marchés africains"
 
+
+generate int_ben_export = regexm(int_ben1_correct, "Export")
+	replace int_ben_export = . if int_ben1_correct == ""
+foreach var of varlist int_ben2_correct int_ben3_correct int_ben_autres_correct {
+	replace int_ben_export = regexm(`var', "Export") if int_ben_export != 1
+	replace int_ben_export = . if `var' == "" & int_ben_export == .
+
+	}
+lab var int_ben_export "Export"
+
 replace int_ben1_correct = "Professional development" if int_ben1=="apprentissage procedures de l'export"
 replace int_ben1_correct = "Professional development" if int_ben1=="aprrentissage pour diriger l'entreprise: marketing"
 replace int_ben2_correct = "Professional development" if int_ben2=="apprentissage"
@@ -360,6 +434,16 @@ replace int_ben3_correct = "Professional development" if int_ben3=="j'ai appris 
 replace int_ben3_correct = "Professional development" if int_ben3=="diagnostic"
 replace int_ben_autres_correct = "Professional development" if int_ben_autres=="financement"
 
+generate int_ben_professional = regexm(int_ben1_correct, "Professional development")
+	replace int_ben_professional = . if int_ben1_correct == ""
+foreach var of varlist int_ben2_correct int_ben3_correct int_ben_autres_correct {
+	replace int_ben_professional = regexm(`var', "Professional development") if int_ben_professional != 1
+		replace int_ben_professional = . if `var' == "" & int_ben_professional == .
+
+}
+lab var int_ben_professional "Professional Development"
+
+
 replace int_ben1_correct = "Personal development" if int_ben1=="Le travail sur soi-même"
 replace int_ben1_correct = "Personal development" if int_ben1=="communication entre eux"
 replace int_ben2_correct = "Personal development" if int_ben2=="Le travail d'équipe"
@@ -374,6 +458,19 @@ replace int_ben3_correct = "Personal development" if int_ben3=="Travailler ensem
 replace int_ben3_correct = "Personal development" if int_ben3=="les entrepreneur elle devient travailler ensemble"
 replace int_ben_autres_correct = "Personal development" if int_ben_autres=="à travers le consortium elle commencée de travailler ensemble"
 
+
+generate int_ben_personal = regexm(int_ben1_correct, "Personal development")
+	replace int_ben_personal = . if int_ben1_correct == ""
+
+foreach var of varlist int_ben2_correct int_ben3_correct int_ben_autres_correct {
+	replace int_ben_personal = regexm(`var', "Personal development") if int_ben_personal != 1
+			replace int_ben_personal = . if `var' == "" & int_ben_personal == .
+
+}
+lab var int_ben_personal "Personal Development"
+
+
+{
 replace int_ben1_correct = "Network" if int_ben1=="réseautage et partage d'expériences"
 replace int_ben1_correct = "Network" if int_ben1=="le réseau"
 replace int_ben1_correct = "Network" if int_ben1=="echange"
@@ -428,7 +525,17 @@ replace int_ben3_correct = "Network" if int_ben3=="partage d experiences"
 replace int_ben3_correct = "Network" if int_ben3=="collaboration"
 
 replace int_ben_autres_correct = "Network" if int_ben_autres=="echenage des information"
+}
 
+generate int_ben_network = regexm(int_ben1_correct, "Network")
+	replace int_ben_network = . if int_ben1_correct == ""
+
+foreach var of varlist int_ben2_correct int_ben3_correct int_ben_autres_correct {
+	replace int_ben_network = regexm(`var', "Network") if int_ben_network != 1
+		replace int_ben_network = . if `var' == "" & int_ben_network == .
+
+}
+lab var int_ben_network "Network"
 
 
 
@@ -437,11 +544,11 @@ gen int_incv2_correct = int_incv2
 gen int_incv3_correct = int_incv3
 gen int_incv_autres_correct = int_incv_autres
 
+
+{
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="conflit à cause de la différence d'options"
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="cconflit internes"
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="jalousie entre les membres du consortium"
-
-
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="le dialogue est compliqué"
 replace int_incv2_correct = "Personnal Conflicts " if  int_incv2=="Égoïsme"
 replace int_incv1_correct = "Personnal Conflicts " if  int_incv1=="communication difficile au début pour créer un lien social et professionnel entre elles  "
@@ -466,6 +573,19 @@ replace int_incv2_correct = "Personnal Conflicts " if  int_incv2=="conflits"
 replace int_incv2_correct = "Personnal Conflicts " if  int_incv2=="mal honneté"
 replace int_incv3_correct = "Personnal Conflicts " if  int_incv3=="manque transparnce"
 replace int_incv3_correct = "Personnal Conflicts " if  int_incv3=="non respect de membre"
+}
+
+
+
+generate int_incv_conflict = regexm(int_incv1_correct, "Personnal Conflicts")
+	replace int_incv_conflict = . if int_incv1_correct == ""
+
+foreach var of varlist int_incv2_correct int_incv3_correct int_incv_autres_correct {
+	replace int_incv_conflict = regexm(`var', "Personnal Conflicts") if int_incv_conflict != 1
+		replace int_incv_conflict = . if `var' == "" & int_incv_conflict == .
+
+}
+lab var int_incv_conflict "Personnal Conflicts"
 
 
 replace int_incv3_correct = "Diversity of members" if  int_incv3=="les niveaux de maturités sont très différents et les attentes également"
@@ -484,6 +604,17 @@ replace int_incv2_correct = "Diversity of members" if  int_incv2=="Je ne peux pa
 replace int_incv3_correct = "Diversity of members" if  int_incv3==".manque d'alignement des valeurs et des objectifs. coûts et ressources supplémentaires"
 
 
+generate int_incv_diversity = regexm(int_incv1_correct, "Diversity of members")
+	replace int_incv_diversity = . if int_incv1_correct == ""
+
+foreach var of varlist int_incv2_correct int_incv3_correct int_incv_autres_correct {
+	replace int_incv_diversity = regexm(`var', "Diversity of members") if int_incv_diversity != 1
+	 replace int_incv_diversity = . if `var' == "" & int_incv_diversity == .
+
+}
+lab var int_incv_diversity "Diversity of members"
+
+{
 replace int_incv1_correct = "Individual Workload" if  int_incv1=="le temps alloué du formation n'est pas adapté à mon temps personnel just une seule fois"
 replace int_incv1_correct = "Individual Workload" if  int_incv1=="le temps allouer au consortium au détriments de son propre entreprise"
 replace int_incv1_correct = "Individual Workload" if  int_incv1=="perte d'argent"
@@ -503,8 +634,20 @@ replace int_incv2_correct = "Individual Workload" if  int_incv2=="il n'y a pas d
 replace int_incv2_correct = "Individual Workload" if  int_incv2=="perte d'évergie"
 replace int_incv3_correct = "Individual Workload" if  int_incv3=="Ca prends trop de temps de ma vie"
 replace int_incv3_correct = "Individual Workload" if  int_incv3=="J'ai perdu mon temps et j'ai fait de gros efforts pour assister à toute la cérémonie, et finalement nous avons été victimes d'une grande injustice."
+}
+
+generate int_incv_workload = regexm(int_incv1_correct, "Individual Workload")
+	replace int_incv_workload = . if int_incv1_correct == ""
+
+foreach var of varlist int_incv2_correct int_incv3_correct int_incv_autres_correct {
+	replace int_incv_workload = regexm(`var', "Individual Workload") if int_incv_workload != 1
+		 replace int_incv_workload = . if `var' == "" & int_incv_workload == .
+
+}
+lab var int_incv_workload "Individual Workload"
 
 
+{
 replace int_incv1_correct = "Program implementation" if  int_incv1=="programme chargé"
 replace int_incv1_correct = "Program implementation" if  int_incv1=="Perte du temps (abscence de stratégie claire)"
 replace int_incv_autres_correct = "Program implementation" if  int_incv_autres=="La GIZ a pris des décisions critiquées dans le processus de sélection des membres du consortium, ce qui a engendré des problèmes dans tous les GIE.  Critères de sélection flous ou non transparents. Manque d'évaluation des capacités, de la maturité et des engagements des membres des GIE."
@@ -533,8 +676,22 @@ replace int_incv3_correct = "Program implementation" if  int_incv3=="les formati
 replace int_incv3_correct = "Program implementation" if  int_incv3=="la différence de maturité des entreprises qui constitue le consortium"
 }
 
+generate int_incv_impl = regexm(int_incv1_correct, "Program implementation")
+	replace int_incv_impl = . if int_incv1_correct == ""
+
+foreach var of varlist int_incv2_correct int_incv3_correct int_incv_autres_correct {
+	replace int_incv_impl = regexm(`var', "Program implementation") if int_incv_impl != 1
+	 replace int_incv_impl = . if `var' == "" & int_incv_impl == .
+
+}
+lab var int_incv_impl "Program implementation"
+
+
+
+}
+
 *************************************************************************
-*	Part 18: Categorisation products_other
+*	Part 15: Categorisation products_other
 *************************************************************************
 {
 gen products_other_correct = products_other 
@@ -575,25 +732,8 @@ replace products_other_correct ="Skin and Hair care" if products_other =="gel an
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ************************************************************************
-*	Part 19: Create non-intervaled financial values
+*	Part 16: Create non-intervaled financial values
 *************************************************************************
 gen prni = profit if profit_2023_category_perte == . & profit_2023_category_gain == .
 
@@ -604,6 +744,6 @@ gen cani = ca if comp_ca2023_intervalles == .
 gen ca2024ni = ca_2024 if comp_ca2024_intervalles == .
 
 ***********************************************************************
-* 	PART 20: save dta file  										  
+* 	PART 17: save dta file  										  
 ***********************************************************************
 save "${el_final}/el_final", replace
