@@ -271,7 +271,7 @@ replace refus = 0 if id_plateforme == 1068 & surveyround == 2 //Refus de répond
 replace refus = 1 if id_plateforme == 1168 & surveyround == 2 // Refus de répondre aux informations comptables
 
 		* endline
-local id 989 994 995 997 1004 1008 1014 1015 1025 1031 1033 1042 1045 1056 1058 1067 1074 1079 1089 1090 1093 1094 1109 1110 1123 1124 1127 1136 1137 1140 1146 1154 1155 1158 1161 1162 1163 1165 1166 1171 1172 1175 1188 1194 1199 1201 1202 1204 1214 1219 1223 1233 1235 1237 1241 1242 
+local id 989 994 995 997 998 1004 1008 1014 1015 1025 1031 1033 1042 1045 1056 1058 1067 1074 1079 1089 1090 1093 1094 1109 1110 1123 1124 1127 1136 1137 1140 1146 1154 1155 1158 1161 1162 1163 1165 1166 1171 1172 1175 1188 1194 1199 1201 1202 1204 1214 1219 1223 1233 1235 1237 1241 1242 
 foreach var of local id {
 	replace refus = 1 if surveyround == 3 & id_plateforme == `var'
 }
@@ -281,8 +281,8 @@ foreach var of local id {
 * 	PART 3:  entreprise no longer in operations	
 ***********************************************************************
 {		
-gen closed = 0 
-replace closed = . if refus == 1
+gen closed = . 
+replace closed = 0 if refus == 0
 lab var closed "Companies that are no longer operating"
 replace closed = 1 if id_plateforme == 989
 replace closed = 1 if id_plateforme == 1083
@@ -306,16 +306,25 @@ exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes exp_pra_rexp exp
 foreach var of local el_variables {
     replace `var' = 0 if surveyround == 3 & closed == 1 & `var' == .
 }
-}
 
-	* put export 
-replace export_3
 
-* individual level outcomes
+	* put not exported = 0 (if no response) 
+replace export_3 = 1 if surveyround == 3 & export_3 == . & closed == 1
+replace export_2 = 0 if surveyround == 3 & export_2 == . & closed == 1
+replace export_1 = 0 if surveyround == 3 & export_1 == . & closed == 1
+
+
+*replace export_3 = 1 if surveyround == 3 & id_plateforme == 989	 // stopped operating
+*replace export_3 = . if surveyround == 3 & id_plateforme == 998	 // did not respond
+*replace export_3 = . if surveyround == 3 & id_plateforme == 1119 // verified based on el database
+
+* individual level outcomes --> do not include
 // netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_coop_pos net_coop_neg net_association net_size3 net_size4 net_gender3 net_gender4 net_gender3_giz net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre car_efi_fin1 car_efi_man
 // car_efi_motiv car_loc_env car_loc_exp car_loc_soin listexp
 // int_contact attest  
 //  inno_none inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother inno_mot_total  
+
+}
 
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
@@ -627,6 +636,7 @@ replace inno_org_correct =1 if surveyround == 3 &  id_plateforme == 1182 /*on a 
 replace inno_org_correct =1 if surveyround == 3 &  id_plateforme == 1239 /*odoo et tecnologie web */
 replace inno_org_correct =1 if surveyround == 3 &  id_plateforme == 1244 /*suivi des chantiers verts/mangemenet des projets plus adapté/améliorer la gestion financière*/
 }
+
 ***********************************************************************
 *	PART 6.2: Innovation
 ***********************************************************************	

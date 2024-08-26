@@ -378,19 +378,29 @@ replace net_gender4 = . if id_plateforme == 1193
 *************************************************************************
 *Correct export part 
 *************************************************************************
+* correct other reasons for not exporting
 replace export_other ="des problemes qui survient à la finalisation de l'operation de l'exportation" if id_plateforme ==1054
 
-replace export = "0" if id_plateforme == 1153 // voir fiche de correction version finale
+* make corrections based on phone calls & audio records
+replace export = "3" if id_plateforme == 1153 // voir fiche de correction version finale
 
-replace export = "0" if id_plateforme == 1157 // suite logique de ses reponses a ca_exp & ca_exp_2024
+replace export = "3" if id_plateforme == 1157 // suite logique de ses reponses a ca_exp & ca_exp_2024
 
-replace export = "0" if id_plateforme == 1244 // suite logique de ses reponses a ca_exp & ca_exp_2024
+replace export = "3" if id_plateforme == 1244 // suite logique de ses reponses a ca_exp & ca_exp_2024
 
-replace export = "0" if id_plateforme == 1245 // voir fiche de correction version 2
+replace export = "3" if id_plateforme == 1245 // voir fiche de correction version 2
+
+replace export = "3" if id_plateforme == 1005 // voir fiche de correction version 2
+
+replace export = "1" if id_plateforme == 1059 // voir fiche de suivi
 
 
+* a revoir/verifier:1157, 1231, 1244
 
-* a revoir/verifier: 1005, 1157, 1231, 1244
+* taking into account filter (exp = 0)
+foreach var of varlist exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes {
+	replace `var' = 0 if export == "/ 3 /"
+}
 
 *************************************************************************
 *Correct financial part
@@ -561,44 +571,15 @@ replace man_source_cons = 1 if id_plateforme== 1215
 }
 
 *************************************************************************
-* Correct Int_other
+* Correct Int_other & refus
 ************************************************************************
-
+{
 
 replace int_other = "Bonne idée mais probleme du temps" if int_other =="mochkolt ouaket 3ejebetha lfekra ama malkatech ouaket"
 replace int_other = "J'ai rien trouvé d'important" if int_other =="Pas important"
 replace int_other = "les procédures très compliquée mais elle veut revenir maintenant" if int_other =="les procédures très compliquée o theb tarjaa lel consortium"
 
-
-
-replace refus_3 = 1 if id_plateforme ==1035
-replace refus_4 = 1 if id_plateforme ==1231
-replace refus_4 = 1 if id_plateforme ==996 
-
-
-gen refus_6 = .
-lab var refus_6 "GIZ mis en oeuvre"
-
-replace refus_6 = 0 if int_refus != ""
-
-replace refus_6 = 1 if id_plateforme == 1097 
-replace refus_6 = 1 if id_plateforme == 1137
-replace refus_6 = 1 if id_plateforme == 1184
-replace refus_6 = 1 if id_plateforme == 1247
-
-gen refus_7 = .
-lab var refus_7 "
-
-replace refus_6 = 0 if int_refus != ""
-
-replace refus_7 = 1 if id_plateforme == 1097 
-replace refus_7 = 1 if id_plateforme == 1137
-replace refus_7 = 1 if id_plateforme == 1184
-replace refus_7= 1 if id_plateforme == 1247
-
-
-
-
+}
 
 ***********************************************************************
 * 	PART 5:  Convert data types to the appropriate format
