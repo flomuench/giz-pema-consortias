@@ -316,7 +316,23 @@ egen miss_extlist = rowmiss(listexp)
 	* section 15: accounting/KPI
 egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp ca_exp_2024)
 
-	
+*each accounting
+egen miss_profit = rowmiss(profit)
+
+*each accounting
+egen miss_profit_2024 = rowmiss(profit_2024)
+
+*each accounting
+egen miss_ca = rowmiss(ca)
+
+*each accounting
+egen miss_ca_2024 = rowmiss(ca_2024)
+
+*each accounting
+egen miss_ca_exp = rowmiss(ca_exp)
+
+*each accounting
+egen miss_ca_exp_2024 = rowmiss(ca_exp_2024)
 
 	* create the sum of missing values per company
 gen missing_values = miss_inno + miss_export + miss_exp_pracc + miss_eri_ssa + miss_empl + miss_manindicators + miss_manprac + miss_marksource + miss_network + miss_networkserv + miss_netcoop + miss_carefi + miss_carloc + miss_extlist + miss_accounting

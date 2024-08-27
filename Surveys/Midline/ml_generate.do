@@ -59,6 +59,10 @@ label var inno_mot5 "exchange ideas with employees"
 label var inno_mot6 "Norms"
 label var inno_mot7 "other source for innovation"
 
+foreach var of varlist inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 {
+replace `var' =. if inno_mot=="" 
+}
+
 	* label the values of each dummy/motivation category + numeric format 
 local inno_vars inno_mot1 inno_mot2 inno_mot3 inno_mot4 inno_mot5 inno_mot6 inno_mot7 
 foreach x of local inno_vars {
@@ -88,6 +92,10 @@ label var man_source4 "Family"
 label var man_source5 "Event"
 label var man_source6 "No new strategy"
 label var man_source7 "Other sources"
+
+foreach var of varlist man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7 {
+replace `var' =. if man_source=="" 
+}
 
 	* label the values of each dummy/motivation category + numeric format 
 local man_vars man_source1 man_source2 man_source3 man_source4 man_source5 man_source6 man_source7 
@@ -123,6 +131,10 @@ label var netcoop7 "Partnership"
 label var netcoop8 "Opponent"
 label var netcoop9 "Connect" 
 label var netcoop10 "Dominate"
+
+foreach var of varlist netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 {
+replace `var' =. if net_coop=="" 
+}
 
 	* generate a count of positive & negative cooperative words
 generate net_coop_pos = netcoop1 + netcoop2 + netcoop3 + netcoop7 + netcoop9
