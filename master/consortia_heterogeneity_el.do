@@ -324,6 +324,7 @@ end
 }
 ** By consortium, by initial network size,by export initial export status **
 }
+
 ***********************************************************************
 * 	PART I:  Pole heterogeneity
 ***********************************************************************
