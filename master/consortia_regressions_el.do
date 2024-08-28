@@ -7,7 +7,7 @@
 *
 *													
 *																	  
-*	Authors:  	Ayoub Chamakhi
+*	Authors:  	Florian Muench, Ayoub Chamakhi
 *	ID variable: id_platforme		  					  
 *	Requires:  	consortium_final.dta
 *	Creates:	reg graphs
@@ -51,6 +51,7 @@ set scheme s1color
 		
 	}
 }
+
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -3451,8 +3452,9 @@ rct_regression_expcost expp_cost expp_ben, gen(expcost)
 }
 
 ***********************************************************************
-* 	PART 12: endline results - EXPORT - intensive & extensive margin
+* 	PART 13: endline results - EXPORT - intensive & extensive margin
 ***********************************************************************
+{
 **************** export - extensive margin ****************
 {
 	* change directory
@@ -4198,117 +4200,11 @@ rct_regression_finexpks ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95
 }
 
 ***********************************************************************
-* 	PART 13: endline results - regression performance results
+* 	PART 14: endline results - KPIs (sales, profits, employees)
 ***********************************************************************
 {
 * change directory
 cd "${master_regressiontables}/endline/regressions/compta"
-**************** empl ****************
-
-{
-capture program drop rct_regression_empl // enables re-running
-program rct_regression_empl
-version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-		}
-		
-* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
-		* tokenize to use all variables at the same time
-tokenize `varlist'
-
-/*		* Correct for MHT - FWER
-rwolf2 ///
-	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(999) usevalid strata_final(strata_final)
-		
-		* save rw-p-values in a seperate table for manual insertion in latex document
-esttab e(RW) using rw_`generate'.tex, replace	
-*/		
-		
-		* Put all regressions into one table
-			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Business performance: Employees} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
-				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				mlabels(, depvars) /// use dep vars labels as model title
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				nobaselevels ///
-				collabels(none) ///	do not use statistics names below models
-				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
-				noobs
-			
-			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2   // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
-				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				mlabels(none) nonumbers ///		do not use varnames as model titles
-				collabels(none) ///	do not use statistics names below models
-				nobaselevels ///
-				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
-				
-			* coefplot
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-3(1)3) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Employees (ITT)"' `1'2 = `"Employees (TOT)"' `2'1 = `"Female employees (ITT)"' `2'2 = `"Female employees (TOT)"' `3'1 = `"Young employees < 36 (ITT)"' `3'2 = `"Young employees < 36  (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		note("{bf:Note}: All variables are winsorised at the 95th percentile.", span) ///
-		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
-
-end
-
-	* apply program to export outcomes
-rct_regression_empl employes_w95 car_empl1_w95 car_empl2_w95, gen(empl)
-
-}
 
 **************** financials ****************
 {
@@ -4379,10 +4275,10 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
+		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1 //  adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions wins 99th.} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions wins 99th.} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{12}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{11}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				mlabels(, depvars) /// use dep vars labels as model title
@@ -4394,10 +4290,10 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2  // adjust manually to number of variables 
+		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				posthead("\hline \\ \multicolumn{11}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
@@ -4407,422 +4303,62 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				label 		/// specifies EVs have label
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				postfoot("\hline\hline\hline \\ \multicolumn{11}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
-	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
-	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
-	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
+	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)) ///
+	(`5'1, pstyle(p3)) (`5'2, pstyle(p3)) ///
+	(`7'1, pstyle(p4)) (`7'2, pstyle(p4)) ///
+	(`9'1, pstyle(p5)) (`9'2, pstyle(p5)), /// 
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Sales 2023 wins. 99th (ITT)"' `1'2 = `"Sales 2023 wins. 99th (TOT)"' `2'1 = `"Sales 2024 wins. 99th (ITT)"' `2'2 = `"Sales 2024 wins. 99th (TOT)"' `3'1 = `"Domestic Sales 2023 wins. 99th (ITT)"' `3'2 = `"Domestic Sales 2023 wins. 99th (TOT)"'  `4'1 = `"Domestic Sales 2024 wins. 99th (ITT)"' `4'2 = `"Domestic Sales 2024 wins. 99th (TOT) "' `5'1 = `"Export turnover 2023 wins. 99th (ITT)"' `5'2 = `"Export turnover 2023 wins. 99th (TOT)"' `6'1 = `"Export turnover 2024 wins. 99th (ITT)"' `6'2 = `"Export turnover 2024 wins. 99th (TOT)"' `7'1 = `"Costs 2023 wins. 99th (ITT)"' `7'2 = `"Costs 2023 wins. 99th (TOT)"' `8'1 = `"Costs 2024 wins. 99th (ITT)"' `8'2 = `"Costs 2024 wins. 99th (TOT)"'  `9'1 = `"Profit 2023 wins. 99th (ITT)"' `9'2 = `"Profit 2023 wins. 99th (TOT) "' `10'1 = `"Profit 2024 wins. 99th (ITT)"' `10'2 = `"Profit 2024 wins. 99th (TOT)"') ///
+		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `3'1 = `"Domestic sales 2023 (ITT)"' `3'2 = `"Domestic sales 2023 (TOT)"'  `5'1 = `"Export sales 2023 (ITT)"' `5'2 = `"Export sales 2023 (TOT)"' `7'1 = `"Profit 2023 (ITT)"' `7'2 = `"Profit 2023 (TOT)"' `9'1 = `"Costs 2023 (ITT)"' `9'2 = `"Costs 2023 (TOT)"') ///
+		title("KPIs 2023") ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
+		note("{bf:Note}: All variables are winsorised & IHS-transformed.", span) ///
+		name(el_`generate'_2023_cfp, replace)
+gr export el_`generate'_2023_cfp.png, replace
+
+		
+coefplot ///
+	(`2'1, pstyle(p1)) (`2'2, pstyle(p1)) ///
+	(`4'1, pstyle(p2)) (`4'2, pstyle(p2)) ///
+	(`6'1, pstyle(p3)) (`6'2, pstyle(p3)) ///
+	(`8'1, pstyle(p4)) (`8'2, pstyle(p4)) ///
+	(`10'1, pstyle(p5)) (`10'2, pstyle(p5)), /// 
+	keep(*treatment take_up) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		title("KPIs 2024") ///
+		eqrename(`2'1 = `"Total sales 2024 (ITT)"' `2'2 = `"Total sales 2024 (TOT)"' `4'1 = `"Domestic sales 2024 (ITT)"' `4'2 = `"Domestic sales 2024 (TOT) "' `6'1 = `"Export sales 2024 (ITT)"' `6'2 = `"Export sales 2024 (TOT)"' `8'1 = `"Profit 2023 (ITT)"' `8'2 = `"Profit 2023 (TOT) "' `10'1 = `"Costs 2024 (ITT)"' `10'2 = `"Costs 2024 (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf:Note}: All variables are winsorised & IHS-transformed.", span) ///
+		name(el_`generate'_2024_cfp, replace)
+gr export el_`generate'_2024_cfp.png, replace
+
 
 end
 
 	* apply program to financial outcomes
-		* win99
-rct_regression_fin ihs_ca_w99_k1 ihs_ca_2024_w99_k1 ihs_catun_w99_k1 ihs_catun2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k1 ihs_costs_w99_k1 ihs_costs_2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k1, gen(fin_k1_w99)
-}
-
-
-{
-capture program drop rct_regression_fin // enables re-running
-program rct_regression_fin
-version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-			capture confirm variable `var'_y0
-			if _rc == 0 {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-			}
-			else {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-        }
-		}
+		* win99, k1
+rct_regression_fin ihs_ca_w99_k1 ihs_ca_2024_w99_k1 ihs_catun_w99_k1 ihs_catun2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k1 ihs_costs_w99_k1 ihs_costs_2024_w99_k1, gen(fin_k1_w99)
 		
-* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
-		* tokenize to use all variables at the same time
-tokenize `varlist'
+		* win95, k1
+rct_regression_fin ihs_ca_w95_k1 ihs_ca_2024_w95_k1 ihs_catun_w95_k1 ihs_catun2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k1 ihs_costs_w95_k1 ihs_costs_2024_w95_k1, gen(fin_k1_w95)
 
-/*		* Correct for MHT - FWER
-rwolf2 ///
-	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(999) usevalid strata_final(strata_final)
-		
-		* save rw-p-values in a seperate table for manual insertion in latex document
-esttab e(RW) using rw_`generate'.tex, replace	
-*/		
-		
-		* Put all regressions into one table
-			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions wins 99th.} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
-				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				mlabels(, depvars) /// use dep vars labels as model title
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				nobaselevels ///
-				collabels(none) ///	do not use statistics names below models
-				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
-				noobs
-			
-			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
-				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				mlabels(none) nonumbers ///		do not use varnames as model titles
-				collabels(none) ///	do not use statistics names below models
-				nobaselevels ///
-				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
-				
-			* coefplot
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
-	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
-	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
-	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Sales 2023 wins. 95th (ITT)"' `1'2 = `"Sales 2023 wins. 95th (TOT)"' `2'1 = `"Sales 2024 wins. 95th (ITT)"' `2'2 = `"Sales 2024 wins. 95th (TOT)"' `3'1 = `"Domestic Sales 2023 wins. 95th (ITT)"' `3'2 = `"Domestic Sales 2023 wins. 95th (TOT)"'  `4'1 = `"Domestic Sales 2024 wins. 95th (ITT)"' `4'2 = `"Domestic Sales 2024 wins. 95th (TOT) "' `5'1 = `"Export turnover 2023 wins. 95th (ITT)"' `5'2 = `"Export turnover 2023 wins. 95th (TOT)"' `6'1 = `"Export turnover 2024 wins. 95th (ITT)"' `6'2 = `"Export turnover 2024 wins. 95th (TOT)"' `7'1 = `"Costs 2023 wins. 95th (ITT)"' `7'2 = `"Costs 2023 wins. 95th (TOT)"' `8'1 = `"Costs 2024 wins. 95th (ITT)"' `8'2 = `"Costs 2024 wins. 95th (TOT)"'  `9'1 = `"Profit 2023 wins. 95th (ITT)"' `9'2 = `"Profit 2023 wins. 95th (TOT) "' `10'1 = `"Profit 2024 wins. 95th (ITT)"' `10'2 = `"Profit 2024 wins. 95th (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
+		* win99, k4
+rct_regression_fin ihs_ca_w99_k4 ihs_ca_2024_w99_k4 ihs_catun_w99_k4 ihs_catun2024_w99_k4 ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_costs_w99_k4 ihs_costs_2024_w99_k4, gen(fin_k4_w99)
 
-end
+		* win95, k4
+rct_regression_fin ihs_ca_w95_k4 ihs_ca_2024_w95_k4 ihs_catun_w95_k4 ihs_catun2024_w95_k4 ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_costs_w95_k4 ihs_costs_2024_w95_k4, gen(fin_k4_w95)
 
-	* apply program to finanicla outcomes
-		* win95
-rct_regression_fin ihs_ca_w95_k1 ihs_ca_2024_w95_k1 ihs_catun_w95_k1 ihs_catun2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k1 ihs_costs_w95_k1 ihs_costs_2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k1, gen(fin_k1_w95)
-
-}
-**************** financial k^4 ****************
-
-{
-capture program drop rct_regression_fink4 // enables re-running
-program rct_regression_fink4
-version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-			capture confirm variable `var'_y0
-			if _rc == 0 {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-			}
-			else {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-        }
-		}
-		
-* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
-		* tokenize to use all variables at the same time
-tokenize `varlist'
-
-/*		* Correct for MHT - FWER
-rwolf2 ///
-	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(999) usevalid strata_final(strata_final)
-		
-		* save rw-p-values in a seperate table for manual insertion in latex document
-esttab e(RW) using rw_`generate'.tex, replace	
-*/		
-		
-		* Put all regressions into one table
-			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions ihs wins. 99th k^} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
-				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				mlabels(, depvars) /// use dep vars labels as model title
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				nobaselevels ///
-				collabels(none) ///	do not use statistics names below models
-				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
-				noobs
-			
-			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
-				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				mlabels(none) nonumbers ///		do not use varnames as model titles
-				collabels(none) ///	do not use statistics names below models
-				nobaselevels ///
-				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
-				
-			* coefplot
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
-	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
-	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
-	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"IHS Sales 2023 wins. 99th k^5 (ITT)"' `1'2 = `"IHS Sales 2023 wins. 99th k^5 (TOT)"' `2'1 = `"IHS Sales 2024 wins. 99th k^5 (ITT)"' `2'2 = `"IHS Sales 2024 wins. 99th k^5 (TOT)"' `3'1 = `"IHS Domestic Sales 2023 wins. 99th k^5 (ITT)"' `3'2 = `"IHS Domestic Sales 2023 wins. 99th k^5 (TOT)"'  `4'1 = `"IHS Domestic Sales 2024 wins. 99th k^5 (ITT)"' `4'2 = `"IHS Domestic Sales 2024 wins. 99th k^5 (TOT) "' `5'1 = `"IHS Export turnover 2023 wins. 99th k^5 (ITT)"' `5'2 = `"IHS Export turnover 2023 wins. 99th k^5 (TOT) "' `6'1 = `"IHS Export turnover 2024 wins. 99th k^5 (ITT)"' `6'2 = `"IHS Export turnover 2024 wins. 99th k^5 (TOT)"' `7'1 = `"IHS Costs 2023 wins. 99th k^5 (ITT)"' `7'2 = `"IHS Costs 2023 wins. 99th k^5 (TOT)"' `8'1 = `"IHS Costs 2024 wins. 99th k^5 (ITT)"' `8'2 = `"IHS Costs 2024 wins. 99th k^5 (TOT)"'  `9'1 = `"IHS Profit 2023 wins. 99th k^5 (ITT)"' `9'2 = `"IHS Profit 2023 wins. 99th  k^5 (TOT) "' `10'1 = `"IHS Profit 2024 wins. 99th k^5 (ITT)"' `10'2 = `"IHS Profit 2024 wins. 99th k^5 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
-
-end
-
-	* apply program to export outcomes
-rct_regression_fink4 ihs_ca_w99_k4 ihs_ca_2024_w99_k4 ihs_catun_w99_k4 ihs_catun2024_w99_k4 ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4, gen(fin_k4_w99)
-
-}
-
-{
-capture program drop rct_regression_fink4 // enables re-running
-program rct_regression_fink4
-version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-			capture confirm variable `var'_y0
-			if _rc == 0 {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-			}
-			else {
-				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-
-				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
-				
-				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
-        }
-		}
-		
-* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
-		* tokenize to use all variables at the same time
-tokenize `varlist'
-
-/*		* Correct for MHT - FWER
-rwolf2 ///
-	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
-	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
-	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
-	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
-	seed(110723) reps(999) usevalid strata_final(strata_final)
-		
-		* save rw-p-values in a seperate table for manual insertion in latex document
-esttab e(RW) using rw_`generate'.tex, replace	
-*/		
-		
-		* Put all regressions into one table
-			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions ihs wins. 99th k^} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
-				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				mlabels(, depvars) /// use dep vars labels as model title
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				nobaselevels ///
-				collabels(none) ///	do not use statistics names below models
-				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
-				noobs
-			
-			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2  // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
-				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
-				star(* 0.1 ** 0.05 *** 0.01) ///
-				mlabels(none) nonumbers ///		do not use varnames as model titles
-				collabels(none) ///	do not use statistics names below models
-				nobaselevels ///
-				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
-				
-			* coefplot
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
-	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
-	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
-	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
-	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)) ///
-	(`8'1, pstyle(p8)) (`8'2, pstyle(p8)) ///
-	(`9'1, pstyle(p9)) (`9'2, pstyle(p9)) ///
-	(`10'1, pstyle(p10)) (`10'2, pstyle(p10)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"IHS Sales 2023 wins. 95th k^5 (ITT)"' `1'2 = `"IHS Sales 2023 wins. 95th k^5 (TOT)"' `2'1 = `"IHS Sales 2024 wins. 95th k^5 (ITT)"' `2'2 = `"IHS Sales 2024 wins. 95th k^5 (TOT)"' `3'1 = `"IHS Domestic Sales 2023 wins. 95th k^5 (ITT)"' `3'2 = `"IHS Domestic Sales 2023 wins. 95th k^5 (TOT)"'  `4'1 = `"IHS Domestic Sales 2024 wins. 95th k^5 (ITT)"' `4'2 = `"IHS Domestic Sales 2024 wins. 95th k^5 (TOT) "' `5'1 = `"IHS Export turnover 2023 wins. 95th k^5 (ITT)"' `5'2 = `"IHS Export turnover 2023 wins. 95th k^5 (TOT) "' `6'1 = `"IHS Export turnover 2024 wins. 95th k^5 (ITT)"' `6'2 = `"IHS Export turnover 2024 wins. 95th k^5 (TOT)"' `7'1 = `"IHS Costs 2023 wins. 95th k^5 (ITT)"' `7'2 = `"IHS Costs 2023 wins. 95th k^5 (TOT)"' `8'1 = `"IHS Costs 2024 wins. 95th k^5 (ITT)"' `8'2 = `"IHS Costs 2024 wins. 95th k^5 (TOT)"'  `9'1 = `"IHS Profit 2023 wins. 95th k^5 (ITT)"' `9'2 = `"IHS Profit 2023 wins. 95th  k^5 (TOT) "' `10'1 = `"IHS Profit 2024 wins. 95th k^5 (ITT)"' `10'2 = `"IHS Profit 2024 wins. 95th k^5 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
-
-end
-
-	* apply program to export outcomes
-rct_regression_fink4 ihs_ca_w95_k4 ihs_ca_2024_w95_k4 ihs_catun_w95_k4 ihs_catun2024_w95_k4 ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4, gen(fin_k4_w95)
 
 }
 
@@ -5169,7 +4705,7 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Profitable 2023 (ITT)"' `1'2 = `"Profitable 2023 (TOT)"' `2'1 = `"Profitable 2024 (ITT)"' `2'2 = `"Profitable 2024 (TOT)"' `3'1 = `"Profitable 2021-2024 (ITT)"' `3'2 = `"Profitable 2021-2024 (TOT)"') ///
+		eqrename(`1'1 = `"Profitable 2023 (ITT)"' `1'2 = `"Profitable 2023 (TOT)"' `2'1 = `"Profitable 2024 (ITT)"' `2'2 = `"Profitable 2024 (TOT)"' `3'1 = `"Profit percentiles (ITT)"' `3'2 = `"Profit percentiles (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
@@ -5179,7 +4715,119 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_pft profit_2023_category profit_2024_category profit_pos, gen(pft)
+rct_regression_pft profit_pos profit_2024_category profit_pct, gen(pft)
 
 }
+
+
+
+**************** empl ****************
+
+{
+capture program drop rct_regression_empl // enables re-running
+program rct_regression_empl
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+		
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes"
+			estadd local strata_final "Yes"
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 3
+estadd scalar control_mean = r(mean)
+estadd scalar control_sd = r(sd)
+		}
+		
+* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
+		* tokenize to use all variables at the same time
+tokenize `varlist'
+
+/*		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+		
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace	
+*/		
+		
+		* Put all regressions into one table
+			* Top panel: ITT
+		local regressions `1'1 `2'1 `3'1  // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Business performance: Employees} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				mlabels(, depvars) /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'2 `2'2 `3'2   // adjust manually to number of variables 
+		esttab `regressions' using "rt_`generate'.tex", append ///
+				fragment ///	
+				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				
+			* coefplot
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-3(1)3) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Employees (ITT)"' `1'2 = `"Employees (TOT)"' `2'1 = `"Female employees (ITT)"' `2'2 = `"Female employees (TOT)"' `3'1 = `"Young employees < 36 (ITT)"' `3'2 = `"Young employees < 36  (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		note("{bf:Note}: All variables are winsorised at the 95th percentile.", span) ///
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		name(el_`generate'_cfplot, replace)
+	
+gr export el_`generate'_cfplot.png, replace
+
+end
+
+	* apply program to export outcomes
+rct_regression_empl employes_w95 car_empl1_w95 car_empl2_w95, gen(empl)
+
+}
+
+
+
 }

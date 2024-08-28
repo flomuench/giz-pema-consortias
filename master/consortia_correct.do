@@ -208,7 +208,7 @@ replace pole = 3 if id_plateforme == 998
 ***********************************************************************
 * 	PART 2:  Correct old accounting values
 ***********************************************************************
-
+{
 {
 		* Correcting ca
 replace ca_2018 = 800000 if id_plateforme == 991
@@ -338,7 +338,9 @@ replace ca_2019 = 50000 if id_plateforme == 1159
 
 replace ca_2019 = 150000 if id_plateforme == 1154
 replace ca_2020 = 20000 if id_plateforme == 1154
+}
 
+{
 		* Correcting ca_exp
 replace ca_exp2020 = 1500000 if id_plateforme == 995
 
@@ -400,8 +402,10 @@ replace ca_exp2020 = 25000  if id_plateforme == 1222
 replace ca_exp2020 = 2000  if id_plateforme == 1231
 
 replace ca_exp2020 = 3000  if id_plateforme == 1245
+}
 
 		* correct baseline responses
+{
 replace profit = 5000 if id_plateforme == 986 & surveyround == 1
 replace profit = 35000 if id_plateforme == 1084 & surveyround == 1
 replace profit = 50000 if id_plateforme == 1098 & surveyround == 1
@@ -420,6 +424,9 @@ replace ca = 62000 if id_plateforme == 1097 & surveyround == 1
 replace ca_exp = 30000 if id_plateforme == 1097 & surveyround == 1
 replace profit = 21000 if id_plateforme == 1097 & surveyround == 1
 
+replace ca_exp = 0 if id_plateforme == 1244 & surveyround == 1 // logical consequence as no export operation
+
+}
 
 }
 

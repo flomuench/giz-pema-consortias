@@ -333,17 +333,20 @@ replace export_1 = 0 if surveyround == 3 & export_1 == . & closed == 1
 * Domestic sales
 gen ca_tun = .
 	replace ca_tun = ca - ca_exp if ca_exp != . & ca != .
-	replace ca_tun = ca if ca_exp == . & ca != .
-	replace ca_tun = ca_exp if ca == . & ca_exp != .
+*	replace ca_tun = ca if ca_exp == 0 & ca != .
+*	replace ca_tun = ca_exp if ca == 0 & ca_exp != .
+	
 
 lab var ca_tun "Domestic sales"
 
 gen ca_tun_2024 = .
 	replace ca_tun_2024 = ca_2024 - ca_exp_2024 if ca_exp_2024 != . & ca_2024 != .
-	replace ca_tun_2024 = ca_2024 if ca_exp_2024 == . & ca_2024 != .
-	replace ca_tun_2024 = ca_exp_2024 if ca_2024 == . & ca_exp_2024 != .
+*	replace ca_tun_2024 = ca_2024 if ca_exp_2024 == . & ca_2024 != .
+*	replace ca_tun_2024 = ca_exp_2024 if ca_2024 == . & ca_exp_2024 != .
 
 lab var ca_tun_2024 "Domestic sales 2024"
+
+format %25.0fc ca_tun ca_tun_2024 ca ca_2024 ca_exp ca_exp_2024 profit profit_2024
 
 	
 * Profitable dummy
