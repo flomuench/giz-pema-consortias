@@ -24,6 +24,16 @@ xtset id_plateforme surveyround, delta(1)
 
 		* set graphics on for coefplot
 set graphics on
+
+		* set color scheme
+if "`c(username)'" == "MUNCHFA" | "`c(username)'" == "fmuench"  {
+	set scheme stcolor
+} 
+	else {
+
+set scheme s1color
+		
+	}
 ***********************************************************************
 * 	PART 0.2:  set the stage - 	write program for Anderson sharpened q-values
 ***********************************************************************
@@ -486,6 +496,7 @@ wolf4 ///
 estimates clear
 */
 }
+
 ***********************************************************************
 * 	PART 2:  Indexes
 ***********************************************************************
@@ -656,6 +667,7 @@ foreach outcome of local outcomes {
 }
 
 }
+
 ***********************************************************************
 * 	PART 3:  Network
 ***********************************************************************
@@ -1018,6 +1030,7 @@ graph drop _all
 }
 
 }
+
 ***********************************************************************
 * 	PART 4:  Innovation
 ***********************************************************************
@@ -1363,6 +1376,7 @@ estimates clear
 graph drop _all
 }
 }
+
 ***********************************************************************
 * 	PART 5:  Export
 ***********************************************************************
@@ -1845,6 +1859,7 @@ esttab e(RW) using "${master_regressiontables}/endline/`17'", replace
 end
 }
 }
+
 ***********************************************************************
 * 	PART 6:  Compta
 ***********************************************************************
@@ -2358,20 +2373,16 @@ foreach outcome of local outcomes {
 estimates clear
 }
 }
+
 }
+
 ***********************************************************************
 * 	PART II:  Export status heterogeneity
 ***********************************************************************
 {
-{
 	* change directory
 cd "${master_regressiontables}/endline/heterogeneity/export"
 
-*operation export to surveyround endline
-sort id_plateforme surveyround
-
-bysort id_plateforme: replace operation_export = operation_export[_n-2] if surveyround == 3
-}
 ***********************************************************************
 * 	PART 1:  Summary table
 ***********************************************************************
@@ -2525,6 +2536,7 @@ wolf2 ///
 estimates clear
 */
 }
+
 ***********************************************************************
 * 	PART 2:  Indexes
 ***********************************************************************
@@ -2693,6 +2705,7 @@ foreach outcome of local outcomes {
 
 estimates clear
 }
+
 ***********************************************************************
 * 	PART 3:  Network
 ************************************************************************
@@ -3037,6 +3050,7 @@ foreach outcome of local outcomes {
 graph drop _all
 }
 }
+
 ***********************************************************************
 * 	PART 4:  Innovation
 ***********************************************************************
@@ -3374,16 +3388,18 @@ estimates clear
 graph drop _all
 }
 }
+
 ***********************************************************************
 * 	PART 5:  Export
 ***********************************************************************
+{
 {
 ****************************  export - extensive margin ***************************
 {
 * change directory
 cd "${master_regressiontables}/endline/heterogeneity/export/export"
 
-local outcomes "export_1 exported" //
+local outcomes "export_1 exported"
 local conditions "operation_export==0 operation_export==1"
 
 foreach outcome of local outcomes {
@@ -3508,7 +3524,7 @@ foreach outcome of local outcomes {
 			prefoot("\hline") ///
 			postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
 	}
-
+	
     // Coefficient plot for 95% confidence interval
     coefplot ///
         (`outcome'_xp1, pstyle(p1)) (`outcome'_xp2, pstyle(p1)) ///
@@ -3517,7 +3533,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Export (ITT)"' `outcome'_xp2 = `"Export (TOT)"' `outcome'_noxp1 = `"No export (ITT)"' `outcome'_noxp2 = `"No export (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -3533,7 +3549,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Export (ITT)"' `outcome'_xp2 = `"Export (TOT)"' `outcome'_noxp1 = `"No export (ITT)"' `outcome'_noxp2 = `"No export (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -3542,7 +3558,6 @@ foreach outcome of local outcomes {
     gr export elhete_`outcome'_99.png, replace
 }
 
-estimates clear
 }
 
 ****************************  export wins 99th ***************************
@@ -3682,7 +3697,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Export (ITT)"' `outcome'_xp2 = `"Export (TOT)"' `outcome'_noxp1 = `"No export (ITT)"' `outcome'_noxp2 = `"No export (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -3698,7 +3713,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Export (ITT)"' `outcome'_xp2 = `"Export (TOT)"' `outcome'_noxp1 = `"No export (ITT)"' `outcome'_noxp2 = `"No export (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -4349,6 +4364,8 @@ estimates clear
 }
 }
 }
+}
+
 ***********************************************************************
 * 	PART III:  Initial network size heterogeneity
 ***********************************************************************
@@ -4361,6 +4378,7 @@ gen net_sizeSR1 = net_size
 
 * Perform the operation on net_sizeSR1
 bysort id_plateforme: replace net_sizeSR1 = net_sizeSR1[_n-2] if surveyround == 3
+
 ***********************************************************************
 * 	PART 1:  Summary table
 ***********************************************************************
