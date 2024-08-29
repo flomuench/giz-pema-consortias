@@ -1384,6 +1384,34 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prefoot("\hline") ///
 				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
+				
+						* coefplot
+		coefplot ///
+			(`1'1_ml, pstyle(p1)) (`1'2_ml, pstyle(p1))  ///
+			(`2'1_ml, pstyle(p2)) (`2'2_ml, pstyle(p2)), ///
+				bylabel("Midline") ///
+				subtitle(, size(medlarge)) ///
+				asequation /// name of model is used
+				swapnames /// swaps coeff & equation names after collecting result
+				levels(95) ///
+				xtitle(, size(medlarge)) ///
+				eqrename(`1'1_ml = `"Positive terms (ITT)"' `1'2_ml = `"Positive terms (TOT)"' `2'1_ml = `"Negative terms (ITT)"' `2'2_ml = `"Negative Terms (TOT)"') ///
+		|| ///
+			(`1'1_el, pstyle(p1)) (`1'2_el, pstyle(p1))  ///
+			(`2'1_el, pstyle(p2)) (`2'2_el, pstyle(p2)), /// 
+				bylabel("Endline") ///
+				subtitle(, size(medlarge)) ///
+				asequation /// name of model is used
+				swapnames /// swaps coeff & equation names after collecting result
+				levels(95) ///
+				xtitle(, size(medlarge)) ///
+				eqrename(`1'1_el = `"Positive terms (ITT)"' `1'2_el = `"Positive terms (TOT)"' `2'1_el = `"Negative terms (ITT)"' `2'2_el = `"Negative Terms (TOT)"') ///
+		||, ///
+		byopts(title("{bf:View of Business Interactions between Entrepreneurs}", justification(center)) note("{bf:Note}:" "All variables are counts of the 3 terms selected among 10 options." "Midline Negative Terms (TOT) is significant at the 10% level.", span size(medlarge)) leg(off)) ///
+		keep(*treatment take_up) drop(_cons *strata_final) xline(0) ///
+		name(netcoop_count_el_ml, replace)
+	gr export netcoop_count_el_ml.png, replace
+			
 
 end
 

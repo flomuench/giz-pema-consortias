@@ -955,6 +955,16 @@ lab var ca_tun_2024_w99 "Domestic sales 2024 wins. 99th"
 gen ca_tun_2024_w95 = ca_2024_w95 - ca_exp_2024_w95
 lab var ca_tun_2024_w95 "Domestic sales 2024 wins. 95th"
 
+************ label winsorised variables used for regressions ************
+lab var exp_pays_w95 "N. of Export countries"
+lab var exp_pays_w99 "N. of Export countries"
+
+lab var clients_w99 "N. of Clients abroad"
+lab var clients_w95 "N. of Cliebts abroad"
+
+lab var clients_ssa_w99 "N. of Clients SSA"
+lab var clients_ssa_w95 "N. of Cliebts SSA"
+
 ************************************************************
 
 	* find optimal k before ihs-transformation
