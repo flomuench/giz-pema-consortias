@@ -979,6 +979,10 @@ graph bar net_gender3_w99 net_gender3_giz_w99 if surveyround == 3 & treatment ==
 graph export "${master_output}/figures/endline/network/el_fem_vs_femgiz.png", width(6000) replace 
 
 
+* Female vs. Male entrepreneurs in network
+
+
+
 *net services
 betterbar net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance net_services_autre if surveyround==3, over(take_up) barlab ci ///
 	title("Network services", position(12)) ///

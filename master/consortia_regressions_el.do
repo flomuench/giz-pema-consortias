@@ -153,22 +153,36 @@ esttab `attrition' using "el_attrition.tex", replace ///
 }
 
 ***********************************************************************
-* 	PART 2: balance table		
+* 	PART 2: balance table of baseline characteristics	
 ***********************************************************************
 {
+
+* gen dummy for whether firm joined consortium or not
+ egen el_take_up = min(take_up), by(id_plateforme) missing
+
 *take_up
 	*without outlier
-iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_take_up_baltab_adj) replace
+iebaltab ca ca_exp profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092 & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj) replace
+
+
+iebaltab ca_w95 ca_exp_w95 profit_w95 employes_w95 mpi net_coop_pos net_coop_neg net_size exp_pays_w95  if surveyround == 1 & id_plateforme != 1092 & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj) replace
+
+
+iebaltab ca ca_exp profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092 & inlist(pole, 1,2,3) & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj_aut) replace
+
+iebaltab ca ca_exp profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092 & inlist(pole, 4) & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj_dig) replace
 
 	*with outlier
-iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_take_up_baltab_unadj) replace
+iebaltab ca ca_exp  profit employes mpi  net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme == 1092, grpvar(take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_take_up_baltab_unadj) replace
+
+
 
 *treatment
 *without outlier
-iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_adj) replace
+iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_treat_baltab_adj) replace
 
 *with outlier
-iebaltab ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 employes car_empl1 car_empl2 net_coop_pos net_coop_neg net_size3 net_size4 net_gender3 net_gender4 exp_pays exp_pays_ssa clients clients_ssa if surveyround == 3 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_unadj) replace
+iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_unadj) replace
 
 }
 
