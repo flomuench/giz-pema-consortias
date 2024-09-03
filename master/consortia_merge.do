@@ -151,7 +151,7 @@ xtset id_plateforme surveyround, delta(1)
 tsfill, full
 
 	* replace missing valeus for attrited firms in ml or el for constant variables with their baseline value
-local cst_vars_num "treatment strata_final eligible gouvernorat id_admin_correct year_created subsector_corrige operation_export"
+local cst_vars_num "treatment strata_final eligible gouvernorat id_admin_correct year_created subsector_corrige operation_export ca_2018 ca_2019 ca_2020 ca_exp2018 ca_exp2019 ca_exp2020"
 foreach var of local cst_vars_num {
 	bys id_plateforme (surveyround): replace `var' = `var'[_n-1] if `var' == .
 	}
