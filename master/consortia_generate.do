@@ -326,11 +326,14 @@ replace export_1 = 0 if surveyround == 3 & export_1 == . & closed == 1
 
 }
 
+
+
 ***********************************************************************
 * 	PART 4:   Create domestic sales + costs + positive profit  
 ***********************************************************************
 {
 * Domestic sales
+	* for survey years
 gen ca_tun = .
 	replace ca_tun = ca - ca_exp if ca_exp != . & ca != .
 *	replace ca_tun = ca if ca_exp == 0 & ca != .
@@ -338,7 +341,7 @@ gen ca_tun = .
 	
 
 lab var ca_tun "Domestic sales"
-
+	* first 6 months in 2024
 gen ca_tun_2024 = .
 	replace ca_tun_2024 = ca_2024 - ca_exp_2024 if ca_exp_2024 != . & ca_2024 != .
 *	replace ca_tun_2024 = ca_2024 if ca_exp_2024 == . & ca_2024 != .
@@ -346,7 +349,13 @@ gen ca_tun_2024 = .
 
 lab var ca_tun_2024 "Domestic sales 2024"
 
-format %25.0fc ca_tun ca_tun_2024 ca ca_2024 ca_exp ca_exp_2024 profit profit_2024
+
+	* pre-treatment periods
+forvalues year=2018(1)2020 {
+		gen ca_tun_`year' = ca_`year' - ca_exp`year' if ca_exp`year' != . & ca_`year' != . 
+}
+
+format %25.0fc ca_tun ca_tun_2024 ca ca_2024 ca_exp ca_exp_2024 profit profit_2024 ca_tun_2018 ca_tun_2019 ca_tun_2020
 
 	
 * Profitable dummy
@@ -362,7 +371,19 @@ lab var profit_pos "Profit > 0"
 * Costs (winsorised costs in Part 11 Winsorisation)
 gen costs = ca - profit
 lab var costs "Costs"
+
 }
+
+***********************************************************************
+* 	PART 4:   Replace 2024 variables with their baseline value (otherwise no Y0 in regresssion)  
+***********************************************************************
+local vars "ca_2024 ca_exp_2024 profit_2024 ca_tun_2024"
+local basevars "ca ca_exp profit ca_tun"
+foreach v of local vars {
+	gettoken basevar basevars : basevars
+	replace `v' = `basevar' if surveyround == 1
+}
+
 
 ***********************************************************************
 *	PART 5: Export - dummies
@@ -708,14 +729,27 @@ foreach var of local allvars {
 			* if you re-run the code, execture before: 
 capture program drop zscore
 program define zscore /* opens a program called zscore */
-	sum `1' if treatment == 0
-	gen `1'z = (`1' - r(mean))/r(sd) /* new variable gen is called --> varnamez */
+	sum `1' if treatment == 0 & surveyround == `2'
+	gen `1'z`2' = (`1' - r(mean))/r(sd) /* new variable gen is called --> varnamez */
 end
 
-		* calcuate the z-score for each variable
+
+		* create empty variable that will be replaced with z-scores
 foreach var of local allvars {
-	zscore temp_`var'
+	g temp_`var'z = .
+	
 }
+		* calculate z-score surveyround & variable specific
+levelsof surveyround, local(survey)
+foreach s of local survey {
+			* calcuate the z-score for each variable
+	foreach var of local allvars {
+		zscore temp_`var' `s'
+		replace temp_`var'z = temp_`var'z`s' if surveyround == `s'
+		drop temp_`var'z`s'
+	}
+}
+
 
 	* calculate the index value: average of zscores 
 			* networking
@@ -885,7 +919,7 @@ gen profit_pct = .
 	
 	* winsorize
 		* winsorize all outcomes (but profit)
-local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes prni pr2024ni cani ca2024ni"
+local wins_vars "capital ca ca_exp ca_tun exp_inv employes car_empl1 car_empl2 inno_rd net_size net_nb_f net_nb_m net_nb_dehors net_nb_fam ca_2024 net_size3 net_size4 net_gender3 net_size3_m net_size4_m net_gender4 net_gender3_giz ca_exp_2024 exp_pays exp_pays_ssa  clients clients_ssa clients_ssa_commandes prni pr2024ni cani ca2024ni ca_2018 ca_2019 ca_2020 ca_tun_2018 ca_tun_2019 ca_tun_2020 ca_exp2018 ca_exp2019 ca_exp2020"
 
 foreach var of local wins_vars {
 		gen `var'_w99 = `var'
@@ -971,7 +1005,7 @@ lab var clients_ssa_w95 "N. of Cliebts SSA"
 		* see Aihounton & Henningsen 2021 for methodological approach
 
 		* put all ihs-transformed outcomes in a list
-local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95 prni_w99 pr2024ni_w99 cani_w99 ca2024ni_w99 prni_w95 pr2024ni_w95 cani_w95 ca2024ni_w95"
+local ys "employes_w99 car_empl1_w99 car_empl2_w99 ca_tun_w99 ca_exp_w99 ca_w99 profit_w99 costs_w99 ca_tun_2024_w99 ca_exp_2024_w99 ca_2024_w99 profit_2024_w99 costs_2024_w99 employes_w95 car_empl1_w95 car_empl2_w95 ca_tun_w95 ca_exp_w95 ca_w95 profit_w95 costs_w95 ca_tun_2024_w95 ca_exp_2024_w95 ca_2024_w95 profit_2024_w95 costs_2024_w95 exp_inv_w99 exp_inv_w95 prni_w99 pr2024ni_w99 cani_w99 ca2024ni_w99 prni_w95 pr2024ni_w95 cani_w95 ca2024ni_w95 ca_2018_w95 ca_2019_w95 ca_2020_w95 ca_exp2018_w95 ca_exp2019_w95 ca_exp2020_w95 ca_tun_2018_w95 ca_tun_2019_w95 ca_tun_2020_w95"
      
 		* check how many zeros
 foreach var of local ys {
@@ -1409,6 +1443,12 @@ foreach var of local y_vars {
 * variable defined as in Cai and Szeidl (2018)
 gen consortia_cluster = id_plateforme
 	replace consortia_cluster = pole if treatment == 1
+	
+	
+***********************************************************************
+* 	PART 19: create post dummy for DiD as Cai and Szeidl (2018)	
+***********************************************************************	
+gen post = (surveyround > 1)
 
 
 ***********************************************************************

@@ -210,6 +210,16 @@ replace pole = 3 if id_plateforme == 998
 ***********************************************************************
 {
 {
+
+/* replacing 0 with .
+local vars "ca ca_exp"
+
+foreach var of local vars {
+	forvalues year = 2018(1)2019 {
+		replace `var'_`year' = . if year_created < `year'	& `var'_`year' == 0
+	}
+}
+*/	
 		* Correcting ca
 replace ca_2018 = 800000 if id_plateforme == 991
 replace ca_2019 = 1400000 if id_plateforme == 991
