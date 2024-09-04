@@ -429,7 +429,7 @@ mat colnames p = "pvalues"
 						nobaselevels ///
 						label 		/// specifies EVs have label
 						mgroups("Export readiness index" "SSA Export readiness index" "Export performance" "Management practices index" "Female efficacy" "Female loucs" "Gender index" "Innovation practices index" "Business performance 2023" "Business performance 2024", pattern(0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1 0 0 0 1)) ///
-						mlabels("Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC & Agro & Artisanat & Service & TIC", numbers) ///
+						mlabels("Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital & Agro & Handicrafts & Consulting & Digital", numbers) ///
 						collabels(none) ///	do not use statistics names below models
 						drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
 						noobs
@@ -567,7 +567,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -582,7 +582,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -603,7 +603,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -618,7 +618,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -638,7 +638,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -656,7 +656,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -745,7 +745,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -760,7 +760,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -781,7 +781,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -796,7 +796,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -816,7 +816,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -834,7 +834,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -926,7 +926,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -941,7 +941,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -962,7 +962,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -977,7 +977,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -997,7 +997,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1015,7 +1015,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1106,7 +1106,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -1121,7 +1121,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1142,7 +1142,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -1157,7 +1157,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1177,7 +1177,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1195,7 +1195,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1273,7 +1273,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -1288,7 +1288,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1309,7 +1309,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -1324,7 +1324,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1344,7 +1344,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1362,7 +1362,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1451,7 +1451,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -1466,7 +1466,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1487,7 +1487,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -1502,7 +1502,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1522,7 +1522,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1540,7 +1540,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1623,7 +1623,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -1638,7 +1638,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1659,7 +1659,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -1674,7 +1674,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1694,7 +1694,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1712,7 +1712,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -1935,7 +1935,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -1950,7 +1950,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -1971,7 +1971,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -1986,7 +1986,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2006,7 +2006,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2024,7 +2024,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2104,7 +2104,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -2119,7 +2119,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2140,7 +2140,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -2155,7 +2155,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2175,7 +2175,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2193,7 +2193,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2272,7 +2272,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -2287,7 +2287,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2308,7 +2308,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -2323,7 +2323,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2343,7 +2343,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2361,7 +2361,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_aa1 = `"Agriculture (ITT)"' `outcome'_aa2 = `"Agriculture (TOT)"' `outcome'_ac1 = `"Artisanat (ITT)"' `outcome'_ac2 = `"Artisanat (TOT)"' `outcome'_s1 = `"Service (ITT)"' `outcome'_s2 = `"Service (TOT)"' `outcome'_tic1 = `"TIC (ITT)"' `outcome'_tic2 = `"TIC (TOT)"') ///
+        eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -2608,7 +2608,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -2623,7 +2623,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2644,7 +2644,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -2659,7 +2659,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2781,7 +2781,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -2796,7 +2796,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2817,7 +2817,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -2832,7 +2832,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2954,7 +2954,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -2969,7 +2969,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -2990,7 +2990,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3005,7 +3005,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3125,7 +3125,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -3140,7 +3140,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3161,7 +3161,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3176,7 +3176,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3288,7 +3288,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -3303,7 +3303,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3324,7 +3324,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3339,7 +3339,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3464,7 +3464,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -3479,7 +3479,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3500,7 +3500,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3515,7 +3515,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3628,7 +3628,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -3643,7 +3643,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3664,7 +3664,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3679,7 +3679,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3938,7 +3938,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -3953,7 +3953,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -3974,7 +3974,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -3989,7 +3989,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4103,7 +4103,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -4118,7 +4118,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4139,7 +4139,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -4154,7 +4154,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4266,7 +4266,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -4281,7 +4281,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4302,7 +4302,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -4317,7 +4317,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4533,6 +4533,7 @@ estimates clear
 }
 */
 }
+
 ***********************************************************************
 * 	PART 2:  Indexes
 ***********************************************************************
@@ -4604,7 +4605,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -4619,7 +4620,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4640,7 +4641,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -4655,7 +4656,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4701,6 +4702,7 @@ foreach outcome of local outcomes {
 
 estimates clear
 }
+
 ***********************************************************************
 * 	PART 3:  Network
 ***********************************************************************
@@ -4709,6 +4711,8 @@ estimates clear
 {
 * change directory
 cd "${master_regressiontables}/endline/heterogeneity/network/network"
+
+lab var net_size3_w99 "Network all contacts, wins. 99th pct."
 
 local outcomes "net_size3_w99 net_coop_pos net_coop_neg"
 *local outcomes "net_size3_w95 net_coop_pos net_coop_neg" ACTIVATE FOR W95
@@ -4776,7 +4780,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -4791,7 +4795,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4812,7 +4816,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -4827,7 +4831,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4845,7 +4849,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Small network (ITT)"' `outcome'_xp2 = `"Small network (TOT)"' `outcome'_noxp1 = `"Large network (ITT)"' `outcome'_noxp2 = `"Large network (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"Small BL network (ITT)"' `outcome'_xp2 = `"Small BL network (TOT)"' `outcome'_noxp1 = `"Large BL network (ITT)"' `outcome'_noxp2 = `"Large BL network (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -4861,15 +4865,17 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Small network (ITT)"' `outcome'_xp2 = `"Small network (TOT)"' `outcome'_noxp1 = `"Large network (ITT)"' `outcome'_noxp2 = `"Large network (TOT)"') ///
-        ytitle("", size(medium)) ///
-        xtitle("`outcome_label'") /// Use the variable label for xtitle
+        eqrename(`outcome'_xp1 = `"Small BL network (ITT)"' `outcome'_xp2 = `"Small BL network (TOT)"' `outcome'_noxp1 = `"Large BL network (ITT)"' `outcome'_noxp2 = `"Large BL network (TOT)"') ///
+        ytitle("", size(medsmall)) ///
+        xtitle("`outcome_label'", size(medsmall)) /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-        note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
+        note("{bf:Note}:" "Confidence interval at the 99th percentile." "Small network is less or equal to 10, while large is more than 10.", span size(small)) /// 99th only holds for large firms
+		ysc(outergap(-5)) ///
         name(elhete_`outcome'_99, replace)
     gr export elhete_`outcome'_99.png, replace
 }
 }
+
 ****************************  net_coop ***************************
 {
 * lab each cooperate word dummy to overwrite the master lab
@@ -4949,7 +4955,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -4964,7 +4970,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -4985,7 +4991,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5000,7 +5006,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5018,7 +5024,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Small network (ITT)"' `outcome'_xp2 = `"Small network (TOT)"' `outcome'_noxp1 = `"Large network (ITT)"' `outcome'_noxp2 = `"Large network (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"Small BL network (ITT)"' `outcome'_xp2 = `"Small BL network (TOT)"' `outcome'_noxp1 = `"Large BL network (ITT)"' `outcome'_noxp2 = `"Large BL network (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -5034,7 +5040,7 @@ foreach outcome of local outcomes {
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"Small network (ITT)"' `outcome'_xp2 = `"Small network (TOT)"' `outcome'_noxp1 = `"Large network (ITT)"' `outcome'_noxp2 = `"Large network (TOT)"') ///
+        eqrename(`outcome'_xp1 = `"Small BL network (ITT)"' `outcome'_xp2 = `"Small BL network (TOT)"' `outcome'_noxp1 = `"Large BL network (ITT)"' `outcome'_noxp2 = `"Large BL network (TOT)"') ///
         ytitle("", size(medium)) ///
         xtitle("`outcome_label'") /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
@@ -5119,7 +5125,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -5134,7 +5140,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5155,7 +5161,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5170,7 +5176,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5282,7 +5288,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -5297,7 +5303,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5318,7 +5324,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5333,7 +5339,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5456,7 +5462,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -5471,7 +5477,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5492,7 +5498,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5507,7 +5513,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5621,7 +5627,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -5636,7 +5642,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5657,7 +5663,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5672,7 +5678,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5934,7 +5940,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -5949,7 +5955,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -5970,7 +5976,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -5985,7 +5991,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -6099,7 +6105,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -6114,7 +6120,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -6135,7 +6141,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -6150,7 +6156,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -6262,7 +6268,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
@@ -6277,7 +6283,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
@@ -6298,7 +6304,7 @@ foreach outcome of local outcomes {
 			star(* 0.1 ** 0.05 *** 0.01) ///
 			nobaselevels ///
 			label      /// specifies EVs have label
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			collabels(none) /// do not use statistics names below models
 			drop(_cons *.strata_final) ///
@@ -6313,7 +6319,7 @@ foreach outcome of local outcomes {
 			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 			drop(_cons *.strata_final) ///
 			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agriculture" "Artisanat" "Service" "TIC", ///
+			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
 			pattern(1 1 1 1)) ///
 			mlabels(none) nonumbers /// do not use varnames as model titles
 			collabels(none) /// do not use statistics names below models
