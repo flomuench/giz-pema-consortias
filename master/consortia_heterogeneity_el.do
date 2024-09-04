@@ -1011,15 +1011,15 @@ foreach outcome of local outcomes {
         (`outcome'_ac1, pstyle(p2)) (`outcome'_ac2, pstyle(p2)) ///
         (`outcome'_s1, pstyle(p3)) (`outcome'_s2, pstyle(p3)) ///
         (`outcome'_tic1, pstyle(p4)) (`outcome'_tic2, pstyle(p4)), ///
-        keep(*treatment take_up) drop(_cons) xline(0) ///
+        keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1(0.2)1) ///
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
         eqrename(`outcome'_aa1 = `"Agri-food (ITT)"' `outcome'_aa2 = `"Agri-food (TOT)"' `outcome'_ac1 = `"Handicrafts (ITT)"' `outcome'_ac2 = `"Handicrafts (TOT)"' `outcome'_s1 = `"Consulting (ITT)"' `outcome'_s2 = `"Consulting (TOT)"' `outcome'_tic1 = `"Digital (ITT)"' `outcome'_tic2 = `"Digital (TOT)"') ///
-        ytitle("", size(medium)) ///
-        xtitle("`outcome_label'") /// Use the variable label for xtitle
+        ytitle("", size(medlarge)) ///
+        xtitle("`outcome_label'", size(medlarge)) /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-        note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
+        note("{bf:Note}: Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
         name(elhetp_`outcome'_99, replace)
     gr export elhetp_`outcome'_99.png, replace
 	
@@ -5036,15 +5036,15 @@ foreach outcome of local outcomes {
     coefplot ///
         (`outcome'_xp1, pstyle(p1)) (`outcome'_xp2, pstyle(p1)) ///
         (`outcome'_noxp1, pstyle(p2)) (`outcome'_noxp2, pstyle(p2)), ///
-        keep(*treatment take_up) drop(_cons) xline(0) ///
+        keep(*treatment take_up) drop(_cons) xline(0) xlabel(-.6(0.2)1) ///
         asequation /// name of model is used
         swapnames /// swaps coeff & equation names after collecting result
         levels(99) /// 99th percentile is null-effect, although tight
         eqrename(`outcome'_xp1 = `"Small BL network (ITT)"' `outcome'_xp2 = `"Small BL network (TOT)"' `outcome'_noxp1 = `"Large BL network (ITT)"' `outcome'_noxp2 = `"Large BL network (TOT)"') ///
-        ytitle("", size(medium)) ///
-        xtitle("`outcome_label'") /// Use the variable label for xtitle
+        ytitle("", size(medlarge)) ///
+        xtitle("`outcome_label'", size(medlarge)) /// Use the variable label for xtitle
         leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-        note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
+        note("{bf:Note}: Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
         name(elhete_`outcome'_99, replace)
     gr export elhete_`outcome'_99.png, replace
 }
