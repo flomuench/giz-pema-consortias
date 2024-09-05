@@ -742,6 +742,7 @@ coefplot ///
 		xtitle("Persons", size(medsmall)) ///  
 		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		ysc(outergap(-35)) /// negative outer gap --> reduces space btw coef names & plot
+		note("{bf: Note}": "The control group endline average is 8." "Variables are winsorized at the 95th percentile.", span) ///
 		name(el_`generate'_cfp, replace)
 	
 gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp.png", replace
