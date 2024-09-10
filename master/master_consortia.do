@@ -68,7 +68,7 @@ set scheme burd 			// for presentation, coloured
 		* define user
 	if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "Admin" | ///
 	"`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | ///
-	"`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  {
+	"`c(username)'" == "ayoub" | "`c(username)'" == "Azra" | "`c(username)'" == "Guest"  {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
 	
@@ -253,10 +253,15 @@ if (0) do "${master_github}/consortia_export.do"
 ----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_test_ml.do"
 /*--------------------------------------------------------------------
-	PART 3.8: Test coherence between survey rounds for endline
+	PART 3.9: Test coherence between survey rounds for endline
 	Creates: fiche_de_correction
 ----------------------------------------------------------------------*/
 if (0) do "${master_github}/consortia_test_el.do"
+/*--------------------------------------------------------------------
+	PART 3.10: Creates a list of firms to recall
+	Creates: fiche_d'appel
+----------------------------------------------------------------------*/
+if (0) do "${master_github}/consortia_appel_el.do"
 }
 
 ***********************************************************************
