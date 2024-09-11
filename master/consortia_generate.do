@@ -870,7 +870,17 @@ drop temp_*
 * 	PART 10:   generate survey-to-survey growth rates
 ***********************************************************************
 	* accounting variables
-local acccounting_vars "ca ca_exp profit employes"
+local acccounting_vars "ca ca_exp profit employes car_empl1 car_empl2"
+foreach var of local acccounting_vars {
+		bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
+			bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
+		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
+			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
+
+}
+
+sort id_plateforme surveyround
+local acccounting_vars "car_empl1 car_empl2"
 foreach var of local acccounting_vars {
 		bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
 			bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
