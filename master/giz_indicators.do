@@ -15,7 +15,7 @@
 ***********************************************************************
 * 	PART 0: load data
 ***********************************************************************
-use "${master_final}/consortia_final", clear
+use "${master_final}/consortium_final", clear
 set graphics on		
 		* change directory to regis folder for merge with regis_final
 cd "${master_output}/giz"
@@ -31,6 +31,7 @@ keep if treatment == 1
 ***********************************************************************
 * 	PART 1: Start & structure Word Document
 ***********************************************************************
+{
 putdocx clear
 
 putdocx begin
@@ -50,7 +51,7 @@ Note that a full stop (.) indicates that the question was not asked in a specifi
 Further note that results pertain to all among the 87 firms that responded to a specific question in the respective surveyround. This includes also firms that dropped-out during the project.
 
 putdocx textblock end
-
+}
 	
 ***********************************************************************
 * 	PART 2: Export preparation indicators
@@ -90,7 +91,7 @@ lab var ssa_action4 "Investment in sales structure abroad"
 lab var ssa_action5 "Digital transaction system"
 
 * gen variable any export action
-egen ssa_any = rowmax(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
+*egen ssa_any = rowmax(ssa_action1 ssa_action2 ssa_action3 ssa_action4 ssa_action5)
 
 lab var ssa_any "Any of the above"
 lab values ssa_any yesno
@@ -104,9 +105,9 @@ dtable, by(surveyround, nototal) ///
 	factor(ssa_any, statistics(fvfrequency fvproportion)) ///
 	sformat("(%s)" fvproportion) ///
 	nformat(%9.0g  fvfrequency) ///
-	nformat(%9.2fc fvproportion) ///
-	export(ssa.docx, replace)
-
+	nformat(%9.2fc fvproportion)
+* export(ssa.docx, replace)
+putdocx collect
 	
 }	  
 
@@ -157,11 +158,11 @@ dtable, by(surveyround, nototal) ///
                profit_rel_growth profit_abs_growth ///
                employes_rel_growth employes_abs_growth ///
                car_empl1_rel_growth car_empl1_abs_growth ///
-               car_empl2_rel_growth car_empl2_abs_growth, statistics(mean))
-			   ///
-    nformat(%9.0g mean) ///
-    export(kpis_growth.docx, replace)
+               car_empl2_rel_growth car_empl2_abs_growth, statistics(mean))	   ///
+    nformat(%9.0g mean)
+*    export(kpis_growth.docx, replace)
 
+putdocx collect
 
 }
 	
@@ -194,7 +195,10 @@ dtable, by(surveyround, nototal) ///
 	continuous(exp_pays exp_pays_ssa clients clients_ssa clients_ssa_commandes, statistics(mean)) 	///
 	nformat(%9.2fc  mean fvproportion) ///
 	nformat(%9.0g fvfrequency)
-	export(export.docx, replace)
-	
+* export(export.docx, replace)
+putdocx collect	
 	
 }
+
+
+putdocx save giz_indicators, replace
