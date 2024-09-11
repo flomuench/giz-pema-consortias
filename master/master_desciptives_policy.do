@@ -27,6 +27,7 @@ gen take_up_control=.
 replace take_up_co~l=1 if take_up==1 & treatment==1
 replace take_up_co~l =0 if take_up==0 & treatment==0
 label define take_up_col 1 "Participant" 0 "Comparison Group"
+
 ***********************************************************************
 * 	PART 1: Adoption of digital practices and technologys
 ***********************************************************************
