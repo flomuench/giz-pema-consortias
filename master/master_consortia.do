@@ -67,7 +67,7 @@ set scheme burd 			// for presentation, coloured
 	* set first level globals for code and data
 		* define user
 	if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "Admin" | ///
-	"`c(username)'"  == "Fabian Scheifele"| "`c(username)'" == "my rog" | ///
+	"`c(username)'"  == "fabi-"| "`c(username)'" == "my rog" | ///
 	"`c(username)'" == "ayoub" | "`c(username)'" == "Azra" | "`c(username)'" == "Guest"  {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
 	} 
