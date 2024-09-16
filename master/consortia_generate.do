@@ -872,25 +872,16 @@ drop temp_*
 	* accounting variables
 local acccounting_vars "ca ca_exp profit employes car_empl1 car_empl2"
 foreach var of local acccounting_vars {
-		bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
-			bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
-		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
-			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
+	bys id_plateforme (surveyround): g `var'_rel_growth = (`var' - `var'[1])/`var'[1]
+	bys id_plateforme (surveyround): g `var'_abs_growth = `var' - `var'[1]
 
 }
 
-sort id_plateforme surveyround
-local acccounting_vars "car_empl1 car_empl2"
-foreach var of local acccounting_vars {
-		bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
-			bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
-		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
-			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
 
-}
 
 /*
 use links to understand the code syntax for creating the accounting variables' growth rates:
+-https://www.statalist.org/forums/forum/general-stata-discussion/general/1474123-changing-the-base-year-and-creating-an-index-from-that-year-in-a-time-series
 - https://www.stata.com/statalist/archive/2008-10/msg00661.html
 - https://www.stata.com/support/faqs/statistics/time-series-operators/
 
