@@ -4622,6 +4622,26 @@ rct_regression_finexpks ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95
 * change directory
 cd "${master_regressiontables}/endline/regressions/compta"
 
+
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ihs_ca_w95_k1 i.treatment i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
+
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final i.id_plateforme (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg profit_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 profit_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 ca_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ca_exp_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 ca_exp_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
 **************** financials: ANCOVA ****************
 {
 capture program drop rct_regression_fin // enables re-running
@@ -4632,12 +4652,12 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster) //  & `var' > 0
 				estadd local bl_control "Yes"
 				estadd local strata_final "Yes"
 
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first //  & `var' > 0
 				estadd local bl_control "Yes"
 				estadd local strata_final "Yes"
 				

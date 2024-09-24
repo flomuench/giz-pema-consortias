@@ -1283,10 +1283,41 @@ twoway (connected ca surveyround if treatment == 1 & take_up == 1) (connected ca
 graph export did_plot2_ca.png, replace
 restore	
 	
-/*	
-twoway  (kdensity ca if treatment == 1 & take_up == 1 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
-        (kdensity ca if treatment == 1 & take_up == 0 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(green) yaxis(2) bw(1.5)) ///
-        (kdensity ca if treatment == 0 & surveyround == 3 & ca<ca_95p & ca>0 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234 , lp(l) lc(navy) yaxis(2) bw(0.4)) ///
+	* total sales
+		* abs
+			* el
+twoway ///
+	(kdensity ca if treatment == 1 & take_up == 1 & surveyround == 3 & ca > 0, lp(l) lc(maroon) yaxis(2)) ///
+    (kdensity ca if treatment == 1 & take_up == 0 & surveyround == 3 & ca > 0, lp(l) lc(green) yaxis(2)) ///
+    (kdensity ca if treatment == 0 & surveyround == 3 & ca > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Total turnover in 2023", pos(12)) ///
+	   xtitle("Total turnover",size(medium)) 
+			* bl
+twoway ///
+	(kdensity ca if treatment == 1 & take_up == 1 & surveyround == 1 & ca > 0, lp(l) lc(maroon) yaxis(2)) ///
+    (kdensity ca if treatment == 1 & take_up == 0 & surveyround == 1 & ca > 0, lp(l) lc(green) yaxis(2)) ///
+    (kdensity ca if treatment == 0 & surveyround == 1 & ca > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Total turnover", pos(12)) ///
+	   xtitle("Total turnover",size(medium)) 
+	   
+	   * ihs
+	   
+twoway ///
+	(kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 3 & ca > 0, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
+    (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 3 & ca > 0, lp(l) lc(green) yaxis(2) bw(1.5)) ///
+    (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 3 & ca > 0, lp(l) lc(navy) yaxis(2) bw(1.5)) ///
         , ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment group, participated" ///
@@ -1299,8 +1330,36 @@ gr export el_ca_kdens.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_ca_kdens.png, width(5000)
 putpdf pagebreak
-*/	  
+
+		* distribution of growth rates in ca
+twoway ///
+	(kdensity ca_rel_growth if treatment == 1 & take_up == 1 & surveyround == 3 & ca_rel_growth < 5, lp(l) lc(maroon) yaxis(2)) ///
+    (kdensity ca_rel_growth if treatment == 1 & take_up == 0 & surveyround == 3 & ca_rel_growth < 5, lp(l) lc(green) yaxis(2)) ///
+    (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth < 5, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Total turnover", pos(12)) ///
+	   xtitle("Growth rate",size(medium)) 
 	   
+		* distribution of growth rates in profit
+twoway ///
+	(kdensity profit_rel_growth if treatment == 1 & take_up == 1 & surveyround == 3 & profit_rel_growth, lp(l) lc(maroon) yaxis(2)) ///
+    (kdensity profit_rel_growth if treatment == 1 & take_up == 0 & surveyround == 3 & profit_rel_growth, lp(l) lc(green) yaxis(2)) ///
+    (kdensity profit_rel_growth if treatment == 0 & surveyround == 3 & profit_rel_growth, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Profit", pos(12)) ///
+	   xtitle("Growth rate",size(medium)) 
+
+		
  graph box ca if ca<ca_95p & ca>0 & surveyround==3 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234, over(take_up) blabel(total, format(%9.2fc)) ///
 	title("Total turnover in 2023 in TND", pos(12))
 gr export el_ca_box.png, width(5000) replace
