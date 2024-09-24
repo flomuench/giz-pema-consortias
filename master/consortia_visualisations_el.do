@@ -1298,6 +1298,7 @@ twoway ///
                col(1) pos(6) ring(6)) ///
 	   title("Total turnover in 2023", pos(12)) ///
 	   xtitle("Total turnover",size(medium)) 
+	  
 			* bl
 twoway ///
 	(kdensity ca if treatment == 1 & take_up == 1 & surveyround == 1 & ca > 0, lp(l) lc(maroon) yaxis(2)) ///
@@ -1358,6 +1359,9 @@ twoway ///
                col(1) pos(6) ring(6)) ///
 	   title("Profit", pos(12)) ///
 	   xtitle("Growth rate",size(medium)) 
+	   
+	   
+	   
 
 		
  graph box ca if ca<ca_95p & ca>0 & surveyround==3 & ca!=666 & ca!=777 & ca!=888 & ca!=999 & ca!=1234, over(take_up) blabel(total, format(%9.2fc)) ///
@@ -1497,6 +1501,55 @@ gr export el_ca_exp_kdens.png, width(5000) replace
 putpdf paragraph, halign(center) 
 putpdf image el_ca_exp_kdens.png, width(5000)
 putpdf pagebreak
+
+twoway ///
+ (kdensity ihs_ca_exp_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+ (kdensity ihs_ca_exp_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(50000)) ///
+ (kdensity ihs_ca_exp_w95_k1 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(50000)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Export turnover in 2023", pos(12)) ///
+	   xtitle("Export turnover",size(medium)) 
+
+
+
+  
+	* domestic sales
+twoway ///
+ (kdensity ca_tun if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+ (kdensity ca_tun if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(50000)) ///
+ (kdensity ca_tun if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(50000)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Domestic turnover in 2023", pos(12)) ///
+	   xtitle("Domestic turnover",size(medium)) 
+	   
+	twoway ///
+ (kdensity ihs_catun2024_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+ (kdensity ihs_catun2024_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)) ///
+ (kdensity ihs_catun2024_w95_k1 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Domestic turnover in 2023", pos(12)) ///
+	   xtitle("Domestic turnover",size(medium)) 
+	   
+	   
+
+  
+  
+  
   
 	   
  graph box ca_exp if ca_exp<ca_exp_95p & ca_exp>0 & surveyround==3 & ca_exp!=666 & ca_exp!=777 & ca_exp!=888 & ca_exp!=999 & ca_exp!=1234, over(take_up) blabel(total, format(%9.2fc)) ///
