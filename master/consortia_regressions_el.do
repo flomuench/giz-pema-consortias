@@ -4296,7 +4296,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1 `2'1 `3'1 `4'1 // `5'1 `6'1 `7'1 `8'1  adjust manually to number of variables 
+		local regressions `1'1 `2'1  // `3'1 `4'1 `5'1 `6'1 `7'1 `8'1  adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Financial regressions: export sensitivity to k} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{5}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
@@ -4311,7 +4311,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 `3'2 `4'2 //  `5'2 `6'2 `7'2 `8'2  adjust manually to number of variables 
+		local regressions `1'2 `2'2  // `3'2 `4'2 `5'2 `6'2 `7'2 `8'2  adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -4329,31 +4329,34 @@ esttab e(RW) using rw_`generate'.tex, replace
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
-	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
-	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)), ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), /// (`3'1, pstyle(p3)) (`3'2, pstyle(p3))
 	keep(*treatment take_up) drop(_cons) xline(0) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Export sales 2023 (ITT)"' `1'2 = `"Export sales 2023 (TOT)"' `2'1 = `"Export sales 2024 (ITT)"' `2'2 = `"Export sales 2024 (TOT)"' `3'1 = `"Export countries (ITT)"' `3'2 = `"Export countries (TOT)"' `4'1 = `"Export countries SSA (ITT)"' `4'2 = `"Export countries SSA (TOT) "') ///  `5'1 = `"Export k^3 2024 (ITT)"' `5'2 = `"Export k^3 2024 (TOT) "' `6'1 = `"Export k^3 2023 (ITT)"' `6'2 = `"Export k^3 2023 (TOT)"' `7'1 = `"Export k^4 2024 (ITT)"' `7'2 = `"Export k^4 2024 (TOT)"' `8'1 = `"Export k^4 2023 (ITT)"' `8'2 = `"Export k^4 2023 (TOT)"'
+		eqrename(`1'1 = `"Export sales 2023 (ITT)"' `1'2 = `"Export sales 2023 (TOT)"' `2'1 = `"Export countries (ITT)"' `2'2 = `"Export countries (TOT)"') ///  `4'1 = `"Export countries SSA (ITT)"' `4'2 = `"Export countries SSA (TOT) "' `5'1 = `"Export k^3 2024 (ITT)"' `5'2 = `"Export k^3 2024 (TOT) "' `6'1 = `"Export k^3 2023 (ITT)"' `6'2 = `"Export k^3 2023 (TOT)"' `7'1 = `"Export k^4 2024 (ITT)"' `7'2 = `"Export k^4 2024 (TOT)"' `8'1 = `"Export k^4 2023 (ITT)"' `8'2 = `"Export k^4 2023 (TOT)"'
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("{bf:Note}:" "The Export countries (TOT) is significant at the 10% level." "Export sales variables are winsorised & ihs-transformed.", span) ///
 		name(el_`generate'_cfp, replace)
-		
+
+//  `2'1 = `"Export sales 2024 (ITT)"' `2'2 = `"Export sales 2024 (TOT)"'	
+	
 // (`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) /// (`6'1, pstyle(p6)) (`6'2, pstyle(p6)) /// (`7'1, pstyle(p7)) (`7'2, pstyle(p7)) /// (`8'1, pstyle(p8)) (`8'2, pstyle(p8))
+	
+// (`4'1, pstyle(p4)) (`4'2, pstyle(p4))
 	
 gr export el_`generate'_cfp.png, replace
 
 end
 
 	* apply program to export outcomes
-exp_int ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k1 exp_pays_w99 exp_pays_ssa_w99, gen(exp_int_majors99)
+exp_int ihs_ca_exp_w99_k1 exp_pays_w99, gen(exp_int_majors99) // ihs_caexp2024_w99_k1 exp_pays_ssa_w99
 
-exp_int ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k1 exp_pays_w95 exp_pays_ssa_w95, gen(exp_int_majors95)
+exp_int ihs_ca_exp_w95_k1 exp_pays_w95, gen(exp_int_majors95) // ihs_caexp2024_w95_k1 exp_pays_ssa_w95
 
 }
+
 
 
 
@@ -4622,6 +4625,26 @@ rct_regression_finexpks ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95
 * change directory
 cd "${master_regressiontables}/endline/regressions/compta"
 
+
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ihs_ca_w95_k1 i.treatment i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
+
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final i.id_plateforme (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg profit_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 profit_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 ca_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ca_exp_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+ivreg2 ca_exp_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
 **************** financials: ANCOVA ****************
 {
 capture program drop rct_regression_fin // enables re-running
@@ -4632,12 +4655,12 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster) //  & `var' > 0
 				estadd local bl_control "Yes"
 				estadd local strata_final "Yes"
 
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first //  & `var' > 0
 				estadd local bl_control "Yes"
 				estadd local strata_final "Yes"
 				

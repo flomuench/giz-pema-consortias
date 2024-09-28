@@ -3562,7 +3562,7 @@ foreach outcome of local outcomes {
 
 ****************************  export wins 99th ***************************
 {
-local outcomes "exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_w99" //
+local outcomes exp_pays_w99  // exp_pays_w99 "exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_w99" //
 *local outcomes "exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_w95" // ACTIVATE FOR 95 WINS
 local conditions "operation_export==0 operation_export==1"
 
