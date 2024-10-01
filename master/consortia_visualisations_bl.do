@@ -28,6 +28,28 @@ set scheme s1color
 
 
 ***********************************************************************
+* 	PART 1: Table 1
+***********************************************************************
+lab var exp_pays "Export countries"
+	* by consortium & surveyround
+table (var) (treatment) if surveyround == 1, nototals ///
+	statistic(mean age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(sd age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(min age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(max age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	nformat(%9.0g  fvfrequency) ///
+	nformat(%9.2fc fvproportion)
+	
+	
+	table (var) () if surveyround == 1, nototals ///
+	statistic(mean age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(sd age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(min age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	statistic(max age employes ca exported exp_pays ca_exp ca_tun profit) ///
+	nformat(%9.0g  fvfrequency) ///
+	nformat(%9.0fc mean sd min max)
+
+***********************************************************************
 * 	PART 2: Basline statistics
 ***********************************************************************
 

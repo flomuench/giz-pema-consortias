@@ -51,6 +51,7 @@ set scheme s1color
 		
 	}
 }
+	
 
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
@@ -4098,6 +4099,18 @@ esttab e(RW) using rw_`generate'.tex, replace
 				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
+	* retrieve & format control mean
+sum `1' if treatment == 0 & surveyround == 3
+local control_mean_`1' = r(mean)
+local fmt_control_mean_`1' : display %3.2 `control_mean_`1''
+
+	* retrieve & format TOT TE
+local te_`1' = e(b)[1,1]
+local fmt_te_`1' : display %3.2 `te_`1''
+
+	* calculate percent increase
+local `1'_per = (fmt_te_`1' / fmt_control_mean_`1')*100
+
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
 	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), ///
@@ -4109,9 +4122,15 @@ coefplot ///
 		eqrename(`1'1 = `"Direct Export (ITT)"' `1'2 = `"Direct Export (TOT)"' `2'1 = `"Export via intermediate (ITT)"' `2'2 = `"Export via intermediate  (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+				note("{bf:Note}:" "The control group endline average is `fmt_control_mean_`1''.", span) ///
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
+
+
+ // need to test this:
+	// mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ")") mlabposition(12) mlabgap(*2)
+	// https://www.statalist.org/forums/forum/general-stata-discussion/general/1577775-placing-text-label-above-and-below-marker-in-a-coefplot-generated-plot
 
 end
 
@@ -4119,6 +4138,8 @@ end
 exp_ext export_1 export_2, gen(exp_ext)
 
 }
+
+ivreg2 export_1 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 
 **************** Reason of not exporting reasons ****************
 
