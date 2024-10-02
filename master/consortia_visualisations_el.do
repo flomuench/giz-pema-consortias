@@ -291,12 +291,30 @@ betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
 		legend (pos(6) row(1))
 graph export correct_inno_points_el.png, replace
 
-
-betterbar ca_rel_growth if surveyround == 3, over(treatment) barlab ci v ///
-	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
+lab var ca_rel_growth "Growth relative to baseline"
+betterbar ca_rel_growth if surveyround == 3 & ca_rel_growth <= 6.5, over(treatment) barlab ci v ///
+	ylabel(0(.1)2,labsize(medium) angle(horizontal)) ///
 	xlabel(, labsize(medium)) ///
 	legend (pos(6) row(1)) 
 
+	
+twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity ca_rel_growth if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+		xtitle("Growth rate of sales relative to baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 
+			   
+twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+		xtitle("Growth rate of sales relative to baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 
+	
+	
 * Export: direct, indirect, no export
 graph bar (mean) export_1 export_2 export_3 if surveyround == 3, over(take_up) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(6) row(6) label (1 "Direct export") label (2 "Indirect export") ///
