@@ -283,6 +283,20 @@ cd "${master_output}/figures/endline/export"
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Export"), bold
 
+*** FOR PRESENTATION
+lab var export_1 "Exported 2023/2024"
+betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
+	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
+	xlabel(, labsize(medium)) ///
+		legend (pos(6) row(1))
+graph export correct_inno_points_el.png, replace
+
+
+betterbar ca_rel_growth if surveyround == 3, over(treatment) barlab ci v ///
+	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
+	xlabel(, labsize(medium)) ///
+	legend (pos(6) row(1)) 
+
 * Export: direct, indirect, no export
 graph bar (mean) export_1 export_2 export_3 if surveyround == 3, over(take_up) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///
     legend (pos(6) row(6) label (1 "Direct export") label (2 "Indirect export") ///
