@@ -51,6 +51,7 @@ set scheme s1color
 		
 	}
 }
+	
 
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
@@ -3998,6 +3999,8 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 
 }
 
+
+
 *** Tables for presentation
 {
 capture program drop exp_ext // enables re-running
@@ -4009,34 +4012,67 @@ version 16							// define Stata version 15 used
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
+						* for latex table
+					estadd scalar control_mean = r(mean)
+					estadd scalar control_sd = r(sd)
+						* for  coefplots
+					local control_mean_`var' = r(mean)
+					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_control_mean_`var'')*100			
+				
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
 
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
+						* for latex table
+					estadd scalar control_mean = r(mean)
+					estadd scalar control_sd = r(sd)
+						* for  coefplots
+					local control_mean_`var' = r(mean)
+					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_control_mean_`var'')*100		
         }
 		}
 		
@@ -4097,28 +4133,108 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prefoot("\hline") ///
 				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
-			* coefplot
+			* coefplots
+{
+* retrieve & format TOT TE
+*local te_`1' = e(b)[1,1]
+*local fmt_te_`1' : display %3.2f `te_`1''
+
+	* retrieve & format control mean
+*sum `1' if treatment == 0 & surveyround == 3
+*local control_mean_`1' = r(mean)
+*local fmt_control_mean_`1' : display  %3.2f `control_mean_`1''
+
+	* calculate percent increase
+*local `1'_per = (`fmt_te_`1'' / `fmt_control_mean_`1'')*100
+
+		* cfp 1: direction & significance (CI)
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
 	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		title("Exported in 2023/24") ///
 		levels(95) ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 		eqrename(`1'1 = `"Direct Export (ITT)"' `1'2 = `"Direct Export (TOT)"' `2'1 = `"Export via intermediate (ITT)"' `2'2 = `"Export via intermediate  (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
+		leg(off) /// 
+				note("{bf:Note}:" "The control group endline average direct export is `fmt_control_mean_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfplot1, replace)
+gr export el_`generate'_cfplot1.pdf, replace
 
+
+		* cfp 2: magnitude & significance (p-value)
+coefplot ///
+	(`1'1,  pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
+	(`1'2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
+	(`2'1, pstyle(p2)) ///
+	(`2'2, pstyle(p2)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		title("Exported in 2023/24") ///
+		levels(95) ///
+		ysize(5) xsize(10) /// specifies height width ratio for whole graph as in latex presentation
+		eqlabels(, labsize(medium)) ///
+		eqrename(`1'1 = `"Direct Export (ITT)"' `1'2 = `"Direct Export (TOT)"' `2'1 = `"Export via intermediate (ITT)"' `2'2 = `"Export via intermediate  (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) /// 
+				note("{bf:Note}:" "The control group endline average direct export is `fmt_control_mean_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfplot2, replace)
+gr export el_`generate'_cfplot2.pdf, replace
+
+		
+		* cfp 3: comparison with other studies
+coefplot ///
+	(`1'1,  pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ")") ///
+	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
+	(`1'2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ")") ///
+	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
+	(`1'2, pstyle(p1) ///
+	mlabel("0.09 in Makioka (2021, JPN)") ///
+	mlabposition(0) mlabgap(*2) offset(-0.15) msymbol(none) noci mlabsize(medium))  ///
+	(`1'2, pstyle(p1) ///
+	mlabel("0.08 pp in Munch & Schaur (2018, DNK)") ///
+	mlabposition(6) mlabgap(*2) offset(-0.25) msymbol(none) noci mlabsize(medium))  ///
+	(`2'1, pstyle(p2)) ///
+	(`2'2, pstyle(p2)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		title("Exported in 2023/24") ///
+		levels(95) ///
+		ysize(5) xsize(10) /// specifies height width ratio for whole graph as in latex presentation
+		eqlabels(, labsize(medium)) ///
+		eqrename(`1'1 = `"Direct Export (ITT)"' `1'2 = `"Direct Export (TOT)"' `2'1 = `"Export via intermediate (ITT)"' `2'2 = `"Export via intermediate  (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) /// 
+				note("{bf:Note}:" "The control group endline average direct export is `fmt_control_mean_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfplot3, replace)
+gr export el_`generate'_cfplot3.pdf, replace	
+		
+		
+}
+		
+ // need to test this:
+//https://www.statalist.org/forums/forum/general-stata-discussion/general/1577775-placing-text-label-above-and-below-marker-in-a-coefplot-generated-plot
+
+	// https://www.statalist.org/forums/forum/general-stata-discussion/general/1500621-formatting-numbers-saved-in-a-local-and-using-these-in-a-text-output
+	
 end
 
 	* apply program to export - extensive margin
 exp_ext export_1 export_2, gen(exp_ext)
 
 }
+
 
 **************** Reason of not exporting reasons ****************
 
