@@ -284,6 +284,7 @@ putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 3: Export"), bold
 
 *** FOR PRESENTATION
+	* Export dummy
 lab var export_1 "Exported 2023/2024"
 betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
 	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
@@ -291,12 +292,31 @@ betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
 		legend (pos(6) row(1))
 graph export correct_inno_points_el.png, replace
 
+	* Export countries
+betterbar exp_pays_w95 if surveyround == 3, over(treatment) barlab ci v ///
+	ylabel(0(.5)2,labsize(medium) angle(horizontal)) ///
+	xlabel(, labsize(medium)) ///
+		legend (pos(6) row(1))
+graph export correct_inno_points_el.png, replace
+
+	* Sales growthS
 lab var ca_rel_growth "Growth relative to baseline"
 betterbar ca_rel_growth if surveyround == 3 & ca_rel_growth <= 6.5, over(treatment) barlab ci v ///
 	ylabel(0(.1)2,labsize(medium) angle(horizontal)) ///
 	xlabel(, labsize(medium)) ///
 	legend (pos(6) row(1)) 
 
+	
+ksmirnov ca_rel_growth if surveyround == 3 & ca_rel_growth < 6.5, by(treatment)
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(treatment)
+
+ksmirnov ca_w95_rel_growth if surveyround == 3, by(take_up)
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(take_up)
+ttest ca_rel_growth_w95 if surveyround == 3, by(take_up)
+
+
+reg ca_rel_growth_w95 i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+ivreg2 ca_rel_growth_w95 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 	
 twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
         (kdensity ca_rel_growth if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
@@ -305,6 +325,35 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(m
                order(1 "Treatment group" ///
                      2 "Control group") ///
                col(1) pos(6) ring(6)) 
+			   
+twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity ca_rel_growth if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+		xtitle("Growth rate of sales relative to baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 
+			   
+			   
+			   
+twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity ca_rel_growth_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+		xtitle("Growth rate of sales relative to baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Take-up = 1" ///
+                     2 "Take-up = 0 (incl. control group)") ///
+               col(1) pos(6) ring(6)) 
+			   
+twoway  (kdensity profit_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity profit_rel_growth_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+		xtitle("Growth rate of profits relative to baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Take-up = 1" ///
+                     2 "Take-up = 0 (incl. control group)") ///
+               col(1) pos(6) ring(6)) 
+			   
+			   
+			   
 			   
 twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
         (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(green) yaxis(2)  bw(.5)), ///
@@ -374,18 +423,18 @@ graph bar (mean) export_41 export_42 export_43 export_44 export_45 if surveyroun
 
 *No of export destinations
 sum exp_pays
-stripplot exp_pays if surveyround == 3, by(treatment) jitter(4) vertical ///
+stripplot exp_pays_w95 if surveyround == 3, by(treatment, note("")) jitter(4) vertical ///
 		ytitle("Number of countries") ///
-		title("Number of export countries",size(medium) pos(12)) ///
+		ylabel(0(1)5) ///
 		name(el_exp_pays_treat, replace)
     gr export el_exp_pays_treat.png, width(5000) replace
 	putpdf paragraph, halign(center) 
 	putpdf image el_exp_pays_treat.png, width(5000)
 	putpdf pagebreak
 
-stripplot exp_pays if surveyround == 3, by(take_up) jitter(4) vertical ///
+stripplot exp_pays_w95 if surveyround == 3, by(take_up, note("")) jitter(4) vertical ///
 		ytitle("Number of countries") ///
-		title("Number of export countries",size(medium) pos(12)) ///
+		ylabel(0(1)5) ///
 		name(el_exp_pays_takeup, replace)
     gr export el_exp_pays_takeup.png, width(5000) replace
 	putpdf paragraph, halign(center) 
