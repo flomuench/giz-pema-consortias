@@ -3562,8 +3562,10 @@ foreach outcome of local outcomes {
 
 ****************************  export wins 99th ***************************
 {
-local outcomes exp_pays_w99  // exp_pays_w99 "exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_w99" //
+	
+// exp_pays_w99 "exp_pays_w99 exp_pays_ssa_w99 clients_w99 clients_ssa_w99" //
 *local outcomes "exp_pays_w95 exp_pays_ssa_w95 clients_w95 clients_ssa_w95" // ACTIVATE FOR 95 WINS
+local outcomes "exp_pays_w95" 
 local conditions "operation_export==0 operation_export==1"
 
 foreach outcome of local outcomes {
@@ -3575,8 +3577,8 @@ foreach outcome of local outcomes {
 		gettoken group groups : groups
 
 			
-					capture confirm variable `outcome'_y0
-					if _rc == 0 { // If `outcome'_y0 exists
+			capture confirm variable `outcome'_y0
+			if _rc == 0 { // If `outcome'_y0 exists
 
 						// ITT: ANCOVA plus stratification dummies
 						eststo `outcome'_`group'1: reg `outcome' i.treatment c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
@@ -3585,6 +3587,9 @@ foreach outcome of local outcomes {
 						quietly ereturn display
 						matrix b = r(table) // access p-values for mht
 						scalar `outcome'_`group'1_p1 = b[4,2]
+						* add to coefplot
+						local itt_`outcome'_`group' = r(table)[1,2]
+						local fmt_itt_`outcome'_`group' : display %3.2f `itt_`outcome'_`group''	
 
 						// ATT, IV
 						eststo `outcome'_`group'2: ivreg2 `outcome' c.`outcome'_y0 i.missing_bl_`outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
@@ -3593,66 +3598,62 @@ foreach outcome of local outcomes {
 						quietly ereturn display // provides same table but with r(table)
 						matrix b = r(table)
 						scalar `outcome'_`group'2_p2 = b[4,1]
+						* add to coefplot
+						local att_`outcome'_`group' = e(b)[1,1]
+						local fmt_att_`outcome'_`group' : display %3.2f `att_`outcome'_`group''	
+						
+						// Calculate control group mean
+					sum `outcome' if treatment == 0 & surveyround == 3 & `cond'
+						* for latex table
+					estadd scalar c_m_`group' = r(mean)
+					estadd scalar control_sd_`group' = r(sd)
+						* for  coefplots
+					local c_m_`outcome'_`group' = r(mean)
+					local fmt_c_m_`outcome'_`group' : display  %3.2f `c_m_`outcome'_`group''
+					
+					// Calculate percent change
+					local `outcome'_per_itt_`group' = (`fmt_itt_`outcome'_`group'' / `fmt_c_m_`outcome'_`group'')*100
+					local `outcome'_per_att_`group' = (`fmt_att_`outcome'_`group'' / `fmt_c_m_`outcome'_`group'')*100		
+						
+						
 
 					} 
 					else { // If `outcome'_y0 does not exist
 
-						// ITT: ANCOVA plus stratification dummies (without `outcome'_y0 and missing_bl_`outcome')
+						// ITT: ANCOVA plus stratification dummies
 						eststo `outcome'_`group'1: reg `outcome' i.treatment i.strata_final if `cond' & surveyround==3, cluster(consortia_cluster)
-						estadd local bl_control "No"
+						estadd local bl_control "Yes"
 						estadd local strata_final "Yes"
 						quietly ereturn display
 						matrix b = r(table) // access p-values for mht
 						scalar `outcome'_`group'1_p1 = b[4,2]
 
-						// ATT, IV (without `outcome'_y0 and missing_bl_`outcome')
+						// ATT, IV
 						eststo `outcome'_`group'2: ivreg2 `outcome' i.strata_final (take_up = i.treatment) if `cond' & surveyround==3, cluster(consortia_cluster) first
-						estadd local bl_control "No"
+						estadd local bl_control "Yes"
 						estadd local strata_final "Yes"
 						quietly ereturn display // provides same table but with r(table)
 						matrix b = r(table)
 						scalar `outcome'_`group'2_p2 = b[4,1]
+						
+						// Calculate control group mean
+					sum `outcome' if treatment == 0 & surveyround == 3 & `cond'
+						* for latex table
+					estadd scalar c_m_`group' = r(mean)
+					estadd scalar control_sd_`group' = r(sd)
+						* for  coefplots
+					local c_m_`outcome'_`group' = r(mean)
+					local fmt_c_m_`outcome'_`group' : display  %3.2f `c_m_`outcome'_`group''
+					
+					// Calculate percent change
+					local `outcome'_per_itt_`group' = (`fmt_itt_`outcome''_`group'' / `fmt_c_m_`outcome''_`group'')*100
+					local `outcome'_per_att_`group' = (`fmt_att_`outcome''_`group'' / `fmt_c_m_`outcome''_`group'')*100		
+						
 					}
 				}
-					
-	capture confirm variable `outcome'_y0
-	if _rc == 0 { // If `outcome'_y0 exists
-		// ITT results table
-		local regressions `outcome'_xp1 `outcome'_noxp1
-		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", replace ///
-			prehead("\begin{table}[!h] \centering \\ \caption{Treatment effect on "`outcome_label'"} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{6}{c}} \hline\hline") ///
-			posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
-			fragment ///
-			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-			mlabels(, depvars) /// use dep vars labels as model title
-			star(* 0.1 ** 0.05 *** 0.01) ///
-			nobaselevels ///
-			label      /// specifies EVs have label
-			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
-			pattern(1 1 1 1)) ///
-			collabels(none) /// do not use statistics names below models
-			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
-			noobs
-		
-		// TOT results table
-		local regressions `outcome'_xp2 `outcome'_noxp2
-		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", append ///
-			fragment ///
-			posthead("\hline \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-			cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-			drop(_cons *.strata_final  ?.missing_bl_* *_y0) ///
-			star(* 0.1 ** 0.05 *** 0.01) ///
-			mgroups("Agri-food" "Handicrafts" "Consulting" "Digital", ///
-			pattern(1 1 1 1)) ///
-			mlabels(none) nonumbers /// do not use varnames as model titles
-			collabels(none) /// do not use statistics names below models
-			nobaselevels ///
-			label      /// specifies EVs have label
-			prefoot("\hline") ///
-			postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
-	}
-	else {
+
+* latex table
+{
 				// ITT results table
 		local regressions `outcome'_xp1 `outcome'_noxp1
 		esttab `regressions' using "rt_hetero_pole_`outcome'.tex", replace ///
@@ -3687,42 +3688,46 @@ foreach outcome of local outcomes {
 			label      /// specifies EVs have label
 			prefoot("\hline") ///
 			postfoot("\hline\hline\hline \\ \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. QI perception is a z-score indices calculated following Kling et al. (2007). Small corresponds to firms with less or 25 employees, medium more than 25 and less or 70 employees, and large to more than 70 and up to 200 employees at baseline. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}")
-	}
-
-    // Coefficient plot for 95% confidence interval
-    coefplot ///
-        (`outcome'_xp1, pstyle(p1)) (`outcome'_xp2, pstyle(p1)) ///
-        (`outcome'_noxp1, pstyle(p2)) (`outcome'_noxp2, pstyle(p2)), ///
-        keep(*treatment take_up) drop(_cons) xline(0) ///
-        asequation /// name of model is used
-        swapnames /// swaps coeff & equation names after collecting result
-        levels(95) /// 95th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
-        ytitle("", size(medium)) ///
-        xtitle("`outcome_label'") /// Use the variable label for xtitle
-        leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-        note("Confidence interval at the 95th percentile.", span size(small)) /// 95th only holds for large firms
-        name(elhete_`outcome'_95, replace)
-    gr export elhete_`outcome'_95.png, replace
-
-    // Coefficient plot for 99% confidence interval
-    coefplot ///
-        (`outcome'_xp1, pstyle(p1)) (`outcome'_xp2, pstyle(p1)) ///
-        (`outcome'_noxp1, pstyle(p2)) (`outcome'_noxp2, pstyle(p2)), ///
-        keep(*treatment take_up) drop(_cons) xline(0) ///
-        asequation /// name of model is used
-        swapnames /// swaps coeff & equation names after collecting result
-        levels(99) /// 99th percentile is null-effect, although tight
-        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
-        ytitle("", size(medium)) ///
-        xtitle("`outcome_label'") /// Use the variable label for xtitle
-        leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
-        note("Confidence interval at the 99th percentile.", span size(small)) /// 99th only holds for large firms
-        name(elhete_`outcome'_99, replace)
-    gr export elhete_`outcome'_99.png, replace
 }
 
-estimates clear
+	* coefplots
+    // Coefficient plot for 99% confidence interval
+    coefplot ///
+        (`outcome'_xp1, pstyle(p1)) ///
+		(`outcome'_xp2, pstyle(p1)) ///
+        (`outcome'_noxp1, pstyle(p2)) (`outcome'_noxp2, pstyle(p2)), ///
+        keep(*treatment take_up) drop(_cons) xline(0) xlabel(-2(0.5)2) ///
+        asequation /// name of model is used
+        swapnames /// swaps coeff & equation names after collecting result
+        levels(99) /// 
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
+        ytitle("", size(medium)) ///
+        xtitle("`outcome_label'") /// Use the variable label for xtitle
+        leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf:Note}:" "Control group EL average export countries {it:with prior export experience} is `fmt_c_m_`outcome'_xp', and `fmt_c_m_`outcome'_noxp' {it:without}." "Export countries are winsorised at the 95th percentile." "Confidence intervals are at the 99th percent level.", span size(medium)) ///
+        name(elhete1_`outcome'_99, replace)
+    gr export elhete1_`outcome'_99.pdf, replace
+	
+	    coefplot ///`outcome'_per_itt_`group'
+        (`outcome'_xp1, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``outcome'_per_itt_xp', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ")") mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
+		(`outcome'_xp2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``outcome'_per_att_xp', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ")") mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
+        (`outcome'_noxp1, pstyle(p2)) (`outcome'_noxp2, pstyle(p2)), ///
+        keep(*treatment take_up) drop(_cons) xline(0) xlabel(-2(0.5)2) ///
+        asequation /// name of model is used
+        swapnames /// swaps coeff & equation names after collecting result
+        levels(99) /// 
+        eqrename(`outcome'_xp1 = `"BL Export (ITT)"' `outcome'_xp2 = `"BL Export (TOT)"' `outcome'_noxp1 = `"BL No Export (ITT)"' `outcome'_noxp2 = `"BL No Export (TOT)"') ///
+        ytitle("", size(medium)) ///
+        xtitle("`outcome_label'") /// Use the variable label for xtitle
+        leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf:Note}:" "Control group EL average export countries {it:with prior export experience} is `fmt_c_m_`outcome'_xp', and `fmt_c_m_`outcome'_noxp' {it:without}." "Export countries are winsorised at the 95th percentile." "Confidence intervals are at the 99th percent level.", span size(medium)) ///
+        name(elhete2_`outcome'_99, replace)
+    gr export elhete2_`outcome'_99.pdf, replace
+	
+}
+
 }
 }
 **************************** clear memory & reload ***************************

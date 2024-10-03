@@ -122,6 +122,7 @@ program qvalues
 	end  
 
 }
+
 ***********************************************************************
 * 	PART 1: test for differential survey attrition 		
 ***********************************************************************
@@ -4354,36 +4355,70 @@ version 16							// define Stata version 15 used
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
-
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "Yes"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
+						* for latex table
+					estadd scalar c_m = r(mean)
+					estadd scalar control_sd = r(sd)
+						* for  coefplots
+					local c_m_`var' = r(mean)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100			
+				
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
 
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-				estadd local bl_control "No"
-				estadd local strata_final "Yes"
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
-				estadd scalar control_mean = r(mean)
-				estadd scalar control_sd = r(sd)
+						* for latex table
+					estadd scalar c_m = r(mean)
+					estadd scalar control_sd = r(sd)
+						* for  coefplots
+					local c_m_`var' = r(mean)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100		
         }
 		}
+
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -4432,7 +4467,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				fragment ///	
 				posthead("\hline \\ \multicolumn{4}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				stats(c_m control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
 				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
@@ -4464,10 +4499,48 @@ coefplot ///
 	
 gr export el_`generate'_cfp.png, replace
 
+
+		* cfp 1: direction & significance (CI)
+coefplot ///
+	(`2'1, pstyle(p1)) (`2'2, pstyle(p1)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-2(0.5)2) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+		eqrename(`2'1 = `"Export countries (ITT)"' `2'2 = `"Export countries  (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) /// 
+		note("{bf:Note}:" "The control group endline average direct export is `fmt_c_m_`2''." "The Export countries (TOT) is significant at the 10% level." "Export countries are winsorised at the 95th percentile." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfp1, replace)
+gr export el_`generate'_cfp1.pdf, replace
+
+
+		* cfp 2: magnitude & significance (p-value)
+coefplot ///
+	(`2'1,  pstyle(p2) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``2'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
+	(`2'2, pstyle(p2) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``2'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2) mlabsize(medium)),  ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-2(0.5)2) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		ysize(5) xsize(10) /// specifies height width ratio for whole graph as in latex presentation
+		eqlabels(, labsize(medium)) ///
+		eqrename(`2'1 = `"Export countries (ITT)"' `2'2 = `"Export countries  (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) /// 
+		note("{bf:Note}:" "The control group endline average direct export is `fmt_c_m_`2''." "Export countries are winsorised at the 95th percentile." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfp2, replace)
+gr export el_`generate'_cfp2.pdf, replace
+
 end
 
 	* apply program to export outcomes
-exp_int ihs_ca_exp_w99_k1 exp_pays_w99, gen(exp_int_majors99) // ihs_caexp2024_w99_k1 exp_pays_ssa_w99
+*exp_int ihs_ca_exp_w99_k1 exp_pays_w99, gen(exp_int_majors99) // ihs_caexp2024_w99_k1 exp_pays_ssa_w99
 
 exp_int ihs_ca_exp_w95_k1 exp_pays_w95, gen(exp_int_majors95) // ihs_caexp2024_w95_k1 exp_pays_ssa_w95
 

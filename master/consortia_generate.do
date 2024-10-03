@@ -867,30 +867,8 @@ drop temp_*
 }
 
 ***********************************************************************
-* 	PART 10:   generate survey-to-survey growth rates
+*	PART 10: Continuous outcomes (winsorization + ihs-transformation)
 ***********************************************************************
-	* accounting variables
-local acccounting_vars "ca ca_exp profit employes car_empl1 car_empl2"
-foreach var of local acccounting_vars {
-	bys id_plateforme (surveyround): g `var'_rel_growth = (`var' - `var'[1])/`var'[1]
-	bys id_plateforme (surveyround): g `var'_abs_growth = `var' - `var'[1]
-
-}
-
-
-
-/*
-use links to understand the code syntax for creating the accounting variables' growth rates:
--https://www.statalist.org/forums/forum/general-stata-discussion/general/1474123-changing-the-base-year-and-creating-an-index-from-that-year-in-a-time-series
-- https://www.stata.com/statalist/archive/2008-10/msg00661.html
-- https://www.stata.com/support/faqs/statistics/time-series-operators/
-
-*/
-
-***********************************************************************
-*	PART 11: Continuous outcomes (winsorization + ihs-transformation)
-***********************************************************************
-
 {
 	* log-transform capital invested
 foreach var of varlist capital ca employes {
@@ -1203,6 +1181,51 @@ gen net_confiance = net_services_confiance
 gen net_autre = net_services_autre
 
 }
+
+
+
+***********************************************************************
+* 	PART 11:   generate survey-to-survey growth rates
+***********************************************************************
+	* accounting variables
+local acccounting_vars "ca ca_exp ca_tun profit employes car_empl1 car_empl2"
+foreach var of local acccounting_vars {
+	bys id_plateforme (surveyround): g `var'_rel_growth = (`var' - `var'[1])/`var'[1]
+	bys id_plateforme (surveyround): g `var'_abs_growth = `var' - `var'[1]
+
+}
+
+	* winsorize growth rates
+local wins_vars "ca_rel_growth profit_rel_growth ca_abs_growth profit_abs_growth"
+foreach var of local wins_vars {
+		gen `var'_w99 = `var'
+		gen `var'_w95 = `var'
+}
+forvalues s = 1(1)3 {
+	foreach var of local wins_vars {	
+	quietly tab `var' if surveyround == `s'
+	if (`r(N)' > 0) {	
+		sum `var' if surveyround == `s', d
+		replace `var'_w99 = `r(p99)' if `var' > `r(p99)' & surveyround ==  `s' & `var' != .
+		*winsor `var' if surveyround == `s', suffix(_`s'w99) cuts(0 99)  // winsorize
+		*replace `var'_w99 = `var'_`s'w99 if surveyround ==  `s'
+		
+		sum `var' if surveyround == `s', d
+		replace `var'_w95 = `r(p95)' if `var' > `r(p95)' & surveyround ==  `s' & `var' != .
+		*winsor `var' if surveyround == `s', suffix(_`s'w95) cuts(0 95)  // winsorize
+		*replace `var'_w95 = `var'_`s'w95 if surveyround ==  `s'
+				}
+			}
+		}
+
+
+/*
+use links to understand the code syntax for creating the accounting variables' growth rates:
+-https://www.statalist.org/forums/forum/general-stata-discussion/general/1474123-changing-the-base-year-and-creating-an-index-from-that-year-in-a-time-series
+- https://www.stata.com/statalist/archive/2008-10/msg00661.html
+- https://www.stata.com/support/faqs/statistics/time-series-operators/
+
+*/
 
 
 ***********************************************************************
