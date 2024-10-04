@@ -331,7 +331,178 @@ replace net_services_confiance = 1 if id_plateforme ==1224
 replace net_services_autre = 1 if id_plateforme ==1224
 replace net_services_other = "Collaboration avec d'autres entreprises" if id_plateforme ==1224
 
+
+replace net_services_pratiques = 1 if id_plateforme ==1019
+replace net_services_produits= 1 if id_plateforme ==1019
+replace net_services_mark = 1 if id_plateforme ==1019
+replace net_services_sup= 0 if id_plateforme ==1019
+replace net_services_contract= 0  if id_plateforme ==1019
+replace net_services_confiance = 1 if id_plateforme ==1019
+replace net_services_autre = 1 if id_plateforme ==1019
+replace net_services_other = "avoir des contacts pour echanger les call for applications des fond d'investissement." if id_plateforme ==1019
+
+
+replace net_services_pratiques = 0 if id_plateforme ==1043
+replace net_services_produits= 1 if id_plateforme ==1043
+replace net_services_mark = 1 if id_plateforme ==1043
+replace net_services_sup= 1 if id_plateforme ==1043
+replace net_services_contract= 1  if id_plateforme ==1043
+replace net_services_confiance = 1 if id_plateforme ==1043
+replace net_services_autre = 1 if id_plateforme ==1043
+replace net_services_other = "Collaboration entre les entrepreneurs. Elle a donnée l'exemple de si sa machine tombe panne, elle peut utiliser celle d'un autre entrepreneur du meme secteur. " if id_plateforme ==1043
+
+replace net_services_pratiques = 1 if id_plateforme ==1046
+replace net_services_produits= 1 if id_plateforme ==1046
+replace net_services_mark = 1 if id_plateforme ==1046
+replace net_services_sup= 1 if id_plateforme ==1046
+replace net_services_contract= 1  if id_plateforme ==1046
+replace net_services_confiance = 1 if id_plateforme ==1046
+replace net_services_autre = 0 if id_plateforme ==1046
+
+
+replace net_services_pratiques = 0 if id_plateforme ==1087
+replace net_services_produits= 1 if id_plateforme ==1087
+replace net_services_mark = 1 if id_plateforme ==1087
+replace net_services_sup= 1 if id_plateforme ==1087
+replace net_services_contract= 0  if id_plateforme ==1087
+replace net_services_confiance = 0 if id_plateforme ==1087
+replace net_services_autre = 0 if id_plateforme ==1087
+
+replace net_services_pratiques = 1 if id_plateforme ==1096
+replace net_services_produits= 1 if id_plateforme ==1096
+replace net_services_mark = 1 if id_plateforme ==1096
+replace net_services_sup= 1 if id_plateforme ==1096
+replace net_services_contract= 0  if id_plateforme ==1096
+replace net_services_confiance = 1 if id_plateforme ==1096
+replace net_services_autre = 0 if id_plateforme ==1096
+
+replace net_services_pratiques = 0 if id_plateforme ==1107
+replace net_services_produits= 0 if id_plateforme ==1107
+replace net_services_mark = 1 if id_plateforme ==1107
+replace net_services_sup= 1 if id_plateforme ==1107
+replace net_services_contract= 0  if id_plateforme ==1107
+replace net_services_confiance = 0 if id_plateforme ==1107
+replace net_services_autre = 0 if id_plateforme ==1107
+
+replace net_services_pratiques = 1 if id_plateforme ==1112
+replace net_services_produits= 1 if id_plateforme ==1112
+replace net_services_mark = 1 if id_plateforme ==1112
+replace net_services_sup= 1 if id_plateforme ==1112
+replace net_services_contract= 0  if id_plateforme ==1112
+replace net_services_confiance = 1 if id_plateforme ==1112
+replace net_services_autre = 0 if id_plateforme ==1112
+
+replace net_services_pratiques = 1 if id_plateforme ==1117
+replace net_services_produits= 0 if id_plateforme ==1117
+replace net_services_mark = 1 if id_plateforme ==1117
+replace net_services_sup= 1 if id_plateforme ==1117
+replace net_services_contract= 1 if id_plateforme ==1117
+replace net_services_confiance = 1 if id_plateforme ==1117
+replace net_services_autre = 0 if id_plateforme ==1117
+
+replace net_services_pratiques = 0 if id_plateforme ==1138
+replace net_services_produits= 1 if id_plateforme ==1138
+replace net_services_mark = 1 if id_plateforme ==1138
+replace net_services_sup= 1 if id_plateforme ==1138
+replace net_services_contract= 1  if id_plateforme ==1138
+replace net_services_confiance = 1 if id_plateforme ==1138
+replace net_services_autre = 1 if id_plateforme ==1138
+replace net_services_other = " Partenariat avec un autre entrepreneur pour elargir le cercle de reseau professionnel" if id_plateforme ==1138
+
+replace net_services_pratiques = 1 if id_plateforme ==1151
+replace net_services_produits= 1 if id_plateforme ==1151
+replace net_services_mark = 1 if id_plateforme ==1151
+replace net_services_sup= 1 if id_plateforme ==1151
+replace net_services_contract= 0  if id_plateforme ==1151
+replace net_services_confiance = 1 if id_plateforme ==1151
+replace net_services_autre = 0 if id_plateforme ==1151
+
+replace net_services_pratiques = 0 if id_plateforme ==1191
+replace net_services_produits= 1 if id_plateforme ==1191
+replace net_services_mark = 1 if id_plateforme ==1191
+replace net_services_sup= 1 if id_plateforme ==1191
+replace net_services_contract= 1  if id_plateforme ==1191
+replace net_services_confiance = 0 if id_plateforme ==1191
+replace net_services_autre = 0 if id_plateforme ==1191
+
+replace net_services_pratiques = 1 if id_plateforme ==1195
+replace net_services_produits= 1 if id_plateforme ==1195
+replace net_services_mark = 0 if id_plateforme ==1195
+replace net_services_sup= 0 if id_plateforme ==1195
+replace net_services_contract= 1 if id_plateforme ==1195
+replace net_services_confiance = 1 if id_plateforme ==1195
+replace net_services_autre = 0 if id_plateforme ==1195
+
+replace net_services_pratiques = 1 if id_plateforme ==1205
+replace net_services_produits= 1 if id_plateforme ==1205
+replace net_services_mark = 0 if id_plateforme ==1205
+replace net_services_sup= 1 if id_plateforme ==1205
+replace net_services_contract= 1 if id_plateforme ==1205
+replace net_services_confiance = 1 if id_plateforme ==1205
+replace net_services_autre = 1 if id_plateforme ==1205
+replace net_services_other = "partage de matiere premiere en cas de besoin." if id_plateforme ==1205
+
+replace net_services_pratiques = 1 if id_plateforme ==1234
+replace net_services_produits= 1 if id_plateforme ==1234
+replace net_services_mark = 0 if id_plateforme ==1234
+replace net_services_sup= 1 if id_plateforme ==1234
+replace net_services_contract= 1 if id_plateforme ==1234
+replace net_services_confiance = 1 if id_plateforme ==1234
+replace net_services_autre = 1 if id_plateforme ==1234
+
+replace net_services_pratiques = 1 if id_plateforme ==1245
+replace net_services_produits= 1 if id_plateforme ==1245
+replace net_services_mark = 1 if id_plateforme ==1245
+replace net_services_sup= 0 if id_plateforme ==1245
+replace net_services_contract= 0 if id_plateforme ==1245
+replace net_services_confiance = 1 if id_plateforme ==1245
+replace net_services_autre = 0 if id_plateforme ==1245
+
+replace net_services_pratiques = 1 if id_plateforme ==1248
+replace net_services_produits= 1 if id_plateforme ==1248
+replace net_services_mark = 1 if id_plateforme ==1248
+replace net_services_sup= 0 if id_plateforme ==1248
+replace net_services_contract= 1 if id_plateforme ==1248
+replace net_services_confiance = 1 if id_plateforme ==1248
+replace net_services_autre = 0 if id_plateforme ==1248
+
+replace net_services_pratiques = 1 if id_plateforme ==1234
+replace net_services_produits= 1 if id_plateforme ==1234
+replace net_services_mark = 0 if id_plateforme ==1234
+replace net_services_sup= 1 if id_plateforme ==1205
+replace net_services_contract= 1 if id_plateforme ==1234
+replace net_services_confiance = 1 if id_plateforme ==1234
+replace net_services_autre = 1 if id_plateforme ==1234
+
+replace net_services_pratiques = 1 if id_plateforme ==1234
+replace net_services_produits= 1 if id_plateforme ==1234
+replace net_services_mark = 0 if id_plateforme ==1234
+replace net_services_sup= 1 if id_plateforme ==1205
+replace net_services_contract= 1 if id_plateforme ==1234
+replace net_services_confiance = 1 if id_plateforme ==1234
+replace net_services_autre = 1 if id_plateforme ==1234
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
 
 
 *************************************************************************
