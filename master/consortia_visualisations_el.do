@@ -352,9 +352,47 @@ twoway  (kdensity profit_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l
                      2 "Take-up = 0 (incl. control group)") ///
                col(1) pos(6) ring(6)) 
 			   
+
+twoway  (kdensity ca_abs_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_abs_growth_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Nominal Growth of Sales Relative to Baseline") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Take-up = 1" ///
+                     2 "Take-up = 0 (incl. control group)") ///
+               col(1) pos(6) ring(6)) 	
+			  
 			   
-			   
-			   
+egen tot_sales_el_t = sum(ca_w95) if treatment == 1 & surveyround == 3		   
+egen tot_sales_el_c = sum(ca_w95) if treatment == 0 & surveyround == 3	  
+sum tot_sales_el_t
+local t = r(mean)	 
+sum tot_sales_el_c   
+local c = r(mean)
+
+display `t' - `c' 			// 5,095,520 --> additional sales!
+display (`t' - `c')*0.19	// 968,148.8 --> additional tax return!
+
+
+egen tot_sales_el_t = sum(ca_w95) if treatment == 1 & surveyround == 3		   
+egen tot_sales_el_c = sum(ca_w95) if treatment == 0 & surveyround == 3	  
+sum tot_sales_el_t
+local t = r(mean)	 
+sum tot_sales_el_c   
+local c = r(mean)
+
+display `t' - `c'
+display (`t' - `c')*0.19
+
+
+twoway  (kdensity ca_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Take-up = 1" ///
+                     2 "Take-up = 0 (incl. control group)") ///
+               col(1) pos(6) ring(6)) 	
+
+	
 twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
         (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(green) yaxis(2)  bw(.5)), ///
 		xtitle("Growth rate of sales relative to baseline") ///
