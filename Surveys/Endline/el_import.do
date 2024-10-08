@@ -37,24 +37,26 @@ rename Firmname_el new_firmname
 rename Product el_products
 rename Autresأخرى products_other
 
-rename V inno_proc_other
+rename W inno_proc_other
 lab var inno_proc_other "Example of another innovation of process"
 
-rename X inno_mot_other
+rename Y inno_mot_other
 lab var inno_mot_other "Binary answer of other source of inspiration"
 
 // to check if not example
-rename AB export_other
+rename AC export_other
 lab var export_other "Binary answer of other reasons to not export?"
 
-rename BL man_sources_other
+rename BM man_sources_other
 lab var man_sources_other "Example of another source of new management strategy"
 
-rename CY profit_2023_category_gain
-rename DA profit_2024_category_gain
-rename DL int_other
+rename CA net_services_other
 
-rename BZ net_services_other
+
+rename CZ profit_2023_category_gain
+rename DB profit_2024_category_gain
+rename DM int_other
+
 rename vousenmesuredenousfournirl accord_q29
 
 
