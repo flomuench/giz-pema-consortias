@@ -9,9 +9,9 @@
 *				PART 3: Endline 
 *				PART 4: Intertemporal descriptive statistics															
 *																	  
-*	Author:  	Fabian Scheifele & Kaïs Jomaa							    
+*	Author:  	Fabian Scheifele & Kaïs Jomaa & Eya Hanefi						    
 *	ID variable: id_platforme		  					  
-*	Requires:  	 ecommerce_data_final.dta
+*	Requires:  	 consortia_data_final.dta
 ***********************************************************************
 * 	PART0: load data
 ***********************************************************************
@@ -24,8 +24,8 @@ set scheme burd
 *temporarily generate a variable that compares only companies that took up to control
 
 gen take_up_control=.
-replace take_up_co~l=1 if take_up==1 & treatment==1
-replace take_up_co~l =0 if take_up==0 & treatment==0
+replace take_up_co~l=1 if take_up_per==1 & treatment==1
+replace take_up_co~l =0 if take_up_per==0 & treatment==0
 label define take_up_col 1 "Participant" 0 "Comparison Group"
 
 ***********************************************************************
