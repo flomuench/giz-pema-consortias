@@ -660,20 +660,35 @@ version 16							// define Stata version 15 used
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+				
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+						* add to latex table
+					estadd local bl_control "Yes"
+					estadd local strata_final "Yes"
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+						* for latex table
+					estadd scalar control_mean = r(mean)
+					estadd scalar control_sd = r(sd)
+						* for  coefplots
+					local control_mean_`var' = r(mean)
+					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_control_mean_`var'')*100			
 
 		}
 		
@@ -739,14 +754,33 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
+		eqlabels(, labsize(medium)) ///
 		eqrename(`1'1 = `"Monthly business `=char(13)'`=char(10)' discussions (ITT)"' `1'2 = `"Monthly business `=char(13)'`=char(10)' discussions (TOT)"') ///
-		xtitle("Persons", size(medsmall)) ///  
-		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		xtitle("Persons", size(medium)) ///  
+		leg(off) ysize(5) xsize(10)  /// xsize controls aspect ratio, makes graph wider & reduces its height 
 		ysc(outergap(-35)) /// negative outer gap --> reduces space btw coef names & plot
-		note("{bf: Note}": "The control group endline average is 8." "Variables are winsorized at the 95th percentile.", span) ///
-		name(el_`generate'_cfp, replace)
-	
-gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp.png", replace
+		note("{bf:Note}:" "The control group endline average is `fmt_control_mean_`1''." "Variables are winsorized at the 95th percentile." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp1.png", replace
+		
+		
+coefplot ///
+	(`1'1, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") mlabposition(12) mlabgap(*2) mlabsize(medium)) ///
+	(`1'2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") mlabposition(12) mlabgap(*2) mlabsize(medium)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(0(1)10) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqlabels(, labsize(medium)) ///
+		eqrename(`1'1 = `"Monthly business `=char(13)'`=char(10)' discussions (ITT)"' `1'2 = `"Monthly business `=char(13)'`=char(10)' discussions (TOT)"') ///
+		xtitle("Persons", size(medium)) ///  
+		leg(off) ysize(5) xsize(10)  /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		ysc(outergap(-35)) /// negative outer gap --> reduces space btw coef names & plot
+		note("{bf:Note}:" "The control group endline average is `fmt_control_mean_`1''." "Variables are winsorized at the 95th percentile." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		name(el_`generate'_cfp2, replace)
+	gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp2.png", replace
 
 
 end
@@ -1728,9 +1762,8 @@ coefplot ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("{bf:Note}: 0.4 corresponds roughly to 2x the mean of the control group.", span) ///
 		ysc(outergap(-20)) ///
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
+		name(el_`generate'_cfp, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp.pdf", replace
 
 
 		* cfp 1: direction & significance (CI)
@@ -1746,17 +1779,17 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+		name(el_`generate'_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
 coefplot ///
 	(`1'1,  pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + 
 	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
 	(`1'2, pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") ///  + " equivalent to " + string(``1'_per_att', "%9.0f") + "%"
 	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
 	(`2'1, pstyle(p2)) ///
 	(`2'2, pstyle(p2)), ///
@@ -1770,8 +1803,8 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+		name(el_`generate'_cfp2, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp2.pdf", replace
 
 
 
@@ -2435,8 +2468,7 @@ coefplot ///
 		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height 
 		ysc(outergap(-50)) /// negative outer gap --> reduces space btw coef names & plot
 		name(el_`generate'_cfp, replace)
-	
-gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp.png", replace
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp.pdf", replace
 
 
 		* cfp 1: direction & significance (CI)
@@ -2453,17 +2485,17 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+		name(el_`generate'_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
 coefplot ///
 	(`1'1,  pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" +
 	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
 	(`1'2, pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// + " equivalent to " + string(``1'_per_att', "%9.0f") + "%"
 	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
 	(`2'1, pstyle(p2)) ///
 	(`2'2, pstyle(p2)), ///
@@ -2477,8 +2509,8 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+		name(el_`generate'_cfp2, replace)
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp2.pdf", replace
 
 
 
