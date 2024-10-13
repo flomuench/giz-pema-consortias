@@ -1762,9 +1762,8 @@ coefplot ///
 		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("{bf:Note}: 0.4 corresponds roughly to 2x the mean of the control group.", span) ///
 		ysc(outergap(-20)) ///
-		name(el_`generate'_cfplot, replace)
-	
-gr export el_`generate'_cfplot.png, replace
+		name(el_`generate'_cfp, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp.pdf", replace
 
 
 		* cfp 1: direction & significance (CI)
@@ -1780,17 +1779,17 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+		name(el_`generate'_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
 coefplot ///
 	(`1'1,  pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + 
 	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
 	(`1'2, pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") ///  + " equivalent to " + string(``1'_per_att', "%9.0f") + "%"
 	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
 	(`2'1, pstyle(p2)) ///
 	(`2'2, pstyle(p2)), ///
@@ -1804,8 +1803,8 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+		name(el_`generate'_cfp2, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp2.pdf", replace
 
 
 
@@ -2469,8 +2468,7 @@ coefplot ///
 		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height 
 		ysc(outergap(-50)) /// negative outer gap --> reduces space btw coef names & plot
 		name(el_`generate'_cfp, replace)
-	
-gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp.png", replace
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp.pdf", replace
 
 
 		* cfp 1: direction & significance (CI)
@@ -2487,17 +2485,17 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+		name(el_`generate'_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
 coefplot ///
 	(`1'1,  pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// " equivalent to " + string(``1'_per_itt', "%9.0f") + "%" +
 	mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///
 	(`1'2, pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") /// + " equivalent to " + string(``1'_per_att', "%9.0f") + "%"
 	mlabposition(12) mlabgap(*2) mlabsize(medium))  ///
 	(`2'1, pstyle(p2)) ///
 	(`2'2, pstyle(p2)), ///
@@ -2511,8 +2509,8 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
-		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+		name(el_`generate'_cfp2, replace)
+gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp2.pdf", replace
 
 
 
