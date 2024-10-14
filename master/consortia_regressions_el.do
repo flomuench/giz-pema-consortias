@@ -160,13 +160,40 @@ esttab `attrition' using "el_attrition.tex", replace ///
 
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
+	
+* define list of pre-treatment characteristics
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1"
+local management "mpi_points"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond "surveyround == 1 & id_plateforme != 1092 & treatment == 1"
+
+br id_plateforme pole el_take_up `vars' if el_take_up == 1 & treatment == 1 & surveyround == 1
 
 *take_up
 	*without outlier
-iebaltab ca ca_exp profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092 & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj) replace
-
-
-iebaltab ca_w95 ca_exp_w95 profit_w95 employes_w95 mpi net_coop_pos net_coop_neg net_size exp_pays_w95  if surveyround == 1 & id_plateforme != 1092 & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj) replace
+		* Take-up vs. Drop out across all consortia
+iebaltab `vars'  if `cond', ///
+	grpvar(el_take_up) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_el_tu_all_adj) replace
+	
+		* Take-up vs. Drop out across all but Digital consortium
+iebaltab `vars'  if `cond' & inlist(pole, 1,2,3), ///
+	grpvar(el_take_up) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_el_tu_nodig_adj) replace
+	
+		* Take-up vs. Drop out across all but Digital consortium
+iebaltab `vars'  if `cond' & inlist(pole, 4), ///
+	grpvar(el_take_up) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_el_tu_dig_adj) replace
 
 
 iebaltab ca ca_exp profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092 & inlist(pole, 1,2,3) & treatment == 1, grpvar(el_take_up) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok save(el_take_up_baltab_adj_aut) replace
@@ -1338,16 +1365,9 @@ rct_regression_coop netcoop2 netcoop3 netcoop7 netcoop8 netcoop9 netcoop1 netcoo
 
 }
 
-**************** net_coop ML/EL ****************
-{
-capture program drop rct_regression_coopsr // enables re-running
-program rct_regression_coopsr
-version 16							// define Stata version 15 used
-	syntax varlist(min=1 numeric), GENerate(string)
-local i = 1
-foreach var in `varlist' {
 
-    // (surveyround == 2)
+**** copied out
+   // (surveyround == 2)
     eststo `var'1_ml: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(consortia_cluster)
     estadd local bl_control "Yes"
     estadd local strata_final "Yes"
@@ -1372,6 +1392,50 @@ foreach var in `varlist' {
     sum `var' if treatment == 0 & surveyround == 3
     estadd scalar el_control_mean = r(mean)
     estadd scalar el_control_sd = r(sd)
+
+
+**************** net_coop ML/EL ****************
+{
+capture program drop rct_regression_coopsr // enables re-running
+program rct_regression_coopsr
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+local i = 1
+foreach var in `varlist' {
+		// Loop for surveyround == 2 and 3
+	foreach sr in 2 3 {
+    // ITT: ANCOVA plus stratification dummies
+    eststo `var'1_`sr': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == `sr', cluster(consortia_cluster)
+        // Add to LaTeX table
+        estadd local bl_control "Yes"
+        estadd local strata_final "Yes"
+        // Add to coefplot
+        local itt_`var'_`sr' = r(table)[1,2]
+        local fmt_itt_`var'_`sr' : display %3.2f `itt_`var'_`sr''
+
+    // ATT, IV regression
+    eststo `var'2_`sr': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == `sr', cluster(consortia_cluster) first
+        // Add to LaTeX table
+        estadd local bl_control "Yes"
+        estadd local strata_final "Yes"
+        // Add to coefplot
+        local att_`var'_`sr' = e(b)[1,1]
+        local fmt_att_`var'_`sr' : display %3.2f `att_`var'_`sr''
+
+    // Calculate control group mean
+    sum `var' if treatment == 0 & surveyround == `sr', d
+        // For LaTeX table
+        estadd scalar control_mean_sr`sr' = r(mean)
+        estadd scalar control_sd_sr`sr' = r(sd)
+        // For coefplots
+        local c_m_`var'_`sr' = r(p50)
+        local fmt_c_m_`var'_`sr' : display %3.2f `c_m_`var'_`sr''
+
+    // Calculate percent change
+    local `var'_per_itt_`sr' = (`fmt_itt_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+    local `var'_per_att_`sr' = (`fmt_att_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+}
+
 }
 
 	
@@ -1403,7 +1467,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		
 		* Put all regressions into one table
 			* Top panel: ITT
-		local regressions `1'1_ml `1'1_el `2'1_ml `2'1_el // adjust manually to number of variables 
+		local regressions `1'1_2 `1'1_3 `2'1_2 `2'1_3 // adjust manually to number of variables 
 		esttab `regressions' using "${master_regressiontables}/endline/regressions/network/rt_`generate'.tex", replace ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Network cooperation} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
@@ -1418,7 +1482,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2_ml `1'2_el  `2'2_ml `2'2_el     // adjust manually to number of variables 
+		local regressions `1'2_2 `1'2_3  `2'2_2 `2'2_3     // adjust manually to number of variables 
 		esttab `regressions' using "${master_regressiontables}/endline/regressions/network/rt_`generate'.tex", append ///
 				fragment ///	
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
@@ -1434,32 +1498,67 @@ esttab e(RW) using rw_`generate'.tex, replace
 				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
 				
-						* coefplot
+	* coefplot
+			* no effect sizes
 		coefplot ///
-			(`1'1_ml, pstyle(p1)) (`1'2_ml, pstyle(p1))  ///
-			(`2'1_ml, pstyle(p2)) (`2'2_ml, pstyle(p2)), ///
+			(`1'1_2, pstyle(p1)) (`1'2_2, pstyle(p1))  ///
+			(`2'1_2, pstyle(p2)) (`2'2_2, pstyle(p2)), ///
 				bylabel("Midline") ///
 				subtitle(, size(medlarge)) ///
 				asequation /// name of model is used
 				swapnames /// swaps coeff & equation names after collecting result
 				levels(95) ///
 				xtitle(, size(medlarge)) ///
-				eqrename(`1'1_ml = `"Positive terms (ITT)"' `1'2_ml = `"Positive terms (TOT)"' `2'1_ml = `"Negative terms (ITT)"' `2'2_ml = `"Negative Terms (TOT)"') ///
+				eqrename(`1'1_2 = `"Positive terms (ITT)"' `1'2_2 = `"Positive terms (TOT)"' `2'1_2 = `"Negative terms (ITT)"' `2'2_2 = `"Negative Terms (TOT)"') ///
 		|| ///
-			(`1'1_el, pstyle(p1)) (`1'2_el, pstyle(p1))  ///
-			(`2'1_el, pstyle(p2)) (`2'2_el, pstyle(p2)), /// 
+			(`1'1_3, pstyle(p1)) (`1'2_3, pstyle(p1))  ///
+			(`2'1_3, pstyle(p2)) (`2'2_3, pstyle(p2)), /// 
 				bylabel("Endline") ///
 				subtitle(, size(medlarge)) ///
 				asequation /// name of model is used
 				swapnames /// swaps coeff & equation names after collecting result
 				levels(95) ///
 				xtitle(, size(medlarge)) ///
-				eqrename(`1'1_el = `"Positive terms (ITT)"' `1'2_el = `"Positive terms (TOT)"' `2'1_el = `"Negative terms (ITT)"' `2'2_el = `"Negative Terms (TOT)"') ///
+				eqrename(`1'1_3 = `"Positive terms (ITT)"' `1'2_3 = `"Positive terms (TOT)"' `2'1_3 = `"Negative terms (ITT)"' `2'2_3 = `"Negative Terms (TOT)"') ///
 		||, ///
 		byopts(title("{bf:View of Business Interactions between Entrepreneurs}", justification(center)) note("{bf:Note}:" "All variables are counts of the 3 terms selected among 10 options." "Midline Negative Terms (TOT) is significant at the 10% level." "Negative: Jealousy, Protect business secrets, Risks, Conflict, Competition." "Positive: Cooperate, Trust, Learn, Partnership, Connect.", span size(medsmall)) leg(off)) ///
 		keep(*treatment take_up) drop(_cons *strata_final) xline(0) ///
-		name(netcoop_count_el_ml, replace)
-	gr export netcoop_count_el_ml.png, replace
+		name(el_coopcount_cfp1, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_coopcount_cfp1.pdf", replace
+
+				* include effect sizes
+		coefplot ///
+			(`1'1_2, pstyle(p1)) ///
+			(`1'2_2, pstyle(p1))  ///
+			mlabel(string(@b, "%9.2f") +" equivalent to " + string(``1'_per_att_2', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") mlabposition(12) mlabgap(*2)  mlabsize(medium))  ///
+			(`2'1_2, pstyle(p2)) ///
+			(`2'2_2, pstyle(p2))  ///
+			mlabel(string(@b, "%9.2f") +" equivalent to " + string(``1'_per_att_2', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") mlabposition(12) mlabgap(*2)  mlabsize(medium)), ///
+				bylabel("Midline") ///
+				subtitle(, size(medlarge)) ///
+				asequation /// name of model is used
+				swapnames /// swaps coeff & equation names after collecting result
+				levels(95) ///
+				xtitle(, size(medlarge)) ///
+				eqrename(`1'1_2 = `"Positive terms (ITT)"' `1'2_2 = `"Positive terms (TOT)"' `2'1_2 = `"Negative terms (ITT)"' `2'2_2 = `"Negative Terms (TOT)"') ///
+		|| ///
+			(`1'1_3, pstyle(p1)) ///
+			(`1'2_3, pstyle(p1)) ///
+			(`2'1_3, pstyle(p2)) ///
+			(`2'2_3, pstyle(p2))), /// 
+				bylabel("Endline") ///
+				subtitle(, size(medlarge)) ///
+				asequation /// name of model is used
+				swapnames /// swaps coeff & equation names after collecting result
+				levels(95) ///
+				xtitle(, size(medlarge)) ///
+				eqrename(`1'1_3 = `"Positive terms (ITT)"' `1'2_3 = `"Positive terms (TOT)"' `2'1_3 = `"Negative terms (ITT)"' `2'2_3 = `"Negative Terms (TOT)"') ///
+		||, ///
+		byopts(title("{bf:View of Business Interactions between Entrepreneurs}", justification(center)) note("{bf:Note}:" "All variables are counts of the 3 terms selected among 10 options." "Average negative terms in control at ML & EL is `fmt_c_m_net_coop_neg_2' & `fmt_c_m_net_coop_neg_3'." "Average negative terms in control at ML & EL is `fmt_c_m_net_coop_pos_2' & `fmt_c_m_net_coop_pos_3'."
+	"Negative: Jealousy, Protect business secrets, Risks, Conflict, Competition." "Positive: Cooperate, Trust, Learn, Partnership, Connect.", span size(medsmall)) leg(off)) ///
+		keep(*treatment take_up) drop(_cons *strata_final) xline(0) ///
+		name(el_coopcount_cfp2, replace)
+gr export "${master_regressiontables}/endline/regressions/confidence/el_coopcount_cfp2.pdf", replace
 			
 
 end
@@ -1468,6 +1567,9 @@ end
 rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 
 }
+
+
+
 
 
 }
