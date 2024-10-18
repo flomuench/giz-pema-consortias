@@ -27,6 +27,10 @@ capture program drop zscore /* drops the program programname */
 qui cap log c
 
 
+
+
+*test 
+
 	* install packages
 /*
 ssc install blindschemes, replace
