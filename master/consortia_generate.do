@@ -217,6 +217,30 @@ replace desistement_consortium = 1 if id_plateforme == 1242 & surveyround ==3
 
 replace take_up = 0 if id_plateforme == 1247 & surveyround ==3
 replace desistement_consortium = 1 if id_plateforme == 1247 & surveyround ==3
+
+* Mise à jour des drop out : modification faite par Eya le 18/10/2024 
+
+replace take_up = 0 if id_plateforme == 1159 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1159 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 985 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 985 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1031 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1031 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1074 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1074 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1004 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1004 & surveyround ==3 
+
+replace take_up = 0 if id_plateforme == 1098 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1098 & surveyround ==3
+
+replace take_up = 0 if id_plateforme == 1155 & surveyround ==3
+replace desistement_consortium = 1 if id_plateforme == 1155 & surveyround ==3
+
 }
 
 ***********************************************************************
