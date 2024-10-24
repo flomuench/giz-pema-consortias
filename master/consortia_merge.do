@@ -166,6 +166,7 @@ foreach var of local cst_vars_str {
 ***********************************************************************
 * 	PART 5: merge with participation data
 ***********************************************************************
+{
 *Note: here should the Présence des ateliers.xlsx be downloaded from teams, renamed and uploaded again in 6-master
 		*  import participation data
 preserve
@@ -232,6 +233,9 @@ graph hbar (percent) ,blabel(total, format(%9.0fc)) over(category)
 save "${implementation}/consortium_coaching_summary", replace
 drop if id_plateforme==.
 */
+
+}
+
 ***********************************************************************
 * 	PART 6: information from pii data that is missing in analysis data
 ***********************************************************************

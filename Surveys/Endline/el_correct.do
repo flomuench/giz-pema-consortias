@@ -685,33 +685,33 @@ replace ca = 0 if id_plateforme == 1193
 
 
 *Entreprise ne veut pas donner CA
-replace ca =. if id_palteforme == 1015
-replace ca_exp =. if id_palteforme == 1015
-replace ca_2024 =. if id_palteforme == 1015
-replace ca_exp_2024 =. if id_palteforme == 1015
+replace ca =. if id_plateforme == 1015
+replace ca_exp =. if id_plateforme == 1015
+replace ca_2024 =. if id_plateforme == 1015
+replace ca_exp_2024 =. if id_plateforme == 1015
 replace profit = . if id_plateforme==1015
 replace profit_2024 = . if id_plateforme==1015
-replace profit_2023_category_perte[20]=. if id_plateforme==1015
-replace profit_2024_category_perte[20]=. if id_plateforme==1015
-replace comp_ca2024_intervalles = . id_plateforme==1015
-replace comp_ca2023_intervalles = . id_plateforme==1015
+replace profit_2023_category_perte=. if id_plateforme==1015
+replace profit_2023_category_perte=. if id_plateforme==1015
+replace comp_ca2024_intervalles = . if id_plateforme==1015
+replace comp_ca2023_intervalles = . if id_plateforme==1015
 
 
-replace ca =. if id_palteforme == 1031
-replace ca_exp =. if id_palteforme == 1031
-replace ca_2024 =. if id_palteforme == 1031
-replace ca_exp_2024 =. if id_palteforme == 1031
+replace ca =. if id_plateforme == 1031
+replace ca_exp =. if id_plateforme == 1031
+replace ca_2024 =. if id_plateforme == 1031
+replace ca_exp_2024 =. if id_plateforme == 1031
 replace profit = . if id_plateforme==1031
 replace profit_2024 = . if id_plateforme==1031
-replace profit_2023_category_perte[20]=. if id_plateforme==1031
-replace profit_2024_category_perte[20]=. if id_plateforme==1031
-replace comp_ca2024_intervalles = . id_plateforme==1031
-replace comp_ca2023_intervalles = . id_plateforme==1031
+replace profit_2023_category_perte=. if id_plateforme==1031
+replace profit_2023_category_perte=. if id_plateforme==1031
+replace comp_ca2024_intervalles = . if id_plateforme==1031
+replace comp_ca2023_intervalles = . if id_plateforme==1031
 
 replace ca = 25000 if id_plateforme ==1140 
 replace ca_2024 = 25000 if id_plateforme ==1140 
-replace ca_exp_2024 =. if id_palteforme == 1140
-replace ca_exp =. if id_palteforme == 1140 
+replace ca_exp_2024 =. if id_plateforme == 1140
+replace ca_exp =. if id_plateforme == 1140 
 
 
 
@@ -928,7 +928,7 @@ replace inno_exampl_produit2 = "des nouvelles création des produits" if inno_ex
 replace inno_exampl_produit2 = "odoo et la partie marketing" if inno_exampl_produit2 == "odoo et la partie marketing ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" /*TBC*/
 replace inno_exampl_produit2 = "sucré  et salé avec une nouvelle texture/ le fondant" if inno_exampl_produit2 == "sucret salé b texture jdida / le fandant /***********" 
 replace inno_exampl_produit2 = "mini chaine dolive" if inno_exampl_produit2 == "mini chaine dolive ***************************......................" /*TBC*/
-replace inno_exempl_product2== "La poterie, la harissa, les épices arabes, la salade grillée et les vêtements traditionnels." if id_plateforme==1140
+replace inno_exampl_produit2 = "La poterie, la harissa, les épices arabes, la salade grillée et les vêtements traditionnels." if id_plateforme==1140
 
 
 }
