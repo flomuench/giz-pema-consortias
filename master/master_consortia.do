@@ -210,6 +210,28 @@ global master_power = "${master_output}/power"
 global master_regressiontables = "${master_output}/tables"
 global master_figures = "${master_output}/figures"
 
+* paths for latex paper (hosted on Github, synchronized with Overleaf)
+if c(os) == "Windows" {
+	global master_latex = "C:/Users/`c(username)'/Documents/GitHub/cf_paper"
+			global figures_latex = "${master_latex}/Figures"
+				global figures_confidence = "${figures_latex}/Empowerment"
+				global figures_exports = "${figures_latex}/Exports"
+				global figures_management = "${figures_latex}/Management Practices"
+				global figures_network = "${figures_latex}/network"
+				
+				
+			global tables_latex = "${master_latex}/Tables"
+				global tables_confidence = "${tables_latex}/empowerment"
+				global tables_exports = "${tables_latex}/export"
+				global tables_kt = "${tables_latex}/knowledge_transfer"
+				global tables_take_up = "${tables_latex}/take-up"
+				global tables_network = "${tables_latex}/network"
+				global tables_descriptives = "${tables_latex}/descriptives"
+				global tables_business = "${tables_latex}/business"
+				global tables_peer = "${tables_latex}/peer"
+}
+
+
 		
 			* set seeds for replication
 set seed 8413195

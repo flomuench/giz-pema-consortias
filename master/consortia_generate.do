@@ -92,7 +92,7 @@ replace desistement_consortium = 1 if id_plateforme == 1192
 
 gen take_up = 0, a(take_up_per)
 replace take_up= 1 if treatment == 1 & desistement_consortium != 1
-lab var take_up "Consortium participant"
+lab var take_up "Consortium member"
 lab values take_up presence_status
 
 	* create a status variable for surveys

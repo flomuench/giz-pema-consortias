@@ -145,26 +145,7 @@ putpdf paragraph, halign(center)
 putpdf image el_missing_accounting_validated.png
 putpdf pagebreak
 
-	* section 15: accounting/KPI
-egen miss_accounting = rowmiss(profit profit_2024 ca ca_2024 ca_exp ca_exp_2024)
 
-*each accounting
-egen miss_profit = rowmiss(profit)
-
-*each accounting
-egen miss_profit_2024 = rowmiss(profit_2024)
-
-*each accounting
-egen miss_ca = rowmiss(ca)
-
-*each accounting
-egen miss_ca_2024 = rowmiss(ca_2024)
-
-*each accounting
-egen miss_ca_exp = rowmiss(ca_exp)
-
-*each accounting
-egen miss_ca_exp_2024 = rowmiss(ca_exp_2024)
 ***********************************************************************
 * 	PART 3:  Vizualisations	  			
 ***********************************************************************
