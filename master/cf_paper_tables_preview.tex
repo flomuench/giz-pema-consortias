@@ -1,12 +1,50 @@
-\documentclass{article}
-\usepackage{booktabs}  % For professional-looking tables
-\usepackage{graphicx}  % For including images
-\usepackage{amsmath}   % For math symbols and equations
-\usepackage{array}     % For advanced table formatting
-\usepackage{geometry}  % To adjust page dimensions if needed
-\usepackage{caption}   % For customizing table and figure captions
-\usepackage{adjustbox}
+\documentclass[13.5pt]{extarticle} % 14pt for larger font size
+\usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw]{xcolor}
+% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{appendix}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amssymb} 
+\usepackage{pdflscape}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float} % use [H] for figures and keep them exactly where located
+\usepackage{natbib}% Citation support using natbib.sty
+%\usepackage{biblatex}
+%\addbibresource{bibliography.bib}
+\usepackage{comment}
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear,open={(},close={)}}
+\usepackage{graphicx}
+\usepackage{lscape}
+\usepackage[section]{placeins}
+\usepackage{booktabs}
+\usepackage{adjustbox} % regulate width of reg table
+\usepackage{threeparttable} % regulate width of reg table
+\usepackage{rotating} % rotate tables to landscape format
 \usepackage{tabularx}
+\usepackage{float} % use of H for image positioning
+\usepackage{authblk}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[gen]{eurosym}
+\usepackage{setspace} % used for line spacing 
+\usepackage[a4paper, margin=1in]{geometry} % used for margins
+\usepackage{hyperref} %lines in ToC become links to page, keep as last package
+\hypersetup{
+  colorlinks,
+  citebordercolor=Violet,
+  filebordercolor=Red,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black
+}
 
 \begin{document}
 
@@ -22,25 +60,13 @@
 \section{Regression Tables}
 \input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex"}
 
+\input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex"}
+
 \input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex"}
 
 \input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex"}
 
 \input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex"}
-
-
-
-
-\input{"C:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_fin_k1_w95_paper.tex"}
-
-
-
-%\section{Take-up}
-
-%\input{"C:/Users/MUNCHFA/Documents/Latex_tables_preview/el_take_up_baltab_adj.tex"}
-
-%\input{G:/My Drive/Research_GIZ_Tunisia_exportpromotion/1. Intervention III – Consortia/output/tables/endline/regressions/confidence/rt_conf_efi.tex}
-
 
 
 
