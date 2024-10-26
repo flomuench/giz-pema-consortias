@@ -1725,13 +1725,15 @@ rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 ***********************************************************************
 {
 cd "${master_regressiontables}/endline/regressions/confidence"
-**************** TABLES FOR PAPER ****************
+**************** TABLES FOR PAPER & PRESENTATION ****************
 * change label for table output
 lab var car_efi_fin1 "access new funding"
 lab var car_loc_env "grasp internal and external dynamics"
 lab var car_loc_exp "deal with exports requisities"
 lab var car_loc_soin "balance personal and professional life"
 
+
+*** midline & endline (not so much additional information? Focus on endline?!)
 {
 capture program drop rct_confidence // enables re-running
 program rct_confidence
@@ -1863,7 +1865,6 @@ rct_confidence female_loc female_loc car_loc_env car_loc_exp car_loc_soin, gen(c
 
 
 
-**************** TABLES FOR PRESENTATION ****************
 cd "${master_regressiontables}/endline/regressions/confidence"
 
 **************** efi & loc (z-scores) ****************
@@ -1878,8 +1879,8 @@ version 16							// define Stata version 15 used
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
@@ -1887,8 +1888,8 @@ version 16							// define Stata version 15 used
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
 					local fmt_att_`var' : display %3.2f `att_`var''	
@@ -1896,8 +1897,8 @@ version 16							// define Stata version 15 used
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3, d
 						* for latex table
-					estadd scalar c_m = r(mean)
-					estadd scalar control_sd = r(sd)
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
 						* for  coefplots
 					local c_m_`var' = r(p50)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
@@ -1910,8 +1911,8 @@ version 16							// define Stata version 15 used
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
@@ -1919,8 +1920,8 @@ version 16							// define Stata version 15 used
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
 					local fmt_att_`var' : display %3.2f `att_`var''	
@@ -1968,34 +1969,34 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 // `3'1 `4'1 adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial empowerment: Efficacy} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{4}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+		esttab `regressions' using "${tables_confidence}/rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial empowerment: Efficacy} \\ \begin{adjustbox}{width=\columnwidth,center} \\\begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\toprule \\ \multicolumn{3}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				cells(b(star fmt(2)) se(par fmt(2))) ///
 				mlabels(, depvars) /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* oL.*
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
 				noobs
 			
 			* Bottom panel: ITT
 		local regressions `1'2 `2'2  //  `3'2 `4'2 adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
+		esttab `regressions' using "${tables_confidence}/rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{3}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.* `5' `6'
+				posthead("\midrule \\ \multicolumn{3}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(2)) se(par fmt(2))) ///
+				stats(c_m control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
 				nobaselevels ///
 				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcomes are z-scores following \citet{Anderson.2008}. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
 coefplot ///
@@ -2052,7 +2053,10 @@ coefplot ///
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfp2, replace)
-gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp2.pdf", replace
+	* export for google drive (presentation?)
+*gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp2.pdf", replace
+	* export for github paper repo
+gr export "${figures_confidence}/el_`generate'_cfp2.pdf", replace
 
 
 
@@ -2573,6 +2577,7 @@ rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 ***********************************************************************
 * 	PART 9:knowledge transfer overview: MPI, ERI, II
 ***********************************************************************
+lab var ipi "Innovation practices"
 capture program drop kt_overview // enables re-running
 program kt_overview
 version 16							// define Stata version 15 used
@@ -2584,8 +2589,8 @@ version 16							// define Stata version 15 used
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
@@ -2593,8 +2598,8 @@ version 16							// define Stata version 15 used
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
 					local fmt_att_`var' : display %3.2f `att_`var''	
@@ -2602,8 +2607,8 @@ version 16							// define Stata version 15 used
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3, d
 						* for latex table
-					estadd scalar c_m = r(mean)
-					estadd scalar control_sd = r(sd)
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
 						* for  coefplots
 					local c_m_`var' = r(p50)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
@@ -2617,8 +2622,8 @@ version 16							// define Stata version 15 used
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
@@ -2626,8 +2631,8 @@ version 16							// define Stata version 15 used
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes"
-					estadd local strata_final "Yes"
+					estadd local bl_control "No": `var'2 
+					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
 					local fmt_att_`var' : display %3.2f `att_`var''	
@@ -2635,8 +2640,8 @@ version 16							// define Stata version 15 used
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3, d
 						* for latex table
-					estadd scalar c_m = r(mean)
-					estadd scalar control_sd = r(sd)
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
 						* for  coefplots
 					local c_m_`var' = r(p50)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
@@ -2671,35 +2676,35 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 *		tokenize `varlist'
-		local regressions `1'1 `2'1 // `3'1 adjust manually to number of variables 
-		esttab `regressions' using "${master_regressiontables}/endline/regressions/rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge Transfer - Management Practices Index} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{3}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
+		local regressions `1'1 `2'1 // `3'1 `4'1 adjust manually to number of variables 
+		esttab `regressions' using "${tables_kt}/rt_`generate'.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge Transfer: Management and Innovation} \\ \begin{adjustbox}{width=\columnwidth,center} \\\begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\toprule \\ \multicolumn{3}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
+				cells(b(star fmt(2)) se(par fmt(2))) ///
 				mlabels(, depvars) /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
 				noobs
-				
-			* Bottom panel: ATT
-		local regressions `1'2 `2'2 // `3'2 adjust manually to number of variables 
-		esttab `regressions' using "${master_regressiontables}/endline/regressions/rt_`generate'.tex", append ///
-				fragment ///
-				posthead("\hline \\ \multicolumn{2}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-				stats(control_median control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group median" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_*) ///  L.*
+			
+			* Bottom panel: ITT
+		local regressions `1'2 `2'2  //  `3'2 `4'2 adjust manually to number of variables 
+		esttab `regressions' using "${tables_kt}/rt_`generate'.tex", append ///
+				fragment ///	
+				posthead("\midrule \\ \multicolumn{3}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(2)) se(par fmt(2))) ///
+				stats(c_m control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
-				label ///
 				nobaselevels ///
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{2}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 95 percent level, corresponding to three extreme values. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values are clustered at the individual firm-level for the control group and at the consortia level for treatment group firms.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") 
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcomes are z-scores following \citet{Anderson.2008}. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
 				// when inserting table in overleaf/latex, requires adding space after %
 				// add the following for MHT RW when done: Adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) are reported below the standard errors
 				
@@ -2758,8 +2763,10 @@ coefplot ///
 		leg(off) /// 
 		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfp2, replace)
+	* export to Gdrive
 gr export "${master_regressiontables}/endline/regressions/el_`generate'_cfp2.pdf", replace
-
+	* export to paper github repo
+gr export "${figures_management}/el_`generate'_cfp2.pdf", replace
 
 
 
