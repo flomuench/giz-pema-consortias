@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.31)  25 OCT 2024 14:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.31)  28 OCT 2024 20:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -472,28 +472,28 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip65
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 47.
+Package hyperref Info: Option `colorlinks' set `true' on input line 48.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:47: Package xcolor Error: Undefined color `Violet'.
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:48: Package xcolor Error: Undefined color `Violet'.
 
 See the xcolor package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.47 }
+l.48 }
       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:47: Package xcolor Error: Undefined color `Red'.
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:48: Package xcolor Error: Undefined color `Red'.
 
 See the xcolor package documentation for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.47 }
+l.48 }
       
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
@@ -510,24 +510,24 @@ LaTeX Warning: Unused global option(s):
 No file cf_paper_tables_preview.aux.
 \openout1 = `cf_paper_tables_preview.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 49.
-LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
 (c:/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count311
@@ -588,13 +588,277 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 49.
+Package hyperref Info: Link coloring ON on input line 63.
 \@outlinefile=\write4
 \openout4 = `cf_paper_tables_preview.out'.
 
-(c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex
+(/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:1: LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{table}[!h] \centering \\
+                                    \caption{Entrepreneurial empowerment: Ef...
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:1: LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 ...n{Entrepreneurial empowerment: Efficacy} \\
+                                                   \begin{adjustbox}{width=\...
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 ...ustbox}{width=\columnwidth,center} \\\begin
+                                                  {tabularx}{\linewidth}{l >...
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+(c:/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd) (c:/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd)
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...\\\[-1ex] Treatment & 0.27\sym 
+                                                  {**} & -0.16 \\ & (0.13) &...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...] Consortium member & 0.46\sym 
+                                                  {**} & -0.28\sym {*} \\ & ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...er & 0.46\sym {**} & -0.28\sym 
+                                                  {*} \\ & (0.20) & (0.17) \...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...rols for randomization strata. \sym 
+                                                  {***} \(p<0.01\), \sym {**...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...strata. \sym {***} \(p<0.01\), \sym 
+                                                  {**} \(p<0.05\), \sym {*} ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
+                                                  {*} \(p<0.1\) denote the s...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...\\\[-1ex] Treatment & 0.27\sym 
+                                                  {**} & -0.16 \\ & (0.13) &...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...] Consortium member & 0.46\sym 
+                                                  {**} & -0.28\sym {*} \\ & ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...er & 0.46\sym {**} & -0.28\sym 
+                                                  {*} \\ & (0.20) & (0.17) \...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...rols for randomization strata. \sym 
+                                                  {***} \(p<0.01\), \sym {**...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...strata. \sym {***} \(p<0.01\), \sym 
+                                                  {**} \(p<0.05\), \sym {*} ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
+                                                  {*} \(p<0.1\) denote the s...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...\\\[-1ex] Treatment & 0.27\sym 
+                                                  {**} & -0.16 \\ & (0.13) &...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...] Consortium member & 0.46\sym 
+                                                  {**} & -0.28\sym {*} \\ & ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<inserted text> ...er & 0.46\sym {**} & -0.28\sym 
+                                                  {*} \\ & (0.20) & (0.17) \...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Package natbib Warning: Citation `Anderson.2008' on page 1 undefined on input line 18.
+
+
+Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 18.
+
+
+Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...rols for randomization strata. \sym 
+                                                  {***} \(p<0.01\), \sym {**...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...strata. \sym {***} \(p<0.01\), \sym 
+                                                  {**} \(p<0.05\), \sym {*} ...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: Undefined control sequence.
+<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
+                                                  {*} \(p<0.1\) denote the s...
+l.18   \\ }} \\ \end{tabularx}
+                               \\ \end{adjustbox} \\ \end{table}
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--18
+
+ []
+
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/empowerment/rt_efi_loc.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.18   \\ }} \\ \end{tabularx} \\ 
+                                  \end{adjustbox} \\ \end{table}
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+) (/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -607,7 +871,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -620,7 +884,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -631,8 +895,7 @@ l.1 ...n{adjustbox}{width=\columnwidth,center} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-(c:/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd) (c:/texlive/2023/texmf-dist/tex/latex/amsfonts/umsb.fd)
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...\\\\[-1ex] Treatment & 3.3\sym 
                                                   {**} & 2.0\sym {**} & 0.5 ...
 l.18  \\ }} \\ \end{tabularx}
@@ -643,7 +906,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...tment & 3.3\sym {**} & 2.0\sym 
                                                   {**} & 0.5 & 1.4\sym {**} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -654,7 +917,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...& 2.0\sym {**} & 0.5 & 1.4\sym 
                                                   {**} & 1.0 & 0.3 & 0.8\sym...
 l.18  \\ }} \\ \end{tabularx}
@@ -665,7 +928,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...sym {**} & 1.0 & 0.3 & 0.8\sym 
                                                   {**} \\ & (1.41) & (0.92) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -676,7 +939,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...x] Consortium member & 5.8\sym 
                                                   {***}& 3.6\sym {***}& 0.9\...
 l.18  \\ }} \\ \end{tabularx}
@@ -687,7 +950,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...ember & 5.8\sym {***}& 3.6\sym 
                                                   {***}& 0.9\sym {*} & 2.5\s...
 l.18  \\ }} \\ \end{tabularx}
@@ -698,7 +961,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ... {***}& 3.6\sym {***}& 0.9\sym 
                                                   {*} & 2.5\sym {**} & 1.7\s...
 l.18  \\ }} \\ \end{tabularx}
@@ -709,7 +972,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...m {***}& 0.9\sym {*} & 2.5\sym 
                                                   {**} & 1.7\sym {*} & 0.6 &...
 l.18  \\ }} \\ \end{tabularx}
@@ -720,7 +983,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...m {*} & 2.5\sym {**} & 1.7\sym 
                                                   {*} & 0.6 & 1.4\sym {***}\...
 l.18  \\ }} \\ \end{tabularx}
@@ -731,7 +994,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ... & 1.7\sym {*} & 0.6 & 1.4\sym 
                                                   {***}\\ & (2.09) & (1.38) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -742,7 +1005,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...tcome variable when available. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -753,7 +1016,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...ilable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -764,7 +1027,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -785,7 +1048,7 @@ Overfull \hbox (20.1266pt too wide) in paragraph at lines 18--18
  []|[]| 
  []
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...\\\\[-1ex] Treatment & 3.3\sym 
                                                   {**} & 2.0\sym {**} & 0.5 ...
 l.18  \\ }} \\ \end{tabularx}
@@ -796,7 +1059,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...tment & 3.3\sym {**} & 2.0\sym 
                                                   {**} & 0.5 & 1.4\sym {**} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -807,7 +1070,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...& 2.0\sym {**} & 0.5 & 1.4\sym 
                                                   {**} & 1.0 & 0.3 & 0.8\sym...
 l.18  \\ }} \\ \end{tabularx}
@@ -818,7 +1081,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...sym {**} & 1.0 & 0.3 & 0.8\sym 
                                                   {**} \\ & (1.41) & (0.92) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -829,7 +1092,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...x] Consortium member & 5.8\sym 
                                                   {***}& 3.6\sym {***}& 0.9\...
 l.18  \\ }} \\ \end{tabularx}
@@ -840,7 +1103,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...ember & 5.8\sym {***}& 3.6\sym 
                                                   {***}& 0.9\sym {*} & 2.5\s...
 l.18  \\ }} \\ \end{tabularx}
@@ -851,7 +1114,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ... {***}& 3.6\sym {***}& 0.9\sym 
                                                   {*} & 2.5\sym {**} & 1.7\s...
 l.18  \\ }} \\ \end{tabularx}
@@ -862,7 +1125,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...m {***}& 0.9\sym {*} & 2.5\sym 
                                                   {**} & 1.7\sym {*} & 0.6 &...
 l.18  \\ }} \\ \end{tabularx}
@@ -873,7 +1136,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ...m {*} & 2.5\sym {**} & 1.7\sym 
                                                   {*} & 0.6 & 1.4\sym {***}\...
 l.18  \\ }} \\ \end{tabularx}
@@ -884,7 +1147,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <inserted text> ... & 1.7\sym {*} & 0.6 & 1.4\sym 
                                                   {***}\\ & (2.09) & (1.38) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -901,7 +1164,7 @@ Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 
 
 Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...tcome variable when available. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -912,7 +1175,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...ilable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -923,7 +1186,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -940,7 +1203,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--18
  []
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_netnumb_w95.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_netnumb_w95.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -951,9 +1214,12 @@ l.18  \\ }} \\ \end{tabularx} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-) (c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: There's no line here to end.
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) (/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_network_use.tex
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -966,7 +1232,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -979,7 +1245,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/network/rt_network_use.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -990,484 +1256,34 @@ l.1 ...n{adjustbox}{width=\columnwidth,center} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...\\\[-1ex] Treatment & 0.23\sym 
-                                                  {**} & 0.21\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+)
+Runaway argument?
+{l >{\centering \arraybackslash }m{1.25cm} >{\centering \arraybackslash \ETC.
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:87: File ended while scanning use of \TX@get@body.
+<inserted text> 
+                \par 
+l.87 ..._paper/Tables/network/rt_network_use.tex"}
+                                                  
+I suspect you have forgotten a `}', causing me
+to read past where you wanted me to stop.
+I'll try to recover; but if the error is serious,
+you'd better type `E' or `X' now and fix your file.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...ent & 0.23\sym {**} & 0.21\sym 
-                                                  {***}& 0.28\sym {***}& 0.1...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
+(/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...**} & 0.21\sym {***}& 0.28\sym 
-                                                  {***}& 0.12 & 0.19\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....28\sym {***}& 0.12 & 0.19\sym 
-                                                  {**} & 0.27\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....12 & 0.19\sym {**} & 0.27\sym 
-                                                  {***}& -0.03 \\ & (0.09) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...nsortium participant& 0.39\sym 
-                                                  {***}& 0.36\sym {***}& 0.4...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...pant& 0.39\sym {***}& 0.36\sym 
-                                                  {***}& 0.47\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...***}& 0.36\sym {***}& 0.47\sym 
-                                                  {***}& 0.20 & 0.32\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....47\sym {***}& 0.20 & 0.32\sym 
-                                                  {**} & 0.46\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....20 & 0.32\sym {**} & 0.46\sym 
-                                                  {***}& -0.06 \\ & (0.12) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...rols for randomization strata. \sym 
-                                                  {***} \(p<0.01\), \sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...strata. \sym {***} \(p<0.01\), \sym 
-                                                  {**} \(p<0.05\), \sym {*} ...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
-                                                  {*} \(p<0.1\) denote the s...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...\\\[-1ex] Treatment & 0.23\sym 
-                                                  {**} & 0.21\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...ent & 0.23\sym {**} & 0.21\sym 
-                                                  {***}& 0.28\sym {***}& 0.1...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...**} & 0.21\sym {***}& 0.28\sym 
-                                                  {***}& 0.12 & 0.19\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....28\sym {***}& 0.12 & 0.19\sym 
-                                                  {**} & 0.27\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....12 & 0.19\sym {**} & 0.27\sym 
-                                                  {***}& -0.03 \\ & (0.09) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...nsortium participant& 0.39\sym 
-                                                  {***}& 0.36\sym {***}& 0.4...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...pant& 0.39\sym {***}& 0.36\sym 
-                                                  {***}& 0.47\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...***}& 0.36\sym {***}& 0.47\sym 
-                                                  {***}& 0.20 & 0.32\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....47\sym {***}& 0.20 & 0.32\sym 
-                                                  {**} & 0.46\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....20 & 0.32\sym {**} & 0.46\sym 
-                                                  {***}& -0.06 \\ & (0.12) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...rols for randomization strata. \sym 
-                                                  {***} \(p<0.01\), \sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...strata. \sym {***} \(p<0.01\), \sym 
-                                                  {**} \(p<0.05\), \sym {*} ...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
-                                                  {*} \(p<0.1\) denote the s...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (1.93414pt too wide) in paragraph at lines 18--18
- []|[]| 
- []
-
-
-Overfull \hbox (10.82309pt too wide) in paragraph at lines 18--18
- []|\OT1/cmr/m/n/10 Innovation| 
- []
-
-
-Overfull \hbox (2.4599pt too wide) in paragraph at lines 18--18
- []|\OT1/cmr/m/n/10 Emotional 
- []
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...\\\[-1ex] Treatment & 0.23\sym 
-                                                  {**} & 0.21\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...ent & 0.23\sym {**} & 0.21\sym 
-                                                  {***}& 0.28\sym {***}& 0.1...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...**} & 0.21\sym {***}& 0.28\sym 
-                                                  {***}& 0.12 & 0.19\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....28\sym {***}& 0.12 & 0.19\sym 
-                                                  {**} & 0.27\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....12 & 0.19\sym {**} & 0.27\sym 
-                                                  {***}& -0.03 \\ & (0.09) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...nsortium participant& 0.39\sym 
-                                                  {***}& 0.36\sym {***}& 0.4...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...pant& 0.39\sym {***}& 0.36\sym 
-                                                  {***}& 0.47\sym {***}& 0.2...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ...***}& 0.36\sym {***}& 0.47\sym 
-                                                  {***}& 0.20 & 0.32\sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....47\sym {***}& 0.20 & 0.32\sym 
-                                                  {**} & 0.46\sym {***}& -0....
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<inserted text> ....20 & 0.32\sym {**} & 0.46\sym 
-                                                  {***}& -0.06 \\ & (0.12) &...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 18.
-
-
-Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...rols for randomization strata. \sym 
-                                                  {***} \(p<0.01\), \sym {**...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...strata. \sym {***} \(p<0.01\), \sym 
-                                                  {**} \(p<0.05\), \sym {*} ...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: Undefined control sequence.
-<argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
-                                                  {*} \(p<0.1\) denote the s...
-l.18  \\ }} \\ \end{tabularx}
-                              \\ \end{adjustbox} \\ \end{table}
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 18--18
-
- []
-
-
-Overfull \hbox (1.71817pt too wide) in alignment at lines 18--18
-[][][][][][][][] 
- []
-
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/network/rt_network_use.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: Not in outer par mode.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
  ...                                              
                                                   
-l.18  \\ }} \\ \end{tabularx} \\ 
-                                 \end{adjustbox} \\ \end{table}
-Try typing  <return>  to proceed.
+l.1 \begin{table}[!h]
+                      \centering \\ \caption{Export: Market Access Intensive...
+You've lost some text.  Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-) (c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex
-
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1480,7 +1296,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1493,7 +1309,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1504,7 +1320,7 @@ l.1 ...n{adjustbox}{width=\columnwidth,center} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.165\sym 
                                                   {**} & 0.329 \\ & (0.064) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1515,7 +1331,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 0.281\sym 
                                                   {***}& 0.560\sym {*} \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1526,7 +1342,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...r & 0.281\sym {***}& 0.560\sym 
                                                   {*} \\ & (0.094) & (0.337)...
 l.18  \\ }} \\ \end{tabularx}
@@ -1537,7 +1353,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1548,7 +1364,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1559,7 +1375,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1570,7 +1386,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.165\sym 
                                                   {**} & 0.329 \\ & (0.064) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1581,7 +1397,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 0.281\sym 
                                                   {***}& 0.560\sym {*} \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1592,7 +1408,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...r & 0.281\sym {***}& 0.560\sym 
                                                   {*} \\ & (0.094) & (0.337)...
 l.18  \\ }} \\ \end{tabularx}
@@ -1603,7 +1419,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1614,7 +1430,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1625,7 +1441,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1636,7 +1452,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.165\sym 
                                                   {**} & 0.329 \\ & (0.064) ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1647,7 +1463,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 0.281\sym 
                                                   {***}& 0.560\sym {*} \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1658,7 +1474,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <inserted text> ...r & 0.281\sym {***}& 0.560\sym 
                                                   {*} \\ & (0.094) & (0.337)...
 l.18  \\ }} \\ \end{tabularx}
@@ -1675,7 +1491,7 @@ Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 
 
 Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1686,7 +1502,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1697,7 +1513,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1714,7 +1530,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--18
  []
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/export/rt_exp_ext.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/export/rt_exp_ext.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1725,12 +1541,21 @@ l.18  \\ }} \\ \end{tabularx} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
+) (/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: Not in outer par mode.
 
-) (c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{table}[!h]
+                      \centering \\ \caption{Business Performance: Sales} \\...
+You've lost some text.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: There's no line here to end.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1743,7 +1568,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1756,7 +1581,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1767,7 +1592,7 @@ l.1 ...n{adjustbox}{width=\columnwidth,center} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.915\sym 
                                                   {*} & 0.911 & 1.017 \\ & (...
 l.18  \\ }} \\ \end{tabularx}
@@ -1778,7 +1603,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 1.518\sym 
                                                   {**} & 1.500 & 1.710 \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1789,7 +1614,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1800,7 +1625,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1811,7 +1636,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1822,7 +1647,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.915\sym 
                                                   {*} & 0.911 & 1.017 \\ & (...
 l.18  \\ }} \\ \end{tabularx}
@@ -1833,7 +1658,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 1.518\sym 
                                                   {**} & 1.500 & 1.710 \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1844,7 +1669,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1855,7 +1680,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1866,7 +1691,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1877,7 +1702,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ...\\[-1ex] Treatment & 0.915\sym 
                                                   {*} & 0.911 & 1.017 \\ & (...
 l.18  \\ }} \\ \end{tabularx}
@@ -1888,7 +1713,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <inserted text> ... Consortium member & 1.518\sym 
                                                   {**} & 1.500 & 1.710 \\ & ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1905,7 +1730,7 @@ Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 
 
 Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -1916,7 +1741,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -1927,7 +1752,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -1944,7 +1769,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--18
  []
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_sales_paper.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_sales_paper.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1955,12 +1780,21 @@ l.18  \\ }} \\ \end{tabularx} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
+) (/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: Not in outer par mode.
 
-) (c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.1 \begin{table}[!h]
+                      \centering \\ \caption{Business Performance: Profits, ...
+You've lost some text.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: There's no line here to end.
+
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1973,7 +1807,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: There's no line here to end.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: There's no line here to end.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1986,7 +1820,7 @@ Type  I <command> <return>  to replace it with another command,
 or  <return>  to continue without it.
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:1: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -1997,7 +1831,7 @@ l.1 ...n{adjustbox}{width=\columnwidth,center} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -2008,7 +1842,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -2019,7 +1853,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -2030,7 +1864,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -2041,7 +1875,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -2052,7 +1886,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -2069,7 +1903,7 @@ Package natbib Warning: Citation `Bruhn.2009' on page 1 undefined on input line 
 
 Package natbib Warning: Citation `Cai.2018' on page 1 undefined on input line 18.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...alues of the outcome variable. \sym 
                                                   {***} \(p<0.01\), \sym {**...
 l.18  \\ }} \\ \end{tabularx}
@@ -2080,7 +1914,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...riable. \sym {***} \(p<0.01\), \sym 
                                                   {**} \(p<0.05\), \sym {*} ...
 l.18  \\ }} \\ \end{tabularx}
@@ -2091,7 +1925,7 @@ misspelled it (e.g., `\hobx'), type `I' and the correct
 spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: Undefined control sequence.
 <argument> ...<0.01\), \sym {**} \(p<0.05\), \sym 
                                                   {*} \(p<0.1\) denote the s...
 l.18  \\ }} \\ \end{tabularx}
@@ -2108,7 +1942,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--18
  []
 
 
-c:/Users/MUNCHFA/Documents/GitHub/cf_paper/Tables/business/rt_business_profit_paper.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
+/Users/MUNCHFA/Documents/GitHub//cf_paper/Tables/business/rt_business_profit_paper.tex:18: LaTeX Error: Something's wrong--perhaps a missing \item.
 
 See the LaTeX manual or LaTeX Companion for explanation.
 Type  H <return>  for immediate help.
@@ -2119,27 +1953,67 @@ l.18  \\ }} \\ \end{tabularx} \\
 Try typing  <return>  to proceed.
 If that doesn't work, type  X <return>  to quit.
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
 )
 
 Package natbib Warning: There were undefined citations.
 
-[1
 
-{c:/texlive/2023/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: LaTeX Error: \begin{tabularx} on input line 1 ended by \end{document}.
 
-LaTeX Warning: Text page 2 contains only floats.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.100 \end{document}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
 
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: Improper \prevdepth.
+\newpage ...everypar {}\fi \par \ifdim \prevdepth 
+                                                  >\z@ \vskip -\ifdim \prevd...
+l.100 \end{document}
+                    
+You can refer to \spacefactor only in horizontal mode;
+you can refer to \prevdepth only in vertical mode; and
+neither of these is meaningful inside \write. So
+I'm forgetting what you said and using zero instead.
 
-Overfull \vbox (1.96643pt too high) has occurred while \output is active []
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: Missing } inserted.
+<inserted text> 
+                }
+l.100 \end{document}
+                    
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
 
- [2]
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: Missing \endgroup inserted.
+<inserted text> 
+                \endgroup 
+l.100 \end{document}
+                    
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
 
-LaTeX Warning: Text page 3 contains only floats.
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: Missing } inserted.
+<inserted text> 
+                }
+l.100 \end{document}
+                    
+I've inserted something that you may have forgotten.
+(See the <inserted text> above.)
+With luck, this will get me unwedged. But if you
+really didn't forget anything, try typing `2' now; then
+my insertion and my current dilemma will both disappear.
 
-[3] (./cf_paper_tables_preview.aux)
+(./cf_paper_tables_preview.aux)
 
 Package rerunfilecheck Warning: File `cf_paper_tables_preview.out' has changed.
 (rerunfilecheck)                Rerun to get outlines right
@@ -2147,21 +2021,43 @@ Package rerunfilecheck Warning: File `cf_paper_tables_preview.out' has changed.
 
 Package rerunfilecheck Info: Checksums for `cf_paper_tables_preview.out':
 (rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  9966EEF9BEE20B7ECC39ECDC9802AE55;131.
- ) 
+(rerunfilecheck)             After:  D41D8CD98F00B204E9800998ECF8427E;0.
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: You can't use `\end' in internal vertical mode.
+\enddocument ...cument/end}\deadcycles \z@ \@@end 
+                                                  
+l.100 \end{document}
+                    
+Sorry, but I'm not programmed to handle this case;
+I'll just pretend that you didn't ask for it.
+If you're in the wrong mode, you might be able to
+return to the right one by typing `I}' or `I$' or `I\par'.
+
+
+c:/Users/MUNCHFA/Documents/GitHub/giz-pema-consortias/master/cf_paper_tables_preview.tex:100: LaTeX Error: \begin{adjustbox} on input line 1 ended by \end{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.100 \end{document}
+                    
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+)
+! Emergency stop.
+<*> ...a-consortias/master/cf_paper_tables_preview
+                                                  
+*** (job aborted, no legal \end found)
+
+ 
 Here is how much of TeX's memory you used:
- 14645 strings out of 476025
- 239963 string characters out of 5794015
- 1915382 words of memory out of 5000000
- 34823 multiletter control sequences out of 15000+600000
+ 14640 strings out of 476025
+ 240131 string characters out of 5794015
+ 1892382 words of memory out of 5000000
+ 34828 multiletter control sequences out of 15000+600000
  519363 words of font info for 60 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 89i,19n,92p,1004b,611s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb>
-Output written on cf_paper_tables_preview.pdf (3 pages, 130269 bytes).
-PDF statistics:
- 79 PDF objects out of 1000 (max. 8388607)
- 53 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+ 89i,22n,92p,1145b,859s stack positions out of 10000i,1000n,20000p,200000b,200000s
+!  ==> Fatal error occurred, no output PDF file produced!

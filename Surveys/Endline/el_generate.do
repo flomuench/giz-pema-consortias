@@ -119,17 +119,17 @@ lab var net_size4_m "Male Family/friends business discussion"
 
 
 * net_coop
-	* generate dummies for each cooperative word
-generate netcoop1 = regexm(net_coop, "1")
-generate netcoop2 = regexm(net_coop, "2")
-generate netcoop3 = regexm(net_coop, "3")
-generate netcoop4 = regexm(net_coop, "4")
-generate netcoop5 = regexm(net_coop, "5")
-generate netcoop6 = regexm(net_coop, "6")
-generate netcoop7 = regexm(net_coop, "7")
-generate netcoop8 = regexm(net_coop, "8")
-generate netcoop9 = regexm(net_coop, "9")
-generate netcoop10 = regexm(net_coop, "10")
+	* generate dummies for each cooperative word	
+generate netcoop1 = regexm(net_coop, "/ 1 /") if net_coop != ""
+generate netcoop2 = regexm(net_coop, "2") if net_coop != ""
+generate netcoop3 = regexm(net_coop, "3") if net_coop != ""
+generate netcoop4 = regexm(net_coop, "4") if net_coop != ""
+generate netcoop5 = regexm(net_coop, "5") if net_coop != ""
+generate netcoop6 = regexm(net_coop, "6") if net_coop != ""
+generate netcoop7 = regexm(net_coop, "7") if net_coop != ""
+generate netcoop8 = regexm(net_coop, "8") if net_coop != ""
+generate netcoop9 = regexm(net_coop, "9") if net_coop != ""
+generate netcoop10 = regexm(net_coop, "/ 10 /") if net_coop != ""
 
 	* lab each cooperate word dummy
 label var netcoop1 "Jealousy"
@@ -149,7 +149,6 @@ label var net_coop_pos "Positive answers for the the perception of interactions 
 generate net_coop_neg = netcoop1 + netcoop4 + netcoop5 + netcoop6 +  netcoop10
 label var net_coop_neg "Negative answers for the the perception of interactions between CEOs" 
 
-drop net_coop
 
 }
 
