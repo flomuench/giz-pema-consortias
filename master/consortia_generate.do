@@ -308,13 +308,10 @@ foreach var of local id {
 gen closed = . 
 replace closed = 0 if refus == 0
 lab var closed "Companies that are no longer operating"
-replace closed = 1 if id_plateforme == 989
-replace closed = 1 if id_plateforme == 1083
-replace closed = 1 if id_plateforme == 1059 
-replace closed = 1 if id_plateforme == 1090
-replace closed = 1 if id_plateforme == 1044
-replace closed = 1 if id_plateforme == 1127
-replace closed = 1 if id_plateforme == 1154
+replace closed = 1 if id_plateforme == 989 /*entreprise n'est plus en activité depuis 2022*/
+replace closed = 1 if id_plateforme == 1083 /*lentreprise  ferme depuis 2 ans donc elle na pas donne le chiffres dafffaire et le matricule fiscale: Entreprise inexistante, elle n'a meme pas demaré. La CEO ne veut plus q'on l'appelle , elle m'a dit que c'est un harcelement. */
+replace closed = 1 if id_plateforme == 1127 /*l'entreprise est fermée fin 2022 : pas d'activité en 2023 et 2024*/
+replace closed = 1 if id_plateforme == 1154 /*L'entreprise est fermée depuis 2 ans*/
 
 * replace company-level outcomes with zero if company has ceased operations, but not indivudal level outcomes
 	* only replace if missing value
