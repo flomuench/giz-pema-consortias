@@ -537,7 +537,7 @@ replace net_gender3 = 10 if id_plateforme ==1108
 * id 1193
 replace net_size3 = 15 if id_plateforme ==1193 
 replace net_size4 = 10 if id_plateforme ==1193 
-replace net_gender3 = 7 if if id_plateforme==1193
+replace net_gender3 = 7 if  id_plateforme==1193
 replace net_gender4 = 6 if id_plateforme == 1193
 
 }
