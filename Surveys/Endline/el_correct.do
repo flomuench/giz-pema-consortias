@@ -518,7 +518,7 @@ forvalues x = 3(1)4 {
 *** Company specific corrections
 * id 1000
 replace net_size4 = 0 if id_plateforme ==1000
-replace net_gender4 = . if id_plateforme == 1000
+replace net_gender4 = 40 if id_plateforme == 1000
 
 * id 1036
 replace net_size4 = 10 if id_plateforme ==1036
@@ -537,10 +537,8 @@ replace net_gender3 = 10 if id_plateforme ==1108
 * id 1193
 replace net_size3 = 15 if id_plateforme ==1193 
 replace net_size4 = 10 if id_plateforme ==1193 
-replace net_gender4 = . if id_plateforme == 1193
-
-
-
+replace net_gender3 = 7 if if id_plateforme==1193
+replace net_gender4 = 6 if id_plateforme == 1193
 
 }
 
