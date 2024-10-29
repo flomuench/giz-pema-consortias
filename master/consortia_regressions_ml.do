@@ -118,20 +118,46 @@ program qvalues
 		* concern: F-test significant at baseline
 				* major outcome variables, untransformed
 local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
-local empowerment_vars "genderi female_efficacy female_loc"
-local kt_vars "mpi innovations innovated inno_rd"
+local empowerment_vars "female_efficacy female_loc"
+local kt_vars "innovations innovated"
 local business_vars "age ca costs profit employes"
 local export_vars "eri exprep_couts exp_inv exported ca_exp exp_pays"
 local vars_untransformed `network_vars' `empowerment_vars' `kt_vars' `business_vars' `export_vars'
-				
+						
 					* F-test
 *local balancevarlist ca_2021 ca_exp_2021 exp_pays exprep_inv exprep_couts inno_rd innovations age net_nb_dehors net_nb_fam net_nb_qualite
 reg treatment `vars_untransformed' if surveyround == 1, vce(robust)
 testparm `vars_untransformed'
-iebaltab `vars_untransformed' if surveyround == 1, ///
+*iebaltab `vars_untransformed' if surveyround == 1, ///
 	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
 	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
-	savetex(baltab_bl_unadj)
+	savetex(baltab_bl_unadj)	
+iebaltab `vars_untransformed' if surveyround == 1 & id_plateforme != 1092, ///
+	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
+	pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	save(baltab_bl_unadj)
+	
+		* Firm-level	
+local business_vars "age ca costs profit employes"
+local export_vars "eri_points exprep_couts exp_inv exported ca_exp exp_pays"
+local firm_vars `business_vars' `export_vars'
+
+iebaltab `firm_vars' if surveyround == 1 & id_plateforme != 1092, ///
+	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
+	pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	savetex("${tables_descriptives}/baltab_bl_firm")
+	
+		* Entrepreneur-level
+local network_vars "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local empowerment_vars "female_efficacy_points female_loc_points"
+local entrepreneur "mpi_points `network_vars' `empowerment_vars'"
+
+iebaltab `entrepreneur' if surveyround == 1 & id_plateforme != 1092, ///
+	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
+	pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	savetex("${tables_descriptives}/baltab_bl_entrepreneur")
+
+
 
 				* major outcome variables, transformed
 local network_vars "net_size_w99 net_nb_qualite net_coop_pos net_coop_neg"
@@ -144,8 +170,10 @@ reg treatment `vars_transformed' if surveyround == 1, vce(robust)
 testparm `vars_transformed'
 iebaltab `vars_transformed' if surveyround == 1, ///
 	grpvar(treatment) vce(robust) format(%12.2fc) replace ///
-	ftest pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
+	pttest rowvarlabels balmiss(mean) onerow stdev notecombine ///
 	savetex(baltab_bl_adj)
+	
+
 
 }
 

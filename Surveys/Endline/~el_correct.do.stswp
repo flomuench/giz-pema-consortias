@@ -723,7 +723,7 @@ replace ca_exp =. if id_plateforme == 1140
 
 *Correcting sources of management
 {
-gen man_source_formation = 0
+gen man_source_formation = 0 if man_source_cons != .
 replace man_source_formation = 1 if man_sources_other =="participation a des formations"
 replace man_source_formation = 1 if man_sources_other =="a travers les formation"
 replace man_source_formation = 1 if man_sources_other =="des formation des recherches"

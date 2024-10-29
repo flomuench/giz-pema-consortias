@@ -105,7 +105,12 @@ lab var inno_process "Process innovation"
 lab var inno_lieu "Organizational innovation"
 lab var inno_commerce "Marketing innovation"
 
+lab var exp_inv "Investment in export"
+lab var exp_pays "Export countries"
 lab var exprep_couts "Export costs"
+
+lab var female_efficacy_points "Entrepreneurial ability (points)"
+lab var female_locus_points "Entrepreneurial control (points)"
 
 lab var employes "Employees"
 
