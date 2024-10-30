@@ -3105,12 +3105,14 @@ coefplot ///
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-.5(.1).5) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
+		title("Innovation - Sources") ///
 		levels(95) ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Events (ITT)"' `3'2 = `"Events (TOT)"' `4'1 = `"Clients (ITT)"' `4'2 = `"Clients (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
-		title("Innovation") ///
-		note("{bf:Note}: Confidence intervals are at the 95 percent level.", span size(medium)) ///		subtitle("Sources") ///
-		leg(off) xsize(12) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		leg(off) /// 
+				note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`2'' (Entrepreneurs), `fmt_c_m_`3'' (Events), & `fmt_c_m_`4'' (Clients)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		leg(off) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		name(el_`generate'_cfplot, replace)
 	
 gr export el_`generate'_cfplot.png, replace
@@ -3134,13 +3136,13 @@ coefplot ///
 		swapnames /// swaps coeff & equation names after collecting result
 		title("Innovation - Sources") ///
 		levels(95) ///
-		ysize(7) xsize(12) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Events (ITT)"' `3'2 = `"Events (TOT)"' `4'1 = `"Clients (ITT)"' `4'2 = `"Clients (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 				note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`2'' (Entrepreneurs), `fmt_c_m_`3'' (Events), & `fmt_c_m_`4'' (Clients)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+gr export "${figures_innovation}/el_`generate'_cfplot1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
@@ -3162,16 +3164,15 @@ coefplot ///
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
-		title("Innovation - Sources", size(medium)) ///
+		title("Innovation - Sources") ///
 		levels(95) ///
-		ysize(7) xsize(12) /// specifies height width ratio for whole graph as in latex presentation
-		eqlabels(, labsize(medium)) ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Events (ITT)"' `3'2 = `"Events (TOT)"' `4'1 = `"Clients (ITT)"' `4'2 = `"Clients (TOT)"' `5'1 = `"Other (ITT)"' `5'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
-		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`2'' (Entrepreneurs), `fmt_c_m_`3'' (Events), & `fmt_c_m_`4'' (Clients)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+				note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`2'' (Entrepreneurs), `fmt_c_m_`3'' (Events), & `fmt_c_m_`4'' (Clients)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+gr export "${figures_innovation}/el_`generate'_cfplot2.pdf", replace
 
 
 end
@@ -4104,13 +4105,13 @@ coefplot ///
 		swapnames /// swaps coeff & equation names after collecting result
 		title("Management Practices - Sources") ///
 		levels(95) ///
-		ysize(7) xsize(12) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 	eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`3'' (Family/Friends), `fmt_c_m_`5'' (Training)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot1, replace)
-gr export el_`generate'_cfplot1.pdf, replace
+gr export "${figures_management}/el_`generate'_cfplot1.pdf", replace
 
 
 		* cfp 2: magnitude & significance (p-value)
@@ -4136,16 +4137,15 @@ coefplot ///
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
-		title("Management - Sources", size(medium)) ///
+		title("Management Practices - Sources") ///
 		levels(95) ///
-		ysize(7) xsize(12) /// specifies height width ratio for whole graph as in latex presentation
-		eqlabels(, labsize(medium)) ///
-		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+	eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
-		note("{bf:Note}: Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`3'' (Family/Friends), `fmt_c_m_`5'' (Training)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot2, replace)
-gr export el_`generate'_cfplot2.pdf, replace
+gr export "${figures_management}/el_`generate'_cfplot2.pdf", replace
 
 
 
@@ -4172,16 +4172,15 @@ coefplot ///
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
-		title("Management - Sources", size(medium)) ///
+		title("Management Practices - Sources") ///
 		levels(95) ///
-		ysize(7) xsize(12) /// specifies height width ratio for whole graph as in latex presentation
-		eqlabels(, labsize(medium)) ///
-		eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
+		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+	eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
 		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`3'' (Family/Friends), `fmt_c_m_`5'' (Training)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot3, replace)
-gr export el_`generate'_cfplot3.pdf, replace
+gr export "${figures_management}/el_`generate'_cfplot3.pdf", replace
 
 
 end
@@ -5910,12 +5909,7 @@ lab var ihs_profit_w95_k1 "Profits"
 lab var ihs_costs_w95_k1 "Costs"
 
 
-*** For presentation
-
-
-
-
-*** For paper
+*** For presentation & For paper
 	* Business Performance: Sales
 capture program drop rct_regression_fin // enables re-running
 program rct_regression_fin
@@ -6026,7 +6020,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prehead("\begin{table}[!h] \centering \\ \caption{Business Performance: Sales} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
 				posthead("\toprule \\ \multicolumn{4}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
 				mlabels(, depvars) /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
@@ -6040,7 +6034,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		esttab `regressions' using "${tables_business}/rt_`generate'.tex", append booktabs ///
 				fragment ///	
 				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{4}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
 				stats(c_m control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
@@ -6051,7 +6045,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prefoot("\addlinespace[0.3cm] \midrule ") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcome variables are winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified. 'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 }				
-/*			* coefplot
+		* coefplot
 				* total sales 2023 only
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)), /// 
@@ -6064,7 +6058,26 @@ coefplot ///
 		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1'' & SD is `fmt_sd_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
 		name(el_`generate'_2023_cfp1, replace)
-gr export el_`generate'_2023_cfp1.pdf, replace
+gr export "${figures_business}/el_`generate'_2023_cfp1.pdf", replace
+
+
+				* total sales 2023 only
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2)  mlabsize(medium)), /// 
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1(0.5)4) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///  
+		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1'' & SD is `fmt_sd_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
+		name(el_`generate'_2023_cfp2, replace)
+gr export "${figures_business}/el_`generate'_2023_cfp2.pdf", replace
+
+
 
 				* total sales 2023 only, added aggregated sales & VAT numbers
 coefplot ///
@@ -6073,7 +6086,7 @@ coefplot ///
 	mlabel("Aggregated sales are ~5.1 million TND higher in T vs. C at EL.") ///
 	mlabposition(12) mlabgap(*2)  mlabsize(medium)) /// 
 	(`1'2, pstyle(p1)  ///
-	mlabel("Equivalent to 970k TND in additional VAT revenue.") ///
+	mlabel("Equivalent to 970k TND in additional VAT revenue vs. 600k TND program costs.") ///
 	mlabposition(0) mlabgap(*2) offset(-0.15) msymbol(none) noci  mlabsize(medium) ///
 	), /// 
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1(0.5)4) ///
@@ -6084,67 +6097,37 @@ coefplot ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
 		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1'' & SD is `fmt_sd_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp1a, replace)
-gr export el_`generate'_2023_cfp1a.pdf, replace
+		name(el_`generate'_2023_cfp, replace)
+gr export "${figures_business}/el_`generate'_2023_cfp3.pdf", replace
+
 				
 				* total, domestic, export sales 2023
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)) ///
-	(`5'1, pstyle(p3)) (`5'2, pstyle(p3)), /// 
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), /// 
 	keep(*treatment take_up) drop(_cons) xline(0)  xlabel(-1(0.5)4) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `3'1 = `"Domestic sales 2023 (ITT)"' `3'2 = `"Domestic sales 2023 (TOT)"'  `5'1 = `"Export sales 2023 (ITT)"' `5'2 = `"Export sales 2023 (TOT)"') ///
+		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `2'1 = `"Domestic sales 2023 (ITT)"' `2'2 = `"Domestic sales 2023 (TOT)"'  `3'1 = `"Export sales 2023 (ITT)"' `3'2 = `"Export sales 2023 (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control EL means are `fmt_c_m_`1'' (total), `fmt_c_m_`3'' (domestic), and `fmt_c_m_`5'' (export)." "The control EL SDs are `fmt_sd_`1'' (total), `fmt_sd_`3'' (domestic), and `fmt_sd_`5'' (export)." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp2, replace)
-gr export el_`generate'_2023_cfp2.pdf, replace
+		note("{bf:Note}:" "The control EL means are `fmt_c_m_`1'' (total), `fmt_c_m_`3'' (domestic), and `fmt_c_m_`5'' (export)." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
+		name(el_`generate'_decomp_2023_cfp, replace)
+gr export "${figures_business}/el_`generate'_decomp_2023_cfp.pdf", replace
 			
-				* overview: 2023
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)) ///
-	(`5'1, pstyle(p3)) (`5'2, pstyle(p3)) ///
-	(`7'1, pstyle(p4)) (`7'2, pstyle(p4)) ///
-	(`9'1, pstyle(p5)) (`9'2, pstyle(p5)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `3'1 = `"Domestic sales 2023 (ITT)"' `3'2 = `"Domestic sales 2023 (TOT)"'  `5'1 = `"Export sales 2023 (ITT)"' `5'2 = `"Export sales 2023 (TOT)"' `7'1 = `"Profit 2023 (ITT)"' `7'2 = `"Profit 2023 (TOT)"' `9'1 = `"Costs 2023 (ITT)"' `9'2 = `"Costs 2023 (TOT)"') ///
-		title("KPIs 2023") ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp, replace)
-gr export el_`generate'_2023_cfp.png, replace
-
-				* overview: 2024
-coefplot ///
-	(`2'1, pstyle(p1)) (`2'2, pstyle(p1)) ///
-	(`4'1, pstyle(p2)) (`4'2, pstyle(p2)) ///
-	(`6'1, pstyle(p3)) (`6'2, pstyle(p3)) ///
-	(`8'1, pstyle(p4)) (`8'2, pstyle(p4)) ///
-	(`10'1, pstyle(p5)) (`10'2, pstyle(p5)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`2'1 = `"Total sales 2024 (ITT)"' `2'2 = `"Total sales 2024 (TOT)"' `4'1 = `"Domestic sales 2024 (ITT)"' `4'2 = `"Domestic sales 2024 (TOT) "' `6'1 = `"Export sales 2024 (ITT)"' `6'2 = `"Export sales 2024 (TOT)"' `8'1 = `"Profit 2023 (ITT)"' `8'2 = `"Profit 2023 (TOT) "' `10'1 = `"Costs 2024 (ITT)"' `10'2 = `"Costs 2024 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2024_cfp, replace)
-gr export el_`generate'_2024_cfp.png, replace
-*/
 
 end
 
 	* win95, k1
-rct_regression_fin ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1, gen(business_sales_paper)
+rct_regression_fin ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1, gen(sales)
+
+
+
+
+
+
 
 
 	* Business Performance: Profits, Costs, Employment
@@ -6282,100 +6265,28 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prefoot("\addlinespace[0.3cm] \midrule ") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcome variables are winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified. 'Profits' and 'Costs' are in units of Tunisian Dinar before transformation. 'Costs' values are calculated by substracting profits from total sales. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 }				
-/*			* coefplot
-				* total sales 2023 only
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1(0.5)4) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1'' & SD is `fmt_sd_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp1, replace)
-gr export el_`generate'_2023_cfp1.pdf, replace
+		* coefplot
 
-				* total sales 2023 only, added aggregated sales & VAT numbers
-coefplot ///
-	(`1'1, pstyle(p1)) ///
-	(`1'2, pstyle(p1)  ///
-	mlabel("Aggregated sales are ~5.1 million TND higher in T vs. C at EL.") ///
-	mlabposition(12) mlabgap(*2)  mlabsize(medium)) /// 
-	(`1'2, pstyle(p1)  ///
-	mlabel("Equivalent to 970k TND in additional VAT revenue.") ///
-	mlabposition(0) mlabgap(*2) offset(-0.15) msymbol(none) noci  mlabsize(medium) ///
-	), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-1(0.5)4) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1'' & SD is `fmt_sd_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp1a, replace)
-gr export el_`generate'_2023_cfp1a.pdf, replace
-				
-				* total, domestic, export sales 2023
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)) ///
-	(`5'1, pstyle(p3)) (`5'2, pstyle(p3)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0)  xlabel(-1(0.5)4) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)), /// 
+	keep(*treatment take_up) drop(_cons) xline(0)  ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `3'1 = `"Domestic sales 2023 (ITT)"' `3'2 = `"Domestic sales 2023 (TOT)"'  `5'1 = `"Export sales 2023 (ITT)"' `5'2 = `"Export sales 2023 (TOT)"') ///
+		eqrename(`1'1 = `"Profit 2023 (ITT)"' `1'2 = `"Profit 2023 (TOT)"' `2'1 = `"Costs 2023 (ITT)"' `2'2 = `"Costs 2023 (TOT)"'  `3'1 = `"Employees 2023 (ITT)"' `3'2 = `"Employees 2023 (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control EL means are `fmt_c_m_`1'' (total), `fmt_c_m_`3'' (domestic), and `fmt_c_m_`5'' (export)." "The control EL SDs are `fmt_sd_`1'' (total), `fmt_sd_`3'' (domestic), and `fmt_sd_`5'' (export)." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
+		note("{bf:Note}:" "The control EL means are `fmt_c_m_`1'' (profit), `fmt_c_m_`2'' (cost), and `fmt_c_m_`3'' (employees)." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
 		name(el_`generate'_2023_cfp2, replace)
-gr export el_`generate'_2023_cfp2.pdf, replace
+gr export "${figures_business}/el_`generate'_2023_cfp.pdf", replace
 			
-				* overview: 2023
-coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
-	(`3'1, pstyle(p2)) (`3'2, pstyle(p2)) ///
-	(`5'1, pstyle(p3)) (`5'2, pstyle(p3)) ///
-	(`7'1, pstyle(p4)) (`7'2, pstyle(p4)) ///
-	(`9'1, pstyle(p5)) (`9'2, pstyle(p5)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`1'1 = `"Total sales 2023 (ITT)"' `1'2 = `"Total sales 2023 (TOT)"' `3'1 = `"Domestic sales 2023 (ITT)"' `3'2 = `"Domestic sales 2023 (TOT)"'  `5'1 = `"Export sales 2023 (ITT)"' `5'2 = `"Export sales 2023 (TOT)"' `7'1 = `"Profit 2023 (ITT)"' `7'2 = `"Profit 2023 (TOT)"' `9'1 = `"Costs 2023 (ITT)"' `9'2 = `"Costs 2023 (TOT)"') ///
-		title("KPIs 2023") ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2023_cfp, replace)
-gr export el_`generate'_2023_cfp.png, replace
-
-				* overview: 2024
-coefplot ///
-	(`2'1, pstyle(p1)) (`2'2, pstyle(p1)) ///
-	(`4'1, pstyle(p2)) (`4'2, pstyle(p2)) ///
-	(`6'1, pstyle(p3)) (`6'2, pstyle(p3)) ///
-	(`8'1, pstyle(p4)) (`8'2, pstyle(p4)) ///
-	(`10'1, pstyle(p5)) (`10'2, pstyle(p5)), /// 
-	keep(*treatment take_up) drop(_cons) xline(0) ///
-		asequation /// name of model is used
-		swapnames /// swaps coeff & equation names after collecting result
-		levels(95) ///
-		eqrename(`2'1 = `"Total sales 2024 (ITT)"' `2'2 = `"Total sales 2024 (TOT)"' `4'1 = `"Domestic sales 2024 (ITT)"' `4'2 = `"Domestic sales 2024 (TOT) "' `6'1 = `"Export sales 2024 (ITT)"' `6'2 = `"Export sales 2024 (TOT)"' `8'1 = `"Profit 2023 (ITT)"' `8'2 = `"Profit 2023 (TOT) "' `10'1 = `"Costs 2024 (ITT)"' `10'2 = `"Costs 2024 (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
-		leg(off) ysize(5) xsize(10) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "The control group endline average is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level." "All variables are winsorised at the 95th percentile & IHS-transformed.", span size(medium)) ///
-		name(el_`generate'_2024_cfp, replace)
-gr export el_`generate'_2024_cfp.png, replace
-*/
 
 end
 
 	* win95, k1
-rct_regression_fin ihs_profit_w95_k1 ihs_costs_w95_k1 ihs_employes_w95_k1, gen(business_profit_paper)
+rct_regression_fin ihs_profit_w95_k1 ihs_costs_w95_k1 ihs_employes_w95_k1, gen(profit)
 
 
 

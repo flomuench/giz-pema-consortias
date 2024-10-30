@@ -218,6 +218,8 @@ if c(os) == "Windows" {
 				global figures_exports = "${figures_latex}/Exports"
 				global figures_management = "${figures_latex}/Management Practices"
 				global figures_network = "${figures_latex}/network"
+				global figures_business = "${figures_latex}/compta"
+				global figures_innovation = "${figures_latex}/innovation"
 				
 				
 			global tables_latex = "${master_latex}/Tables"
