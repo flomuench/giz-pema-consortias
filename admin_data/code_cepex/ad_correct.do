@@ -27,20 +27,10 @@ use "${intermediate}/rct_rne_inter", clear
 local numvar ca_export_dt ca_local_dt resultatall_dt ca_ttc_dt total_wage moyennes export_value export_weight import_value import_weight net_job_creation
 local numvarc  ca_export_dt ca_local_dt resultatall_dt ca_ttc_dt total_wage moyennes export_value export_weight import_value import_weight net_job_creation
 
-
 ***********************************************************************
-* 	PART 2:  Automatic corrections
+* 	PART 2:  Clean export data  			
 ***********************************************************************
 
-
-
-***********************************************************************
-* 	PART 4:  Convert string to numerical variables after corrections  			
-***********************************************************************
-foreach x of local numvar {
-destring `x', replace
-format `x' %25.0fc
-}
 
 ***********************************************************************
 * 	PART 5: Save the changes made to the data		  			
