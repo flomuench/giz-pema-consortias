@@ -5908,6 +5908,9 @@ lab var ihs_ca_exp_w95_k1 "Export Sales"
 lab var ihs_profit_w95_k1 "Profits"
 lab var ihs_costs_w95_k1 "Costs"
 
+* without zeros
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
 
 *** For presentation & For paper
 	* Business Performance: Sales
@@ -5919,7 +5922,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3 & `var' > 0, cluster(consortia_cluster)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -5928,7 +5931,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3 & `var' > 0, cluster(consortia_cluster) first
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2
 					estadd local strata_final "Yes" : `var'2
