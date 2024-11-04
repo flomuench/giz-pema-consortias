@@ -1227,11 +1227,15 @@ forvalues s = 1(1)3 {
 	if (`r(N)' > 0) {	
 		sum `var' if surveyround == `s', d
 		replace `var'_w99 = `r(p99)' if `var' > `r(p99)' & surveyround ==  `s' & `var' != .
+		replace `var'_w99 = `r(p1)' if `var' < `r(p1)' & surveyround ==  `s' & `var' != .
+
 		*winsor `var' if surveyround == `s', suffix(_`s'w99) cuts(0 99)  // winsorize
 		*replace `var'_w99 = `var'_`s'w99 if surveyround ==  `s'
 		
 		sum `var' if surveyround == `s', d
 		replace `var'_w95 = `r(p95)' if `var' > `r(p95)' & surveyround ==  `s' & `var' != .
+		replace `var'_w95 = `r(p5)' if `var' < `r(p5)' & surveyround ==  `s' & `var' != .
+
 		*winsor `var' if surveyround == `s', suffix(_`s'w95) cuts(0 95)  // winsorize
 		*replace `var'_w95 = `var'_`s'w95 if surveyround ==  `s'
 				}
