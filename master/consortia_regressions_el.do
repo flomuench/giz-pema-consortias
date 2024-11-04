@@ -3480,24 +3480,85 @@ program mpi_presentation
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
-			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+						* add to latex table
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
+				
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+						* add to latex table
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3, d
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100			
+				
+			}
+			else {
+				// ITT: ANCOVA plus stratification dummies
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+						* add to latex table
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
-			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes"
-			estadd local strata_final "Yes"
-			
-			* calculate control group mean
-				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-
-		}
+				// ATT, IV
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+						* add to latex table
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3, d
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
+					
+					// Calculate percent change
+					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100		
+        }
+	}
 		
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -3556,18 +3617,21 @@ esttab e(RW) using rw_`generate'.tex, replace
 				
 						* coefplot
 coefplot ///
-	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)), ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1) ///
+	mlabel(string(@b, "%9.2f") + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabposition(12) mlabgap(*2)  mlabsize(medium)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) /// xlabel(0(1)10)
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' Index (ITT)"' `1'2 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' Index (TOT)"') ///
+		eqrename(`1'1 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' z-score (ITT)"' `1'2 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' z-score (TOT)"') ///
 		xtitle("Treatment Effect", size(medsmall)) ///  
-		leg(off) xsize(4) ysize(4) /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		leg(off) xsize(8) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height 
 		ysc(outergap(-50)) /// negative outer gap --> reduces space btw coef names & plot
+		note("{bf:Note}:" "The control endline median is `fmt_c_m_`1'' and SD is `fmt_sd_`1''." "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variables are z-scores based on Anderson (2008).", span size(medium)) ///
 		name(el_`generate'_cfp, replace)
-	
-gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfp.png", replace
+gr export "${figures_management}/el_`generate'_cfp.png", replace	
+*gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfp.png", replace
 
 
 end
@@ -5912,6 +5976,35 @@ lab var ihs_costs_w95_k1 "Costs"
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
 ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
 
+* Cai and Szeidl, Iacovone et al. firm fixed effects
+gen midline = (surveyround == 2)
+gen endline = (surveyround == 3)
+
+	* absolute sales
+reg ca_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+reg ca_exp_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+reg ca_tun_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+
+	* ihs-win-sales
+reg ihs_ca_w95_k1 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+reg ihs_catun_w95_k1 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+reg ihs_caexp_w95_k1 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
+
+	* relative growth rate in sales
+reg ca_rel_growth i.treatment##i.midline i.treatment##i.endline i.strata_final, cluster(consortia_cluster)
+reg ca_tun_rel_growth i.treatment##i.midline i.treatment##i.endline i.strata_final, cluster(consortia_cluster)
+reg ca_exp_rel_growth i.treatment##i.midline i.treatment##i.endline i.strata_final, cluster(consortia_cluster)
+
+
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+ivreg2 ca_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ca_exp_abs_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+ivreg2 ca_exp_abs_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg ca_tun_abs_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+ivreg2 ca_tun_abs_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
 *** For presentation & For paper
 	* Business Performance: Sales
 capture program drop rct_regression_fin // enables re-running
@@ -5922,7 +6015,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3 & `var' > 0, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -5931,7 +6024,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3 & `var' > 0, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2
 					estadd local strata_final "Yes" : `var'2
@@ -5940,10 +6033,12 @@ version 16							// define Stata version 15 used
 					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
+				sum `var' if treatment == 0 & surveyround == 3, d
 						* for latex table
 					estadd scalar c_m = r(mean) : `var'2
 					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
 						* for  coefplots
 					local c_m_`var' = r(mean)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
@@ -5959,7 +6054,7 @@ version 16							// define Stata version 15 used
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes" : `var'1
+					estadd local bl_control "No" : `var'1
 					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
@@ -5968,17 +6063,19 @@ version 16							// define Stata version 15 used
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes" : `var'2
+					estadd local bl_control "No" : `var'2
 					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
 					local fmt_att_`var' : display %3.2f `att_`var''	
 				
 				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
+				sum `var' if treatment == 0 & surveyround == 3, d
 						* for latex table
 					estadd scalar c_m = r(mean) : `var'2
 					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
 						* for  coefplots
 					local c_m_`var' = r(mean)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
@@ -6016,7 +6113,7 @@ rwolf2 ///
 esttab e(RW) using rw_`generate'.tex, replace	
 */		
 {		
-		* Put all regressions into one table
+		* 1st table w/o growth rates
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 // `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  adjust manually to number of variables 
 		esttab `regressions' using "${tables_business}/rt_`generate'.tex", replace booktabs ///
@@ -6024,7 +6121,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\toprule \\ \multicolumn{4}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
-				mlabels(, depvars) /// use dep vars labels as model title
+				mlabels("Total sales" "Domestic sales" "Export sales") /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
@@ -6047,6 +6144,40 @@ esttab e(RW) using rw_`generate'.tex, replace
 				label 		/// specifies EVs have label
 				prefoot("\addlinespace[0.3cm] \midrule ") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcome variables are winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified. 'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+
+			***2nd table with growth rates (for presentation need to remove caption)
+		local regressions `1'1 `4'1 `5'1 // `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  adjust manually to number of variables 
+		esttab `regressions' using "${tables_business}/rt_`generate'_2.tex", replace booktabs ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Business Performance: Sales - IHS-transformed and growth rates} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\toprule \\ \multicolumn{4}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				mlabels("Total sales - IHS" "Total sales - Growth rate" " Total sales - Growth rate (wins.)") /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'2 `4'2 `5'2  // `4'2 `5'2 `6'2 `7'2 `8'2 `9'2 `10'2 adjust manually to number of variables 
+		esttab `regressions' using "${tables_business}/rt_`generate'_2.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{4}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				stats(c_m c_med control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group median" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule ") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: Total sales is winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified.   'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") 
+				
+				
+				
 }				
 		* coefplot
 				* total sales 2023 only
@@ -6124,7 +6255,7 @@ gr export "${figures_business}/el_`generate'_decomp_2023_cfp.pdf", replace
 end
 
 	* win95, k1
-rct_regression_fin ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1, gen(sales)
+rct_regression_fin ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95, gen(sales)
 
 
 
@@ -6290,13 +6421,6 @@ end
 
 	* win95, k1
 rct_regression_fin ihs_profit_w95_k1 ihs_costs_w95_k1 ihs_employes_w95_k1, gen(profit)
-
-
-
-
-
-
-
 
 
 
