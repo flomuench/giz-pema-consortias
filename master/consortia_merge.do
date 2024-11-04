@@ -237,13 +237,45 @@ drop if id_plateforme==.
 }
 
 ***********************************************************************
-* 	PART 6: information from pii data that is missing in analysis data
+* 	PART 6: merge with cleaned product/ substitutes
+***********************************************************************
+{
+		*  import data
+preserve
+import excel "${harmonize}/cepex_produits.xlsx", firstrow clear
+
+		* remove blank lines
+drop if id_plateforme==.
+
+		* select take-up variables
+keep id_plateforme produit_clean_engl substitutes
+		
+		* save
+save "${harmonize}/cepex_produits", replace
+drop if id_plateforme==.
+restore
+
+		* merge to analysis data
+merge m:1 id_plateforme using "${harmonize}/cepex_produits"
+/*
+   Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                               528  (_merge==3)
+    -----------------------------------------
+
+    -----------------------------------------* id 1040 & 1192 se sont desistés le 19 et 26 avril après la randomisation du 7 avril (post Eya 4 avril)
+*/
+drop _merge
+}
+***********************************************************************
+* 	PART 7: information from pii data that is missing in analysis data
 ***********************************************************************
 * list_group allocation for firms that attrited
 
 
 ***********************************************************************
-* 	PART 7: save finale analysis data set as raw
+* 	PART 8: save finale analysis data set as raw
 ***********************************************************************
     * save as consortium_database
 save "${master_raw}/consortium_raw", replace
