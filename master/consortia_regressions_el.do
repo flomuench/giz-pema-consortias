@@ -693,6 +693,8 @@ version 16							// define Stata version 15 used
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -711,6 +713,8 @@ version 16							// define Stata version 15 used
 						* for  coefplots
 					local control_mean_`var' = r(mean)
 					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+										local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 					
 					// Calculate percent change
 					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
@@ -788,9 +792,7 @@ coefplot ///
     mlabel(string(@b, "%9.2f") + " equivalent to " + string(``3'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
     mlabposition(12) mlabgap(*2) mlabsize(medsmall)) ///
     (`4'1, pstyle(p4)) ///
-    (`4'2, pstyle(p4) ///
-    mlabel(string(@b, "%9.2f") + " equivalent to " + string(``4'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
-    mlabposition(12) mlabgap(*2) mlabsize(medsmall)) ///
+    (`4'2, pstyle(p4)) ///
     (`5'1, pstyle(p5)) ///
     (`5'2, pstyle(p5) ///
     mlabel(string(@b, "%9.2f") + " equivalent to " + string(``5'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
@@ -808,11 +810,12 @@ coefplot ///
 		eqrename(`1'1 = `"Shares management practices (ITT)"' `1'2 = `"Shares management practices (TOT)"' `2'1 = `"Shares product ideas (ITT)"' `2'2 = `"Shares product ideas (TOT)"' `3'1 = `"Shares export experience (ITT)"' `3'2 = `"Shares export experience (TOT)"' `4'1 = `"Make/receive referral (ITT)"' `4'2 = `"Make/receive referral (TOT)"' `5'1 = `"Joint contract bid (ITT)"' `5'2 = `"Joint contract bid (TOT)"' `6'1 = `"Emotional support business risk (ITT)"' `6'2 = `"Emotional support business risk (TOT)"' `7'1 = `"Other (ITT)"' `7'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(12)  ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}:" "Confidence intervals are at the 95 percent level.", span size(medsmall)) ///	
+		note("{bf:Note}:" "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "All variables are binary (0/1).", span size(medsmall)) ///	
 		ysc(outergap(-8)) ///
 		name(el_`generate'_cfp, replace)
+gr export "${figures_network}/el_`generate'_cfp.pdf", replace	
 	
-gr export "${figures_network}/el_`generate'_cfp.pdf", replace
+*gr export "${figures_network}/el_`generate'_cfp.pdf", replace
 
 end
 
@@ -839,7 +842,9 @@ version 16							// define Stata version 15 used
 					estadd local strata_final "Yes"
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
-					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local fmt_itt_`var' : display %3.1f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -848,7 +853,7 @@ version 16							// define Stata version 15 used
 					estadd local strata_final "Yes"
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local fmt_att_`var' : display %3.1f `att_`var''	
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
@@ -857,7 +862,9 @@ version 16							// define Stata version 15 used
 					estadd scalar control_sd = r(sd)
 						* for  coefplots
 					local control_mean_`var' = r(mean)
-					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					local fmt_control_mean_`var' : display  %3.1f `control_mean_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.1f `sd_`var''
 					
 					// Calculate percent change
 					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
@@ -947,18 +954,23 @@ coefplot ///
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
 		eqlabels(, labsize(medium)) ///
-		eqrename(`1'1 = `"Monthly business `=char(13)'`=char(10)' discussions (ITT)"' `1'2 = `"Monthly business `=char(13)'`=char(10)' discussions (TOT)"') ///
+		eqrename(`1'1 = `"Monthly business discussions (ITT)"' `1'2 = `"Monthly business discussions (TOT)"') ///
 		xtitle("Persons", size(medium)) ///  
-		leg(off) ysize(5) xsize(10)  /// xsize controls aspect ratio, makes graph wider & reduces its height 
-		ysc(outergap(-35)) /// negative outer gap --> reduces space btw coef names & plot
-		note("{bf:Note}:" "The control group endline average is `fmt_control_mean_`1''." "Variables are winsorized at the 95th percentile." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		leg(off) ysize(5) xsize(8)  /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		note("{bf:Note}:" "The control group endline average is `fmt_control_mean_`1'' and SD is `fmt_sd_`1''." "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variable is winsorized at the 95th percentile.", span size(medium)) ///
 		name(el_`generate'_cfp2, replace)
-	gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp2.png", replace
+gr export "${figures_network}/el_`generate'_cfp2.pdf", replace	
+	
+*	gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfp2.png", replace
 
 
 end
 	
 network_size_presentation net_size_w95, gen(netsize)	
+	
+	
+	
+	
 	
 	* network composition entrepreneurs & gender (1: nbr of contacts, 2: % of women, 3: % GIZ)
 capture program drop network_comp_presentation // enables re-running
@@ -1857,6 +1869,8 @@ version 16							// define Stata version 15 used
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -1875,10 +1889,13 @@ version 16							// define Stata version 15 used
 						* for  coefplots
 					local c_m_`var' = r(p50)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 					
 				// Calculate percent change
 					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
-					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100	
+					local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100
+					
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
@@ -1888,7 +1905,9 @@ version 16							// define Stata version 15 used
 					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
-					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local fmt_itt_`var' : display %3.2f `itt_`var''
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -1897,7 +1916,9 @@ version 16							// define Stata version 15 used
 					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local fmt_att_`var' : display %3.2f `att_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3, d
@@ -2021,10 +2042,10 @@ coefplot ///
 		levels(95) ///
 		ysize(5) xsize(10) /// specifies height width ratio for whole graph as in latex presentation
 		eqlabels(, labsize(medium)) ///
-		eqrename(`1'1 = `"Efficacy: `=char(13)'`=char(10)' Z-score (ITT)"' `1'2 = `"Efficacy: `=char(13)'`=char(10)' Z-score (TOT)"' `2'1 = `"Locus of Control: `=char(13)'`=char(10)' Z-score (ITT)"' `2'2 = `"Locus of Control: `=char(13)'`=char(10)' Z-score (TOT)"') ///
+		eqrename(`1'1 = `"Efficacy: Z-score (ITT)"' `1'2 = `"Efficacy: Z-score (TOT)"' `2'1 = `"Locus of Control: Z-score (ITT)"' `2'2 = `"Locus of Control: Z-score (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
-		note("{bf:Note}:" "The control group endline median is `fmt_c_m_`1''." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		note("{bf:Note}:" "The control group endline median efficacy is `fmt_c_m_`1'' and SD is `fmt_sd_`1''." "The control group endline median locus of control is `fmt_c_m_`2'' and SD is `fmt_sd_`2''."  "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variables are z-scores following Anderson (2008) based on three 7-likert scale self-affirmation questions.", span size(medium)) ///
 		name(el_`generate'_cfp2, replace)
 	* export for google drive (presentation?)
 *gr export "${master_regressiontables}/endline/regressions/confidence/el_`generate'_cfp2.pdf", replace
@@ -2039,6 +2060,9 @@ end
 rct_regression_efi female_efficacy female_loc, gen(efi_loc)
 
 }
+
+
+
 
 **************** efi (components) ****************
 {
@@ -3624,13 +3648,12 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' z-score (ITT)"' `1'2 = `"Management `=char(13)'`=char(10)' Practices `=char(13)'`=char(10)' z-score (TOT)"') ///
+		eqrename(`1'1 = `"Management Practices z-score (ITT)"' `1'2 = `"Management Practices z-score (TOT)"') ///
 		xtitle("Treatment Effect", size(medsmall)) ///  
-		leg(off) xsize(8) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height 
-		ysc(outergap(-50)) /// negative outer gap --> reduces space btw coef names & plot
-		note("{bf:Note}:" "The control endline median is `fmt_c_m_`1'' and SD is `fmt_sd_`1''." "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variables are z-scores based on Anderson (2008).", span size(medium)) ///
+		leg(off) xsize(10) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		note("{bf:Note}:" "The control endline median is `fmt_c_m_`1'' and SD is `fmt_sd_`1''." "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variables are z-scores following Anderson (2008)." "Z-score based on 10 management practice variables correlated with Bloom et al. (2013).", span size(medium)) ///
 		name(el_`generate'_cfp, replace)
-gr export "${figures_management}/el_`generate'_cfp.png", replace	
+gr export "${figures_management}/el_`generate'_cfp.pdf", replace	
 *gr export "${master_regressiontables}/endline/regressions/management/el_`generate'_cfp.png", replace
 
 
@@ -4020,6 +4043,8 @@ version 16							// define Stata version 15 used
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -4028,7 +4053,9 @@ version 16							// define Stata version 15 used
 					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local fmt_att_`var' : display %3.2f `att_`var''
+
+
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3
@@ -4038,6 +4065,8 @@ version 16							// define Stata version 15 used
 						* for  coefplots
 					local c_m_`var' = r(mean)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 					
 					// Calculate percent change
 					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
@@ -4051,7 +4080,9 @@ else {
 					estadd local strata_final "Yes" : `var'1
 						* add to coefplot
 					local itt_`var' = r(table)[1,2]
-					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local fmt_itt_`var' : display %3.2f `itt_`var''
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
 				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
@@ -4060,7 +4091,9 @@ else {
 					estadd local strata_final "Yes" : `var'2
 						* add to coefplot
 					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local fmt_att_`var' : display %3.2f `att_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 				
 				// Calculate control group mean
 				sum `var' if treatment == 0 & surveyround == 3, d
@@ -4070,6 +4103,8 @@ else {
 						* for  coefplots
 					local c_m_`var' = r(mean)
 					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 						
 					// Calculate percent change
 					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100			
@@ -4164,16 +4199,16 @@ coefplot ///
 	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
 	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
 	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.6(0.1)0.6) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		title("Management Practices - Sources") ///
 		levels(95) ///
-		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+		ysize(7) xsize(12) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 	eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) /// 
-		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`3'' (Family/Friends), `fmt_c_m_`5'' (Training)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		note("{bf:Note}:" "Control means [SD] are `fmt_c_m_`1'' [`fmt_sd_`1''] (Consultants), `fmt_c_m_`3'' [`fmt_sd_`3''] (Family/Friends), `fmt_c_m_`5'' [`fmt_sd_`5''] (Training)." "Number of observations is `fmt_nobs_`1''." "Variables are binary [0;1]." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot1, replace)
 gr export "${figures_management}/el_`generate'_cfplot1.pdf", replace
 
@@ -4198,7 +4233,7 @@ coefplot ///
 	mlabposition(12) mlabgap(*2)  mlabsize(medsmall)) ///
 	(`6'1, pstyle(p6)) ///
 	(`6'2, pstyle(p6)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.6(0.1)0.6) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		title("Management Practices - Sources") ///
@@ -4217,32 +4252,31 @@ gr export "${figures_management}/el_`generate'_cfplot2.pdf", replace
 coefplot ///
 (`1'1,  pstyle(p1)) ///
 (`1'2, pstyle(p1) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " or " + string(``1'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
 	mlabposition(12) mlabgap(*2)  mlabsize(medsmall)) ///
 	(`2'1, pstyle(p2)) ///
 	(`2'2, pstyle(p2)) ///
 (`3'1, pstyle(p3)) ///
 (`3'2, pstyle(p3) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``3'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " or " + string(``3'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
 	mlabposition(12) mlabgap(*2)  mlabsize(medsmall)) ///
 	(`4'1, pstyle(p4)) ///
 	(`4'2, pstyle(p4)) ///
 (`5'1, pstyle(p5)) ///
 (`5'2, pstyle(p5) ///
-	mlabel(string(@b, "%9.2f") + " equivalent to " + string(``5'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
+	mlabel(string(@b, "%9.2f") + " or " + string(``5'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "%9.2f") + ") ") ///
 	mlabposition(12) mlabgap(*2)  mlabsize(medsmall)) ///
 	(`6'1, pstyle(p6)) ///
 	(`6'2, pstyle(p6)), ///
-	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.2(0.1)0.4) ///
+	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.6(0.1)0.6) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
-		title("Management Practices - Sources") ///
 		levels(95) ///
-		ysize(5) xsize(10) /// specifies 16:9 height width ratio for whole graph as in latex presentation
+		ysize(5) xsize(12) /// specifies 16:9 height width ratio for whole graph as in latex presentation
 	eqrename(`1'1 = `"Consultant (ITT)"' `1'2 = `"Consultant (TOT)"' `2'1 = `"Other Entrepreneurs (ITT)"' `2'2 = `"Other Entrepreneurs (TOT)"' `3'1 = `"Family & Friends (ITT)"' `3'2 = `"Family & Friends (TOT)"' `4'1 = `"Events (ITT)"' `4'2 = `"Events (TOT)"' `5'1 = `"Training (ITT)"' `5'2 = `"Training (TOT)"' `6'1 = `"Other (ITT)"' `6'2 = `"Other (TOT)"') ///
-		xtitle("Treatment coefficient", size(medium)) ///  
+		xtitle("Sources Management Practices", size(medium)) ///  
 		leg(off) /// 
-		note("{bf:Note}:" "Control means are `fmt_c_m_`1'' (Consultants), `fmt_c_m_`3'' (Family/Friends), `fmt_c_m_`5'' (Training)." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		note("{bf:Note}:" "Control means [SD]: `fmt_c_m_`1'' [`fmt_sd_`1''] (Consultants), `fmt_c_m_`3'' [`fmt_sd_`3''] (Family & Friends), & `fmt_c_m_`5'' [`fmt_sd_`5''] (Training)." "Number of observations is `fmt_nobs_`1''. Variables are binary [0;1]." "Confidence intervals are at the 95 percent level.", span size(medium)) ///
 		name(el_`generate'_cfplot3, replace)
 gr export "${figures_management}/el_`generate'_cfplot3.pdf", replace
 
@@ -4272,35 +4306,70 @@ version 16							// define Stata version 15 used
 			if _rc == 0 {
 			// ITT: ANCOVA plus stratification dummies
 			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local bl_control "Yes" : `var'1
-			estadd local strata_final "Yes" : `var'1
+						* add to latex table
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
 			// ATT, IV
 			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes" : `var'2
-			estadd local strata_final "Yes" : `var'2
-
+						* add to latex table
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
+					
 			// Calculate control group mean
 			sum `var' if treatment == 0 & surveyround == 3, d
-			estadd scalar control_median = r(mean) : `var'2
+				* for latex table
+			estadd scalar control_median = r(p50) : `var'2
 			estadd scalar control_sd = r(sd) : `var'2
+				* for coefplots
+			local c_m_`var' = r(p50)
+			local fmt_c_m_`var' : display  %3.2f `c_m_`var''			
+			local sd_`var' = r(sd)
+			local fmt_sd_`var' : display  %3.2f `sd_`var''
 
         }
         else {
             // ITT: ANCOVA plus stratification dummies
             eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-            estadd local bl_control "No" : `var'1
-            estadd local strata_final "Yes" : `var'1
+						* add to latex table
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
             // ATT, IV
             eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-            estadd local bl_control "No" : `var'2
-            estadd local strata_final "Yes" : `var'2
-            
-            // Calculate control group mean
-            sum `var' if treatment == 0 & surveyround == 3, d
-            estadd scalar control_median = r(p50) : `var'2
-            estadd scalar control_sd = r(sd) : `var'2
+						* add to latex table
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
+				
+				// Calculate control group mean
+				sum `var' if treatment == 0 & surveyround == 3, d
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
+			
         }
 }
 		
@@ -4374,13 +4443,12 @@ coefplot ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
 		levels(95) ///
-		eqrename(`1'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, General (ITT)"' `1'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, General (TOT)"' `2'1 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, SSA (ITT)"' `2'2 = `"Export `=char(13)'`=char(10)' Readiness `=char(13)'`=char(10)' Index, SSA (TOT)"') ///
+		eqrename(`1'1 = `"Export Readiness Index, General (ITT)"' `1'2 = `"Export Readiness Index, General (TOT)"' `2'1 = `"Export Readiness Index, SSA (ITT)"' `2'2 = `"Export Readiness Index, SSA (TOT)"') ///
 		xtitle("Treatment Effect", size(medsmall)) ///  
-		leg(off) xsize(12) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height 
-		ysc(outergap(-30)) /// negative outer gap --> reduces space btw coef names & plot
-		note("{bf:Note}: Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		leg(off) xsize(10) ysize(5) /// xsize controls aspect ratio, makes graph wider & reduces its height 
+		note("{bf:Note}:" "The control endline median ERI SSA is `fmt_c_m_`1'' and SD is `fmt_sd_`1''." "Number of observations is `fmt_nobs_`1''." "Confidence intervals are at the 95 percent level." "Variables are z-scores following Anderson (2008).", span size(medium)) ///
 		name(el_`generate'_cfp, replace)
-gr export "${figures_exports}/el_`generate'_cfp.png", replace
+gr export "${figures_exports}/el_`generate'_cfp.pdf", replace
 
 
 end
@@ -4406,44 +4474,66 @@ version 16							// define Stata version 15 used
 					* add to coefplot
 				local itt_`var' = r(table)[1,2]
 				local fmt_itt_`var' : display %3.2f `itt_`var''	
+				local nobs_`var' = e(N)
+				local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
 			// ATT, IV
 			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes" : `var'2
-			estadd local strata_final "Yes" : `var'2
+						* add to latex table
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 
 			// Calculate control group mean
-			sum `var' if treatment == 0 & surveyround == 3, d
-					* for latex table
-				estadd scalar c_m = r(mean) : `var'2
-				estadd scalar control_sd = r(sd) : `var'2
-					* for  coefplots
-				local c_m_`var' = r(mean)
-				local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+				sum `var' if treatment == 0 & surveyround == 3, d
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 
         }
         else {
             // ITT: ANCOVA plus stratification dummies
             eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-					* add to latex table
-				estadd local bl_control "No" : `var'1
-				estadd local strata_final "Yes" : `var'1
-					* add to coefplot
-				local itt_`var' = r(table)[1,2]
-				local fmt_itt_`var' : display %3.2f `itt_`var''	
+						* add to latex table
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
+					
+					
             // ATT, IV
             eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-            estadd local bl_control "No" : `var'2
-            estadd local strata_final "Yes" : `var'2
+						* add to latex table
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
             
             // Calculate control group mean
             sum `var' if treatment == 0 & surveyround == 3, d
-					* for latex table
-				estadd scalar c_m = r(mean) : `var'2
-				estadd scalar control_sd = r(sd) : `var'2
-					* for  coefplots
-				local c_m_`var' = r(mean)
-				local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
         }
 }
 		
@@ -4520,9 +4610,8 @@ coefplot ///
 		eqrename(`1'1 = `"Export manager (ITT)"' `1'2 = `"Export manager (TOT)"' `2'1 = `"Trade fair (ITT)"' `2'2 = `"Trade fair (TOT)"' `3'1 = `"Business partner (ITT)"' `3'2 = `"Business partner  (TOT)"' `4'1 = `"Intl. certification (ITT)"' `4'2 = `"Intl. certification (TOT)"' `5'1 = `"Sales structure (ITT)"' `5'2 = `"Sales structure (TOT)"') ///
 		xtitle("Treatment coefficient", size(medsmall)) ///  
 		leg(off) xsize(12) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}: Confidence intervals are at the 95 percent level.", span size(medium)) ///
+		note("{bf:Note}:" "The control endline median for trade fair is `fmt_c_m_`2'' and SD is `fmt_sd_`2''." "Number of observations is `fmt_nobs_`2''." "Confidence intervals are at the 95 percent level." "Variables are binary [0;1].", span size(medium)) ///
 		name(el_`generate'_cfplot, replace)
-	
 gr export "${figures_exports}/el_`generate'_cfp.pdf", replace
 
 end
@@ -4546,50 +4635,72 @@ version 16							// define Stata version 15 used
 			if _rc == 0 {
 			// ITT: ANCOVA plus stratification dummies
 			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
-					* add to latex table
-				estadd local bl_control "Yes" : `var'1
-				estadd local strata_final "Yes" : `var'1
-					* add to coefplot
-				local itt_`var' = r(table)[1,2]
-				local fmt_itt_`var' : display %3.2f `itt_`var''	
+						* add to latex table
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
 			// ATT, IV
 			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local bl_control "Yes" : `var'2
-			estadd local strata_final "Yes" : `var'2
+						* add to latex table
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
 
 			// Calculate control group mean
 			sum `var' if treatment == 0 & surveyround == 3, d
-					* for latex table
-				estadd scalar c_m = r(mean) : `var'2
-				estadd scalar control_sd = r(sd) : `var'2
-					* for  coefplots
-				local c_m_`var' = r(mean)
-				local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
 
         }
         else {
             // ITT: ANCOVA plus stratification dummies
             eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-					* add to latex table
-				estadd local bl_control "No" : `var'1
-				estadd local strata_final "Yes" : `var'1
-					* add to coefplot
-				local itt_`var' = r(table)[1,2]
-				local fmt_itt_`var' : display %3.2f `itt_`var''	
+						* add to latex table
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
+						* add to coefplot
+					local itt_`var' = r(table)[1,2]
+					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local nobs_`var' = e(N)
+					local fmt_nobs_`var' : display %3.0f `nobs_`var''
+					
+					
             // ATT, IV
             eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-            estadd local bl_control "No" : `var'2
-            estadd local strata_final "Yes" : `var'2
+						* add to latex table
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
+						* add to coefplot
+					local att_`var' = e(b)[1,1]
+					local fmt_att_`var' : display %3.2f `att_`var''	
             
             // Calculate control group mean
             sum `var' if treatment == 0 & surveyround == 3, d
-					* for latex table
-				estadd scalar c_m = r(mean) : `var'2
-				estadd scalar control_sd = r(sd) : `var'2
-					* for  coefplots
-				local c_m_`var' = r(mean)
-				local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+						* for latex table
+					estadd scalar c_m = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar c_med = r(p50) : `var'2
+					
+						* for  coefplots
+					local c_m_`var' = r(p50)
+					local fmt_c_m_`var' : display  %3.2f `c_m_`var''
+					local sd_`var' = r(sd)
+					local fmt_sd_`var' : display  %3.2f `sd_`var''
         }
 }
 		
@@ -4669,7 +4780,7 @@ coefplot ///
 		eqrename(`1'1 = `"Potential client (ITT)"' `1'2 = `"Potential client (TOT)"' `2'1 = `"Business partner (ITT)"' `2'2 = `"Business partner (TOT)"' `3'1 = `"Funding (ITT)"' `3'2 = `"Funding (TOT)"' `4'1 = `"Sales structure (ITT)"' `4'2 = `"Sales structure (TOT)"') ///
 		xtitle("Treatment coefficient", size(medium)) ///  
 		leg(off) xsize(12) ysize(6) /// xsize controls aspect ratio, makes graph wider & reduces its height
-		note("{bf:Note}: Confidence intervals are at the 95 percent level.", span size(medium)) ///		
+		note("{bf:Note}:" "Control endline medians [SD]: `fmt_c_m_`1'' [`fmt_sd_`1''] (Client), `fmt_c_m_`2'' [`fmt_sd_`2''] (Partner), & `fmt_c_m_`3'' [`fmt_sd_`3''] (Funding)." "Number of observations is `fmt_nobs_`2''." "Confidence intervals are at the 95 percent level." "Variables are binary [0;1].", span size(medium)) ///		
 		name(el_`generate'_cfplot, replace)
 gr export "${figures_exports}/el_`generate'_cfp.pdf", replace
 
