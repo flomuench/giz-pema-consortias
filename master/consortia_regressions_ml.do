@@ -529,30 +529,51 @@ program rct_regression_network
 	version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+		     capture confirm variable `var'_y0
+			 if _rc == 0 {
 		
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(id_plateforme)
-			estadd local bl_control "Yes"
-			estadd local strata "Yes"
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(consortia_cluster)
+			estadd local bl_control "Yes" : `var'1
+			estadd local strata "Yes" : `var'1
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
-			estadd local bl_control "Yes"
-			estadd local strata "Yes"
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+			estadd local bl_control "Yes" : `var'2
+			estadd local strata "Yes" : `var'2
 			
 			* calculate control group mean
 				* take midline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 2
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
+sum `var' if treatment == 0 & surveyround == 2, d
+estadd scalar control_mean = r(mean) : `var'2
+estadd scalar control_sd = r(sd) : `var'2
 
 		}
+	else {
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 2, cluster(consortia_cluster)
+			estadd local bl_control "No" : `var'1
+			estadd local strata "Yes" : `var'1
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+			estadd local bl_control "No" : `var'2
+			estadd local strata "Yes" : `var'2
+			
+			* calculate control group mean
+				* take midline mean to control for time trend
+sum `var' if treatment == 0 & surveyround == 2, d
+estadd scalar control_mean = r(mean) : `var'2
+estadd scalar control_sd = r(sd) : `var'2
 	
+	}
+}	
 	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 
 		* Correct for MHT - FWER
+/*
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -571,16 +592,17 @@ rwolf2 ///
 
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-		
+*/		
+
 	* Put all regressions into one table
 		* Top panel: ATE
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 // adjust manually to number of variables 
 		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Business Networks} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Business Networks: Midline} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-				mlabels(, depvars) /// use dep vars labels as model title
+				cells(b(star fmt(3)) se(par fmt(3))) ///  p(fmt(3)) rw
+				mlabels("All persons" "Female CEOs" "Male CEOs" "Network quality" "\shortstack{Pos. View\\ CEO interaction}" "\shortstack{Neg. View\\ CEO interaction}") /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
@@ -593,8 +615,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 		esttab `regressions' using "rt_`generate'.tex", append ///
 				fragment ///
 				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw) ///
-				stats(control_mean control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "Y0 controls")) ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw
+				stats(control_mean control_sd N strata bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final ?.missing_bl_* *y0) /// L.* `2'  `3'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
@@ -602,8 +624,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				label 		/// specifies EVs have label
 				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. The only exception are columns 2 and 3 for which we did not collect baseline data. The number of observations for network quality is only 123 as all other 18 firms reported zero contacts with other entrepreneurs. The total of female, male and all other CEOs met are winsorized at the 99th percentile. Coefficients display absolute values of the outcomes. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
-				
+				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: Each specification includes controls for randomization strata, baseline values of the outcome, and a missing baseline dummy for the outcome variable when available. The total of female, male and all other CEOs met with whom the female entrepreneurs discuss business regularly in the past three months are winsorised at the $95^{th}$ percentile as pre-specified. The number of observations drops to 123 for Network Quality as 18 entrepreneurs to not discuss their business challenges with anyone. Panel A reports ANCOVA estimates as defined in \citet{McKenzie.2012}. Panel B documents IV estimates instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after % ;  P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.
+						
 			* coefplot
 coefplot ///
 	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
@@ -626,9 +648,10 @@ gr export ml_`generate'_cfplot.png, replace
 end
 
 	* apply program to network outcomes
-rct_regression_network net_size_w99 net_nb_f_w99 net_nb_m_w99 net_nb_qualite net_coop_pos net_coop_neg, gen(network_outcomes)
+rct_regression_network net_size_w95 net_nb_f_w95 net_nb_m_w95 net_nb_qualite net_coop_pos net_coop_neg, gen(network_ml)
 
 }
+
 
 ***********************************************************************
 * 	PART 10: Midline results - regression empowerment outcomes

@@ -542,6 +542,7 @@ lab var net_gender4_w95 "Female Friends/Family"
 
 **** TABLES & Figures FOR PAPER ****
 * Network size and composition
+	* Only endline
 {
 capture program drop rct_regression_network_paper // enables re-running
 program rct_regression_network_paper
@@ -663,7 +664,7 @@ gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_
 end
 
 	* apply program to network outcomes
-		* w95
+		* w95		
 rct_regression_network_paper net_size_w95 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95, gen(netnumb_w95)
 
 		* w99
@@ -671,6 +672,206 @@ rct_regression_network_paper net_size_w99 net_size3_w99 net_size3_m_w99 net_gend
 
 }
 
+
+
+
+
+
+
+	* Endline & midline
+{
+capture program drop rct_regression_network_paper // enables re-running
+program rct_regression_network_paper
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+    foreach var in `varlist' {
+		foreach sr in 2 3 {			
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT: ANCOVA plus stratification dummies
+					eststo `var'1_`sr': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == `sr', cluster(consortia_cluster)
+						// Add to LaTeX table
+						estadd local bl_control "Yes" : `var'1_`sr'
+						estadd local strata_final "Yes" : `var'1_`sr'
+						// Add to coefplot
+						local itt_`var'_`sr' = r(table)[1,2]
+						local fmt_itt_`var'_`sr' : display %3.2f `itt_`var'_`sr''
+
+				// ATT, IV regression
+					eststo `var'2_`sr': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == `sr', cluster(consortia_cluster) first
+						// Add to LaTeX table
+						estadd local bl_control "Yes" : `var'2_`sr'
+						estadd local strata_final "Yes" : `var'2_`sr'
+						// Add to coefplot
+						local att_`var'_`sr' = e(b)[1,1]
+						local fmt_att_`var'_`sr' : display %3.2f `att_`var'_`sr''
+
+				// Calculate control group mean
+					sum `var' if treatment == 0 & surveyround == `sr', d
+						// For LaTeX table
+						estadd scalar control_mean = r(mean) : `var'2_`sr'
+						estadd scalar control_sd = r(sd) : `var'2_`sr'
+						// For coefplots
+						local c_m_`var'_`sr' = r(p50)
+						local fmt_c_m_`var'_`sr' : display %3.2f `c_m_`var'_`sr''
+
+				// Calculate percent change
+					local `var'_per_itt_`sr' = (`fmt_itt_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+					local `var'_per_att_`sr' = (`fmt_att_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+	}
+        else {
+				// ITT: ANCOVA plus stratification dummies
+					eststo `var'1_`sr': reg `var' i.treatment i.strata_final if surveyround == `sr', cluster(consortia_cluster)
+						// Add to LaTeX table
+						estadd local bl_control "Yes" : `var'1_`sr'
+						estadd local strata_final "Yes" : `var'1_`sr'
+						// Add to coefplot
+						local itt_`var'_`sr' = r(table)[1,2]
+						local fmt_itt_`var'_`sr' : display %3.2f `itt_`var'_`sr''
+
+				// ATT, IV regression
+					eststo `var'2_`sr': ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == `sr', cluster(consortia_cluster) first
+						// Add to LaTeX table
+						estadd local bl_control "Yes" : `var'2_`sr'
+						estadd local strata_final "Yes" : `var'2_`sr'
+						// Add to coefplot
+						local att_`var'_`sr' = e(b)[1,1]
+						local fmt_att_`var'_`sr' : display %3.2f `att_`var'_`sr''
+
+				// Calculate control group mean
+					sum `var' if treatment == 0 & surveyround == `sr', d
+						// For LaTeX table
+						estadd scalar control_mean = r(mean) : `var'2_`sr'
+						estadd scalar control_sd = r(sd) : `var'2_`sr'
+						// For coefplots
+						local c_m_`var'_`sr' = r(p50)
+						local fmt_c_m_`var'_`sr' : display %3.2f `c_m_`var'_`sr''
+
+				// Calculate percent change
+					local `var'_per_itt_`sr' = (`fmt_itt_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+					local `var'_per_att_`sr' = (`fmt_att_`var'_`sr'' / `fmt_c_m_`var'_`sr'') * 100
+					
+        }	// closes else condition
+	}		// closes loop over srs
+} 			// closes loop over vars
+		
+	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
+		* tokenize to use all variables at the same time
+tokenize `varlist'
+
+/*
+		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+	
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace  
+*/
+	
+		* Put all regressions into one table
+			* Top panel: Endline
+				* ITT
+		local regressions `1'1_3 // `2'1_3 `3'1_3 `4'1_3 `5'1_3 `6'1_3 `7'1_3
+		esttab `regressions' using "${tables_network}/rt_`generate'_el_ml.tex", replace booktabs ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Networks: Size and Composition} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.5cm} >{\centering\arraybackslash}m{1.5cm}} \toprule") ///
+				posthead("\toprule \\ \multicolumn{8}{c}{Panel A: Endline} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(1)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				mlabels("All persons"  "CEOs" "Male CEOs" "Female CEOs"  "\shortstack{Friend/\\Family}" "\shortstack{Male Friend/\\Family}" "\shortstack{Female\\ Friend/Family}") /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
+				noobs
+				
+				* ToT
+		local regressions `1'2_3 // `2'2_3 `3'2_3 `4'2_3 `5'2_3 `6'2_3 `7'2_3  
+		esttab `regressions' using "${tables_network}/rt_`generate'_el_ml.tex", append booktabs ///
+				fragment ///	
+				cells(b(star fmt(1)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\addlinespace[0.3cm] \midrule")
+			
+			* BOTTOM PANEL: MIDLINE
+				* ITT
+		local regressions `1'1_2 // `2'1_2 `3'1_2 `4'1_2 `5'1_2 `6'1_2 `7'1_2
+		esttab `regressions' using "${tables_network}/rt_`generate'_el_ml.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{8}{c}{Panel B: Midline} \\\\[-1ex]") ///
+				cells(b(star fmt(1)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+		
+		local regressions `1'2_2 // `2'2_2 `3'2_2 `4'2_2 `5'2_2 `6'2_2 `7'2_2
+		esttab `regressions' using "${tables_network}/rt_`generate'_el_ml.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{8}{c}{Panel B: Midline} \\\\[-1ex]") ///
+				cells(b(star fmt(1)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{8}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome is the number of people with whom the female entrepreneurs discuss business regularly in the past three months. All variables are winsorised at the $95^{th}$ percentile as pre-specified. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable when available. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+				// when inserting table in overleaf/latex, requires adding space after %
+				// add the following for MHT RW when done: Adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) are reported below the standard errors
+				
+/*						* coefplot
+coefplot ///
+	(`1'1, pstyle(p1)) (`1'2, pstyle(p1)) ///
+	(`2'1, pstyle(p2)) (`2'2, pstyle(p2)) ///
+	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///
+	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
+	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)) ///
+	(`6'1, pstyle(p6)) (`6'2, pstyle(p6)) ///
+	(`7'1, pstyle(p7)) (`7'2, pstyle(p7)), ///
+	keep(*treatment take_up) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`1'1 = `"Any (ITT)"' `1'2 = `"Any (TOT)"' `2'1 = `"Entrepreneurs (ITT)"' `2'2 = `"Entrepreneurs (TOT)"' `3'1 = `"Male Entrepreneurs (ITT)"' `3'2 = `"Male Entrepreneurs (TOT)"' `4'1 = `"Female Entrepreneurs (ITT)"' `4'2 = `"Female Entrepreneurs (TOT)"' `5'1 = `"Family/Friends (ITT)"' `5'2 = `"Family/Friends (TOT)"' `6'1 = `"Male Family/Friends (ITT)"' `6'2 = `"Male Family/Friends (TOT)"' `7'1 = `" Female Family/Friends (ITT)"' `7'2 = `"Female Family/Friends (TOT)"') ///
+		xtitle("Regular business discussion partners", size(medium)) ///  
+		leg(off) xsize(4.5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		name(el_`generate'_cfplot, replace)
+	
+gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_cfplot.png", replace
+*/
+
+end
+
+	* apply program to network outcomes
+		* w95
+
+rct_regression_network_paper net_size_w95, gen(net_size_w95)
+
+rct_regression_network_paper net_size_w95 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95, gen(netnumb_w95)
+
+		* w99
+rct_regression_network_paper net_size_w99 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99, gen(netnumb_w99)
+
+}
 
 
 
@@ -1704,6 +1905,10 @@ rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 
 
 }
+
+
+
+
 
 ***********************************************************************
 * 	PART 8: endline results - regression table entrepreneurial empowerment
