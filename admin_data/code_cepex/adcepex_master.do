@@ -11,7 +11,7 @@
 *				PART 3: Run endline do-files                          
 *																	  
 *																	  
-*	Authors:  	Florian Muench & Amira Bouziri & Kaïs Jomaa & Ayoub Chamakhi 						    
+*	Authors:  	Florian Muench & Teo Firpo
 *	ID variable: 	id (example: f101)			  					  
 *	Requires: ad_data.dta 	  										  
 ***********************************************************************
@@ -59,7 +59,46 @@ set scheme burd
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 {
-* Jawhar folder paths
+	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
+		
+if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "my rog" | "`c(username)'" == "fabi-" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  | "`c(username)'" == "Admin"{
+
+		global gdrive = "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"	
+}
+if "`c(username)'" == "MUNCHFA" {
+		global gdrive = "G:/My Drive"
+}
+if "`c(username)'" == "ASUS" { 
+
+		global gdrive = "G:/Meine Ablage"
+	}
+	
+if "`c(username)'" == "wb603971" { 
+
+		global gdrive = "C:/Users/wb603971/Documents"
+	}	
+	
+if  "`c(username)'" == "teofirpo" {
+	
+		global gdrive = "/Users/teofirpo/Library/CloudStorage/GoogleDrive-teo.firpo@gmail.com/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
+		
+}
+
+		if c(os) == "Windows" {
+	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
+	global github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
+}
+else if c(os) == "MacOSX" {
+	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
+	global github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
+}	
+
+
+global data "${gdrive}/cepex_october_2024"
+
+
+
+/* FROM OTHER FILE DELETE AFTER Set folder paths
 global root     = "C:/Users/user/Documents/rct"
 global code     = "${root}/code"
 global data     = "${root}/data"
@@ -79,7 +118,7 @@ global tables   = "${output}/tables"
 	global tab_cf    = "${tables}/cf"
 	global tab_aqe   = "${tables}/aqe"
 
-
+*/
 * create log file
 cap log close
 log using "${root}logfile.log", replace 

@@ -2,38 +2,43 @@
 * 			Administrative data Import									  		  
 ***********************************************************************
 *																	  
-*	PURPOSE:  Import the adminstrative data provided by the INS
+*	PURPOSE:  Import the adminstrative data provided by Cepex
 *																	  
 *																	  
 *	OUTLINE:														  
-*	1)	import list of firms and variables needed for analysis
-*	2)	merge rct firms to RNE universe of firms
-*	3)  save merged file      					  
+*	1)	Import Cepex data and list of firms from all programmes 
+*	2)	Make corrections to prepare mergers
+*	3)  Merge and save  file      					  
+*	4)  Save  file      					  
 *																	  									  			
 *
-*	Authors:  	Florian Muench & Amira Bouziri & Kaïs Jomaa & Ayoub Chamakhi 
+*	Authors:  	Florian Muench & Teo Firpo
 *	ID variable: 	id (example: f101)			  					  
 *	Requires: ins_adminstrative_data.xlsx  
 *	Creates: ins_adminstrative_data.dta 															  
-***********************************************************************
-* 	PART 0: 	import RNE & select latest year to speed up processing
-***********************************************************************
-/* only execute during first run
-use "${raw}/dw2023v", clear
 
-drop if annee < 2018 // speeds up operations
-
-save "${raw}/rne_2018_2023", replace 
-*/
 ***********************************************************************
-* 	PART 1: 	import list of firms and variables needed for analysis
+* 	PART 1: 	Import Cepex data and list of firms from all programmes 
 ***********************************************************************
-	* old file 
-*use "${raw}/list_RCT.dta", clear
 
-	* new file
-import excel "${raw}/Entreprises.xlsx", firstrow clear
+	* import Cepex data
+	
+import excel "${data}/BI-STAT-GIZ-2-Octobre2024.xlsx", firstrow clear
+	
+	* a few observations are encoded wrong, drop them
+	
+drop if O!=.
 
+drop O P Q R
+
+gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
+
+save "${data}/temp_cepex.dta", replace
+
+
+	* now load file linking Cepex id to programs' ids
+	
+import excel "${gdrive}/Entreprises (1).xlsx", firstrow clear
 
 	* make sure only real observations
 encode id_plateforme, gen(id)	
@@ -47,12 +52,10 @@ sort id, stable
 * 	PART 2:  make corrections to prepare merger  					  
 ***********************************************************************
 {	
+	* FROM OTHER FILE DELETE AFTER 
 	* make manual corrections
 		* AQE
-replace matricule_fiscale = "0966564M" if id_plateforme == "f142"  // Jawhar resarched 
-replace matricule_fiscale = "1092914B"  if id_plateforme == "f266" // Jawhar resarched
-replace matricule_fiscale = "0941121M" if id_plateforme == "f283"  // Jawhar resarched
-
+		
 replace matricule_fiscale = "0982278R" if id_plateforme == "f151"  // 0 added 
 replace matricule_fiscale = "0047723H" if id_plateforme == "f157"  // 0 added 
 		* CF
@@ -68,19 +71,16 @@ replace matricule_fiscale = "1733053A" if id_plateforme == "1233"  // A added as
 replace matricule_fiscale = "1554011A" if id_plateforme == "381"  // A added as placeholder
 replace matricule_fiscale = "0615241H" if id_plateforme == "679"  // 0 added
 replace matricule_fiscale = "0655112G" if id_plateforme == "841"  // 0 added
-replace matricule_fiscale = "0931877D" if id_plateforme == "129"  // 0 added
 replace matricule_fiscale = "1066365A" if id_plateforme == "508"  // A added as placeholder
 
-
-
-	* rename fiscal identifier for consistency with RNE
+	* rename fiscal identifier for consistency with Cepex
 gen mf_len = strlen(matricule_fiscale)
 br if mf_len != 8
 		* potentially correct mf here manually
 gen ndgcf = substr(matricule_fiscale, 1, strlen(matricule_fiscale) - 1)
 
 	* drop cases w/o matricule fiscale
-drop if ndgcf == "" // 1 obs, f127 AQE
+drop if ndgcf == "" // 4 obs, all from AQE f127, f142, f266, f283
 }
 	
 ***********************************************************************
@@ -91,13 +91,15 @@ drop if ndgcf == "" // 1 obs, f127 AQE
 duplicates report matricule_fiscale
 /*
 Duplicates in terms of matricule_fiscale
+
 --------------------------------------
    copies | observations       surplus
 ----------+---------------------------
-        1 |          514             0
-        2 |           96            48 /// fir,s that were in all 2 programs
+        1 |          511             0
+        2 |           98            48 /// firms that were in all 2 programs
         3 |           15            10 /// firms that were in all 3 programs
 --------------------------------------
+
 */
 
 duplicates tag matricule_fiscale, gen(dup)
@@ -118,17 +120,17 @@ drop if matricule_fiscale == "0976398L" & id_plateforme == "f164"
 
 	* create program dummies to have one row per company
 codebook ndgcf
-* unique values:  567                      missing "":  0/622
-* 567 unique firms, with some participating
+* unique values:  564                      missing "":  0/618
+* 564 unique firms, with some participating
 encode programme, gen(program)
-drop exporter programme
+drop programme exporter
 rename strata_final strata
 reshape wide id id_plateforme firmname matricule_fiscale treatment take_up strata program_num, i(ndgcf) j(program)
 /* Result: 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                      621   ->     567 
-Number of variables                  12   ->      27
+Number of obs.                      618   ->     564
+Number of variables                  13   ->      28
 j variable (3 values)           program   ->   (dropped)
 xij variables:
                                      id   ->   id1 id2 id3
@@ -137,9 +139,12 @@ xij variables:
                       matricule_fiscale   ->   matricule_fiscale1 matricule_fiscale2 matricule_fiscale3
                               treatment   ->   treatment1 treatment2 treatment3
                                 take_up   ->   take_up1 take_up2 take_up3
-                           strata_final   ->   strata_final1 strata_final2 strata_final3
+                                 strata   ->   strata1 strata2 strata3
                             program_num   ->   program_num1 program_num2 program_num3
 -----------------------------------------------------------------------------
+
+. 
+
 */	
 order id? id_plateforme? matricule_fiscale? firmname? treatment? take_up? strata? program_num?
 
@@ -161,43 +166,32 @@ order program4, a(program3)
 }
 
 ***********************************************************************
-* 	PART 3:  merge rct firms to RNE universe of firms  					  
+* 	PART 3:  merge rct firms to Cepex universe of firms  					  
 ***********************************************************************
 {
 	* merge RCT sample with RNE firm population
 sort ndgcf, stable
-merge 1:m ndgcf using "${raw}/rne_2018_2023" // dw2023v for full RNE
+merge 1:m ndgcf using "${data}/temp_cepex.dta" 
 codebook ndgcf if _merge == 3
 
 /* 
 result merge:
-AQE only (full RNE):
     Result                           # of obs.
     -----------------------------------------
-    not matched                    16,654,910
-        from master                         0  (_merge==1)
-        from using                 16,654,910  (_merge==2)
+    not matched                           258
+        from master                       258  (_merge==1)
+        from using                          0  (_merge==2)
 
-    matched                             3,850  (_merge==3)
+    matched                             5,324  (_merge==3)
     -----------------------------------------
-result codebook
-unique values:  210                      missing "":  0/3,850
 
-All 3 RCTs (RNE 2018-2022, 2023 version)
-. merge 1:m ndgcf using "${raw}/rne_2018_2023" // dw2023v for full RNE
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                     4,295,154
-        from master                         6  (_merge==1)
-        from using                  4,295,148  (_merge==2)
-
-    matched                             2,662  (_merge==3)
-    -----------------------------------------	
 */
 
-	* drop unmatched RCT firms
-drop if _merge == 1
+
+
+/*FROM OTHER FILE DELETE AFTER 
+
+BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
 
 	* gen dummy for RCT firms vs. rest of firm population
 gen sample = (_merge == 3)
@@ -232,15 +226,15 @@ iebaltab `balancevar' if annee == 2020, ///
     ftest rowvarlabels ///
     savexlsx("${tab_`p'}/baltab_admin_population")
 restore
-}	
+}*/	
 	
-	* drop all the firms in the RNE that are not part of the RCT sample
-drop if _merge == 2
 }
 
 
 ***********************************************************************
 * 	PART 3: 	save merged file
 ***********************************************************************
-save "${raw}/rct_rne_raw", replace
 
+save "${data}/cepex_raw.dta", replace
+
+erase "${data}/temp_cepex.dta"
