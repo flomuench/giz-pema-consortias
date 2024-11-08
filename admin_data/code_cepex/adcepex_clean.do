@@ -21,13 +21,13 @@
 ***********************************************************************
 * 	PART 0: 	import raw data	  			
 ***********************************************************************		
-use "${raw}/rct_rne_raw", clear
-	
 
+use "${data}/cepex_raw", clear
+	
 ***********************************************************************
 * 	PART 1: 	Clean up reshape		
 ***********************************************************************	
-{
+{	
 	* keep only one var: mf, program_num
 egen program_num = rowfirst(program_num1 program_num2 program_num3)
 order program_num, a(program_num3)
@@ -46,8 +46,6 @@ egen take_up4 = rowmax(take_up1 take_up2 take_up3)
 order treatment4, a(treatment3)
 order take_up4, a(take_up3)
 
-
-
 gen strata_all = strata1 + strata2 + strata3 
 	 order strata_all, a(strata3)
 	 replace strata_all = "two programs" if program_num == 2 
@@ -64,14 +62,13 @@ encode strat, gen(strata1)
 order strata1, b(strata2)
 drop strat
 
-
 	* drop: mf_len, dup	
-drop mf_len dup
+drop mf_len dup _merge
 
 }
 	
 ***********************************************************************
-* 	PART 2: 	Adjust format of string and numerical variables		
+* 	PART 2: 	Adjust formats, encode, etc
 ***********************************************************************
 {
 ds, has(type string) 
@@ -88,8 +85,66 @@ local numvars "`r(varlist)'"
 format %-25.0fc `numvars'
 }
 
-format %-9.0g annee
+//format %-9.0g annee
 
+{
+	local vars2020 Sum_Qte_2020 SumVALEUR_2021 Sum_Qte_2021 SumVALEUR_2020
+	
+	foreach x of local vars2020 {
+		destring `x', replace
+	}
+	
+}
+
+	* Encode product names
+		
+encode Libelle_NDP, gen(product_name)
+
+lab var product_name "Name of the product exported"
+
+	* Encode countries
+		
+encode Libelle_Pays, gen(country)
+
+lab var country "Name of the country to which the firm exported"
+
+	* calculate unit prices
+
+{  
+	forvalues i = 2020(1)2024 {
+		gen unit_price`i' = SumVALEUR_`i'/Sum_Qte_`i'
+		lab var unit_price`i' "Unit price for `i'"
+	}
+
+	* average unit price
+	
+egen unit_price = rowmean(unit_price*)	
+	
+}
+
+	* Total exports in volume
+	
+{
+	forvalues i = 2020(1)2024 {
+	bysort matricule_fiscale : egen export_volume_`i' = total(SumVALEUR_`i')
+	
+	lab var export_volume_`i' "Total export volumes in `i'"
+	}
+}
+
+	* Total number of products per firm-year
+	
+egen tag = tag(matricule_fiscale country)
+egen countries = total(tag), by(matricule_fiscale)
+
+lab var countries "Number of countries to which the firm exported"
+
+egen tag2 = tag(matricule_fiscale product_name)
+egen products = total(tag2), by(matricule_fiscale)
+
+lab var products "Number of products exported by the firm"
+
+drop tag tag2
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
@@ -99,56 +154,53 @@ rename *, lower
 ***********************************************************************
 * 	PART 4: 	Drop unnecessary variables (e.g. text windows)		  			
 ***********************************************************************
-** correct the employment variable
-drop moyennes nat96 apen96
-egen employees = rowmean(effectifst1 effectifst2 effectifst3 effectifst4)
-egen wages = rowmean(salairest1 salairest2 salairest3 salairest4)
 
-drop effectifst? salairest? tranches generat*
+*** ADD
 
 
 ***********************************************************************
 * 	PART 5: 	Rename the variables		  			
 ***********************************************************************
-		* rename endline identification of respondent section
-rename  masse_salariale total_wage
-rename  exportv export_value
-rename  exportp export_weight
-rename  importv import_value
-rename  importp import_weight
-rename  njc net_job_creation
 
-rename ca_export_dt ca_export
-rename ca_ttc_dt ca_ttc
-rename ca_local_dt ca_local
-rename resultatall_dt profit
+*** ADD
+
 
 **********************************************************************
 * 	PART 6: 	Label the variables		  			
 ***********************************************************************
 
-            * comptabilité
-label var employees "number of full-time employees"
-label var ca_export "export turnover in dt"
-label var ca_local "domestic turnover in dt "
-label var profit "company profit in dt"
-label var ca_ttc "total turnover in dt"
-label var total_wage "total wage bill in millimes"
-label var export_value "value of export in DT"
-label var export_weight "export (weight)"
-label var import_value "value of import in DT"
-label var import_weight "import (weight)"
-label var net_job_creation "net job creation"
-
+   *** ADD
 
 ***********************************************************************
-* 	PART 7: Define panel: a) years considered, b) sort
+* 	PART 7: Reshape into panel form (wide format)
 ***********************************************************************
+
+	** Save long
+
+save "${data}/cepex_long", replace
+
+
+	
+	* drop year variables
+	
+drop sumvaleur_* sum_qte_* unit_price* product_name country 
+
+bysort matricule_fiscale : gen tag = _n == 1
+
+keep if tag==1
+
+drop tag 
+
+
+
+/*
 order ndgcf annee, first
 	* sort firm-year with year 2022 first
 gsort ndgcf -annee
+*/
+
 
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
-save "${intermediate}/rct_rne_inter", replace
+save "${long}/cepex_wide", replace
