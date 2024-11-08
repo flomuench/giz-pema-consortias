@@ -526,7 +526,7 @@ esttab lexp1 lexp2 using "ml_listexp.tex", replace ///
 {
 capture program drop rct_regression_network // enables re-running the program
 program rct_regression_network
-	version 16							// define Stata version 15 used
+	version 15							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 		     capture confirm variable `var'_y0
