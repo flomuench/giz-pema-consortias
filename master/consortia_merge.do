@@ -239,6 +239,7 @@ drop if id_plateforme==.
 ***********************************************************************
 * 	PART 6: merge with cleaned product/ substitutes
 ***********************************************************************
+/*
 {
 		*  import data
 preserve
@@ -268,6 +269,7 @@ merge m:1 id_plateforme using "${harmonize}/cepex_produits"
 */
 drop _merge
 }
+*/
 ***********************************************************************
 * 	PART 7: information from pii data that is missing in analysis data
 ***********************************************************************

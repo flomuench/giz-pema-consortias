@@ -852,6 +852,12 @@ egen eri_ssa_points = rowtotal(ssa_action1 ssa_action2 ssa_action3 ssa_action4 s
 
 			* management practices (mpi)  
 egen mpi_points = rowtotal(man_hr_obj man_hr_feed man_pro_ano man_fin_enr man_fin_profit man_fin_per temp_man_hr_pro man_fin_num man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_ind_awa), missing
+
+* calculate "adoption rate" for better comparison to Bloom et al. 2013, 2020
+gen mpi_rate = .
+	replace mpi_rate = mpi_points/8 if surveyround == 1
+	replace mpi_rate = mpi_points/5 if surveyround == 2
+	replace mpi_rate = mpi_points/12 if surveyround == 3
 			
 			* marketing practices index (marki) 
 egen marki_points = rowtotal(man_mark_prix man_mark_div man_mark_clients man_mark_offre man_mark_pub), missing
@@ -869,6 +875,11 @@ egen female_initiative_points = rowtotal(car_init_prob car_init_init car_init_op
 egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
 
 egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
+
+
+* create averages for self-effifacy & locus of control (not pre-specified, but to compare effect size with Alibhai et al. 2019)
+egen female_efficacy_mean = rowmean(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv) // ignores missing values
+egen female_loc_mean = rowmean(car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin)
 
 		* labeling
 label var eri_points "Export readiness index points"
@@ -1315,8 +1326,9 @@ rename ihs_ca_exp_2024_w`p'_k5 ihs_caexp2024_w`p'_k5
 	* collect all ys in string
 local network "network net_size net_size_w99 net_size_w95 net_nb_qualite net_coop_pos net_coop_neg net_nb_f_w99 net_nb_f_w95 net_nb_m_w99 net_nb_m_w95 net_nb_fam net_nb_dehors famille2 net_association net_size3 net_size3_m net_gender3 net_gender3_giz netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10 net_size3_w99 net_size3_m_w99 net_gender3_w99 net_size4_w99 net_size4_m_w99 net_gender4_w99 net_gender3_giz_w99 net_size3_w95 net_size3_m_w95 net_gender3_w95 net_size4_w95 net_size4_m_w95 net_gender4_w95 net_pratiques net_produits net_mark net_sup net_contract net_confiance net_autre net_gender3_ratio net_giz_ratio"
 
-local empowerment "genderi female_efficacy female_loc listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
-local mp "mpi man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres man_fin_per"
+local empowerment "genderi female_efficacy female_loc female_efficacy_mean female_loc_mean listexp car_efi_fin1 car_efi_man car_efi_motiv car_loc_env car_loc_exp car_loc_soin"
+
+local mp "mpi mpi_rate man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres man_fin_per"
 
 local innovation "ipi ipi_correct innovated innovations inno_produit inno_process inno_lieu inno_commerce inno_improve inno_new inno_both inno_none inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres inno_mot_cons inno_mot_cont inno_mot_eve inno_mot_client inno_mot_dummyother proc_prod_correct proc_mark_correct inno_org_correct inno_product_imp inno_product_new"
 
