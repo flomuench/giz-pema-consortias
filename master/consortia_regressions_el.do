@@ -3197,7 +3197,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		local regressions `1'1 `2'1 `3'1 `4'1 // adjust manually to number of variables 
 		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", replace ///
 				prehead("\begin{table}[H] \centering \\ \caption{Innovation: Improved or New Products} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
-				posthead("\hline \\ \multicolumn{5}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
+				posthead("\toprule \\ \multicolumn{5}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
 				mlabels(, depvars) /// use dep vars labels as model title
@@ -3212,7 +3212,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		local regressions `1'2 `2'2 `3'2 `4'2 // adjust manually to number of variables 
 		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{5}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				posthead("\midrule \\ \multicolumn{5}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final) ///  L.* `5' `6'
@@ -3327,7 +3327,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
 		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", replace ///
 				prehead("\begin{table}[H] \centering \\ \caption{Innovation: Improved or New Products} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
-				posthead("\hline \\ \multicolumn{6}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
+				posthead("\toprule \\ \multicolumn{6}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
 				mlabels("\shortstack{Production\\Technology}" "\shortstack{Marketing//Channels}" "\shortstack{Pricing\\Methods}" "\shortstack{Suppliers}" "Other") /// use dep vars labels as model title
@@ -3342,7 +3342,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 // adjust manually to number of variables 
 		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{6}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				posthead("\midrule \\ \multicolumn{6}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
 				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final) ///  L.* `5' `6'
@@ -3840,7 +3840,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1_ml `1'1_el   // `2'1_ml `2'1_el adjust manually to number of variables 
-		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", replace booktabs ///
+		esttab `regressions' using "${tables_kt}/rt_`generate'.tex", replace booktabs ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Management Practices Index (MPI): ML and EL} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
 				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{3}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
@@ -3855,7 +3855,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 			
 			* Bottom panel: ITT
 		local regressions `1'2_ml `1'2_el  // `2'2_ml `2'2_el adjust manually to number of variables 
-		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", append booktabs ///
+		esttab `regressions' using "${tables_kt}/rt_`generate'.tex", append booktabs ///
 				fragment ///	
 				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{3}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
 				cells(b(star fmt(3)) se(par fmt(3))) ///  p(fmt(3)) rw ci(fmt(2))
@@ -3888,8 +3888,8 @@ rct_management_ml_el mpi_rate, gen(mpi_rate)
 
 
 **************** Deep dive management practices (10 vars) ****************
-capture program drop deep_man // enables re-running
-program deep_man
+capture program drop deep_man_el // enables re-running
+program deep_man_el
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		
@@ -4019,7 +4019,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				
 end
 
-deep_man man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis, gen(deep_man)
+deep_man_el man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis, gen(deep_man)
 
 **************** TABLES FOR PRESENTATION ****************
 {
