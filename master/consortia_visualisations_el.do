@@ -1,4 +1,4 @@
-***********************************************************************
+ ***********************************************************************
 * 			Descriptive Statistics in master file *					  
 ***********************************************************************
 *																	  
@@ -1035,6 +1035,19 @@ putpdf paragraph, halign(center)
 putpdf image el_assoc_treat_kdens.png, width(5000)
 putpdf pagebreak
 
+* total contacts
+twoway ///
+ (kdensity net_size_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(3)) ///
+ (kdensity net_size_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(3)), ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+	   title("Business network size distribution", size(medium)) ///
+	   xtitle("People regularly discussed business with",size(medium)) ///
+	   ytitle("Density") 
+
+
 * male
 twoway  (kdensity net_size3_m if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(1.5)) ///
         (kdensity net_size3_m if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(1.5)) ///
@@ -1103,13 +1116,15 @@ putpdf image el_femmet.png, width(6000)
 putpdf pagebreak
 
 	* Female entrepreneur contacts relative to number known via GIZ
-graph bar net_gender3_w99 net_gender3_giz_w99 if surveyround == 3 & treatment == 1, over(take_up, lab(labsize(medsmall))) ///
-	legend(order(1 "Female Entrepreneurs in Network" ///
-		   2 "Female Entrepreneurs known via Consortium") ///
+graph bar (mean) net_gender3_w99 net_gender3_giz_w99 if surveyround == 3 & treatment == 1, over(take_up, lab(labsize(medsmall))) ///
+	ytitle("mean no. female entrepreneurs") ///
+	legend(order(1 "Total in Network" ///
+		   2 "Known via Consortium") ///
 		   pos(6) rows(2) size(medsmall)) ///
-		   ylab(, labsize(medsmall))
-	note("The figure only considers firms in the treatment group.")
-graph export "${master_output}/figures/endline/network/el_fem_vs_femgiz.png", width(6000) replace 
+		   ylab(0(1)6, labsize(medsmall)) ///
+	note("{bf: Note}: Sample : Endline respondents in the treatment group.", span size(medsmall))
+graph export "${figures_network}/el_fem_vs_femgiz.pdf", replace 
+*graph export "${master_output}/figures/endline/network/el_fem_vs_femgiz.png", width(6000) replace 
 
 
 * Female vs. Male entrepreneurs in network

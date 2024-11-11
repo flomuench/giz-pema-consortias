@@ -1936,6 +1936,137 @@ program rct_confidence
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// (surveyround == 2)
+				eststo `var'1_ml: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(consortia_cluster)
+				estadd local bl_control "Yes" : `var'1_ml
+				estadd local strata_final "Yes" : `var'1_ml
+
+				eststo `var'2_ml: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+				estadd local bl_control "Yes" : `var'2_ml
+				estadd local strata_final "Yes" : `var'2_ml
+
+				sum `var' if treatment == 0 & surveyround == 2
+				estadd scalar control_mean = r(mean) : `var'2_ml
+				estadd scalar control_sd = r(sd) : `var'2_ml
+
+				//  (surveyround == 3)
+				eststo `var'1_el: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes" : `var'1_el
+				estadd local strata_final "Yes" : `var'1_el
+
+				eststo `var'2_el: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes" : `var'2_el
+				estadd local strata_final "Yes" : `var'2_el
+
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2_el
+				estadd scalar control_sd = r(sd) : `var'2_el
+			}
+			else {
+				// (surveyround == 2)
+				eststo `var'1_ml: reg `var' i.treatment i.strata_final if surveyround == 2, cluster(consortia_cluster)
+				estadd local bl_control "No" : `var'1_ml
+				estadd local strata_final "Yes" : `var'1_ml
+
+				eststo `var'2_ml: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+				estadd local bl_control "No" : `var'2_ml
+				estadd local strata_final "Yes" : `var'2_ml
+
+				sum `var' if treatment == 0 & surveyround == 2
+				estadd scalar control_mean = r(mean) : `var'2_ml
+				estadd scalar control_sd = r(sd) : `var'2_ml
+
+				//  (surveyround == 3)
+				eststo `var'1_el: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No" : `var'1_el
+				estadd local strata_final "Yes" : `var'1_el
+
+				eststo `var'2_el: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No" : `var'2_el
+				estadd local strata_final "Yes" : `var'2_el
+
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2_el
+				estadd scalar control_sd = r(sd) : `var'2_el
+        }
+
+}
+
+tokenize `varlist'
+/*		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+		
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace	
+*/		
+	
+		* Put all regressions into one table
+			* Top panel: ITT
+		local regressions `1'1_ml `1'1_el `2'1_ml `2'1_el  // adjust manually to number of variables 
+		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", replace booktabs ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Entrepreneurial confidence: Efficacy and Locus of Control} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm} >{\centering\arraybackslash}m{1.25cm}} \toprule") ///
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{5}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) /// rw ci(fmt(2))
+				mlabels("\shortstack{ML\\ Efficacy}" "\shortstack{EL\\ Efficacy}" "\shortstack{ML\\ Locus of Control}" "\shortstack{EL\\ Locus of Control}") /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final *_y0 ?.missing_bl_*) ///  L.* oL.* ?.missing_bl_*  *_y0
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'2_ml `1'2_el `2'2_ml `2'2_el // adjust manually to number of variables 
+		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{5}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3))) ///  rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final *_y0 ?.missing_bl_*) ///  L.* `5' `6' ?.missing_bl_*  *_y0
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{8}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All dependent variables are indexes calculated based on z-scores as described in \citet{Anderson.2008}. Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. Panel A reports ANCOVA estimates as defined in \citet{McKenzie.2012}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors in parentheses are clustered on the consortia-level for treatment group firms and on the firm-level for control group firms following \citet{Cai.2018}. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. % \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") 
+				// when inserting table in overleaf/latex, requires adding space after %
+				// P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.
+end
+
+	* apply program to efficacy & loc
+rct_confidence female_efficacy female_loc, gen(conf)
+
+	* apply program to efficacy & loc
+rct_confidence female_efficacy_mean female_loc_mean, gen(conf_mean)
+
+}
+
+
+
+{
+capture program drop rct_confidence // enables re-running
+program rct_confidence
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
 
 			capture confirm variable `var'_y0
 			if _rc == 0 {
@@ -2061,7 +2192,6 @@ rct_confidence female_loc female_loc car_loc_env car_loc_exp car_loc_soin, gen(c
 
 
 
-cd "${master_regressiontables}/endline/regressions/confidence"
 
 **************** efi & loc (z-scores) ****************
 {
@@ -2996,21 +3126,46 @@ program rct_regression_kt
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+			
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local strata_final "Yes"
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes" : `var'1
+			estadd local strata_final "Yes" : `var'1
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local strata_final "Yes"
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes" : `var'2
+			estadd local strata_final "Yes" : `var'2
 			
 			* calculate control group mean
 				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-		}
+			sum `var' if treatment == 0 & surveyround == 3
+			estadd scalar control_mean = r(mean) : `var'2
+			estadd scalar control_sd = r(sd) : `var'2
+	}
+	else {
+		
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes" : `var'1
+			estadd local strata_final "Yes" : `var'1
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes" : `var'2
+			estadd local strata_final "Yes" : `var'2
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+			sum `var' if treatment == 0 & surveyround == 3
+			estadd scalar control_mean = r(mean) : `var'2
+			estadd scalar control_sd = r(sd) : `var'2
+		
+		
+	}
+}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -3040,11 +3195,11 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge transfer: Product Innovations} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", replace ///
+				prehead("\begin{table}[H] \centering \\ \caption{Innovation: Improved or New Products} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\hline \\ \multicolumn{5}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
 				mlabels(, depvars) /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
@@ -3055,19 +3210,19 @@ esttab e(RW) using rw_`generate'.tex, replace
 			
 			* Bottom panel: ITT
 		local regressions `1'2 `2'2 `3'2 `4'2 // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
+		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				posthead("\hline \\ \multicolumn{5}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
 				nobaselevels ///
 				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{5}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All dependent variables are dummies [0;1]. Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. Panel A reports ANCOVA estimates as defined in \citet{McKenzie.2012}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors in parentheses are clustered on the consortia-level for treatment group firms and on the firm-level for control group firms following \citet{Cai.2018}. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. % \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")  // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
 coefplot ///
@@ -3101,21 +3256,46 @@ program rct_regression_ktpro
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
 		foreach var in `varlist' {		// do following for all variables in varlist seperately	
-		
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+			
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
-			estadd local strata_final "Yes"
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes" : `var'1
+			estadd local strata_final "Yes" : `var'1
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
-			estadd local strata_final "Yes"
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes" : `var'2
+			estadd local strata_final "Yes" : `var'2
 			
 			* calculate control group mean
 				* take endline mean to control for time trend
-sum `var' if treatment == 0 & surveyround == 3
-estadd scalar control_mean = r(mean)
-estadd scalar control_sd = r(sd)
-		}
+			sum `var' if treatment == 0 & surveyround == 3
+			estadd scalar control_mean = r(mean) : `var'2
+			estadd scalar control_sd = r(sd) : `var'2
+	}
+	else {
+		
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+			estadd local bl_control "Yes" : `var'1
+			estadd local strata_final "Yes" : `var'1
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+			estadd local bl_control "Yes" : `var'2
+			estadd local strata_final "Yes" : `var'2
+			
+			* calculate control group mean
+				* take endline mean to control for time trend
+			sum `var' if treatment == 0 & surveyround == 3
+			estadd scalar control_mean = r(mean) : `var'2
+			estadd scalar control_sd = r(sd) : `var'2
+		
+		
+	}
+}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -3145,12 +3325,12 @@ esttab e(RW) using rw_`generate'.tex, replace
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", replace ///
-				prehead("\begin{table}[!h] \centering \\ \caption{Knowledge transfer: Process innovations} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{8}{c}} \hline\hline") ///
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///			
+		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", replace ///
+				prehead("\begin{table}[H] \centering \\ \caption{Innovation: Improved or New Products} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\hline \\ \multicolumn{6}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				mlabels(, depvars) /// use dep vars labels as model title
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				mlabels("\shortstack{Production\\Technology}" "\shortstack{Marketing//Channels}" "\shortstack{Pricing\\Methods}" "\shortstack{Suppliers}" "Other") /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
@@ -3160,19 +3340,19 @@ esttab e(RW) using rw_`generate'.tex, replace
 			
 			* Bottom panel: ITT
 		local regressions `1'2 `2'2 `3'2 `4'2 `5'2 // adjust manually to number of variables 
-		esttab `regressions' using "rt_`generate'.tex", append ///
+		esttab `regressions' using "${figures_innovation}/rt_`generate'.tex", append ///
 				fragment ///	
-				posthead("\hline \\ \multicolumn{7}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
-				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) rw ci(fmt(2))) ///
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "strata_final controls" "Y0 controls")) ///
+				posthead("\hline \\ \multicolumn{6}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
 				drop(_cons *.strata_final) ///  L.* `5' `6'
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
 				nobaselevels ///
 				label 		/// specifies EVs have label
-				prefoot("\hline") ///
-				postfoot("\hline\hline\hline \\ \multicolumn{7}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata_final, baseline outcome, and a missing baseline dummy. All variables are winsorized at the 99th percentile and ihs-transformed. The units for ihs-transformation are chosen based on the highest R-square, ten thousands for all variables, as described in Aihounton and Henningsen (2020). Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{5}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All dependent variables are dummies [0;1]. Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. Panel A reports ANCOVA estimates as defined in \citet{McKenzie.2012}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors in parentheses are clustered on the consortia-level for treatment group firms and on the firm-level for control group firms following \citet{Cai.2018}. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. % \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")  // when inserting table in overleaf/latex, requires adding space after %
 				
 			* coefplot
 coefplot ///
@@ -3195,7 +3375,7 @@ gr export el_`generate'_cfplot.png, replace
 end
 
 	* apply program to export outcomes
-rct_regression_ktpro inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres, gen(ktpro)
+rct_regression_ktpro inno_proc_met inno_proc_log inno_proc_prix inno_proc_sup inno_proc_autres, gen(inno_process)
 
 }
 
@@ -3571,6 +3751,140 @@ set scheme s1color
 }
 
 **************** TABLES FOR PAPER ****************
+{
+capture program drop rct_management_ml_el // enables re-running
+program rct_management_ml_el
+version 16							// define Stata version 15 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// (surveyround == 2)
+				eststo `var'1_ml: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 2, cluster(consortia_cluster)
+				estadd local bl_control "Yes" : `var'1_ml
+				estadd local strata_final "Yes" : `var'1_ml
+
+				eststo `var'2_ml: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+				estadd local bl_control "Yes" : `var'2_ml
+				estadd local strata_final "Yes" : `var'2_ml
+
+				sum `var' if treatment == 0 & surveyround == 2
+				estadd scalar control_mean = r(mean) : `var'2_ml
+				estadd scalar control_sd = r(sd) : `var'2_ml
+
+				//  (surveyround == 3)
+				eststo `var'1_el: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "Yes" : `var'1_el
+				estadd local strata_final "Yes" : `var'1_el
+
+				eststo `var'2_el: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "Yes" : `var'2_el
+				estadd local strata_final "Yes" : `var'2_el
+
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2_el
+				estadd scalar control_sd = r(sd) : `var'2_el
+			}
+			else {
+				// (surveyround == 2)
+				eststo `var'1_ml: reg `var' i.treatment i.strata_final if surveyround == 2, cluster(consortia_cluster)
+				estadd local bl_control "No" : `var'1_ml
+				estadd local strata_final "Yes" : `var'1_ml
+
+				eststo `var'2_ml: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) first
+				estadd local bl_control "No" : `var'2_ml
+				estadd local strata_final "Yes" : `var'2_ml
+
+				sum `var' if treatment == 0 & surveyround == 2
+				estadd scalar control_mean = r(mean) : `var'2_ml
+				estadd scalar control_sd = r(sd) : `var'2_ml
+
+				//  (surveyround == 3)
+				eststo `var'1_el: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				estadd local bl_control "No" : `var'1_el
+				estadd local strata_final "Yes" : `var'1_el
+
+				eststo `var'2_el: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				estadd local bl_control "No" : `var'2_el
+				estadd local strata_final "Yes" : `var'2_el
+
+				sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2_el
+				estadd scalar control_sd = r(sd) : `var'2_el
+        }
+
+}
+
+tokenize `varlist'
+/*		* Correct for MHT - FWER
+rwolf2 ///
+	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `2' treatment `2'_y0 i.missing_bl_`2' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `3' treatment `3'_y0 i.missing_bl_`3' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `3' `3'_y0 i.missing_bl_`3' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `4' treatment `4'_y0 i.missing_bl_`4' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `4' `4'_y0 i.missing_bl_`4' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `5' treatment `5'_y0 i.missing_bl_`5' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `5' `5'_y0 i.missing_bl_`5' i.strata_final (take_up = treatment), cluster(consortia_cluster)) ///
+	(reg `6' treatment `6'_y0 i.missing_bl_`6' i.strata_final, cluster(consortia_cluster)) ///
+	(ivreg2 `6' `6'_y0 i.missing_bl_`6' i.strata_final (take_up = treatment), cluster(consortia_cluster)), ///
+	indepvars(treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up, treatment, take_up) ///
+	seed(110723) reps(999) usevalid strata_final(strata_final)
+		
+		* save rw-p-values in a seperate table for manual insertion in latex document
+esttab e(RW) using rw_`generate'.tex, replace	
+*/		
+	
+		* Put all regressions into one table
+			* Top panel: ITT
+		local regressions `1'1_ml `1'1_el   // `2'1_ml `2'1_el adjust manually to number of variables 
+		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", replace booktabs ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Management Practices Index (MPI): ML and EL} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{3}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) rw ci(fmt(2))
+				mlabels("\shortstack{ML\\ MPI}" "\shortstack{EL\\ MPI}") /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final *_y0 ?.missing_bl_*) ///  L.* oL.* ?.missing_bl_*  *_y0
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'2_ml `1'2_el  // `2'2_ml `2'2_el adjust manually to number of variables 
+		esttab `regressions' using "${figures_confidence}/rt_`generate'.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{3}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3))) ///  p(fmt(3)) rw ci(fmt(2))
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final *_y0 ?.missing_bl_*) ///  L.* `5' `6' ?.missing_bl_*  *_y0
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All dependent variables are indexes calculated based on z-scores as described in \citet{Anderson.2008}. Each specification includes controls for randomization strata, baseline outcome, and a missing baseline dummy. Panel A reports ANCOVA estimates as defined in \citet{McKenzie.2012}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors in parentheses are clustered on the consortia-level for treatment group firms and on the firm-level for control group firms following \citet{Cai.2018}. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level. % \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") 
+				// when inserting table in overleaf/latex, requires adding space after %
+				// P-values and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications are reported below the standard errors.
+end
+
+	* apply program to mp index
+rct_management_ml_el mpi, gen(mpi_paper)
+
+	* apply program to mp rate for comparison of treatment effect size with Bloom et al. 2013, 2020
+rct_management_ml_el mpi_rate, gen(mpi_rate)
+
+}
+
+
+
+
+
+
 
 
 **************** Deep dive management practices (10 vars) ****************
