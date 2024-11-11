@@ -134,30 +134,30 @@ log using "${root}logfile.log", replace
 	PART 3.2: Import raw data
 	Creates: rct1_rne_inter
 ----------------------------------------------------------------------*/		
-if (1) do "${code}/ad_import_merge.do"
+if (1) do "${code}/adcepex_import_merge.do"
 /* --------------------------------------------------------------------
 	PART 3.3: Clean data
 ----------------------------------------------------------------------*/
-if (1) do "${code}/ad_clean.do"
+if (1) do "${code}/adcepex_clean.do"
 /* --------------------------------------------------------------------
 	PART 3.4: Correct observations
 ----------------------------------------------------------------------*/
-if (0) do "${code}/ad_correct.do"
+if (0) do "${code}/adcepex_correct.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Generate variables
 	Creates: rct_rne_final
 ----------------------------------------------------------------------*/
-if (1) do "${code}/ad_generate.do"
+if (1) do "${code}/adcepex_generate.do"
 /* --------------------------------------------------------------------
 	PART 3.6: Identify optimal ihs-transformation
 ----------------------------------------------------------------------*/
-if (0) do "${code}/ad_scale.do"
+if (0) do "${code}/adcepex_scale.do"
 /* --------------------------------------------------------------------
 	PART 3.7: Visualize main outcome variables
 ----------------------------------------------------------------------*/
-if (1) do "${code}/ad_visualise.do"
+if (1) do "${code}/adcepex_visualise.do"
 /* --------------------------------------------------------------------
 	PART 3.8: Regressions
 ----------------------------------------------------------------------*/
-if (1) do "${code}/ad_regressions.do"
+if (1) do "${code}/adcepex_regressions.do"
 log close
