@@ -1246,7 +1246,7 @@ estadd scalar control_sd = r(sd)
 		* tokenize to use all variables at the same time
 tokenize `varlist'
 {
-		* Correct for MHT - FWER
+/*		* Correct for MHT - FWER
 rwolf2 ///
 	(reg `1' treatment `1'_y0 i.missing_bl_`1' i.strata_final, cluster(id_plateforme)) ///
 	(ivreg2 `1' `1'_y0 i.missing_bl_`1' i.strata_final (take_up = treatment), cluster(id_plateforme)) ///
@@ -1265,7 +1265,7 @@ rwolf2 ///
 }		
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace
-		
+*/		
 		* Put all regressions into one table
 			* Top panel: ITT
 		local regressions `1'1 `2'1 `3'1 `4'1 `5'1 `6'1 // adjust manually to number of variables 

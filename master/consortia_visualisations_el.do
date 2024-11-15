@@ -363,28 +363,6 @@ twoway  (kdensity ca_abs_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc
                col(1) pos(6) ring(6)) 	
 			  
 			   
-egen tot_sales_el_t = sum(ca_w95) if treatment == 1 & surveyround == 3		   
-egen tot_sales_el_c = sum(ca_w95) if treatment == 0 & surveyround == 3	  
-sum tot_sales_el_t
-local t = r(mean)	 
-sum tot_sales_el_c   
-local c = r(mean)
-
-display `t' - `c' 			// 5,095,520 --> additional sales!
-display (`t' - `c')*0.19	// 968,148.8 --> additional tax return!
-
-
-egen tot_sales_bl_t = sum(ca_w95) if treatment == 1 & surveyround == 1		   
-egen tot_sales_bl_c = sum(ca_w95) if treatment == 0 & surveyround == 1	  
-sum tot_sales_bl_t
-local t = r(mean)	 
-sum tot_sales_bl_c   
-local c = r(mean) 			
-
-display `t' - `c'			// -3,838,340 --> at baseline, control sales were 3.8 million higher
-
-
-
 
 ksmirnov ca_w95 if surveyround == 3, by(treatment)
 ttest ca_w95 if surveyround == 3, by(treatment)
