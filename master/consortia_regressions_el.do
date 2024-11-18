@@ -131,8 +131,8 @@ program qvalues
 ***********************************************************************
 * 	PART 1: test for differential survey attrition 		
 ***********************************************************************
+* Is there differential attrition between treatment and control group?
 {
-	* is there differential attrition between treatment and control group?
 		* column (1): at endline
 eststo att1, r: areg refus i.treatment if surveyround == 3, absorb(strata_final) cluster(consortia_cluster)
 estadd local strata_final "Yes"
@@ -159,6 +159,139 @@ esttab `attrition' using "el_attrition.tex", replace ///
 		
 }
 
+* Does pre-balance btw T & C still hold? Do attriters differ from non-attriters before treatment?
+		* define list of pre-treatment characteristics
+gen temp_el_refus = refus if surveyround == 3
+egen el_refus = min(temp_el_refus), by(id_plateforme) missing
+drop temp_el_refus
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
+local management "mpi_points"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond1 "surveyround == 1"
+local cond2 "surveyround == 1 & id_plateforme != 1092"
+
+iebaltab `vars'  if `cond1', ///
+	grpvar(el_refus) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_attrition_yesvsno_bl) replace
+	
+iebaltab `vars'  if `cond2', ///
+	grpvar(el_refus) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_attrition_yesvsno_bl_no1092) replace
+	
+/*
+suggests that
+	1: attriters had higher pre-sales than non-attriters
+	2: attriters are more likely to have pre-treatment export experience
+*/
+	
+	
+* Do attriters in the control group differ from attriters in the treatment group before treatment?
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
+local management "mpi_points"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond1 "surveyround == 1 & el_refus == 1"
+local cond2 "surveyround == 1 & id_plateforme != 1092 & el_refus == 1"
+
+iebaltab `vars'  if `cond1', ///
+	grpvar(treatment) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_attrition_TvsC_bl) replace
+	
+iebaltab `vars'  if `cond2', ///
+	grpvar(treatment) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_attrition_TvsC_bl_no1092) replace
+	
+/*
+suggests that
+	1: attriters in T had higher pre-sales than in C 
+	2: attriters in T had higher pre-treatment export experience
+*/
+
+
+* Lee/Behaghel bounds: Prepare data
+tabstat refus if surveyround == 3, by(treatment) statistics(mean) save
+return list
+display "Treatment response rate is: " 1 - r(Stat2)[1,1] // 0.77 (67 out of 87 firms)
+display "Control response rate is: " 1 - r(Stat1)[1,1] 	 // 0.67 (60 out of 89 firms)
+
+	* Find out at what call 67% of treated firms had responded 
+preserve
+			* keep only respondents and endline data
+keep if refus == 0 & surveyround == 3
+			* collapse  to have respondents for each nth call in T and C
+collapse (count) id_plateforme, by(calls treatment)
+drop if calls == . // one obs in T & C who categorically refused after midline
+rename id_plateforme firms
+
+			* generate
+				* proportion of respondents for each nth call in T and C
+gen proportion = firms/87 if treatment == 1
+replace proportion = firms/89 if treatment == 0
+				* generate cumulative distribution
+bys treatment (calls): gen cum = sum(proportion) 
+
+			* Visualise as Behaghel et al. 2015
+sum cum if treatment == 0
+local response_rate_c = r(max)
+twoway ///
+	(line cum calls if treatment == 1, lcolor(maroon))  ///
+	(line cum calls if treatment == 0, lcolor(red)), ///
+		yline(`response_rate_c') ///
+		xline(15) ///
+		ylabel(0(.1)1) ytitle("Cum. Response Rate") ///
+		xlabel(0(5)30) xtitle("Calls") ///
+		legend(pos(6) rows(2) order(1 "Treatment" 2 "Control"))
+graph export "${figures_attrition}/behaghel_graph.pdf"	
+	
+	 * Calculate percentage of treatment group observations to be trimmed
+sum cum if calls == 15 & treatment == 1
+local response_rate_t = r(mean)
+display `response_rate_t'
+
+sum cum if treatment == 0
+local response_rate_c = r(max)
+display `response_rate_c'
+
+display `response_rate_t' - `response_rate_c' // 0.00374532
+local trim_perc = (`response_rate_t' - `response_rate_c')/`response_rate_t'
+display "Percentage of observations in T to be trimmed off: " `trim_perc' // .00561798
+
+restore
+
+* generate group-variable for C (all) + T (within 15 calls)
+gen bh_sample_temp = 0 if surveyround == 3
+	replace bh_sample_temp = 1 if treatment == 0 & refus == 0 & surveyround == 3 				// 60 firms
+	replace bh_sample_temp = 1 if treatment == 1 & refus == 0 & surveyround == 3 & calls <= 15 	// 58 firms
+egen bh_sample = min(bh_sample_temp), by(id_plateforme)
+
+* check if there is balance between Behaghel trimmed T and controls
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
+local management "mpi_points"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond "surveyround == 1 & bh_sample == 1" // Gourmandise 1092 not included as categorical refusal at ML, no EL call
+
+iebaltab `vars'  if `cond', ///
+	grpvar(treatment) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	ftest fmissok ///
+	save(baltab_attrition_TvsC_bl_bhsample) replace
+	
 ***********************************************************************
 * 	PART 2: balance table of baseline characteristics	
 ***********************************************************************
@@ -5557,7 +5690,12 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 
 }
 
+reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
+ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
 
+
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
+ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
 
 *** Tables for presentation
 {
@@ -5839,74 +5977,82 @@ capture program drop exp_ext // enables re-running
 program exp_ext
 version 16							// define Stata version 15 used
 	syntax varlist(min=1 numeric), GENerate(string)
-		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+		foreach var in `varlist' {		// do following for all variables in varlist seperately
+		  local conds `" "surveyround == 3" "surveyround == 3 & bh_sample == 1" "'
+		  local i = 1 			
+		  foreach cond of local conds {
 			capture confirm variable `var'_y0
 			if `var' == exp_pays_w95 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1`i': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if `cond', cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes" : `var'1
-					estadd local strata "Yes" : `var'1
+					estadd local bl_control "Yes" : `var'1`i'
+					estadd local strata "Yes" : `var'1`i'
 						* add to coefplot
-					local itt_`var' = r(table)[1,2]
-					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local itt_`var'`i' = r(table)[1,2]
+					local fmt_itt_`var'`i' : display %3.2f `itt_`var'`i''
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2`i': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if `cond', cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes" : `var'2
-					estadd local strata "Yes" : `var'2
+					estadd local bl_control "Yes" : `var'2`i'
+					estadd local strata "Yes" : `var'2`i'
 						* add to coefplot
-					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local att_`var'`i' = e(b)[1,1]
+					local fmt_att_`var'`i' : display %3.2f `att_`var'`i''
+					
 				
 				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
+				sum `var' if treatment == 0 & `cond'
 						* for latex table
-					estadd scalar control_mean = r(mean) : `var'2
-					estadd scalar control_sd = r(sd) :  `var'2
+					estadd scalar control_mean = r(mean) : `var'2`i'
+					estadd scalar control_sd = r(sd) :  `var'2`i'
 						* for  coefplots
-					local control_mean_`var' = r(mean)
-					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					local control_mean_`var'`i' = r(mean)
+					local fmt_control_mean_`var'`i' : display  %3.2f `control_mean_`var'`i''
 					
 					// Calculate percent change
-					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
-					local `var'_per_att = (`fmt_att_`var'' / `fmt_control_mean_`var'')*100			
+					local `var'`i'_per_itt = (`fmt_itt_`var'`i'' / `fmt_control_mean_`var'`i'')*100			
+					local `var'`i'_per_att = (`fmt_att_`var'`i'' / `fmt_control_mean_`var'`i'')*100
 				
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3, cluster(consortia_cluster)
+					// not accounting for differential attrition
+				eststo `var'1`i': reg `var' i.treatment exported_y0 missing_bl_exported i.strata_final if `cond', cluster(consortia_cluster)
 						* add to latex table
-					estadd local bl_control "Yes" : `var'1
-					estadd local strata_final "Yes" : `var'1
+					estadd local bl_control "Yes" : `var'1`i'
+					estadd local strata_final "Yes" : `var'1`i'
 						* add to coefplot
-					local itt_`var' = r(table)[1,2]
-					local fmt_itt_`var' : display %3.2f `itt_`var''	
+					local itt_`var'`i' = r(table)[1,2]
+					local fmt_itt_`var'`i' : display %3.2f `itt_`var'`i''	
 
+				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2`i': ivreg2 `var' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if `cond', cluster(consortia_cluster) first
 						* add to latex table
-					estadd local bl_control "Yes" : `var'2   // useful to understand: https://www.statalist.org/forums/forum/general-stata-discussion/general/1521037-estadd-do-not-appear-in-output-of-esttab-in-stata-15
-					estadd local strata "Yes" : `var'2
+					estadd local bl_control "Yes" : `var'2`i' 
+					estadd local strata "Yes" : `var'2`i'
 						* add to coefplot
-					local att_`var' = e(b)[1,1]
-					local fmt_att_`var' : display %3.2f `att_`var''	
+					local att_`var'`i' = e(b)[1,1]
+					local fmt_att_`var'`i' : display %3.2f `att_`var'`i''			
 				
 				// Calculate control group mean
-				sum `var' if treatment == 0 & surveyround == 3
+				sum `var' if treatment == 0 & `cond'
 						* for latex table
-					estadd scalar control_mean = r(mean) : `var'2
-					estadd scalar control_sd = r(sd) : `var'2
+					estadd scalar control_mean = r(mean) : `var'2`i'
+					estadd scalar control_sd = r(sd) : `var'2`i'
 						* for  coefplots
-					local control_mean_`var' = r(mean)
-					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
+					local control_mean_`var'`i' = r(mean)
+					local fmt_control_mean_`var'`i' : display  %3.2f `control_mean_`var'`i''
 					
 					// Calculate percent change
-					local `var'_per_itt = (`fmt_itt_`var'' / `fmt_control_mean_`var'')*100			
-					local `var'_per_att = (`fmt_att_`var'' / `fmt_control_mean_`var'')*100		
+					local `var'`i'_per_itt = (`fmt_itt_`var'`i'' / `fmt_control_mean_`var'`i'')*100			
+					local `var'`i'_per_att = (`fmt_att_`var'`i'' / `fmt_control_mean_`var'`i'')*100
+			}
+		local i = `i' + 1	
         }
-		}
+	}
 		
 * change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
 		* tokenize to use all variables at the same time
@@ -5932,16 +6078,16 @@ rwolf2 ///
 		* save rw-p-values in a seperate table for manual insertion in latex document
 esttab e(RW) using rw_`generate'.tex, replace	
 */		
-		
-		* Put all regressions into one table
+	* Table only with outcomes w/o accounting for attrition	
 			* Top panel: ITT
-		local regressions `1'1 `2'1 //  adjust manually to number of variables 
+		local regressions `1'11 `2'11 //  adjust manually to number of variables 
 		esttab `regressions' using "${tables_exports}/rt_`generate'.tex", replace booktabs ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Export: Market Access Intensive and Extensive Margins} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
 				posthead("\toprule \\ \multicolumn{3}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) ci(fmt(2)) rw
 				mlabels(, depvars) /// use dep vars labels as model title
+ /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
@@ -5950,7 +6096,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				noobs
 			
 			* Bottom panel: ITT
-		local regressions `1'2 `2'2 //  adjust manually to number of variables 
+		local regressions `1'21 `2'21 //  adjust manually to number of variables 
 		esttab `regressions' using "${tables_exports}/rt_`generate'.tex", append booktabs ///
 				fragment ///	
 				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{3}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
@@ -5964,6 +6110,40 @@ esttab e(RW) using rw_`generate'.tex, replace
 				label 		/// specifies EVs have label
 				prefoot("\addlinespace[0.3cm] \midrule") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{3}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome variable 'Exported' is based on firms' survey response to whether they exported in 2023 or the first six month of 2024. The 'Export countries' variable is winsorized at the 95th percentile as pre-specified. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after each % sign and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications%
+				
+	* Table for outcomes w/o & with accounting for attrition for comparison	
+			* Top panel: ITT
+		local regressions `1'11 `1'12 `2'11 `2'12 //  adjust manually to number of variables 
+		esttab `regressions' using "${tables_exports}/rt_`generate'_attrit.tex", replace booktabs ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Export: Market Access Intensive and Extensive Margins} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\toprule \\ \multicolumn{5}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) ci(fmt(2)) rw
+				mlabels("\shortstack{Direct\\ Export}" "\shortstack{BH\\ Attrition}" "\shortstack{N. of \\ Export countries}" "\shortstack{BH\\ Attrition}") ///				
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata_final *_y0 *missing_*) ///  L.* oL.*
+				noobs
+			
+			* Bottom panel: ITT
+		local regressions `1'21 `1'22 `2'21 `2'22 //  adjust manually to number of variables 
+		esttab `regressions' using "${tables_exports}/rt_`generate'_attrit.tex", append booktabs ///
+				fragment ///	
+				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{5}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3))) /// p(fmt(3)) ci(fmt(2)) rw
+				stats(control_mean control_sd N bl_control strata, fmt(%9.2fc %9.2fc %9.0g) labels("EL control group mean" "EL control group SD" "Observations" "BL controls" "Strata controls")) ///
+				drop(_cons *.strata_final *_y0 *missing_*) ///  L.* `5' `6'
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				nobaselevels ///
+				label 		/// specifies EVs have label
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{5}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome variable 'Exported' is based on firms' survey response to whether they exported in 2023 or the first six month of 2024. The 'Export countries' variable is winsorized at the 95th percentile as pre-specified. Attrition corrections are based on \citet{Behaghel2015}. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after each % sign and adjusted p-values for multiple hypotheses testing using the Romano-Wolf correction procedure (Clarke et al., 2020) with 999 bootstrap replications%
+								
+				
 				
 			* coefplots
 {

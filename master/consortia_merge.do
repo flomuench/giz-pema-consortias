@@ -270,10 +270,64 @@ merge m:1 id_plateforme using "${harmonize}/cepex_produits"
 drop _merge
 }
 */
+
 ***********************************************************************
 * 	PART 7: information from pii data that is missing in analysis data
 ***********************************************************************
 * list_group allocation for firms that attrited
+
+
+***********************************************************************
+* 	PART 7: merge with EL fiche de suivi for number of phone calls required to reach firms
+***********************************************************************
+preserve
+import excel "${el_raw}/Fiche de suivi CF.xlsx", firstrow clear
+
+		* remove blank lines
+rename A id_plateforme
+drop if id_plateforme==.
+
+		* select take-up variables
+keep id_plateforme status endline_refus_raison commentaire situation methode_reponse  A1_date_heure-A30_notes
+
+		* modify format
+local num 25 28 29
+foreach x of local num  {
+	drop A`x'_notes
+	gen A`x'_notes = ""
+}
+order A25_notes, a(A25_résultat)  
+order A28_notes, a(A28_résultat) 
+order A29_notes, a(A29_résultat) 
+
+format %-20s  A1_résultat-A30_notes
+
+		* generate count of total call attempts for each firm
+local a "A1_date_heure A2_date_heure A3_date_heure A4_date_heure A5_date_heure"
+local b "A6_date_heure A7_date_heure A8_date_heure A9_date_heure A10_date_heure"
+local c "A11_date_heure A12_date_heure A13_date_heure A14_date_heure A15_date_heure"
+local d "A16_date_heure A17_date_heure A18_date_heure A19_date_heure A20_date_heure"
+local e "A21_date_heure A22_date_heure A23_date_heure A24_date_heure A25_date_heure"
+local f "A26_date_heure A27_date_heure A28_date_heure A29_date_heure A30_date_heure"
+local all_attempts `a' `b' `c' `d' `e' `f'
+egen calls = rownonmiss(`all_attempts'), strok
+
+local vars "status commentaire situation methode_reponse"
+foreach var of local vars {
+	rename `var' el_`var'
+}
+
+		* gen surveyround identifier
+gen surveyround = 3
+
+order id_plateforme surveyround, first
+		
+		* save
+save "${el_raw}/calls_el", replace
+restore
+
+		* merge to analysis data
+merge m:1 id_plateforme surveyround using "${el_raw}/calls_el", keepusing(calls el_commentaire endline_refus_raison)
 
 
 ***********************************************************************
