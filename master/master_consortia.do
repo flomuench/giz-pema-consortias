@@ -220,6 +220,7 @@ if c(os) == "Windows" {
 				global figures_network = "${figures_latex}/network"
 				global figures_business = "${figures_latex}/compta"
 				global figures_innovation = "${figures_latex}/innovation"
+				global figures_attrition = "${figures_latex}/attrition"
 				
 				
 			global tables_latex = "${master_latex}/Tables"
