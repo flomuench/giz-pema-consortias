@@ -32,16 +32,16 @@ lab var surveyround "1-baseline 2-midline 3-endline"
 * 	PART 3:  el_produits
 ***********************************************************************
 {
-generate el_produit1 = regexm(el_products, "el_produit1")
-lab var el_produit1 " Best selling product or service"
+generate produit1 = regexm(el_products, "el_produit1")
+lab var produit1 " Best selling product or service"
 
-generate el_produit2 = regexm(el_products, "2")
-lab var el_produit2 "Second best selling product or service"
+generate produit2 = regexm(el_products, "2")
+lab var produit2 "Second best selling product or service"
 
-generate el_produit3 = regexm(el_products, "el_produit3")
-lab var el_produit3 "Third best selling product or service" 
+generate produit3 = regexm(el_products, "el_produit3")
+lab var produit3 "Third best selling product or service" 
 
-foreach var of varlist el_produit1 el_produit2 el_produit3 {
+foreach var of varlist produit1 produit2 produit3 {
 	replace `var' = . if el_products == ""
 }
 
