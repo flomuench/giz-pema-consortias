@@ -60,8 +60,8 @@ save "${harmonize}/cepex_produits.dta", replace
 
 use "${map_output}/coordinates"
 
-merge 1:1 id_plateforme using "${harmonize}/cepex_produits.dta", keepusing(product_hom1_eng product_hom2_eng product_hom3_eng)
-drop _merge
+*merge 1:1 id_plateforme using "${harmonize}/cepex_produits.dta", keepusing(product_hom1_eng product_hom2_eng product_hom3_eng)
+*drop _merge
 
 *save .dta
 save "${map_output}/coordinates", replace
@@ -77,9 +77,163 @@ spshape2dta TN_regions, replace saving(tunisia)
 use "${map_output}/tunisia", replace
 
 ***********************************************************************
+* 	PART 2.1: 	Draw map parts of tunisia by treat
+***********************************************************************
+
+*transform shape data to .dta
+spshape2dta TN_districts, replace saving(tunisia_regions)
+
+*use
+use "${map_output}/tunisia_regions", replace
+
+*extract labels that need to be on seperate .dta
+preserve
+
+keep _ID _CY _CX dis_en
+compress
+keep if dis_en == "Tunis 1" | dis_en == "Tunis 2" |  dis_en == "Ariana" | dis_en == "Ben Arous" | dis_en == "Mannouba"
+replace _CX = _CX - 0.04 if dis_en=="Tunis 1"  // Tunis1 label
+replace _CY = _CY - 0.025 if dis_en=="Tunis 2"  // Tunis 2 label
+
+save tunis_labels, replace
+
+restore
+
+
+*extract labels that need to be on seperate .dta
+preserve
+
+keep _ID _CY _CX dis_en
+compress
+keep if dis_en == "Tunis 1" | dis_en == "Tunis 2"
+replace _CX = _CX - 0.04 if dis_en=="Tunis 1"  // Tunis1 label
+replace _CY = _CY - 0.025 if dis_en=="Tunis 2"  // Tunis 2 label
+
+save tunis12_labels, replace
+
+restore
+
+*initiate PDF
+putpdf clear
+putpdf begin, pagesize(A3)
+putpdf paragraph
+
+*aggrofood
+spmap using tunisia_regions_shp if !inlist(_ID, 22, 23, 24, 25, 26, 27), id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 1 & gouvernorat != 32) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2))
+graph export map_agri_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_agri_treatment.png
+putpdf pagebreak
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2 | _ID == 3| _ID == 4 | _ID == 5, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 1 & (gouvernorat == 20 | gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_agriTunis_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_agriTunis_treatment.png
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 1 & (gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis12_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_agriTunis12_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_agriTunis12_treatment.png
+
+putpdf save "agri_firmsmap", replace
+
+
+*initiate PDF
+putpdf clear
+putpdf begin, pagesize(A3)
+putpdf paragraph
+
+*handicraft
+spmap using tunisia_regions_shp if !inlist(_ID, 22, 23, 24, 25, 26, 27), id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 2 & (gouvernorat != 32 & gouvernorat != 12 & gouvernorat != 41 & gouvernorat != 42 & gouvernorat != 60 & gouvernorat != 22)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2))
+graph export map_handy_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_handy_treatment.png
+putpdf pagebreak
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2 | _ID == 3| _ID == 4 | _ID == 5, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 2 & (gouvernorat == 20 | gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_handyTunis_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_handyTunis_treatment.png
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 2 & (gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis12_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_handyTunis12_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_handyTunis12_treatment.png
+
+putpdf save "artisanat_firmsmap", replace
+
+*initiate PDF
+putpdf clear
+putpdf begin, pagesize(A3)
+putpdf paragraph
+
+*business services
+spmap using tunisia_regions_shp if !inlist(_ID, 22, 23, 24, 25, 26, 27), id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 3 & (gouvernorat != 32 & gouvernorat != 12 & gouvernorat != 41 & gouvernorat != 42 & gouvernorat != 60 & gouvernorat != 22)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2))
+graph export map_cosmetics_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_cosmetics_treatment.png
+putpdf pagebreak
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2 | _ID == 3| _ID == 4 | _ID == 5, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 3 & (gouvernorat == 20 | gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_cosmeticsTunis_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_cosmeticsTunis_treatment.png
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 3 & (gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis12_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_cosmeticsTunis12_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_cosmeticsTunis12_treatment.png
+
+putpdf save "business_firmsmap", replace
+
+*initiate PDF
+putpdf clear
+putpdf begin, pagesize(A3)
+putpdf paragraph
+
+
+*TIC
+spmap using tunisia_regions_shp if !inlist(_ID, 22, 23, 24, 25, 26, 27), id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 4 & (gouvernorat != 32 & gouvernorat != 12 & gouvernorat != 41 & gouvernorat != 42 & gouvernorat != 60 & gouvernorat != 22)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2))
+graph export map_TIC_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_TIC_treatment.png
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2 | _ID == 3| _ID == 4 | _ID == 5, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 4 & (gouvernorat == 20 | gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_TICTunis_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_TICTunis_treatment.png
+
+spmap using tunisia_regions_shp if _ID == 1 | _ID == 2, id(_ID) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) ocolor(white ..) select(keep if pole == 4 & (gouvernorat == 10)) by(treatment) size(v.Small ..) legenda(on) legcount shape(O D)) ///
+	legend(size(*1.8) rowgap(1.2)) ///
+	label(data(tunis12_labels) x(_CX) y(_CY) label(dis_en))
+graph export map_TICTunis12_treatment.png, replace
+putpdf paragraph, halign(center)
+putpdf image map_TICTunis12_treatment.png
+
+putpdf save "TIC_firmsmap", replace
+
+***********************************************************************
 * 	PART 3: 	Draw map whole Tunisia
 ***********************************************************************
-{
+
 *initiate PDF
 putpdf clear
 putpdf begin, pagesize(A3)
@@ -90,7 +244,7 @@ putpdf text ("Consortia: Firms Distribution Map"), bold linebreak
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 
-	
+
 *draw the map whole tunis by treatment
 spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
@@ -100,8 +254,10 @@ putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisia_treatment.png
 putpdf pagebreak
 
+
+
 *draw the map whole tunis by take-up
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if treatment == 1) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisia_takeup.png, replace
@@ -109,18 +265,19 @@ putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisia_takeup.png
 putpdf pagebreak
 
+
+
 *draw the map whole tunis by pole
 	*pôle d'activités agri-agroalimentaire 2
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 2 & treatment == 1) legenda(on) legcount) ///
-	legend(size(*1.8) rowgap(1.2)) ///
-	title("Agro consorita firms by take-up", size(*1.2))
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) plotregion(color(YlGnBu)) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment)  select(keep if subsector_corrige == 2) legenda(on) legcount) ///
+	legend(size(*1.8) rowgap(1.2))
 graph export map_consortiaTunisiaAggro_takeup.png, replace
 putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisiaAggro_takeup.png
 putpdf pagebreak
 
 	*pôle d'activités artisanat 3
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 3 & treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 3 & treatment == 1) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("Artisanat consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisiaArtisanat_takeup.png, replace
@@ -129,7 +286,7 @@ putpdf image map_consortiaTunisiaArtisanat_takeup.png
 putpdf pagebreak
 
 	*pôle d'activités cosmétiques 4
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 4 & treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 4 & treatment == 1) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("Cosmetics consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisiaCosmetics_takeup.png, replace
@@ -138,7 +295,7 @@ putpdf image map_consortiaTunisiaCosmetics_takeup.png
 putpdf pagebreak
 
 	*pôle d'activités de service conseil, ed 6
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 6 & treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 6 & treatment == 1) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("Service consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisiaService_takeup.png, replace
@@ -146,19 +303,20 @@ putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisiaService_takeup.png
 putpdf pagebreak
 
-/*
+
+
 	*pôle de l'énergie durable et développem 8
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 8 & treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 8) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("Energy consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisiaEnergy_takeup.png, replace
 putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisiaEnergy_takeup.png
 putpdf pagebreak
-*/
+
 
 	*pôle d'activités technologies de l'info 9
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(take_up) select(keep if subsector_corrige == 9 & treatment == 1) legenda(on) legcount) ///
+spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(treatment) select(keep if subsector_corrige == 9 & treatment == 1) legenda(on) legcount) ///
 	legend(size(*1.8) rowgap(1.2)) ///
 	title("TIC consorita firms by take-up", size(*1.2))
 graph export map_consortiaTunisiaInfo_takeup.png, replace
@@ -169,6 +327,7 @@ putpdf pagebreak
 ***********************************************************************
 * 	PART 4: 	Draw map parts of tunisia
 ***********************************************************************
+
 *transform shape data to .dta
 spshape2dta TN_districts, replace saving(tunisia_regions)
 
@@ -306,7 +465,6 @@ putpdf image map_consortiaKasserine_treatment.png
 
 putpdf save "consortia_firmsmap", replace
 
-}
 
 ***********************************************************************
 * 	PART 5: 	Create graphs
@@ -386,16 +544,6 @@ putpdf paragraph, halign(center)
 putpdf image map_consortiaTunisiaInfo_treatment.png
 putpdf pagebreak
 
-spmap using tunisia_shp, id(_ID) fcolor(eggshell) point(data("coordinates.dta") xcoord(new_longitude) ycoord(new_latitude) fcolor(red%50 navy%50) size(1.5) ocolor(white ..) osize(*0.5) by(product_hom3_eng) select(keep if subsector_corrige == 9) legenda(on) legcount) ///
-	legend(size(*1.8) rowgap(1.2)) ///
-	title("TIC consorita firms by treatment", size(*1.2))
-graph export map_consortiaTunisiaInfo_treatment.png, replace
-putpdf paragraph, halign(center)
-putpdf image map_consortiaTunisiaInfo_treatment.png
-putpdf pagebreak
-
-
-putpdf save "consortia_firmsmap2", replace
 
 }
 
