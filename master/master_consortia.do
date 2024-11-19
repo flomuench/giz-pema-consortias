@@ -202,6 +202,7 @@ global el_figures = "${el_output}/descriptive-statistics-figures"
 global el_progress = "${el_output}/progress-eligibility-characteristics"
 
 				* map
+global map_raw = "${map}/raw"
 global map_output = "${map}/output"
 
 				* master
