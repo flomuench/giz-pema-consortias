@@ -1,4 +1,4 @@
-* 00000031
+* 00000033
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -1074,4 +1074,69 @@ d
 d Distribution-Date: 02jun2010
 f g\grc1leg.ado
 f g\grc1leg.hlp
+e
+S http://fmwww.bc.edu/repec/bocode/m
+N mipolate.pkg
+D 11 Sep 2024
+U 32
+d 'MIPOLATE': module to interpolate values
+d 
+d  mipolate interpolates yvar on xvar for missing values of  yvar.
+d It uses one of the following methods: linear, cubic, cubic
+d spline, pchip (piecewise cubic Hermite interpolation),  idw
+d (inverse distance weighted), forward, backward, nearest
+d neighbour, groupwise. stripolate interpolates string values using
+d forward, background or groupwise interpolation.
+d 
+d KW: interpolation
+d KW: extrapolation
+d KW: times
+d KW: generate
+d 
+d Requires: Stata version 12
+d 
+d Distribution-Date: 20161219
+d 
+d Author: Nicholas J. Cox, Durham University
+d Support: email N.J.Cox@@durham.ac.uk
+d 
+f m\mipolate.ado
+f m\mipolate.sthlp
+f s\stripolate.ado
+f s\stripolate.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/a
+N attregtest.pkg
+D 19 Nov 2024
+U 33
+d 'ATTREGTEST': module to implement the regression-based attrition tests proposed in  Ghanem et al. (2022)
+d 
+d   attregtest implements the two regression-based attrition tests
+d proposed in  Ghanem et al. (2022). The first test is based on the
+d testable implication of the identifying assumption of internal
+d validity for the respondent subpopulation (IV-R). The second test
+d is based on the testable implication of the identifying
+d assumption of internal validity for the study population (IV-P).
+d These tests can be implemented for completely or cluster
+d randomized experiments as well as experiments with stratified
+d randomization.
+d 
+d KW: regression
+d KW: attrition tests
+d 
+d Requires: Stata version 13 and estout, randtreat from SSC (q.v.)
+d 
+d Distribution-Date: 20231127
+d 
+d Author: Dalia Ghanem, University of California, Davis
+d Support: email dghanem@@ucdavis.edu
+d 
+d Author: Sarojini Hirshleifer, University of California, Riverside
+d Support: email sarojini.hirshleifer@@ucr.edu
+d 
+d Author: Karen Ortiz-Becerra, University of San Diego
+d Support: email kortizbecerra@@sandiego.edu
+d 
+f a\attregtest.ado
+f a\attregtest.sthlp
 e
