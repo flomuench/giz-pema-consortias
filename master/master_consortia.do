@@ -26,6 +26,7 @@ set graphics off /* switch off to on to display graphs */
 capture program drop zscore /* drops the program programname */
 qui cap log c
 
+graph set window fontface "Times New Roman" // set font type in line with Latex document
 
 
 
@@ -233,6 +234,8 @@ if c(os) == "Windows" {
 				global tables_descriptives = "${tables_latex}/descriptives"
 				global tables_business = "${tables_latex}/business"
 				global tables_peer = "${tables_latex}/peer"
+				global tables_attrition = "${tables_latex}/attrition"
+
 }
 
 

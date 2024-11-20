@@ -1,4 +1,4 @@
-* 00000033
+* 00000034
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -1139,4 +1139,37 @@ d Support: email kortizbecerra@@sandiego.edu
 d 
 f a\attregtest.ado
 f a\attregtest.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/r
+N randtreat.pkg
+D 19 Nov 2024
+U 34
+d 'RANDTREAT': module to randomly assign treatments uneven treatments and deal with misfits
+d 
+d      The randtreat command performs random treatment assignment.
+d It can handle an arbitrary number    of treatments and uneven
+d treatment fractions, which are common in real-world randomized
+d control trials.  Stratified randomization can be achieved by
+d optionally specifying a variable    list that defines multiple
+d strata.  It also provides several methods to deal with 'misfits',
+d a    practical issue that arises in treatment assignment whenever
+d observations can't be neatly   distributed among treatments.
+d The command performs all tasks in a way that marks misfit
+d observations and provides several methods to deal with those
+d misfits.
+d 
+d KW: treatment effects
+d KW: treatment
+d KW: random treatment
+d KW: misfits
+d 
+d Requires: Stata version 11
+d 
+d Distribution-Date: 20170413
+d 
+d Author: Alvaro Carril, University of Chile
+d Support: email acarril@@fen.uchile.cl
+d 
+f r\randtreat.ado
+f r\randtreat.sthlp
 e
