@@ -613,9 +613,9 @@ egen mpmarki = rowmean(mpi marki)
 				* sense of initiative
 egen female_efficacy = rowmean(t_car_efi_fin1z t_car_efi_negoz t_car_efi_convz t_car_efi_manz t_car_efi_motivz)
 egen female_initiative = rowmean(t_car_init_probz t_car_init_initz t_car_init_oppz)
-egen female_loc = rowmean(t_car_loc_succz t_car_loc_envz t_car_loc_inspz t_car_loc_envz t_car_loc_expz t_car_loc_soinz)
+egen female_loc = rowmean(t_car_loc_succz t_car_loc_envz t_car_loc_inspz t_car_loc_expz t_car_loc_soinz)
 
-egen genderi = rowmean(t_car_efi_fin1z t_car_efi_negoz t_car_efi_convz t_car_efi_manz t_car_efi_motivz t_car_init_probz t_car_init_initz t_car_init_oppz t_car_loc_succz t_car_loc_envz t_car_loc_inspz t_car_loc_envz t_car_loc_expz t_car_loc_soinz)
+egen genderi = rowmean(t_car_efi_fin1z t_car_efi_negoz t_car_efi_convz t_car_efi_manz t_car_efi_motivz t_car_init_probz t_car_init_initz t_car_init_oppz t_car_loc_succz t_car_loc_envz t_car_loc_inspz t_car_loc_expz t_car_loc_soinz)
 
 		* labeling
 label var network "Network"
@@ -681,7 +681,7 @@ egen cor_inno_points = rowtotal (proc_prod_cor proc_mark_cor inno_org_cor inno_i
 				* sense of initiative
 egen female_efficacy_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv), missing
 egen female_initiative_points = rowtotal(car_init_prob car_init_init car_init_opp), missing
-egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
+egen female_loc_points = rowtotal(car_loc_succ car_loc_env car_loc_insp car_loc_exp car_loc_soin), missing
 
 egen genderi_points = rowtotal(car_efi_fin1 car_efi_nego car_efi_conv car_efi_man car_efi_motiv car_init_prob car_init_init car_init_opp car_loc_succ car_loc_env car_loc_insp car_loc_env car_loc_exp car_loc_soin), missing
 

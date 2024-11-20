@@ -53,11 +53,6 @@ set scheme s1color
 }
 	
 	
-twoway scatter ihs_ca_w95_k1 ca_rel_growth_w95 if surveyround == 3 & ihs_ca_w95_k1 > 0, colorvar(treatment)
-
-twoway scatter ihs_ca_w95_k1 ca_rel_growth_w95 if surveyround == 3 & ihs_ca_w95_k1 > 0 & ca_rel_growth_w95 <= 5, colorvar(treatment)
-	
-	
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
@@ -515,28 +510,72 @@ gen bh_sample_temp = 0 if surveyround == 3
 egen bh_sample = min(bh_sample_temp), by(id_plateforme)
 
 * check if there is balance between Behaghel trimmed T and controls
-local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
-local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
-local management "mpi_points"
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
 local network "net_size net_coop_pos net_coop_neg"
-local confidence "female_efficacy_points female_loc_points"
+local confidence "female_efficacy female_loc"
 local vars "`kpis' `exp' `management' `network' `confidence'"
 local cond "surveyround == 1 & bh_sample == 1" // Gourmandise 1092 not included as categorical refusal at ML, no EL call
 
+foreach sfmt in save savetex {
 iebaltab `vars'  if `cond', ///
 	grpvar(treatment) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
 	ftest fmissok ///
-	save(baltab_attrition_TvsC_bl_bhsample) replace
+	`sfmt'("${tables_attrition}/baltab_attrition_TvsC_bl_bhsample") replace
 
 	}
 	
-}	
+  }
+ 
+}
 
 ***********************************************************************
 * 	PART 2: balance table of baseline characteristics	
 ***********************************************************************
 {
+	
+* Baseline balance
+	* Entrepreneur level characteristics
+lab var mpi_points "Management Practices points [0-8]"
+lab var net_nb_qualite "Self-perceived Network Quality [1-10]"
+lab var net_coop_neg "Neg. view of CEO interaction [0-3]"
+lab var net_coop_pos "Pos. view of CEO interaction [0-3]"
+lab var female_efficacy "Entrepreneurial Self-Efficacy points [3-15]" 
+lab var female_loc "Entrepreneurial Locus of control points [3-15]" 
+	
+local management "mpi_points"
+local network "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`management' `network' `confidence'"
+
+local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
+
+
+foreach sfmt in save savetex {
+	local con_names "full no_out"
+	foreach con of local cond {
+		
+		gettoken con_name con_names : con_names
+
+		iebaltab `vars'  if `con', ///
+			grpvar(treatment) ///
+			rowvarlabels format(%15.2fc) vce(robust) ///
+			stats(desc(sd) pair(diff)) ///
+			ftest fmissok ///
+			`sfmt'("${tables_descriptives}/baltab_bl_entrepreneur_`con_name'") replace
+	}
+}
+	
+	
+	* Firm level characteristics
+lab var age "Firm age"
+lab var operation_export "Export experience [0;1]"
+lab var ihs_profit_w95_k1 "Profit [ihs, wins. $95^{th} pctl.$]"
+lab var ihs_ca_w95_k1 "Total sales [ihs, wins. $95^{th} pctl.$]"
+lab var employes_w95 "N. of employees [wins. $95^{th} pctl.$]"
+lab var ihs_ca_exp2018_w95_k1 "Export sales [ihs, wins. $95^{th} pctl.$]"	
 
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
