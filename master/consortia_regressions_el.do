@@ -536,19 +536,26 @@ iebaltab `vars'  if `cond', ///
 ***********************************************************************
 {
 	
-* Baseline balance
+*** Baseline balance
+gen kids = (famille2 > 0)
+	replace kids = . if famille2 == .
+lab var kids "Kids below 18 [0;1]"
+
 	* Entrepreneur level characteristics
 lab var mpi_points "Management Practices points [0-8]"
 lab var net_nb_qualite "Self-perceived Network Quality [1-10]"
 lab var net_coop_neg "Neg. view of CEO interaction [0-3]"
 lab var net_coop_pos "Pos. view of CEO interaction [0-3]"
-lab var female_efficacy "Entrepreneurial Self-Efficacy points [3-15]" 
-lab var female_loc "Entrepreneurial Locus of control points [3-15]" 
+lab var female_efficacy_points "Entrepreneurial Self-Efficacy points [3-15]" 
+lab var female_loc_points "Entrepreneurial Locus of control points [3-15]"
+lab var famille1 "Family member entrepreneur [0;1]" 
+lab var famille2 "N. of kids below 18"
 	
 local management "mpi_points"
-local network "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local network "net_size net_nb_fam net_nb_dehors net_nb_qualite net_coop_pos net_coop_neg"
 local confidence "female_efficacy_points female_loc_points"
-local vars "`management' `network' `confidence'"
+local family "famille2 famille1"
+local vars "`management' `network' `confidence' `family'"
 
 local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
 
@@ -562,31 +569,83 @@ foreach sfmt in save savetex {
 		iebaltab `vars'  if `con', ///
 			grpvar(treatment) ///
 			rowvarlabels format(%15.2fc) vce(robust) ///
-			stats(desc(sd) pair(diff)) ///
-			ftest fmissok ///
+			fmissok /// ftest not reliable, manual regression provide different result
 			`sfmt'("${tables_descriptives}/baltab_bl_entrepreneur_`con_name'") replace
+	}
+}
+
+* Conduct F-test
+local management "mpi_points"
+local network "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`management' `network' `confidence'"
+reg treatment `vars' if surveyround == 1
+testparm `vars'
+
+reg treatment `vars' if surveyround == 1 & id_plateforme != 1092
+testparm `vars' 
+	
+	
+	* Firm level characteristics
+
+gen profit_euro = profit*0.3				// source for exchange rate, retrieved last Nov 21st 2024: https://www.exchangerates.org.uk/TND-EUR-spot-exchange-rates-history-2021.html
+gen ca_euro = ca*0.3
+gen ca_exp_euro = ca_exp*0.3
+gen ca_tun_euro = ca_tun*0.3
+lab var age "Firm age"
+lab var operation_export "Export experience [0;1]"
+lab var profit_euro "Profit [€]"
+lab var ca_euro "Total sales [€]"
+lab var ca_tun_euro "Domestic sales [€]"	
+lab var employes "N. of employees"
+lab var ca_exp_euro "Export sales [€]"	
+
+local kpis "age employes profit_euro ca_euro ca_tun_euro ca_exp_euro"
+local exp "operation_export exp_pays"
+local vars "`kpis' `exp'"
+local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
+
+foreach sfmt in save savetex {
+	local con_names "full no_out"
+	foreach con of local cond {
+		
+		gettoken con_name con_names : con_names
+
+		iebaltab `vars'  if `con', ///
+			grpvar(treatment) ///
+			rowvarlabels format(%15.2fc) vce(robust) ///
+			covariates(strata_final) ///
+			fmissok ///
+			`sfmt'("${tables_descriptives}/baltab_bl_firm_`con_name'") replace
 	}
 }
 	
 	
-	* Firm level characteristics
-lab var age "Firm age"
-lab var operation_export "Export experience [0;1]"
-lab var ihs_profit_w95_k1 "Profit [ihs, wins. $95^{th} pctl.$]"
-lab var ihs_ca_w95_k1 "Total sales [ihs, wins. $95^{th} pctl.$]"
-lab var employes_w95 "N. of employees [wins. $95^{th} pctl.$]"
-lab var ihs_ca_exp2018_w95_k1 "Export sales [ihs, wins. $95^{th} pctl.$]"	
+	
+* Conduct F-test
+local kpis "age employes profit_euro ca_euro ca_tun_euro ca_exp_euro"
+local exp "operation_export exp_pays"
+local vars "`kpis' `exp' strata_final" 
 
+reg treatment `vars' if surveyround == 1
+testparm `vars'
+
+reg treatment `vars' if surveyround == 1 & id_plateforme != 1092
+testparm `vars' 
+		
+		
+		
+	
+
+
+*** Take-up
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
 	
 * define list of pre-treatment characteristics
-local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
-local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1"
-local management "mpi_points"
-local network "net_size net_coop_pos net_coop_neg"
-local confidence "female_efficacy_points female_loc_points"
-local vars "`kpis' `exp' `management' `network' `confidence'"
+local kpis "age profit ca employes"
+local exp "operation_export exp_pays ca_exp"
+local vars "`kpis' `exp'"
 local cond "surveyround == 1 & id_plateforme != 1092 & treatment == 1"
 
 br id_plateforme pole el_take_up `vars' if el_take_up == 1 & treatment == 1 & surveyround == 1
