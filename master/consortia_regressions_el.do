@@ -52,11 +52,14 @@ set scheme s1color
 	}
 }
 	
+<<<<<<< HEAD
 	/* comment out because colorvar needs STATA 18 version */
 *twoway scatter ihs_ca_w95_k1 ca_rel_growth_w95 if surveyround == 3 & ihs_ca_w95_k1 > 0, colorvar(treatment)
 
 *twoway scatter ihs_ca_w95_k1 ca_rel_growth_w95 if surveyround == 3 & ihs_ca_w95_k1 > 0 & ca_rel_growth_w95 <= 5, colorvar(treatment)
 	
+=======
+>>>>>>> main
 	
 ***********************************************************************
 * 	Part 0.1: create a program to estimate sharpened q-values
@@ -131,89 +134,242 @@ program qvalues
 ***********************************************************************
 * 	PART 1: test for differential survey attrition 		
 ***********************************************************************
+<<<<<<< HEAD
 {
 * Is there differential attrition between treatment and control group?
+=======
+>>>>>>> main
 {
-		* column (1): at endline
-eststo att1, r: areg refus i.treatment if surveyround == 3, absorb(strata_final) cluster(consortia_cluster)
-estadd local strata_final "Yes"
-		
-		* column (2): at midline
-eststo att2, r: areg refus i.treatment if surveyround == 2, absorb(strata_final) cluster(consortia_cluster)
-estadd local strata_final "Yes"
-
-		* column (3): at baseline
-eststo att3, r: areg refus i.treatment if surveyround == 1, absorb(strata_final) cluster(consortia_cluster)
-estadd local strata_final "Yes"
-
-local attrition att1 att2 att3
-esttab `attrition' using "el_attrition.tex", replace ///
-	title("Attrition: Total") ///
-	mtitles("EL" "ML" "BL") ///
-	label ///
-	b(3) ///
-	se(3) ///
-	star(* 0.1 ** 0.05 *** 0.01) ///
-	nobaselevels ///
-	scalars("strata_final strata_final controls") ///
-	addnotes("All standard errors are Hubert-White robust standord errors clustered at the firm level for the control and at the consortia level for the treatment group.")
-		
-}
-
-* Does pre-balance btw T & C still hold? Do attriters differ from non-attriters before treatment?
-		* define list of pre-treatment characteristics
+* generate additional variables
+	* create indicator for EL refusal
 gen temp_el_refus = refus if surveyround == 3
 egen el_refus = min(temp_el_refus), by(id_plateforme) missing
 drop temp_el_refus
-local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
-local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
-local management "mpi_points"
-local network "net_size net_coop_pos net_coop_neg"
-local confidence "female_efficacy_points female_loc_points"
-local vars "`kpis' `exp' `management' `network' `confidence'"
-local cond1 "surveyround == 1"
-local cond2 "surveyround == 1 & id_plateforme != 1092"
+		
+	* responded dummy
+gen responded = (refus == 0), a(refus)
+lab var responded "responded to survey"
+	
+* Is there differential attrition between treatment and control group?
+		* simple visualisation
+forvalues x = 1(1)3 {
+	* get N in each group
+	count if surveyround == `x' & responded == 1
+		local NR = r(N)
+	count if surveyround == `x' & responded == 1 & treatment == 1
+		local NRT = r(N)
+	count if surveyround == `x' & responded == 1 & treatment == 0
+		local NRC = r(N)
+	
+	betterbar responded if surveyround == `x', over(treatment) ci barlab vertical ///
+		legend(pos(6) rows(1) size(medium)) ///
+		ytitle("response rate", size(medium)) ///
+		xtitle("", size(medium)) ///
+		ylabel(0(.1)1, labs(medium)) ///
+		xlabel(, labs(medium)) ///
+		note("{bf:Note}:" "Total respondents: `NR' out of 189." "Treatment: `NRT' out of 87." "Control: `NRC' out of 89.", span size(medium))
+	gr export "${figures_attrition}/response_rate`x'.pdf", replace
+}
+		
+		* regression framework
+{
 
-iebaltab `vars'  if `cond1', ///
-	grpvar(el_refus) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
-	ftest fmissok ///
-	save(baltab_attrition_yesvsno_bl) replace
+		* column (1): at endline
+eststo att1, r: areg refus i.treatment if surveyround == 3, absorb(strata_final) cluster(consortia_cluster)
+	estadd local strata_final "Yes"
 	
-iebaltab `vars'  if `cond2', ///
-	grpvar(el_refus) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
-	ftest fmissok ///
-	save(baltab_attrition_yesvsno_bl_no1092) replace
+	sum responded if surveyround == 3
+	estadd scalar response_rate = r(mean)
+
+	count if surveyround == 3 & responded == 1 & treatment == 1
+	estadd scalar NRT = r(N)
+
+	sum responded if surveyround == 3 & treatment == 1
+	estadd scalar response_rate_T = r(mean)
 	
+	count if surveyround == 3 & responded == 1 & treatment == 0
+	estadd scalar NRC = r(N)
+	
+	sum responded if surveyround == 3 & treatment == 0
+	estadd scalar response_rate_C = r(mean)
+		
+		* column (2): at midline
+eststo att2, r: areg refus i.treatment if surveyround == 2, absorb(strata_final) cluster(consortia_cluster)
+	estadd local strata_final "Yes"
+
+	sum responded if surveyround == 2
+	estadd scalar response_rate = r(mean)
+	
+	count if surveyround == 2 & responded == 1 & treatment == 1
+	estadd scalar NRT = r(N)
+
+	sum responded if surveyround == 2 & treatment == 1
+	estadd scalar response_rate_T = r(mean)
+	
+	count if surveyround == 2 & responded == 1 & treatment == 0
+	estadd scalar NRC = r(N)
+	
+	sum responded if surveyround == 2 & treatment == 0
+	estadd scalar response_rate_C = r(mean)
+	
+		* column (3): at baseline
+eststo att3, r: areg refus i.treatment if surveyround == 1, absorb(strata_final) cluster(consortia_cluster)
+	estadd local strata_final "Yes"
+	
+	sum responded if surveyround == 1
+	estadd scalar response_rate = r(mean)
+
+	count if surveyround == 1 & responded == 1 & treatment == 1
+	estadd scalar NRT = r(N)
+
+	sum responded if surveyround == 1 & treatment == 1
+	estadd scalar response_rate_T = r(mean)
+	
+	count if surveyround == 1 & responded == 1 & treatment == 0
+	estadd scalar NRC = r(N)
+	
+	sum responded if surveyround == 1 & treatment == 0
+	estadd scalar response_rate_C = r(mean)
+
+local attrition att1 att2 att3
+esttab `attrition' using "${tables_attrition}/rt_attrition.tex", replace booktabs ///
+				prehead("\begin{table}[H] \centering \\ \caption{Differential Attrition across Baseline, Midline, and Endline} \\ \begin{adjustbox}{width=\textwidth,center} \label{tab:rg_attrition} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+				posthead("\toprule \addlinespace[0.3cm]") ///			
+				fragment ///
+				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
+				mtitles("\shortstack{EL\\ Responded}" "\shortstack{ML\\ Responded}" "\shortstack{BL\\ Responded}") ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				drop(_cons) ///  L.* `5' `6'
+				label 		/// specifies EVs have label
+				stats(response_rate response_rate_T response_rate_C NRT NRC N strata_final, fmt(%9.2fc %9.2fc %9.2fc %9.0g %9.0g %9.0g %-9s) labels("Sample response rate" "Treatment response rate" "Control response rate" "Treatment respondents" "Control respondents" "N. of obs."  "Strata controls")) ///
+				prefoot("\addlinespace[0.3cm] \midrule") ///
+				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome is a dummy [0;1] indicating whether the firm responded to the specific survey. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable when available. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+	
+}
+
+
+
+	
+* Do RESPONDENTS in T differ from RESPONDENTS in C pre-treatment? (Resp. validity)
+lab var age "Firm age"
+lab var operation_export "Export experience [0;1]"
+lab var ihs_profit_w95_k1 "Profit [ihs, wins. $95^{th} pctl.$]"
+lab var ihs_ca_w95_k1 "Total sales [ihs, wins. $95^{th} pctl.$]"
+lab var employes_w95 "N. of employees [wins. $95^{th} pctl.$]"
+lab var ihs_ca_exp2018_w95_k1 "Export sales [ihs, wins. $95^{th} pctl.$]"
+lab var mpi "Management Practices index [\overline{z-score}]"
+lab var net_coop_neg "Neg. view of CEO interaction [0-3]"
+lab var net_coop_pos "Pos. view of CEO interaction [0-3]"
+lab var female_efficacy "Entrepreneurial Self-Efficacy [\overline{z-score}]" 
+lab var female_loc "Entrepreneurial Locus of control [\overline{z-score}]" 
+
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy female_loc"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond1 "surveyround == 1 & el_refus == 0"
+local cond2 "surveyround == 1 & id_plateforme != 1092 & el_refus == 0"	
+
+foreach sfmt in save savetex {
+		iebaltab `vars'  if `cond1', ///
+			grpvar(treatment) 		 ///
+			covariates(strata_final) ///
+			rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+			fmissok ///
+			`sfmt'("${tables_attrition}/baltab_elrespondents_TvsC_bl") replace
+			
+		iebaltab `vars'  if `cond2', ///
+			grpvar(treatment) ///
+			covariates(strata_final) ///
+			rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+			fmissok ///
+			`sfmt'("${tables_attrition}/baltab_elrespondents_TvsC_bl_no1092") replace
+* Note: Table layout is further manually adjusted in Latex.
+}
+
 /*
-suggests that
-	1: attriters had higher pre-sales than non-attriters
-	2: attriters are more likely to have pre-treatment export experience
+For some reason, iebaltab does not accept deleting or adding a note.
+nonote addnotes("All characteristics displayed here are measured at baseline. Standard errors are clustered on the firm-level for the control and at the consortium-level for the treatment group as in \citet{Cai.2018}. Strata dummies are included as covariables. The value displayed for t-tests are the differences in the means across the groups. Standard errors are clustered at variable consortia cluster. ***, **, and * indicate significance at the 1, 5, and 10 percent critical level.") ///
+
+*/
+
+* Do RESPONDENTS differ from ATTRITERS in T and in C?
+lab var el_refus "Attrited EL [0;1]"
+lab def attriter 1 "Attrited" 0 "Responded"
+lab val el_refus attriter
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy female_loc"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+
+foreach sfmt in save savetex {
+
+		* T
+iebaltab `vars'  if treatment == 1 & surveyround == 1, ///
+	grpvar(el_refus) ///
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+	fmissok /// F-test unreliable
+	`sfmt'("${tables_attrition}/baltab_elTresvsTatt_bl") replace
+	
+iebaltab `vars'  if treatment == 1 & surveyround == 1 & id_plateforme != 1092, ///
+	grpvar(el_refus) ///
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+	fmissok /// F-test unreliable
+	`sfmt'("${tables_attrition}/baltab_elTresvsTatt_bl_no1092") replace
+	
+/* in T pre-treatment:
+1 :  ATTRITERS have 0.21 pp higher export-likelihood (robu)
+
 */
 	
-	
-* Do attriters in the control group differ from attriters in the treatment group before treatment?
-local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
-local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
-local management "mpi_points"
+		* C
+iebaltab `vars'  if treatment == 0 & surveyround == 1, ///
+	grpvar(el_refus) ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	fmissok /// F-test unreliable
+	`sfmt'("${tables_attrition}/baltab_elCresvsCatt_bl") replace
+
+* Note: Table layout is further manually adjusted in Latex.
+
+}	
+
+
+* Do ATTRITERS in T differ from ATTRITERS in C pre-treatment?
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
 local network "net_size net_coop_pos net_coop_neg"
-local confidence "female_efficacy_points female_loc_points"
+local confidence "female_efficacy female_loc"
 local vars "`kpis' `exp' `management' `network' `confidence'"
 local cond1 "surveyround == 1 & el_refus == 1"
 local cond2 "surveyround == 1 & id_plateforme != 1092 & el_refus == 1"
 
+foreach sfmt in save savetex {
+
 iebaltab `vars'  if `cond1', ///
 	grpvar(treatment) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
-	ftest fmissok ///
-	save(baltab_attrition_TvsC_bl) replace
+	covariates(strata_final) ///	
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+	fmissok ///
+	`sfmt'("${tables_attrition}/baltab_attrition_TvsC_bl") replace
 	
 iebaltab `vars'  if `cond2', ///
 	grpvar(treatment) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
-	ftest fmissok ///
-	save(baltab_attrition_TvsC_bl_no1092) replace
+	covariates(strata_final) ///
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+	fmissok ///
+	`sfmt'("${tables_attrition}/baltab_attrition_TvsC_bl_no1092") replace
+
+* Note: Table layout is further manually adjusted in Latex.
+
+
+}
 	
 /*
 suggests that
@@ -222,7 +378,94 @@ suggests that
 */
 
 
+* Do attriters differ from non-attriters before treatment?
+	* define list of pre-treatment characteristics (key outcomes)
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
+local network "net_size net_coop_pos net_coop_neg"
+local confidence "female_efficacy female_loc"
+local vars "`kpis' `exp' `management' `network' `confidence'"
+local cond1 "surveyround == 1"
+local cond2 "surveyround == 1 & id_plateforme != 1092"
+
+foreach sfmt in save savetex {
+
+	iebaltab `vars'  if `cond1', ///
+		grpvar(el_refus) 		 ///
+		covariates(strata_final) ///
+		rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
+		fmissok ///
+		`sfmt'("${tables_attrition}/baltab_attrition_yesvsno_bl") replace
+		
+	iebaltab `vars'  if `cond2', ///
+		grpvar(el_refus) ///
+		covariates(strata_final) ///
+		rowvarlabels format(%15.2fc) vce(robust) ///
+		fmissok ///
+		`sfmt'("${tables_attrition}/baltab_attrition_yesvsno_bl_no1092") replace
+
+* Note: Table layout is further manually adjusted in Latex.
+		
+}	
+/*
+suggests that
+	1: attriters had lower pre-sales than non-attriters
+	2: attriters are more likely to have pre-treatment export experience (if Gourmandise is removed, does not hold)
+*/
+
+
+
+* Look atttrition via Ghanem et al. 2023 approach (code not working, contacted authors awaiting response)
+{
+	* Test for interval validity among respondents
+	* Test for internal validity among population
+/*
+preserve 
+	* create el outcome for baseline survey
+local exp "operation_export exported exp_pays_w95 ihs_ca_exp_w95_k1"
+local kpis "ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local network "net_size"
+local confidence "female_efficacy female_loc"
+local management "mpi"
+local inno "inno_produit inno_process"
+local outcome_vars "`kpis' `exp' `management' `network' `confidence' `inno'"
+
+foreach var of local outcome_vars {
+	gen temp_el_refus_`var' = (`var' == .) if surveyround == 3
+	egen el_`var'_refus = min(temp_el_refus_`var'), by(id_plateforme) missing
+	drop temp_el_refus_`var'
+}
+
+keep if surveyround == 1
+
+local exp "operation_export exported exp_pays_w95 ihs_ca_exp_w95_k1"
+local kpis "ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
+local network "net_size"
+local confidence "female_efficacy female_loc"
+local management "mpi"
+local inno "inno_produit inno_process"
+local outcome_vars "`kpis' `exp' `management' `network' `confidence' `inno'"
+
+keep id_plateforme treatment el_*_refus strata_final consortia_cluster `outcome_vars'
+save "${figures_attrition}/test_sample_for_Ghanem_etal.dta", replace
+
+
+attregtest net_size, treatvar(treatment) respvar(el_net_size_refus) stratavar(strata_final) vce(cluster consortia_cluster)
+
+attregtest net_size, treatvar(treatment) respvar(el_net_size_refus) stratavar(strata_final) 
+
+attregtest mpi if surveyround == 1, treatvar(treatment) respvar(el_mpi_refus) stratavar(strata_final) vce(cluster consortia_cluster)
+
+attregtest `vars', ///
+		treatvar(treatment) respvar(el_refus) stratavar(strata_final) vce(cluster consortia_cluster)
+		
+*/
+}		
+		
+
 * Lee/Behaghel bounds: Prepare data
+{
 tabstat refus if surveyround == 3, by(treatment) statistics(mean) save
 return list
 display "Treatment response rate is: " 1 - r(Stat2)[1,1] // 0.77 (67 out of 87 firms)
@@ -255,7 +498,11 @@ twoway ///
 		ylabel(0(.1)1) ytitle("Cum. Response Rate") ///
 		xlabel(0(5)30) xtitle("Calls") ///
 		legend(pos(6) rows(2) order(1 "Treatment" 2 "Control"))
+<<<<<<< HEAD
 *graph export "${figures_attrition}/behaghel_graph.pdf", replace
+=======
+graph export "${figures_attrition}/behaghel_graph.pdf", replace
+>>>>>>> main
 	
 	 * Calculate percentage of treatment group observations to be trimmed
 sum cum if calls == 15 & treatment == 1
@@ -272,6 +519,7 @@ display "Percentage of observations in T to be trimmed off: " `trim_perc' // .00
 
 restore
 
+
 * generate group-variable for C (all) + T (within 15 calls)
 gen bh_sample_temp = 0 if surveyround == 3
 	replace bh_sample_temp = 1 if treatment == 0 & refus == 0 & surveyround == 3 				// 60 firms
@@ -279,24 +527,77 @@ gen bh_sample_temp = 0 if surveyround == 3
 egen bh_sample = min(bh_sample_temp), by(id_plateforme)
 
 * check if there is balance between Behaghel trimmed T and controls
-local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 employes_w95"
-local exp "operation_export exp_pays_w95 ihs_ca_exp2018_w95_k1" // 
-local management "mpi_points"
+local kpis "age ihs_profit_w95_k1 ihs_ca_w95_k1 ihs_ca_exp2018_w95_k1 employes_w95"
+local exp "operation_export exp_pays_w95" // 
+local management "mpi"
 local network "net_size net_coop_pos net_coop_neg"
-local confidence "female_efficacy_points female_loc_points"
+local confidence "female_efficacy female_loc"
 local vars "`kpis' `exp' `management' `network' `confidence'"
 local cond "surveyround == 1 & bh_sample == 1" // Gourmandise 1092 not included as categorical refusal at ML, no EL call
 
+foreach sfmt in save savetex {
 iebaltab `vars'  if `cond', ///
 	grpvar(treatment) ///
-	rowvarlabels format(%15.2fc) vce(robust) ///
+	rowvarlabels format(%15.2fc) vce(cluster consortia_cluster) ///
 	ftest fmissok ///
+<<<<<<< HEAD
 	save(baltab_attrition_TvsC_bl_bhsample) replace
 }
+=======
+	`sfmt'("${tables_attrition}/baltab_attrition_TvsC_bl_bhsample") replace
+
+	}
+	
+  }
+ 
+}
+
+>>>>>>> main
 ***********************************************************************
 * 	PART 2: balance table of baseline characteristics	
 ***********************************************************************
 {
+	
+* Baseline balance
+	* Entrepreneur level characteristics
+lab var mpi_points "Management Practices points [0-8]"
+lab var net_nb_qualite "Self-perceived Network Quality [1-10]"
+lab var net_coop_neg "Neg. view of CEO interaction [0-3]"
+lab var net_coop_pos "Pos. view of CEO interaction [0-3]"
+lab var female_efficacy "Entrepreneurial Self-Efficacy points [3-15]" 
+lab var female_loc "Entrepreneurial Locus of control points [3-15]" 
+	
+local management "mpi_points"
+local network "net_size net_nb_qualite net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local vars "`management' `network' `confidence'"
+
+local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
+
+
+foreach sfmt in save savetex {
+	local con_names "full no_out"
+	foreach con of local cond {
+		
+		gettoken con_name con_names : con_names
+
+		iebaltab `vars'  if `con', ///
+			grpvar(treatment) ///
+			rowvarlabels format(%15.2fc) vce(robust) ///
+			stats(desc(sd) pair(diff)) ///
+			ftest fmissok ///
+			`sfmt'("${tables_descriptives}/baltab_bl_entrepreneur_`con_name'") replace
+	}
+}
+	
+	
+	* Firm level characteristics
+lab var age "Firm age"
+lab var operation_export "Export experience [0;1]"
+lab var ihs_profit_w95_k1 "Profit [ihs, wins. $95^{th} pctl.$]"
+lab var ihs_ca_w95_k1 "Total sales [ihs, wins. $95^{th} pctl.$]"
+lab var employes_w95 "N. of employees [wins. $95^{th} pctl.$]"
+lab var ihs_ca_exp2018_w95_k1 "Export sales [ihs, wins. $95^{th} pctl.$]"	
 
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
@@ -7296,6 +7597,8 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 
 }
 
+
+* including attrition
 reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
 

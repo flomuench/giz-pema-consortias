@@ -580,6 +580,302 @@ replace man_fin_per = 0.5 if man_fin_per == 2 & surveyround == 1
 replace man_fin_per = 0.75 if man_fin_per == 3 & surveyround == 1
 replace man_fin_per = 1 if man_fin_per == 4 & surveyround == 1
 
+
+***********************************************************************
+*	PART 7: Correct the different types of innovation based on respondent examples
+***********************************************************************	
+{
+gen inno_improve_cor = .
+	replace inno_improve_cor = 0 if surveyround == 3 & (inno_new != . | inno_improve != . | inno_both != .)
+	lab var inno_improve_cor "Improving the existing product"
+
+gen inno_new_cor = .
+	replace inno_new_cor = 0 if surveyround == 3 & (inno_new != . | inno_improve != . | inno_both != .)
+	lab var inno_new_cor "New product innovation"
+
+gen inno_proc_met_cor = .
+	replace inno_proc_met_cor = 0 if inno_proc_met != . & surveyround == 3
+	lab var inno_proc_met_cor "Innovation in the production process"
+	
+gen inno_proc_prix_log_cor = .
+	replace inno_proc_prix_log_cor = 0 if surveyround == 3	& (inno_proc_prix != . | inno_proc_log != .)
+	lab var inno_proc_prix_log_cor "Innovation in sales and marketing techniques"
+
+gen inno_proc_prix_cor = .
+	replace inno_proc_prix_cor = 0 if surveyround == 3 & inno_proc_prix != .
+	lab var inno_proc_prix_cor "Innovation in pricing methods"
+	
+gen inno_proc_log_cor = .
+	replace inno_proc_log_cor = 0 if surveyround == 3 & inno_proc_log != .
+	lab var inno_proc_log_cor "Innovation in logistics procedures"
+	
+gen inno_proc_sup_cor = .
+	replace inno_proc_sup_cor = 0 if surveyround == 3 & inno_proc_sup != .
+	lab var inno_proc_sup_cor "Innovation in supply chain"
+
+	{
+*inno_improve_cor
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 984 /*changement de l'emballage, introduction des nouveaux jouets et des nouvelle gammes*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 985 /*nous avons améliorés nos packagings, refaits le branding de la marque ainsi qu'une refonte de notre boutique en ligne*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 990 /*yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 996 /*la gamme en cuir est augmenté elle diversifié la gamme de tissu*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1000 /*développement de la partie ia de la plateforme de résolution des conflits*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1007 /*nouveau design */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1010 /*Packaging: changement du logo et charte graphique */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1013 /*amélioration de qualité de cuire de produit et amélioration de chaine de produit , amélioration de la finition des sac trouses ect */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1019 /*services sous forme de chatroom en ligne /aamlt des améliorations au niveau de la plateforme*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1020 /*bouturage des oliviers , production des plantes arbres fruitiers*/
+
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1027 /*gamme de maquillage , améliorations fl laboratoire */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1035 /*accompagnement et vulgarisation scientifique */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1041 /*emballage (étiquette,) w hasnet fl livraison */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1043 /*produit publicitaires , importer des nouveaux produit naturels  et elle fait leurs chartes, elle fait des choses personnalisées en fonction de l'occasion ou de la demande du client*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1050 /*nous avons réalisé des innovations et des améliorations grâce à des systèmes personnalisés adaptés aux consommateurs*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1055 /*nous avons augmenter le nombre de produits et nous avons change l'emballage*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1058 /*nous avons apporté des optimisations à la phase setup de notre solution logicielle auprès de nos clients pour réduire les délais de mise en service*/
+
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1081 /*qualité amande: qualité kbira w behia */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1087 /*la certifaction /recouler la game cheuveux/ lemballage /qutite des produits*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1107 /*amélioration de résistance mécanique */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1119 /*ameliaration pour les mise a jour logiciel*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1124 /*taille et coulleur de produit*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1128 /*produits personnalisable selon les besoin des clients*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1140 /*amélioration de la qualité du produit comme les noeud d'escargot tressage*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1151 /*des produits bio qui sont devenus plus bio à plus de 40%*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1157 /*amelioration interne au niveau des mesures de securité des donnees de la ste qui va aussi impacter la securité des donnees de nos clients */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1164 /* de nouveaux parfums pour les pâtes à tartiner*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1167 /*amélioration de la qualité du produit et changement du fournisseur*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1169 /*coté choix et diversité de formation destiné pour les proffesionnels*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1186 /*changement de l'emballage extérieur des boites, tapis barbére , da5elna clim el halfa et zarbia dans le même produit*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1190 /*changement des types de produits élargir la gamme des produits*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1192 /*on a amélioré l'emballage, je vois ce que les consommateurs veulent et j'améliore le produit et j'ai fait une diversification des articles (des choses qui sortent de l'ordinaire)*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1193 /*sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1196 /*j'ai fait de nouvelles infusions destiné pour les femmes allaitantes / on a fait des améliorations dans la qualité de production/ on a rajouté dans production et qualité de la moringa*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1203 /*comme chaque année, nous sommes en amélioration continue du qualité du produit (choix des matières, finitions, sous-traitants) pour être plus adapter à l'export et aux normes internationales*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1117 /*changement du logo w couleur personamisé et création des parfum sur mesure */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1185 /*changement de design */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1215 /*ré innovation : nouvelle étiquette, chart graphique*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1230 /*changement de l' emballage et qualité de produit */
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1231 /* Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1240 /*améliorations et corions des bugs de la plateforme*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1243 /*amelioration au niveau qualité des panneaux polyester c est un panneau composite rigide anti-flame densité 40*/
+replace inno_improve_cor =1 if surveyround == 3 &  id_plateforme == 1247 /*l'emballage et le design/ dans le produit que nous avons transformé avec des sucres naturels/ innovation dans la diversité des produits en produisant des produits biologiques comme les graines de lin*/
+
+*inno_new_cor
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 983 /*bsissa caroube*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 984 /*des nouvelles jouets en bois et des autres ustenside de cuisine */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 985 /*nous avons intégrés la rubrique maroquinerie pour y proposer des sacs à main et des couffins pour nos clients*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 990 /*de nouvelles formations de coiffure, ils ont rajouté un atelier de coifire et la possibilité de se déplacer dans les différentes régions pour faire les formations*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 994 /*dentifrice naturelle dedorant natrurelle gommage visage*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 996 /*un autre modele de portfeuille de bloc note autres sac et ajouter les meme modelle des sac en tissue et une collection saaff o tissaage*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 999 /*nouvelle services de comptabilité carbone( déclaration de matériel ) */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*des jbeyeb (tenues traditionnelles masculines)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1009 /*nouveaux recrutements, conception et mise en place des projets de pergola avec les horeca (hotels)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1107 /*les vasques  des meubles ( exp : des tables ) */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1010 /*gel fixateur */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1019 /*Introduction d'un nouveau service: cours dédié aux professionnels(pas que les eleves,etudiants)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1020 /*developement un systeme complet de production des plante adapter pour tous les types des climats*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1027 /*concilier , eyeliner , blush , bodyblush  */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1030 /*zedna fl nombre des employés / kabarna fl rendement / zedou des articles (assiette rond/ pizza)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1031 /*peinture naturelle haute couture , */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1035 /*le conseil */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1038 /*on a rajouté des machines afin d'améliorer la capacité de production / introduire une nouvelle gamme dans secteur décoration ( céramique artistique )*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1040 /*الفخار الهريسة العربي السلاطه مشويه التوابل اللبسه التقليدية*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1050 /*nous avons réalisé des innovations et des améliorations grâce à des systèmes personnalisés adaptés aux consommateurs// nous avons développé de nouvelles applications telles que rafekni et kesati*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1055 /*les astrotorisme */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1057 /*variation des produits dérivés en collaboration avec de nouveaux artistes*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1061 /*atelier créatifs pour adultes*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1064 /*création de la gamme peau sensible avec la rose de kairouan :gel, crème, hydratante du jour crème nourrissante du soir,le sérum a base de hé de rose,et un savon// atelier de fabrication des huiles de massage */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1065 /*des produits cosmétiques et ont diversifié les produits de décoration*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1068 /*a lancer gamme de shampoing et gel douche o des déo naturelle*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1069 /*vidéo 3 d */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1081 /*tomùate, pimon , dele3 ,9ra3*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1084 /*nouvelles formations : convention de partenariati avec la confédération italienne des héliciculteur*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1087 /*deodorant /game cheuveux/huile essensielel*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1096 /*extrait de mare de café */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1102 /*landaux, les couvres lits, décoration amigurumis etc*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1112 /*des produit agro alimentaires */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1116 /*bonjour,  pour les lampadaires et les lampes on a changé de design nouvelle création: - fauteuil forme ronde avec fibres végétales - canapé ovale avec fibres végétales*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1117 /*des bougies */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1122 /*parure de lit et ouss de lit */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1124 /*produit en gré */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1126 /*des nouvelles sacs a main en cuire */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1128 /*création et innovation de produit changer la formation des produit//des nouvelles forme de produit  */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1132 /*organisation des evenements*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1135 /*lancement d'un nouveau produit : pour un cadeau (cookies m3a gourmandise)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1140 /*La poterie, la harissa, les épices arabes, la salade grillée et les vêtements traditionnels.*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1143 /*nouvelle ligne de bijoux fins pour une clientèle plus jeune*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*maquillage: les écrans, de noveaux mascaras, gloss et pinceaux*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1150 /*nous avons développé de nouvelles applications telles que rafekni et kesati*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1151 /*des confitures, sauce tomate, jus de citronade*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1153 /*d'autres produits et services digital ,*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1157 /*audit interne de securité */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1164 /*on rajouté une nouvelle ligne de produits énérgétiques/ packs de produits/ des formations gratuites pour les femmes// des confitures de tomates sucrées + de nouveaux parfums pour les pâtes à tartiner*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1167 /*sacs de soiré /accesoire de soiré*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1168 /*lancement de gamme de salon de jardin */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1170 /*de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1171 /*nouvelles analyses complémentaires et service d'extraction des huiles*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1176 /*nouvelle conception et liaison intelligente */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1182 /*une gamme luvia c serum o mousse o creme b vitamine c */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1185 /*des articles de cadeaux, Haïk Kamraya, des sacs et des pochette sur taille de pc block note*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1186 /*abajoret bil 7alfa w souf */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1190 /*les étagères les corbeilles ala base de thmara avec du verre lhsor avec thmara et a travers le tissage*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1191 /*Diversification des produits*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1192 /*on a amélioré l'emballage, je vois ce que les consommateurs veulent et j'améliore le produit et j'ai fait une diversification des articles (des choses qui sortent de l'ordinaire)//j'ai fait une évolution avec la paille/ j'ai fait des chnagement avec le mais pour les personnes qui ont des maladies infectieuses et les personnes qui souhaitent faire un régime*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1193 /*sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat // zedet el medhalat , zedet aalam tounes bel halfa  */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1196 /*j'ai fait de nouvelles infusions destiné pour les femmes allaitantes / on a fait des améliorations dans la qualité de production/ on a rajouté dans production et qualité de la moringa// diversité des infusion pour le bien-être ( exp: constipation) / poudre de moringa*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1197 /*j'ai travaillé des modèles traditionnels et modernes*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1203 /*produit : une nouvelle collection uni-sexe (adpatation à notre demande feminine et masculine à la fois)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1205 /*ajout des soins spécifiques avec la nouvelle machine hydrafacial// fabrication des soins capillaires naturelset skin care safe*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1210 /*service dans le domaine de sport*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1222 /*le conseil, audit*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1224 /*développement des nouveaux produit,//écran (3 types: invisible, teinté beige clair, beige rosé)*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1230 /*changement de la quantité de produit innovation de bssissa avec du chocolats et des fruits secs et goutée pour les enfants*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1234 /*des nouvelles création des produits */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1239 /*odoo et la partie marketing*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1243 /*installation des groupe frigorifique daikin et intégré la nouvelle technologie de gamme daikin zeas mini centrale frigorifique en tunisie*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1244 /*ajout de volet formation au services fournis par le bureau*/
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1245 /*des nouvelles création des produits */
+replace inno_new_cor =1 if surveyround == 3 &  id_plateforme == 1247 /*l'emballage et le design/ dans le produit que nous avons transformé avec des sucres naturels/ innovation dans la diversité des produits en produisant des produits biologiques comme les graines de lin sucret salé b texture jdida / le fandant */
+
+replace inno_new_cor =0 if surveyround == 3 &  id_plateforme == 988 /*des études a l'étranger */
+replace inno_new_cor =0 if surveyround == 3 &  id_plateforme == 1017 /*biscuit traditionnelle , biscuit secs , gamme sans sucres*/
+replace inno_new_cor =0 if surveyround == 3 &  id_plateforme == 1041 /*zedet fruits et légume surgelé */
+
+*inno_proc_met_cor
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 990 /*yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 996 /*la gamme en cuir est augmenté elle diversifié la gamme de tissu*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1013 /*amélioration de qualité de cuire de produit et amélioration de chaine de produit , amélioration de la finition des sac trouses ect */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1020 /*elle a l'intention d'introduire un planning des matières nouvelles afin de faciliter le travail et réduire le coût de production*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1036 /*elle a aggrandit l'espace de stockage et les touriste viennent pour voir l'expérience*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1046 /*le local a changé */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1068 /*elle a changé de local*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1108 /*mise en place de panneaux solaires pour génerer l'éclectricité dans sa ferme*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1126 /*changement de l'atelier o elle travaille plus sur le marketing digitale*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1128 /*changement de local*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*le systheme erp cest la gestion de commande et de fourniseurs et des espace et des machines*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1164 /*ajout d'une nouvelle ligne de production + prospection de marché à l'étranger*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1192 /*elle a augmenté le nombre d'employés afin d'améliorer la production et augmenter la rapidité du traail + elle a travoué de nouvelles méthodes de travail où elle donne la majorité du travail aux employés et elle prends la responsabilité et s'occupe du suivi du travail*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1193 /*ghayart fl mantoujet aamalt midhalet bel halfa*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1230 /*le local a été aggrandi*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1020 /*developement un systeme complet de production des plante adapter pour tous les types des climats*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1030 /*zedna fl nombre des employés / kabarna fl rendement / zedou des articles (assiette rond/ pizza)*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1038 /*on a rajouté des machines afin d'améliorer la capacité de production / introduire une nouvelle gamme dans secteur décoration ( céramique artistique )*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1046 /*des nouvelles techniques et de nouveaux outils d'auteur dans la création de contenus*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1055 /*nous avons augmenter le nombre de produits et nous avons change l'emballage*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1087 /*la certifaction /recouler la game cheuveux/ lemballage /qutite des produits*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1096 /*certification iso 22716*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1112 /*matériaux de construction */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1186 /*changement de l'emballage extérieur des boites, tapis barbére , da5elna clim el halfa et zarbia dans le même produit*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1193 /*sebigha , tatawer mantouj men naheyet afkar jdid khedma zdet hajet medhalat */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1196 /*j'ai fait de nouvelles infusions destiné pour les femmes allaitantes / on a fait des améliorations dans la qualité de production/ on a rajouté dans production et qualité de la moringa*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1203 /*comme chaque année, nous sommes en amélioration continue du qualité du produit (choix des matières, finitions, sous-traitants) pour être plus adapter à l'export et aux normes internationales*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1205 /*ajout des soins spécifiques avec la nouvelle machine hydrafacial*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1247 /*l'emballage et le design/ dans le produit que nous avons transformé avec des sucres naturels/ innovation dans la diversité des produits en produisant des produits biologiques comme les graines de lin*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1248 /*la qualite de la chaine de production qui est devenue plus petite et la qualite de production*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1192 /*elle a augmenté le nombre d'employés afin d'améliorer la production et augmenter la rapidité du traail + elle a travoué de nouvelles méthodes de travail où elle donne la majorité du travail aux employés et elle prends la responsabilité et s'occupe du suivi du travail*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1247 /*changement de formation personnels et les technique et le loi pour les personnel*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1057 /*arrondissement de l équipe, développement de stratégie*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1071 /*meilleur organisation du processus interne, meilleur effort commercial, la prise de décision documenté et organisé*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1096 /*certification iso 22716*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1157 /*amelioration interne au niveau des mesures de securité des donnees de la ste qui va aussi impacter la securité des donnees de nos clients */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1132 /*aggrandissement de l'équipe et de nouveaux bureaux*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1009 /*nouveaux recrutements, conception et mise en place des projets de pergola avec les horeca (hotels)*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1108 /*mise en place de panneaux solaires pour génerer l'éclectricité dans sa ferme*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*des formations pour les employés afin de garantir la durabilté des produits artisanaux*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1017 /*aménagement, extension du laboratoire*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1030 /*elle a changé l'organisation du management intérieur*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1239 /*odoo et tecnologie web */
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1176 /*des nouvelles technologies par exp: des nouveau protocoles de communication*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
+replace inno_proc_met_cor =1 if surveyround == 3 &  id_plateforme == 1244 /*suivi des chantiers verts/mangemenet des projets plus adapté/améliorer la gestion financière*/
+
+*inno_proc_sup_cor 
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 990 /*yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement */
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1020 /*elle a l'intention d'introduire un planning des matières nouvelles afin de faciliter le travail et réduire le coût de production*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*le systheme erp cest la gestion de commande et de fourniseurs et des espace et des machines*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1027 /*de nouveaux employes et de nouvelles matières ont été rajoutés*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*le systheme erp cest la gestion de commande et de fourniseurs et des espace et des machines*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1248 /*intégration de nouveaux matériaux*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1203 /*comme chaque année, nous sommes en amélioration continue du qualité du produit (choix des matières, finitions, sous-traitants) pour être plus adapter à l'export et aux normes internationales*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1049 /*Changement de l'entreprise avec laquelle elle travaille*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1057 /*variation des produits dérivés en collaboration avec de nouveaux artistes*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1084 /*qualité : 3malt des partenariat nouvelles */
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1088 /*consulter des affaires avec des consultants internationaux*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1170 /*de nouvelles solutions digitales, on a rajouté dans la quantité et de nouveaux partenariats en Afrique*/
+replace inno_proc_sup_cor =1 if surveyround == 3 &  id_plateforme == 1231 /* Agrandissement de l'amenagement, amelioration du qualité des huiles,insertion des nouveaux produits intermediaires dans la chaine de production de certains produits*/
+
+*inno_proc_prix_cor
+replace inno_proc_prix_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne*/
+
+*inno_proc_log_cor
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 988 /*des études a l'étranger */
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1118 /*lancement d'un site web de l'entreprise*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1010 /*ils ont intégré du commercial et ont un nouvel canal de distribution*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1030 /*services marketing en ligne/ on a travaillé sur l'image de marque/ site web en cours pour les ventes en ligne/ j'ai fait un logiciel interne personnalisé*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1043 /*Penetration au marché du B2C, avant elle travaille seulement sur le B2B/ site web , sponsoring , les promotions, application mobile*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1054 /*elle a fait un site web*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1118 /*lancement d'un site web de l'entreprise*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1126 /*elle travaille sur le marketing digitale o elle lancer un site de l'export a l'internationale */
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1001 /*la qualité des produits/ la création des nouveaux produits et l'accès aux nouveaux marchés*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 990 /*yamlou deplacement lel jihet o yamloulhom des formation lapart f locale mte3hom o ykadmou des servies o amlou amenagement */
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1164 /*ajout d'une nouvelle ligne de production + prospection de marché à l'étranger*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1150 /*nous avons développé de nouvelles applications telles que rafekni et kesati*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1112 /*Commerce international: Vente pure*/
+replace inno_proc_log_cor =1 if surveyround == 3 &  id_plateforme == 1178 /*Introduire ses services au marché africain*/
+
+*inno_proc_prix_log_cor
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 984 /*changement de l'emballage, introduction des nouveaux jouets et des nouvelle gammes*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 985 /*nous avons améliorés nos packagings, refaits le branding de la marque ainsi qu'une refonte de notre boutique en ligne*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1005 /*la création et la diminution de prix , améloration de qualité du tissu: il travaille l'haut gamme mais aussi, maintenant, la gamme moyenne*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1010 /*ils ont intégré du commercial et ont un nouvel canal de distribution*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1017 /*b2b, pause cafe ,evenement, site web , logiciel erp */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1019 /*ils ont fait des changements au niveau des offres et ont fait des changements dans les packs services*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1022 /*we made a good packaging for our product and we made a small show room*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1030 /*services marketing en ligne/ on a travaillé sur l'image de marque/ site web en cours pour les ventes en ligne/ j'ai fait un logiciel interne personnalisé*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1035 /*par rapport aux communications plus networking , participation aux evenemnets d'ordre professionnel*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1038 /*elles ont travaillés sur des formations techniques (pratiques), ont rajouté des workshops pour les petits et se sont concentrés plus sur le digital*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1043 /*site web , sponsoring , les promotions, application mobile*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1054 /*elle a fait un site web*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1118 /*informations , technique de commmunication avec le client*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1126 /*changement de l'atelier o elle travaille plus sur le marketing digitale*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1182 /*ajout d'une charte graphique, changement de l'emballage, changement du site web et de nouveaux catalogues*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1215 /*actions de marketing*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1036 /*hasanet l'emballage/ hasanet fl les etiquette hasanet fl qualite produit /aamalet des coffret cadeaux double/simple */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1041 /*emballage (étiquette,) w hasnet fl livraison */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1055 /*nous avons augmenter le nombre de produits et nous avons change l'emballage*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1065 /*marketing*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1071 /*meilleur organisation du processus interne, meilleur effort commercial, la prise de décision documenté et organisé*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1087 /*la certifaction /recouler la game cheuveux/ lemballage /qutite des produits*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1108 /*badalna logo w l embalage  callité espace ecologique en bois decoration  formation ferme pedagogique*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1117 /*changement du logo w couleur personamisé et création des parfum sur mesure */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1118 /*lancement d'un site web de l'entreprise*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1126 /*elle travaille sur le marketing digitale o elle lancer un site de l'export a l'internationale */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1147 /*regrouper l'usine et le lieu de stockage au même endroit/on a amélioré le produit dans la quantite et des differentes qualités; des nouvelles textures et un nouveau emballage*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1182 /*on a un nouvel emballage carton,certification iso o des salariésresponsable qualité manajement o 2 nouveaux ouvriers*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1186 /*changement de l'emballage extérieur des boites, tapis barbére , da5elna clim el halfa et zarbia dans le même produit*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1192 /*on a amélioré l'emballage, je vois ce que les consommateurs veulent et j'améliore le produit et j'ai fait une diversification des articles (des choses qui sortent de l'ordinaire)*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1215 /*ré innovation : nouvelle étiquette, chart graphique*/
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1230 /*changement de l' emballage et qualité de produit */
+replace inno_proc_prix_log_cor =1 if surveyround == 3 &  id_plateforme == 1247 /*l'emballage et le design/ dans le produit que nous avons transformé avec des sucres naturels/ innovation dans la diversité des produits en produisant des produits biologiques comme les graines de lin*/
+	}
+
+
+}
+
 ***********************************************************************
 * 	PART final save:    save as intermediate consortium_database
 ***********************************************************************
