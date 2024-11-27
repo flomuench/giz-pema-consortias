@@ -14,14 +14,41 @@
 *
 *	Authors:  	Florian Muench & Teo Firpo
 *	ID variable: 	id (example: f101)			  					  
-*	Requires: ins_adminstrative_data.xlsx  
-*	Creates: ins_adminstrative_data.dta 															  
+*	Requires: BI-STAT-GIZ-Octobre2024.xlsx  
+				/// BI-STATOctobre2024.xlsx 
+				/// Entreprises (1).xlsx
+*	Creates: cepex_raw.dta 															  
 
 ***********************************************************************
 * 	PART 1: 	Import Cepex data and list of firms from all programmes 
 ***********************************************************************
 
-	* import Cepex data
+	* import Cepex data (without product breakdown)
+
+import excel "${data}/BI-STAT-GIZ-Octobre2024.xlsx", firstrow clear
+	
+	* drop useless vars
+	
+drop Libelle_Pays Libelle_NDP
+
+gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
+
+	* rename variables so there is not clash with the other dataset 
+	
+forvalues i = 2020(1)2024 {
+	rename SumVALEUR_`i' total_revenue_`i'
+	rename Sum_Qte_`i' total_qty_`i'
+	
+	lab var total_revenue_`i' "Total revenue in `i'"
+	lab var total_qty_`i' "Total quantity of exports in `i'"
+}
+ 
+drop if ndgcf==""
+
+save "${data}/temp_cepex1.dta", replace
+
+	
+	* import Cepex data (with product breakdown)
 	
 import excel "${data}/BI-STAT-GIZ-2-Octobre2024.xlsx", firstrow clear
 	
@@ -33,7 +60,7 @@ drop O P Q R
 
 gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
 
-save "${data}/temp_cepex.dta", replace
+save "${data}/temp_cepex2.dta", replace
 
 
 	* now load file linking Cepex id to programs' ids
@@ -96,7 +123,7 @@ Duplicates in terms of matricule_fiscale
    copies | observations       surplus
 ----------+---------------------------
         1 |          511             0
-        2 |           98            48 /// firms that were in all 2 programs
+        2 |           96            48 /// firms that were in all 2 programs
         3 |           15            10 /// firms that were in all 3 programs
 --------------------------------------
 
@@ -169,13 +196,34 @@ order program4, a(program3)
 * 	PART 3:  merge rct firms to Cepex universe of firms  					  
 ***********************************************************************
 {
-	* merge RCT sample with RNE firm population
+	* merge RCT sample with Cepex firm population
 sort ndgcf, stable
-merge 1:m ndgcf using "${data}/temp_cepex.dta" 
+merge 1:m ndgcf using "${data}/temp_cepex1.dta" 
+codebook ndgcf if _merge == 3
+/* 
+unique values:  306                      missing "":  0/306
+result merge:
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                           258
+        from master                       258  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                               306  (_merge==3)
+    -----------------------------------------
+
+*/
+
+rename _merge match
+
+	* now merge with Cepex firm data with totals
+
+sort ndgcf, stable
+merge 1:m ndgcf using "${data}/temp_cepex2.dta" 
 codebook ndgcf if _merge == 3
 
-/* 
-result merge:
+/*
+result merge: 
     Result                           # of obs.
     -----------------------------------------
     not matched                           258
@@ -185,8 +233,10 @@ result merge:
     matched                             5,324  (_merge==3)
     -----------------------------------------
 
+	unique values:  306                      missing "":  0/5,324
 */
 
+drop match
 
 
 /*FROM OTHER FILE DELETE AFTER 
@@ -237,4 +287,6 @@ restore
 
 save "${data}/cepex_raw.dta", replace
 
-erase "${data}/temp_cepex.dta"
+erase "${data}/temp_cepex1.dta"
+
+erase "${data}/temp_cepex2.dta"

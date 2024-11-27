@@ -86,11 +86,11 @@ if  "`c(username)'" == "teofirpo" {
 
 		if c(os) == "Windows" {
 	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
-	global github = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
+	global code = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
 }
 else if c(os) == "MacOSX" {
 	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
-	global github = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
+	global code = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
 }	
 
 
@@ -100,7 +100,7 @@ global data "${gdrive}/cepex_october_2024"
 
 /* FROM OTHER FILE DELETE AFTER Set folder paths
 global root     = "C:/Users/user/Documents/rct"
-global code     = "${root}/code"
+global code     = "${github}/code"
 global data     = "${root}/data"
 global raw  		= "${data}/raw"
 global intermediate = "${data}/intermediate"
