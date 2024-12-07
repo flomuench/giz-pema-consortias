@@ -124,7 +124,7 @@ program qvalues
 }
 
 ***********************************************************************
-* 	PART 1: test for differential survey attrition 		
+* 	PART 1: Tests for differential survey attrition 		
 ***********************************************************************
 {
 * generate additional variables
