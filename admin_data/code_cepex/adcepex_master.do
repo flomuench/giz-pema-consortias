@@ -59,8 +59,7 @@ set scheme burd
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 {
-	* dynamic folder path for gdrive(data,output), github(code), backup(local computer)
-		
+	* Root folder
 if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "my rog" | "`c(username)'" == "fabi-" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  | "`c(username)'" == "Admin"{
 
 		global gdrive = "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"	
@@ -84,47 +83,41 @@ if  "`c(username)'" == "teofirpo" {
 		
 }
 
+	* Data & Code
 		if c(os) == "Windows" {
-	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
+	global data = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
 	global code = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
 }
 else if c(os) == "MacOSX" {
-	global gdrive = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data"
+	global data = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
 	global code = "/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
 }	
 
 
-global data "${gdrive}/cepex_october_2024"
+	global raw  		= "${data}/raw"
+	global intermediate = "${data}/intermediate"
+	global final		= "${data}/final"
 
-
-
-/* FROM OTHER FILE DELETE AFTER Set folder paths
-global root     = "C:/Users/user/Documents/rct"
-global code     = "${github}/code"
-global data     = "${root}/data"
-global raw  		= "${data}/raw"
-global intermediate = "${data}/intermediate"
-global final		= "${data}/final"
-global output   = "${root}/output"
+	* Output
+global output   = "${data}/output"
+		* Figures
 global figures  = "${output}/figures"
 	global fig_all  = "${figures}/all"
-	global fig_ecom  = "${figures}/ecom"
-	global fig_cf  = "${figures}/cf"
-	global fig_aqe  = "${figures}/aqe"
-
+		global fig_ecom  = "${figures}/ecom"
+		global fig_cf  = "${figures}/cf"
+		global fig_aqe  = "${figures}/aqe"
+		* Tables
 global tables   = "${output}/tables"
 	global tab_all   = "${tables}/all"
-	global tab_ecom  = "${tables}/ecom"
-	global tab_cf    = "${tables}/cf"
-	global tab_aqe   = "${tables}/aqe"
+		global tab_ecom  = "${tables}/ecom"
+		global tab_cf    = "${tables}/cf"
+		global tab_aqe   = "${tables}/aqe"
 
 */
 * create log file
 cap log close
-log using "${root}logfile.log", replace 
+log using "${data}/logfile.log", replace 
 } 
-
-
 
 
 ***********************************************************************

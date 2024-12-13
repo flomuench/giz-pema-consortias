@@ -632,17 +632,57 @@ testparm `vars'
 
 reg treatment `vars' if surveyround == 1 & id_plateforme != 1092
 testparm `vars' 
-		
-		
-		
-	
+
+}
 
 
-*** Take-up
+***********************************************************************
+* 	PART 2: Take-up
+***********************************************************************
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
-	
+
+ gen mid_tu = take_up if surveyround == 2
+ egen ml_take_up = min(mid_tu), by(id_plateforme)
+ drop mid_tu
+ 
 * define list of pre-treatment characteristics
+local management "mpi_points"
+local network "net_size net_nb_fam net_nb_dehors net_nb_qualite net_coop_pos net_coop_neg"
+local confidence "female_efficacy_points female_loc_points"
+local family "famille2 famille1"
+local kpis "age bpi epp employes profit_euro ca_euro ca_tun_euro ca_exp_euro"
+local exp "operation_export exp_pays"
+local all_vars "`kpis' `exp' `management' `network' `confidence' `family'"
+local cond "id_plateforme != 1092 & treatment == 1"
+
+*take_up
+	*without outlier
+		* Take-up vs. Drop out across all consortia
+
+
+foreach x of varlist el_take_up ml_take_up {
+	foreach sfmt in save savetex {
+		
+iebaltab `all_vars' if `cond' & surveyround == 1, ///
+	grpvar(`x') ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	`sfmt'("${tables_take_up}/baltab_`x'_tu_all_noout") replace
+	
+		* Take-up vs. Drop out across all but Digital consortium
+iebaltab `all_vars' if `cond' & surveyround == 1 & inlist(pole, 1,2,3), ///
+	grpvar(`x') ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	`sfmt'("${tables_take_up}/baltab_`x'_tu_nodig_noout") replace
+	
+		* Take-up vs. Drop out across all but Digital consortium
+iebaltab `all_vars' if `cond' & surveyround == 1 & inlist(pole, 4), ///
+	grpvar(`x') ///
+	rowvarlabels format(%15.2fc) vce(robust) ///
+	`sfmt'("${tables_take_up}/baltab_`x'_tu_dig_noout") replace
+		}
+}
+	
 local kpis "age profit ca employes"
 local exp "operation_export exp_pays ca_exp"
 local vars "`kpis' `exp'"
@@ -689,8 +729,6 @@ iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_p
 
 *with outlier
 iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_unadj) replace
-
-}
 
 
 ***********************************************************************
@@ -1639,9 +1677,6 @@ end
 network_size_presentation net_size_w95, gen(netsize)	
 	
 	
-	
-	
-	
 	* network composition entrepreneurs & gender (1: nbr of contacts, 2: % of women, 3: % GIZ)
 capture program drop network_comp_presentation // enables re-running
 program network_comp_presentation
@@ -2078,18 +2113,18 @@ version 16							// define Stata version 15 used
 			foreach var in `varlist' {		// do following for all variables in varlist seperately	
 
     // ITT: ANCOVA plus stratification dummies
-    eststo `var'1_`sr': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == `sr', cluster(consortia_cluster)
+    eststo `var'1_`sr': reg `var' i.treatment i.strata_final if surveyround == `sr', cluster(consortia_cluster)
         // Add to LaTeX table
-        estadd local bl_control "Yes" : `var'1_`sr'
+        estadd local bl_control "No" : `var'1_`sr'
         estadd local strata_final "Yes" : `var'1_`sr'
         // Add to coefplot
         local itt_`var'_`sr' = r(table)[1,2]
         local fmt_itt_`var'_`sr' : display %3.2f `itt_`var'_`sr''
 
     // ATT, IV regression
-    eststo `var'2_`sr': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == `sr', cluster(consortia_cluster) first
+    eststo `var'2_`sr': ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == `sr', cluster(consortia_cluster) first
         // Add to LaTeX table
-        estadd local bl_control "Yes" : `var'2_`sr'
+        estadd local bl_control "No" : `var'2_`sr'
         estadd local strata_final "Yes" : `var'2_`sr'
         // Add to coefplot
         local att_`var'_`sr' = e(b)[1,1]
@@ -2181,7 +2216,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
 				label 		/// specifies EVs have label
-				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* oL.*
+				drop(_cons *.strata_final) ///  L.* oL.* ?.missing_bl_* *_y0
 				noobs
 			
 			* Bottom panel: ITT
@@ -2190,8 +2225,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 				fragment ///	
 				posthead("\addlinespace[0.3cm] \midrule \\ \multicolumn{11}{c}{Panel B: Treatment Effect on the Treated (TOT)} \\\\[-1ex]") ///
 				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
-				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
-				drop(_cons *.strata_final ?.missing_bl_* *_y0) ///  L.* `5' `6'
+				stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g) labels("Control mean" "Control SD" "Observations" "Strata controls" "BL controls")) ///
+				drop(_cons *.strata_final) ///  L.* `5' `6' ?.missing_bl_* *_y0
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				mlabels(none) nonumbers ///		do not use varnames as model titles
 				collabels(none) ///	do not use statistics names below models
@@ -2243,11 +2278,44 @@ gr export "${master_regressiontables}/endline/regressions/network/el_`generate'_
 end
 
 	* apply program to export outcomes
-rct_regression_coop netcoop2 netcoop3 netcoop7 netcoop8 netcoop9 netcoop1 netcoop4 netcoop5 netcoop6 netcoop10, gen(coop)
+rct_regression_coop netcoop1 netcoop2 netcoop3 netcoop4 netcoop5 netcoop6 netcoop7 netcoop8 netcoop9 netcoop10, gen(coop)
 
 }
 
 
+* Explorative: Partnership & Trust coefficients seem to go in the same direction. Can be considered substitutes. Test if sign if combined.
+
+gen partner_trust = .
+
+	replace partner_trust = 1 if (netcoop3 == 1 | netcoop7 == 1) & surveyround == 2 
+	replace partner_trust = 0 if (netcoop3 == 0 & netcoop7 == 0) & surveyround == 2 
+	
+	replace partner_trust = 1 if (netcoop3 == 1 | netcoop8 == 1) & surveyround == 3 
+	replace partner_trust = 0 if (netcoop3 == 0 & netcoop8 == 0) & surveyround == 3 
+
+
+	
+reg partner_trust i.treatment i.strata_final if surveyround == 2, cluster(consortia_cluster)
+	
+ivreg2 partner_trust i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(consortia_cluster) 
+
+reg partner_trust i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+	
+ivreg2 partner_trust i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) 
+
+* Same for connect, learn, cooperate at endline. Concern: might be an alternative choice for partnership.
+gen connect_learn_cooperate = . 
+
+*	replace connect_learn_cooperate = 1 if (netcoop2 == 1 | netcoop7 == 1 | netcoop9 == 1) & surveyround == 2 
+*	replace connect_learn_cooperate = 0 if (netcoop2 == 0 & netcoop7 == 0 & netcoop9 == 0) & surveyround == 2 
+	
+	replace connect_learn_cooperate = 1 if (netcoop2 == 1 | netcoop7 == 1 | netcoop9 == 1) & surveyround == 3 
+	replace connect_learn_cooperate = 0 if (netcoop2 == 0 & netcoop7 == 0 & netcoop9 == 0) & surveyround == 3 
+
+reg connect_learn_cooperate i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+	
+ivreg2 connect_learn_cooperate i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) 
+	
 **************** net_coop ML/EL ****************
 lab var net_coop_pos "Pos. view"
 lab var net_coop_neg "Neg. view"
@@ -2429,9 +2497,6 @@ rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 
 
 }
-
-
-
 
 
 ***********************************************************************

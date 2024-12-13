@@ -16,6 +16,7 @@
 ***********************************************************************
 * 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
+{
 	* set standard settings
 version 15
 clear all
@@ -51,10 +52,12 @@ net install time.pkg
 */
 	* define graph scheme for visual outputs
 set scheme plotplain
+}
 
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
+{
 		* define user
 	if "`c(username)'" == "amira.bouziri" | "`c(username)'" == "Admin" | "`c(username)'"  == "Fabian Scheifele" | "`c(username)'" == "my rog" | "`c(username)'" == "Amina" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra" {
 	global person =  "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
@@ -92,6 +95,8 @@ global ml_output = "${ml_gdrive}/output"
 			* set seeds for replication
 set seed 1231234
 set sortseed 1231234
+
+}
 		
 ***********************************************************************
 

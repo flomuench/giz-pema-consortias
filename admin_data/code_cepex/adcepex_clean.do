@@ -159,6 +159,7 @@ egen countries_2020 = total(tag2020), by(ndgcf)
 egen tag2024 = tag(ndgcf country) if exported_2024==1
 egen countries_2024 = total(tag2024), by(ndgcf)
 
+/*
 * Step 2: Count the number of countries for each firm in 2020
 gen countries_2020 = .
 bysort ndgcf country (exported_2020): replace countries_2020 = sum(exported_2020)
@@ -184,6 +185,8 @@ lab var products "Number of products exported by the firm"
 
 drop tag tag2
 }
+
+*/
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
@@ -212,10 +215,7 @@ lab var program_num "Number of programs the firm participated in"
 lab var matricule_fiscale "Fiscal identifier"
 lab var price_change_pc "Product unit price change at the firm level"
 lab var price_change_pc_per "Percentage product unit price change at the firm level"
-lab var ""
-lab var ""
 
-lab var ""
 
 
 ***********************************************************************

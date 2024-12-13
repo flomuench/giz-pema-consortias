@@ -59,7 +59,7 @@ set scheme burd
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
 {
-* Jawhar folder paths
+*  Folder paths
 global root     = "C:/Users/user/Documents/rct"
 global code     = "${root}/code"
 global data     = "${root}/data"
@@ -82,10 +82,8 @@ global tables   = "${output}/tables"
 
 * create log file
 cap log close
-log using "${root}logfile.log", replace 
+log using "${root}/logfile.log", replace 
 } 
-
-
 
 
 ***********************************************************************
