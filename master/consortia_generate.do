@@ -583,7 +583,7 @@ egen eri = rowmean(t_exprep_normez t_exp_pra_ciblez t_exp_pra_missionz t_exp_pra
 egen eri_ssa = rowmean(t_ssa_action1z t_ssa_action2z t_ssa_action3z t_ssa_action4z t_ssa_action5z t_exp_pays_ssaz t_clients_ssaz t_clients_ssa_commandesz) 
 
 			* export performance
-egen epp = rowmean(t_exportedz t_export_1z t_export_2z t_exp_paysz t_ca_expz)
+egen epi = rowmean(t_exportedz t_export_1z t_export_2z t_exp_paysz t_ca_expz)
 
 			*Innovation product index
 egen ii_prod = rowmean(t_inno_improvez t_inno_newz t_inno_produitz) 
@@ -595,7 +595,7 @@ egen ii_proc = rowmean(t_inno_proc_metz t_inno_proc_logz t_inno_proc_prixz t_inn
 egen ii_proc_cor = rowmean(t_inno_proc_met_corz t_inno_proc_log_corz t_inno_proc_prix_corz t_inno_proc_sup_corz t_inno_processz t_inno_commercez t_inno_lieuz)		
 	
 			* business performance
-egen bpi = rowmean(t_employesz t_ca_tunz t_profitz)
+egen bpi = rowmean(t_employesz t_caz t_profitz)
 egen bpi_2024 = rowmean(t_employesz t_ca_2024z t_profit_2024z)
 
 

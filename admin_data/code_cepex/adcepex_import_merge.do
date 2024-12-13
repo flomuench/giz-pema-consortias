@@ -24,7 +24,6 @@
 ***********************************************************************
 
 	* import Cepex data (without product breakdown)
-
 import excel "${data}/BI-STAT-GIZ-Octobre2024.xlsx", firstrow clear
 	
 	* drop useless vars
@@ -62,10 +61,13 @@ gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
 
 save "${data}/temp_cepex2.dta", replace
 
+	* reshape & collapse to create a panel version of the data
+reshape long SumVALEUR_ Sum_QTE_, i(CODEDOUANE) j(year)
+
 
 	* now load file linking Cepex id to programs' ids
 	
-import excel "${gdrive}/Entreprises (1).xlsx", firstrow clear
+import excel "${data}/Entreprises (1).xlsx", firstrow clear
 
 	* make sure only real observations
 encode id_plateforme, gen(id)	
