@@ -124,7 +124,7 @@ lab var country "Name of the country to which the firm exported"
 		lab var avg_unit_price`i' "Average unit product price in `i'"
 	}	
 	
-	* increases in unit prices
+	/* increases in unit prices
 		** take first available unit price (in 2020 or 2021)
 gen first_price = .
 replace first_price = avg_unit_price2020 if avg_unit_price2020!=.
@@ -141,52 +141,53 @@ replace price_change_pc = last_price - first_price if !missing(first_price) & !m
 		** including in percentage terms
 gen price_change_pc_per = price_change_pc/first_price
 drop last_price first_price
-
-}
-
-
-	* Total number of products per firm-year
-	
-		* indicator variable for positive and non-missing sales in 2020 and 2024
-gen exported_2020 = !missing(SumVALEUR_2020) & SumVALEUR_2020 > 0
-gen exported_2024 = !missing(SumVALEUR_2024) & SumVALEUR_2024 > 0
-
-		* tag unique countries in 2020
-egen tag2020 = tag(ndgcf country) if exported_2020==1
-egen countries_2020 = total(tag2020), by(ndgcf)
-
-		* tag unique countries in 2024
-egen tag2024 = tag(ndgcf country) if exported_2024==1
-egen countries_2024 = total(tag2024), by(ndgcf)
-
-/*
-* Step 2: Count the number of countries for each firm in 2020
-gen countries_2020 = .
-bysort ndgcf country (exported_2020): replace countries_2020 = sum(exported_2020)
-bysort ndgcf (country): replace countries_2020 = countries_2020[_N]
-
-* Step 3: Count the number of countries for each firm in 2024
-gen countries_2024 = .
-bysort ndgcf country (exported_2024): replace countries_2024 = sum(exported_2024)
-bysort ndgcf (country): replace countries_2024 = countries_2024[_N]
-
-	
-	
-	
-{	
-egen tag = tag(ndgcf country)
-
-lab var countries "Number of countries to which the firm exported"
-
-egen tag2 = tag(matricule_fiscale product_name)
-egen products = total(tag2), by(matricule_fiscale)
-
-lab var products "Number of products exported by the firm"
-
-drop tag tag2
-}
-
 */
+}
+
+
+	* Total number of countries per year
+
+	forvalues i = 2020(1)2024 {
+		* check if the value for that product-country-firm combo is nonzero
+		gen exported_`i' = !missing(SumVALEUR_`i') & SumVALEUR_`i' > 0
+		* tag unique countries
+		egen tag`i' = tag(ndgcf country) if exported_`i'==1
+		egen num_countries_`i' = total(tag`i'), by(ndgcf)
+		* lable 
+		lab var num_countries_`i' "Number of countries exported to in `i'"
+	}	
+	
+	* Total number of products per year
+
+	
+		forvalues i = 2020(1)2024 {
+		* tag unique products
+		egen tag_product_`i' = tag(ndgcf product_name) if exported_`i'==1
+		egen num_products_`i' = total(tag_product_`i'), by(ndgcf)
+		* lable 
+		lab var num_products_`i' "Number of products exported to in `i'"
+	}	
+	
+	
+	* Total number of products-country combinations per year
+	
+		* create unique product-countries
+			* decode the two encoded variables into string versions
+			decode country, gen(country_str)
+			decode product_name, gen(product_name_str)
+
+			* combine the two decoded string variables into one
+			gen country_product = country_str + "_" + product_name_str
+		
+		forvalues i = 2020(1)2024 {
+		* tag unique products-countries
+		egen tag_combos_`i' = tag(ndgcf country_product) if exported_`i'==1
+		egen num_combos_`i' = total(tag_combos_`i'), by(ndgcf)
+		* lable 
+		lab var num_combos_`i' "Number of product-country combinations exported to in `i'"
+	}	
+	
+
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
@@ -197,7 +198,7 @@ rename *, lower
 * 	PART 4: 	Drop unnecessary variables (e.g. text windows)		  			
 ***********************************************************************
 
-*** ADD
+drop tag* tag_combos_* tag_product_* country_str product_name_str country_product exported_*
 
 
 ***********************************************************************
@@ -213,8 +214,6 @@ rename *, lower
 
 lab var program_num "Number of programs the firm participated in"
 lab var matricule_fiscale "Fiscal identifier"
-lab var price_change_pc "Product unit price change at the firm level"
-lab var price_change_pc_per "Percentage product unit price change at the firm level"
 
 
 
@@ -222,22 +221,25 @@ lab var price_change_pc_per "Percentage product unit price change at the firm le
 * 	PART 7: Reshape into panel form (wide format)
 ***********************************************************************
 
-	** Save long
+	** save wide
 
-save "${data}/cepex_long", replace
+save "${data}/cepex_wide", replace
 
-
-	
 	* drop year variables
 	
-drop sumvaleur_* sum_qte_* unit_price* product_name country 
+drop sumvaleur_* sum_qte_* unit_price* product_name country avg_unit_price*  libelle_pays libelle_ndp length_mf
 
-bysort matricule_fiscale : gen tag = _n == 1
+	* collapse data 
+	
+bysort ndgcf : gen tag = _n == 1
 
 keep if tag==1
 
 drop tag 
 
+	** reshape long
+	
+reshape long total_revenue_ total_qty_ num_countries_ num_products_  num_combos_, i(ndgcf) j(year)
 
 
 /*
@@ -250,4 +252,4 @@ gsort ndgcf -annee
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
-save "${long}/cepex_wide", replace
+save "${long}/cepex_long", replace
