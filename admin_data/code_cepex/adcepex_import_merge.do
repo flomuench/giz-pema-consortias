@@ -61,9 +61,6 @@ gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
 
 save "${data}/temp_cepex2.dta", replace
 
-	* reshape & collapse to create a panel version of the data
-reshape long SumVALEUR_ Sum_QTE_, i(CODEDOUANE) j(year)
-
 
 	* now load file linking Cepex id to programs' ids
 	
