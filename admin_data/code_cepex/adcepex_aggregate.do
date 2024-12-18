@@ -13,14 +13,12 @@
 ********************************************************************
 * 	PART:  set the stage - technicalities	
 ********************************************************************
-
+use "${intermediate}/cepex_wide", clear
 
 ***********************************************************************
 * 	PART 1: Reshape into panel
 ***********************************************************************
-	* 
-preserve
-
+{
 	* drop year variables
 drop sumvaleur_* sum_qte_* unit_price* product_name country avg_unit_price*  libelle_pays libelle_ndp length_mf
 
@@ -40,7 +38,8 @@ order ndgcf year, first
 gsort ndgcf -year
 
 	* define as panel data
-xtset ndgcf year 
+encode ndgcf, gen(ID)
+xtset ID year 
 
 	* fill up gaps for firms without exports in specific years
 display _N
@@ -48,15 +47,12 @@ tsfill, full
 display _N
 
 	* does tsfill create 0 or MV? if MV, replace with 0. 
+		* generate indicator variable to test if replacement matters for analysis (most likely does)
+	gen not_matched = (total_qty_ == .)
 	
-
-* 	Save the changes made to the data		  			
-save "${intermediate}/cepex_long", replace
-
-
-
-***********************************************************************
-* 	PART 2: Collapse into firm pre-post level ***********************************************************************
+		* replace missings with 0
+replace total_qty_ = 0 if total_qty_ == .
+replace total_revenue_ = 0 if total_revenue_ == . 	
 
 * generate time to treat variable for pre-post aggregation
 	gen ttt = . 
@@ -65,21 +61,30 @@ save "${intermediate}/cepex_long", replace
 		replace ttt = 2021 - year if program1 == 1
 		
 	lab var ttt "time-to-treatment"
+	
+	order ttt, a(treatment4)
 
 * gen post variable (= 1 once treatment kicks on, ttt = 0)
 	gen post = (ttt >= 0)
+
+	order post, a(ttt)
 	
+* 	Save the changes made to the data		  			
+save "${intermediate}/cepex_long", replace
+
+}
+
+***********************************************************************
+* 	PART 2: Collapse into firm pre-post level 
+***********************************************************************
+{
+	
+
 * collapse the data
-	collapse ///
-	(sum) total_revenue_ total_qty_ num_combos_ num_countries_ num_products_ ///
-	(mean) total_revenue_ total_qty_ num_combos_ num_countries_ num_products_
-	(firstnm) treatment1 treatment2 treatment3 treatment4 ///
-	strata1 strata2 strata3 strata4 ///
-	take_up1 take_up2 take_up3 take_up4 ///
-	, ///
-	by(ID post)
+	collapse (sum) exp_rev_sum = total_revenue_ exp_qty_sum = total_qty_ combo_sum = num_combos_  countries_sum = num_countries_ products_sum = num_products_ (mean) exp_rev_mean = total_revenue_ exp_qty_mean = total_qty_ combos_mean = num_combos_ countries_mean = num_countries_ products_mean = num_products_ (firstnm) treatment1 treatment2 treatment3 treatment4 strata1 strata2 strata3 strata4 take_up1 take_up2 take_up3 take_up4, by(ID post)
 	
 * 	Save the changes made to the data		  			
 save "${intermediate}/cepex_pre_post", replace
-	
+
+}
 	

@@ -216,5 +216,5 @@ lab var matricule_fiscale "Fiscal identifier"
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
-save "${data}/cepex_wide", replace
+save "${intermediate}/cepex_wide", replace
 
