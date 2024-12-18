@@ -19,7 +19,7 @@
 ***********************************************************************
 {
 	* set standard settings
-version 14.2
+version 15
 clear all
 graph drop _all
 scalar drop _all
@@ -62,30 +62,34 @@ set scheme burd
 	* Root folder
 if "`c(username)'" == "amira.bouziri" |"`c(username)'" == "my rog" | "`c(username)'" == "fabi-" | "`c(username)'" == "ayoub" | "`c(username)'" == "Azra"  | "`c(username)'" == "Admin"{
 
-		global gdrive = "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"	
+		global gdrive = "G:/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"	
 }
 if "`c(username)'" == "MUNCHFA" {
-		global gdrive = "G:/My Drive"
+		global gdrive = "G:/My Drive/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
 }
 if "`c(username)'" == "ASUS" { 
 
-		global gdrive = "G:/Meine Ablage"
+		global gdrive = "G:/Meine Ablage/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
+	}
+	
+if "`c(username)'" == "fmuench" { 
+		global gdrive = "C:\Users\fmuench\Documents\Research_GIZ_Tunisia_exportpromotion\6. Admin data\cepex_october_2024"
 	}
 	
 if "`c(username)'" == "wb603971" { 
 
-		global gdrive = "C:/Users/wb603971/Documents"
+		global gdrive = "C:/Users/wb603971/Documents/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
 	}	
 	
 if  "`c(username)'" == "teofirpo" {
 	
-		global gdrive = "/Users/teofirpo/Library/CloudStorage/GoogleDrive-teo.firpo@gmail.com/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT"
+		global gdrive = "/Users/teofirpo/Library/CloudStorage/GoogleDrive-teo.firpo@gmail.com/.shortcut-targets-by-id/1bVknNNmRT3qZhosLmEQwPJeB-O24_QKT/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
 		
 }
 
 	* Data & Code
 		if c(os) == "Windows" {
-	global data = "${gdrive}/Research_GIZ_Tunisia_exportpromotion/6. Admin data/cepex_october_2024"
+	global data = "${gdrive}/data"
 	global code = "C:/Users/`c(username)'/Documents/GitHub/giz-pema-consortias/admin_data/code_cepex"
 }
 else if c(os) == "MacOSX" {
@@ -133,9 +137,9 @@ if (1) do "${code}/adcepex_import_merge.do"
 ----------------------------------------------------------------------*/
 if (1) do "${code}/adcepex_clean.do"
 /* --------------------------------------------------------------------
-	PART 3.4: Correct observations
+	PART 3.4: Aggregate raw data to firm-year panel & firm pre-post data set
 ----------------------------------------------------------------------*/
-if (0) do "${code}/adcepex_correct.do"
+if (1) do "${code}/adcepex_aggregate.do"
 /* --------------------------------------------------------------------
 	PART 3.5: Generate variables
 	Creates: rct_rne_final

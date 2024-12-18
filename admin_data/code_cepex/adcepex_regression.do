@@ -16,31 +16,192 @@
 * 	PART:  set the stage - technicalities	
 ***********************************************************************
 	* import the data 
-use "${final}/rct_rne_final", clear
+use "${final}/cepex_long", clear
 
 	* set panel and sort the observations
 encode ndgcf, gen(ID)
 order ID, b(ndgcf)
-sort ID annee, stable
-xtset ID annee 
+sort ID year, stable
+xtset ID year 
 
 	* set graphics output window on
 set graphics on
 	
 ***********************************************************************
-* 	PART 1: Make sure all variables are labeled for the regression table columns
+* 	PART 1: Labeled variables for tables & figures
 ***********************************************************************
 	* label variables
-lab var ca_ttc "sales, ihs"
-lab var profit "Profit, ihs" 
-lab var profitable "Profitable"
-lab var profit_pct "Profit, pct"
+lab var total_revenue_ "Exp. Revenue [Dinar]"
+lab var exp_rev_euro "Exp. Revenue [Euro]"
+lab var total_qty_ "Exp. Quantity [unit]"
+lab var num_combos_ "Country-product pairs"
+lab var num_countries_ "Exp. countries"
+lab var num_products_ "Exp. products"
+lab var exp_rev_dinar_deflated "Exp. Rev. [Dinar, deflated]"
+lab var exp_rev_euro_deflated "Exp. Rev. [Euro, deflated]"
 
-lab var ca_export "Export sales, tax"
-lab var export_value  "Export sales, customs"
-lab var price_exp "Export price"
-lab var import_value "Imports, customs" 
-lab var price_imp "Import price" 
+
+***********************************************************************
+* 	PART 1: Check pre-treatment balance table
+***********************************************************************
+* BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
+	* loop elements
+local balancevar "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_"
+local fmt "save savetex"
+local programs "aqe cf ecom all"
+	
+	* balance table
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+	foreach f of local fmt {
+iebaltab `balancevar' if year == 2020, ///
+    grpvar(treatment`s') vce(robust) format(%12.2fc) replace ///
+    rowvarlabels ///
+    `f'("${tab_`p'}/baltab_cepex_treatment`s'")
+	}
+}
+	
+
+	
+***********************************************************************
+* 	PART : Event study analysis
+***********************************************************************
+{
+capture program drop rcts_event // enables re-running
+program rcts_event
+	version 15						// define Stata version 14.2 used
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {		// do following for all variables in varlist seperately	
+				* make sure enough obs to technically run regression
+		count if `var' != . & annee == 2022 & program4 == 1
+		local obs_tot = r(N)
+if `obs_tot' > 30 {
+* ITT: ancova plus stratification dummies						
+			* ITT: ancova plus stratification dummies
+			eststo `var'1: reg `var' i.ttt#i.treatment i.strata, cluster(ID)
+				* for latex table
+			estadd local strata "Yes"
+				* for coefplot
+			local obs_`var' = e(N)
+			matrix t = r(table)
+			local itt_`var' = t[1,2]
+			local fmt_itt_`var' : display %3.2f `itt_`var''
+
+
+			* ATT, IV		
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+				* for latex table
+			estadd local lags "Yes"
+			estadd local strata "Yes"
+				* for coefplot
+			matrix u = e(b)
+			local att_`var' = u[1,1]
+			local fmt_att_`var' : display %3.2f `att_`var''
+			
+			
+			* calculate control group mean
+			sum `var' if treatment4 == 0 & annee == 2022 
+				* for latex table
+			estadd scalar control_mean = r(mean)
+			estadd scalar control_sd = r(sd)
+				* for coefplot
+			local c_m_`var' = r(mean)
+			local fmt_c_m_`var' : display %3.2f `c_m_`var''
+			
+			* calculate percent change
+			local `var'_per_itt = (`fmt_itt_`var'' / `fmt_c_m_`var'')*100
+			local `var'_per_att = (`fmt_att_`var'' / `fmt_c_m_`var'')*100
+			
+			* number of obs
+			
+
+	* coefplot
+		* "nature"
+coefplot ///
+(`var'1, pstyle(p1)) (`var'2, pstyle(p2)), ///
+	keep(*treatment* take_up*) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`var'1 = `"`var' (ITT)"' `var'2 = `"`var' (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///
+		leg(off) xsize(10) ysize(5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf: Note}:" "The control group EL mean is `fmt_c_m_`var''." "Confidence intervals are at the 95 percent level." "Number of observation is `obs_`var''.", span size(medium)) ///
+		name(ad_`var'_cfp1, replace)
+gr export "${fig_all}/cfp_`var'_22_1.pdf", replace	
+
+		* with percent changes
+coefplot ///
+(`var'1, pstyle(p1) ///
+ mlabel(string(@b, "%9.2f") + " equivalent to " + string(``var'_per_itt', "%9.0f") + "%" + " (P = " + string(@pval, "9.2f") + ")") ///
+ mlabposition(12) mlabgap(*2) mlabsize(medium)) ///
+ (`var'2, pstyle(p2) ///
+ mlabel(string(@b, "%9.2f") + " equivalent to " + string(``var'_per_att', "%9.0f") + "%" + " (P = " + string(@pval, "9.2f") + ")") ///
+ mlabposition(12) mlabgap(*2) mlabsize(medium)), ///
+	keep(*treatment* take_up*) drop(_cons) xline(0) ///
+		asequation /// name of model is used
+		swapnames /// swaps coeff & equation names after collecting result
+		levels(95) ///
+		eqrename(`var'1 = `"`var' (ITT)"' `var'2 = `"`var' (TOT)"') ///
+		xtitle("Treatment coefficient", size(medium)) ///
+		leg(off) xsize(10) ysize(5) /// xsize controls aspect ratio, makes graph wider & reduces its height
+		note("{bf: Note}:" "The control group EL mean is `fmt_c_m_`var''." "Confidence intervals are at the 95 percent level." "Number of observation is `obs_`var''.", span size(medium)) ///
+		name(ad_`var'_cfp2, replace)
+gr export "${fig_all}/cfp_`var'_22_2.pdf", replace	
+	}
+}	
+	* change logic from "to same thing to each variable" (loop) to "use all variables at the same time" (program)
+		* tokenize to use all variables at the same time
+tokenize `varlist'
+{
+				* Put all regressions into one table
+			* Top panel: ITT
+*		tokenize `varlist'
+		local regressions `1'1 `2'1 `3'1 // `4'1 `5'1 adjust manually to number of variables 
+		esttab `regressions' using "${tab_all}/rt_`generate'_22.tex", replace ///
+				prehead("\begin{table}[!h] \centering \\ \caption{Impact on `generate' performance} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabular}{l*{7}{c}} \hline\hline") ///
+				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel A: Intention-to-treat (ITT)}} \\\\[-1ex]") ///
+				fragment ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) ci(fmt(2)) rw) ///
+				mlabels(, depvars) /// use dep vars labels as model title
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				nobaselevels ///
+				collabels(none) ///	do not use statistics names below models
+				label 		/// specifies EVs have label
+				drop(_cons *.strata* *l*) ///
+				noobs
+				
+			* Bottom panel: TOT
+		local regressions `1'2 `2'2 `3'2   // `4'2 `5'2  adjust manually to number of variables 
+		esttab `regressions' using "${tab_all}/rt_`generate'_22.tex", append ///
+				fragment ///
+				posthead("\hline \\ \multicolumn{6}{c}{\textbf{Panel B: Treatment Effect on the Treated (TOT)}} \\\\[-1ex]") ///
+				cells(b(star fmt(3)) se(par fmt(3)) p(fmt(3)) ci(fmt(2)) rw) ///
+				stats(control_mean control_sd N strata lags, fmt(%9.2fc %9.2fc %9.0g) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "3-year lags")) ///
+				drop(_cons *.strata* *l*) ///
+				star(* 0.1 ** 0.05 *** 0.01) ///
+				mlabels(none) nonumbers ///		do not use varnames as model titles
+				collabels(none) ///	do not use statistics names below models
+				label ///
+				nobaselevels ///
+				prefoot("\hline") ///
+				postfoot("\hline\hline\hline \\ \multicolumn{6}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% Notes: Each specification includes controls for randomization strata, the lagged outcome in the previous 3-years, and a missing lag dummy. Employee and sales variables are winsorized at the 99 percentile, IHS-transformed with units-scaled for optimal R-square. Export and import prices are winsorized and log-transformed. Panel A reports ANCOVA estimates as defined in Mckenzie and Bruhn (2011). Panel B documents IV estimates, instrumenting take-up with treatment assignment. Clustered standard errors by firms in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabular} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
+}						
+end
+
+	* apply program to business performance outcomes
+		* sales (3 vars)
+rct_admin ca_ttc ca_local ca_export, gen(sales_abs)
+rct_admin ihs_ca_ttc_w99 ihs_ca_local_w99 ihs_ca_export_w99, gen(sales_99)
+rct_admin ihs_ca_ttc_w95 ihs_ca_local_w95 ihs_ca_export_w95, gen(sales_95)
+
+		* import (3 vars)
+rct_admin import_value import_weight price_imp, gen(import_abs)
+rct_admin ihs_import_value_w99 ihs_import_weight_w99 lprice_imp_w99, gen(import_99)
+rct_admin ihs_import_value_w95 ihs_import_weight_w95 lprice_imp_w95, gen(import_95)
+}
+
+	
 
 ***********************************************************************
 * 	PART 2A: Test regressions

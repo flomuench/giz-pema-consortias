@@ -22,7 +22,7 @@
 * 	PART 0: 	import raw data	  			
 ***********************************************************************		
 
-use "${data}/cepex_raw", clear
+use "${raw}/cepex_raw", clear
 	
 ***********************************************************************
 * 	PART 1: 	Clean up 		
@@ -110,7 +110,6 @@ encode Libelle_Pays, gen(country)
 lab var country "Name of the country to which the firm exported"
 
 	* calculate unit prices
-
 {  
 	forvalues i = 2020(1)2024 {
 		gen unit_price`i' = SumVALEUR_`i'/Sum_Qte_`i'
@@ -118,7 +117,6 @@ lab var country "Name of the country to which the firm exported"
 	}
 
 	* average unit price by product
-	
 	forvalues i = 2020(1)2024 {
 		bysort ndgcf product_name: egen avg_unit_price`i' = mean(unit_price`i')	
 		lab var avg_unit_price`i' "Average unit product price in `i'"
@@ -215,41 +213,8 @@ drop tag* tag_combos_* tag_product_* country_str product_name_str country_produc
 lab var program_num "Number of programs the firm participated in"
 lab var matricule_fiscale "Fiscal identifier"
 
-
-
-***********************************************************************
-* 	PART 7: Reshape into panel form (wide format)
-***********************************************************************
-
-	** save wide
-
-save "${data}/cepex_wide", replace
-
-	* drop year variables
-	
-drop sumvaleur_* sum_qte_* unit_price* product_name country avg_unit_price*  libelle_pays libelle_ndp length_mf
-
-	* collapse data 
-	
-bysort ndgcf : gen tag = _n == 1
-
-keep if tag==1
-
-drop tag 
-
-	** reshape long
-	
-reshape long total_revenue_ total_qty_ num_countries_ num_products_  num_combos_, i(ndgcf) j(year)
-
-
-/*
-order ndgcf annee, first
-	* sort firm-year with year 2022 first
-gsort ndgcf -annee
-*/
-
-
 ***********************************************************************
 * 	Save the changes made to the data		  			
 ***********************************************************************
-save "${long}/cepex_long", replace
+save "${data}/cepex_wide", replace
+
