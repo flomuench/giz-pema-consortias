@@ -37,9 +37,24 @@ lab var total_qty_ "Exp. Quantity [unit]"
 lab var num_combos_ "Country-product pairs"
 lab var num_countries_ "Exp. countries"
 lab var num_products_ "Exp. products"
-lab var exp_rev_dinar_deflated "Exp. Rev. [Dinar, deflated]"
-lab var exp_rev_euro_deflated "Exp. Rev. [Euro, deflated]"
+*lab var exp_rev_dinar_deflated "Exp. Rev. [Dinar, deflated]"
+*lab var exp_rev_euro_deflated "Exp. Rev. [Euro, deflated]"
 
+
+***********************************************************************
+* 	PART 0: Check how many firms got matched/not matched (either no export or wrong legal ID)
+***********************************************************************
+lab def match 1 "matched" 0 "not matched"
+lab val not_matched match
+
+local programs "aqe cf ecom all"
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+		graph bar (count) if year == 2020 & (treatment`s' == 1 | treatment`s' == 0), ///
+			over(not_matched) blabel(total) ///
+			ytitle("No of Firms") title("`p'")
+		gr export "${fig_`p'}/matchN_`s'.pdf", replace
+	}
 
 ***********************************************************************
 * 	PART 1: Check pre-treatment balance table
@@ -47,7 +62,7 @@ lab var exp_rev_euro_deflated "Exp. Rev. [Euro, deflated]"
 * BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
 	* loop elements
 local balancevar "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_"
-local fmt "save savetex"
+local fmt "xlsx tex"
 local programs "aqe cf ecom all"
 	
 	* balance table
@@ -55,18 +70,143 @@ forvalues s = 1(1)4 {
 	gettoken p programs : programs
 	foreach f of local fmt {
 iebaltab `balancevar' if year == 2020, ///
-    grpvar(treatment`s') vce(robust) format(%12.2fc) replace ///
+    grpvar(treatment`s') vce(robust) format(%12.2fc) ///
     rowvarlabels ///
-    `f'("${tab_`p'}/baltab_cepex_treatment`s'")
+    save`f'("${tab_`p'}/bt_cepex_treat`s'.`f'") replace
+	}
+}
+
+
+***********************************************************************
+* 	PART 2: Annual density distributions in T vs. C
+***********************************************************************
+	* look at distribution
+			* Treatment vs control
+local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local programs "aqe cf ecom all"
+
+forvalues s = 1(1)4 {
+ gettoken p programs : programs
+	foreach v of local vars {
+		forvalues y = 2020(1)2024 {
+			graph twoway  (kdensity `v'_w95 if treatment`s' == 1 & year == `y' & `v' > 0, lp(l) lc(maroon) yaxis(2)) ///
+						  (kdensity `v'_w95 if treatment`s' == 0 & year == `y' & `v' > 0, lp(l) lc(green) yaxis(2)), ///
+						legend(rows(3) symxsize(small) ///
+							   order(1 "Treatment group" ///
+									 2 "Control group") ///
+							   col(1) pos(6) ring(6)) ///
+						xtitle("`v'") title("`y'") ///
+						xlabel(, angle(45)) ///
+						saving(density_`v'`s'_`y', replace)
+			gr export "${fig_`p'}/density_`v'`s'_`y'.pdf", replace
+		}
+	}
+}
+
+
+local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local programs "aqe cf ecom all"
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+		foreach v of local vars {
+			gr combine "density_`v'`s'_2020" "density_`v'`s'_2021" "density_`v'`s'_2022" "density_`v'`s'_2023" "density_`v'`s'_2024", title("`p'")
+			gr export "${fig_`p'}/density_`v'`s'_combined.pdf", replace
+		}
+}
+
+
+		* Take-up vs. drop-out + control
+local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local programs "aqe cf ecom all"
+
+forvalues s = 1(1)4 {
+ gettoken p programs : programs
+	foreach v of local vars {
+		forvalues y = 2020(1)2024 {
+			graph twoway  (kdensity `v'_w95 if take_up`s' == 1 & year == `y' & `v' > 0, lp(l) lc(maroon) yaxis(2)) ///
+						  (kdensity `v'_w95 if take_up`s' == 0 & year == `y' & `v' > 0, lp(l) lc(green) yaxis(2)), ///
+						legend(rows(3) symxsize(small) ///
+							   order(1 "Take-up = 1" ///
+									 2 "Take-up = 0") ///
+							   col(1) pos(6) ring(6)) ///
+						xtitle("`v'") title("`y'") ///
+						xlabel(, angle(45)) ///
+						saving(density_`v'`s'_`y'_tup, replace)
+			gr export "${fig_`p'}/density_`v'`s'_`y'_tup.pdf", replace
+		}
+	}
+}
+
+
+local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local programs "aqe cf ecom all"
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+		foreach v of local vars {
+			gr combine "density_`v'`s'_2020_tup" "density_`v'`s'_2021_tup" "density_`v'`s'_2022_tup" "density_`v'`s'_2023_tup" "density_`v'`s'_2024_tup", title("`p'")
+			gr export "${fig_`p'}/density_`v'`s'_combined_tup.pdf", replace
+		}
+}
+
+	
+	* Exported vs. not exported
+		* Treatment vs. control
+lab def exp 1 "exported" 0 "no export"
+lab val exported exp
+
+local programs "aqe cf ecom all"
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+	forvalues t = 2020(1)2024 {
+		graph bar (mean) exported if year == `t', ///
+				 over(treatment`s', label(labsize(large))) ///
+				 blabel(total, format(%9.2fc) size(large)) ///
+				 ytitle("mean of exported in `t'", size(large)) title("`p'")
+		gr export "${fig_`p'}/exported_`s'_`t'.pdf", replace
 	}
 }
 	
-
+local programs "aqe cf ecom all"
+forvalues s = 1(1)4 {
+	gettoken p programs : programs
+		foreach v of local vars {
+			gr combine "exported_`s'_2020" "exported_`s'_2021" "exported_`s'_2022" "exported_`s'_2023" "exported_`s'_2024", title("`p'")
+			gr export "${fig_`p'}/exported_`s'_combined.pdf", replace
+		}
+}
 	
+
+		 
+		 
 ***********************************************************************
 * 	PART : Event study analysis
 ***********************************************************************
 {
+	
+	* shift ttt variable as Stata does not accept negative factors
+gen ttt_sh = ttt + 2
+	
+	* test
+reg total_revenue_ i.ttt_sh#ib0.treatment4 i.strata4, cluster(ID)\\
+
+reg total_revenue_ i.treatment4 L1.total_revenue_ i.strata4 if year == 2021, cluster(ID)
+
+reg total_revenue_ i.treatment4 L2.total_revenue_ i.strata4 if year == 2022, cluster(ID)
+reg total_revenue_ i.treatment4 L3.total_revenue_ i.strata4 if year == 2023, cluster(ID)
+reg total_revenue_ i.treatment4 L4.total_revenue_ i.strata4 if year == 2024, cluster(ID)
+
+
+reg total_revenue_ i.treatment4 L2.total_revenue__w95 i.strata4 if year == 2022, cluster(ID)
+reg total_revenue_ i.treatment4 L3.total_revenue__w95 i.strata4 if year == 2023, cluster(ID)
+reg total_revenue_ i.treatment4 L4.total_revenue__w95 i.strata4 if year == 2024, cluster(ID)
+
+
+	* Cai/Szeidl, Mckenzie/Woodruff FE specification
+xtreg total_revenue_ i.treatment4##ib2020.year, fe cluster(ID)
+xtreg total_revenue__w95 i.treatment4##ib2020.year, fe cluster(ID)
+xtreg ihs_total_revenue__w95 i.treatment4##ib2020.year, fe cluster(ID)
+
+	
 capture program drop rcts_event // enables re-running
 program rcts_event
 	version 15						// define Stata version 14.2 used

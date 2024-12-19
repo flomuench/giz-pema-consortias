@@ -103,7 +103,7 @@ else if c(os) == "MacOSX" {
 	global final		= "${data}/final"
 
 	* Output
-global output   = "${data}/output"
+global output   = "${gdrive}/output"
 		* Figures
 global figures  = "${output}/figures"
 	global fig_all  = "${figures}/all"

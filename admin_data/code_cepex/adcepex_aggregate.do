@@ -56,9 +56,9 @@ replace total_revenue_ = 0 if total_revenue_ == .
 
 * generate time to treat variable for pre-post aggregation
 	gen ttt = . 
-		replace ttt = 2022 - year if program3 == 1
-		replace ttt = 2022 - year if program2 == 1		
-		replace ttt = 2021 - year if program1 == 1
+		replace ttt = year - 2022 if program3 == 1
+		replace ttt = year - 2022 if program2 == 1		
+		replace ttt = year - 2021 if program1 == 1
 		
 	lab var ttt "time-to-treatment"
 	

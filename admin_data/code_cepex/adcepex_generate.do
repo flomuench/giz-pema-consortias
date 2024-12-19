@@ -38,19 +38,19 @@ gen exp_rev_euro = total_revenue_/3
 ***********************************************************************
 * 	PART 3:  Accounting for inflation
 ***********************************************************************
-gen exp_rev_dinar_deflated = 
-gen exp_rev_euro_deflated = 
+*gen exp_rev_dinar_deflated = 
+*gen exp_rev_euro_deflated = 
 
 ***********************************************************************
 * 	PART 2:  DV Transformations: Winsorisations, IHS
 ***********************************************************************
 {
 
-local vars "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_ exp_rev_dinar_deflated exp_rev_euro exp_rev_euro_deflated"
+local vars "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_  exp_rev_euro" // exp_rev_dinar_deflated exp_rev_euro_deflated
 
 foreach var of local vars {
-	winsor2 `var', suffix(_w99) cuts(0 99)
-	winsor2 `var', suffix(_w95) cuts(0 95)
+	winsor2 `var', suffix(w99) cuts(0 99)
+	winsor2 `var', suffix(w95) cuts(0 95)
 	ihstrans `var'_w99, prefix(ihs_)
 	ihstrans `var'_w95, prefix(ihs_)
 	}
@@ -80,25 +80,17 @@ gen profit_pct = .
 ***********************************************************************	
 {
 	* price
-gen price_exp  = export_value / export_weight
+gen price_exp  = total_revenue_ / total_qty_
 lab var price_exp "Export price"
 
-gen price_imp  = import_value / import_weight
-lab var price_imp "Import price"
 
-gen price_exp_w99  = export_value_w99 / export_weight_w99
+gen price_exp_w99  = total_revenue__w99 / total_qty__w99
 lab var price_exp_w99 "Export price, winsorized"
 
-gen price_imp_w99  = import_value_w99 / import_weight_w99
-lab var price_imp_w99 "Import price, winsorized"
-
-gen price_exp_w95  = export_value_w95 / export_weight_w95
+gen price_exp_w95  = total_revenue__w95 / total_qty__w95
 lab var price_exp_w95 "Export price, winsorized"
 
-gen price_imp_w95  = import_value_w95 / import_weight_w95
-lab var price_imp_w95 "Import price, winsorized"
-
-foreach var of varlist price_exp price_exp_w99 price_exp_w95 price_imp price_imp_w99 price_imp_w95 {
+foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 	gen l`var' = log(`var')
 	}
 
@@ -111,9 +103,6 @@ foreach var of varlist price_exp price_exp_w99 price_exp_w95 price_imp price_imp
 gen exported = (total_revenue_ > 0)
 	replace exported = . if total_revenue_ == .  // account for MVs
 	replace exported = 1 if exported == . & (total_revenue_ < . & total_revenue_ > 0) // account for customs data
-}
-	
-
 
 ***********************************************************************
 * 	PART :  Save directory to progress folder

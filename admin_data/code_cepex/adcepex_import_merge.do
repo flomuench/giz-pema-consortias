@@ -215,6 +215,10 @@ result merge:
 
 rename _merge match
 
+gen matched = .
+	replace matched = 1 if match == 3
+	replace matched = 0 if match == 1
+
 	* now merge with Cepex firm data with totals
 
 sort ndgcf, stable
@@ -235,7 +239,7 @@ result merge:
 	unique values:  306                      missing "":  0/5,324
 */
 
-drop match
+drop match _merge
 	
 }
 

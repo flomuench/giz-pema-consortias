@@ -1,3 +1,4 @@
+
 **********************************************************************
 * 			Adminstrative clean									  		  
 ***********************************************************************
@@ -46,6 +47,12 @@ egen take_up4 = rowmax(take_up1 take_up2 take_up3)
 order treatment4, a(treatment3)
 order take_up4, a(take_up3)
 
+lab def treat 1 "Treatment" 0 "Control"
+lab def take_up 1 "Take-up = 1" 0 "Take-up = 0"
+
+lab val treatment1 treatment2 treatment3 treatment4 treat
+lab val take_up1 take_up2 take_up3 take_up4 take_up
+
 gen strata_all = strata1 + strata2 + strata3 
 	 order strata_all, a(strata3)
 	 replace strata_all = "two programs" if program_num == 2 
@@ -63,13 +70,15 @@ order strata1, b(strata2)
 drop strat
 
 	* drop: mf_len, dup	
-drop mf_len dup _merge
+drop mf_len dup
 
 }
 	
 ***********************************************************************
 * 	PART 2: 	Adjust formats, encode, etc
 ***********************************************************************
+{
+	
 {
 ds, has(type string) 
 local strvars "`r(varlist)'"
@@ -185,7 +194,7 @@ drop last_price first_price
 		lab var num_combos_`i' "Number of product-country combinations exported to in `i'"
 	}	
 	
-
+}
 
 ***********************************************************************
 * 	PART 3: 	Make all variables names lower case		  			
