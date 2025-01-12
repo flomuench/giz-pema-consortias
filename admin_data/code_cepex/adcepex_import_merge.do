@@ -24,7 +24,7 @@
 ***********************************************************************
 
 	* import Cepex data (without product breakdown)
-import excel "${data}/BI-STAT-GIZ-Octobre2024.xlsx", firstrow clear
+import excel "${raw}/BI-STAT-GIZ-Octobre2024.xlsx", firstrow clear
 	
 	* drop useless vars
 	
@@ -44,12 +44,12 @@ forvalues i = 2020(1)2024 {
  
 drop if ndgcf==""
 
-save "${data}/temp_cepex1.dta", replace
+save "${raw}/temp_cepex1.dta", replace
 
 	
 	* import Cepex data (with product breakdown)
 	
-import excel "${data}/BI-STAT-GIZ-2-Octobre2024.xlsx", firstrow clear
+import excel "${raw}/BI-STAT-GIZ-2-Octobre2024.xlsx", firstrow clear
 	
 	* a few observations are encoded wrong, drop them
 	
@@ -59,12 +59,12 @@ drop O P Q R
 
 gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
 
-save "${data}/temp_cepex2.dta", replace
+save "${raw}/temp_cepex2.dta", replace
 
 
 	* now load file linking Cepex id to programs' ids
 	
-import excel "${data}/Entreprises (1).xlsx", firstrow clear
+import excel "${raw}/Entreprises (1).xlsx", firstrow clear
 
 	* make sure only real observations
 encode id_plateforme, gen(id)	
@@ -192,12 +192,12 @@ order program4, a(program3)
 }
 
 ***********************************************************************
-* 	PART 3:  merge rct firms to Cepex universe of firms  					  
+* 	PART 4:  merge rct firms to Cepex universe of firms  					  
 ***********************************************************************
 {
 	* merge RCT sample with Cepex firm population
 sort ndgcf, stable
-merge 1:m ndgcf using "${data}/temp_cepex1.dta" 
+merge 1:m ndgcf using "${raw}/temp_cepex1.dta" 
 codebook ndgcf if _merge == 3
 /* 
 unique values:  306                      missing "":  0/306
@@ -215,10 +215,14 @@ result merge:
 
 rename _merge match
 
+gen matched = .
+	replace matched = 1 if match == 3
+	replace matched = 0 if match == 1
+
 	* now merge with Cepex firm data with totals
 
 sort ndgcf, stable
-merge 1:m ndgcf using "${data}/temp_cepex2.dta" 
+merge 1:m ndgcf using "${raw}/temp_cepex2.dta" 
 codebook ndgcf if _merge == 3
 
 /*
@@ -235,47 +239,7 @@ result merge:
 	unique values:  306                      missing "":  0/5,324
 */
 
-drop match
-
-
-/*FROM OTHER FILE DELETE AFTER 
-
-BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
-
-	* gen dummy for RCT firms vs. rest of firm population
-gen sample = (_merge == 3)
-lab var sample "sample vs. rest of firm population"
-
-local balancevar "MoyenneS Masse_Salariale ExportV ExportP ImportV ImportP CA_TTC_DT CA_Local_DT CA_Export_DT"
-iebaltab `balancevar' if annee == 2020, ///
-    grpvar(sample) vce(robust) format(%12.2fc) replace ///
-    ftest rowvarlabels ///
-    savetex("${tab_all}/baltab_admin_population")
-
-local balancevar "MoyenneS Masse_Salariale ExportV ExportP ImportV ImportP CA_TTC_DT CA_Local_DT CA_Export_DT"	
-iebaltab `balancevar' if annee == 2020, ///
-    grpvar(sample) vce(robust) format(%12.2fc) replace ///
-    ftest rowvarlabels ///
-    savexlsx("${tab_all}/baltab_admin_population")
-
-local programs "aqe cf ecom"
-forvalues x = 1(1)3 {
-gettoken p programs : programs
-preserve 
-keep if sample == 0 | program`x' == 1  
-local balancevar "MoyenneS Masse_Salariale ExportV ExportP ImportV ImportP CA_TTC_DT CA_Local_DT CA_Export_DT"
-iebaltab `balancevar' if annee == 2020, ///
-    grpvar(sample) vce(robust) format(%12.2fc) replace ///
-    ftest rowvarlabels ///
-    savetex("${tab_`p'}/baltab_admin_population")
-
-local balancevar "MoyenneS Masse_Salariale ExportV ExportP ImportV ImportP CA_TTC_DT CA_Local_DT CA_Export_DT"	
-iebaltab `balancevar' if annee == 2020, ///
-    grpvar(sample) vce(robust) format(%12.2fc) replace ///
-    ftest rowvarlabels ///
-    savexlsx("${tab_`p'}/baltab_admin_population")
-restore
-}*/	
+drop match _merge
 	
 }
 
@@ -284,8 +248,8 @@ restore
 * 	PART 3: 	save merged file
 ***********************************************************************
 
-save "${data}/cepex_raw.dta", replace
+save "${raw}/cepex_raw.dta", replace
 
-erase "${data}/temp_cepex1.dta"
+erase "${raw}/temp_cepex1.dta"
 
-erase "${data}/temp_cepex2.dta"
+erase "${raw}/temp_cepex2.dta"

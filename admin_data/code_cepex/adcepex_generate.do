@@ -18,41 +18,49 @@
 ***********************************************************************
 * 	PART 1:  Gen treatment status variable		  			
 ***********************************************************************
-use "${intermediate}/rct_rne_inter", clear
+use "${intermediate}/cepex_long", clear
 
 
 ***********************************************************************
-* 	PART 2:  Generate costs
+* 	PART 2:  Transform into Euros (easier for intl audiance)
 ***********************************************************************
-gen cost = profit - ca_ttc
+/* annual exchange rates
+2024 = 0.2968 
+2023 = 
+
+
+*/
+
+
+gen exp_rev_euro = total_revenue_/3
+
+
+***********************************************************************
+* 	PART 3:  Accounting for inflation
+***********************************************************************
+*gen exp_rev_dinar_deflated = 
+*gen exp_rev_euro_deflated = 
 
 ***********************************************************************
 * 	PART 2:  DV Transformations: Winsorisations, IHS
 ***********************************************************************
 {
-local kpis "ca_local ca_ttc total_wage cost employees wages net_job_creation"
-local export "ca_export export_value import_value export_weight import_weight"
-local vars `kpis' `export'
+
+local vars "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_  exp_rev_euro" // exp_rev_dinar_deflated exp_rev_euro_deflated
 
 foreach var of local vars {
-	winsor2 `var', suffix(_w99) cuts(0 99)
-	winsor2 `var', suffix(_w95) cuts(0 95)
+	winsor2 `var', suffix(w99) cuts(0 99)
+	winsor2 `var', suffix(w95) cuts(0 95)
 	ihstrans `var'_w99, prefix(ihs_)
 	ihstrans `var'_w95, prefix(ihs_)
-}
-
-	* profits: as negative, wins bottom too
-winsor2 profit, suffix(_w99) cuts(1 99)
-winsor2 profit, suffix(_w95) cuts(5 95)
-ihstrans profit_w99, prefix(ihs_)
-ihstrans profit_w95, prefix(ihs_)
-
+	}
 }
 
 
 ***********************************************************************
 * 	PART 3:  Percentile transformation
 ***********************************************************************
+/* either delete or consider at later stage
 {
 	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
 gen profit_pct = .
@@ -65,47 +73,38 @@ gen profit_pct = .
 	replace profit_pct = profit_pct2/(`r(N)' + 1)
 	drop profit_pct1 profit_pct2
 }	
+*/
 
 ***********************************************************************
 * 	PART 4:  Generating unit price variables
 ***********************************************************************	
 {
 	* price
-gen price_exp  = export_value / export_weight
+gen price_exp  = total_revenue_ / total_qty_
 lab var price_exp "Export price"
 
-gen price_imp  = import_value / import_weight
-lab var price_imp "Import price"
 
-gen price_exp_w99  = export_value_w99 / export_weight_w99
+gen price_exp_w99  = total_revenue__w99 / total_qty__w99
 lab var price_exp_w99 "Export price, winsorized"
 
-gen price_imp_w99  = import_value_w99 / import_weight_w99
-lab var price_imp_w99 "Import price, winsorized"
-
-gen price_exp_w95  = export_value_w95 / export_weight_w95
+gen price_exp_w95  = total_revenue__w95 / total_qty__w95
 lab var price_exp_w95 "Export price, winsorized"
 
-gen price_imp_w95  = import_value_w95 / import_weight_w95
-lab var price_imp_w95 "Import price, winsorized"
-
-foreach var of varlist price_exp price_exp_w99 price_exp_w95 price_imp price_imp_w99 price_imp_w95 {
+foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 	gen l`var' = log(`var')
-}
+	}
 
-	* profitable dummy
-gen profitable = (profit > 0)
-	replace profitable = . if profit == .
-
-	* export dummy
-gen exported = (ca_export > 0)
-	replace exported = . if ca_export == .  // account for MVs
-	replace exported = 1 if exported == . & (export_value < . & export_value > 0) // account for customs data
 }
 	
-
+***********************************************************************
+* 	PART 4:  Export dummy
+***********************************************************************
+	* export dummy
+gen exported = (total_revenue_ > 0)
+	replace exported = . if total_revenue_ == .  // account for MVs
+	replace exported = 1 if exported == . & (total_revenue_ < . & total_revenue_ > 0) // account for customs data
 
 ***********************************************************************
 * 	PART :  Save directory to progress folder
 ***********************************************************************
-save "${final}/rct1_rne_final", replace
+save "${final}/cepex_long", replace
