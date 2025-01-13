@@ -639,6 +639,7 @@ testparm `vars'
 ***********************************************************************
 * 	PART 2: Take-up
 ***********************************************************************
+{
 * gen dummy for whether firm joined consortium or not
  egen el_take_up = min(take_up), by(id_plateforme) missing
 
@@ -730,6 +731,7 @@ iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_p
 *with outlier
 iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_pays  if surveyround == 1 & id_plateforme != 1092, grpvar(treatment) rowvarlabels format(%15.2fc) vce(robust) ftest fmissok savetex(el_treat_baltab_unadj) replace
 
+}
 
 ***********************************************************************
 * 	PART 3: operated/closed		
@@ -6296,7 +6298,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
@@ -6307,7 +6309,7 @@ version 16							// define Stata version 15 used
 					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
 						* add to latex table
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
@@ -6333,7 +6335,7 @@ version 16							// define Stata version 15 used
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
@@ -6344,7 +6346,7 @@ version 16							// define Stata version 15 used
 					local fmt_nobs_`var' : display %3.0f `nobs_`var''
 
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
 						* add to latex table
 					estadd local bl_control "Yes"
 					estadd local strata_final "Yes"
@@ -6573,7 +6575,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if `var' == exp_pays_w95 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1`i': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if `cond', cluster(consortia_cluster)
+				eststo `var'1`i': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if `cond', cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1`i'
 					estadd local strata "Yes" : `var'1`i'
@@ -6582,7 +6584,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var'`i' : display %3.2f `itt_`var'`i''
 				
 				// ATT, IV
-				eststo `var'2`i': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if `cond', cluster(consortia_cluster) first
+				eststo `var'2`i': ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if `cond', cluster(id_plateforme) first
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2`i'
 					estadd local strata "Yes" : `var'2`i'
@@ -6608,7 +6610,7 @@ version 16							// define Stata version 15 used
 			else {
 				// ITT: ANCOVA plus stratification dummies
 					// not accounting for differential attrition
-				eststo `var'1`i': reg `var' i.treatment exported_y0 missing_bl_exported i.strata_final if `cond', cluster(consortia_cluster)
+				eststo `var'1`i': reg `var' i.treatment exported_y0 missing_bl_exported i.strata_final if `cond', cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1`i'
 					estadd local strata_final "Yes" : `var'1`i'
@@ -6618,7 +6620,7 @@ version 16							// define Stata version 15 used
 
 				
 				// ATT, IV
-				eststo `var'2`i': ivreg2 `var' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if `cond', cluster(consortia_cluster) first
+				eststo `var'2`i': ivreg2 `var' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if `cond', cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2`i' 
 					estadd local strata "Yes" : `var'2`i'
@@ -7423,6 +7425,21 @@ gen midline = (surveyround == 2)
 gen endline = (surveyround == 3)
 
 	* absolute sales
+		* Ancova
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3, cluster(id_plateforme)
+
+reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(id_plateforme)
+ivreg2 lca lca_y0 i.strata_final i.missing_bl_lca (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+
+reg lca i.treatment lca_y0 i.missing_bl_lca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+ivreg2 lca_w95 lca_w95_y0 i.strata_final i.missing_bl_lca_w95 (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+
+		* 2x2 DiD
+xtreg ca_w95 i.treatment##i.endline i.strata_final if surveyround == 1 | surveyround == 3, vce(cluster id_plateforme)
+xtreg ihs_ca_w95_k1 i.treatment##i.endline i.strata_final if surveyround == 1 | surveyround == 3, vce(cluster id_plateforme)
+
+		* TWFE
 reg ca_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
 reg ca_exp_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
 reg ca_tun_w95 i.treatment##i.midline i.treatment##i.endline i.id_plateforme, cluster(consortia_cluster)
@@ -7438,7 +7455,7 @@ reg ca_tun_rel_growth i.treatment##i.midline i.treatment##i.endline i.strata_fin
 reg ca_exp_rel_growth i.treatment##i.midline i.treatment##i.endline i.strata_final, cluster(consortia_cluster)
 
 
-reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
 ivreg2 ca_rel_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 
 reg ca_exp_abs_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
@@ -7457,7 +7474,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -7466,7 +7483,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2
 					estadd local strata_final "Yes" : `var'2
@@ -7494,7 +7511,7 @@ version 16							// define Stata version 15 used
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
 						* add to latex table
 					estadd local bl_control "No" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -7503,7 +7520,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
 						* add to latex table
 					estadd local bl_control "No" : `var'2
 					estadd local strata_final "Yes" : `var'2
@@ -7563,7 +7580,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				posthead("\toprule \\ \multicolumn{4}{c}{Panel A: Intention-to-treat (ITT)} \\\\[-1ex]") ///			
 				fragment ///
 				cells(b(star fmt(2)) se(par fmt(2))) /// p(fmt(3)) rw ci(fmt(2))
-				mlabels("Total sales" "Domestic sales" "Export sales") /// use dep vars labels as model title
+				mlabels("IHS(Sales)" "Sales" "Sales growth") /// use dep vars labels as model title
 				star(* 0.1 ** 0.05 *** 0.01) ///
 				nobaselevels ///
 				collabels(none) ///	do not use statistics names below models
@@ -7588,6 +7605,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcome variables are winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified. 'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 
 			***2nd table with growth rates (for presentation need to remove caption)
+/*
 		local regressions `1'1 `4'1 `5'1 // `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  adjust manually to number of variables 
 		esttab `regressions' using "${tables_business}/rt_`generate'_2.tex", replace booktabs ///
 				prehead("\begin{table}[!h] \centering \\ \caption{Business Performance: Sales - IHS-transformed and growth rates} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
@@ -7617,7 +7635,8 @@ esttab e(RW) using rw_`generate'.tex, replace
 				label 		/// specifies EVs have label
 				prefoot("\addlinespace[0.3cm] \midrule ") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: Total sales is winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified.   'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") 
-				
+	
+	*/
 				
 				
 }				
@@ -7697,7 +7716,7 @@ gr export "${figures_business}/el_`generate'_decomp_2023_cfp.pdf", replace
 end
 
 	* win95, k1
-rct_regression_fin ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95, gen(sales)
+rct_regression_fin ihs_ca_w95_k1 ca_w95 ca_rel_growth_w95, gen(sales) // ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95
 
 
 
