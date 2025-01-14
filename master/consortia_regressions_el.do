@@ -613,6 +613,7 @@ foreach sfmt in save savetex {
 
 		iebaltab `vars'  if `con', ///
 			grpvar(treatment) ///
+			pair(p) ///
 			rowvarlabels format(%15.2fc) vce(robust) ///
 			covariates(strata_final) ///
 			fmissok ///
