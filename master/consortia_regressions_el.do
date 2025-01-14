@@ -652,7 +652,7 @@ local management "mpi_points"
 local network "net_size net_nb_fam net_nb_dehors net_nb_qualite net_coop_pos net_coop_neg"
 local confidence "female_efficacy_points female_loc_points"
 local family "famille2 famille1"
-local kpis "age bpi epp employes profit_euro ca_euro ca_tun_euro ca_exp_euro"
+local kpis "age bpi employes profit_euro ca_euro ca_tun_euro ca_exp_euro" // epp
 local exp "operation_export exp_pays"
 local all_vars "`kpis' `exp' `management' `network' `confidence' `family'"
 local cond "id_plateforme != 1092 & treatment == 1"
@@ -7474,7 +7474,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster) // & bh_sample == 1
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -7483,7 +7483,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first // & bh_sample == 1
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2
 					estadd local strata_final "Yes" : `var'2
@@ -7511,7 +7511,7 @@ version 16							// define Stata version 15 used
 			}
 			else {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // id_plateforme
 						* add to latex table
 					estadd local bl_control "No" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -7520,7 +7520,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first // id_plateforme
 						* add to latex table
 					estadd local bl_control "No" : `var'2
 					estadd local strata_final "Yes" : `var'2
@@ -7604,7 +7604,7 @@ esttab e(RW) using rw_`generate'.tex, replace
 				prefoot("\addlinespace[0.3cm] \midrule ") ///
 				postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{4}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcome variables are winsorised at the $95^{th}$ percentile and inverse hyperbolic sine transormed as pre-specified. 'Total', 'Domestic', and 'Export sales' are in units of Tunisian Dinar before transformation. Panel A reports ANCOVA estimates as defined in \citet{Bruhn.2009}. Panel B documents IV estimates, instrumenting take-up with treatment assignment. Standard errors are clustered on the firm-level for the control group and on the consortium-level for the treatment group following \citet{Cai.2018} and reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}") // when inserting table in overleaf/latex, requires adding space after %
 
-			***2nd table with growth rates (for presentation need to remove caption)
+			* 2nd table with growth rates (for presentation need to remove caption)
 /*
 		local regressions `1'1 `4'1 `5'1 // `4'1 `5'1 `6'1 `7'1 `8'1 `9'1 `10'1  adjust manually to number of variables 
 		esttab `regressions' using "${tables_business}/rt_`generate'_2.tex", replace booktabs ///
