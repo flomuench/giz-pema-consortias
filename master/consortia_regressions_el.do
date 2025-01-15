@@ -559,7 +559,6 @@ local vars "`management' `network' `confidence' `family'"
 
 local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
 
-
 foreach sfmt in save savetex {
 	local con_names "full no_out"
 	foreach con of local cond {
@@ -604,6 +603,12 @@ local kpis "age employes profit_euro ca_euro ca_tun_euro ca_exp_euro"
 local exp "operation_export exp_pays"
 local vars "`kpis' `exp'"
 local cond `" "surveyround == 1" "surveyround == 1 & id_plateforme != 1092" "'
+
+foreach var of local vars {
+	display "T-test for variable: `var'"
+	ttest `var' if surveyround == 1, by(treatment) // & id_plateforme != 1092
+}
+
 
 foreach sfmt in save savetex {
 	local con_names "full no_out"
