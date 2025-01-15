@@ -5853,7 +5853,7 @@ coefplot ///
 		mlabposition(12) mlabgap(*2)  mlabsize(medium)) ///	
 	(`3'1, pstyle(p3)) (`3'2, pstyle(p3)) ///	
 	(`4'1, pstyle(p4)) (`4'2, pstyle(p4)) ///
-	(`5'1, pstyle(p4)) (`5'2, pstyle(p5)), ///
+	(`5'1, pstyle(p5)) (`5'2, pstyle(p5)), ///
 	keep(*treatment take_up) drop(_cons) xline(0) xlabel(-0.75(0.25)0.75) ///
 		asequation /// name of model is used
 		swapnames /// swaps coeff & equation names after collecting result
