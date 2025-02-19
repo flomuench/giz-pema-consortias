@@ -96,15 +96,7 @@ format %-25.0fc `numvars'
 
 //format %-9.0g annee
 
-	* destring
-{
-	local vars2020 Sum_Qte_2020 SumVALEUR_2021 Sum_Qte_2021 SumVALEUR_2020
-	
-	foreach x of local vars2020 {
-		destring `x', replace
-	}
-	
-}
+
 
 	* Encode product names
 		

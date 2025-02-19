@@ -15,27 +15,84 @@
 ********************************************************************
 use "${intermediate}/cepex_wide", clear
 
+
+use "${raw}/temp_cepex2.dta", clear
+
+
+********************************************************************
+* 	PART:  basic data preparation	
+********************************************************************
+* order variables
+order ndgcf Libelle_NDP Libelle_Pays SumVALEUR_* Sum_Qte_*
+
+* sort
+sort CODEDOUANE Libelle_NDP Libelle_Pays
+
+* format variables
+format Libelle_NDP %-30s
+format CODEDOUANE %-10s
+
+* destring
+	local vars Sum_Qte_2020 SumVALEUR_2021 Sum_Qte_2021 SumVALEUR_2020	
+	foreach x of local vars {
+		destring `x', replace
+	}
+
 ***********************************************************************
-* 	PART 1: Reshape into panel
+* 	PART 2: Reshape from wide to long
 ***********************************************************************
 {
 	* drop year variables
-drop sumvaleur_* sum_qte_* unit_price* product_name country avg_unit_price*  libelle_pays libelle_ndp length_mf
+*drop sumvaleur_* sum_qte_* unit_price* product_name country avg_unit_price*  libelle_pays libelle_ndp length_mf
 
 	* collapse data 
-bysort ndgcf : gen tag = _n == 1
+*bysort ndgcf : gen tag = _n == 1
 
-keep if tag==1
+*keep if tag==1
 
-drop tag 
+*drop tag 
 
-	** reshape long
-reshape long total_revenue_ total_qty_ num_countries_ num_products_  num_combos_, i(ndgcf) j(year)
+	* reshape long
+reshape long SumVALEUR_ Sum_Qte_, i(ndgcf Libelle_NDP Libelle_Pays) j(year) // num_countries_ num_products_  num_combos_
+
+order CODEDOUANE ndgcf year Libelle_NDP Libelle_Pays
+sort CODEDOUANE year Libelle_NDP Libelle_Pays
+}
+
+***********************************************************************
+* 	PART 3: Collapse into firm-year panel
+***********************************************************************
+{
+	* prepare collapse
+		*remove rows (firm-year-product-destination combinations) with zero exports
+			* Note: done in preparation for collapse to be able to count export countries & export products for each firm-year
+br if SumVALEUR_ == 0 & Sum_Qte_ != 0 // 2 observations
+br if SumVALEUR_ != 0 & Sum_Qte_ == 0 // 0 observations
+
+replace SumVALEUR_ = . if SumVALEUR_ == 0 & Sum_Qte_ != 0 // 2 to missing
+
+drop if SumVALEUR_ == 0 & Sum_Qte_ == 0 // (17,296 observations deleted)
+
+
+	* as collapse does not allow counting unique (or distinct) products & countries, create a tag (=1 if the 1st occurrence for a firm-year-product and firm-year-country combination)
+egen product_tag = tag(CODEDOUANE year Libelle_NDP)
+egen country_tag = tag(CODEDOUANE year Libelle_Pays)
+
+order product_tag, a(Libelle_NDP)
+order country_tag, a(Libelle_Pays)
+
+replace product_tag = . if product_tag == 0  // only nonmissing obs are counted in collapse command
+replace country_tag = . if country_tag == 0  // only nonmissing obs are counted in collapse command
+
+	* do collapse
+collapse (firstnm) ndgcf (count) countries = country_tag  products = product_tag (sum) value = SumVALEUR_ quantity = Sum_Qte_, by(CODEDOUANE year)
 
 	* sort, order
 order ndgcf year, first
 	* sort firm-year with year 2022 first
 gsort ndgcf -year
+
+}
 
 	* define as panel data
 encode ndgcf, gen(ID)
