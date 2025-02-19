@@ -53,6 +53,7 @@ putpdf paragraph, halign(center)
 ****** Section 1: Response rate & take-up ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
+
 {
 * response rate
 graph bar (count) attest if surveyround ==3, over(treatment) blabel(total, format(%9.0fc)) ///
@@ -361,19 +362,266 @@ twoway  (kdensity ca_abs_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc
                order(1 "Take-up = 1" ///
                      2 "Take-up = 0 (incl. control group)") ///
                col(1) pos(6) ring(6)) 	
-			  
 			   
-
-ksmirnov ca_w95 if surveyround == 3, by(treatment)
-ttest ca_w95 if surveyround == 3, by(treatment)
-twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
-        (kdensity ca_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2) bw(50000)), ///
+		* IHS sales at baseline
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 1 & id_plateforme != 1092, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Baseline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6))  			   
+			   
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 1 & ihs_ca_w95_k1 > 0, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 1 & ihs_ca_w95_k1 > 0, lp(l) lc(green) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 1 & ihs_ca_w95_k1 > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Baseline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6))  
+			   
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & surveyround == 1 & id_plateforme != 1092, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Baseline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6))  		
+		
+twoway  (kdensity ihs_ca_w99_k1 if treatment == 1 & surveyround == 1 & id_plateforme != 1092 & ihs_ca_w95_k1 > 0, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w99_k1 if treatment == 0 & surveyround == 1 & ihs_ca_w95_k1 > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Baseline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6))  	
+			   
+			
+twoway  (kdensity ca_w99 if treatment == 1 & surveyround == 1 & id_plateforme != 1092 & ihs_ca_w95_k1 > 0, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_w99 if treatment == 0 & surveyround == 1 & ihs_ca_w95_k1 > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Baseline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6))  	
+			   
+			   
+ksmirnov ca_w95 if surveyround == 1, by(treatment)
+ttest ca_w95 if surveyround == 1, by(treatment)
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2) bw(50000)), ///
 		xtitle("Sales, winsorized") ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment = 1" ///
                      2 "Treatment = 0") ///
                col(1) pos(6) ring(6)) 	
+			   
 
+
+			   
+		* IHS sales at endline
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Endline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6))  
+			   
+			   
+			   
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 1 & surveyround == 3 & ihs_ca_w95_k1 > 0, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 1 & take_up == 0 & surveyround == 3 & ihs_ca_w95_k1 > 0, lp(l) lc(green) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 3 & ihs_ca_w95_k1 > 0, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Endline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group, participated" ///
+                     2 "Treatment group, absent" ///
+                     3 "Control group") ///
+               col(1) pos(6) ring(6))  
+			  
+			  
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Endline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6))  			   
+			   
+			   
+			   
+twoway  (kdensity ihs_ca_w95_k1 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 1, lp(l) lc(navy) yaxis(2)) ///
+		 (kdensity ihs_ca_w95_k1 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ihs_ca_w95_k1 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2)) ///
+        , ///
+		title("Total sales (Endline)", pos(12) size(medium)) ///
+	xtitle("Total sales (ihs-transformed & wins. 95th pctl.)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6))  			   
+			  
+twoway  (kdensity ca_w95 if treatment == 1 & take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+		(kdensity ca_w95 if treatment == 1 & take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)) ///
+		(kdensity ca_w95 if treatment == 0 & surveyround == 3, lp(l) lc(navy) yaxis(2) bw(2)) ///
+		, ///
+		title("Total sales", pos(12) size(medium)) ///
+	xtitle("Total sales (total sales (absolute values))") ///
+		legend(rows(3) symxsize(small) ///
+			   order(1 "Treatment group, participated" ///
+					 2 "Treatment group, absent" ///
+					 3 "Control group") ///
+			   col(1) pos(6) ring(6))  
+			  
+			   
+
+ksmirnov ca_w95 if surveyround == 3, by(treatment)
+ksmirnov ca_w95 if surveyround == 3 & ca_w95 > 5000 & ca_w95 < 900000, by(treatment)
+ksmirnov ca_w95 if surveyround == 3 & ca_w95 > 5000 & ca_w95 < 400000, by(treatment)
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(treatment)
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(take_up)
+ksmirnov ca_rel_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+
+ksmirnov ca_abs_growth_w95 if surveyround == 3, by(treatment)
+ksmirnov ca_abs_growth_w95 if surveyround == 3, by(take_up)
+ksmirnov ca_abs_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+
+
+ttest ca_w95 if surveyround == 3, by(treatment)
+
+		* EL T vs C, P10-P90	   
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 3 & ca_w95 > 5000 & ca_w95 < 900000, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 3 & ca_w95 > 5000 & ca_w95 < 900000, lp(l) lc(green) yaxis(2) bw(50000)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+			   
+		
+		* EL T vs C, P10-P75	   
+twoway  (kdensity ca_rel_growth_w95 if treatment == 1 & surveyround == 3 & ca_w95 > 5000 & ca_w95 < 900000, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_rel_growth_w95 if treatment == 0 & surveyround == 3 & ca_w95 > 5000 & ca_w95 < 900000, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+			   
+twoway  (kdensity ca_rel_growth_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_rel_growth_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Sales growth relative to baseline , winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6))
+			   
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(treatment)
+ksmirnov ca_rel_growth_w95 if surveyround == 3, by(take_up)
+ksmirnov ca_rel_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+
+ksmirnov ca_abs_growth_w95 if surveyround == 3, by(treatment)
+ksmirnov ca_abs_growth_w95 if surveyround == 3, by(take_up)
+ksmirnov ca_abs_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+
+
+
+ksmirnov ca_rel_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+local pv = r(p)
+local fpv : display %9.2fc `pv'		   
+	twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon)) ///
+		(kdensity ca_rel_growth_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green)), ///
+		xtitle("Sales growth", size(medium)) ///
+		text(0.2 10 "Kolmogorov-Smirnov p-value = `fpv'", size(medlarge)) ///
+		ytitle("Density", size(medium)) ///
+		legend(rows(1) ///
+			   order(1 "Take-Up = 1" ///
+					 2 "Treatment = 0") ///
+			   col(2) pos(6)) ///
+		note("Take-up is defined as a firm joining the consortium." "Sales growth is calculated for each firm individually as Y(EL)-Y(BL) divided by Y(BL)." "Y is sales winsorized at the 95th percentile.", span size(medium))
+		
+		graph export "${figures_business}/sales_rel_growth_density.pdf", replace
+
+
+ksmirnov ca_abs_growth_w95 if surveyround == 3 & treatment != 0, by(take_up)
+local pv = r(p)
+local fpv : display %9.2fc `pv'
+twoway  (kdensity ca_abs_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon)) ///
+        (kdensity ca_abs_growth_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green)), ///
+		xtitle("Sales growth", size(medium)) ///
+		xlabel(-750000(250000)750000) ///
+		text(0.000003 -350000 "Kolmogorov-Smirnov p-value = `fpv'", size(medlarge)) ///
+		ytitle("Density", size(medium)) ///
+        legend(rows(1) ///
+               order(1 "Take-Up = 1" ///
+                     2 "Treatment = 0") ///
+               col(2) pos(6)) ///
+		note("Take-up is defined as a firm joining the consortium." "Sales growth is calculated for each firm individually as Y(EL)-Y(BL)." "Y is sales winsorized at the 95th pctl." "Sales are in Tunisian Dinar." , span size(medium))
+		
+		graph export "${figures_business}/sales_abs_growth_density.pdf", replace
+
+			   
+twoway  (kdensity ca_abs_growth_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_abs_growth_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+			   
+			   
+twoway  (kdensity ca_abs_growth_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2)) ///
+        (kdensity ca_abs_growth_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Take-Up = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+			   
+			   
+		* BL T vs C, P10-P75	   
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 1 & ca_w95 > 3000 & ca_w95 < 257000, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 1 & ca_w95 > 3000 & ca_w95 < 257000, lp(l) lc(green) yaxis(2) bw(50000)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+		
+		* BL T vs C, P10-P90	   
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 1 & ca_w95 > 3000 & ca_w95 < 1000000, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 1 & ca_w95 > 3000 & ca_w95 < 1000000, lp(l) lc(green) yaxis(2) bw(50000)), ///
+		xtitle("Sales, winsorized") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment = 1" ///
+                     2 "Treatment = 0") ///
+               col(1) pos(6) ring(6)) 	
+			   
+			  
 ksmirnov ca_w95 if surveyround == 3, by(take_up)
 ttest ca_w95 if surveyround == 3, by(take_up)
 twoway  (kdensity ca_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(50000)) ///
@@ -385,8 +633,8 @@ twoway  (kdensity ca_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) ya
                col(1) pos(6) ring(6)) 	
 
 	
-twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
-        (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth <= 6.5, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_growth <= 12, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
+        (kdensity ca_rel_growth if treatment == 0 & surveyround == 3 & ca_rel_growth <= 12, lp(l) lc(green) yaxis(2)  bw(.5)), ///
 		xtitle("Growth rate of sales relative to baseline") ///
         legend(rows(3) symxsize(small) ///
                order(1 "Treatment group" ///
