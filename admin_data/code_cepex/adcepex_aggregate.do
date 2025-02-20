@@ -94,14 +94,39 @@ gsort ndgcf -year
 
 }
 
+
+***********************************************************************
+* 	PART 4: Fill gaps in panel with zeros
+***********************************************************************
 	* define as panel data
 encode ndgcf, gen(ID)
 xtset ID year 
 
 	* fill up gaps for firms without exports in specific years
-display _N
+display _N // 1130 
 tsfill, full
-display _N
+display _N // 1530
+
+	* replace gaps with zeros instead of missing values
+local vars "countries products value quantity"
+	foreach var of local vars {
+		replace `var' = 0 if `var' == .
+	}
+
+
+	* fill in missing ID information for rows with zeros
+decode ID, gen(id)	
+drop ndgcf CODEDOUANE
+rename id ndgcf
+order ID ndgcf year, first
+	
+	
+***********************************************************************
+* 	PART 4: save & continue with merging
+***********************************************************************
+save "${intermediate}/cepex_long_inter", replace // before cepex_long
+
+
 
 	* does tsfill create 0 or MV? if MV, replace with 0. 
 		* generate indicator variable to test if replacement matters for analysis (most likely does)
@@ -127,7 +152,8 @@ replace total_revenue_ = 0 if total_revenue_ == .
 	order post, a(ttt)
 	
 * 	Save the changes made to the data		  			
-save "${intermediate}/cepex_long", replace
+*save "${intermediate}/cepex_long", replace
+	
 
 }
 
