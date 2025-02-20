@@ -16,9 +16,23 @@
 				/// BI-STATOctobre2024.xlsx 
 				/// Entreprises (1).xlsx
 *	Creates: cepex_raw.dta 															  
+***********************************************************************
+* 	PART 1: Import list with all firms from the three programs 
+***********************************************************************	
+import excel "${raw}/Entreprises (1).xlsx", firstrow clear
+
+	* make sure only real observations
+encode id_plateforme, gen(id)	
+sum id
+keep in 1/`r(N)'
+order id, first
+sort id, stable
+
+save "${raw}/enterprises.dta", replace
+
 
 ***********************************************************************
-* 	PART 1: 	Import Cepex data and list of firms from all programmes 
+* 	PART 2: Import Cepex data and list of firms from all programmes 
 ***********************************************************************
 
 	* import Cepex data (without product breakdown)
@@ -61,6 +75,9 @@ save "${raw}/temp_cepex2.dta", replace
 
 
 
+***********************************************************************
+* 	PART 3: Import Cepex data and list of firms from all programmes 
+***********************************************************************
 save "${raw}/cepex_raw.dta", replace
 
 erase "${raw}/temp_cepex1.dta"

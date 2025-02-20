@@ -20,18 +20,7 @@
 ***********************************************************************
 * 	PART 1: 	Import Cepex data and list of firms from all programmes 
 ***********************************************************************
-
-	* now load file linking Cepex id to programs' ids
-	
-import excel "${raw}/Entreprises (1).xlsx", firstrow clear
-
-	* make sure only real observations
-encode id_plateforme, gen(id)	
-sum id
-keep in 1/`r(N)'
-order id, first
-sort id, stable
- 
+use "${raw}/enterprises.dta", clear
 
 ***********************************************************************
 * 	PART 2:  make corrections to prepare merger  					  
@@ -153,6 +142,91 @@ order program4, a(program3)
 ***********************************************************************
 * 	PART 4:  merge rct firms to Cepex universe of firms  					  
 ***********************************************************************
+
+	* merge RCT sample with Cepex firm population
+sort ndgcf, stable
+merge 1:m ndgcf using "${intermediate}/cepex_inter.dta" 
+codebook ndgcf if _merge == 3
+
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                           258
+        from master                       258  (_merge==1)
+        from using                          0  (_merge==2)
+
+    Matched                             1,530  (_merge==3)
+    -----------------------------------------
+*/
+
+
+	* order
+order ID ndgcf id? year _merge value quantity, first
+sort  ndgcf year, stable
+
+save "${intermediate}/cepex_panel_raw", replace // before cepex_long
+
+
+
+***********************************************************************
+* 	PART 5: expand merged observations into firm year panel					  
+***********************************************************************
+	* create ID for merged firms
+drop ID
+encode ndgcf, gen(ID)
+order ID, first
+
+	* define a year for merged firms to be able to use tsfill
+replace year = 2020 if _merge == 1
+
+	* define as panel data
+xtset ID year 
+
+	* fill up gaps for firms without exports in specific years
+display _N // 1788 
+tsfill, full
+display _N // 2820
+
+	* replace gaps with zeros instead of missing values
+local vars "countries products value quantity"
+	foreach var of local vars {
+		replace `var' = 0 if `var' == .
+	}
+	
+	* redefine panel
+sort ndgcf year, stable
+xtset ID year 
+
+
+***********************************************************************
+* 	PART 6: expand firm variables into firm-year panel					  
+***********************************************************************
+
+local vars "id matricule_fiscale firmname treatment take_up strata program_num program"
+local newvars "Id Matricule_fiscale Firmname Treatment Take_up Strata Program_num Program"
+forvalues s = 1(1)3 {
+	foreach var of local vars {
+		gettoken newvar newvars : newvars 
+		ds `var'`s', has(type string)  // check if string variable
+		if "`var'`s'" == "`r(varlist)'" {
+			// for string variables: transform string into factor
+			encode `var'`s', gen(`newvar'`s')
+			drop `var'`s'
+			// expand variable across all years
+			egen `var'`s' = min(`newvar'`s'), by(ID)
+			drop `newvar'`s'
+		}
+		else {
+			// for numeric variables
+			egen `newvar'`s' = min(`var'`s'), by(ID)
+			drop `var'`s'
+			rename `newvar'`s' `var'`s'
+		}
+	}
+}
+
+
+
 {
 	* merge RCT sample with Cepex firm population
 sort ndgcf, stable

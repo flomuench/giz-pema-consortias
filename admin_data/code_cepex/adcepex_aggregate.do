@@ -13,15 +13,16 @@
 ********************************************************************
 * 	PART:  set the stage - technicalities	
 ********************************************************************
-use "${intermediate}/cepex_wide", clear
+*use "${intermediate}/cepex_wide", clear
 
 
-use "${raw}/temp_cepex2.dta", clear
+use "${raw}/cepex_raw.dta", clear
 
 
 ********************************************************************
 * 	PART:  basic data preparation	
 ********************************************************************
+{
 * order variables
 order ndgcf Libelle_NDP Libelle_Pays SumVALEUR_* Sum_Qte_*
 
@@ -37,6 +38,7 @@ format CODEDOUANE %-10s
 	foreach x of local vars {
 		destring `x', replace
 	}
+}
 
 ***********************************************************************
 * 	PART 2: Reshape from wide to long
@@ -98,6 +100,7 @@ gsort ndgcf -year
 ***********************************************************************
 * 	PART 4: Fill gaps in panel with zeros
 ***********************************************************************
+{
 	* define as panel data
 encode ndgcf, gen(ID)
 xtset ID year 
@@ -119,55 +122,10 @@ decode ID, gen(id)
 drop ndgcf CODEDOUANE
 rename id ndgcf
 order ID ndgcf year, first
-	
+}	
 	
 ***********************************************************************
-* 	PART 4: save & continue with merging
+* 	PART 5: save & continue with merging
 ***********************************************************************
-save "${intermediate}/cepex_long_inter", replace // before cepex_long
-
-
-
-	* does tsfill create 0 or MV? if MV, replace with 0. 
-		* generate indicator variable to test if replacement matters for analysis (most likely does)
-	gen not_matched = (total_qty_ == .)
-	
-		* replace missings with 0
-replace total_qty_ = 0 if total_qty_ == .
-replace total_revenue_ = 0 if total_revenue_ == . 	
-
-* generate time to treat variable for pre-post aggregation
-	gen ttt = . 
-		replace ttt = year - 2022 if program3 == 1
-		replace ttt = year - 2022 if program2 == 1		
-		replace ttt = year - 2021 if program1 == 1
-		
-	lab var ttt "time-to-treatment"
-	
-	order ttt, a(treatment4)
-
-* gen post variable (= 1 once treatment kicks on, ttt = 0)
-	gen post = (ttt >= 0)
-
-	order post, a(ttt)
-	
-* 	Save the changes made to the data		  			
-*save "${intermediate}/cepex_long", replace
-	
-
-}
-
-***********************************************************************
-* 	PART 2: Collapse into firm pre-post level 
-***********************************************************************
-{
-	
-
-* collapse the data
-	collapse (sum) exp_rev_sum = total_revenue_ exp_qty_sum = total_qty_ combo_sum = num_combos_  countries_sum = num_countries_ products_sum = num_products_ (mean) exp_rev_mean = total_revenue_ exp_qty_mean = total_qty_ combos_mean = num_combos_ countries_mean = num_countries_ products_mean = num_products_ (firstnm) treatment1 treatment2 treatment3 treatment4 strata1 strata2 strata3 strata4 take_up1 take_up2 take_up3 take_up4, by(ID post)
-	
-* 	Save the changes made to the data		  			
-save "${intermediate}/cepex_pre_post", replace
-
-}
+save "${intermediate}/cepex_inter", replace // before cepex_long
 	
