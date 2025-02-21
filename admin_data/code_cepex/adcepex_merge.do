@@ -169,63 +169,9 @@ save "${intermediate}/cepex_panel_raw", replace // before cepex_long
 
 
 ***********************************************************************
-* 	PART 5: expand merged observations into firm year panel					  
+* 	PART archive: 	archived code
 ***********************************************************************
-	* create ID for merged firms
-drop ID
-encode ndgcf, gen(ID)
-order ID, first
-
-	* define a year for merged firms to be able to use tsfill
-replace year = 2020 if _merge == 1
-
-	* define as panel data
-xtset ID year 
-
-	* fill up gaps for firms without exports in specific years
-display _N // 1788 
-tsfill, full
-display _N // 2820
-
-	* replace gaps with zeros instead of missing values
-local vars "countries products value quantity"
-	foreach var of local vars {
-		replace `var' = 0 if `var' == .
-	}
-	
-	* redefine panel
-sort ndgcf year, stable
-xtset ID year 
-
-
-***********************************************************************
-* 	PART 6: expand firm variables into firm-year panel					  
-***********************************************************************
-
-local vars "id matricule_fiscale firmname treatment take_up strata program_num program"
-local newvars "Id Matricule_fiscale Firmname Treatment Take_up Strata Program_num Program"
-forvalues s = 1(1)3 {
-	foreach var of local vars {
-		gettoken newvar newvars : newvars 
-		ds `var'`s', has(type string)  // check if string variable
-		if "`var'`s'" == "`r(varlist)'" {
-			// for string variables: transform string into factor
-			encode `var'`s', gen(`newvar'`s')
-			drop `var'`s'
-			// expand variable across all years
-			egen `var'`s' = min(`newvar'`s'), by(ID)
-			drop `newvar'`s'
-		}
-		else {
-			// for numeric variables
-			egen `newvar'`s' = min(`var'`s'), by(ID)
-			drop `var'`s'
-			rename `newvar'`s' `var'`s'
-		}
-	}
-}
-
-
+/*
 
 {
 	* merge RCT sample with Cepex firm population
@@ -275,8 +221,3 @@ result merge:
 drop match _merge
 	
 }
-
-
-***********************************************************************
-* 	PART 3: 	save merged file
-***********************************************************************

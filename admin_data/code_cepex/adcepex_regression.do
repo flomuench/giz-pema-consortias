@@ -9,20 +9,18 @@
 *			PART 5: Regression table with 5 vars (export)
 *																
 *	Author:  	Florian Muench			         													      
-*	ID variable: 	id (example: f101)			  			
+*	id variable: 	id (example: f101)			  			
 *	  Requires: ad_final.dta 	  										  
 *	  Creates:  ad_final.dta										  							  
 ***********************************************************************
 * 	PART:  set the stage - technicalities	
 ***********************************************************************
 	* import the data 
-use "${final}/cepex_long", clear
+use "${final}/cepex_panel_final", clear
 
 	* set panel and sort the observations
-encode ndgcf, gen(ID)
-order ID, b(ndgcf)
-sort ID year, stable
-xtset ID year 
+sort id year, stable
+xtset id year 
 
 	* set graphics output window on
 set graphics on
@@ -30,19 +28,25 @@ set graphics on
 ***********************************************************************
 * 	PART 1: Labeled variables for tables & figures
 ***********************************************************************
+{
 	* label variables
-lab var total_revenue_ "Exp. Revenue [Dinar]"
-lab var exp_rev_euro "Exp. Revenue [Euro]"
-lab var total_qty_ "Exp. Quantity [unit]"
-lab var num_combos_ "Country-product pairs"
-lab var num_countries_ "Exp. countries"
-lab var num_products_ "Exp. products"
-*lab var exp_rev_dinar_deflated "Exp. Rev. [Dinar, deflated]"
-*lab var exp_rev_euro_deflated "Exp. Rev. [Euro, deflated]"
+lab var value "Exp. Revenue [Dinar]"
+lab var value_eur "Exp. Revenue [Euro]"
+lab var quantity "Exp. Quantity [unit]"
+*lab var num_combos_ "Country-product pairs"
+lab var countries "Exp. countries"
+lab var products "Exp. products"
+lab var value_dfl "Exp. Rev. [Dinar, deflated]"
+lab var value_eur_dfl "Exp. Rev. [Euro, deflated]"
+lab var exported "Exported"
 
+lab def exp 1 "exported" 0 "no export"
+lab val exported exp
+
+}
 
 ***********************************************************************
-* 	PART 0: Check how many firms got matched/not matched (either no export or wrong legal ID)
+* 	PART 0: Check how many firms got matched/not matched (either no export or wrong legal id)
 ***********************************************************************
 lab def match 1 "matched" 0 "not matched"
 lab val not_matched match
@@ -61,7 +65,7 @@ forvalues s = 1(1)4 {
 ***********************************************************************
 * BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
 	* loop elements
-local balancevar "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_"
+local balancevar "value quantity countries products"
 local fmt "xlsx tex"
 local programs "aqe cf ecom all"
 	
@@ -80,9 +84,10 @@ iebaltab `balancevar' if year == 2020, ///
 ***********************************************************************
 * 	PART 2: Annual density distributions in T vs. C
 ***********************************************************************
+{
 	* look at distribution
 			* Treatment vs control
-local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local vars "value num_combos_ countries products" // quantity
 local programs "aqe cf ecom all"
 
 forvalues s = 1(1)4 {
@@ -104,7 +109,7 @@ forvalues s = 1(1)4 {
 }
 
 
-local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local vars "value num_combos_ countries products" // quantity
 local programs "aqe cf ecom all"
 forvalues s = 1(1)4 {
 	gettoken p programs : programs
@@ -116,7 +121,7 @@ forvalues s = 1(1)4 {
 
 
 		* Take-up vs. drop-out + control
-local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local vars "value num_combos_ countries products" // quantity
 local programs "aqe cf ecom all"
 
 forvalues s = 1(1)4 {
@@ -138,7 +143,7 @@ forvalues s = 1(1)4 {
 }
 
 
-local vars "total_revenue_ num_combos_ num_countries_ num_products_" // total_qty_
+local vars "value num_combos_ countries products" // quantity
 local programs "aqe cf ecom all"
 forvalues s = 1(1)4 {
 	gettoken p programs : programs
@@ -151,9 +156,6 @@ forvalues s = 1(1)4 {
 	
 	* Exported vs. not exported
 		* Treatment vs. control
-lab def exp 1 "exported" 0 "no export"
-lab val exported exp
-
 local programs "aqe cf ecom all"
 forvalues s = 1(1)4 {
 	gettoken p programs : programs
@@ -176,7 +178,7 @@ forvalues s = 1(1)4 {
 }
 	
 
-		 
+}		 
 		 
 ***********************************************************************
 * 	PART : Event study analysis
@@ -187,24 +189,31 @@ forvalues s = 1(1)4 {
 gen ttt_sh = ttt + 2
 	
 	* test
-reg total_revenue_ i.ttt_sh#ib0.treatment4 i.strata4, cluster(ID)\\
+reg value i.ttt_sh#ib0.treatment4 i.strata4, cluster(id)\\
 
-reg total_revenue_ i.treatment4 L1.total_revenue_ i.strata4 if year == 2021, cluster(ID)
+reg value i.treatment4 L1.value i.strata4 if year == 2021, cluster(id)
 
-reg total_revenue_ i.treatment4 L2.total_revenue_ i.strata4 if year == 2022, cluster(ID)
-reg total_revenue_ i.treatment4 L3.total_revenue_ i.strata4 if year == 2023, cluster(ID)
-reg total_revenue_ i.treatment4 L4.total_revenue_ i.strata4 if year == 2024, cluster(ID)
+reg value i.treatment4 L2.value i.strata4 if year == 2022, cluster(id)
+reg value i.treatment4 L3.value i.strata4 if year == 2023, cluster(id)
+reg value i.treatment4 L4.value i.strata4 if year == 2024, cluster(id)
 
 
-reg total_revenue_ i.treatment4 L2.total_revenue__w95 i.strata4 if year == 2022, cluster(ID)
-reg total_revenue_ i.treatment4 L3.total_revenue__w95 i.strata4 if year == 2023, cluster(ID)
-reg total_revenue_ i.treatment4 L4.total_revenue__w95 i.strata4 if year == 2024, cluster(ID)
+reg value i.treatment4 L2.value_w95 i.strata4 if year == 2022, cluster(id)
+reg value i.treatment4 L3.value_w95 i.strata4 if year == 2023, cluster(id)
+reg value i.treatment4 L4.value_w95 i.strata4 if year == 2024, cluster(id)
 
 
 	* Cai/Szeidl, Mckenzie/Woodruff FE specification
-xtreg total_revenue_ i.treatment4##ib2020.year, fe cluster(ID)
-xtreg total_revenue__w95 i.treatment4##ib2020.year, fe cluster(ID)
-xtreg ihs_total_revenue__w95 i.treatment4##ib2020.year, fe cluster(ID)
+xtreg value_dfl i.treatment4##ib2020.year, fe cluster(id)
+xtreg value_dfl_w95 i.treatment4##ib2020.year, fe cluster(id)
+xtreg ihs_value_dfl_w95 i.treatment4##ib2020.year, fe cluster(id)
+xtreg ihs_value_dfl_w99 i.treatment4##ib2020.year, fe cluster(id)
+
+
+xtreg countries i.treatment4##ib2020.year, fe cluster(id)
+
+xtreg products i.treatment4##ib2020.year, fe cluster(id)
+
 
 	
 capture program drop rcts_event // enables re-running
@@ -218,7 +227,7 @@ program rcts_event
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.ttt#i.treatment i.strata, cluster(ID)
+			eststo `var'1: reg `var' i.ttt#i.treatment i.strata, cluster(id)
 				* for latex table
 			estadd local strata "Yes"
 				* for coefplot
@@ -229,7 +238,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -351,14 +360,14 @@ rct_admin ihs_import_value_w95 ihs_import_weight_w95 lprice_imp_w95, gen(import_
 /*
 * test
 	* with lags
-reg ca_ttc i.treatment4 L2.ca_ttc i.strata4 if annee == 2022, cluster(ID)
+reg ca_ttc i.treatment4 L2.ca_ttc i.strata4 if annee == 2022, cluster(id)
 local obs_ca_ttc = e(N)
 display `obs_ca_ttc'
 
-ivreg2 ca_ttc L2.ca_ttc i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+ivreg2 ca_ttc L2.ca_ttc i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 matrix u = e(b)
 
-			eststo ca_ttc1: reg ca_ttc i.treatment4 L2.ca_ttc i.strata4 if annee == 2022, cluster(ID)
+			eststo ca_ttc1: reg ca_ttc i.treatment4 L2.ca_ttc i.strata4 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -370,7 +379,7 @@ matrix u = e(b)
 
 
 			* ATT, IV		
-			eststo ca_ttc2: ivreg2 ca_ttc L2.ca_ttc i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+			eststo ca_ttc2: ivreg2 ca_ttc L2.ca_ttc i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -447,7 +456,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment4 L2.`var' i.strata4 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment4 L2.`var' i.strata4 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -459,7 +468,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -591,7 +600,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment1 L2.`var' i.strata1 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment1 L2.`var' i.strata1 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -603,7 +612,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -737,7 +746,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment2 L2.`var' i.strata2 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment2 L2.`var' i.strata2 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -749,7 +758,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -886,7 +895,7 @@ if `obs_tot' > 30 {
 		
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment3 L2.`var' i.strata3 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment3 L2.`var' i.strata3 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -898,7 +907,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1035,7 +1044,7 @@ if `obs_tot' > 30 {
 		
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment4 L2.`var' i.strata4 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment4 L2.`var' i.strata4 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1047,7 +1056,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1183,7 +1192,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment1 L2.`var' i.strata1 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment1 L2.`var' i.strata1 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1195,7 +1204,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1321,7 +1330,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment2 L2.`var' i.strata2 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment2 L2.`var' i.strata2 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1333,7 +1342,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1467,7 +1476,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment3 L2.`var' i.strata3 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment3 L2.`var' i.strata3 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1479,7 +1488,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L2.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L2.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1612,7 +1621,7 @@ program rct_admin
 		if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment4 L1.`var' i.strata4 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment4 L1.`var' i.strata4 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1624,7 +1633,7 @@ program rct_admin
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L1.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L1.`var' i.strata4 (take_up4 = i.treatment4) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1757,7 +1766,7 @@ program rct_admin
 if `obs_tot' > 30 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment1 L1.`var' i.strata1 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment1 L1.`var' i.strata1 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1769,7 +1778,7 @@ if `obs_tot' > 30 {
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L1.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L1.`var' i.strata1 (take_up1 = i.treatment1) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1902,7 +1911,7 @@ program rct_admin
 		if `obs_tot' > 50 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment2 L1.`var' i.strata2 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment2 L1.`var' i.strata2 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -1914,7 +1923,7 @@ program rct_admin
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L1.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L1.`var' i.strata2 (take_up2 = i.treatment2) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -2049,7 +2058,7 @@ program rct_admin
 		if `obs_tot' > 50 {
 * ITT: ancova plus stratification dummies						
 			* ITT: ancova plus stratification dummies
-			eststo `var'1: reg `var' i.treatment3 L1.`var' i.strata3 if annee == 2022, cluster(ID)
+			eststo `var'1: reg `var' i.treatment3 L1.`var' i.strata3 if annee == 2022, cluster(id)
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"
@@ -2061,7 +2070,7 @@ program rct_admin
 
 
 			* ATT, IV		
-			eststo `var'2: ivreg2 `var' L1.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(ID) first
+			eststo `var'2: ivreg2 `var' L1.`var' i.strata3 (take_up3 = i.treatment3) if annee == 2022, cluster(id) first
 				* for latex table
 			estadd local lags "Yes"
 			estadd local strata "Yes"

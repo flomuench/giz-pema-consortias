@@ -54,7 +54,6 @@ set scheme plotplain
 set scheme burd
 }
 
-
 ***********************************************************************
 * 	PART 2: 	Prepare dynamic folder paths & globals			  	  *
 ***********************************************************************
@@ -123,26 +122,35 @@ cap log close
 log using "${data}/logfile.log", replace 
 } 
 
-
 ***********************************************************************
 * 	PART 3: 	Run endline do-files			  	 				  *
 ***********************************************************************
 /* --------------------------------------------------------------------
-	PART 3.2: Import raw data
-	Creates: rct1_rne_inter
-----------------------------------------------------------------------*/
-if (1) do "${code}/adcepex_import_merge.do"
+	PART 3.1: Import raw data
+	Requires:
+	Creates: cepex_raw.dta, enterprises.dta
+----------------save "${intermediate}/cepex_panel_final", replace
+------------------------------------------------------*/
+if (1) do "${code}/adcepex_import.do"
 /* --------------------------------------------------------------------
-	PART 3.3: Clean data
-----------------------------------------------------------------------*/
-if (1) do "${code}/adcepex_clean.do"
-/* --------------------------------------------------------------------
-	PART 3.4: Aggregate raw data to firm-year panel & firm pre-post data set
+	PART 3.2: Aggregate raw data to firm-year panel & firm pre-post data set
+	Creates: cepex_inter.dta
 ----------------------------------------------------------------------*/
 if (1) do "${code}/adcepex_aggregate.do"
 /* --------------------------------------------------------------------
-	PART 3.5: Generate variables
-	Creates: rct_rne_final
+	PART 3.3: Merge cepex export data (panel) to sample of firms
+	Requires: enterprises.dta
+	Creates: cepex_panel_raw.dta
+----------------------------------------------------------------------*/
+if (1) do "${code}/adcepex_merge.do"
+/* --------------------------------------------------------------------
+	PART 3.4: Clean & format
+	Creates: cepex_panel_inter.dta
+----------------------------------------------------------------------*/
+if (1) do "${code}/adcepex_clean.do"
+/* --------------------------------------------------------------------
+	PART 3.5: Generate derived variables
+	Creates: cepex_panel_final.dta
 ----------------------------------------------------------------------*/
 if (1) do "${code}/adcepex_generate.do"
 /* --------------------------------------------------------------------
