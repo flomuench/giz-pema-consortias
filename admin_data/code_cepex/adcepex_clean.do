@@ -22,11 +22,66 @@
 ***********************************************************************
 * 	PART 0: 	import raw data	  			
 ***********************************************************************		
+use "${intermediate}/cepex_panel_raw", clear
 
-use "${raw}/cepex_raw", clear
-	
 ***********************************************************************
-* 	PART 1: 	Clean up 		
+* 	PART 1: expand merged observations into firm year panel		  
+***********************************************************************
+{
+	* create ID for merged firms
+drop ID
+encode ndgcf, gen(ID)
+order ID, first
+
+	* define a year for merged firms to be able to use tsfill
+replace year = 2020 if _merge == 1
+
+	* define as panel data
+xtset ID year 
+
+	* fill up gaps for firms without exports in specific years
+display _N // 1788 
+tsfill, full
+display _N // 2820
+
+	* replace gaps with zeros instead of missing values
+local vars "countries products value quantity"
+	foreach var of local vars {
+		replace `var' = 0 if `var' == .
+	}
+	
+	* redefine panel
+sort ndgcf year, stable
+xtset ID year 
+
+}
+
+***********************************************************************
+* 	PART 2: expand firm variables into firm-year panel					  
+***********************************************************************
+{
+* string variables
+local vars "matricule_fiscale firmname strata id_plateforme"
+foreach var of local vars {
+	forvalues x = 1(1)3 {
+		bysort ID (year): replace `var'`x'=`var'`x'[_n-1] if `var'`x'== ""
+	}
+}
+
+* numeric/factor variables
+local vars "id treatment take_up program_num program"
+foreach var of local vars {
+	forvalues x = 1(1)3 {
+		bysort ID (year): replace `var'`x'=`var'`x'[_n-1] if `var'`x'== .
+		}
+	}
+
+bysort ID (year): replace program4=program4[_n-1] if program4== .
+	
+}
+
+***********************************************************************
+* 	PART 3: 	Clean up 		
 ***********************************************************************	
 {	
 	* keep only one var: mf, program_num
@@ -69,13 +124,10 @@ encode strat, gen(strata1)
 order strata1, b(strata2)
 drop strat
 
-	* drop: mf_len, dup	
-drop mf_len dup
-
 }
 	
 ***********************************************************************
-* 	PART 2: 	Adjust formats, encode, etc
+* 	PART 4: 	Adjust formats, encode, etc
 ***********************************************************************
 {
 	
@@ -86,7 +138,7 @@ format %-20s `strvars'
 
 *Lower all string observations of string variables*
 foreach x of local strvars {
-replace `x' = lower(stritrim(strtrim(`x')))
+	replace `x' = lower(stritrim(strtrim(`x')))
 }
  
 ds, has(type numeric) 
@@ -94,17 +146,57 @@ local numvars "`r(varlist)'"
 format %-25.0fc `numvars'
 }
 
-//format %-9.0g annee
-
-	* destring
-{
-	local vars2020 Sum_Qte_2020 SumVALEUR_2021 Sum_Qte_2021 SumVALEUR_2020
-	
-	foreach x of local vars2020 {
-		destring `x', replace
-	}
+format %-9.0g year
 	
 }
+
+***********************************************************************
+* 	PART 5: 	Make all variables names lower case		  			
+***********************************************************************
+rename *, lower
+
+***********************************************************************
+* 	PART 6: 	Drop unnecessary variables (e.g. text windows)		  			
+***********************************************************************
+
+drop mf_len nbr_mf dup  // tag* tag_combos_* tag_product_* country_str product_name_str country_product exported_*
+
+
+***********************************************************************
+* 	PART 5: 	Rename the variables		  			
+***********************************************************************
+
+*** ADD
+
+
+***********************************************************************
+* 	PART 6: 	Label the variables		  			
+***********************************************************************
+
+lab var program_num "Number of programs the firm participated in"
+lab var matricule_fiscale "Fiscal identifier"
+
+
+***********************************************************************
+* 	PART 7: 	Put the variables in order
+***********************************************************************
+order id ndgcf year value countries products value quantity id1 id2 id3 treatment? take_up? strata? program? program_num
+
+sort id year
+
+***********************************************************************
+* 	Save the changes made to the data		  			
+***********************************************************************
+save "${intermediate}/cepex_panel_inter", replace
+
+
+
+
+
+
+
+
+/*
 
 	* Encode product names
 		
@@ -193,37 +285,6 @@ drop last_price first_price
 		* lable 
 		lab var num_combos_`i' "Number of product-country combinations exported to in `i'"
 	}	
-	
-}
-
-***********************************************************************
-* 	PART 3: 	Make all variables names lower case		  			
-***********************************************************************
-rename *, lower
-
-***********************************************************************
-* 	PART 4: 	Drop unnecessary variables (e.g. text windows)		  			
-***********************************************************************
-
-drop tag* tag_combos_* tag_product_* country_str product_name_str country_product exported_*
 
 
-***********************************************************************
-* 	PART 5: 	Rename the variables		  			
-***********************************************************************
-
-*** ADD
-
-
-**********************************************************************
-* 	PART 6: 	Label the variables		  			
-***********************************************************************
-
-lab var program_num "Number of programs the firm participated in"
-lab var matricule_fiscale "Fiscal identifier"
-
-***********************************************************************
-* 	Save the changes made to the data		  			
-***********************************************************************
-save "${intermediate}/cepex_wide", replace
 

@@ -1,16 +1,14 @@
 ***********************************************************************
-* 			Administrative data Import									  		  
+* 			Administrative data import
 ***********************************************************************
 *																	  
-*	PURPOSE:  Import the adminstrative data provided by Cepex
-*																	  
-*																	  
+*	PURPOSE:  Import the adminstrative data provided by Cepex	  *																	  
 *	OUTLINE:														  
 *	1)	Import Cepex data and list of firms from all programmes 
 *	2)	Make corrections to prepare mergers
 *	3)  Merge and save  file      					  
 *	4)  Save  file      					  
-*																	  									  			
+*	  			
 *
 *	Authors:  	Florian Muench & Teo Firpo
 *	ID variable: 	id (example: f101)			  					  
@@ -22,57 +20,7 @@
 ***********************************************************************
 * 	PART 1: 	Import Cepex data and list of firms from all programmes 
 ***********************************************************************
-
-	* import Cepex data (without product breakdown)
-import excel "${raw}/BI-STAT-GIZ-Octobre2024.xlsx", firstrow clear
-	
-	* drop useless vars
-	
-drop Libelle_Pays Libelle_NDP
-
-gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
-
-	* rename variables so there is not clash with the other dataset 
-	
-forvalues i = 2020(1)2024 {
-	rename SumVALEUR_`i' total_revenue_`i'
-	rename Sum_Qte_`i' total_qty_`i'
-	
-	lab var total_revenue_`i' "Total revenue in `i'"
-	lab var total_qty_`i' "Total quantity of exports in `i'"
-}
- 
-drop if ndgcf==""
-
-save "${raw}/temp_cepex1.dta", replace
-
-	
-	* import Cepex data (with product breakdown)
-	
-import excel "${raw}/BI-STAT-GIZ-2-Octobre2024.xlsx", firstrow clear
-	
-	* a few observations are encoded wrong, drop them
-	
-drop if O!=.
-
-drop O P Q R
-
-gen ndgcf = substr(CODEDOUANE, 1, strlen(CODEDOUANE) - 1)
-
-save "${raw}/temp_cepex2.dta", replace
-
-
-	* now load file linking Cepex id to programs' ids
-	
-import excel "${raw}/Entreprises (1).xlsx", firstrow clear
-
-	* make sure only real observations
-encode id_plateforme, gen(id)	
-sum id
-keep in 1/`r(N)'
-order id, first
-sort id, stable
- 
+use "${raw}/enterprises.dta", clear
 
 ***********************************************************************
 * 	PART 2:  make corrections to prepare merger  					  
@@ -194,6 +142,37 @@ order program4, a(program3)
 ***********************************************************************
 * 	PART 4:  merge rct firms to Cepex universe of firms  					  
 ***********************************************************************
+
+	* merge RCT sample with Cepex firm population
+sort ndgcf, stable
+merge 1:m ndgcf using "${intermediate}/cepex_inter.dta" 
+codebook ndgcf if _merge == 3
+
+/*
+    Result                      Number of obs
+    -----------------------------------------
+    Not matched                           258
+        from master                       258  (_merge==1)
+        from using                          0  (_merge==2)
+
+    Matched                             1,530  (_merge==3)
+    -----------------------------------------
+*/
+
+
+	* order
+order ID ndgcf id? year _merge value quantity, first
+sort  ndgcf year, stable
+
+save "${intermediate}/cepex_panel_raw", replace // before cepex_long
+
+
+
+***********************************************************************
+* 	PART archive: 	archived code
+***********************************************************************
+/*
+
 {
 	* merge RCT sample with Cepex firm population
 sort ndgcf, stable
@@ -242,14 +221,3 @@ result merge:
 drop match _merge
 	
 }
-
-
-***********************************************************************
-* 	PART 3: 	save merged file
-***********************************************************************
-
-save "${raw}/cepex_raw.dta", replace
-
-erase "${raw}/temp_cepex1.dta"
-
-erase "${raw}/temp_cepex2.dta"

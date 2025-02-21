@@ -1,14 +1,14 @@
 ***********************************************************************
-* 			Appui Qualité Export (AQE) - master generate
+* 			Admin Export Data - Generate derived variables
 ***********************************************************************
 *																	    
-*	PURPOSE: Generate variables for final analysis AQE			
+*	PURPOSE: Generate variables for final analysis			
 *																	  
 *	OUTLINE:														 
-*	1)	Gen treatment status variable			  						 
-*	2)  Winsorisations 						  		    
-*	3)  Log transformations
-*	4)  Percentile transformation		  
+*	1)	Transform into Euros			  						 
+*	2)  Deflate 						  		    
+*	3)  Ihs-transform & winsorize
+*	4)  		  
 *																	  
 *	Author:  	Florian Muench					          													      
 *	ID variable: 	id (example: f101)			  					  
@@ -16,41 +16,72 @@
 *	Creates:  aqe_database_inter			   						  
 *																	  
 ***********************************************************************
-* 	PART 1:  Gen treatment status variable		  			
+* 	PART 1: Import data  			
 ***********************************************************************
-use "${intermediate}/cepex_long", clear
+use "${intermediate}/cepex_panel_inter", clear
 
 
 ***********************************************************************
 * 	PART 2:  Transform into Euros (easier for intl audiance)
 ***********************************************************************
+{
 /* annual exchange rates
 2024 = 0.2968 
 2023 = 
-
-
 */
 
 
-gen exp_rev_euro = total_revenue_/3
+gen value_eur = value/3
 
+}
 
 ***********************************************************************
 * 	PART 3:  Accounting for inflation
 ***********************************************************************
-*gen exp_rev_dinar_deflated = 
-*gen exp_rev_euro_deflated = 
+{
+/* 
+Deflation Factor t = 1 /  (1+Inflation Rate 2021)×(1+Inflation Rate 
+2022)×...×(1+Inflation Rate t)
+​
+Inflation rates (rounded 10^3 after comma):
+
+2021 = 0.057 ; 2022 = 0.071 ; 2023 = 0.074 ; 2024 = 0.066
+
+Source: FED St Louis, IMF: https://fred.stlouisfed.org/series/TUNPCPICOREPCHPT
+*/
+
+
+gen dfl_factor_21 = 1/(1+0.057)
+gen dfl_factor_22 = 1/((1+0.057)*(1+0.071))
+gen dfl_factor_23 = 1/((1+0.057)*(1+0.071)*(1+0.074))
+gen dfl_factor_24 = 1/((1+0.057)*(1+0.071)*(1+0.074)*(1+0.066))
+
+local val "value value_eur"
+foreach v of local val {
+	gen `v'_dfl = ., a(`v')
+		replace `v'_dfl = `v' if year == 2020
+			forvalues y = 1(1)4 {
+				replace `v'_dfl = `v' * dfl_factor_2`y' if year == 202`y'
+	}
+	
+	format `v'_dfl %-25.0fc
+
+}
+
+drop dfl_factor_2?
+
+}
 
 ***********************************************************************
-* 	PART 2:  DV Transformations: Winsorisations, IHS
+* 	PART 4:  DV Transformations: Winsorisations, IHS
 ***********************************************************************
 {
 
-local vars "total_revenue_ total_qty_ num_combos_ num_countries_ num_products_  exp_rev_euro" // exp_rev_dinar_deflated exp_rev_euro_deflated
+local vars "value value_dfl value_eur value_eur_dfl countries products quantity" // exp_rev_dinar_deflated exp_rev_euro_deflated
 
 foreach var of local vars {
-	winsor2 `var', suffix(w99) cuts(0 99)
-	winsor2 `var', suffix(w95) cuts(0 95)
+	winsor2 `var', suffix(_w99) cuts(0 99)
+	winsor2 `var', suffix(_w95) cuts(0 95)
 	ihstrans `var'_w99, prefix(ihs_)
 	ihstrans `var'_w95, prefix(ihs_)
 	}
@@ -58,7 +89,7 @@ foreach var of local vars {
 
 
 ***********************************************************************
-* 	PART 3:  Percentile transformation
+* 	PART :  Percentile transformation
 ***********************************************************************
 /* either delete or consider at later stage
 {
@@ -76,19 +107,19 @@ gen profit_pct = .
 */
 
 ***********************************************************************
-* 	PART 4:  Generating unit price variables
+* 	PART 5:  Generating unit price variables
 ***********************************************************************	
 {
 	* price
-gen price_exp  = total_revenue_ / total_qty_
-lab var price_exp "Export price"
+gen price_exp  = value / quantity
+lab var price_exp "Average unit price"
 
 
-gen price_exp_w99  = total_revenue__w99 / total_qty__w99
-lab var price_exp_w99 "Export price, winsorized"
+gen price_exp_w99  = value_w99 / quantity_w99
+lab var price_exp_w99 "Average unit price, winsorized"
 
-gen price_exp_w95  = total_revenue__w95 / total_qty__w95
-lab var price_exp_w95 "Export price, winsorized"
+gen price_exp_w95  = value_w95 / quantity_w95
+lab var price_exp_w95 "Average unit price, winsorized"
 
 foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 	gen l`var' = log(`var')
@@ -100,11 +131,11 @@ foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 * 	PART 4:  Export dummy
 ***********************************************************************
 	* export dummy
-gen exported = (total_revenue_ > 0)
-	replace exported = . if total_revenue_ == .  // account for MVs
-	replace exported = 1 if exported == . & (total_revenue_ < . & total_revenue_ > 0) // account for customs data
+gen exported = (value > 0)
+	replace exported = . if value == .  // account for MVs
+	replace exported = 1 if exported == . & (value < . & value > 0) // account for customs data
 
 ***********************************************************************
 * 	PART :  Save directory to progress folder
 ***********************************************************************
-save "${final}/cepex_long", replace
+save "${final}/cepex_panel_final", replace
