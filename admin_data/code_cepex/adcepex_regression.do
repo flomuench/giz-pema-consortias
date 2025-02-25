@@ -46,8 +46,11 @@ lab val exported exp
 }
 
 ***********************************************************************
-* 	PART 0: Check how many firms got matched/not matched (either no export or wrong legal id)
+* 	PART 2: Check how many firms got matched/not matched (either no export or wrong legal id)
 ***********************************************************************
+* does not make sense here as we assume if not matched it is because firm did not export
+	* this approach has the weakness that service firms are assumed to not export 
+/*
 lab def match 1 "matched" 0 "not matched"
 lab val not_matched match
 
@@ -59,13 +62,14 @@ forvalues s = 1(1)4 {
 			ytitle("No of Firms") title("`p'")
 		gr export "${fig_`p'}/matchN_`s'.pdf", replace
 	}
+*/
 
 ***********************************************************************
-* 	PART 1: Check pre-treatment balance table
+* 	PART 3: Check pre-treatment balance table
 ***********************************************************************
 * BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
 	* loop elements
-local balancevar "value quantity countries products"
+local balancevar "value_dfl quantity countries products"
 local fmt "xlsx tex"
 local programs "aqe cf ecom all"
 	
@@ -87,7 +91,7 @@ iebaltab `balancevar' if year == 2020, ///
 {
 	* look at distribution
 			* Treatment vs control
-local vars "value num_combos_ countries products" // quantity
+local vars "value_dfl quantity countries products price_exp" // quantity
 local programs "aqe cf ecom all"
 
 forvalues s = 1(1)4 {
@@ -109,7 +113,7 @@ forvalues s = 1(1)4 {
 }
 
 
-local vars "value num_combos_ countries products" // quantity
+local vars "value_dfl quantity countries products price_exp" // quantity
 local programs "aqe cf ecom all"
 forvalues s = 1(1)4 {
 	gettoken p programs : programs
@@ -121,7 +125,7 @@ forvalues s = 1(1)4 {
 
 
 		* Take-up vs. drop-out + control
-local vars "value num_combos_ countries products" // quantity
+local vars "value_dfl quantity countries products price_exp" // quantity
 local programs "aqe cf ecom all"
 
 forvalues s = 1(1)4 {
@@ -143,7 +147,7 @@ forvalues s = 1(1)4 {
 }
 
 
-local vars "value num_combos_ countries products" // quantity
+local vars "value_dfl quantity countries products price_exp" // quantity
 local programs "aqe cf ecom all"
 forvalues s = 1(1)4 {
 	gettoken p programs : programs
@@ -214,6 +218,13 @@ xtreg countries i.treatment4##ib2020.year, fe cluster(id)
 
 xtreg products i.treatment4##ib2020.year, fe cluster(id)
 
+
+	* Callaway & Sant'Anna
+csdid value_dfl_w95 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid_plot
+
+
+csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 
 	
 capture program drop rcts_event // enables re-running

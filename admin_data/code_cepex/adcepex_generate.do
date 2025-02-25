@@ -134,6 +134,23 @@ foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 gen exported = (value > 0)
 	replace exported = . if value == .  // account for MVs
 	replace exported = 1 if exported == . & (value < . & value > 0) // account for customs data
+	
+
+	
+***********************************************************************
+* 	PART 5:  Create treatment variables for staggered Did
+***********************************************************************
+* Callaway & Sant'Anna estimator
+
+gen first_treat = ., a(treatment4)
+	replace first_treat = 0 if treatment4 == 0
+	replace first_treat = 2021 if treatment1 == 1
+	replace first_treat = 2022 if treatment2 == 1 | treatment3 == 1
+	
+tab first_treat, missing
+
+
+
 
 ***********************************************************************
 * 	PART :  Save directory to progress folder
