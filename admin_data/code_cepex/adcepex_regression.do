@@ -220,11 +220,57 @@ xtreg products i.treatment4##ib2020.year, fe cluster(id)
 
 
 	* Callaway & Sant'Anna
+		* Exported dummy
+			* all programs - treatment
+csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+// null effect
+
+			* all programs - take-up
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+// null effect
+
+
+			* Heterogeneity by program
+
+				* AQE
+xtreg exported i.treatment1##ib2020.year, fe cluster(id)
+xtreg exported i.take_up1##ib2020.year, fe cluster(id)
+			
+				* E-Commerce
+xtreg exported i.treatment2##ib2021.year, fe cluster(id)
+xtreg exported i.take_up2##ib2021.year, fe cluster(id)
+
+				* CF
+xtreg exported i.treatment3##ib2021.year, fe cluster(id)
+xtreg exported i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
+
+
+			* Heterogeneity by prior export status
+			
+		* Export value
+			
+			
+			
+			
+csdid_plot
+csdid exported treatment3, ivar(id) time(year) gvar(first_treat) method(reg)
+
+		
 csdid value_dfl_w95 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 csdid_plot
 
 
 csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+
+
+csdid exported treatment3, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid_plot
 
 	
 capture program drop rcts_event // enables re-running
