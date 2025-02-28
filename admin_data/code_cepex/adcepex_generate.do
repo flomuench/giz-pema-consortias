@@ -150,6 +150,12 @@ gen first_treat = ., a(treatment4)
 tab first_treat, missing
 
 
+gen first_treat_take_up = ., a(take_up4)
+	replace first_treat_take_up = 0 if take_up4 == 0
+	replace first_treat_take_up = 2021 if take_up1 == 1
+	replace first_treat_take_up = 2022 if take_up2 == 1 | take_up3 == 1
+
+
 
 
 ***********************************************************************

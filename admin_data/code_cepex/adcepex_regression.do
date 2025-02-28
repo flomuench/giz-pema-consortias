@@ -67,6 +67,7 @@ forvalues s = 1(1)4 {
 ***********************************************************************
 * 	PART 3: Check pre-treatment balance table
 ***********************************************************************
+{
 * BALANCE - PRE TREATMENT BALANCE TABLE 2020 compare treatment vs control for the whole sampple and then each program
 	* loop elements
 local balancevar "value_dfl quantity countries products"
@@ -82,9 +83,9 @@ iebaltab `balancevar' if year == 2020, ///
     rowvarlabels ///
     save`f'("${tab_`p'}/bt_cepex_treat`s'.`f'") replace
 	}
+  }
+
 }
-
-
 ***********************************************************************
 * 	PART 2: Annual density distributions in T vs. C
 ***********************************************************************
@@ -220,7 +221,7 @@ xtreg products i.treatment4##ib2020.year, fe cluster(id)
 
 
 	* Callaway & Sant'Anna
-		* Exported dummy
+		*** Exported dummy ***
 			* all programs - treatment
 csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
@@ -229,9 +230,10 @@ csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg
 // null effect
 
 			* all programs - take-up
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(group)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(calendar)
+csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(simple)
 
 // null effect
 
@@ -253,7 +255,48 @@ xtreg exported i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 ne
 
 			* Heterogeneity by prior export status
 			
-		* Export value
+		*** Export value ***
+			* all programs - treatment
+				
+csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+
+csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+// null effect
+
+			* all programs - take-up
+csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg)
+csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(group)
+csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(calendar)
+csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(simple)
+
+
+
+// null effect
+
+
+			* Heterogeneity by program
+
+				* AQE
+xtreg value_dfl i.treatment1##ib2020.year, fe cluster(id)
+xtreg value_dfl i.take_up1##ib2020.year, fe cluster(id)
+			
+				* E-Commerce
+xtreg value_dfl i.treatment2##ib2021.year, fe cluster(id)
+xtreg value_dfl i.take_up2##ib2021.year, fe cluster(id)
+
+				* CF
+xtreg value_dfl i.treatment3##ib2021.year, fe cluster(id)
+xtreg value_dfl i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
 			
 			
 			
