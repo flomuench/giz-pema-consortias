@@ -190,37 +190,6 @@ forvalues s = 1(1)4 {
 ***********************************************************************
 {
 	
-	* shift ttt variable as Stata does not accept negative factors
-gen ttt_sh = ttt + 2
-	
-	* test
-reg value i.ttt_sh#ib0.treatment4 i.strata4, cluster(id)\\
-
-reg value i.treatment4 L1.value i.strata4 if year == 2021, cluster(id)
-
-reg value i.treatment4 L2.value i.strata4 if year == 2022, cluster(id)
-reg value i.treatment4 L3.value i.strata4 if year == 2023, cluster(id)
-reg value i.treatment4 L4.value i.strata4 if year == 2024, cluster(id)
-
-
-reg value i.treatment4 L2.value_w95 i.strata4 if year == 2022, cluster(id)
-reg value i.treatment4 L3.value_w95 i.strata4 if year == 2023, cluster(id)
-reg value i.treatment4 L4.value_w95 i.strata4 if year == 2024, cluster(id)
-
-
-	* Cai/Szeidl, Mckenzie/Woodruff FE specification
-xtreg value_dfl i.treatment4##ib2020.year, fe cluster(id)
-xtreg value_dfl_w95 i.treatment4##ib2020.year, fe cluster(id)
-xtreg ihs_value_dfl_w95 i.treatment4##ib2020.year, fe cluster(id)
-xtreg ihs_value_dfl_w99 i.treatment4##ib2020.year, fe cluster(id)
-
-
-xtreg countries i.treatment4##ib2020.year, fe cluster(id)
-
-xtreg products i.treatment4##ib2020.year, fe cluster(id)
-
-
-	* Callaway & Sant'Anna
 		*** Exported dummy ***
 			* all programs - treatment
 csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
@@ -239,7 +208,6 @@ csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(re
 
 
 			* Heterogeneity by program
-
 				* AQE
 xtreg exported i.treatment1##ib2020.year, fe cluster(id)
 xtreg exported i.take_up1##ib2020.year, fe cluster(id)
@@ -254,19 +222,45 @@ xtreg exported i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 ne
 
 
 			* Heterogeneity by prior export status
+					* All programs
+						* No export in t-1
+csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) // AQE 
+csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+						* Export in t-1 // no effect among firms with prior export experience
+csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg)
+csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
+csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+
+					* AQE
+xtreg exported i.treatment1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg exported i.take_up1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg exported i.treatment1##ib2020.year if pre_export == 1, fe cluster(id)
+xtreg exported i.take_up1##ib2020.year if pre_export == 1, fe cluster(id)
+			
+					* E-Commerce
+xtreg exported i.treatment2##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg exported i.take_up2##ib2021.year if pre_export == 0, fe cluster(id)
+
+					* CF
+xtreg exported i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg exported i.take_up3##ib2021.year if pre_export == 0, fe cluster(id) // seems like take_up3 needs review!
+
 			
 		*** Export value ***
 			* all programs - treatment
-				
+				* abs value in euro deflated
 csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
 csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
 
-
+				* wins abs value in euro deflated
 csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
 csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
 
+				* ihs wins abs value in euro deflated
 csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
 csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
 csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)

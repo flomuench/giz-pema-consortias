@@ -128,12 +128,29 @@ foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 }
 	
 ***********************************************************************
-* 	PART 4:  Export dummy
+* 	PART 4:  Export
 ***********************************************************************
 	* export dummy
 gen exported = (value > 0)
 	replace exported = . if value == .  // account for MVs
 	replace exported = 1 if exported == . & (value < . & value > 0) // account for customs data
+	
+	* export in t-1 dummy for heterogeneity analysis
+gen pre_export = ., a(exported)
+	
+egen export_temp = min(exported) if year == 2020, by(id)
+egen export_2020 = min(export_temp), by(id)
+drop export_temp
+egen export_temp = min(exported) if year == 2021, by(id)
+egen export_2021 = min(export_temp), by(id)
+drop export_temp
+
+	 replace pre_export = export_2020 if program1 == 1
+	 replace pre_export = export_2021 if program2 == 1 | program3 == 1
+	 
+lab def prior_export 0 "no export in t-1" 1 "export in t-1"
+lab val pre_export prior_export
+
 	
 
 	
