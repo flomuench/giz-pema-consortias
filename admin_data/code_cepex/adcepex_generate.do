@@ -130,6 +130,7 @@ foreach var of varlist price_exp price_exp_w99 price_exp_w95 {
 ***********************************************************************
 * 	PART 4:  Export
 ***********************************************************************
+{
 	* export dummy
 gen exported = (value > 0)
 	replace exported = . if value == .  // account for MVs
@@ -152,7 +153,7 @@ lab def prior_export 0 "no export in t-1" 1 "export in t-1"
 lab val pre_export prior_export
 
 	
-
+}
 	
 ***********************************************************************
 * 	PART 5:  Create treatment variables for staggered Did
@@ -171,6 +172,13 @@ gen first_treat_take_up = ., a(take_up4)
 	replace first_treat_take_up = 0 if take_up4 == 0
 	replace first_treat_take_up = 2021 if take_up1 == 1
 	replace first_treat_take_up = 2022 if take_up2 == 1 | take_up3 == 1
+	
+	
+* fixed effect post-specification
+gen post = 0
+	replace post = 1 if program1 == 1 & year > 2020
+	replace post = 1 if program2 == 1 & year > 2021
+	replace post = 1 if program3 == 1 & year > 2021
 
 
 

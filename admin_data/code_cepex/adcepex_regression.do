@@ -86,6 +86,7 @@ iebaltab `balancevar' if year == 2020, ///
   }
 
 }
+
 ***********************************************************************
 * 	PART 2: Annual density distributions in T vs. C
 ***********************************************************************
@@ -186,37 +187,40 @@ forvalues s = 1(1)4 {
 }		 
 		 
 ***********************************************************************
-* 	PART : Event study analysis
+* 	PART : Regressions
 ***********************************************************************
 {
-	
-		*** Exported dummy ***
+
+* Explorative	
+	*** Exported dummy ***
+{
 			* all programs - treatment
-csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+xtreg exported i.treatment4##ib2020.year, fe cluster(id)
 
 // null effect
 
 			* all programs - take-up
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg)
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(group)
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(calendar)
-csdid exported take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(simple)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid exported strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple) // tight zero: -5 to 5
 
 // null effect
-
 
 			* Heterogeneity by program
 				* AQE
 xtreg exported i.treatment1##ib2020.year, fe cluster(id)
 xtreg exported i.take_up1##ib2020.year, fe cluster(id)
 			
-				* E-Commerce
+				* CF
 xtreg exported i.treatment2##ib2021.year, fe cluster(id)
 xtreg exported i.take_up2##ib2021.year, fe cluster(id)
 
-				* CF
+				* E-Commerce
 xtreg exported i.treatment3##ib2021.year, fe cluster(id)
 xtreg exported i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
 
@@ -224,14 +228,14 @@ xtreg exported i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 ne
 			* Heterogeneity by prior export status
 					* All programs
 						* No export in t-1
-csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) // AQE 
-csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid exported treatment4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid exported strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) // AQE 
+csdid exported strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid exported strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
 
 						* Export in t-1 // no effect among firms with prior export experience
-csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid exported treatment4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid exported strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid exported strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid exported strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
 
 					* AQE
 xtreg exported i.treatment1##ib2020.year if pre_export == 0, fe cluster(id)
@@ -239,43 +243,65 @@ xtreg exported i.take_up1##ib2020.year if pre_export == 0, fe cluster(id)
 xtreg exported i.treatment1##ib2020.year if pre_export == 1, fe cluster(id)
 xtreg exported i.take_up1##ib2020.year if pre_export == 1, fe cluster(id)
 			
-					* E-Commerce
+					* CF
 xtreg exported i.treatment2##ib2021.year if pre_export == 0, fe cluster(id)
 xtreg exported i.take_up2##ib2021.year if pre_export == 0, fe cluster(id)
 
-					* CF
-xtreg exported i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
-xtreg exported i.take_up3##ib2021.year if pre_export == 0, fe cluster(id) // seems like take_up3 needs review!
+xtreg exported i.treatment2##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg exported i.take_up2##ib2021.year if pre_export == 1, fe cluster(id)
 
-			
-		*** Export value ***
-			* all programs - treatment
+					* Ecommerce
+xtreg exported i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg exported i.take_up3##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg exported i.treatment3##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg exported i.take_up3##ib2021.year if pre_export == 1, fe cluster(id)
+
+}		
+
+	*** Export value ***
+{
+	* all programs - treatment
 				* abs value in euro deflated
-csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid value_eur_dfl treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid value_eur_dfl strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid value_eur_dfl strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid value_eur_dfl strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+
+ppmlhdfe value_eur_dfl_w99 i.treatment4##i.post, cluster(id) absorb(id)
+
 
 				* wins abs value in euro deflated
-csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
 
 				* ihs wins abs value in euro deflated
-csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid ihs_value_eur_dfl_w99 treatment4, ivar(id) time(year) gvar(first_treat) method(reg) agg(simple)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
 
 // null effect
 
 			* all programs - take-up
-csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg)
-csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(group)
-csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(calendar)
-csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(reg) agg(simple)
-
-
-
-// null effect
+				* abs value
+csdid value_dfl strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid value_dfl strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid value_dfl strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid value_dfl strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple) // 632,818
+			
+				* wins abs value in euro deflated
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple) // 66,865				
+				
+				
+				* ihs wins abs value in euro deflated
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid ihs_value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple) // null effect
 
 
 			* Heterogeneity by program
@@ -284,31 +310,264 @@ csdid value_dfl take_up4, ivar(id) time(year) gvar(first_treat_take_up) method(r
 xtreg value_dfl i.treatment1##ib2020.year, fe cluster(id)
 xtreg value_dfl i.take_up1##ib2020.year, fe cluster(id)
 			
-				* E-Commerce
+				* CF
 xtreg value_dfl i.treatment2##ib2021.year, fe cluster(id)
 xtreg value_dfl i.take_up2##ib2021.year, fe cluster(id)
 
-				* CF
+				* E-Commerce
 xtreg value_dfl i.treatment3##ib2021.year, fe cluster(id)
 xtreg value_dfl i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
+
+
+
+			* Heterogeneity by prior export status
+					* All programs
+						* No export in t-1
+csdid value_eur_dfl strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid value_eur_dfl strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid value_eur_dfl strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+						* Export in t-1 // no effect among firms with prior export experience
+csdid value_eur_dfl strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid value_eur_dfl strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid value_eur_dfl strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+					* AQE
+xtreg value_eur_dfl i.treatment1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg value_eur_dfl i.take_up1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg value_eur_dfl i.treatment1##ib2020.year if pre_export == 1, fe cluster(id)
+xtreg value_eur_dfl i.take_up1##ib2020.year if pre_export == 1, fe cluster(id)
 			
+					* CF
+xtreg value_eur_dfl i.treatment2##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg value_eur_dfl i.take_up2##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg value_eur_dfl i.treatment2##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg value_eur_dfl i.take_up2##ib2021.year if pre_export == 1, fe cluster(id)
+
+					* Ecommerce
+xtreg value_eur_dfl i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg value_eur_dfl i.take_up3##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg value_eur_dfl i.treatment3##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg value_eur_dfl i.take_up3##ib2021.year if pre_export == 1, fe cluster(id)
 			
+}		
 			
+
 			
-csdid_plot
-csdid exported treatment3, ivar(id) time(year) gvar(first_treat) method(reg)
+	*** Countries ***
+{
+	* all programs - treatment
+				* abs count
+csdid countries strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid countries strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid countries strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
 
-		
-csdid value_dfl_w95 treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
-csdid_plot
+ppmlhdfe countries i.treatment4##i.post, cluster(id) absorb(id) // 1290 obs not included
 
 
-csdid exported treatment4, ivar(id) time(year) gvar(first_treat) method(reg)
+				* wins abs value in euro deflated
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+				* ihs wins abs value in euro deflated
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+// null effect
+
+			* all programs - take-up
+				* abs value
+csdid countries strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid countries strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid countries strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid countries strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+			
+				* wins abs value in euro deflated
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+				
+				* ihs wins abs value in euro deflated
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid ihs_countries_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+
+			* Heterogeneity by program
+
+				* AQE
+xtreg countries i.treatment1##ib2020.year, fe cluster(id)
+xtreg countries i.take_up1##ib2020.year, fe cluster(id)
+
+ppmlhdfe countries i.treatment1##i.post, cluster(id) absorb(id)
+ppmlhdfe countries i.take_up1##i.post, cluster(id) absorb(id)
+
+			
+				* CF
+xtreg countries i.treatment2##ib2021.year, fe cluster(id)
+xtreg countries i.take_up2##ib2021.year, fe cluster(id)
+
+ppmlhdfe countries i.treatment2##i.post, cluster(id) absorb(id) // very little obs, only 35 firms
+ppmlhdfe countries i.take_up2##i.post, cluster(id) absorb(id) // same
+
+				* E-Commerce
+xtreg countries i.treatment3##ib2021.year, fe cluster(id)
+xtreg countries i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
+
+ppmlhdfe countries i.treatment3##i.post, cluster(id) absorb(id)
+ppmlhdfe countries i.take_up3##i.post, cluster(id) absorb(id)
 
 
-csdid exported treatment3, ivar(id) time(year) gvar(first_treat) method(reg) agg(calendar)
-csdid_plot
 
+			* Heterogeneity by prior export status
+					* All programs
+						* No export in t-1
+csdid countries strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid countries strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid countries strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+						* Export in t-1 // no effect among firms with prior export experience
+csdid countries strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid countries strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid countries strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+					* AQE
+xtreg countries i.treatment1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg countries i.take_up1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg countries i.treatment1##ib2020.year if pre_export == 1, fe cluster(id)
+xtreg countries i.take_up1##ib2020.year if pre_export == 1, fe cluster(id)
+			
+					* CF
+xtreg countries i.treatment2##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg countries i.take_up2##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg countries i.treatment2##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg countries i.take_up2##ib2021.year if pre_export == 1, fe cluster(id)
+
+					* Ecommerce
+xtreg countries i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg countries i.take_up3##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg countries i.treatment3##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg countries i.take_up3##ib2021.year if pre_export == 1, fe cluster(id)
+			
+}		
+
+
+
+
+	*** Products ***
+{
+	* all programs - treatment
+				* abs count
+csdid products strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid products strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid products strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+ppmlhdfe products i.treatment4##i.post, cluster(id) absorb(id) // 1290 obs not included
+
+
+				* wins abs value in euro deflated
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+				* ihs wins abs value in euro deflated
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+// null effect
+
+			* all programs - take-up
+				* abs value
+csdid products strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid products strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid products strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid products strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+			
+				* wins abs value in euro deflated
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+				
+				* ihs wins abs value in euro deflated
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw)
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(group)
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(calendar)
+csdid ihs_products_w99 strata4, ivar(id) time(year) gvar(first_treat_take_up) method(dripw) agg(simple)
+
+			* Heterogeneity by program
+
+				* AQE
+xtreg products i.treatment1##ib2020.year, fe cluster(id)
+xtreg products i.take_up1##ib2020.year, fe cluster(id)
+
+ppmlhdfe products i.treatment1##i.post, cluster(id) absorb(id)
+ppmlhdfe products i.take_up1##i.post, cluster(id) absorb(id)
+
+			
+				* CF
+xtreg products i.treatment2##ib2021.year, fe cluster(id)
+xtreg products i.take_up2##ib2021.year, fe cluster(id)
+
+ppmlhdfe products i.treatment2##i.post, cluster(id) absorb(id) // very little obs, only 35 firms
+ppmlhdfe products i.take_up2##i.post, cluster(id) absorb(id) // same
+
+				* E-Commerce
+xtreg products i.treatment3##ib2021.year, fe cluster(id)
+xtreg products i.take_up3##ib2021.year, fe cluster(id) // seems like take_up3 needs review!
+
+ppmlhdfe products i.treatment3##i.post, cluster(id) absorb(id)
+ppmlhdfe products i.take_up3##i.post, cluster(id) absorb(id)
+
+
+
+			* Heterogeneity by prior export status
+					* All programs
+						* No export in t-1
+csdid products strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid products strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid products strata4 if pre_export == 0, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+						* Export in t-1 // no effect among firms with prior export experience
+csdid products strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw)
+csdid products strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(calendar)
+csdid products strata4 if pre_export == 1, ivar(id) time(year) gvar(first_treat) method(dripw) agg(simple)
+
+					* AQE
+xtreg products i.treatment1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg products i.take_up1##ib2020.year if pre_export == 0, fe cluster(id)
+xtreg products i.treatment1##ib2020.year if pre_export == 1, fe cluster(id)
+xtreg products i.take_up1##ib2020.year if pre_export == 1, fe cluster(id)
+			
+					* CF
+xtreg products i.treatment2##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg products i.take_up2##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg products i.treatment2##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg products i.take_up2##ib2021.year if pre_export == 1, fe cluster(id)
+
+					* Ecommerce
+xtreg products i.treatment3##ib2021.year if pre_export == 0, fe cluster(id)
+xtreg products i.take_up3##ib2021.year if pre_export == 0, fe cluster(id)
+
+xtreg products i.treatment3##ib2021.year if pre_export == 1, fe cluster(id)
+xtreg products i.take_up3##ib2021.year if pre_export == 1, fe cluster(id)
+			
+}		
+
+
+
+***********************************************************************
+* 	PART : Archive
+***********************************************************************
 	
 capture program drop rcts_event // enables re-running
 program rcts_event

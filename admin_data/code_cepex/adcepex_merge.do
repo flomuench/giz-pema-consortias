@@ -99,6 +99,7 @@ codebook ndgcf
 encode programme, gen(program)
 drop programme exporter
 rename strata_final strata
+sort program, stable
 reshape wide id id_plateforme firmname matricule_fiscale treatment take_up strata program_num, i(ndgcf) j(program)
 /* Result: 
 Data                               long   ->   wide

@@ -1,4 +1,4 @@
-* 00000035
+* 00000040
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -1172,4 +1172,260 @@ f i\iematch.ado
 f i\iematch.sthlp
 f i\iesave.ado
 f i\iesave.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/c
+N csdid.pkg
+D  5 Mar 2025
+U 36
+d 'CSDID': module for the estimation of Difference-in-Difference models with multiple time periods
+d 
+d  CSDID implements Callaway and Sant'Anna (2020) estimator for DID
+d models with multiple time periods. The main idea of CSDID is that
+d consistent estimations for ATT's can be obtained by ignoring 2x2
+d DID design that compare late treated units with earlier treated
+d units. In the presence of heterogeneous and dynamic effects, this
+d type of comparison can severely bias the estimation of Treatment
+d effects. CSDID at its core uses DRDID for the estimation of all
+d 2x2 DID designs to estimate all relevant ATTGT's (Average
+d treatment effects of the treated for group G at time T). Post
+d estimation commands can be used to obtain important aggregations.
+d CSDID can be used with panel data and repeated cross-section. 
+d 
+d KW: difference in differences
+d KW: DID
+d KW: event studies
+d KW: drdid
+d 
+d Requires: Stata version 14 and drdid from SSC (q.v.)
+d 
+d Distribution-Date: 20230225
+d 
+d Author: Fernando Rios-Avila, Levy Economics Institute of Bard College
+d Support: email friosavi@@levy.org
+d 
+d Author: Pedro H.C. Sant'Anna, Vanderbilt University
+d Support: email pedro.h.santanna@@vanderbilt.edu
+d 
+d Author: Brantly Callaway, University of Georgia
+d Support: email brantly.callaway@@uga.edu
+d 
+f c\csdid.ado
+f c\csdid_estat.ado
+f c\csdid_rif.ado
+f c\csdid_stats.ado
+f c\csdid_table.ado
+f c\csdid_plot.ado
+f _\_gcsgvar.ado
+f t\tsvmat.ado
+f c\csdid.sthlp
+f c\csdid_postestimation.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/d
+N drdid.pkg
+D  5 Mar 2025
+U 37
+d 'DRDID': module for the estimation of Doubly Robust Difference-in-Difference models
+d 
+d  DRDID implements Sant'Anna and Zhao (2020) proposed estimators
+d for the Average Treatment Effect on the Treated (ATT) in
+d Difference-in-Differences (DID) setups where the parallel trends
+d assumption holds after conditioning on a vector of pre-treatment
+d covariates. For a generalization to multiple periods see CSDID.
+d  The main estimators in DRDID are locally efficient and
+d doubly-robust estimators, because they combine Inverse
+d probability weighting and outcome regression to estimate ATT's.
+d  DRDID can be applied to both balanced/unbalanced panel data, or
+d repeated cross-section.
+d 
+d KW: difference in differences
+d KW: DID
+d KW: pretreatment covariates
+d KW: csdid
+d 
+d Requires: Stata version 14
+d 
+d Distribution-Date: 20221018
+d 
+d Author: Fernando Rios-Avila, Levy Economics Institute of Bard College
+d Support: email friosavi@@levy.org
+d 
+d Author: Pedro H.C. Sant'Anna, Vanderbilt University
+d Support: email pedro.h.santanna@@vanderbilt.edu
+d 
+d Author:  Asjad Naqvi, International Institute for Applied Systems Analysis
+d Support: email snaqvi@@wu.ac.at
+d 
+f d\drdid.ado
+f d\drdid_display.ado
+f d\drdid_predict.ado
+f _\_gmm_regipw.ado
+f _\_het_did_gmm.ado
+f _\_gmm_dripw.ado
+f _\_gmm_repeated.ado
+f d\drdid.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/r
+N reghdfe.pkg
+D  5 Mar 2025
+U 38
+d 'REGHDFE': module to perform linear or instrumental-variable regression absorbing any number of high-dimensional fixed effects
+d 
+d  reghdfe fits a linear or instrumental-variable regression
+d absorbing an arbitrary number of categorical factors and
+d factorial interactions Optionally, it saves the estimated fixed
+d effects.
+d 
+d KW: regression
+d KW: instrumental variables
+d KW: fixed effects
+d KW: high dimension fixed effects
+d 
+d Requires: Stata version 11.2
+d 
+d Distribution-Date: 20230821
+d 
+d Author: Sergio Correia, Board of Governors of the Federal Reserve System
+d Support: email sergio.correia@@gmail.com
+d 
+f r\reghdfe.ado
+f r\reghdfe.mata
+f r\reghdfe3.ado
+f r\reghdfe_p.ado
+f r\reghdfe3_p.ado
+f r\reghdfe5.ado
+f r\reghdfe5_p.ado
+f r\reghdfe_estat.ado
+f r\reghdfe3_estat.ado
+f r\reghdfe5_estat.ado
+f r\reghdfe_parse.ado
+f r\reghdfe5_parse.ado
+f r\reghdfe_footnote.ado
+f r\reghdfe3_footnote.ado
+f r\reghdfe5_footnote.ado
+f e\estfe.ado
+f r\reghdfe_header.ado
+f r\reghdfe5_header.ado
+f r\reghdfe5_parse.ado
+f r\reghdfe.sthlp
+f r\reghdfe3.sthlp
+f r\reghdfe5.sthlp
+f r\reghdfe.mata
+f r\reghdfe_programming.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/f
+N ftools.pkg
+D  5 Mar 2025
+U 39
+d 'FTOOLS': module to provide alternatives to common Stata commands optimized for large datasets
+d 
+d  ftools consists of a Mata file and several Stata commands: The
+d Mata file creates identifiers (factors) from variables by using
+d hash functions instead of sorting the data, so it runs in time
+d O(N) and not in O(N log N). The Stata commands exploit this to
+d avoid sort operations,  at the cost of being slower for small
+d datasets (mainly because of the cost involved in moving data from
+d Stata to Mata). Implemented commands are fcollapse, fegen group,
+d and fsort. Note that most of the capabilities of levels and
+d contract are already supported by these commands. Possible
+d commands include more egen functions and merge and reshape
+d alternatives.
+d 
+d KW: levels
+d KW: collapse
+d KW: contract
+d KW: egen
+d KW: sort
+d KW: factor variables
+d KW: Mata
+d 
+d Requires: Stata version 11.2
+d 
+d Distribution-Date: 20230821
+d 
+d Author: Sergio Correia, Board of Governors of the Federal Reserve System
+d Support: email sergio.correia@@gmail.com
+d 
+f f\ftools.ado
+f f\ftools.mata
+f f\ftools.sthlp
+f f\fcollapse.ado
+f f\fcollapse.sthlp
+f f\fegen.ado
+f f\fegen_group.ado
+f f\fegen.sthlp
+f f\fisid.ado
+f f\fisid.sthlp
+f f\flevelsof.ado
+f f\flevelsof.sthlp
+f f\fmerge.ado
+f f\fmerge.sthlp
+f f\freshape.ado
+f f\fsort.ado
+f f\fsort.sthlp
+f f\ftab.ado
+f j\join.ado
+f j\join.sthlp
+f l\local_inlist.ado
+f l\local_inlist.sthlp
+f f\fcollapse_functions.mata
+f f\fcollapse_main.mata
+f f\ftools_type_aliases.mata
+f f\ftools.mata
+f f\ftools_common.mata
+f f\ftools_hash1.mata
+f f\ftools_main.mata
+f f\ftools_experimental.mata
+f f\ftools_plugin.mata
+f f\ftools_type_aliases.mata
+f m\ms_compile_mata.ado
+f m\ms_expand_varlist.ado
+f m\ms_fvstrip.ado
+f m\ms_fvstrip.sthlp
+f m\ms_fvunab.ado
+f m\ms_get_version.ado
+f m\ms_parse_absvars.ado
+f m\ms_parse_varlist.ado
+f m\ms_parse_vce.ado
+f m\ms_add_comma.ado
+e
+S http://fmwww.bc.edu/repec/bocode/p
+N ppmlhdfe.pkg
+D  5 Mar 2025
+U 40
+d 'PPMLHDFE': module for Poisson pseudo-likelihood regression with multiple levels of fixed effects
+d 
+d   ppmlhdfe implements Poisson pseudo-maximum likelihood
+d regressions (PPML) with multi-way fixed effects, as  described
+d by Correia, Guimarães, Zylkin (arXiv:1903.01690).  The estimator
+d employed is robust to statistical separation and    convergence
+d issues, due to the procedures developed in Correia, Guimarães,
+d Zylkin (arXiv:1903.01633).
+d 
+d KW: Poisson pseudo-likelihood
+d KW: ppml
+d KW: fixed effects
+d KW: high dimension fixed effects
+d 
+d Requires: Stata version 11.2, reghdfe, ftools  from SSC (q.v.)
+d 
+d Distribution-Date: 20230907
+d 
+d Author: Sergio Correia, Board of Governors of the Federal Reserve System
+d Support: email sergio.correia@@gmail.com
+d 
+d Author: Paulo Guimaraes, University of Porto
+d Support: email pguimaraes@@fep.up.pt
+d 
+d Author: Thomas Zylkin, University of Richmond
+d Support: email tzylkin@@richmond.edu
+d 
+f p\ppmlhdfe.ado
+f p\ppmlhdfe.sthlp
+f p\ppmlhdfe_header.ado
+f p\ppmlhdfe_p.ado
+f p\ppmlhdfe.mata
+f r\reghdfe5.mata
+f p\ppmlhdfe_functions.mata
+f p\ppmlhdfe_separation_relu.mata
+f p\ppmlhdfe_separation_simplex.mata
 e

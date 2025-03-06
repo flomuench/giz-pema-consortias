@@ -129,8 +129,7 @@ log using "${data}/logfile.log", replace
 	PART 3.1: Import raw data
 	Requires:
 	Creates: cepex_raw.dta, enterprises.dta
-----------------save "${intermediate}/cepex_panel_final", replace
-------------------------------------------------------*/
+----------------------------------------------------------------------*/
 if (1) do "${code}/adcepex_import.do"
 /* --------------------------------------------------------------------
 	PART 3.2: Aggregate raw data to firm-year panel & firm pre-post data set
