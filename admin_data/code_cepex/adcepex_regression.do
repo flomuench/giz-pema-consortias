@@ -270,6 +270,8 @@ csdid value_eur_dfl strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
 
 ppmlhdfe value_eur_dfl_w99 i.treatment4##i.post, cluster(id) absorb(id)
 
+xtreg exported i.treatment1##i.post i.treatment2##i.post i.treatment3##i.post, fe cluster(id)
+
 
 				* wins abs value in euro deflated
 csdid value_eur_dfl_w99 strata4, ivar(id) time(year) gvar(first_treat) method(dripw)
