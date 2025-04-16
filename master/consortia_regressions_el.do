@@ -7470,6 +7470,39 @@ ivreg2 ca_exp_abs_growth i.strata_final (take_up = i.treatment) if surveyround =
 reg ca_tun_abs_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster)
 ivreg2 ca_tun_abs_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 
+
+	* comparing log vs. ihs vs. rel growth rate
+		* all obs
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
+reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 112 obs
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster) // 110 obs
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+		* no ca = 0
+reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 112 obs
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0, cluster(consortia_cluster) // 112 obs
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3 & ca ! = 0, cluster(consortia_cluster) // 104 obs
+
+
+		* BH sample ihs vs. log with zeros
+reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0 & bh_sample == 1, cluster(consortia_cluster) // N = 105
+reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3 & lca != 0 & bh_sample == 1, cluster(consortia_cluster) // N = 105
+reg ca_rel_growth i.treatment i.strata_final if surveyround == 3 & ca ! = 0 & bh_sample == 1, cluster(consortia_cluster) // 97 obs
+
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
+ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
+
+
+
+/*
+results are sensitive to inclusion of zeros. However, these zeros are real and correspond to firms that have closed.
+These closures are higher/more prevalent in the control group. The effect direction does not change but the magnitude
+and significance. 
+
+*/
+
+
+
 *** For presentation & For paper
 	* Business Performance: Sales
 capture program drop rct_regression_fin // enables re-running
@@ -7480,7 +7513,7 @@ version 16							// define Stata version 15 used
 			capture confirm variable `var'_y0
 			if _rc == 0 {
 				// ITT: ANCOVA plus stratification dummies
-				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(consortia_cluster) // & bh_sample == 1
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // & bh_sample == 1
 						* add to latex table
 					estadd local bl_control "Yes" : `var'1
 					estadd local strata_final "Yes" : `var'1
@@ -7489,7 +7522,7 @@ version 16							// define Stata version 15 used
 					local fmt_itt_`var' : display %3.2f `itt_`var''	
 				
 				// ATT, IV
-				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first // & bh_sample == 1
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first // & bh_sample == 1
 						* add to latex table
 					estadd local bl_control "Yes" : `var'2
 					estadd local strata_final "Yes" : `var'2

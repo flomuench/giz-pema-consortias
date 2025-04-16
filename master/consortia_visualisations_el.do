@@ -278,29 +278,40 @@ putpdf pagebreak
 
 }
 
-****** Section 3: Export ******
+
+****** Section 3: sales *******
 {
-cd "${master_output}/figures/endline/export"
-putpdf paragraph,  font("Courier", 20)
-putpdf text ("Section 3: Export"), bold
+	
+	* Compare distributions of sales, ihs-sales, and log-sales
+twoway (kdensity lca if surveyround == 3, xaxis(1) yaxis(1)) ///
+	   (kdensity ihs_ca_w95_k1 if surveyround == 3, xaxis(2) yaxis(2)) ///
+	   (kdensity ca if surveyround == 3, xaxis(3) yaxis(3)) ///
+	   (kdensity ca_rel_growth_w95 if surveyround == 3, xaxis(4) yaxis(4))
+	   
+	   
+twoway (kdensity lca if surveyround == 3 & treatment == 1, xaxis(1) yaxis(1)) ///
+	   (kdensity lca if surveyround == 3 & treatment == 0, xaxis(1) yaxis(1)) ///
+	   (kdensity ihs_ca_w95_k1 if surveyround == 3 & treatment == 1, xaxis(2) yaxis(2)) ///
+	   (kdensity ihs_ca_w95_k1 if surveyround == 3 & treatment == 0, xaxis(2) yaxis(2)), ///
+			legend(order(1 "Treatment, log" 2 "Control, log" 3 "Treatment, ihs" 4 "Control, ihs"))
+			
+			* not considering obs = 0
+twoway (kdensity lca if surveyround == 3 & treatment == 1, xaxis(1) yaxis(1)) ///
+	   (kdensity lca if surveyround == 3 & treatment == 0, xaxis(1) yaxis(1)) ///
+	   (kdensity ihs_ca_w95_k1 if surveyround == 3 & treatment == 1 & ihs_ca_exp_w95_k1 != 0, xaxis(2) yaxis(2)) ///
+	   (kdensity ihs_ca_w95_k1 if surveyround == 3 & treatment == 0 & ihs_ca_exp_w95_k1 != 0, xaxis(2) yaxis(2)), ///
+			legend(order(1 "Treatment, log" 2 "Control, log" 3 "Treatment, ihs" 4 "Control, ihs"))			
 
-*** FOR PRESENTATION
-	* Export dummy
-lab var export_1 "Exported 2023/2024"
-betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
-	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
-	xlabel(, labsize(medium)) ///
-		legend (pos(6) row(1))
-graph export correct_inno_points_el.png, replace
 
-	* Export countries
-betterbar exp_pays_w95 if surveyround == 3, over(treatment) barlab ci v ///
-	ylabel(0(.5)2,labsize(medium) angle(horizontal)) ///
-	xlabel(, labsize(medium)) ///
-		legend (pos(6) row(1))
-graph export correct_inno_points_el.png, replace
+	* Relationship sales growth and BL sales
+scatter ca_rel_growth_w95 ca_w95_y0 if surveyround == 3
+scatter ca_rel_growth_w95 lca_y0 if surveyround == 3 || lpoly ca_rel_growth_w95 lca_y0
+	corr ca_rel_growth_w95 lca_y0 if surveyround == 3
+	corr ca_rel_growth_w95 lca_y0 if surveyround == 3 & take_up == 1
+	corr ca_rel_growth_w95 lca_y0 if surveyround == 3 & treatment == 0
 
-	* Sales growthS
+	
+	* Sales growth
 lab var ca_rel_growth "Growth relative to baseline"
 betterbar ca_rel_growth if surveyround == 3 & ca_rel_growth <= 6.5, over(treatment) barlab ci v ///
 	ylabel(0(.1)2,labsize(medium) angle(horizontal)) ///
@@ -641,6 +652,33 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_gr
                      2 "Control group") ///
                col(1) pos(6) ring(6)) 
 	
+}
+
+
+
+****** Section 3: Export ******
+{
+cd "${master_output}/figures/endline/export"
+putpdf paragraph,  font("Courier", 20)
+putpdf text ("Section 3: Export"), bold
+
+*** FOR PRESENTATION
+	* Export dummy
+lab var export_1 "Exported 2023/2024"
+betterbar export_1 if surveyround == 3, over(treatment) barlab ci v ///
+	ylabel(0(.1)1,labsize(medium) angle(horizontal)) ///
+	xlabel(, labsize(medium)) ///
+		legend (pos(6) row(1))
+graph export correct_inno_points_el.png, replace
+
+	* Export countries
+betterbar exp_pays_w95 if surveyround == 3, over(treatment) barlab ci v ///
+	ylabel(0(.5)2,labsize(medium) angle(horizontal)) ///
+	xlabel(, labsize(medium)) ///
+		legend (pos(6) row(1))
+graph export correct_inno_points_el.png, replace
+
+
 	
 * Export: direct, indirect, no export
 graph bar (mean) export_1 export_2 export_3 if surveyround == 3, over(take_up) percentage blabel(total, format(%9.1fc) gap(-0.2)) ///

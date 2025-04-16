@@ -6,7 +6,7 @@
 * 	of consortium registration data								  
 *																	  
 *	OUTLINE: 	PART 1: Set standard settings & install packages	  
-*				PART 2: Prepare dynamic folder paths & globals		  
+*				PART 2: Prepare dynamic folder paths & globals
 *				PART 3: Run all do-files                          											  
 *																	  
 *	Author:  	Florian Münch, Fabian Scheifele							    
