@@ -279,7 +279,7 @@ putpdf pagebreak
 }
 
 
-****** Section 3: sales *******
+****** Section 3a: sales *******
 {
 	
 	* Compare distributions of sales, ihs-sales, and log-sales
@@ -653,6 +653,75 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_gr
                col(1) pos(6) ring(6)) 
 	
 }
+
+
+****** Section 3b: sales & network *******
+* look at correlations
+corr net_size_w95_y0 bpi_y0
+corr net_size ca if surveyround == 1 
+corr net_size profit if surveyround == 1 
+corr net_nb_dehors profit if surveyround == 1 
+corr net_nb_fam profit if surveyround == 1
+
+
+corr net_size ca if surveyround == 3 
+corr net_size profit if surveyround == 3 
+
+corr net_size_w95 ca_tun if surveyround == 1
+corr net_size_w95 ca_tun if surveyround == 1 & ca_tun > 0
+
+
+corr net_services_pratiques ca_rel_growth_w95 // 0.12
+corr net_services_produits ca_rel_growth_w95 // 0.03
+corr net_services_mark ca_rel_growth_w95 	 // 0.1
+corr net_services_sup ca_rel_growth_w95		 // 0.12
+corr net_services_contract ca_rel_growth_w95 // -0.1
+corr net_services_confiance ca_rel_growth_w95 // 0.08
+
+
+
+corr net_services_pratiques ca_rel_growth_w95 if treatment == 1 // 0.21
+corr net_services_produits ca_rel_growth_w95 if treatment == 1 // 0.2
+corr net_services_mark ca_rel_growth_w95 if treatment == 1 	 // 0.07
+corr net_services_sup ca_rel_growth_w95 if treatment == 1		 // 0.16
+corr net_services_contract ca_rel_growth_w95 if treatment == 1 // -0.1
+corr net_services_confiance ca_rel_growth_w95 if treatment == 1 // 0.28
+
+
+
+* visualize correlation
+twoway scatter net_size lca if surveyround == 1 & lca > 0
+
+gen lnet_size = log(net_size)
+
+twoway scatter lnet_size lca if surveyround == 1 & lca > 0
+
+twoway scatter net_nb_dehors lca if surveyround == 1 & lca > 0
+
+
+corr ca_rel_growth net_services
+corr ca_rel_growth net_services if treatment == 1
+corr ca_rel_growth net_services if treatment == 0
+
+twoway (scatter ca_rel_growth_w95 net_services_total) ///
+	   (lfit ca_rel_growth_w95 net_services_total), by(treatment)
+	   
+	   
+twoway (scatter ca_rel_growth_w95 net_services_total) ///
+	   (lfit ca_rel_growth_w95 net_services_total), by(treatment)
+	   
+	   
+corr profit_rel_growth_w95 net_services_total
+twoway (scatter profit_rel_growth_w95 net_services_total) ///
+	   (lfit profit_rel_growth_w95 net_services_total), by(treatment)
+
+
+* look at determinants of sales: does network size play a significant role? Does it remain significant after controlling for confounders?
+regress lca 
+
+
+
+	   
 
 
 

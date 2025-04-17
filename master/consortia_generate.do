@@ -576,8 +576,12 @@ foreach s of local survey {
 			* networking
 egen network = rowmean(t_net_associationz t_net_size3z t_net_gender3_gizz t_net_services_pratiquesz t_net_services_produitsz t_net_services_markz t_net_services_supz t_net_services_contractz t_net_services_confiancez t_net_services_autrez t_net_coop_posz t_net_coop_negz)
 
+egen net_services_mean = rowmean(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance)
+
+egen net_services_total = rowtotal(net_services_pratiques net_services_produits net_services_mark net_services_sup net_services_contract net_services_confiance), missing
+
 			* export readiness index (eri)
-egen eri = rowmean(t_exprep_normez t_exp_pra_ciblez t_exp_pra_missionz t_exp_pra_douanez t_exp_pra_planz t_exp_pra_rexpz t_exp_pra_foirez t_exp_pra_sciz t_exp_pra_ventz)			
+egen eri = rowtotal(t_exprep_normez t_exp_pra_ciblez t_exp_pra_missionz t_exp_pra_douanez t_exp_pra_planz t_exp_pra_rexpz t_exp_pra_foirez t_exp_pra_sciz t_exp_pra_ventz)			
 			
 			* export readiness SSA index (eri_ssa)
 egen eri_ssa = rowmean(t_ssa_action1z t_ssa_action2z t_ssa_action3z t_ssa_action4z t_ssa_action5z t_exp_pays_ssaz t_clients_ssaz t_clients_ssa_commandesz) 
