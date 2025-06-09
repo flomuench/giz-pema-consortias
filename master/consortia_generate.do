@@ -1033,6 +1033,58 @@ gen net_autre = net_services_autre
 
 
 
+* Keeping IHS transformed and winsorised variables separate (wins vars exist already, only ihs needed)
+foreach var in ca ca_exp employes profit {
+		capture confirm variable ihs_`var' 
+		if !_rc {
+			di "ihs `var' exists already"
+			drop ihs_`var'
+			di "ihs `var' old dropped"
+
+					gen ihs_`var' = .
+					*gen `var'_w99 = .
+					*gen `var'_w95 = .
+			di "ihs `var' new created"
+
+		} 
+		else {
+		di "ihs `var' did not exist"
+		gen ihs_`var' = .
+		*gen `var'_w99 = .
+		*gen `var'_w95 = .	
+			
+		} 
+}
+
+
+forvalues s = 1(1)3 {
+	
+	* over each var
+	foreach var in ca ca_exp employes profit {
+		* check if 
+		sum `var' if surveyround == `s'
+		if (`r(N)' > 0) {
+		
+		* Winsorisation
+			*winsor2 `var' if surveyround == `s', suffix(`s'_w99) cuts(0 99)
+			*winsor2 `var' if surveyround == `s', suffix(`s'_w95) cuts(0 95)
+			
+			*replace `var'_w99 = `var'`s'_w99 if surveyround == `s'
+			*replace `var'_w95 = `var'`s'_w95 if surveyround == `s'
+			
+			*drop `var'`s'_w99 `var'`s'_w95
+		
+		* IHS-transformation
+			ihstrans `var' if surveyround == `s', prefix(ihs`s'_)
+			
+			replace ihs_`var' = ihs`s'_`var' if surveyround == `s'
+			
+			drop ihs`s'_`var'
+	}
+  }
+}
+
+
 ***********************************************************************
 * 	PART 11:   generate survey-to-survey growth rates
 ***********************************************************************
