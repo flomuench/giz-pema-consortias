@@ -641,7 +641,6 @@ testparm `vars'
 
 }
 
-
 ***********************************************************************
 * 	PART 2: Take-up
 ***********************************************************************
@@ -1429,7 +1428,7 @@ version 16							// define Stata version 15 used
 						* for  coefplots
 					local control_mean_`var' = r(mean)
 					local fmt_control_mean_`var' : display  %3.2f `control_mean_`var''
-										local sd_`var' = r(sd)
+					local sd_`var' = r(sd)
 					local fmt_sd_`var' : display  %3.2f `sd_`var''
 					
 					// Calculate percent change
@@ -2506,7 +2505,6 @@ rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 
 }
 
-
 ***********************************************************************
 * 	PART 8: endline results - regression table entrepreneurial empowerment
 ***********************************************************************
@@ -3501,7 +3499,6 @@ rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 }
 
 }
-
 
 ***********************************************************************
 * 	PART 9:knowledge transfer overview: MPI, ERI, II
@@ -6578,8 +6575,10 @@ version 16							// define Stata version 15 used
 		  local conds `" "surveyround == 3" "surveyround == 3 & bh_sample == 1" "'
 		  local i = 1 			
 		  foreach cond of local conds {
+		  	
 			capture confirm variable `var'_y0
 			if `var' == exp_pays_w95 {
+				
 				// ITT: ANCOVA plus stratification dummies
 				eststo `var'1`i': reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if `cond', cluster(id_plateforme)
 						* add to latex table
@@ -6832,9 +6831,16 @@ exp_ext export_1 exp_pays_w95, gen(exp_ext)
 }
 
 
+* Randomization Inference Test
+preserve
+keep if surveyround == 3
+keep id_plateforme export_1 treatment exported_y0 missing_bl_exported strata_final
 
+timer on 1 
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg export_1 treatment exported_y0 missing_bl_exported strata_final, cluster(id_plateforme)
 
-
+timer off 1
+timer list 1
 
 **************** Reason of not exporting reasons ****************
 {
@@ -7757,6 +7763,109 @@ end
 	* win95, k1
 rct_regression_fin ihs_ca_w95_k1 ca_w95 ca_rel_growth_w95, gen(sales) // ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95
 
+
+
+	* Quantile regressions for sales and profits
+			* visualizing ITT effect by quantiles
+{
+
+	qreg ca_w95 i.treatment ca_w95_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg ca_w95 i.treatment strata_final if surveyround == 3, vce(robust)
+	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	qreg ca i.treatment ca_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg ca i.treatment strata_final if surveyround == 3, vce(robust)
+	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0, vce(robust) // also works
+	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0, vce(robust) level(90) // also works
+	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	
+		* Full sample winsorized values and ihs-transformed values
+foreach var in ca_w95 ihs_ca_w95_k1 {
+	qreg `var' i.treatment `var'_y0 strata_final if surveyround == 3, vce(robust)
+	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("`var'")
+	graph export "$fa_figures/q_`var'.pdf", replace 
+
+}
+
+foreach var in profit_w95 ihs_profit_w95_k1 {
+	qreg `var' i.Treatment `var'_y0 strata_final if surveyround == 3, vce(robust)
+	qregplot 1.Treatment, q(5(5)95) title("Impact on Profit") ytitle("`var'")
+	graph export "$fa_figures/q_`var'.pdf", replace 
+
+}
+}
+
+	* visualizing ToT/Late effect by quantiles
+{
+preserve 
+keep if surveyround == 3
+
+ivqregress smooth ihs_ca_w95_k1 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.9) 
+
+	* sales 
+foreach in ca_w95 ca_rel_growth_w95 ihs_ca_w95_k1 {
+	
+ivqregress smooth ca ca_y0 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.9)
+estat coefplot, name(ivqr_ca, replace) title("Sales impact at different quantiles") ytitle("ca") yline(0)
+	
+ivqregress smooth ca_w95 ca_w95_y0 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8)
+estat coefplot, name(ivqr_ca_w95, replace) title("Sales impact at different quantiles") ytitle("ca") yline(0)
+
+ivqregress smooth ca_w95 ca_w95_y0 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8) level(90)
+estat coefplot, name(ivqr_ca_w95, replace) title("Sales impact at different quantiles") ytitle("ca") yline(0)
+
+estat coefplot, name(ivqr_`var', replace) title("Sales impact at different quantiles") ytitle("ca") yline(0)
+graph export "$fa_figures/ivq_`var'.pdf", replace 
+estat endogeffects, rseed(12345671)
+
+}
+
+ivqregress smooth ca_rel_growth_w95 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8)
+estat coefplot, name(ivqr_ca_rel_growth, replace) title("Impact on sales growth rate at different quantiles") ytitle("ca") yline(0)
+ivqregress smooth ca_rel_growth_w95 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8) level(90)
+estat coefplot, name(ivqr_ca_rel_growth, replace) title("Impact on sales growth rate at different quantiles") ytitle("ca") yline(0)
+
+ivqregress smooth ca_abs_growth_w95 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8)
+estat coefplot, name(ivqr_ca_abs_growth, replace) title("Impact on Sales Growth at different quantiles") ytitle("ca") yline(0)
+ivqregress smooth ca_abs_growth_w95 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.8) level(90)
+estat coefplot, name(ivqr_ca_abs_growth, replace) title("Impact on Sales Growth at different quantiles") ytitle("ca") yline(0)
+
+graph export "$fa_figures/ivq_ca.pdf", replace 
+estat endogeffects, rseed(12345671)
+
+
+ivqregress smooth ihs_ca_w95_k1 ihs_ca_w95_k1_y0 strata_final (take_up = i.treatment), vce(robust) quantile(0.1(0.1)0.9)
+estat coefplot, name(ivqr_ihs_ca_w95, replace) title("Impact on ca at different quantiles") ytitle("ca (winsorized 95th)") yline(0)
+
+ivqregress smooth ihs_ca_w95_k1 ihs_ca_w95_k1_y0 strata_final (take_up = i.treatment) if ihs_ca_w95_k1 != 0, vce(robust) quantile(0.1(0.1)0.9)
+estat coefplot, name(ivqr_ihs_ca_w95, replace) title("Impact on ca at different quantiles") ytitle("ca (winsorized 95th)") yline(0)
+graph export "$fa_figures/ivq_ca_w95.pdf", replace 
+
+
+ivqregress smooth profit strata_final (i.treatment = take_up), vce(robust) quantile(0.1(0.1)0.9)
+estat coefplot, name(ivqr_profit, replace) title("Impact on Profit at different quantiles") ytitle("Profit")
+graph export "$fa_figures/ivq_profit.pdf", replace 
+estat endogeffects, rseed(12345671)
+
+
+estat endogeffects, rseed(12345671)
+
+ivqregress smooth profit_w95 strata_final (i.treatment = take_up), vce(robust) quantile(0.1(0.1)0.9)
+estat coefplot, name(ivqr_profit_w95, replace) title("Impact on Profit at different quantiles") ytitle("Profit (winsorized 95th)")
+graph export "$fa_figures/ivq_profit_w95.pdf", replace 
+estat endogeffects, rseed(12345671)
+
+restore
+
+}
 
 
 	* Business Performance: Profits, Costs, Employment
