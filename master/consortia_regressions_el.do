@@ -6833,7 +6833,7 @@ exp_ext export_1 exp_pays_w95, gen(exp_ext)
 }
 
 
-* Randomization Inference Test
+	* Randomization Inference Test
 preserve
 keep if surveyround == 3
 keep id_plateforme export_1 treatment exported_y0 missing_bl_exported strata_final
@@ -6843,6 +6843,8 @@ ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plat
 
 timer off 1
 timer list 1
+
+
 
 **************** Reason of not exporting reasons ****************
 {
@@ -7431,6 +7433,11 @@ lab var ihs_profit_w95_k1 "Profits"
 lab var ihs_costs_w95_k1 "Costs"
 **************** explorative
 {
+
+
+*** Explorative
+{
+
 * without zeros
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
 ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
@@ -7501,12 +7508,11 @@ reg ca_rel_growth i.treatment i.strata_final if surveyround == 3 & ca ! = 0 & bh
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
 }
-
+}
 
 /*
 results are sensitive to inclusion of zeros. However, these zeros are real and correspond to firms that have closed.
-These closures are higher/more prevalent in the control group. The effect direction does not change but the magnitude
-and significance. 
+These closures are higher/more prevalent in the control group. The effect direction does not change but the magnitude and significance. 
 
 */
 
@@ -7764,7 +7770,7 @@ gr export "${figures_business}/el_`generate'_decomp_2023_cfp.pdf", replace
 end
 
 	* win95, k1
-rct_regression_fin ihs_ca_w95_k1 ca_w95 ca_rel_growth_w95, gen(sales) // ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95
+rct_regression_fin ihs_ca ca_w95 ca_rel_growth_w95, gen(sales) // ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95
 
 
 	* Randomization inference
@@ -7844,12 +7850,15 @@ timer list 1
 {
 
 	qreg ca_w95 i.treatment ca_w95_y0 strata_final if surveyround == 3, vce(robust) // also works
-	qreg ca_w95 i.treatment strata_final if surveyround == 3, vce(robust)
+	qreg ca i.treatment ca_w99_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
+	
 	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
 	
 	qreg ca i.treatment ca_y0 strata_final if surveyround == 3, vce(robust) // also works
 	qreg ca i.treatment strata_final if surveyround == 3, vce(robust)
 	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qregplot 1.treatment, q(10(10)80) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+
 	
 	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3, vce(robust) // also works
 	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
@@ -7941,6 +7950,51 @@ restore
 
 }
 
+	* Relative sales growth by BL sales (high vs. low)
+gen temp_ca = ca if surveyround == 1
+egen bl_ca = min(temp_ca), by(id_plateforme)
+br id_plateforme surveyround refus ca temp_ca bl_ca
+
+sum bl_ca, d
+gen bl_ca_high = (bl_ca > `r(p50)')
+	replace bl_ca_high = . if bl_ca == .
+tabstat ca if bl_ca_high == 1 & surveyround ==3, by(treatment)
+tabstat ca if bl_ca_high == 0 & surveyround ==3, by(treatment)
+tabstat ca_w95 if bl_ca_high == 1 & surveyround ==3, by(treatment)
+tabstat ca_w95 if bl_ca_high == 0 & surveyround ==3, by(treatment)
+
+tabstat ca_w95 if bl_ca_high == 1 & surveyround ==3, by(take_up)
+tabstat ca_w95 if bl_ca_high == 0 & surveyround ==3, by(take_up)
+
+tabstat ca_rel_growth_w95 if bl_ca_high == 1 & surveyround ==3, by(treatment)
+tabstat ca_rel_growth_w95 if bl_ca_high == 0 & surveyround ==3, by(treatment)
+
+tabstat ca_rel_growth_w95 if bl_ca_high == 1 & surveyround ==3, by(take_up)
+tabstat ca_rel_growth_w95 if bl_ca_high == 0 & surveyround ==3, by(take_up)
+
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bl_ca_high == 1, cluster(consortia_cluster)
+ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bl_ca_high == 1, cluster(consortia_cluster) first
+
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bl_ca_high == 0, cluster(consortia_cluster)
+ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bl_ca_high == 0, cluster(consortia_cluster) first
+
+
+gen temp_lca = lca if surveyround == 1
+egen bl_lca = min(temp_lca), by(id_plateforme)
+br id_plateforme surveyround refus lca temp_ca bl_ca
+
+reg lca i.treatment bl_lca i.missing_bl_ca_w95  i.strata_final if surveyround == 3, cluster(consortia_cluster)
+ivreg2 lca bl_lca i.strata_final i.missing_bl_ca_w95 (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
+
+reg lca i.treatment bl_lca i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
+ivreg2 lca bl_lca i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
+
+
+
+
+
+/* suggest relative sales growth stronger in both low and high pre-sales in T vs. C,
+	but the relative sales growth is stronger in high vs. pre-sales group */
 
 	* Business Performance: Profits, Costs, Employment
 capture program drop rct_regression_fin // enables re-running
