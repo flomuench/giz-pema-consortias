@@ -501,9 +501,13 @@ local trim_perc = (`response_rate_t' - `response_rate_c')/`response_rate_t'
 display "Percentage of observations in T to be trimmed off: " `trim_perc' // .00561798
 
 restore
+  }
+ 
+}
 
-
-* generate group-variable for C (all) + T (within 15 calls)
+* generate bh_sample dummy 
+	*group-variable for C (all) + T (within 15 calls)
+{
 gen bh_sample_temp = 0 if surveyround == 3
 	replace bh_sample_temp = 1 if treatment == 0 & refus == 0 & surveyround == 3 				// 60 firms
 	replace bh_sample_temp = 1 if treatment == 1 & refus == 0 & surveyround == 3 & calls <= 15 	// 58 firms
@@ -526,10 +530,8 @@ iebaltab `vars'  if `cond', ///
 	`sfmt'("${tables_attrition}/baltab_attrition_TvsC_bl_bhsample") replace
 
 	}
-	
-  }
- 
-}
+}	
+
 
 ***********************************************************************
 * 	PART 2: balance table of baseline characteristics	
@@ -7419,7 +7421,7 @@ rct_regression_finexpks ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95
 cd "${master_regressiontables}/endline/regressions/compta"
 
 
-**************** finale tables & figures for presentation & paper ****************
+**************** finale tables & figures for presentation & paper 
 *** label variables for each output
 lab var ihs_employes_w95_k1 "N. of Employees"
 lab var ihs_ca_w95_k1 "Total Sales"
@@ -7427,7 +7429,8 @@ lab var ihs_catun_w95_k1 "Domestic Sales"
 lab var ihs_ca_exp_w95_k1 "Export Sales"
 lab var ihs_profit_w95_k1 "Profits"
 lab var ihs_costs_w95_k1 "Costs"
-
+**************** explorative
+{
 * without zeros
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
 ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
@@ -7497,7 +7500,7 @@ reg ca_rel_growth i.treatment i.strata_final if surveyround == 3 & ca ! = 0 & bh
 
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
-
+}
 
 
 /*
@@ -7762,6 +7765,77 @@ end
 
 	* win95, k1
 rct_regression_fin ihs_ca_w95_k1 ca_w95 ca_rel_growth_w95, gen(sales) // ihs_ca_w95_k1 ihs_catun_w95_k1 ihs_ca_exp_w95_k1 ca_rel_growth ca_rel_growth_w95
+
+
+	* Randomization inference
+preserve
+keep if surveyround == 3
+		* keep only necessary variables 
+keep id_plateforme ihs_ca_w95_k1 ca_w95 ca_rel_growth_w95 ihs_ca_w95_k1_y0 ca_w95_y0 treatment missing_bl_ihs_ca_w95_k1 missing_bl_ca_w95 strata_final bh_sample consortia_cluster take_up
+
+		* wins
+			* ANCOVA
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if bh_sample == 1, cluster(id_plateforme)
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if bh_sample == 1, cluster(consortia_cluster)
+
+ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if bh_sample == 1, cluster(id_plateforme) first
+ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if bh_sample == 1, cluster(consortia_cluster) first
+
+			* RI test
+timer on 1 
+				* firm-level cl SE
+					* full sample
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg ca_w95 treatment ca_w95_y0 missing_bl_ca_w95 strata_final, cluster(id_plateforme)
+					* BH sample
+preserve 
+keep if bh_sample == 1
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg ca_w95 treatment ca_w95_y0 missing_bl_ca_w95 strata_final, cluster(id_plateforme)
+restore
+					
+				* twoway cl SE
+					* full sample
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(consortia_cluster) seed(8413195)  kdensityplot :  reg ca_w95 treatment ca_w95_y0 missing_bl_ca_w95 strata_final, cluster(consortia_cluster)
+
+					* BH sample
+preserve 
+keep if bh_sample == 1
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(consortia_cluster) seed(8413195)  kdensityplot :  reg ca_w95 treatment ca_w95_y0 missing_bl_ca_w95 strata_final, cluster(consortia_cluster)
+restore
+
+preserve 
+keep if bh_sample == 1
+ritest treatment _b[take_up], reps(10000) strata(strata_final) cluster(consortia_cluster) seed(8413195)  kdensityplot :  ivreg2 ca_w95 ca_w95_y0 missing_bl_ca_w95 strata_final (take_up = treatment), cluster(consortia_cluster)
+restore
+
+
+
+
+		* ihs
+			* full sample
+				* firm cl SE
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg ihs_ca_w95_k1 treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 strata_final, cluster(id_plateforme)
+
+				* twoway cl SE
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(consortia_cluster) seed(8413195)  kdensityplot :  reg ihs_ca_w95_k1 treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 strata_final, cluster(consortia_cluster)
+
+			* bh sample
+				* firm cl SE
+preserve 
+keep if bh_sample == 1				
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg ihs_ca_w95_k1 treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 strata_final, cluster(id_plateforme)
+restore
+
+				* twoway cl SE
+preserve 
+keep if bh_sample == 1
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(consortia_cluster) seed(8413195)  kdensityplot :  reg ihs_ca_w95_k1 treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 strata_final, cluster(consortia_cluster)
+restore
+
+		* rel growth
+ritest treatment _b[treatment], reps(10000) strata(strata_final) cluster(id_plateforme) seed(8413195)  kdensityplot :  reg export_1 treatment exported_y0 missing_bl_exported strata_final, cluster(id_plateforme)
+
+timer off 1
+timer list 1
 
 
 
