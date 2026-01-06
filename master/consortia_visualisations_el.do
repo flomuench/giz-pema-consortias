@@ -13,7 +13,7 @@
 
 										  
 ***********************************************************************
-* 	PART 1: Paths
+**# 	PART 1: Paths
 ***********************************************************************
 use "${master_final}/consortium_final", clear
 
@@ -35,7 +35,7 @@ set scheme s1color
 	
 
 ***********************************************************************
-* 	PART 2: Endline statistics
+**# 	PART 2: Endline statistics
 ***********************************************************************
 * create word document
 set graphics on
@@ -50,7 +50,7 @@ putpdf text ("Consortia: Endline Statistics"), bold linebreak
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 
-****** Section 1: Response rate & take-up ******
+**## Section 1: Response rate & take-up ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
 
@@ -118,7 +118,7 @@ graph export "${master_output}/figures/take_up/takeup_pole_surveyround.png", rep
 
 }
 
-****** Section 2: innovation ******
+**## Section 2: innovation ******
 {
 cd "${master_output}/figures/endline/innovation"
 putpdf paragraph,  font("Courier", 20)
@@ -279,7 +279,7 @@ putpdf pagebreak
 }
 
 
-****** Section 3a: sales *******
+**## Section 3a: sales *******
 {
 	
 	* Compare distributions of sales, ihs-sales, and log-sales
@@ -348,13 +348,12 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(m
 			   
 			   
 			   
-twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
-        (kdensity ca_rel_growth_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3 & bh_sample == 1, lp(l) lc(maroon) yaxis(2) bw(1)) ///
+        (kdensity ca_rel_growth_w95 if take_up == 0 & surveyround == 3 & bh_sample == 1, lp(l) lc(green) yaxis(2)  bw(1)), ///
 		xtitle("Growth rate of sales relative to baseline") ///
-		xlabel(-1(1)10) ///
         legend(rows(3) symxsize(small) ///
-               order(1 "Take-up = 1" ///
-                     2 "Take-up = 0 (incl. control group)") ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
                col(1) pos(6) ring(6)) 
 			   
 twoway  (kdensity profit_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
@@ -655,7 +654,7 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_gr
 }
 
 
-****** Section 3b: sales & network *******
+**## Section 3b: sales & network *******
 * look at correlations
 corr net_size_w95_y0 bpi_y0
 corr net_size ca if surveyround == 1 
@@ -725,7 +724,7 @@ regress lca
 
 
 
-****** Section 3: Export ******
+**## Section 3: Export ******
 {
 cd "${master_output}/figures/endline/export"
 putpdf paragraph,  font("Courier", 20)
@@ -1157,7 +1156,7 @@ putpdf pagebreak
 
 }
 
-****** Section 4: Employees ******
+**## Section 4: Employees ******
 {
 cd "${master_output}/figures/endline/compta"
 putpdf paragraph,  font("Courier", 20)
@@ -1250,7 +1249,7 @@ restore
 }
 
 
-****** Section 5: Management******
+**## Section 5: Management******
 {
 cd "${master_output}/figures/endline/management"	
 putpdf paragraph,  font("Courier", 20)
@@ -1345,7 +1344,7 @@ putpdf pagebreak
 
 }
 
-****** Section 6: Network******
+**## Section 6: Network******
 {
 cd "${master_output}/figures/endline/network"
 putpdf paragraph,  font("Courier", 20)
@@ -1518,7 +1517,7 @@ putpdf pagebreak
 
 }
 
-****** Section 7: Entrepreneurial Confidence ******
+**## Section 7: Entrepreneurial Confidence ******
 {
 cd "${master_output}/figures/endline/confidence"
 putpdf paragraph,  font("Courier", 20)
@@ -1715,7 +1714,7 @@ putpdf image genderi_points_el.png
 putpdf pagebreak
 }
 
-****** Section 8: Accounting******
+**## Section 8: Accounting******
 {
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 8.1: Export"), bold
@@ -2316,7 +2315,7 @@ putpdf pagebreak
 
 }
 
-****** Section 8.2: Accounting CHECK******
+**## Section 8.2: Accounting CHECK******
 {
 
 putpdf paragraph,  font("Courier", 20)
@@ -2394,7 +2393,7 @@ putpdf pagebreak
 
 }
 
-****** Section 9: Intervention******
+**## Section 9: Intervention******
 {
 cd "${master_output}/figures/endline/intervention"
 putpdf paragraph,  font("Courier", 20)
@@ -2471,7 +2470,7 @@ graph bar (count) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3, 
 
 
 ***********************************************************************
-* 	PART 4:  save pdf
+**# 	PART 4:  save pdf
 ***********************************************************************
 	* change directory to progress folder
 

@@ -15,16 +15,16 @@
 *	Requires:  	consortium__master_inter.dta
 *	Creates:	consortium__master_final.dta
 ***********************************************************************
-********************* 	I: PII data ***********************************
+**# 	I: PII data
 ***********************************************************************	
 {
 ***********************************************************************
-* 	PART 1:    import data  
+**## 	PART 1:    import data  
 ***********************************************************************
 use "${master_intermediate}/consortium_pii_inter", clear
 
 ***********************************************************************
-* 	PART 2:  generate dummy account contact information missing
+**## 	PART 2:  generate dummy account contact information missing
 ***********************************************************************
 gen comptable_missing = 0, a(comptable_email)
 	replace comptable_missing = 1 if comptable_numero == . & comptable_email == ""
@@ -34,7 +34,7 @@ gen comptable_missing = 0, a(comptable_email)
 
 
 ***********************************************************************
-* 	PART 3:    Add Tunis to rg_adresse using PII data 
+**## 	PART 3:    Add Tunis to rg_adresse using PII data 
 ***********************************************************************
 
 *gen dummy if tunis in variable
@@ -47,7 +47,7 @@ gen rg_adresse_modified = rg_adresse
 replace rg_adresse_modified = rg_adresse_modified + ", tunis" if !contains_tunis
 
 ***********************************************************************
-* 	PART 4:  save
+**## 	PART 4:  save
 ***********************************************************************
 save "${master_final}/consortium_pii_final", replace
 
@@ -55,12 +55,12 @@ save "${master_final}/consortium_pii_final", replace
 
 
 ***********************************************************************
-********************* 	II: Analysis data *****************************
+**#	II: Analysis data *****************************
 ***********************************************************************	
 use "${master_intermediate}/consortium_inter", clear
 
 ***********************************************************************
-* 	PART 1:  generate take-up variable
+**## 	PART 1:  generate take-up variable
 ***********************************************************************
 {
 * PHASE 1 of the treatment: "consortia creation"
@@ -244,7 +244,7 @@ replace desistement_consortium = 1 if id_plateforme == 1155 & surveyround ==3
 }
 
 ***********************************************************************
-* 	PART 2:  survey attrition (refusal to respond to survey)	
+**## 	PART 2:  survey attrition (refusal to respond to survey)	
 ***********************************************************************
 {
 gen refus = 0 // zero for baseline as randomization only among respondents
@@ -302,7 +302,7 @@ foreach var of local id {
 }
 
 ***********************************************************************
-* 	PART 3:  entreprise no longer in operations	
+**## 	PART 3:  entreprise no longer in operations	
 ***********************************************************************
 {		
 gen closed = . 
@@ -347,10 +347,8 @@ replace export_1 = 0 if surveyround == 3 & export_1 == . & closed == 1
 
 }
 
-
-
 ***********************************************************************
-* 	PART 4:   Create domestic sales + costs + positive profit  
+**## 	PART 4:   Create domestic sales + costs + positive profit  
 ***********************************************************************
 {
 * Domestic sales
@@ -396,7 +394,7 @@ lab var costs "Costs"
 }
 
 ***********************************************************************
-* 	PART 4:   Replace 2024 variables with their baseline value (otherwise no Y0 in regresssion)  
+**## 	PART 4:   Replace 2024 variables with their baseline value (otherwise no Y0 in regresssion)  
 ***********************************************************************
 local vars "ca_2024 ca_exp_2024 profit_2024 ca_tun_2024"
 local basevars "ca ca_exp profit ca_tun"
@@ -510,7 +508,7 @@ lab var net_female_friend "Discussed business with female friend"
 
 
 ***********************************************************************
-* 	PART 8:   Create the indices based on a z-score			  
+**## 	PART 8:   Create the indices based on a z-score			  
 ***********************************************************************
 {
 	*Definition of all variables that are being used in index calculation
@@ -642,7 +640,7 @@ label var bpi_2024 "Business performance index"
 }
 
 ***********************************************************************
-* 	PART 9:   Create the indices as total points		  
+**## 	PART 9:   Create the indices as total points		  
 ***********************************************************************
 {
 	* find out max. points
@@ -712,13 +710,19 @@ drop t_*
 }
 
 ***********************************************************************
-*	PART 10: Continuous outcomes (winsorization + ihs-transformation)
+**##	PART 10: Continuous outcomes (winsorization + ihs-transformation)
 ***********************************************************************
 {
-	* log-transform capital invested
+	* log-transform 
 foreach var of varlist capital ca employes {
 	gen l`var' = log(`var')	
 	replace l`var' = . if `var' == .
+	
+	if `var' == ca {
+	
+	gen l`var'pl1 = log(`var' + 1)	
+	replace l`var'pl1 = . if `var' == .
+	}
 }
 	
 	* quantile transform profits --> see Delius and Sterck 2020 : https://oliviersterck.files.wordpress.com/2020/12/ds_cash_transfers_microenterprises.pdf
@@ -1086,7 +1090,7 @@ forvalues s = 1(1)3 {
 
 
 ***********************************************************************
-* 	PART 11:   generate survey-to-survey growth rates
+**## 	PART 11:   generate survey-to-survey growth rates
 ***********************************************************************
 {
 	* accounting variables
@@ -1153,7 +1157,7 @@ lab var net_giz_ratio "% female entrepreneurs met via consortium"
 
 
 ***********************************************************************
-* 	PART 13: (endline) generate YO + missing baseline dummies	
+**## 	PART 13: (endline) generate YO + missing baseline dummies	
 ***********************************************************************
 {
 *rename long var
@@ -1201,11 +1205,11 @@ local empowerment "genderi female_efficacy female_loc female_efficacy_mean femal
 
 local mp "mpi mpi_rate man_fin_per_ind man_fin_per_pro man_fin_per_qua man_fin_per_sto man_fin_per_emp man_fin_per_liv man_fin_per_fre man_fin_pra_bud man_fin_pra_pro man_fin_pra_dis man_source_cons man_source_pdg man_source_fam man_source_even man_source_autres man_fin_per"
 
-local innovation " ii_proc ii_proc_cor ii_prod ii_prod_cor inno_improve inno_new inno_produit inno_improve_cor inno_new_cor inno_commerce inno_lieu inno_process inno_proc_met inno_proc_sup inno_proc_log inno_proc_prix inno_proc_met_cor inno_proc_sup_cor inno_proc_log_cor inno_proc_prix_cor innovations_prod innovated_prod innovations_prod_cor innovated_prod_cor innovations_proc innovations_proc_cor  innovated_proc innovated_proc_cor"
+local innovation "ii_proc ii_proc_cor ii_prod ii_prod_cor inno_improve inno_new inno_produit inno_improve_cor inno_new_cor inno_commerce inno_lieu inno_process inno_proc_met inno_proc_sup inno_proc_log inno_proc_prix inno_proc_met_cor inno_proc_sup_cor inno_proc_log_cor inno_proc_prix_cor innovations_prod innovated_prod innovations_prod_cor innovated_prod_cor innovations_proc innovations_proc_cor  innovated_proc innovated_proc_cor"
 
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45 exp_pays_ssa_w99 exp_pays_ssa_w95" // add at endline: ihs_exp_pays_w99_k1 epp
 
-local business_performance99 "ca lca lca_w95 closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
+local business_performance99 "ihs_ca lcapl1 ca lca lca_w95 closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
 
 local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3 ihs_ca_2024_w95_k1 ihs_costs_2024_w95_k1"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance99'  `business_performance95'
@@ -1245,7 +1249,7 @@ foreach var of local ys {
 }
 
 ***********************************************************************
-* 	PART 14: Tunis dummy	
+**## 	PART 14: Tunis dummy	
 ***********************************************************************
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
@@ -1253,7 +1257,7 @@ lab var tunis "HQ in Tunis"
 lab var city "HQ in Tunis, Sousse, Sfax"
 
 ***********************************************************************
-* 	PART 15: Entreprise Size
+**## 	PART 15: Entreprise Size
 ***********************************************************************
 {
 * Generate entrep_size variable and label it
@@ -1282,12 +1286,12 @@ label values entrep_size2 entrep_size_label2
 }
 
 ***********************************************************************
-* 	PART 16: Digital consortia dummy	
+**## 	PART 16: Digital consortia dummy	
 ***********************************************************************
 gen cons_dig = (pole == 4)
 
 ***********************************************************************
-* 	PART 17: peer effects: baseline peer quality	
+**## 	PART 17: peer effects: baseline peer quality	
 ***********************************************************************	
 {
 	* loop over all peer quality baseline characteristics
@@ -1375,7 +1379,7 @@ foreach var of local y_vars {
 
 
 ***********************************************************************
-* 	PART 18: create cluster variable for twoway clustered SE	
+**## 	PART 18: create cluster variable for twoway clustered SE	
 ***********************************************************************	
 * variable defined as in Cai and Szeidl (2018)
 gen consortia_cluster = id_plateforme
@@ -1383,13 +1387,13 @@ gen consortia_cluster = id_plateforme
 	
 	
 ***********************************************************************
-* 	PART 19: create post dummy for DiD as Cai and Szeidl (2018)	
+**## 	PART 19: create post dummy for DiD as Cai and Szeidl (2018)	
 ***********************************************************************	
 gen post = (surveyround > 1)
 
 
 ***********************************************************************
-* 	PART final save:    save as final consortium_database
+**## 	PART final save:    save as final consortium_database
 ***********************************************************************
 save "${master_final}/consortium_final", replace
 
