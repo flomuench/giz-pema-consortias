@@ -7439,8 +7439,45 @@ lab var ihs_costs_w95_k1 "Costs"
 {
 
 * without zeros
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
+
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
-ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
+
+	* Winsorized sales: all samples configuration (all, bh, excluding zeros) & CONSORTIA/FIRM-clustered SEs
+			* OLS
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // sign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(consortia_cluster) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(consortia_cluster) // sign, 10 percent
+			* Poisson
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 10 perc
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 5 perc
+* removing zeros makes no sense as this is purpose of poisson
+*poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(consortia_cluster) // insign
+*poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(consortia_cluster) // sign, 10 percent
+
+	* Winsorized sales: OLS all samples configuration (all, bh, excluding zeros) & FIRM-clustered SEs
+			* OLS
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // marginally insign p = 0.128
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(id_plateforme) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(id_plateforme) // insign 
+
+			* Poisson
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 5 perc
+
+
+
+	* Productivity
+			* OLS
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 1 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 1 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
+			* Placebo baseline
+reg productivity_w95 i.treatment i.strata_final if surveyround == 1, cluster(consortia_cluster) // insign
+reg productivity_w95 i.treatment i.strata_final if surveyround == 1 & bh_sample == 1, cluster(consortia_cluster) // 6k lower, 10 percent
 
 * Cai and Szeidl, Iacovone et al. firm fixed effects
 gen midline = (surveyround == 2)
@@ -7501,8 +7538,18 @@ reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyrou
 reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
 reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
 
+		* bh-sample
+			* with zeros (ihs & log(x+1))
 reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 111 obs
 reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 111 obs
+		
+			* w/o zeros 
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3 & bh_sample == 1 & ihs_ca > 0, cluster(consortia_cluster) // 105 obs
+reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3 & bh_sample == 1 & lcapl1 > 0, cluster(consortia_cluster) // 105 obs
+
+
+
+
 
 
 		* no ca = 0

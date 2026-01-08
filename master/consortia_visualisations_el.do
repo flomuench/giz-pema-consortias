@@ -337,6 +337,7 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(m
                order(1 "Treatment group" ///
                      2 "Control group") ///
                col(1) pos(6) ring(6)) 
+			   			  
 			   
 twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
         (kdensity ca_rel_growth if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
@@ -654,7 +655,98 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_gr
 }
 
 
-**## Section 3b: sales & network *******
+**## Section 3b: Productivity *******
+		* Productivity = sales / employees
+twoway  (kdensity productivity if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(10000)) ///
+        (kdensity productivity if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(10000)), ///
+		xtitle("Productivity (Sales / Employees)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving("prod_el", replace)
+			   
+twoway  (kdensity productivity if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(10000)) ///
+        (kdensity productivity if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(10000)), ///
+		xtitle("Productivity (Sales / Employees)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Baseline") ///
+			   saving("prod_bl", replace)
+graph combine "prod_el" "prod_bl"
+
+			   
+			   
+		* Employees
+twoway  (kdensity employes_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(5)) ///
+        (kdensity employes_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(5)), ///
+		xtitle("employes_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving(emp_el, replace)
+			   
+twoway  (kdensity employes_w95 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(5)) ///
+        (kdensity employes_w95 if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(5)), ///
+		xtitle("employes_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 	///
+			   title("Baseline")	///
+			   saving(emp_bl, replace)
+			   
+graph combine "emp_el" "emp_bl"
+
+
+		* Sales
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(75000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(75000)), ///
+		xtitle("ca_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving(ca_el, replace)
+			   
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(75000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(75000)), ///
+		xtitle("ca_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 	///
+			   title("Baseline")	///
+			   saving(ca_bl, replace)
+			   
+graph combine "ca_el" "ca_bl"
+			   
+		
+			   
+			   
+* check why such long tail in treatment group
+sort productivity
+br productivity ca ca_w95 employes employes_w95 if treatment ==1 & surveyround == 3
+br productivity ca ca_w95 employes employes_w95 if treatment ==0 & surveyround == 3
+
+preserve	
+keep if surveyround == 3
+keep id_plateforme treatment productivity ca ca_w95 employes employes_w95
+
+sort productivity
+br  productivity ca ca_w95 employes employes_w95 if treatment ==1
+
+restore 
+
+
+
+**## Section 3c: sales & network *******
 * look at correlations
 corr net_size_w95_y0 bpi_y0
 corr net_size ca if surveyround == 1 
@@ -724,7 +816,7 @@ regress lca
 
 
 
-**## Section 3: Export ******
+**## Section 3d: Export ******
 {
 cd "${master_output}/figures/endline/export"
 putpdf paragraph,  font("Courier", 20)
