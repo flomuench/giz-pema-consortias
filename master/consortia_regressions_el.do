@@ -6289,6 +6289,9 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
 
+reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 
+ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+
 
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
@@ -7470,11 +7473,19 @@ poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surve
 
 
 	* Productivity
-			* OLS
+			* OLS - consortia clustered
 reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 1 percent
 reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 1 percent
 reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
 reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
+
+			* OLS - firm clustered
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & productivity_w95 > 0, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & productivity_w95 > 0, cluster(id_plateforme) // 5
+
+
 			* Placebo baseline
 reg productivity_w95 i.treatment i.strata_final if surveyround == 1, cluster(consortia_cluster) // insign
 reg productivity_w95 i.treatment i.strata_final if surveyround == 1 & bh_sample == 1, cluster(consortia_cluster) // 6k lower, 10 percent
@@ -7913,12 +7924,18 @@ timer list 1
 	qreg ihs_ca i.treatment ihs_ca_y0 strata_final if surveyround == 3, vce(robust) // also works
 	qreg ihs_ca i.treatment ihs_ca_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
 	
+	
+	qreg productivity_w95 i.treatment productivity_w95_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) level(95)
+
+	
 	/*
 	BH-sample with ihs transformed sales corresponds best to descriptive evidence (highest growth rate for firms
 	between 20-40th quantile) & attrition pattern (larger firms dropping out) & theoretical idea that achieving scale
 	scale collectively most beneficial for smaller firms
 	*/
-	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qregplot 1.treatment, q(10(10)80) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qregplot 1.treatment, q(10(10)90) title("Impact on Productivity") ytitle("Sales (wins. 95th pct)") yline(0)
+
 	
 	qreg mpi i.treatment mpi_y0 strata_final if surveyround == 3, vce(robust) // also works
 	qreg mpi i.treatment mpi_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
