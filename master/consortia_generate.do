@@ -1103,7 +1103,7 @@ forvalues s = 1(1)3 {
 ***********************************************************************
 {
 	* accounting variables
-local acccounting_vars "ca ca_exp ca_tun profit employes car_empl1 car_empl2"
+local acccounting_vars "ca ca_exp ca_tun profit employes car_empl1 car_empl2 net_size"
 foreach var of local acccounting_vars {
 	bys id_plateforme (surveyround): g `var'_rel_growth = (`var' - `var'[1])/`var'[1]
 	bys id_plateforme (surveyround): g `var'_abs_growth = `var' - `var'[1]

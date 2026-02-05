@@ -769,14 +769,63 @@ corr net_services_sup ca_rel_growth_w95		 // 0.12
 corr net_services_contract ca_rel_growth_w95 // -0.1
 corr net_services_confiance ca_rel_growth_w95 // 0.08
 
-
-
 corr net_services_pratiques ca_rel_growth_w95 if treatment == 1 // 0.21
 corr net_services_produits ca_rel_growth_w95 if treatment == 1 // 0.2
 corr net_services_mark ca_rel_growth_w95 if treatment == 1 	 // 0.07
 corr net_services_sup ca_rel_growth_w95 if treatment == 1		 // 0.16
 corr net_services_contract ca_rel_growth_w95 if treatment == 1 // -0.1
 corr net_services_confiance ca_rel_growth_w95 if treatment == 1 // 0.28
+
+
+corr net_services_pratiques productivity // 0.01
+corr net_services_produits productivity // 0.06
+corr net_services_mark productivity 	 // 0.08
+corr net_services_sup 	productivity	 // 0.04
+corr net_services_contract  productivity // -0.01
+corr net_services_confiance  productivity // 0.007
+
+
+corr net_services_pratiques productivity if treatment == 1 // -0.13
+corr net_services_produits productivity  if treatment == 1 // -.21
+corr net_services_mark productivity  if treatment == 1	 // 0.08
+corr net_services_sup 	productivity  if treatment == 1	 // 0.04
+corr net_services_contract  productivity  if treatment == 1 // -0.1
+corr net_services_confiance  productivity  if treatment == 1 // 0.08
+
+
+
+regress productivity net_services_pratiques if surveyround == 3 & treatment == 1, vce(cluster id_plateforme) 
+regress productivity net_services_pratiques if surveyround == 3 & treatment == 0, vce(cluster id_plateforme) 
+
+
+
+foreach var of varlist net_services_pratiques net_services_produits net_services_mark {
+	zscore `var' 3
+}
+
+egen net_hc = rowmean(net_services_pratiquesz3 net_services_produitsz3 net_services_markz3)
+
+corr net_hc productivity if treatment == 0
+corr net_hc productivity if treatment == 1
+
+corr net_hc ca_rel_growth_w95 if treatment == 0
+corr net_hc ca_rel_growth_w95 if treatment == 1
+
+gen log_productivity = log(productivity)
+
+twoway ///
+	(scatter log_productivity net_hc) (lfit log_productivity net_hc), by(treatment)
+	
+twoway ///
+	(scatter ca_rel_growth_w95 net_hc) (lfit ca_rel_growth_w95 net_hc), by(treatment)
+	
+twoway ///
+	(scatter ca_rel_growth_w95 net_size_rel_growth) (lfit ca_rel_growth_w95 net_size_rel_growth), by(treatment)
+
+corr net_hc productivity if treatment == 1
+corr net_hc ca_rel_growth_w95 if treatment == 1
+
+
 
 
 
