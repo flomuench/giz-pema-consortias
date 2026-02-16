@@ -13,7 +13,7 @@
 *	Creates:	reg graphs
 
 ***********************************************************************
-* 	Part 0: 	set the stage		  
+**# 	PART 0: 	set the stage		  
 ***********************************************************************
 {
 use "${master_final}/consortium_final", clear
@@ -54,7 +54,7 @@ set scheme s1color
 	
 	
 ***********************************************************************
-* 	Part 0.1: create a program to estimate sharpened q-values
+**# 	PART 0.1: create a program to estimate sharpened q-values
 ***********************************************************************
 {
 	* source 1:
@@ -124,7 +124,7 @@ program qvalues
 }
 
 ***********************************************************************
-* 	PART 1: Tests for differential survey attrition 		
+**# 	PART 1: Tests for differential survey attrition 		
 ***********************************************************************
 {
 * generate additional variables
@@ -534,7 +534,7 @@ iebaltab `vars'  if `cond', ///
 
 
 ***********************************************************************
-* 	PART 2: balance table of baseline characteristics	
+**# 	PART 2: balance table of baseline characteristics	
 ***********************************************************************
 {
 	
@@ -644,7 +644,7 @@ testparm `vars'
 }
 
 ***********************************************************************
-* 	PART 2: Take-up
+**# 	PART 2: Take-up
 ***********************************************************************
 {
 * gen dummy for whether firm joined consortium or not
@@ -741,7 +741,7 @@ iebaltab ca ca_exp  profit employes mpi net_coop_pos net_coop_neg net_size exp_p
 }
 
 ***********************************************************************
-* 	PART 3: operated/closed		
+**# 	PART 3: operated/closed		
 ***********************************************************************
 {
 capture program drop rct_regression_close // enables re-running the program
@@ -847,7 +847,7 @@ rct_regression_close closed, gen(closed)
 }
 
 ***********************************************************************
-* 	PART 4: list experiment regression
+**# 	PART 4: list experiment regression
 ***********************************************************************
 {
 	* ITT, ancova	
@@ -882,7 +882,7 @@ esttab lexp1 lexp2 lexp3 using "el_listexp1.tex", replace ///
 }
 
 ***********************************************************************
-* 	PART 5: Endline results - regression table indexes
+**# 	PART 5: Endline results - regression table indexes
 ***********************************************************************
 {
 	
@@ -1017,7 +1017,7 @@ rct_regression_indexes network eri eri_ssa epp mpi female_efficacy female_loc ge
 }
 
 ***********************************************************************
-* 	PART 6: endline results - check consistency reg & reghfde - regression network outcomes
+**# 	PART 6: endline results - check consistency reg & reghfde - regression network outcomes
 ***********************************************************************
 /*
 * variables:
@@ -1049,7 +1049,7 @@ reghdfe net_association i.strata_final (take_up = treatment) if surveyround == 3
 */
 
 ***********************************************************************
-* 	PART 7: endline results - regression network outcomes
+**# 	PART 7: endline results - regression network outcomes
 ***********************************************************************
 * useful reference for adjusting coefplots: https://www.statalist.org/forums/forum/general-stata-discussion/general/1713248-coefplot-add-a-line-break-to-coefficient-labels
 {	
@@ -2508,7 +2508,7 @@ rct_regression_coopsr net_coop_pos net_coop_neg, gen(coopsr)
 }
 
 ***********************************************************************
-* 	PART 8: endline results - regression table entrepreneurial empowerment
+**# 	PART 8: endline results - regression table entrepreneurial empowerment
 ***********************************************************************
 {
 cd "${master_regressiontables}/endline/regressions/confidence"
@@ -3503,7 +3503,7 @@ rct_regression_locus female_loc car_loc_env car_loc_exp car_loc_soin, gen(locus)
 }
 
 ***********************************************************************
-* 	PART 9:knowledge transfer overview: MPI, ERI, II
+**# 	PART 9:knowledge transfer overview: MPI, ERI, II
 ***********************************************************************
 lab var ipi "Innovation practices"
 capture program drop kt_overview // enables re-running
@@ -3703,7 +3703,7 @@ end
 kt_overview mpi ipi, gen(kt) // eri
 
 ***********************************************************************
-* 	PART 10: endline results - INNOVATION - knowledge transfer
+**# 	PART 10: endline results - INNOVATION - knowledge transfer
 ***********************************************************************
 {
 **************** inno_produit ****************
@@ -4435,7 +4435,7 @@ rct_regression_ipivars proc_prod_correct proc_mark_correct inno_org_correct inno
 
 
 ***********************************************************************
-* 	PART 11: endline results - MANAGEMENT - knowledge transfer
+**# 	PART 11: endline results - MANAGEMENT - knowledge transfer
 ***********************************************************************
 **************** memory limit clear all and reload ****************
 {
@@ -5546,7 +5546,7 @@ rct_regression_mans man_source_cons man_source_pdg man_source_fam man_source_eve
 
 
 ***********************************************************************
-* 	PART 12: endline results - EXPORT READINESS
+**# 	PART 12: endline results - EXPORT READINESS
 ***********************************************************************
 {
 capture program drop eri_presentation // enables re-running
@@ -6153,7 +6153,7 @@ rct_regression_expcost expp_cost expp_ben, gen(expcost)
 }
 
 ***********************************************************************
-* 	PART 13: endline results - EXPORT - intensive & extensive margin
+**# 	PART 13: endline results - EXPORT - intensive & extensive margin
 ***********************************************************************
 {
 **************** export - extensive margin ****************
@@ -6288,6 +6288,9 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 * including attrition
 reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
+
+reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 
+ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
 
 
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
@@ -7416,7 +7419,7 @@ rct_regression_finexpks ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95
 }
 
 ***********************************************************************
-* 	PART 14: endline results - KPIs (sales, profits, employees)
+**# 	PART 14: endline results - KPIs (sales, profits, employees)
 ***********************************************************************
 {
 * change directory
@@ -7435,12 +7438,57 @@ lab var ihs_costs_w95_k1 "Costs"
 {
 
 
-*** Explorative
+**## Explorative
 {
 
 * without zeros
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
+
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3  & ihs_ca_w95_k1 > 0, cluster(consortia_cluster)
-ivreg2 ihs_ca_w95_k1 ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final (take_up = i.treatment) if surveyround == 3 & ihs_ca_w95_k1 > 0, cluster(consortia_cluster) first
+
+	* Winsorized sales: all samples configuration (all, bh, excluding zeros) & CONSORTIA/FIRM-clustered SEs
+			* OLS
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // sign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(consortia_cluster) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(consortia_cluster) // sign, 10 percent
+			* Poisson
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 10 perc
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 5 perc
+* removing zeros makes no sense as this is purpose of poisson
+*poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(consortia_cluster) // insign
+*poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(consortia_cluster) // sign, 10 percent
+
+	* Winsorized sales: OLS all samples configuration (all, bh, excluding zeros) & FIRM-clustered SEs
+			* OLS
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // marginally insign p = 0.128
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & ca_w95 > 0, cluster(id_plateforme) // insign
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & ca_w95 > 0, cluster(id_plateforme) // insign 
+
+			* Poisson
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
+poisson ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 5 perc
+
+
+
+	* Productivity
+			* OLS - consortia clustered
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 1 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 1 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & productivity_w95 > 0, cluster(consortia_cluster) // 5 percent
+
+			* OLS - firm clustered
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & productivity_w95 > 0, cluster(id_plateforme) // 5 percent
+reg productivity_w95 i.treatment productivity_w95_y0 i.missing_bl_productivity_w95 i.strata_final if surveyround == 3  & bh_sample == 1 & productivity_w95 > 0, cluster(id_plateforme) // 5
+
+
+			* Placebo baseline
+reg productivity_w95 i.treatment i.strata_final if surveyround == 1, cluster(consortia_cluster) // insign
+reg productivity_w95 i.treatment i.strata_final if surveyround == 1 & bh_sample == 1, cluster(consortia_cluster) // 6k lower, 10 percent
 
 * Cai and Szeidl, Iacovone et al. firm fixed effects
 gen midline = (surveyround == 2)
@@ -7450,6 +7498,10 @@ gen endline = (surveyround == 3)
 		* Ancova
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3, cluster(id_plateforme)
+
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) /// 111
+
 
 reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(id_plateforme)
 ivreg2 lca lca_y0 i.strata_final i.missing_bl_lca (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
@@ -7487,12 +7539,29 @@ reg ca_tun_abs_growth i.treatment i.strata_final if surveyround == 3, cluster(co
 ivreg2 ca_tun_abs_growth i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(consortia_cluster) first
 
 
-	* comparing log vs. ihs vs. rel growth rate
+	**## log vs. ihs
 		* all obs
 reg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 i.missing_bl_ihs_ca_w95_k1 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
 reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 112 obs
 reg ca_rel_growth i.treatment i.strata_final if surveyround == 3, cluster(consortia_cluster) // 110 obs
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(consortia_cluster)
+
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
+reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3, cluster(consortia_cluster) // 118 obs
+
+		* bh-sample
+			* with zeros (ihs & log(x+1))
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 111 obs
+reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) // 111 obs
+		
+			* w/o zeros 
+reg ihs_ca i.treatment ihs_ca_y0 i.missing_bl_ihs_ca i.strata_final if surveyround == 3 & bh_sample == 1 & ihs_ca > 0, cluster(consortia_cluster) // 105 obs
+reg lcapl1 i.treatment lcapl1_y0 i.missing_bl_lcapl1 i.strata_final if surveyround == 3 & bh_sample == 1 & lcapl1 > 0, cluster(consortia_cluster) // 105 obs
+
+
+
+
+
 
 		* no ca = 0
 reg lca i.treatment lca_y0 i.missing_bl_lca i.strata_final if surveyround == 3, cluster(consortia_cluster) // 112 obs
@@ -7518,7 +7587,7 @@ These closures are higher/more prevalent in the control group. The effect direct
 
 
 
-*** For presentation & For paper
+**## For presentation & For paper
 	* Business Performance: Sales
 capture program drop rct_regression_fin // enables re-running
 program rct_regression_fin
@@ -7787,7 +7856,7 @@ reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if bh_sample
 ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if bh_sample == 1, cluster(id_plateforme) first
 ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if bh_sample == 1, cluster(consortia_cluster) first
 
-			* RI test
+			**## RI test
 timer on 1 
 				* firm-level cl SE
 					* full sample
@@ -7845,30 +7914,50 @@ timer list 1
 
 
 
-	* Quantile regressions for sales and profits
+	**## Quantile regressions for sales and profits
 			* visualizing ITT effect by quantiles
 {
 
-	qreg ca_w95 i.treatment ca_w95_y0 strata_final if surveyround == 3, vce(robust) // also works
-	qreg ca i.treatment ca_w99_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
+	qreg ca_w95 i.treatment ca_w95_y0 strata_final if surveyround == 3, vce(robust) level(95)
+	qreg ca_w95 i.treatment ca_w95_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) level(95)
 	
-	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qreg ihs_ca i.treatment ihs_ca_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg ihs_ca i.treatment ihs_ca_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
 	
-	qreg ca i.treatment ca_y0 strata_final if surveyround == 3, vce(robust) // also works
-	qreg ca i.treatment strata_final if surveyround == 3, vce(robust)
-	qregplot 1.treatment, q(10(10)90) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
-	qregplot 1.treatment, q(10(10)80) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	
+	qreg productivity_w95 i.treatment productivity_w95_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) level(95)
 
 	
-	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3, vce(robust) // also works
-	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	/*
+	BH-sample with ihs transformed sales corresponds best to descriptive evidence (highest growth rate for firms
+	between 20-40th quantile) & attrition pattern (larger firms dropping out) & theoretical idea that achieving scale
+	scale collectively most beneficial for smaller firms
+	*/
+	qregplot 1.treatment, q(10(10)80) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qregplot 1.treatment, q(10(10)90) title("Impact on Productivity") ytitle("Sales (wins. 95th pct)") yline(0)
+
 	
-	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0, vce(robust) // also works
-	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qreg mpi i.treatment mpi_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg mpi i.treatment mpi_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
 	
-	qreg ihs_ca_w95_k1 i.treatment ihs_ca_w95_k1_y0 strata_final if surveyround == 3 & ihs_ca_w95_k1 != 0, vce(robust) level(90) // also works
-	qregplot 1.treatment, q(5(5)95) title("Impact on Sales") ytitle("Sales (wins. 95th pct)") yline(0)
+	qregplot 1.treatment, q(10(10)90) title("Impact on Management Practices") ytitle("Export Readiness Index") yline(0)
+
+	qreg eri i.treatment eri_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg eri i.treatment eri_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
 	
+	qregplot 1.treatment, q(10(10)90) title("Impact on Export Readiness") ytitle("Export Readiness Index") yline(0)
+	
+	qreg female_efficacy i.treatment female_efficacy_y0 strata_final if surveyround == 3, vce(robust) // also works
+	qreg female_efficacy i.treatment female_efficacy_y0 strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
+	
+	qregplot 1.treatment, q(10(10)90) title("Entrepreneurial Self-Efficacy") ytitle("Entrepreneurial Self-Efficacy") yline(0)
+	
+	qreg net_services_mean i.treatment  strata_final if surveyround == 3, vce(robust) // also works
+	qreg net_services_mean i.treatment  strata_final if surveyround == 3 & bh_sample == 1, vce(robust) // also works	
+	
+	qregplot 1.treatment, q(10(10)90) title("Impact on Business Network Use") ytitle("Business Network Use") yline(0)
+
+
 	
 		* Full sample winsorized values and ihs-transformed values
 foreach var in ca_w95 ihs_ca_w95_k1 {

@@ -13,7 +13,7 @@
 
 										  
 ***********************************************************************
-* 	PART 1: Paths
+**# 	PART 1: Paths
 ***********************************************************************
 use "${master_final}/consortium_final", clear
 
@@ -35,7 +35,7 @@ set scheme s1color
 	
 
 ***********************************************************************
-* 	PART 2: Endline statistics
+**# 	PART 2: Endline statistics
 ***********************************************************************
 * create word document
 set graphics on
@@ -50,7 +50,7 @@ putpdf text ("Consortia: Endline Statistics"), bold linebreak
 putpdf text ("Date: `c(current_date)'"), bold linebreak
 putpdf paragraph, halign(center) 
 
-****** Section 1: Response rate & take-up ******
+**## Section 1: Response rate & take-up ******
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 1: Survey Progress Overview"), bold
 
@@ -118,7 +118,7 @@ graph export "${master_output}/figures/take_up/takeup_pole_surveyround.png", rep
 
 }
 
-****** Section 2: innovation ******
+**## Section 2: innovation ******
 {
 cd "${master_output}/figures/endline/innovation"
 putpdf paragraph,  font("Courier", 20)
@@ -279,7 +279,7 @@ putpdf pagebreak
 }
 
 
-****** Section 3a: sales *******
+**## Section 3a: sales *******
 {
 	
 	* Compare distributions of sales, ihs-sales, and log-sales
@@ -337,6 +337,7 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(m
                order(1 "Treatment group" ///
                      2 "Control group") ///
                col(1) pos(6) ring(6)) 
+			   			  
 			   
 twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
         (kdensity ca_rel_growth if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
@@ -348,13 +349,12 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3, lp(l) lc(m
 			   
 			   
 			   
-twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
-        (kdensity ca_rel_growth_w95 if take_up == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(.5)), ///
+twoway  (kdensity ca_rel_growth_w95 if take_up == 1 & surveyround == 3 & bh_sample == 1, lp(l) lc(maroon) yaxis(2) bw(1)) ///
+        (kdensity ca_rel_growth_w95 if take_up == 0 & surveyround == 3 & bh_sample == 1, lp(l) lc(green) yaxis(2)  bw(1)), ///
 		xtitle("Growth rate of sales relative to baseline") ///
-		xlabel(-1(1)10) ///
         legend(rows(3) symxsize(small) ///
-               order(1 "Take-up = 1" ///
-                     2 "Take-up = 0 (incl. control group)") ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
                col(1) pos(6) ring(6)) 
 			   
 twoway  (kdensity profit_rel_growth_w95 if take_up == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(.5)) ///
@@ -655,7 +655,98 @@ twoway  (kdensity ca_rel_growth if treatment == 1 & surveyround == 3 & ca_rel_gr
 }
 
 
-****** Section 3b: sales & network *******
+**## Section 3b: Productivity *******
+		* Productivity = sales / employees
+twoway  (kdensity productivity if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(10000)) ///
+        (kdensity productivity if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(10000)), ///
+		xtitle("Productivity (Sales / Employees)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving("prod_el", replace)
+			   
+twoway  (kdensity productivity if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(10000)) ///
+        (kdensity productivity if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(10000)), ///
+		xtitle("Productivity (Sales / Employees)") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Baseline") ///
+			   saving("prod_bl", replace)
+graph combine "prod_el" "prod_bl"
+
+			   
+			   
+		* Employees
+twoway  (kdensity employes_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(5)) ///
+        (kdensity employes_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(5)), ///
+		xtitle("employes_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving(emp_el, replace)
+			   
+twoway  (kdensity employes_w95 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(5)) ///
+        (kdensity employes_w95 if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(5)), ///
+		xtitle("employes_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 	///
+			   title("Baseline")	///
+			   saving(emp_bl, replace)
+			   
+graph combine "emp_el" "emp_bl"
+
+
+		* Sales
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 3, lp(l) lc(maroon) yaxis(2) bw(75000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 3, lp(l) lc(green) yaxis(2)  bw(75000)), ///
+		xtitle("ca_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) ///
+			   title("Endline") ///
+			   saving(ca_el, replace)
+			   
+twoway  (kdensity ca_w95 if treatment == 1 & surveyround == 1, lp(l) lc(maroon) yaxis(2) bw(75000)) ///
+        (kdensity ca_w95 if treatment == 0 & surveyround == 1, lp(l) lc(green) yaxis(2)  bw(75000)), ///
+		xtitle("ca_w95") ///
+        legend(rows(3) symxsize(small) ///
+               order(1 "Treatment group" ///
+                     2 "Control group") ///
+               col(1) pos(6) ring(6)) 	///
+			   title("Baseline")	///
+			   saving(ca_bl, replace)
+			   
+graph combine "ca_el" "ca_bl"
+			   
+		
+			   
+			   
+* check why such long tail in treatment group
+sort productivity
+br productivity ca ca_w95 employes employes_w95 if treatment ==1 & surveyround == 3
+br productivity ca ca_w95 employes employes_w95 if treatment ==0 & surveyround == 3
+
+preserve	
+keep if surveyround == 3
+keep id_plateforme treatment productivity ca ca_w95 employes employes_w95
+
+sort productivity
+br  productivity ca ca_w95 employes employes_w95 if treatment ==1
+
+restore 
+
+
+
+**## Section 3c: sales & network *******
 * look at correlations
 corr net_size_w95_y0 bpi_y0
 corr net_size ca if surveyround == 1 
@@ -678,14 +769,63 @@ corr net_services_sup ca_rel_growth_w95		 // 0.12
 corr net_services_contract ca_rel_growth_w95 // -0.1
 corr net_services_confiance ca_rel_growth_w95 // 0.08
 
-
-
 corr net_services_pratiques ca_rel_growth_w95 if treatment == 1 // 0.21
 corr net_services_produits ca_rel_growth_w95 if treatment == 1 // 0.2
 corr net_services_mark ca_rel_growth_w95 if treatment == 1 	 // 0.07
 corr net_services_sup ca_rel_growth_w95 if treatment == 1		 // 0.16
 corr net_services_contract ca_rel_growth_w95 if treatment == 1 // -0.1
 corr net_services_confiance ca_rel_growth_w95 if treatment == 1 // 0.28
+
+
+corr net_services_pratiques productivity // 0.01
+corr net_services_produits productivity // 0.06
+corr net_services_mark productivity 	 // 0.08
+corr net_services_sup 	productivity	 // 0.04
+corr net_services_contract  productivity // -0.01
+corr net_services_confiance  productivity // 0.007
+
+
+corr net_services_pratiques productivity if treatment == 1 // -0.13
+corr net_services_produits productivity  if treatment == 1 // -.21
+corr net_services_mark productivity  if treatment == 1	 // 0.08
+corr net_services_sup 	productivity  if treatment == 1	 // 0.04
+corr net_services_contract  productivity  if treatment == 1 // -0.1
+corr net_services_confiance  productivity  if treatment == 1 // 0.08
+
+
+
+regress productivity net_services_pratiques if surveyround == 3 & treatment == 1, vce(cluster id_plateforme) 
+regress productivity net_services_pratiques if surveyround == 3 & treatment == 0, vce(cluster id_plateforme) 
+
+
+
+foreach var of varlist net_services_pratiques net_services_produits net_services_mark {
+	zscore `var' 3
+}
+
+egen net_hc = rowmean(net_services_pratiquesz3 net_services_produitsz3 net_services_markz3)
+
+corr net_hc productivity if treatment == 0
+corr net_hc productivity if treatment == 1
+
+corr net_hc ca_rel_growth_w95 if treatment == 0
+corr net_hc ca_rel_growth_w95 if treatment == 1
+
+gen log_productivity = log(productivity)
+
+twoway ///
+	(scatter log_productivity net_hc) (lfit log_productivity net_hc), by(treatment)
+	
+twoway ///
+	(scatter ca_rel_growth_w95 net_hc) (lfit ca_rel_growth_w95 net_hc), by(treatment)
+	
+twoway ///
+	(scatter ca_rel_growth_w95 net_size_rel_growth) (lfit ca_rel_growth_w95 net_size_rel_growth), by(treatment)
+
+corr net_hc productivity if treatment == 1
+corr net_hc ca_rel_growth_w95 if treatment == 1
+
+
 
 
 
@@ -725,7 +865,7 @@ regress lca
 
 
 
-****** Section 3: Export ******
+**## Section 3d: Export ******
 {
 cd "${master_output}/figures/endline/export"
 putpdf paragraph,  font("Courier", 20)
@@ -1157,7 +1297,7 @@ putpdf pagebreak
 
 }
 
-****** Section 4: Employees ******
+**## Section 4: Employees ******
 {
 cd "${master_output}/figures/endline/compta"
 putpdf paragraph,  font("Courier", 20)
@@ -1250,7 +1390,7 @@ restore
 }
 
 
-****** Section 5: Management******
+**## Section 5: Management******
 {
 cd "${master_output}/figures/endline/management"	
 putpdf paragraph,  font("Courier", 20)
@@ -1345,7 +1485,7 @@ putpdf pagebreak
 
 }
 
-****** Section 6: Network******
+**## Section 6: Network******
 {
 cd "${master_output}/figures/endline/network"
 putpdf paragraph,  font("Courier", 20)
@@ -1518,7 +1658,7 @@ putpdf pagebreak
 
 }
 
-****** Section 7: Entrepreneurial Confidence ******
+**## Section 7: Entrepreneurial Confidence ******
 {
 cd "${master_output}/figures/endline/confidence"
 putpdf paragraph,  font("Courier", 20)
@@ -1715,7 +1855,7 @@ putpdf image genderi_points_el.png
 putpdf pagebreak
 }
 
-****** Section 8: Accounting******
+**## Section 8: Accounting******
 {
 putpdf paragraph,  font("Courier", 20)
 putpdf text ("Section 8.1: Export"), bold
@@ -2316,7 +2456,7 @@ putpdf pagebreak
 
 }
 
-****** Section 8.2: Accounting CHECK******
+**## Section 8.2: Accounting CHECK******
 {
 
 putpdf paragraph,  font("Courier", 20)
@@ -2394,7 +2534,7 @@ putpdf pagebreak
 
 }
 
-****** Section 9: Intervention******
+**## Section 9: Intervention******
 {
 cd "${master_output}/figures/endline/intervention"
 putpdf paragraph,  font("Courier", 20)
@@ -2471,7 +2611,7 @@ graph bar (count) refus_1 refus_2 refus_3 refus_4 refus_5  if surveyround == 3, 
 
 
 ***********************************************************************
-* 	PART 4:  save pdf
+**# 	PART 4:  save pdf
 ***********************************************************************
 	* change directory to progress folder
 
