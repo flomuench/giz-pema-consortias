@@ -12,7 +12,7 @@
 *	Author:  	Florian Münch, Fabian Scheifele							    
 *	ID variable: id_plateforme (id for firms), surveyround (panel time id)
 ***********************************************************************
-* 	PART 1: 	Set standard settings & install packages			  
+**# 	PART 1: 	Set standard settings & install packages			  
 ***********************************************************************
 {	
 	* set standard settings
@@ -66,7 +66,7 @@ set scheme burd 			// for presentation, coloured
 }
 
 ***********************************************************************
-* 	PART 2: 	Prepare dynamic folder paths & globals
+**# 	PART 2: 	Prepare dynamic folder paths & globals
 ***********************************************************************
 {
 	* set first level globals for code and data
@@ -247,7 +247,7 @@ set sortseed 8413195
 }
 
 ***********************************************************************
-* 	PART 3: 	Run consortium do-files			  	 				  *
+**# 	PART 3: 	Run consortium do-files
 ***********************************************************************
 {
 /*--------------------------------------------------------------------
@@ -298,7 +298,7 @@ if (0) do "${master_github}/consortia_appel_el.do"
 }
 
 ***********************************************************************
-* 	PART 4: 	Run consortia analysis do-files
+**# 	PART 4: 	Run consortia analysis do-files
 ***********************************************************************
 /* --------------------------------------------------------------------
 	PART 4.1: Visualisations
@@ -324,6 +324,6 @@ if (0) do "${master_github}/consortia_heterogeneity_ml.do"
 if (0) do "${master_github}/consortia_heterogeneity_el.do"
 
 ***********************************************************************
-* 	PART 5: 	Run master map
+**# 	PART 5: 	Run master map
 ***********************************************************************
 if (0) do "${master_github}/master_map.do"
