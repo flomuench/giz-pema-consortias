@@ -1258,12 +1258,52 @@ foreach var of local ys {
 }
 
 ***********************************************************************
-**## 	PART 14: Tunis dummy	
+**## 	PART 14: Geography dummies	
 ***********************************************************************
+* Tunis dummy
 gen tunis = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11) // Tunis
 gen city = (gouvernorat == 10 | gouvernorat == 20 | gouvernorat == 11 | gouvernorat == 30 | gouvernorat == 40) // Tunis, Sfax, Sousse
 lab var tunis "HQ in Tunis"
 lab var city "HQ in Tunis, Sousse, Sfax"
+
+* region dummies
+gen region = .
+replace region = 1 if gouvernorat == 10 | gouvernorat == 11 | gouvernorat == 20 | gouvernorat == 80 | gouvernorat == 70
+replace region = 2 if gouvernorat == 90 | gouvernorat == 81 | gouvernorat == 71 | gouvernorat == 61
+replace region = 3 if gouvernorat == 40 | gouvernorat == 50 | gouvernorat == 51 | gouvernorat == 30
+replace region = 4 if gouvernorat == 31 | gouvernorat == 12 | gouvernorat == 91
+replace region = 5 if gouvernorat == 60 | gouvernorat == 32 | gouvernorat == 41
+replace region = 6 if gouvernorat == 21 | gouvernorat == 22 | gouvernorat == 42
+
+lab def regions 1 "north-east" 2 "north-west" 3 "centre-east" 4 "centre-west" 5 "south-east" 6 "south-west"
+lab val region regions
+tab region if surveyround == 1
+/*
+          21 Gafsa
+          22 Tozeur
+          30 Sfax
+          31 Kairouan
+          32 Tataouine
+          40 Sousse
+          41 Médenine
+          42 Kebili
+          50 Monastir
+          51 Mahdia
+          60 Gabès
+          61 Siliana
+          70 Bizerte
+          71 Kef
+          80 Nabeul
+          81 Jendouba
+          90 Béja
+          91 Sidi Bouzid
+*/
+
+* Explore different combinations of region-treatment and region-sector for SUTVA-control analysis
+tab region treatment if surveyround == 1
+tab region pole if surveyround == 1
+
+
 
 ***********************************************************************
 **## 	PART 15: Entreprise Size
