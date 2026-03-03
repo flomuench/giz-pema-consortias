@@ -6286,8 +6286,18 @@ rct_regression_exp export_1 export_2 exported exported_2024, gen(exp_ext)
 
 
 * including attrition
+	* consortia clustered
 reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster)
 ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(consortia_cluster) first
+
+	* firm-level SEs
+reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+
+
+reg ca_exp_w95 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+ivreg2 ca_exp_w95 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+
 
 reg export_1 i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // 
 ivreg2 export_1 exported_y0 missing_bl_exported (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
@@ -6378,6 +6388,130 @@ end
 	* apply program
 rct_regression_exp_paper export_1 exp_pays_w95, gen(exp_ext)
 }
+
+
+	* new version with BH sample
+{
+
+capture program drop rct_regression_exp_paper
+program rct_regression_exp_paper
+version 16
+	syntax varlist(min=1 numeric), GENerate(string)
+		foreach var in `varlist' {
+			capture confirm variable `var'_y0
+			if _rc == 0 {
+				// ITT
+				eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
+					estadd local bl_control "Yes" : `var'1
+					estadd local strata_final "Yes" : `var'1
+				// TOT
+				eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+					estadd local bl_control "Yes" : `var'2
+					estadd local strata_final "Yes" : `var'2
+				// Control group mean
+				sum `var' if treatment == 0 & surveyround == 3
+					estadd scalar control_mean = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+			}
+			else {
+				// ITT without BL control
+				eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
+					estadd local bl_control "No" : `var'1
+					estadd local strata_final "Yes" : `var'1
+				// TOT
+				eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+					estadd local bl_control "No" : `var'2
+					estadd local strata_final "Yes" : `var'2
+				sum `var' if treatment == 0 & surveyround == 3
+					estadd scalar control_mean = r(mean) : `var'2
+					estadd scalar control_sd = r(sd) : `var'2
+			}
+		}
+
+	tokenize `varlist'
+
+	* Full-sample regressions for export_1 with correct BL var name
+	* export_1 has no export_1_y0; baseline is exported_y0 / missing_bl_exported
+	// ITT - full sample with BL control
+	eststo `1'_bl1: reg `1' i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3, cluster(id_plateforme)
+		estadd local bl_control "Yes" : `1'_bl1
+		estadd local strata_final "Yes" : `1'_bl1
+	// TOT - full sample with BL control
+	eststo `1'_bl2: ivreg2 `1' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : `1'_bl2
+		estadd local strata_final "Yes" : `1'_bl2
+	sum `1' if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : `1'_bl2
+		estadd scalar control_sd = r(sd) : `1'_bl2
+
+	* BH-sample regressions for exported dummy (var 1)
+	// ITT - BH
+	eststo `1'_bh1: reg `1' i.treatment exported_y0 missing_bl_exported i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : `1'_bh1
+		estadd local strata_final "Yes" : `1'_bh1
+	// TOT - BH
+	eststo `1'_bh2: ivreg2 `1' exported_y0 missing_bl_exported i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : `1'_bh2
+		estadd local strata_final "Yes" : `1'_bh2
+	sum `1' if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : `1'_bh2
+		estadd scalar control_sd = r(sd) : `1'_bh2
+
+	* BH-sample for export countries (var 2)
+	capture confirm variable `2'_y0
+	if _rc == 0 {
+		eststo `2'_bh1: reg `2' i.treatment `2'_y0 i.missing_bl_`2' i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+			estadd local bl_control "Yes" : `2'_bh1
+			estadd local strata_final "Yes" : `2'_bh1
+		eststo `2'_bh2: ivreg2 `2' `2'_y0 i.missing_bl_`2' i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+			estadd local bl_control "Yes" : `2'_bh2
+			estadd local strata_final "Yes" : `2'_bh2
+		sum `2' if treatment == 0 & surveyround == 3 & bh_sample == 1
+			estadd scalar control_mean = r(mean) : `2'_bh2
+			estadd scalar control_sd = r(sd) : `2'_bh2
+	}
+
+	local ncols = 5 // 4 columns + 1 for row labels
+
+		* Top panel: ITT
+		* Use _bl1 (with BL control) instead of `1'1 (without) for exported
+	local regressions `1'_bl1 `1'_bh1 `2'1 `2'_bh1
+	esttab `regressions' using "${tables_exports}/rt_exp_ext.tex", replace booktabs ///
+			prehead("\begin{table}[H] \centering \caption{Export Performance} \label{tab:export_results} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+			posthead("\toprule & \multicolumn{4}{c}{\textit{Panel A: Intention-to-treat (ITT)}} \\ \cmidrule(lr){2-5}") ///
+			fragment ///
+			cells(b(star fmt(3)) se(par fmt(3))) ///
+			mtitles("\shortstack{Exported\\{[0;1]}}" "\shortstack{Exported\\(BH)}" "\shortstack{N. Export\\Countries}" "\shortstack{N. Export\\Countries (BH)}") ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			collabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0 exported_y0 missing_bl_exported) ///
+			noobs
+
+		* Bottom panel: TOT
+	local regressions `1'_bl2 `1'_bh2 `2'2 `2'_bh2
+	esttab `regressions' using "${tables_exports}/rt_exp_ext.tex", append booktabs ///
+			fragment ///
+			posthead("\midrule & \multicolumn{4}{c}{\textit{Panel B: Treatment Effect on the Treated (TOT)}} \\ \cmidrule(lr){2-5}") ///
+			cells(b(star fmt(3)) se(par fmt(3))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0 exported_y0 missing_bl_exported) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.2fc %9.2fc %9.0g %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{`ncols'}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: All outcomes are measured at endline, two years after the program started. Panel A reports intention-to-treat (ITT) estimates. Panel B reports IV estimates, instrumenting consortium membership with treatment assignment. Export countries are winsorised at the $95^{th}$ percentile. Columns (2) and (4) restrict the sample to the Behaghel-trimmed sample to account for differential attrition (see Section \ref{sec:attrition}). Standard errors clustered at the firm level are reported in parentheses. Each specification includes controls for randomization strata and baseline values of the outcome variable. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+
+end
+
+	* apply program
+rct_regression_exp_paper export_1 exp_pays_w95, gen(exp_ext)
+
+}
+
 
 
 
@@ -7520,6 +7654,10 @@ lab var ihs_catun_w95_k1 "Domestic Sales"
 lab var ihs_ca_exp_w95_k1 "Export Sales"
 lab var ihs_profit_w95_k1 "Profits"
 lab var ihs_costs_w95_k1 "Costs"
+
+gen ca_w95_eur = ca_w95 / 3
+gen ca_w95_y0_eur = ca_w95_y0 / 3
+
 **************** explorative
 {
 
@@ -7855,14 +7993,14 @@ version 16
 
 	* Panel A formatting: no decimals + comma, except col 6 (employees) = 2 decimals
 	* 7 models: Total Sales | Total Sales BH | Domestic | Export | Profits | Employees | Productivity
-	local fmtA "%9.0fc %9.0fc %9.0fc %9.0fc %9.0fc %9.2fc %9.0fc"
+	local fmtA "%9.0fc %9.0fc %9.0fc %9.0fc %9.0fc %9.0fc %9.0fc"
 	* Panel B formatting: 2 decimals throughout (Poisson coefficients)
 	local fmtB "%9.2fc %9.2fc %9.2fc %9.2fc %9.2fc %9.2fc %9.2fc"
 
 	*** (1) Panel A - ITT (replace)
 	local regA_itt `1'1 `1'_bh1 `2'1 `3'1 `4'1 `5'1 `6'1
 	esttab `regA_itt' using "${tables_business}/rt_business_paper.tex", replace booktabs ///
-			prehead("\begin{table}[H] \centering \\ \caption{Business Performance} \\ \begin{adjustbox}{width=\textwidth,center} \label{tab:business_results} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+			prehead("\begin{table}[H] \centering \\ \caption{Business Performance} \label{tab:business_results} \\ \begin{adjustbox}{width=\textwidth,center}  \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
 			posthead("\toprule & \multicolumn{7}{c}{\textit{Panel A: OLS ANCOVA (winsorized)}} \\\\ \cmidrule(lr){2-8}") ///
 			fragment ///
 			cells(b(star fmt(`fmtA')) se(par fmt(`fmtA'))) ///
@@ -7917,7 +8055,202 @@ rct_regression_business_paper ///
 	gen(business_paper)
 
 
+* further improved formatting
 
+{
+
+capture program drop rct_regression_business_paper
+program rct_regression_business_paper
+version 16
+	syntax varlist(min=1 numeric), GENerate(string)
+
+	* ----------------------------------------------------------------
+	* 	OLS regressions (Panel A vars: winsorized IHS)
+	* ----------------------------------------------------------------
+	* Panel A varlist passed as arguments 1-6
+	tokenize `varlist'
+	local nA = 6
+
+	forvalues i = 1/`nA' {
+		local var "``i''"
+		capture confirm variable `var'_y0
+		if _rc == 0 {
+			// ITT
+			eststo `var'1: reg `var' i.treatment `var'_y0 i.missing_bl_`var' i.strata_final if surveyround == 3, cluster(id_plateforme)
+				estadd local bl_control "Yes" : `var'1
+				estadd local strata_final "Yes" : `var'1
+
+			// TOT
+			eststo `var'2: ivreg2 `var' `var'_y0 i.missing_bl_`var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+				estadd local bl_control "Yes" : `var'2
+				estadd local strata_final "Yes" : `var'2
+
+			sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2
+				estadd scalar control_sd = r(sd) : `var'2
+		}
+		else {
+			// ITT without BL control
+			eststo `var'1: reg `var' i.treatment i.strata_final if surveyround == 3, cluster(id_plateforme)
+				estadd local bl_control "No" : `var'1
+				estadd local strata_final "Yes" : `var'1
+
+			eststo `var'2: ivreg2 `var' i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+				estadd local bl_control "No" : `var'2
+				estadd local strata_final "Yes" : `var'2
+
+			sum `var' if treatment == 0 & surveyround == 3
+				estadd scalar control_mean = r(mean) : `var'2
+				estadd scalar control_sd = r(sd) : `var'2
+		}
+	}
+
+	* BH-sample for first OLS variable (total sales)
+	local bhvar "`1'"
+	capture confirm variable `bhvar'_y0
+	if _rc == 0 {
+		eststo `bhvar'_bh1: reg `bhvar' i.treatment `bhvar'_y0 i.missing_bl_`bhvar' i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+			estadd local bl_control "Yes" : `bhvar'_bh1
+			estadd local strata_final "Yes" : `bhvar'_bh1
+
+		eststo `bhvar'_bh2: ivreg2 `bhvar' `bhvar'_y0 i.missing_bl_`bhvar' i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+			estadd local bl_control "Yes" : `bhvar'_bh2
+			estadd local strata_final "Yes" : `bhvar'_bh2
+
+		sum `bhvar' if treatment == 0 & surveyround == 3 & bh_sample == 1
+			estadd scalar control_mean = r(mean) : `bhvar'_bh2
+			estadd scalar control_sd = r(sd) : `bhvar'_bh2
+	}
+
+	* ----------------------------------------------------------------
+	* 	Poisson / IHS regressions (Panel B vars: arguments 7-12)
+	*	Uses unwinsorized outcomes but winsorized baseline controls
+	*	Panel A var (position i-6) provides the _y0 and missing_bl_ controls
+	* ----------------------------------------------------------------
+	local nB_start = 7
+	local nB_end = 12
+
+	forvalues i = `nB_start'/`nB_end' {
+		local var "``i''"
+		* corresponding Panel A variable for y0 control
+		local j = `i' - 6
+		local var_panelA "``j''"
+
+		capture confirm variable `var_panelA'_y0
+		if _rc == 0 {
+			local bl_ctrls "`var_panelA'_y0 i.missing_bl_`var_panelA'"
+		}
+		else {
+			local bl_ctrls ""
+		}
+
+		* IHS vars get OLS, level vars get Poisson
+		local is_ihs = (strpos("`var'", "ihs_") > 0)
+
+		if `is_ihs' {
+			// OLS for IHS profit (ITT only)
+			eststo `var'1: reg `var' i.treatment `bl_ctrls' i.strata_final if surveyround == 3, cluster(id_plateforme)
+				estadd local bl_control = cond("`bl_ctrls'" != "", "Yes", "No") : `var'1
+				estadd local strata_final "Yes" : `var'1
+		}
+		else {
+			// Poisson for level vars (ITT only)
+			eststo `var'1: poisson `var' i.treatment `bl_ctrls' i.strata_final if surveyround == 3, vce(cluster id_plateforme)
+				estadd local bl_control = cond("`bl_ctrls'" != "", "Yes", "No") : `var'1
+				estadd local strata_final "Yes" : `var'1
+		}
+
+		sum `var' if treatment == 0 & surveyround == 3
+			estadd scalar control_mean = r(mean) : `var'1
+			estadd scalar control_sd = r(sd) : `var'1
+	}
+
+	* BH-sample Poisson for first Panel B variable (total sales level)
+	*	Uses winsorized y0 from Panel A var 1
+	local bhvarB "``nB_start''"
+	local bhvarA "`1'"
+	capture confirm variable `bhvarA'_y0
+	if _rc == 0 {
+		local bl_ctrls_bh "`bhvarA'_y0 i.missing_bl_`bhvarA'"
+	}
+	else {
+		local bl_ctrls_bh ""
+	}
+
+	eststo `bhvarB'_bh1: poisson `bhvarB' i.treatment `bl_ctrls_bh' i.strata_final if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control = cond("`bl_ctrls_bh'" != "", "Yes", "No") : `bhvarB'_bh1
+		estadd local strata_final "Yes" : `bhvarB'_bh1
+
+	sum `bhvarB' if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : `bhvarB'_bh1
+		estadd scalar control_sd = r(sd) : `bhvarB'_bh1
+
+	* ----------------------------------------------------------------
+	*	Build single table: 3 esttab calls (replace, append, append)
+	*	Column order: Productivity | Total Sales | Total Sales BH | Domestic | Export | Profits | Employees
+	*	Variable positions: 1=ca_w95 2=ca_tun_w95 3=ca_exp_w95 4=profit_w95 5=employes_w95 6=productivity_w95
+	*	                    7=ca    8=ca_tun    9=ca_exp    10=ihs_profit 11=employes 12=productivity
+	* ----------------------------------------------------------------
+
+	local ncols = 8 // 7 columns + 1 for row labels
+
+	*** (1) Panel A - ITT (replace)
+	local regA_itt `6'1 `1'1 `1'_bh1 `2'1 `3'1 `4'1 `5'1
+	esttab `regA_itt' using "${tables_business}/rt_business_paper.tex", replace booktabs ///
+			prehead("\begin{table}[H] \centering \caption{Business Performance} \label{tab:business_results} \\ \begin{adjustbox}{width=\textwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+			posthead("\toprule & \multicolumn{7}{c}{\textit{Panel A: OLS ANCOVA (winsorized)}} \\ \cmidrule(lr){2-8}") ///
+			fragment ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			mtitles("\shortstack{Product-\\ivity}" "\shortstack{Total\\Sales}" "\shortstack{Total Sales\\(BH)}" "\shortstack{Domestic\\Sales}" "\shortstack{Export\\Sales}" "\shortstack{Profits}" "\shortstack{N. of\\Employees}") ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			collabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			noobs
+
+	*** (2) Panel A - TOT (append)
+	local regA_tot `6'2 `1'2 `1'_bh2 `2'2 `3'2 `4'2 `5'2
+	esttab `regA_tot' using "${tables_business}/rt_business_paper.tex", append booktabs ///
+			fragment ///
+			posthead("") ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			noobs
+
+	*** (3) Panel B - ITT only (append, with stats + postfoot)
+	local regB_itt `12'1 `7'1 `7'_bh1 `8'1 `9'1 `10'1 `11'1
+	esttab `regB_itt' using "${tables_business}/rt_business_paper.tex", append booktabs ///
+			fragment ///
+			posthead("\addlinespace[0.3cm] \midrule & \multicolumn{7}{c}{\textit{Panel B: Poisson (unwinsorized) / IHS (profit)}} \\ \cmidrule(lr){2-8}") ///
+			cells(b(star fmt(%9.2fc)) se(par fmt(%9.2fc))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			eqlabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{`ncols'}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: Productivity is defined as total sales divided by the number of employees. All outcomes are measured at endline, two years after the program started. Panel A reports OLS ANCOVA estimates on outcomes winsorized at the $95^{th}$ percentile, with ITT and TOT (instrumenting consortium membership with treatment assignment) rows. Panel B reports ITT Poisson regression coefficients on unwinsorized outcomes following \citet{Chen.2022}, except Column (6) which uses OLS on IHS-transformed unwinsorized profits (Poisson is not defined for negative values). Both panels control for winsorized baseline values of the outcome variable. TOT estimates for Panel B specifications are available in Panel A. Column (3) restricts the sample to the Behaghel-trimmed sample to account for differential attrition (see Section \ref{sec:attrition}). Standard errors clustered at the firm level are reported in parentheses. Each specification includes controls for randomization strata. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\) denote the significance level.% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+
+end
+
+	* apply program: args 1-6 = Panel A (OLS winsorized), args 7-12 = Panel B (Poisson/IHS)
+rct_regression_business_paper ///
+	ca_w95 ca_tun_w95 ca_exp_w95 profit_w95 employes_w95 productivity_w95 ///
+	ca ca_tun ca_exp ihs_profit employes productivity, ///
+	gen(business_paper)
+
+}
 
 
 
@@ -7933,6 +8266,9 @@ rct_regression_business_paper ///
 		* regional markets
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.region i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.region i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // marginally insign p = 0.104
+
+*reg ca_w95_eur i.treatment ca_w95_y0_eur i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
+*reg ca_w95_eur i.treatment ca_w95_y0_eur i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) // marginally insign p = 0.104
 
 		* sector markets
 reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.pole i.strata_final if surveyround == 3, cluster(id_plateforme) // insign
@@ -10128,5 +10464,472 @@ rct_regression_empl employes_w95 car_empl1_w95 car_empl2_w95, gen(empl)
 }
 
 
+
+}
+
+
+
+
+***********************************************************************
+**# 	TABLE A1: Sales Robustness across Specifications
+***********************************************************************
+{
+
+	* ----------------------------------------------------------------
+	*	Column structure (8 columns):
+	*	Full sample:  (1) Winsorized OLS  (2) Poisson  (3) IHS  (4) log(x+1)
+	*	BH sample:    (5) Winsorized OLS  (6) Poisson  (7) IHS  (8) log(x+1)
+	* ----------------------------------------------------------------
+
+	* ----------------------------------------------------------------
+	*	Full sample regressions
+	* ----------------------------------------------------------------
+{
+	** (1) Winsorized OLS (ANCOVA) - ITT + TOT
+	eststo sales_w1: reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_w1
+		estadd local strata_final "Yes" : sales_w1
+	eststo sales_w2: ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_w2
+		estadd local strata_final "Yes" : sales_w2
+	sum ca_w95 if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : sales_w2
+		estadd scalar control_sd = r(sd) : sales_w2
+
+	** (2) Poisson (unwinsorized, winsorized BL control) - ITT only
+	eststo sales_p1: poisson ca i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sales_p1
+		estadd local strata_final "Yes" : sales_p1
+	sum ca if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : sales_p1
+		estadd scalar control_sd = r(sd) : sales_p1
+
+	** (3) IHS - ITT + TOT
+	eststo sales_ihs1: reg ihs_ca i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_ihs1
+		estadd local strata_final "Yes" : sales_ihs1
+	eststo sales_ihs2: ivreg2 ihs_ca ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_ihs2
+		estadd local strata_final "Yes" : sales_ihs2
+	sum ihs_ca if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : sales_ihs2
+		estadd scalar control_sd = r(sd) : sales_ihs2
+
+	** (4) log(x+1) - ITT + TOT
+	eststo sales_log1: reg lcapl1 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_log1
+		estadd local strata_final "Yes" : sales_log1
+	eststo sales_log2: ivreg2 lcapl1 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_log2
+		estadd local strata_final "Yes" : sales_log2
+	sum lcapl1 if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : sales_log2
+		estadd scalar control_sd = r(sd) : sales_log2
+
+}
+	* ----------------------------------------------------------------
+	*	BH sample regressions
+	* ----------------------------------------------------------------
+{
+
+	** (5) Winsorized OLS (BH)
+	eststo sales_w_bh1: reg ca_w95 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_w_bh1
+		estadd local strata_final "Yes" : sales_w_bh1
+	eststo sales_w_bh2: ivreg2 ca_w95 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_w_bh2
+		estadd local strata_final "Yes" : sales_w_bh2
+	sum ca_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sales_w_bh2
+		estadd scalar control_sd = r(sd) : sales_w_bh2
+
+	** (6) Poisson (BH) - ITT only
+	eststo sales_p_bh1: poisson ca i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sales_p_bh1
+		estadd local strata_final "Yes" : sales_p_bh1
+	sum ca if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sales_p_bh1
+		estadd scalar control_sd = r(sd) : sales_p_bh1
+
+	** (7) IHS (BH)
+	eststo sales_ihs_bh1: reg ihs_ca i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_ihs_bh1
+		estadd local strata_final "Yes" : sales_ihs_bh1
+	eststo sales_ihs_bh2: ivreg2 ihs_ca ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_ihs_bh2
+		estadd local strata_final "Yes" : sales_ihs_bh2
+	sum ihs_ca if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sales_ihs_bh2
+		estadd scalar control_sd = r(sd) : sales_ihs_bh2
+
+	** (8) log(x+1) (BH)
+	eststo sales_log_bh1: reg lcapl1 i.treatment ca_w95_y0 i.missing_bl_ca_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sales_log_bh1
+		estadd local strata_final "Yes" : sales_log_bh1
+	eststo sales_log_bh2: ivreg2 lcapl1 ca_w95_y0 i.missing_bl_ca_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sales_log_bh2
+		estadd local strata_final "Yes" : sales_log_bh2
+	sum lcapl1 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sales_log_bh2
+		estadd scalar control_sd = r(sd) : sales_log_bh2
+}
+	* ----------------------------------------------------------------
+	*	Build table: 2 esttab calls (ITT replace, TOT append)
+	* ----------------------------------------------------------------
+{
+
+	local ncols = 9 // 8 columns + 1 for row labels
+
+	*** Panel A: ITT
+	local regressions sales_w1 sales_p1 sales_ihs1 sales_log1 sales_w_bh1 sales_p_bh1 sales_ihs_bh1 sales_log_bh1
+	esttab `regressions' using "${tables_business}/rt_sales_robustness.tex", replace booktabs ///
+			prehead("\begin{table}[H] \centering \caption{Robustness: Total Sales across Specifications} \label{tab:sales-robustness} \\ \begin{adjustbox}{width=\textwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule & \multicolumn{4}{c}{Full sample} & \multicolumn{4}{c}{Behaghel-trimmed sample} \\ \cmidrule(lr){2-5} \cmidrule(lr){6-9}") ///
+			posthead("\toprule & \multicolumn{8}{c}{\textit{Panel A: Intention-to-treat (ITT)}} \\ \cmidrule(lr){2-9}") ///
+			fragment ///
+			cells(b(star fmt(3)) se(par fmt(3))) ///
+			mtitles("\shortstack{Winsorized\\OLS}" "\shortstack{Poisson}" "\shortstack{IHS}" "\shortstack{log(x+1)}" "\shortstack{Winsorized\\OLS}" "\shortstack{Poisson}" "\shortstack{IHS}" "\shortstack{log(x+1)}") ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			collabels(none) ///
+			eqlabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			noobs
+	* Blank placeholders for Poisson TOT (IV Poisson does not converge)
+	* Post a dummy _cons coefficient that gets dropped by esttab
+	* Get N from Poisson ITT estimates
+	estimates restore sales_p1
+	local N_full = e(N)
+	estimates restore sales_p_bh1
+	local N_bh = e(N)
+
+	capture matrix drop b_empty V_empty
+	matrix b_empty = (0)
+	matrix colnames b_empty = _cons
+	matrix V_empty = (0)
+	matrix colnames V_empty = _cons
+	matrix rownames V_empty = _cons
+	eststo sales_p2: ereturn post b_empty V_empty
+		estadd local bl_control "Yes" : sales_p2
+		estadd local strata_final "Yes" : sales_p2
+		estadd scalar N = `N_full' : sales_p2
+	sum ca if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : sales_p2
+		estadd scalar control_sd = r(sd) : sales_p2
+
+	matrix b_empty = (0)
+	matrix colnames b_empty = _cons
+	matrix V_empty = (0)
+	matrix colnames V_empty = _cons
+	matrix rownames V_empty = _cons
+	eststo sales_p_bh2: ereturn post b_empty V_empty
+		estadd local bl_control "Yes" : sales_p_bh2
+		estadd local strata_final "Yes" : sales_p_bh2
+		estadd scalar N = `N_bh' : sales_p_bh2
+	sum ca if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sales_p_bh2
+		estadd scalar control_sd = r(sd) : sales_p_bh2
+
+	*** Panel B: TOT (Poisson cols blank - IV Poisson does not converge)
+	local regressions sales_w2 sales_p2 sales_ihs2 sales_log2 sales_w_bh2 sales_p_bh2 sales_ihs_bh2 sales_log_bh2
+	esttab `regressions' using "${tables_business}/rt_sales_robustness.tex", append booktabs ///
+			fragment ///
+			posthead("\midrule & \multicolumn{8}{c}{\textit{Panel B: Treatment Effect on the Treated (TOT)}} \\ \cmidrule(lr){2-9}") ///
+			cells(b(star fmt(3)) se(par fmt(3))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			eqlabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{`ncols'}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: Each column reports estimates with total sales as the outcome variable under a different specification. Columns (1) and (5) use OLS on sales winsorized at the $95^{th}$ percentile. Columns (2) and (6) report Poisson QMLE coefficients on unwinsorized sales (ITT only; IV Poisson does not converge). Columns (3) and (7) use the inverse hyperbolic sine transformation. Columns (4) and (8) use $\log(x+1)$. Columns (5)--(8) restrict the sample using the Behaghel-trimmed bounds to account for differential attrition. All specifications control for winsorized baseline sales and randomization strata. Standard errors clustered at the firm level in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+
+}
+}
+
+
+***********************************************************************
+**# 	TABLE A2: Profits at Midline vs Endline
+***********************************************************************
+{
+
+	* ----------------------------------------------------------------
+	*	Column structure (4 columns):
+	*	(1) Midline full  (2) Midline BH  (3) Endline full  (4) Endline BH
+	*	Outcome: profit_w95 (winsorized)
+	*	BL control: profit_w95_y0 / missing_bl_profit_w95
+	* ----------------------------------------------------------------
+
+	** (1) Midline - full sample
+{
+	eststo prof_ml1: reg profit_w95 i.treatment profit_w95_y0 i.missing_bl_profit_w95 i.strata_final if surveyround == 2, cluster(id_plateforme)
+		estadd local bl_control "Yes" : prof_ml1
+		estadd local strata_final "Yes" : prof_ml1
+	eststo prof_ml2: ivreg2 profit_w95 profit_w95_y0 i.missing_bl_profit_w95 i.strata_final (take_up = i.treatment) if surveyround == 2, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : prof_ml2
+		estadd local strata_final "Yes" : prof_ml2
+	sum profit_w95 if treatment == 0 & surveyround == 2
+		estadd scalar control_mean = r(mean) : prof_ml2
+		estadd scalar control_sd = r(sd) : prof_ml2
+
+}
+	** (2) Midline - BH sample
+{
+	eststo prof_ml_bh1: reg profit_w95 i.treatment profit_w95_y0 i.missing_bl_profit_w95 i.strata_final if surveyround == 2 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : prof_ml_bh1
+		estadd local strata_final "Yes" : prof_ml_bh1
+	eststo prof_ml_bh2: ivreg2 profit_w95 profit_w95_y0 i.missing_bl_profit_w95 i.strata_final (take_up = i.treatment) if surveyround == 2 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : prof_ml_bh2
+		estadd local strata_final "Yes" : prof_ml_bh2
+	sum profit_w95 if treatment == 0 & surveyround == 2 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : prof_ml_bh2
+		estadd scalar control_sd = r(sd) : prof_ml_bh2
+
+	** (3) Endline - full sample
+	eststo prof_el1: reg profit_w95 i.treatment profit_w95_y0 i.missing_bl_profit_w95 i.strata_final if surveyround == 3, cluster(id_plateforme)
+		estadd local bl_control "Yes" : prof_el1
+		estadd local strata_final "Yes" : prof_el1
+	eststo prof_el2: ivreg2 profit_w95 profit_w95_y0 i.missing_bl_profit_w95 i.strata_final (take_up = i.treatment) if surveyround == 3, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : prof_el2
+		estadd local strata_final "Yes" : prof_el2
+	sum profit_w95 if treatment == 0 & surveyround == 3
+		estadd scalar control_mean = r(mean) : prof_el2
+		estadd scalar control_sd = r(sd) : prof_el2
+
+	** (4) Endline - BH sample
+	eststo prof_el_bh1: reg profit_w95 i.treatment profit_w95_y0 i.missing_bl_profit_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : prof_el_bh1
+		estadd local strata_final "Yes" : prof_el_bh1
+	eststo prof_el_bh2: ivreg2 profit_w95 profit_w95_y0 i.missing_bl_profit_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : prof_el_bh2
+		estadd local strata_final "Yes" : prof_el_bh2
+	sum profit_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : prof_el_bh2
+		estadd scalar control_sd = r(sd) : prof_el_bh2
+
+	* ----------------------------------------------------------------
+	*	Build table
+	* ----------------------------------------------------------------
+
+	local ncols = 5 // 4 columns + 1 for row labels
+
+	*** Panel A: ITT
+	local regressions prof_ml1 prof_ml_bh1 prof_el1 prof_el_bh1
+	esttab `regressions' using "${tables_business}/rt_profits_ml_el.tex", replace booktabs ///
+			prehead("\begin{table}[H] \centering \caption{Profits at Midline and Endline} \label{tab:profits-ml-el} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule & \multicolumn{2}{c}{Midline (year 1)} & \multicolumn{2}{c}{Endline (year 2)} \\ \cmidrule(lr){2-3} \cmidrule(lr){4-5}") ///
+			posthead("\toprule & \multicolumn{4}{c}{\textit{Panel A: Intention-to-treat (ITT)}} \\ \cmidrule(lr){2-5}") ///
+			fragment ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			mtitles("\shortstack{Profits}" "\shortstack{Profits\\(BH)}" "\shortstack{Profits}" "\shortstack{Profits\\(BH)}") ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			collabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			noobs
+
+	*** Panel B: TOT
+	local regressions prof_ml2 prof_ml_bh2 prof_el2 prof_el_bh2
+	esttab `regressions' using "${tables_business}/rt_profits_ml_el.tex", append booktabs ///
+			fragment ///
+			posthead("\midrule & \multicolumn{4}{c}{\textit{Panel B: Treatment Effect on the Treated (TOT)}} \\ \cmidrule(lr){2-5}") ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0) ///
+			stats(control_mean control_sd N strata_final bl_control, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{`ncols'}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome is profits winsorized at the $95^{th}$ percentile. Columns (1)--(2) report midline estimates (one year after the program started). Columns (3)--(4) report endline estimates (two years after the program started). Columns (2) and (4) restrict the sample to the Behaghel-trimmed sample. Standard errors clustered at the firm level in parentheses. Each specification includes controls for randomization strata and winsorized baseline profits. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+
+}
+}
+
+***********************************************************************
+**# 	TABLE A3: SUTVA - Business Stealing Robustness
+***********************************************************************
+{
+	* ----------------------------------------------------------------
+	*	Column structure (4 columns per panel):
+	*	(1) Baseline (no SUTVA control)
+	*	(2) + Region FE
+	*	(3) + Sector FE
+	*	(4) + Region x Sector FE
+	*
+	*	Panel A: OLS ANCOVA (winsorized domestic sales)
+	*	Panel B: Poisson (unwinsorized domestic sales)
+	*
+	*	Note: sector (pole) is a component of strata_final.
+	*	Including i.pole alongside i.strata_final creates collinearity;
+	*	Stata drops collinear terms automatically.
+	* ----------------------------------------------------------------
+
+	* ----------------------------------------------------------------
+	*	Panel A: OLS ANCOVA (winsorized) - ITT + TOT, BH sample
+	* ----------------------------------------------------------------
+{
+	** (1) Baseline - no SUTVA control
+	eststo sutva_ols1: reg ca_tun_w95 i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sutva_ols1
+		estadd local strata_final "Yes" : sutva_ols1
+		estadd local region_fe "No" : sutva_ols1
+		estadd local sector_fe "No" : sutva_ols1
+	eststo sutva_ols1_iv: ivreg2 ca_tun_w95 ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sutva_ols1_iv
+		estadd local strata_final "Yes" : sutva_ols1_iv
+		estadd local region_fe "No" : sutva_ols1_iv
+		estadd local sector_fe "No" : sutva_ols1_iv
+	sum ca_tun_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_ols1_iv
+		estadd scalar control_sd = r(sd) : sutva_ols1_iv
+
+	** (2) + Region FE
+	eststo sutva_ols2: reg ca_tun_w95 i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sutva_ols2
+		estadd local strata_final "Yes" : sutva_ols2
+		estadd local region_fe "Yes" : sutva_ols2
+		estadd local sector_fe "No" : sutva_ols2
+	eststo sutva_ols2_iv: ivreg2 ca_tun_w95 ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sutva_ols2_iv
+		estadd local strata_final "Yes" : sutva_ols2_iv
+		estadd local region_fe "Yes" : sutva_ols2_iv
+		estadd local sector_fe "No" : sutva_ols2_iv
+	sum ca_tun_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_ols2_iv
+		estadd scalar control_sd = r(sd) : sutva_ols2_iv
+
+	** (3) + Sector FE
+	eststo sutva_ols3: reg ca_tun_w95 i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.pole if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sutva_ols3
+		estadd local strata_final "Yes" : sutva_ols3
+		estadd local region_fe "No" : sutva_ols3
+		estadd local sector_fe "Yes" : sutva_ols3
+	eststo sutva_ols3_iv: ivreg2 ca_tun_w95 ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.pole (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sutva_ols3_iv
+		estadd local strata_final "Yes" : sutva_ols3_iv
+		estadd local region_fe "No" : sutva_ols3_iv
+		estadd local sector_fe "Yes" : sutva_ols3_iv
+	sum ca_tun_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_ols3_iv
+		estadd scalar control_sd = r(sd) : sutva_ols3_iv
+
+	** (4) + Region x Sector FE
+	eststo sutva_ols4: reg ca_tun_w95 i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region#i.pole if surveyround == 3 & bh_sample == 1, cluster(id_plateforme)
+		estadd local bl_control "Yes" : sutva_ols4
+		estadd local strata_final "Yes" : sutva_ols4
+		estadd local region_fe "Yes" : sutva_ols4
+		estadd local sector_fe "Yes" : sutva_ols4
+	eststo sutva_ols4_iv: ivreg2 ca_tun_w95 ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region#i.pole (take_up = i.treatment) if surveyround == 3 & bh_sample == 1, cluster(id_plateforme) first
+		estadd local bl_control "Yes" : sutva_ols4_iv
+		estadd local strata_final "Yes" : sutva_ols4_iv
+		estadd local region_fe "Yes" : sutva_ols4_iv
+		estadd local sector_fe "Yes" : sutva_ols4_iv
+	sum ca_tun_w95 if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_ols4_iv
+		estadd scalar control_sd = r(sd) : sutva_ols4_iv
+}
+	* ----------------------------------------------------------------
+	*	Panel B: Poisson (unwinsorized, winsorized BL control) - ITT, BH sample
+	* ----------------------------------------------------------------
+{
+	** (1) Baseline
+	eststo sutva_poi1: poisson ca_tun i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sutva_poi1
+		estadd local strata_final "Yes" : sutva_poi1
+		estadd local region_fe "No" : sutva_poi1
+		estadd local sector_fe "No" : sutva_poi1
+	sum ca_tun if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_poi1
+		estadd scalar control_sd = r(sd) : sutva_poi1
+
+	** (2) + Region FE
+	eststo sutva_poi2: poisson ca_tun i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sutva_poi2
+		estadd local strata_final "Yes" : sutva_poi2
+		estadd local region_fe "Yes" : sutva_poi2
+		estadd local sector_fe "No" : sutva_poi2
+	sum ca_tun if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_poi2
+		estadd scalar control_sd = r(sd) : sutva_poi2
+
+	** (3) + Sector FE
+	eststo sutva_poi3: poisson ca_tun i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.pole if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sutva_poi3
+		estadd local strata_final "Yes" : sutva_poi3
+		estadd local region_fe "No" : sutva_poi3
+		estadd local sector_fe "Yes" : sutva_poi3
+	sum ca_tun if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_poi3
+		estadd scalar control_sd = r(sd) : sutva_poi3
+
+	** (4) + Region x Sector FE
+	eststo sutva_poi4: poisson ca_tun i.treatment ca_tun_w95_y0 i.missing_bl_ca_tun_w95 i.strata_final i.region#i.pole if surveyround == 3 & bh_sample == 1, vce(cluster id_plateforme)
+		estadd local bl_control "Yes" : sutva_poi4
+		estadd local strata_final "Yes" : sutva_poi4
+		estadd local region_fe "Yes" : sutva_poi4
+		estadd local sector_fe "Yes" : sutva_poi4
+	sum ca_tun if treatment == 0 & surveyround == 3 & bh_sample == 1
+		estadd scalar control_mean = r(mean) : sutva_poi4
+		estadd scalar control_sd = r(sd) : sutva_poi4
+}
+	* ----------------------------------------------------------------
+	*	Build table: 3 esttab calls (Panel A ITT, Panel A TOT, Panel B ITT)
+	* ----------------------------------------------------------------
+{
+	local ncols = 5 // 4 columns + 1 for row labels
+
+	*** Panel A: OLS ANCOVA - ITT (replace)
+	local regressions sutva_ols1 sutva_ols2 sutva_ols3 sutva_ols4
+	esttab `regressions' using "${tables_business}/rt_sutva.tex", replace booktabs ///
+			prehead("\begin{table}[H] \centering \caption{SUTVA Robustness: Domestic Sales with Region and Sector Controls} \label{tab:sutva-robustness} \\ \begin{adjustbox}{width=\columnwidth,center} \\ \begin{tabularx}{\linewidth}{l >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X >{\centering\arraybackslash}X} \toprule") ///
+			posthead("\toprule & \multicolumn{4}{c}{\textit{Panel A: OLS ANCOVA (winsorized domestic sales)}} \\ \cmidrule(lr){2-5}") ///
+			fragment ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			mtitles("\shortstack{Baseline}" "\shortstack{+ Region}" "\shortstack{+ Sector}" "\shortstack{+ Region$\times$ Sector}") ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			nobaselevels ///
+			collabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0 *.region *.pole *.region#*.pole) ///
+			noobs
+
+	*** Panel A: OLS ANCOVA - TOT (append)
+	local regressions sutva_ols1_iv sutva_ols2_iv sutva_ols3_iv sutva_ols4_iv
+	esttab `regressions' using "${tables_business}/rt_sutva.tex", append booktabs ///
+			fragment ///
+			posthead("") ///
+			cells(b(star fmt(%9.0fc)) se(par fmt(%9.0fc))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0 *.region *.pole *.region#*.pole) ///
+			stats(control_mean control_sd N strata_final bl_control region_fe sector_fe, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls" "Region FE" "Sector FE")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			noobs
+
+	*** Panel B: Poisson - ITT (append)
+	local regressions sutva_poi1 sutva_poi2 sutva_poi3 sutva_poi4
+	esttab `regressions' using "${tables_business}/rt_sutva.tex", append booktabs ///
+			fragment ///
+			posthead("\addlinespace[0.3cm] \midrule & \multicolumn{4}{c}{\textit{Panel B: Poisson (unwinsorized domestic sales)}} \\ \cmidrule(lr){2-5}") ///
+			cells(b(star fmt(%9.2fc)) se(par fmt(%9.2fc))) ///
+			star(* 0.1 ** 0.05 *** 0.01) ///
+			mlabels(none) nonumbers ///
+			collabels(none) ///
+			nobaselevels ///
+			eqlabels(none) ///
+			label ///
+			drop(_cons *.strata_final ?.missing_bl_* *_y0 *.region *.pole *.region#*.pole) ///
+			stats(control_mean control_sd N strata_final bl_control region_fe sector_fe, fmt(%9.0fc %9.0fc %9.0g %-9s %-9s %-9s %-9s) labels("Control group mean" "Control group SD" "Observations" "Strata controls" "BL controls" "Region FE" "Sector FE")) ///
+			prefoot("\addlinespace[0.3cm] \midrule") ///
+			postfoot("\bottomrule \addlinespace[0.2cm] \multicolumn{`ncols'}{@{}p{\textwidth}@{}}{ \footnotesize \parbox{\linewidth}{% \textit{Notes}: The outcome is domestic sales. Panel A reports OLS ANCOVA on winsorized values with ITT and TOT (instrumenting consortium membership with treatment assignment) rows. Panel B reports ITT Poisson QMLE coefficients on unwinsorized values. Column (1) is the baseline specification. Columns (2)--(4) progressively add region, sector, and region$\times$sector fixed effects to test whether the treatment effect is robust to controlling for geographic and sectoral proximity between treated and control firms. Note that sector (\textit{pole}) is a component of the randomization strata; including sector fixed effects alongside strata controls introduces collinearity, and Stata drops redundant terms. The sample is restricted to the Behaghel-trimmed sample throughout. Both panels control for winsorized baseline domestic sales. Standard errors clustered at the firm level in parentheses. \sym{***} \(p<0.01\), \sym{**} \(p<0.05\), \sym{*} \(p<0.1\).% \\ }} \\ \end{tabularx} \\ \end{adjustbox} \\ \end{table}")
+}
 
 }

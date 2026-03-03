@@ -43,6 +43,7 @@ lab var produit3 "Third best selling product or service"
 
 foreach var of varlist produit1 produit2 produit3 {
 	replace `var' = . if el_products == ""
+	tostring `var', replace
 }
 
 

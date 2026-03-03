@@ -801,9 +801,7 @@ forvalues s = 1(1)3 {
 	winsor2 profit_2024, suffix(_w95) cuts(5 95) // winsorize also at lowest percentile to reduce influence of negative outliers
 
 ************ generate winsorised costs & domestic sales ************
-* 
-gen lca_w95 = log(ca_w95)
-
+*
 * costs
 gen costs_w99 = ca_w99 - profit_w99
 lab var costs_w99 "Costs wins. 99th"
@@ -1103,7 +1101,7 @@ forvalues s = 1(1)3 {
 ***********************************************************************
 {
 	* accounting variables
-local acccounting_vars "ca ca_exp ca_tun profit employes car_empl1 car_empl2 net_size"
+local acccounting_vars "ca ca_exp ca_tun profit employes car_empl1 car_empl2 net_size mpi productivity"
 foreach var of local acccounting_vars {
 	bys id_plateforme (surveyround): g `var'_rel_growth = (`var' - `var'[1])/`var'[1]
 	bys id_plateforme (surveyround): g `var'_abs_growth = `var' - `var'[1]
@@ -1111,7 +1109,7 @@ foreach var of local acccounting_vars {
 }
 
 	* winsorize growth rates
-local wins_vars "ca_rel_growth profit_rel_growth ca_abs_growth profit_abs_growth"
+local wins_vars "ca_rel_growth profit_rel_growth ca_abs_growth profit_abs_growth mpi_abs_growth mpi_rel_growth productivity_rel_growth productivity_abs_growth"
 foreach var of local wins_vars {
 		gen `var'_w99 = `var'
 		gen `var'_w95 = `var'
@@ -1218,7 +1216,7 @@ local innovation "ii_proc ii_proc_cor ii_prod ii_prod_cor inno_improve inno_new 
 
 local export_readiness "eri eri_ssa exp_invested ihs_exp_inv_w99_k1 ihs_exp_inv_w99_k4 exported ca_exp exprep_couts ssa_action1 ssa_action2 ssa_action3 ssa_action4 exp_pra_rexp exp_pra_foire exp_pra_sci exprep_norme exp_pra_vent expp_cost expp_ben export_1 export_2 export_3 exported_2024 export_41 export_42 export_43 export_44 export_45 exp_pays_ssa_w99 exp_pays_ssa_w95" // add at endline: ihs_exp_pays_w99_k1 epp
 
-local business_performance99 "productivity productivity_w95 ihs_ca lcapl1 ca lca lca_w95 closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
+local business_performance99 "productivity productivity_w95 ihs_ca lcapl1 ca closed ihs_catun_w99_k1 ihs_catun_w99_k2 ihs_catun_w99_k3 ihs_catun_w99_k5 ihs_catun_w99_k4 ihs_catun2024_w99_k1 ihs_catun2024_w99_k2 ihs_catun2024_w99_k3 ihs_catun2024_w99_k5 ihs_catun2024_w99_k4 ihs_ca_w99_k1 ihs_ca_w99_k4 profit_pos profit_pct ihs_employes_w99_k1 car_empl1_w99_k1 car_empl2_w99_k1 ihs_employes_w99_k3 car_empl1_w99_k3 car_empl2_w99_k3 ihs_costs_w99_k4 marki ihs_costs_w99_k1 ca_w99 profit_w99 clients_w99 clients_ssa_w99 orderssa_w99 exp_pays_w99 ca_tun_w99 ca_tun_2024_w99 ca_2024_w99 ca_exp_w99 ca_exp_2024_w99 costs_w99 costs_2024_w99 profit_2024_w99 employes_w99 car_empl1_w99 car_empl2_w99 ihs_ca_2024_w99_k4  ihs_ca_exp_w99_k4 ihs_caexp2024_w99_k4 ihs_costs_2024_w99_k4 ihs_profit_w99_k4 ihs_profit2024_w99_k4 ihs_caexp2024_w99_k1 ihs_ca_exp_w99_k1 ihs_caexp2024_w99_k2 ihs_ca_exp_w99_k2 ihs_caexp2024_w99_k3 ihs_ca_exp_w99_k3 ihs_profit2024_w99_k1 ihs_profit_w99_k1 ihs_profit2024_w99_k2 ihs_profit_w99_k2 ihs_profit2024_w99_k3 ihs_profit_w99_k3 profit_2024_category bpi bpi_2024 ihs_ca_2024_w99_k1 ihs_costs_2024_w99_k1 ihs_profit2024_w99_k5 ihs_profit_w99_k5 profit_2023_category ihs_pr2024ni_w99_k1 ihs_prni_w99_k1 ihs_pr2024ni_w99_k2 ihs_prni_w99_k2 ihs_pr2024ni_w99_k3 ihs_prni_w99_k3 ihs_pr2024ni_w99_k4 ihs_prni_w99_k4 ihs_pr2024ni_w99_k5 ihs_prni_w99_k5"
 
 local business_performance95 "ihs_catun_w95_k1 ihs_catun_w95_k2 ihs_catun_w95_k3 ihs_catun_w95_k5 ihs_catun_w95_k4 ihs_catun2024_w95_k1 ihs_catun2024_w95_k2 ihs_catun2024_w95_k3 ihs_catun2024_w95_k5 ihs_catun2024_w95_k4 ihs_ca_w95_k1 ihs_ca_w95_k4 ihs_employes_w95_k1 car_empl1_w95_k1 car_empl2_w95_k1 ihs_employes_w95_k3 car_empl1_w95_k3 car_empl2_w95_k3 ihs_costs_w95_k4 ihs_costs_w95_k1 ca_w95 profit_w95 clients_w95 clients_ssa_w95 orderssa_w95 exp_pays_w95 ca_tun_w95 ca_tun_2024_w95 ca_2024_w95 ca_exp_w95 ca_exp_2024_w95 costs_w95 costs_2024_w95 profit_2024_w95 employes_w95 car_empl1_w95 car_empl2_w95 ihs_ca_2024_w95_k4  ihs_ca_exp_w95_k4 ihs_caexp2024_w95_k4 ihs_costs_2024_w95_k4 ihs_profit_w95_k4 ihs_profit2024_w95_k4 ihs_caexp2024_w95_k1 ihs_ca_exp_w95_k1 ihs_caexp2024_w95_k2 ihs_ca_exp_w95_k2 ihs_caexp2024_w95_k3 ihs_ca_exp_w95_k3 ihs_profit2024_w95_k1 ihs_profit_w95_k1 ihs_profit2024_w95_k2 ihs_profit_w95_k2 ihs_profit2024_w95_k3 ihs_profit_w95_k3 ihs_ca_2024_w95_k1 ihs_costs_2024_w95_k1"
 local ys `network' `empowerment' `mp' `innovation' `export_readiness' `business_performance99'  `business_performance95'
@@ -1414,15 +1412,6 @@ foreach var of local peer_vars {
 	}
 }
 
-
-	* generate survey-to-survey growth rates
-local y_vars "genderi mpi ihs_profit_w99_k1"
-foreach var of local y_vars {
-		bys id_plateforme: g `var'_abs_growth = D.`var' if `var' != -999 | `var' != -888
-			bys id_plateforme: replace `var'_abs_growth = . if `var' == -999 | `var' == -888
-}
-*bys id_plateforme: g `var'_rel_growth = D.`var'/L.`var'
-*bys id_plateforme: replace `var'_rel_growth = . if `var' == -999 | `var' == -888
 
 }
 

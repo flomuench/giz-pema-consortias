@@ -745,6 +745,10 @@ br  productivity ca ca_w95 employes employes_w95 if treatment ==1
 restore 
 
 
+** What correlates with productivity? Does change in MP correlate with change in productivity? How does it relate to network usage?
+
+
+
 
 **## Section 3c: sales & network *******
 * look at correlations
@@ -826,8 +830,32 @@ corr net_hc productivity if treatment == 1
 corr net_hc ca_rel_growth_w95 if treatment == 1
 
 
+twoway ///
+	(scatter log_productivity net_hc) (lfit log_productivity net_hc), by(treatment)
+	
+	* Looking at Productivity
+twoway ///
+	(kdensity productivity_rel_growth_w95 if treatment == 1 & surveyround == 3, color(blue)) ///
+	(kdensity productivity_rel_growth_w95 if treatment == 0 & surveyround == 3, color(red))
 
-
+	* Productivity growth correlation with change in MP
+twoway ///
+	(scatter productivity_rel_growth_w95 mpi_rel_growth) (lfit productivity_rel_growth_w95 mpi_rel_growth) if surveyround == 3, by(treatment)	
+	
+	* Productivity growth correlation with network usage
+twoway ///
+	(scatter productivity_rel_growth_w95 net_hc) (lfit productivity_rel_growth_w95 net_hc), by(treatment)
+twoway ///
+	(scatter productivity_rel_growth_w95 net_hc) (lfit productivity_rel_growth_w95 net_hc) if surveyround == 3
+	
+	
+	* MPI change and network usage
+twoway ///
+	(scatter mpi_rel_growth_w95 net_services_mean) (lfit mpi_rel_growth_w95 net_services_mean) if surveyround == 3
+twoway ///
+	(scatter mpi_rel_growth_w95 net_services_mean) (lfit mpi_rel_growth_w95 net_services_mean) if surveyround == 3, by(treatment)
+	
+corr mpi_rel_growth_w95 net_services_mean if treatment == 1 & surveyround == 3
 
 * visualize correlation
 twoway scatter net_size lca if surveyround == 1 & lca > 0
