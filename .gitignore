@@ -1,3 +1,4 @@
 *.stswp
 master/cf_paper_tables_preview.log
 master/cf_paper_tables_preview.pdf
+.Rproj.user
